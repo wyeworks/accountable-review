@@ -1,0 +1,436 @@
+<!--
+  rails-review-guide · page template
+
+  Copy this file, fill in the content, delete unused component examples and any
+  section the diff does not touch. Everything below is verified working: no
+  horizontal overflow, diagrams fit or scroll in their own container, and all
+  three theme states resolve.
+
+  THEME RULE, do not break it: every colour is a token defined on bare :root and
+  redefined in BOTH dark blocks. Never declare a colour only inside a media or
+  [data-theme] block — that is the classic unreadable-artifact bug. The three
+  states are: explicit dark, explicit light, and the unstamped default that most
+  viewers actually get, where only prefers-color-scheme applies.
+
+  Placeholders are written as {{LIKE_THIS}}.
+-->
+<title>{{PR_TITLE_OR_BRANCH}} Review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+/* ============================================================
+   Tokens. Cool-slate neutrals with a green bias; deep teal
+   accent; severity scale kept separate from the accent so a
+   flag never reads as branding.
+   ============================================================ */
+:root {
+  --ground: #F4F6F5;
+  --surface: #FFFFFF;
+  --surface-2: #EBF0EE;
+  --ink: #141E1C;
+  --ink-2: #46564F;
+  --ink-3: #6E7D76;
+  --rule: #D5DEDA;
+  --rule-strong: #B6C3BE;
+  --accent: #0F5F5C;
+  --accent-soft: #E0EDEB;
+  --block: #B3261E;
+  --block-soft: #FAE8E6;
+  --watch: #8A5A00;
+  --watch-soft: #F9F0DA;
+  --good: #1F6B45;
+  --good-soft: #E3F0E9;
+  --shadow: 0 1px 2px rgba(20, 30, 28, .06), 0 8px 24px -16px rgba(20, 30, 28, .18);
+
+  --font-display: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #101614;
+    --surface: #171F1D;
+    --surface-2: #1F2926;
+    --ink: #E7EDEA;
+    --ink-2: #A9B7B1;
+    --ink-3: #7F8E88;
+    --rule: #2B3734;
+    --rule-strong: #3E4C48;
+    --accent: #62C0B7;
+    --accent-soft: #16302E;
+    --block: #F0857C;
+    --block-soft: #34201E;
+    --watch: #DFB260;
+    --watch-soft: #2E2516;
+    --good: #71C89B;
+    --good-soft: #15281F;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -16px rgba(0, 0, 0, .6);
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #101614;
+  --surface: #171F1D;
+  --surface-2: #1F2926;
+  --ink: #E7EDEA;
+  --ink-2: #A9B7B1;
+  --ink-3: #7F8E88;
+  --rule: #2B3734;
+  --rule-strong: #3E4C48;
+  --accent: #62C0B7;
+  --accent-soft: #16302E;
+  --block: #F0857C;
+  --block-soft: #34201E;
+  --watch: #DFB260;
+  --watch-soft: #2E2516;
+  --good: #71C89B;
+  --good-soft: #15281F;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -16px rgba(0, 0, 0, .6);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---------- shell ---------- */
+.shell { max-width: 1240px; margin: 0 auto; padding: 0 28px 120px; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+@media (min-width: 1080px) {
+  .grid { grid-template-columns: 196px minmax(0, 1fr); gap: 56px; align-items: start; }
+}
+main { min-width: 0; }
+
+.rail { display: none; }
+@media (min-width: 1080px) {
+  .rail { display: block; position: sticky; top: 32px; padding-top: 8px; font-family: var(--font-display); }
+}
+.rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.rail a {
+  display: block; padding: 5px 0 5px 12px; font-size: 12.5px; font-weight: 500;
+  letter-spacing: .02em; color: var(--ink-3); text-decoration: none;
+  border-left: 2px solid var(--rule);
+}
+.rail a:hover, .rail a:focus-visible { color: var(--accent); border-left-color: var(--accent); }
+.rail .rail-sub { padding-left: 24px; font-size: 12px; }
+.rail-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); margin: 0 0 12px 14px;
+}
+
+/* ---------- type ---------- */
+.prose { max-width: 66ch; }
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--ink); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(30px, 4.4vw, 46px); font-weight: 700; letter-spacing: -.022em; line-height: 1.06; }
+h2 { font-size: clamp(23px, 2.6vw, 30px); font-weight: 700; letter-spacing: -.016em; line-height: 1.14; }
+h3 { font-size: 18.5px; font-weight: 600; letter-spacing: -.008em; line-height: 1.25; }
+h4 { font-size: 14px; font-weight: 600; letter-spacing: .01em; }
+p { margin: 0 0 15px; }
+p:last-child { margin-bottom: 0; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+strong { font-weight: 600; }
+em { font-style: italic; }
+.lede { font-size: 20px; line-height: 1.5; color: var(--ink-2); }
+.note { font-size: 14px; color: var(--ink-3); }
+.eyebrow {
+  font-family: var(--font-display); font-size: 10.5px; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-3); margin: 0 0 10px;
+}
+code, .mono { font-family: var(--font-mono); font-size: .855em; font-variant-ligatures: none; }
+code {
+  background: var(--surface-2); border-radius: 3px; padding: .1em .32em;
+  color: var(--ink); overflow-wrap: break-word;
+}
+h2 code, h3 code, h4 code { background: none; padding: 0; font-size: .9em; }
+/* A citation link. Renders as a plain <span class="cite"> when there is no PR. */
+.cite { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+a.cite:hover { color: var(--accent); }
+
+/* ---------- rhythm ---------- */
+section { padding-top: 72px; scroll-margin-top: 24px; }
+section > * + * { margin-top: 24px; }
+.stack { display: flex; flex-direction: column; gap: 24px; }
+.stack-tight { display: flex; flex-direction: column; gap: 12px; }
+.layer-head { display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; border-bottom: 2px solid var(--ink); }
+hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+.two-col { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 780px) { .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- masthead ---------- */
+header.masthead { padding: 64px 0 0; }
+.meta-strip {
+  display: flex; flex-wrap: wrap; margin-top: 32px; border: 1px solid var(--rule);
+  border-radius: 6px; background: var(--surface); overflow: hidden;
+}
+.meta-cell { flex: 1 1 128px; padding: 14px 18px; border-right: 1px solid var(--rule); }
+.meta-cell:first-child { flex: 2 1 236px; }
+.meta-cell:last-child { border-right: 0; }
+.meta-cell dt {
+  font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--ink-3); margin: 0 0 4px;
+}
+.meta-cell dd {
+  margin: 0; font-family: var(--font-mono); font-size: 13.5px; font-weight: 500;
+  color: var(--ink); font-variant-numeric: tabular-nums; overflow-wrap: break-word;
+}
+
+/* ---------- chips ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-display);
+  font-size: 10.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+  background: var(--surface-2); color: var(--ink-2); border: 1px solid transparent;
+}
+.chip-block { background: var(--block-soft); color: var(--block); border-color: color-mix(in srgb, var(--block) 24%, transparent); }
+.chip-watch { background: var(--watch-soft); color: var(--watch); border-color: color-mix(in srgb, var(--watch) 24%, transparent); }
+.chip-good  { background: var(--good-soft);  color: var(--good);  border-color: color-mix(in srgb, var(--good) 24%, transparent); }
+.chip-accent{ background: var(--accent-soft); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 24%, transparent); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ---------- cards and callouts ---------- */
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px 22px; box-shadow: var(--shadow); }
+.callout { border-left: 3px solid var(--rule-strong); background: var(--surface); border-radius: 0 5px 5px 0; padding: 16px 20px; }
+.callout-block { border-left-color: var(--block); background: var(--block-soft); }
+.callout-watch { border-left-color: var(--watch); background: var(--watch-soft); }
+.callout-good  { border-left-color: var(--good);  background: var(--good-soft); }
+.callout h4 { margin-bottom: 6px; }
+.callout p { font-size: 15.5px; }
+
+/* ---------- "start here" ---------- */
+.firstlook { display: flex; flex-direction: column; gap: 14px; counter-reset: fl; margin: 0; padding: 0; }
+.firstlook > li {
+  list-style: none; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px;
+  background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--block);
+  border-radius: 0 6px 6px 0; padding: 16px 20px;
+}
+.firstlook > li::before {
+  counter-increment: fl; content: counter(fl); font-family: var(--font-display);
+  font-size: 22px; font-weight: 700; color: var(--block); line-height: 1; padding-top: 2px;
+}
+.firstlook h4 { margin-bottom: 5px; }
+.firstlook p { font-size: 15px; margin-bottom: 0; }
+
+/* ---------- reading order ---------- */
+.readorder { margin: 0; padding: 0; list-style: none; counter-reset: ro; display: flex; flex-direction: column; }
+.readorder li {
+  counter-increment: ro; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px;
+  padding: 11px 0; border-top: 1px solid var(--rule); font-size: 15.5px;
+}
+.readorder li:last-child { border-bottom: 1px solid var(--rule); }
+.readorder li::before {
+  content: counter(ro, decimal-leading-zero); font-family: var(--font-mono); font-size: 12px;
+  font-weight: 600; color: var(--accent); padding-top: 4px; font-variant-numeric: tabular-nums;
+}
+.readorder .why { color: var(--ink-3); }
+
+/* ---------- wide blocks ---------- */
+.wide { max-width: 100%; }
+.scroller { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; box-shadow: var(--shadow); }
+/* Diagrams scale down to fit the column, then scroll rather than shrink to
+   illegibility. min-width is the floor where 10-11px labels stay readable. */
+.scroller > svg { display: block; width: 100%; min-width: 880px; height: auto; }
+figure { margin: 0; }
+figcaption { font-size: 14px; color: var(--ink-3); margin-top: 10px; max-width: 72ch; }
+figcaption strong { color: var(--ink-2); }
+
+/* ---------- tables ---------- */
+table { border-collapse: collapse; width: 100%; font-family: var(--font-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+thead th {
+  text-align: left; font-family: var(--font-display); font-size: 10px; font-weight: 700;
+  letter-spacing: .11em; text-transform: uppercase; color: var(--ink-3); padding: 11px 14px;
+  border-bottom: 1px solid var(--rule-strong); white-space: nowrap; background: var(--surface-2);
+}
+tbody td { padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.45; }
+tbody tr:last-child td { border-bottom: 0; }
+td.prose-cell { font-family: var(--font-body); font-size: 14.5px; }
+td .chip { font-size: 9.5px; }
+.nowrap { white-space: nowrap; }
+
+/* ---------- endpoint cards ---------- */
+.endpoint { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; box-shadow: var(--shadow); overflow: hidden; }
+.endpoint-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 13px 18px; background: var(--surface-2); border-bottom: 1px solid var(--rule); }
+.verb { font-family: var(--font-display); font-size: 10.5px; font-weight: 700; letter-spacing: .09em; padding: 3px 7px; border-radius: 3px; color: var(--surface); }
+.verb-get { background: var(--accent); }
+.verb-post { background: var(--watch); }
+.verb-delete { background: var(--block); }
+.endpoint-head .path { font-family: var(--font-mono); font-size: 13.5px; font-weight: 500; overflow-wrap: anywhere; }
+.endpoint-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+.endpoint-body > p { font-size: 15.5px; margin: 0; }
+.ep-row { display: grid; grid-template-columns: 108px minmax(0, 1fr); gap: 14px; align-items: start; }
+@media (max-width: 620px) { .ep-row { grid-template-columns: minmax(0, 1fr); gap: 5px; } }
+.ep-row > dt { font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--ink-3); padding-top: 3px; }
+.ep-row > dd { margin: 0; font-size: 14.5px; line-height: 1.5; }
+.ep-row > dd > ul { margin: 0; padding-left: 18px; }
+
+/* ---------- code ---------- */
+pre.codeblock {
+  margin: 0; padding: 13px 16px; background: var(--surface-2); border: 1px solid var(--rule);
+  border-radius: 5px; overflow-x: auto; font-family: var(--font-mono); font-size: 12px;
+  line-height: 1.55; color: var(--ink-2); tab-size: 2;
+}
+pre.codeblock b { color: var(--ink); font-weight: 600; }
+
+/* ---------- cohorts ---------- */
+.cohort { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; box-shadow: var(--shadow); overflow: hidden; }
+.cohort-head { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; align-items: start; padding: 18px 20px; border-bottom: 1px solid var(--rule); }
+.cohort-letter {
+  font-family: var(--font-display); font-size: 26px; font-weight: 700; line-height: 1;
+  color: var(--accent); background: var(--accent-soft); border-radius: 5px;
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+}
+.cohort-head h3 { margin-bottom: 6px; }
+.cohort-head p { font-size: 15.5px; margin: 0; color: var(--ink-2); }
+.cohort-foot { padding: 14px 20px; border-top: 1px solid var(--rule); background: var(--surface-2); font-size: 14.5px; }
+.cohort-foot strong { font-family: var(--font-display); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 4px; }
+
+/* ---------- step chains ---------- */
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; counter-reset: st; }
+.steps > li {
+  counter-increment: st; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px;
+  padding: 8px 0; border-top: 1px solid var(--rule); font-family: var(--font-mono);
+  font-size: 12.5px; line-height: 1.5;
+}
+.steps > li:first-child { border-top: 0; }
+.steps > li::before { content: counter(st); color: var(--accent); font-size: 11px; font-weight: 600; padding-top: 2px; font-variant-numeric: tabular-nums; }
+.steps .anno { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-3); display: block; }
+
+/* ---------- flags ---------- */
+.flags { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.flags > li {
+  display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 14px; align-items: start;
+  padding: 13px 17px; background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 5px; font-size: 15px; line-height: 1.5;
+}
+.flags .chip { margin-top: 2px; }
+.flags p { margin: 0; }
+.flags .src { display: block; margin-top: 5px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+
+/* ---------- decisions ---------- */
+.decisions { counter-reset: dec; }
+.decision { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px; padding: 16px 0; border-top: 1px solid var(--rule); counter-increment: dec; }
+.decision::before { content: counter(dec, decimal-leading-zero); font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent); padding-top: 4px; font-variant-numeric: tabular-nums; }
+.decision h4 { margin-bottom: 6px; }
+.decision p { font-size: 15px; margin-bottom: 8px; }
+.decision .risk { font-size: 14.5px; color: var(--ink-2); margin-bottom: 0; }
+.decision .risk b { font-family: var(--font-display); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--watch); margin-right: 6px; }
+
+/* ---------- SVG diagram vocabulary ---------- */
+svg text { font-family: var(--font-mono); fill: var(--ink); }
+svg .t-title { font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .01em; }
+svg .t-col { font-size: 11px; }
+svg .t-dim { fill: var(--ink-3); font-size: 10.5px; }
+svg .t-lbl { font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: .1em; fill: var(--ink-3); }
+svg .t-edge { font-size: 10.5px; fill: var(--ink-2); }
+svg .box { fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.5; }
+svg .box-hd { fill: var(--surface-2); stroke: var(--rule-strong); stroke-width: 1.5; }
+svg .box-json { fill: var(--watch-soft); stroke: none; }        /* schemaless blob column */
+svg .edge { stroke: var(--rule-strong); stroke-width: 1.5; fill: none; }
+svg .edge-dash { stroke: var(--block); stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+svg .edge-accent { stroke: var(--accent); stroke-width: 1.75; fill: none; }
+svg .node { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+svg .node-dead { fill: var(--surface-2); stroke: var(--rule-strong); stroke-width: 1.5; stroke-dasharray: 4 3; }
+svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="shell">
+
+<header class="masthead">
+  <div class="grid">
+    <div></div>
+    <div>
+      <p class="eyebrow">{{REPO}} &middot; PR #{{N}} &middot; {{AUTHOR}}</p>
+      <h1>{{ONE_LINE_WHAT_THIS_DOES}}</h1>
+      <p class="lede prose" style="margin-top:18px">{{PARAGRAPH_FROM_THE_CODE_NOT_THE_PR_BODY}}</p>
+
+      <dl class="meta-strip">
+        <div class="meta-cell"><dt>Branch</dt><dd>{{HEAD}} &rarr; {{BASE}}</dd></div>
+        <div class="meta-cell"><dt>Shape</dt><dd>{{FEATURE_REFACTOR_FIX}}</dd></div>
+        <div class="meta-cell"><dt>Commits</dt><dd>{{N}}</dd></div>
+        <div class="meta-cell"><dt>Files</dt><dd>{{N}}</dd></div>
+        <div class="meta-cell"><dt>Prod / test</dt><dd>{{N}} / {{N}}</dd></div>
+      </dl>
+    </div>
+  </div>
+</header>
+
+<div class="grid">
+  <nav class="rail" aria-label="Sections">
+    <p class="rail-title">Contents</p>
+    <ol>
+      <li><a href="#orientation">Where to start</a></li>
+      <!-- one entry per emitted layer section -->
+      <li><a href="#coverage">Coverage ledger</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ===== Part 1 · Orientation ===== -->
+    <section id="orientation">
+      <div class="layer-head"><p class="eyebrow">Orientation</p><h2>Where to start</h2></div>
+
+      <!-- Start here: 2-5 verified items. If none, say so plainly instead. -->
+      <ol class="firstlook">
+        <li><div>
+          <h4>{{FINDING}}</h4>
+          <p>{{WHAT_AND_WHY_IT_MATTERS}}</p>
+        </div></li>
+      </ol>
+
+      <ol class="readorder">
+        <li><div><code>{{PATH}}</code> &mdash; <span class="why">{{WHY_THIS_BEFORE_THAT}}</span></div></li>
+      </ol>
+    </section>
+
+    <!-- ===== Part 2 · One section per non-empty layer =====
+         Emit in dependency order: data, interface, domain logic,
+         boundaries, tests, paired frontend. Omit any layer the diff
+         does not touch — no "N/A" placeholders. See guide-outline.md.
+
+         Component reference:
+           figure.wide > .scroller > svg   diagrams
+           .wide.scroller > table          wide tables
+           article.endpoint                API contract cards
+           article.cohort                  service groupings
+           .decisions > .decision          decisions to pay attention to
+           ul.flags > li + .chip           review flags
+           .callout-block/watch/good       emphasis
+           ol.steps                        call chains
+    -->
+
+    <!-- ===== Part 3 · Closing ===== -->
+    <section id="coverage">
+      <div class="layer-head"><p class="eyebrow">Completeness</p><h2>Coverage ledger</h2></div>
+      <p class="prose">Every file in the diff, and where this guide covers it.</p>
+      <div class="wide scroller">
+        <table>
+          <thead><tr><th>File</th><th>Section</th><th>Attention</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><a class="cite" href="{{DEEP_LINK}}">{{PATH}}</a></td>
+              <td>{{SECTION}}</td>
+              <td><span class="chip">{{read | skim | mechanical}}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+</div>
