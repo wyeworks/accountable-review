@@ -133,6 +133,40 @@ So a very large diff will strain this version. That is the signal the next itera
 on, which is why `SKILL.md` tells the skill to *report* the strain (say which region it skimmed)
 rather than quietly skim. When specialists do arrive, the seam is per-cohort, not per-layer, and the
 orchestrator's job is reconnecting them into end-to-end behaviours.
+ . 
+### The unsolved half: how to sample a diff too large to read
+
+`SKILL.md` says to report the strain. It does not say how to *choose* what to skim, and that gap is
+the one thing a 112-file run exposed that has not been fixed. Naming it here so the next iteration
+starts from the real question rather than rediscovering it.
+
+The run in question — `experiment/ai-hours-assistant` in wye-time, 112 files, 14.8k insertions, a
+Rails API and a Next.js client in one diff — got through the goal, the blast radius and five verified
+affected-but-unchanged findings, and would have needed several times that budget to finish the
+behaviour cohorts and a 112-row ledger. Nothing about it failed. It simply ran out of room, in a way
+the procedure has no policy for.
+
+What makes this hard is that the honest sampling strategy runs against the skill's own instincts:
+
+- **The completeness invariant is not the same as reading everything.** Every path must appear in the
+  page; the depth rules already say most appear as a ledger row. So the question is not "which files
+  do I cover" but "which files do I *open*", and the ledger is what makes a shallow pass on the rest
+  legitimate rather than a silent gap.
+- **Cheap signals exist and are unused.** Line counts per file, the status letter, whether a file has
+  a matching spec, whether it is named in a commit message, whether anything outside the diff
+  references it. `ledger-rows.sh` already prints the first two. A defensible sampling rule could be
+  built from them without opening anything.
+- **The parts are not equally compressible.** Persistence and the API contract are small and
+  load-bearing, and skimping there is what makes a page wrong. Behaviour cohorts are where the volume
+  is, and a cohort read at half depth still teaches the shape. So the budget should be spent
+  unevenly, and the skill currently gives no basis for that.
+- **Whatever is skipped has to be visible.** A skimmed region must say so in place, in the same voice
+  as a stated limit, not in a footnote nobody reads. The build states already carry the vocabulary for
+  this — a fifth shape alongside written, pending, not written and omitted.
+
+Decomposition may dissolve some of this: a per-cohort agent has its own context, so the aggregate
+budget grows. It does not dissolve all of it — the orchestrator still has to decide how many cohorts
+are worth an agent, and that is the same question one level up.
 
 ## Boundaries the skill must keep
 
