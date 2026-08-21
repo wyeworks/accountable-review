@@ -1,12 +1,17 @@
 # The report format
 
-What parts exist, when each appears, how deep it goes, and the two primitives the page is built
-from — the review unit and the evidence tier.
+What sections exist, when each appears, how deep it goes, and the primitives the page is built from —
+the review unit, the evidence tier, the source excerpt, and the rule that each fact has one home.
 
-The order below is the default review path, not a mould. Derive the actual order from the PR's own
-goals: if the change is a client-side refactor with one new field behind it, the contract section
-leads and persistence is a paragraph. A part the diff does not earn is **omitted**, never filled with
-generic content and never left as an "N/A" placeholder.
+Seven sections, and the order below is the default review path rather than a mould. Derive the actual
+order from the PR's own goals: if the change is a client-side refactor with one new field behind it,
+the boundary leads and persistence is a sentence. A section the diff does not earn is **omitted**,
+never filled with generic content and never left as an "N/A" placeholder.
+
+**The page is short because of how it is organised, not because anything was cut.** Every section
+below is a place where a distinct kind of thing lives exactly once. If you find yourself explaining
+something a second time, the structure is telling you the explanation is in the wrong section — move
+it, do not duplicate it.
 
 ---
 
@@ -16,27 +21,28 @@ generic content and never left as an "N/A" placeholder.
 
 - *The review unit* — the seven fields every meaningful change gets
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
-- *Depth rules* — how much treatment a part earns, and the diagram budget
+- *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
+  what code does
+- *One canonical home* — every fact explained once, referenced from everywhere else
+- *Depth rules* — how much treatment a section earns, and the diagram budget
 - *The completeness invariant* — why every diff path appears, and why the check is one-directional
 - *Build state* — the banner and pending markers that keep a staged page honest while it fills in
 
-**The parts, in default order** — each with what triggers it.
+**The seven sections, in default order** — each with what triggers it.
 
-| | Part | Appears |
-|---|---|---|
-| 0 | Masthead | always |
-| 1 | Goal and behavioural change | always |
-| 2 | Review map | always — the blast radius, and the highest-value screen |
-| 3 | State and persistence | migrations, schema or models changed |
-| 4 | API surface | routes, controllers, serializers or views changed |
-| 5 | Backend ↔ frontend contract | the diff touches either side |
-| 6 | Behaviour cohorts | the bulk — one review unit per cohort |
-| 7 | Cross-cutting concerns | any apply |
-| 8 | Test harness | test *infrastructure* changed |
-| 9 | Agentic and developer tooling | it changed |
-| 10 | Primary, supporting and secondary | the split is non-trivial |
-| 11 | Comprehension checkpoint | always |
-| 12 | Coverage ledger | always |
+| | Section | Appears | Owns |
+|---|---|---|---|
+| 1 | What changed | always | Intent, scope, the metric strip, the use cases named |
+| 2 | Review map | always | The blast radius — where consequences leave the diff |
+| 3 | Start here | always | The 2–5 highest-value findings, canonically |
+| 4 | Behaviour flows | the bulk | One flow per behaviour, carrying only what is specific to it |
+| 5 | Cross-cutting consequences | anything genuinely spans flows | Schema structure, authorization, jobs, deploy order, test infrastructure |
+| 6 | Before approving | always | Author questions, validations, test gaps, a ≤5-question checkpoint |
+| 7 | Coverage | always | The ledger. No findings |
+
+*Where the old per-layer material goes* maps the previous twelve-part format onto these, since
+persistence, API surface and contract no longer have sections of their own — they are covered inside
+the behaviour they serve.
 
 **Citations** — *Deep links*, the two URL forms, and *Choosing a mode*, the four-rung degradation
 ladder. Settle the mode once, in step 1 of the procedure.
@@ -45,7 +51,7 @@ ladder. Settle the mode once, in step 1 of the procedure.
 
 ## The review unit
 
-The page's reusable primitive. Every meaningful change — usually one per behaviour cohort, sometimes
+The page's reusable primitive. Every meaningful change — usually one per behaviour flow, sometimes
 one per significant standalone change — renders as a unit with these seven fields, in this order:
 
 | Field | Carries |
@@ -67,6 +73,9 @@ Rules that keep units from becoming ceremony:
 - **Validation steps must exist in this repo.** The real rake task, the real route, the real factory.
   One invented command spends the reader's trust in the entire page.
 - Render as `article.unit` with `.ep-row` field rows — see `page-template.html`.
+- Three of the fields may carry a collapsed source excerpt: *implementation*, *affected but unchanged*
+  and *things to understand*. See § *Source excerpts* for the budget and for the rule that the field
+  still has to read complete with the excerpt closed.
 
 ## Evidence tiers
 
@@ -92,19 +101,215 @@ worse than being wrong loudly.
 The PR description is never evidence. Where the page reports intent from it, attribute it —
 *"the description says …"* — so a stale description cannot masquerade as a property of the code.
 
+## Source excerpts
+
+The page's third primitive. A verbatim quotation of code, collapsed until the reader decides to check
+the claim it supports.
+
+It exists because of an asymmetry the deep links cannot fix. A citation to a *changed* line is cheap
+to follow — the reviewer has the diff open anyway. A citation to an *unchanged* line sends them into
+an unfamiliar file with no context, and the ones who do not go take the finding **on faith**. Faith is
+what this page is built to remove, so the lines come to the reader instead.
+
+Two variants:
+
+| Variant | Shows | Used for |
+|---|---|---|
+| `.excerpt--source` | Lines at the head SHA, no signs | Unchanged code, which has no diff to show. The variant that carries the product |
+| `.excerpt--diff` | A hunk with `+`/`−` gutters | Changed code, where *what moved* is the reviewer's question |
+
+**Where they may appear.** Not in the coverage ledger — a ledger row is a checklist entry, not a
+claim, and a hundred collapsed hunks is a page nobody can load. Everywhere else on this list, subject
+to the test below.
+
+| Location | Variant |
+|---|---|
+| § 4 · a flow's *affected but unchanged* | `--source` |
+| § 4 · a flow's *implementation* | `--diff`, the one hunk carrying the decision |
+| § 4 · a flow's *things to understand* | Either, whichever fits the claim |
+| § 3 · *start here*, each finding | Either |
+| § 2 · *changed vs potentially affected*, the affected column | `--source` |
+| § 5 · the application-vs-database invariants block | `--source` |
+
+The last two were added after a run showed the original list barred excerpts from the two densest
+concentrations of unchanged-code claims a server-rendered Rails PR produces. § 5 is the sharper
+case: *"no unique index on `communities.organizer_id`, `db/schema.rb:332`"* is one line inside a
+twelve-hundred-line generated file, and no reviewer opens that file to check it. The general rule
+against excerpting `db/schema.rb` is about **churn** — do not quote a migration's regenerated diff. It
+was never about quoting one committed line that a claim turns on.
+
+### The rules
+
+- **The page must read completely with every excerpt closed.** No claim, no evidence tier and no
+  citation may live only inside one. An excerpt *confirms* what the prose already said; it never
+  *carries* it. This is the whole difference between progressive disclosure and hidden content, and it
+  is the rule to check first when reviewing a page that uses them.
+- **The closed summary says what the reader will see and why to open it** — `path:lines`, then a
+  clause. `View diff` and `Show code` are not summaries: a closed excerpt has to be informative,
+  because most of them stay closed.
+- **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped ledger row fails the
+  coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
+  catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
+- **An excerpt is evidence for one claim, not coverage of a file.** Never a whole file, never every
+  hunk. Completeness belongs to the ledger.
+- **The field carries its own citation, not one from elsewhere on the page.** The closed-page rule is
+  easy to satisfy globally and still fail locally: a run wrote *"an unchanged monkey-patch in
+  `test_helper.rb` adds an `after_create` callback"* with the path as bare prose, the only `file:line`
+  for it being the excerpt's own footer. The same citation did appear linked in § 2 and in the
+  reading order, so the page as a whole was fine — but a reader working through that field with the
+  block shut had nothing to click. Judge the rule field by field, not page-wide. `check.sh` cannot
+  catch this: it checks summaries and collapse state, never whether a citation survives the block
+  closing.
+- **The excerpt does not replace the link.** It deliberately omits the surrounding context, so the
+  citation stays in the body for a reader who needs more than the quoted lines.
+- **Next to a `--diff` excerpt, say which range you mean.** The script labels the block with the
+  hunk's new-side span, which is rarely the range the prose wants to cite — the method, or the one
+  changed line. All three are correct and on screen together they read as an inconsistency. Leave the
+  script's label alone and make the prose citation explicit about what it points at (*"the guard at
+  `:128`"*, *"the method at `:121-134`"*), so the reader knows the summary is describing the hunk.
+- **`data-path` is reserved to ledger rows.** Excerpts carry `data-src`. `scripts/coverage-gate.sh`
+  greps `data-path` across the whole page and compares it to the diff as a set, so an excerpt using it
+  would register as a surplus path — and would do so most reliably when citing unchanged code, which
+  is to say on the page's best content.
+
+### Budget
+
+Same shape as the diagram budget, and for the same reason: the constraint is what keeps the component
+meaning something. But it needs a sharper test than the diagram budget does, because the obvious
+phrasing is circular.
+
+**"One per field that earns one" is not a budget.** *Affected but unchanged* is by definition nothing
+but claims a reader would otherwise take on faith — that is the field's stated reason for existing —
+so under that reading every one of them earns an excerpt automatically, three flows produce three
+without a decision being made, and a twenty-flow PR produces twenty-plus. A cap that is always
+reached is not a cap.
+
+**The test that does work: is the citation load-bearing for a decision the reviewer has to make?**
+Not merely unchanged, not merely interesting — load-bearing. A finding they will act on, ask the
+author about, or have to weigh. Most *affected but unchanged* entries are context; a few are the
+reason the section exists, and those are the ones that get the lines brought to them. This test came
+out of a run that hit the circularity above and had to invent something to escape it.
+
+Then the mechanical limits:
+
+- **One excerpt per field or entry**, never two.
+- **Never twice for the same lines.** If a start-here entry and its flow field rest on the same
+  citation, the excerpt goes in **one** of them — the start-here entry, since that is the screen where
+  the reader decides what to trust — and the other cites in prose. Do not solve the duplication by
+  quoting a *neighbouring* range instead: a run did exactly that, and the near-identical second
+  excerpt was the one excerpt it regretted.
+- **Never a near-duplicate.** Two excerpts of structurally identical code — the same guard chain, the
+  same shape of method, ninety lines apart — teach once and cost twice. The second is a prose citation.
+- **Past about 24 lines the prose is not pointing precisely enough.** For `--source`, tighten the
+  range. For `--diff` the range is the hunk's and you cannot trim it, so the answer is different:
+  drop to `--at` on the decisive lines, or cite in prose. `excerpt.sh` warns at that length and still
+  emits, because it is a generator and not a gate.
+- **Never excerpt** lockfiles, generated API types, compiled assets, pure renames, import-only edits
+  or test boilerplate — ledger rows by definition, and an excerpt of one teaches nothing. `db/schema.rb`
+  is the one nuanced case; see the note under the location table.
+- **A page-wide sense of scale**, since the per-field cap alone does not bound the total: on a
+  small diff, roughly half a dozen is where a page stops rewarding another one. On a large diff the
+  number does not grow with the file count — it grows with the number of load-bearing findings, which
+  is a much slower curve. If a section has more than two, ask whether the prose is doing its job.
+
+**Link rung changes the budget, in one direction only.** At rungs 3 and 4 nothing is clickable, so an
+excerpt is the only followable evidence there is: lean towards more. At rungs 1 and 2 the budget above
+applies as written — clickable citations are not a reason to cut it, because the reason a reader does
+not click is the cost of arriving in an unfamiliar file, and a working link does not lower that cost.
+
+### Excerpts are also the shortest way to say what code does
+
+The budget above rations excerpts against prose, which is right when the excerpt is *additional*. It is
+the wrong frame when the excerpt **replaces** prose, and that is the more valuable use.
+
+A paragraph describing what a guard does is longer than the guard, less precise, and unverifiable. So
+where you are about to write prose that narrates code, show the code and write one sentence of
+**implication** instead:
+
+> Before — 78 words narrating the method:
+>
+> *"The guard first returns early when no user is signed in, then again for admins, then checks whether
+> the user has an accepted organization role. Previously it also admitted anyone whose `user_type` was
+> organizer, which meant a community organizer with no role would be redirected to `/organizer`,
+> bounced back by the section's own guard, and loop indefinitely."*
+>
+> After — 24 words plus the excerpt:
+>
+> *"Admission is now the accepted role alone; the `user_type` clause is gone, which is what breaks the
+> loop."* ▸ `application_controller.rb:125-131`
+
+Shorter, checkable, and the reader who trusts it can move on without opening the block.
+
+**The guard is unchanged and matters more here, not less.** The sentence must still stand on its own
+with the excerpt closed — it states the *implication*, which is the thing the code does not say. What
+you are removing is narration of the mechanism, never the consequence. A page whose prose collapses
+into "see the code below" has failed both rules at once.
+
+Two corollaries:
+
+- **Prefer the excerpt to the paragraph, then re-check the budget.** Replacing prose does not exempt an
+  excerpt from being load-bearing; it means a load-bearing citation should more often arrive as lines
+  than as description.
+- **Never narrate an excerpt after showing it.** Restating in prose what the reader can now see is the
+  duplication this whole format exists to remove, and it undoes the saving that justified the excerpt.
+
+## One canonical home
+
+Every fact, finding, risk, uncertainty and reviewer action has **exactly one place** in the page that
+explains it. Everywhere else refers to it in a sentence and moves on.
+
+This is a structural rule, not an editing tip, and it is the reason the sections below are shaped the
+way they are. An earlier version of this format had twelve parts, three of which existed to restate
+material from the others — findings surfaced in *start here* and then re-explained in full inside a
+cohort, cross-cutting concerns retelling behaviours, a checkpoint quizzing the reader on the paragraph
+above it. A 21-page page became 9 pages with nothing of value removed, which means roughly half of it
+was the same content arriving repeatedly. A reviewer who thinks *"I have read this already"* stops
+reading, and everything after that point is wasted regardless of how good it is.
+
+**Assign the home by where the reader first needs it**, then reference from later sections:
+
+| The concept | Lives in | Referenced from |
+|---|---|---|
+| A high-value finding | *Start here* | The flow it belongs to, in one clause |
+| A consequence spanning flows | *Cross-cutting consequences* | Each flow it touches, in one clause |
+| Behaviour specific to one flow | That flow | Nowhere else |
+| An open question for the author | *Before approving* | The flow that raised it, if the reader needs it there |
+| A validation step | The flow it validates, or *Before approving* if it is setup | Not both |
+
+The reference form is one sentence, no re-explanation:
+
+> The `require_profile_setup` consequence under *Start here* applies to this flow too.
+
+Not a summary of that consequence, not its citation again, not its tier label again.
+
+**Two consequences worth stating plainly.** A caveat belongs in the page once — *"these findings are a
+pass, not an audit"* is said in *start here* and nowhere else. And a `file:line` is not repeated every
+time its fact is mentioned; it sits with the canonical explanation, and later references point at the
+section, not the file.
+
+**Where synthesis beats deletion.** When two sections hold overlapping but non-identical facts, merge
+them into one sentence that carries both rather than keeping the better one:
+
+> Because invite acceptance no longer writes `user_type: :organizer`, community organizers now enter
+> `User.recommendable`, so the background jobs consuming that scope may process them. Whether that is
+> intended is an author question.
+
+Three separate paragraphs — one for the write, one for the scope, one for the jobs — say less than
+that, at four times the length.
+
 ## Depth rules
 
-Depth scales with how much the diff puts into a part, on the same shape as before:
+Depth scales with how much the diff puts into a section, on the same shape as before:
 
-| Weight of the part | Treatment |
+| Weight of the section | Treatment |
 |---|---|
 | Nothing | Omitted entirely |
 | One small thing | A paragraph, or a row in a shared "also changed" table |
 | A handful | Its own subsection with a table |
 | Substantial | Subsection, plus grouping or units, plus a diagram if one is earned |
 
-For behaviour cohorts, weight is the number of cohorts and how far each reaches, not the file count —
-a two-file cohort spanning a serializer and a TS type can need more explanation than an eight-file
+For behaviour flows, weight is the number of flows and how far each reaches, not the file count —
+a two-file flow spanning a serializer and a TS type can need more explanation than an eight-file
 one that is a single rename.
 
 File count sets *prose* depth. It does not set diagram count — **diagrams are earned by mechanism
@@ -112,7 +317,7 @@ complexity, which is a different axis.** A six-file migration introducing a stat
 two figures; a twenty-six-file layer that is one linear pipeline needs one. Judge on how many
 distinct mechanisms a reader has to hold, not on how many files carry them.
 
-**Diagram budget: one per part, and a second only for a genuinely different mechanism.** Each must
+**Diagram budget: one per section, and a second only for a genuinely different mechanism.** Each must
 show something a table cannot. A diagram that restates a list is worse than no diagram, because it
 costs the reader time and teaches nothing.
 
@@ -121,7 +326,11 @@ lifecycle diagram shows *behaviour over time*, and no single figure shows both. 
 status column or state machine on top of new tables, draw both. Elsewhere, if you find yourself
 wanting a second diagram, the honest question is whether the first one is doing its job — and a
 transition table with a `file:line` per row is often better than a second figure anyway. Never exceed
-two in one part.
+two in one section.
+
+Excerpts have their own budget, in § *Source excerpts*. Keep the two apart when judging a section: a
+diagram is earned by mechanism complexity, an excerpt by a claim the reader would otherwise have to
+take on faith. Neither is earned by file count.
 
 Adaptivity trims ceremony on small PRs. It never trims teaching on a large one — on a big change,
 explanation is the whole product.
@@ -137,7 +346,7 @@ needing no discussion are still listed, batched into a compact table with a one-
 pure moves get a line saying so, which is itself useful.
 
 **The invariant is one-directional.** Every path in the diff must appear in the page. The reverse does
-*not* hold: the page cites unchanged files everywhere by design — that is what part 2 and the
+*not* hold: the page cites unchanged files everywhere by design — that is what § 2 and the
 *affected but unchanged* field are for. So the check is a subset test, never set equality:
 
 ```
@@ -157,12 +366,12 @@ half-written page cannot be mistaken for a finished one, so the page carries its
 until the moment it is complete.
 
 **Three states, and they must not look alike.** The confusion this prevents is a reader seeing no
-contract part, concluding the change has no contract implications, and being wrong.
+boundary material, concluding the change has no contract implications, and being wrong.
 
 | State | Means | Rendered |
 |---|---|---|
-| **Written** | The part is there | Normally |
-| **Pending** | This diff earns the part; it is not written yet | An explicit marker, in the rail *and* in place |
+| **Written** | The section is there | Normally |
+| **Pending** | This diff earns the section; it is not written yet | An explicit marker, in the rail *and* in place |
 | **Omitted** | The diff does not earn it | Nothing at all. Never an "N/A" row, never an empty section |
 
 **The banner** sits above the masthead until the final publish:
@@ -179,15 +388,15 @@ That last sentence is the load-bearing one. Keep it.
 **Pending in the rail** so the reader can see the shape of what is coming:
 
 ```html
-<li><a href="#contract">Backend ↔ frontend contract <span class="pending">pending</span></a></li>
+<li><a href="#flows">Behaviour flows <span class="pending">pending</span></a></li>
 ```
 
-**Pending in place**, where the part will go, so someone scrolling does not skip past a gap:
+**Pending in place**, where the section will go, so someone scrolling does not skip past a gap:
 
 ```html
-<section id="contract">
-  <div class="layer-head"><p class="eyebrow">Contract</p><h2>Backend ↔ frontend contract</h2></div>
-  <p class="note"><span class="pending">pending</span> Seven files touch both sides; this part is
+<section id="flows">
+  <div class="layer-head"><p class="eyebrow">Flows</p><h2>Behaviour flows</h2></div>
+  <p class="note"><span class="pending">pending</span> Three flows across seven files; this section is
   being written.</p>
 </section>
 ```
@@ -207,251 +416,231 @@ the wording.
 
 **At the final publish, all of it goes**: banner, rail markers, stubs. A finished page still saying
 "stage 2 of 3" undersells completed work and leaves the reader unable to tell whether the run
-stopped early. If a part genuinely was left unwritten — the diff was too large, a region got skimmed
+stopped early. If a section genuinely was left unwritten — the diff was too large, a region got skimmed
 — that is a sentence of prose stating the limit, not a pending marker. The two mean different things:
 pending is a promise, a stated limit is a fact.
 
-## Part 0 · Masthead — always
+## Where the old per-layer material goes
+
+This format used to have a section per architectural layer — persistence, API surface, contract, then
+cohorts. That guaranteed restatement, because one behaviour crosses all four and got described in each.
+The layers are still covered; they are covered **inside the behaviour they serve**. Two things stay
+global, because they genuinely are:
+
+| Material | Now lives in |
+|---|---|
+| Schema structure: ER diagram, migration safety, schema-vs-migration consistency | § 5, once for the whole diff |
+| Persistence detail for one behaviour: the column it writes, the callback it fires | § 4, in that flow |
+| One endpoint's contract: params, response, errors, side effects | § 4, in the flow that calls it |
+| The authorization matrix across endpoints | § 5, once |
+| One field crossing the backend/frontend boundary | § 4, in its flow |
+| Deploy-ordering hazard between the two sides | § 5, once |
+| Test *infrastructure* that changes how other specs behave | § 5, once |
+| Tests for one behaviour, and its test gap | § 4, in that flow |
+| Primary / supporting / secondary classification | § 7, the ledger's group column — it was never worth a section |
+
+## Section 1 · What changed — always
+
+The masthead and the goal, merged: a reviewer orienting themselves reads one screen, not two that
+overlap.
 
 - PR title and number, branch → base, author, linked ticket if the project uses one.
+- **Change shape** chip: feature / refactor / bugfix / migration / dependency bump / mixed. Reading
+  strategy differs per shape.
 - Metric strip, restricted to metrics that change a reviewer's behaviour: commits, files, and a line
-  split. A PR that is 70% specs is a different animal from one that is 70% new controllers.
-
-  The buckets are fixed, so numbers stay comparable between runs:
+  split. A PR that is 70% specs is a different animal from one that is 70% new controllers. Buckets are
+  fixed so numbers stay comparable between runs:
 
   | Bucket | What lands in it |
   |---|---|
   | Production | Application code a human wrote and a human must review |
-  | Test | Specs, test support, factories, fixtures, VCR cassettes |
-  | Generated | `db/schema.rb`, `db/structure.sql`, lockfiles, generated API types, compiled or vendored assets |
+  | Test | Specs, test support, factories, fixtures, cassettes |
+  | Generated | `db/schema.rb`, lockfiles, generated API types, compiled or vendored assets |
   | Docs | Markdown and other prose |
 
   Count generated and docs separately rather than folding them into production — a 150-line
-  `schema.rb` churn is not 150 lines of review surface, and reporting it as such makes every large
-  migration look terrifying.
-- **Change shape** chip: feature / refactor / bugfix / migration / dependency bump / mixed. Reading
-  strategy differs per shape; naming it sets expectations.
-- One paragraph on what the PR does, in plain language, **derived from the code and commits — not
-  copied from the PR description.**
+  `schema.rb` churn is not 150 lines of review surface, and reporting it as such makes every migration
+  look terrifying.
+- **What it is for, and what changes**, in a few sentences derived from the code, tests and commits —
+  **not** copied from the PR description. What was possible before, what is possible now, what is now
+  prevented. Then the use cases, one line each, as actor plus behaviour:
 
-## Part 1 · Goal and behavioural change — always
+  ```
+  A workspace admin archives a project — new time entries are prevented, historical ones preserved.
+  ```
 
-What the change is *for*, before any mechanism. One block per use case:
+  The **execution path** for each belongs to that behaviour's flow in § 4, not here. Naming the use
+  case is what § 1 owes the reader; tracing it is § 4's job.
+- **Evidence tier on the intent itself.** Behaviour pinned by a test is a different claim from
+  behaviour inferred from a service class's name, and the reviewer's next move differs. Where intent
+  cannot be established, state the gap as a gap.
 
-- **Actor and behaviour** as a sentence — "a workspace admin can archive an active project".
-- **Before / after**: what was possible, what is now possible, what is now prevented.
-- **Main path** as a chain, rendered with `ol.steps`: UI → request → controller → operation → model →
-  column, and the response path back if it carries anything interesting.
-- **Evidence tier** on the intent itself. Behaviour pinned by a test is not the same claim as
-  behaviour inferred from a service class's name, and the reviewer's next move differs.
+## Section 2 · Review map — always
 
-Where intent cannot be established, state the gap as a gap: *"whether existing entries stay editable
-after archival is not settled by any test."*
+Where consequences extend beyond the diff. This is the section a diff cannot produce at all.
 
-## Part 2 · Review map — always
-
-The highest-value screen, and where the work from step 5 lands.
-
-- **Blast-radius diagram** — the primary flow end to end, with secondary effects branching off it.
-  Changed nodes solid, affected-but-unchanged nodes dashed (`.node-dead`), legend required. This is
-  the one diagram that earns its place on almost every PR, because it is the only view of the change
-  that a diff cannot produce at all.
-- **Changed vs potentially affected** — two lists, side by side. The second is the point of the page:
-  every entry carries a citation and a clause on *why* it is affected. If the search came up empty,
-  say what was searched.
-- **Start here** — the two to five things most needing human judgment. Each is a *statement about the
-  code* plus why it is load-bearing plus a link to its unit — never a grade. No severity chips, no
-  approval language. If nothing rises to that level, say so plainly rather than manufacturing
-  concerns.
-
-  Carry one line of honesty with this block: these are what this pass surfaced, not an exhaustive
-  list. Repeated runs over the same diff surface overlapping but different sets — the explanation is
-  stable, the findings are a sample.
+- **Blast-radius diagram** — the primary flow end to end, secondary effects branching off it. Changed
+  nodes solid, affected-but-unchanged nodes dashed (`.node-dead`), legend required. The one diagram
+  that earns its place on almost every PR.
+- **Changed vs potentially affected**, two lists side by side. The second is the point: every entry
+  carries a citation and a clause on *why* it is affected. If a search came up empty, say what was
+  searched — unrecorded, absence and omission look identical.
 - **Reading order** — a numbered path through the files, each with a one-line *why this before that*.
   Good defaults: schema before the code that uses it; the smallest complete example before the bulk;
   irreversible code last, read twice.
-- **Where the attention goes** — which handful of files carry the design, and which are mechanical. A
+- **Where the attention goes** — which handful of files carry the design, which are mechanical. A
   71-file PR where 6 files matter should say so on the first screen. This ranks the work; it excuses
   nothing from coverage.
 
-## Part 3 · State and persistence — if migrations, schema, or models changed
+The prose here explains what the diagram *implies*. It does not transcribe the diagram — if a paragraph
+lists the same nodes and edges the figure already shows, delete the paragraph, not the figure.
 
-Early, because it establishes the vocabulary every later part uses.
+## Section 3 · Start here — always
 
-- **ER diagram** of touched tables plus immediate neighbours only, never the whole schema.
-  Distinguish new, modified, and untouched-but-adjacent tables. Draw absent relationships when the
-  absence is the point (a write with no foreign key back to its origin, for instance).
-- **Migration safety table** — the Rails knowledge a diff view cannot give you: reversible? locks a
-  table? index added concurrently? `NOT NULL` plus default on an existing table? backfill in the same
-  migration as the schema change? destructive drop? Deployment compatibility between old and new
-  application versions during a rolling deploy.
-- **Invariants, split by where they are enforced.** Application invariants and database invariants
-  side by side:
+The two to five things most needing human judgment, and the **canonical home** for each of them. This
+is the section most at risk of being re-explained later; it must not be.
+
+Each entry, compactly:
+
+- **What changed** — a statement about the code, with its citation.
+- **Why it matters** — the consequence, in behavioural terms.
+- **What remains uncertain**, if anything, with its evidence tier and what would settle it.
+
+Never a grade. No severity chips, no approval language. If nothing rises to this level, say so plainly
+rather than manufacturing concerns.
+
+Carry the sampling caveat here, once, and nowhere else in the page: these are what this pass surfaced,
+not an exhaustive list. Repeated runs over the same diff surface overlapping but different sets — the
+explanation is stable, the findings are a sample.
+
+A § 4 flow that touches one of these refers to it in a clause. It does not restate the finding, the
+citation or the tier.
+
+## Section 4 · Behaviour flows — the bulk
+
+One flow per behaviour or user cohort, grouped as decided in step 6 of the procedure and **never by
+directory**. `Services / Models / Hooks / Components` is the repository's structure, not the change's,
+and a reviewer who reads it still has to assemble the behaviour themselves. State the grouping
+principle before the flows — the split *is* the insight.
+
+Each flow carries **only what is specific to that behaviour**, as a review unit (see § *The review
+unit*) plus whatever of this it actually needs:
+
+- **Before / after** — what was possible, what is now, what is now prevented.
+- **The path**, as `ol.steps`: UI → request → controller → operation → model → column, and the
+  response path back if it carries anything interesting. Where the chain is non-trivial, draw it.
+- **Persistence for this behaviour** — the column written, the callback fired, the validation added,
+  the state transition performed. Schema-wide structure is § 5's.
+- **The endpoint** it goes through, if the diff changed one: params with required/optional and where
+  they are coerced, a real success body, the **full** error list with statuses, and a side-effects row
+  — reads only / writes / calls an external service / idempotent or not. That last row is the
+  reviewer's actual question and no diff answers it. Render as `article.endpoint`. Server-rendered
+  instead? Then the flow is page → action → redirect or render, with forms, permitted params and
+  flash states.
+- **The field crossing the boundary**, if it does, as a chain — serializer → JSON → type → hook →
+  component. Following one field teaches more than reviewing both sides as separate file trees. The
+  mismatches worth hunting: nullable backend field typed non-null, backend enum value missing from the
+  frontend union, a new error status nothing handles, a required param the client never sends. If the
+  client is in another repository or simply absent, say which and build the backend half only — do not
+  guess at code you cannot read.
+- **Affected but unchanged**, for this behaviour, with the clause on why.
+- **Tests, and the gap.** Which behaviour they pin, which branch they leave open. One sentence per test
+  capturing its behavioural guarantee — never a walk through its assertions.
+- **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
+  decision, where it lives, why it matters, the tradeoff accepted. Mine them from comments explaining
+  *why*, commit messages, named constants, transaction boundaries, `rescue` clauses, and anything the
+  code deliberately refuses to do.
+- **Validation** for this behaviour, if it needs its own. Setup and seeds go to § 6.
+
+Anything already explained in § 2, § 3 or § 5 is referenced in a clause, never re-explained.
+
+## Section 5 · Cross-cutting consequences — only what genuinely spans flows
+
+The test for inclusion: **does this reach more than one behaviour, or the whole repository?** If it
+belongs to one flow, it goes in that flow. This section is not a recap, and "no meaningful
+cross-cutting changes" is an acceptable and useful whole section.
+
+- **Schema structure**, once for the diff: ER diagram of touched tables plus immediate neighbours only,
+  never the whole schema, distinguishing new / modified / untouched-but-adjacent. Draw absent
+  relationships where the absence is the point. Migration safety — reversible? locks a table? index
+  added concurrently? `NOT NULL` plus default on an existing table? backfill in the same migration?
+  destructive drop? rolling-deploy compatibility. Whether the committed schema matches what the
+  migrations produce. A lifecycle diagram **only** if a status column, enum or state machine changed,
+  with the `file:line` performing each transition — that is what reveals whether transitions are
+  guarded at all.
+- **Persistence invariants**, application beside database, because the gap between the two columns is
+  reliably where the interesting problems live and is invisible in a diff touching only one:
 
   ```
   Application   Project#slug validates uniqueness          app/models/project.rb:22
   Database      no unique index on projects.slug           db/schema.rb:141
   ```
+- **The authorization model** — the matrix of who can reach what, once, rather than per endpoint.
+- **Deploy ordering**, if the two sides ship separately: what breaks in the window where one is updated
+  and the other is not. Name the safe order.
+- **Test infrastructure** that changes how other specs behave — factories, fixtures, shared helpers,
+  global config. The question is not "is this tested?" but "does this change how every other test in
+  the suite behaves?" A moved factory default can alter specs nobody in this PR opened. Tests for one
+  behaviour belong to its flow.
+- **Agentic and developer tooling** — `CLAUDE.md`, `AGENTS.md`, `.claude/`, skills, hooks, MCP config,
+  CI scripts. No runtime impact and easy to wave through, which is exactly why it is here: these files
+  change how every human *and every agent* works in the repository from here on.
+- Whatever else genuinely spans: feature flags and their default state; background jobs (queue,
+  retries, idempotency, ordering, failure mode, safe to run twice?); transaction and locking
+  boundaries, and what sits outside the transaction; concurrency; caching; observability; environment
+  variables — including **what happens when unset**, often the most useful row, because it describes
+  how the feature degrades; new dependencies and why the version is pinned; external calls with
+  timeout, retry and whether they block a request; performance and N+1; rate limits.
 
-  The gap between the two columns is reliably where the interesting problems live, and it is
-  invisible in a diff that touches only one of them.
-- **Lifecycle diagram** — only if a status column, enum, or state machine is added or changed. Label
-  every transition with the `file:line` that performs it; that is what reveals whether transitions
-  are guarded at all, or whether any caller can move a record anywhere.
-- Callbacks, validations and scopes added; data backfills and their rollback story.
-- **Schema consistency check** — does the committed schema match what the migrations produce? Cheap
-  to check, and a real source of blocking-grade problems (which the page reports as a fact and its
-  consequence, not as a grade).
+## Section 6 · Before approving — always
 
-## Part 4 · API surface — if routes, controllers, serializers, or views changed
+The reviewer's action list. Compact, and nothing here restates an explanation from above.
 
-Reconstruct the *interface*, do not list the controllers. The reviewer should be able to answer "what
-are we now exposing?" before reading any implementation.
+- **Questions for the author** — phrased as questions, and only those that *only the author* can
+  answer. Distinct from uncertainty the page has already recorded: this is what no amount of reading
+  will settle.
+- **Validations worth running** — real commands against this repository: the actual rake task, the
+  actual route, the actual factory. Plus setup and seeds, so a reviewer can get to a state where the
+  per-flow validations can be run at all. One invented command spends the reader's trust in the whole
+  page.
+- **Test gaps** that matter, gathered from the flows in one place so a reviewer sees the shape of what
+  is unproven.
+- **Production and data checks**, if the change touches existing rows or deploy order.
+- **Comprehension checkpoint** — **at most five** questions, rendered as `ol.firstlook`, that a reviewer
+  should be able to answer before approving.
 
-**API mode**
-- Route table: verb, expanded URL, `controller#action`.
-- Per-endpoint contract cards (`article.endpoint`) carrying: purpose; params with required/optional
-  and where they are coerced; a real success body; the **full** error list with statuses; delegated
-  services; and a **side-effects row** — reads only / writes / calls an external service / idempotent
-  or not. That last row is the reviewer's actual question and no diff answers it.
-
-**Server-rendered mode**
-- User flow diagram: page → action → redirect or render.
-- Forms and permitted params, flash and error states, per-action authorization.
-
-Both modes also get an **authorization matrix** (who can reach what), and a sequence diagram only
-when a request involves three or more participants.
-
-**Contract conformance.** If the project documents its conventions, check against them. If not, infer
-the house style from adjacent unchanged controllers and note whether the new code is internally
-consistent with its neighbours — the portable move, and often more accurate than a stale document.
-
-## Part 5 · Backend ↔ frontend contract — if the diff touches either side of it
-
-First-class, because this boundary has no compiler and no test that spans it.
-
-- **The chain**, rendered as one figure or `ol.steps`, per field or endpoint that changed:
+  The rule that keeps these from being a quiz: **answerable from the page, but not by copying one
+  sentence out of it.** A question whose verbatim answer is a paragraph above is restatement wearing a
+  question mark, and it is the single easiest way to bloat this page. A good one forces the reader to
+  join two things the page established separately:
 
   ```
-  ProjectSerializer#archived_at → GET /api/projects → Project.archivedAt
-    → useProjects() → ProjectSelector
+  1. Which authorization rule admits a user to the organizer section now, and which sibling
+     guards still read the old flag?
+  2. What happens to a user who is mid-flow when the two sides deploy at different times?
   ```
 
-  Following one field across the boundary teaches more than reviewing both sides as separate file
-  trees, which is what a diff already offers.
-- **Mismatch table** — the failure modes worth hunting, one row each, with both citations:
-  nullable backend field typed non-null; backend enum value missing from the frontend union; a new
-  error status nothing in the UI handles; response shape changed with stale client code still reading
-  the old one; a required param the client never sends.
-- **Deploy ordering** — if the two sides ship separately, what breaks in the window where one is
-  updated and the other is not. Name the safe order.
-- If the frontend is in a different repository, or simply not in this diff, build the backend half and
-  say so: what a consumer must change, marked as unverifiable from here. Do not guess at client code
-  you cannot read.
+  If the page cannot lead a reader to the answer at all, that is a gap in the page, not a challenge for
+  the reader. Never a mechanical checklist (`[x] read the models`) — that is ceremony and teaches
+  nothing.
 
-## Part 6 · Behaviour cohorts — the bulk
+## Section 7 · Coverage — always
 
-One review unit per cohort, grouped as decided in step 6 and **never by directory**. State the
-grouping principle before the units.
+Every changed file, the section covering it, its attention level (read / skim / mechanical), its group
+(primary / supporting / secondary) and a deep link. Machine-generated from the diff by
+`scripts/ledger-rows.sh`, gated by `scripts/coverage-gate.sh`. Doubles as a checklist for a reviewer
+working through the whole diff.
 
-Inside a cohort, beyond the seven fields, cover what the behaviour actually depends on: the trigger,
-the happy path, the branches that matter, side effects, the data touched, and both ends of the
-implementation. Where a cohort has a non-trivial call chain, draw it as an ordered sequence of
-classes.
+**Each row carries its path in a `data-path` attribute** on the path cell:
+`<td data-path="app/models/project.rb">`. That attribute is the whole interface to the gate — it is
+what lets the check compare sets exactly instead of searching the rendered page, where `api/Gemfile`
+matches inside `api/Gemfile.lock`. Omit it and the gate fails loudly, which is intended: a check that
+cannot run must not report a pass.
 
-**Decisions to pay attention to** live here — the least automatable and highest-value content in the
-page. Each entry: the decision, where it lives, why it matters, and the tradeoff accepted. Mine them
-from comments explaining *why*, commit messages, named constants and magic numbers, transaction
-boundaries, `rescue` clauses, and anything the code deliberately refuses to do. Quote the code's own
-comments where they carry rationale.
-
-## Part 7 · Cross-cutting concerns — if any apply
-
-One subsection per concern the diff actually touches, and no filler: "no meaningful cross-cutting
-changes detected" is an acceptable and useful whole section.
-
-Candidates: authorization and authentication; feature flags and their default state; background jobs
-(queue, retries, idempotency, ordering, failure mode, safe to run twice?); transaction and locking
-boundaries, and what sits outside the transaction; concurrency; caching and revalidation;
-observability; environment variables and secrets — including **what happens when unset**, often the
-most useful row in the table, because it describes how the feature degrades; new dependencies and why
-the version is pinned; external calls with timeout, retry, failure mode and whether they block a
-request; performance and N+1; rate limits; server/client boundaries in Next.js and server actions.
-
-## Part 8 · Test harness — if test infrastructure changed
-
-**Infrastructure only.** Tests for a behaviour belong beside that behaviour, in its unit's *relevant
-tests* field. This part is for changes to the machinery: factories, fixtures, helpers, shared
-contexts, Playwright or Cypress config, mocking infrastructure, database setup, global configuration,
-changed testing conventions.
-
-The question here is different from "is this tested?" — it is "does this change how every other test
-in the suite behaves?" A factory default that moved can alter specs nobody in this PR looked at.
-
-If the PR adds behaviour with no tests at all, that belongs in the affected units and in *Start here*,
-not here.
-
-## Part 9 · Agentic and developer tooling — if it changed
-
-`CLAUDE.md`, `AGENTS.md`, `.claude/`, skills, commands, agents, hooks, MCP configuration,
-agent-facing scripts, CI scripts, developer tooling. No runtime impact, and easy to wave through,
-which is exactly why it gets a section: these files change how every human *and every agent* works in
-the repository from here on.
-
-Per change: what behaviour changed, who or what consumes it, whether it is scoped correctly, whether
-a command or hook it introduces is safe and deterministic, whether it influences code generation or
-repository operations, and how to validate it.
-
-## Part 10 · Primary, supporting and secondary — always, when the split is non-trivial
-
-Three groups, neutrally framed, each entry pointing at its cohort or ledger rows:
-
-- **Primary** — directly implements the stated use cases.
-- **Supporting** — refactors or infrastructure the primary behaviour needed.
-- **Secondary** — appears unrelated; independently reviewable.
-
-The purpose is to tell the reviewer which changes they may hold as a separate mental model. It is not
-to criticize the author for bundling them, and the page must not read that way.
-
-## Part 11 · Comprehension checkpoint — always
-
-The page's closing move against comprehension debt: several **PR-specific** questions the reviewer
-should be able to answer before approving. Rendered as `ol.firstlook`.
-
-```
-Before approving, you should be able to explain:
-1. What is the authoritative representation of an archived project?
-2. What prevents creating a time entry for one?
-3. Which existing entries are affected at the moment of archival?
-4. How does the client learn a project became archived?
-5. Which authorization rule controls the operation?
-6. What happens if the two sides deploy at different times?
-```
-
-Each question must be answerable from the page plus the code it links to — a question the page cannot
-lead the reader to is a gap in the page, not a challenge for the reader. Never a mechanical checklist
-(`[x] read the models`); that is ceremony, and it teaches nothing.
-
-Two more closing blocks:
-
-- **Run it yourself** — setup, seeds, and the commands to get the change exercised locally. Per-unit
-  validation steps cover the individual behaviours; this covers getting to a state where they can be
-  run at all.
-- **Open questions for the author** — distinct from the checkpoint, and phrased as questions rather
-  than accusations. The checkpoint asks what the *reviewer* should understand; this asks what only the
-  *author* can answer. That is what turns the page into a conversation rather than a verdict.
-
-## Part 12 · Coverage ledger — always
-
-Every changed file, the part covering it, its attention level (read / skim / mechanical), which group
-it belongs to (primary / supporting / secondary) and a deep link. Machine-generated from the diff, per
-the gate in `SKILL.md` step 10. Doubles as a checklist for a reviewer working through the entire diff.
-
-**Each row carries its path in a `data-path` attribute** on the path cell, as the template does:
-`<td data-path="app/models/project.rb">`. That attribute is the whole interface to
-`scripts/coverage-gate.sh` — it is what lets the check compare sets exactly instead of searching the
-rendered page, where `api/Gemfile` matches inside `api/Gemfile.lock`. Omit it and the gate fails
-loudly, which is the intended behaviour: a check that cannot run must not report a pass.
+**No findings here.** The group column is where the primary / supporting / secondary split lives, which
+is all that split was ever worth — it tells a reviewer which changes they may hold as a separate mental
+model. Neutrally framed: "appears unrelated to archival; review independently" is the whole register,
+never a criticism of the author for bundling.
 
 ---
 
@@ -508,6 +697,11 @@ At rung 3, say so once in the masthead rather than leaving the reader wondering 
 clickable — one line is enough: *"Citations are plain text: this branch is not pushed, so there is no
 permalink target."* Do not emit hrefs you know are dead, and do not silently fall back to linking
 against the default branch, where the cited line numbers will not match.
+
+**Rungs 3 and 4 are where source excerpts matter most.** With nothing clickable, a collapsed excerpt
+is the only way a reader can follow a citation without leaving the page — so on those rungs the
+excerpt budget goes *up*, not down. This is the opposite of the instinct to do less when the tooling
+gives you less. See § *Source excerpts*.
 
 A force-push after publishing can also orphan a rung-1 or rung-2 SHA. GitHub keeps orphaned commits
 reachable by SHA for a while, so this degrades slowly rather than breaking at once — but it is a

@@ -56,10 +56,11 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the review-unit format, the evidence tiers, which parts exist and what triggers each, depth rules, deep-link forms and the degradation ladder |
+| `references/report-format.md` | Page structure — the seven sections and what triggers each, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the search recipes for affected-but-unchanged code |
 | `references/page-template.html` | Design system — tokens, component classes, SVG diagram vocabulary |
-| `scripts/ledger-rows.sh` | Generates the ledger rows, so the gate checks classification rather than typing |
+| `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
+| `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `evals/` | Fixtures with planted findings, the cases, and `check.sh`. Not loaded at runtime; see `evals/README.md` |
 
@@ -87,14 +88,14 @@ Editing one of these means checking the others still agree.
   `report-format.md` and rendered as `article.unit`. Two guards keep it from becoming ceremony — a
   unit needs a non-obvious *things to understand*, and fields may be omitted but never faked.
 - **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the search recipes in
-  `rails-nextjs.md` are how, part 2 and the review-unit field are where it surfaces. The rule that
+  `rails-nextjs.md` are how, § 2 and the review-unit field are where it surfaces. The rule that
   makes it honest: **record what was searched**, so an empty result reads as evidence rather than as
   omission.
 - **Completeness, and the one mechanical check.** Every path in the diff appears in the page. Stated
   in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and enforced in
   step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work: the script
   reads a `data-path` attribute, the template emits it on the ledger's path cell, `report-format.md`
-  Part 12 requires it, and `SKILL.md` step 10 runs the script. Break any one and the gate stops
+  § 7 requires it, and `SKILL.md` step 10 runs the script. Break any one and the gate stops
   checking. Note the asymmetry in the invariant itself: the page-wide rule is a subset test (the page
   cites unchanged files everywhere by design), while the gate is exact set equality against
   `git diff --name-only`, compared as whole strings — never substring matching, because `api/Gemfile`
@@ -113,6 +114,46 @@ Editing one of these means checking the others still agree.
 - **Deep-link mode is chosen once**, in step 1, from the four-rung ladder in `report-format.md` —
   driven by whether the head SHA is reachable on a remote. Unpushed branches are the common case, and
   the correct behaviour there is plain text, not a permalink that 404s.
+- **Seven sections, and each fact has one home.** The format is deliberately *not* one section per
+  architectural layer. It was, and that guaranteed restatement: one behaviour crosses persistence, the
+  API, the boundary and its cohort, so it got described four times, and three further parts existed
+  only to restate — findings surfaced in *start here* and re-explained inside a cohort, cross-cutting
+  concerns retelling behaviours, a checkpoint quizzing the reader on the paragraph above. A 21-page
+  page condensed to 9 with nothing of value removed, which measures the duplication at about half the
+  document. So persistence, endpoint contracts and the backend/frontend boundary have **no sections of
+  their own** — they are covered inside the behaviour flow they serve, and only what genuinely spans
+  flows goes in § 5. `report-format.md` § *One canonical home* carries the routing table and the
+  one-sentence reference form; § *Where the old per-layer material goes* maps the old twelve parts onto
+  the seven. Reintroducing a per-layer section is how this regression comes back, and it will look like
+  an improvement when it does.
+- **The comprehension checkpoint is capped at five questions**, and each must be answerable from the
+  page but **not by copying one sentence out of it**. A question whose verbatim answer sits in a
+  paragraph above is restatement wearing a question mark. It lives inside § 6 *Before approving*
+  alongside the author questions, validations and test gaps, not as a section of its own — the old
+  standalone part overlapped all three.
+- **Source excerpts are quotations, and the page reads complete without them.** The third page
+  primitive: a collapsed `details.excerpt` holding verbatim code, in two variants — `--diff` for
+  changed lines, `--source` for unchanged ones, which is the variant that carries the product because
+  no diff view can address an unchanged line. Three things have to stay true together. The page must
+  read completely with **every excerpt closed** — an excerpt confirms a claim, never carries one, and
+  that is the whole difference between progressive disclosure and hidden content; the hard rule is in
+  `SKILL.md`, the form and budget in `report-format.md` § *Source excerpts*, and the shape in
+  `page-template.html`. The quotation is **generated by `scripts/excerpt.sh`, never typed** — a
+  mistyped ledger row fails the gate loudly, whereas a paraphrased quotation is a false quotation the
+  reader cannot catch. And **`data-path` is reserved to ledger rows**: `coverage-gate.sh` greps it
+  page-wide, so an excerpt using it would register as a surplus path, most reliably when quoting
+  unchanged code — the gate would fail on the page's best content. Excerpts carry `data-src`.
+  `evals/check.sh` holds the mechanical half of all three; whether the prose survives with the blocks
+  shut is a judged expectation, because no script can tell.
+  Two things the first live run changed, both worth keeping stated. The closed-page rule is judged
+  **field by field**: a citation elsewhere on the page does not rescue a field whose only `file:line`
+  sits inside the collapsed block, and `check.sh` cannot see that. And the budget's test is that the
+  citation is **load-bearing for a decision the reviewer must make** — the obvious phrasing, "one per
+  field that earns one", is circular, because *affected but unchanged* is by definition nothing but
+  claims a reader would take on faith, so every such field earns one automatically and the cap bounds
+  nothing. The budget, the permitted locations and the rung adjustment live in `report-format.md`
+  **only**; `SKILL.md` points at them. An earlier version restated the cap in slightly different words
+  and the two drifted apart within one run — hence the rule that this one has a single home.
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
   the classic unreadable-artifact bug.
@@ -131,9 +172,9 @@ split threw away.
 
 So a very large diff will strain this version. That is the signal the next iteration is meant to act
 on, which is why `SKILL.md` tells the skill to *report* the strain (say which region it skimmed)
-rather than quietly skim. When specialists do arrive, the seam is per-cohort, not per-layer, and the
+rather than quietly skim. When specialists do arrive, the seam is per-flow, not per-layer, and the
 orchestrator's job is reconnecting them into end-to-end behaviours.
- . 
+
 ### The unsolved half: how to sample a diff too large to read
 
 `SKILL.md` says to report the strain. It does not say how to *choose* what to skim, and that gap is
@@ -143,7 +184,7 @@ starts from the real question rather than rediscovering it.
 The run in question — `experiment/ai-hours-assistant` in wye-time, 112 files, 14.8k insertions, a
 Rails API and a Next.js client in one diff — got through the goal, the blast radius and five verified
 affected-but-unchanged findings, and would have needed several times that budget to finish the
-behaviour cohorts and a 112-row ledger. Nothing about it failed. It simply ran out of room, in a way
+behaviour flows and a 112-row ledger. Nothing about it failed. It simply ran out of room, in a way
 the procedure has no policy for.
 
 What makes this hard is that the honest sampling strategy runs against the skill's own instincts:
@@ -156,16 +197,16 @@ What makes this hard is that the honest sampling strategy runs against the skill
   a matching spec, whether it is named in a commit message, whether anything outside the diff
   references it. `ledger-rows.sh` already prints the first two. A defensible sampling rule could be
   built from them without opening anything.
-- **The parts are not equally compressible.** Persistence and the API contract are small and
-  load-bearing, and skimping there is what makes a page wrong. Behaviour cohorts are where the volume
-  is, and a cohort read at half depth still teaches the shape. So the budget should be spent
+- **The sections are not equally compressible.** Persistence and the API contract are small and
+  load-bearing, and skimping there is what makes a page wrong. Behaviour flows are where the volume
+  is, and a flow read at half depth still teaches the shape. So the budget should be spent
   unevenly, and the skill currently gives no basis for that.
 - **Whatever is skipped has to be visible.** A skimmed region must say so in place, in the same voice
   as a stated limit, not in a footnote nobody reads. The build states already carry the vocabulary for
   this — a fifth shape alongside written, pending, not written and omitted.
 
-Decomposition may dissolve some of this: a per-cohort agent has its own context, so the aggregate
-budget grows. It does not dissolve all of it — the orchestrator still has to decide how many cohorts
+Decomposition may dissolve some of this: a per-flow agent has its own context, so the aggregate
+budget grows. It does not dissolve all of it — the orchestrator still has to decide how many flows
 are worth an agent, and that is the same question one level up.
 
 ## Boundaries the skill must keep

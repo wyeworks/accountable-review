@@ -68,30 +68,40 @@ pushes instead of scattering links.
 
 ## What it produces
 
-The page follows a review path, with every part omitted outright when the diff does not earn it:
+Seven sections, each owning one kind of thing, with any the diff does not earn omitted outright:
 
-- **What this does** — the use cases, as actor plus behaviour plus execution path. What was possible
-  before, what is possible now, what is now prevented — derived from tests, code and commits rather
-  than copied from a possibly-stale PR description.
+- **What changed** — intent, scope and the central behavioural change, with the use cases named as
+  actor plus behaviour. Derived from tests, code and commits rather than copied from a possibly-stale
+  PR description.
 - **Review map** — the blast radius. The primary flow end to end, plus the code that is *affected but
-  unchanged*: the callers, serializers, queries, factories, policies and TypeScript types whose
-  meaning this diff just changed. This is the part no diff can produce, and the reason the page
-  exists.
-- **State and persistence** — ER diagram, migration safety, and application invariants set beside
-  database invariants. The gap between those two columns is where the interesting problems live.
-- **API surface** — the interface reconstructed as a contract: params, real response bodies, the full
-  error list, and a side-effects row per endpoint.
-- **Backend ↔ frontend contract** — one field followed across the boundary, from serializer to JSON
-  to TypeScript type to hook to component, plus the mismatch table: nullable fields typed non-null,
-  enum values missing from a union, error statuses nothing handles, deploy-ordering hazards.
-- **Behaviour cohorts** — the bulk, grouped by use case rather than by directory, each as a review
-  unit.
-- **Cross-cutting concerns, test harness, developer tooling** — authorization, jobs, transactions,
-  caching, env vars; test *infrastructure* changes that reach specs nobody in the PR opened; and
-  changes to `CLAUDE.md`, hooks and skills, which alter how every human and agent works in the repo.
-- **Comprehension checkpoint** — PR-specific questions you should be able to answer before approving.
-- **Coverage ledger** — every changed file, where it is covered, and whether it is primary,
-  supporting or secondary work.
+  unchanged*: the callers, serializers, queries, factories, policies and TypeScript types whose meaning
+  this diff just changed. This is the part no diff can produce, and the reason the page exists.
+- **Start here** — the two to five things most needing human judgment, and the one place each of them
+  is explained.
+- **Behaviour flows** — the bulk, grouped by behaviour rather than by directory. Each flow carries only
+  what is specific to it: before and after, the path through the stack, the column it writes, the
+  endpoint it goes through, the field crossing the backend/frontend boundary, its tests and its test
+  gap, and the decisions worth pausing on.
+- **Cross-cutting consequences** — only what genuinely spans flows: schema structure and migration
+  safety, application invariants set beside database invariants, the authorization model, background
+  jobs, deploy ordering, test infrastructure that changes how other specs behave, and changes to
+  `CLAUDE.md`, hooks and skills, which alter how every human and agent works in the repo.
+- **Before approving** — questions only the author can answer, validations worth running, the test
+  gaps gathered in one place, and a comprehension checkpoint of at most five questions.
+- **Coverage** — every changed file, where it is covered, and whether it is primary, supporting or
+  secondary work.
+
+### Each fact has one home
+
+Persistence, endpoint contracts and the frontend boundary have no sections of their own, on purpose.
+One behaviour crosses all three, so giving each its own section meant describing that behaviour three
+times — and an earlier version did, along with a findings section that got re-explained later and a
+checkpoint that quizzed you on the paragraph above it.
+
+Now every fact, finding, risk and reviewer action is explained in exactly one place and referenced
+from anywhere else in a sentence. On a real PR that took a 21-page page to 9 with nothing of value
+removed. The reader who thinks *"I already read this"* stops reading, and everything after that is
+wasted no matter how good it is.
 
 ### It arrives in stages
 
@@ -116,6 +126,27 @@ tests · **affected but unchanged** · things to understand · how to validate �
 Validation steps are real commands against your repository, not invented ceremony. Tests appear
 twice on purpose: beside the behaviour they pin, and again as their own section when the change
 touches the test machinery itself.
+
+### The code comes to you
+
+Claims about *changed* code are cheap to check — you have the diff open anyway. Claims about
+*unchanged* code are not: following one means opening an unfamiliar file with no context, so the
+readers who do not follow it end up taking the finding on trust. Trust is the thing this page exists
+to remove.
+
+So the lines come to the reader. Where a claim would otherwise be taken on faith, the page carries a
+collapsed excerpt of the real source, which you open when you are ready to check that particular
+claim — verbatim, quoted by a script rather than retyped, and reading as a diff for changed lines and
+as plain source for unchanged ones. The excerpts matter most on an unpushed branch, where nothing on
+the page is clickable at all.
+
+They also make the page shorter, which is the part that surprised us. A paragraph describing what a
+guard does is longer than the guard, less precise, and unverifiable — so where the page would have
+narrated the mechanism, it shows the lines and states the implication in one sentence instead.
+
+One rule keeps this from turning into a diff viewer: **the page reads completely with every excerpt
+closed.** The sentence carries the consequence, which is the thing the code does not say; the excerpt
+carries the proof. What gets dropped is narration, never the finding.
 
 ### It separates evidence from inference
 

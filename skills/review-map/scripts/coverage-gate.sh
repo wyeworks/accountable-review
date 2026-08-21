@@ -22,6 +22,14 @@
 # a diff anchor, or plain text. If you are looking at this because the gate says it
 # found no paths, that attribute is what is missing.
 #
+# data-path is RESERVED to ledger rows. The grep below is not scoped to the ledger
+# table — it reads the whole page — so any other component emitting the attribute
+# injects surplus paths and fails this check. Source excerpts carry data-src for
+# exactly that reason, and they are the case that would bite: an excerpt of
+# unchanged code is not in the diff, so it would fail the gate on the page's most
+# valuable content. If you are adding a component that needs to name a path, pick
+# another attribute.
+#
 # Renames: git reports the post-rename path, so that is what the ledger row must
 # carry. Name the old path in prose, not in the ledger cell.
 

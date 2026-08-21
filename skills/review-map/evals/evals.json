@@ -6,16 +6,22 @@
       "id": 1,
       "fixture": "rails-only-small",
       "prompt": "I need to review the add-project-archival branch before standup tomorrow and I've never touched this part of the app. Can you give me something that explains what it actually changes?",
-      "expected_output": "A published review map for the five-file diff. Citations are plain text because nothing is pushed to a remote. No backend/frontend contract part, because there is no client. The page names app/queries/active_projects.rb — which is not in the diff — as affected by archival, and names the new slug uniqueness validation as enforced in Rails with no unique index behind it.",
+      "expected_output": "A published review map for the five-file diff. Citations are plain text because nothing is pushed to a remote. No boundary material anywhere, because there is no client — and no section for it to be missing from. The page names app/queries/active_projects.rb — which is not in the diff — as affected by archival, and names the new slug uniqueness validation as enforced in Rails with no unique index behind it.",
       "files": [],
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
       "expectations": [
         "check.sh passes: coverage gate, no severity chips, no verdict language, evidence tiers used, no dead permalinks, three theme states, and active_projects.rb is named",
         "The page identifies app/queries/active_projects.rb as affected-but-unchanged, and says why: it scopes the selectable project list, which archival changes the meaning of",
         "The page notes that the new slug uniqueness validation has no unique index behind it, distinguishing the application invariant from the database invariant",
-        "There is no backend/frontend contract part at all — omitted, not present-and-empty",
+        "No section, subsection or paragraph discusses a client that does not exist; the absence is stated once, in section 1, not left as a gap",
         "The page says once, near the top, why citations are not clickable",
-        "No sentence grades the change, scores its risk, or recommends approving it"
+        "No sentence grades the change, scores its risk, or recommends approving it",
+        "Because nothing is clickable, the affected-but-unchanged finding on app/queries/active_projects.rb carries a collapsed source excerpt of the unchanged lines — at rung 4 an excerpt is the only followable evidence on the page",
+        "Judged field by field, not page-wide: every field carrying an excerpt still holds its own file:line outside the collapsed block. A citation that appears elsewhere on the page does not rescue a field whose only one is inside the excerpt",
+        "Excerpts are earned by citations that are load-bearing for a decision, not by every affected-but-unchanged entry — a five-file diff should not produce one per cohort automatically",
+        "Seven sections, not twelve: persistence and any endpoint contract appear inside the behaviour flow they serve, not as sections of their own",
+        "No fact is explained twice. A finding in Start here is referenced from its flow in a clause, never re-explained",
+        "The comprehension checkpoint holds at most five questions, and none is answerable by copying a single sentence from earlier in the page"
       ]
     },
     {
@@ -30,8 +36,14 @@
         "The page identifies the nullable/non-null mismatch between the serializer and the TypeScript type, citing both sides",
         "The page identifies that the archive endpoint can respond 422 and that no client code handles it",
         "The page names web/src/queries/selectableProjects.ts as affected-but-unchanged",
-        "The contract part follows one field across the boundary as a chain, rather than reviewing the two sides as separate file lists",
-        "Every claim about intent that is not visible in the diff carries an evidence tier"
+        "The boundary is covered inside the flow that uses the field, following it as a chain rather than reviewing the two sides as separate file lists",
+        "Every claim about intent that is not visible in the diff carries an evidence tier",
+        "The nullable/non-null mismatch carries a collapsed source excerpt of the unchanged archivedAt declaration in web/src/types/project.ts — the claim a reviewer would otherwise have to take on faith",
+        "No excerpt quotes a whole file or every hunk of one, and none quotes a generated file, a lockfile or a pure rename",
+        "No two excerpts are near-duplicates of each other — structurally identical code quoted twice teaches once and costs twice",
+        "Where a start-here entry and its cohort field rest on the same citation, only one carries the excerpt; the other cites in prose, and the page does not quote a neighbouring range to dodge the duplication",
+        "The nullable/non-null mismatch, the unhandled 422 and selectableProjects each have exactly one canonical explanation; later mentions are one-sentence references",
+        "Where prose would narrate what a guard or serializer does, the page shows the lines and states the implication instead"
       ]
     },
     {
@@ -44,7 +56,8 @@
       "expectations": [
         "No artifact is published",
         "The response says plainly that this diff does not need a review map, and offers to stop rather than asking permission to continue",
-        "It does not emit sections, tables or diagrams for layers the diff never touches"
+        "It does not emit sections, tables or diagrams for layers the diff never touches",
+        "It does not offer a source excerpt of the one changed line as a consolation deliverable"
       ]
     },
     {

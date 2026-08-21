@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, blast radius including the unchanged code the change gives new meaning to, API and client contract, behaviour cohorts, and a comprehension checkpoint — so a reviewer can explain the change before judging it. Targets a Rails API with a Next.js client. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — goal and use cases, blast radius including the unchanged code the change gives new meaning to, the API and client contract, behaviour flows, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -22,15 +22,16 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## What is bundled
 
-The procedure below relies on five bundled files. Read each at the step that needs it rather than up
+The procedure below relies on six bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
 | File | Read at | For |
 |---|---|---|
-| `references/report-format.md` | steps 1, 7, 8, 9 | The review-unit format, the evidence tiers, which parts exist, depth rules, deep-link forms and the degradation ladder |
+| `references/report-format.md` | steps 1, 7, 8, 9 | The seven sections, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | step 5, then while reading any layer | What a senior reviewer of this stack looks for, and the search recipes for code the diff did not touch |
 | `references/page-template.html` | step 9 | The design system: tokens, component classes, SVG diagram vocabulary |
-| `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows from the diff |
+| `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
+| `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
 
 Paths are relative to the base directory named at the top of this skill when it loads. That value is
@@ -73,7 +74,8 @@ touched by the diff, ask which to cover. Detect, don't assume: RSpec vs Minitest
 the background job adapter; whether `strong_migrations` is present.
 
 **Frontend.** Locate it the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
-find the seam between the two sides, because that is what section 5 of the page is built from:
+find the seam between the two sides, because that is what the boundary material inside each
+behaviour flow is built from:
 
 - the API client or fetch wrapper, and where base URLs and error handling live;
 - **whether types crossing the boundary are generated from the backend or hand-written.** Generated
@@ -157,9 +159,10 @@ caller of `Project#archive`, searched `rg 'archive[!?]?\b' app lib`" — but onl
 the search. Unrecorded, absence and omission look identical, and the reviewer has to redo the work.
 
 Then draw the primary flow end to end, from user action to persistence and back, and list the
-secondary effects hanging off it. That flow is the page's backbone: sections 3 through 6 are its parts.
+secondary effects hanging off it. That flow is the page's backbone: the behaviour flows in
+section 4 are its parts.
 
-## 6. Cluster into cohorts, then classify
+## 6. Cluster into behaviour flows, then classify
 
 **Group by behaviour, never by directory.** `Services / Models / Hooks / Components` is the repository's
 structure, not the change's, and a reviewer who reads it still has to assemble the behaviour themselves.
@@ -167,15 +170,15 @@ Group into vertical slices instead — one per use case, each cutting through co
 client and tests:
 
 ```
-Cohort A — Archiving a project
-Cohort B — Preventing time entries against archived projects
-Cohort C — Showing archived projects in historical reports
+Flow A — Archiving a project
+Flow B — Preventing time entries against archived projects
+Flow C — Showing archived projects in historical reports
 ```
 
 Say why you split it that way. The split *is* the insight, and a defensible one is the backbone of
 the whole section.
 
-Then label each cohort and each leftover file:
+Then label each flow and each leftover file:
 
 - **Primary** — directly implements the stated use cases.
 - **Supporting** — refactors or infrastructure the primary behaviour needed.
@@ -232,20 +235,21 @@ someone mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
-| 1 · Orientation | 4 | Masthead, goal and behavioural change, and the outline of the parts this diff earns, each marked pending |
+| 1 · Orientation | 4 | Section 1 (what changed), and the outline of the sections this diff earns, each marked pending |
 | 2 · Map | 5 | Adds the review map: blast radius, start here, reading order, where the attention goes |
 | 3 · Complete | 10 | Everything else, gate passed, build banner gone |
 
 Between stages 2 and 3 the bulk gets written. If that stretches over many turns, republish as each
-cohort or part completes — those intermediate saves cost one tool call and mean a crash leaves a
+flow or section completes — those intermediate saves cost one tool call and mean a crash leaves a
 useful page rather than nothing.
 
 **The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
-than no page at all: a reviewer sees no contract part, concludes there was nothing to say about the
-contract, and moves on. It was simply not written yet. So until the final publish the page carries a
-build-state banner naming which parts are still pending, and every pending part appears in the rail
-and in place as an explicit *pending* marker — not as an absence, and not as an "N/A" placeholder.
-The two look nothing alike on purpose. `references/report-format.md` § *Build state* has the form.
+than no page at all: a reviewer sees no cross-cutting section, concludes there was nothing to say
+about it, and moves on. It was simply not written yet. So until the final publish the page carries a
+build-state banner naming which sections are still pending, and every pending section appears in
+the rail and in place as an explicit *pending* marker — not as an absence, and not as an "N/A"
+placeholder. The two look nothing alike on purpose. `references/report-format.md` § *Build state*
+has the form.
 
 **Pin the title and favicon at the first publish** and do not change them, even if your understanding
 of the PR improves. Readers find a tab by its name and icon; a page that renames itself mid-run reads
@@ -253,8 +257,23 @@ as a different page.
 
 Everything else about writing holds at every stage:
 
-- Follow `references/report-format.md` for what parts exist, when they appear, and how deep they go.
-  Follow `references/page-template.html` for the design system, layout, and diagram styles.
+- Follow `references/report-format.md` for the seven sections, when each appears, how deep it goes,
+  and the rule that each fact has one home. Follow `references/page-template.html` for the design
+  system, layout, and diagram styles.
+- **One fact, one home.** Before writing a section, ask what it *owns* that no other section owns. If
+  the answer is "it re-explains something from earlier", write the reference instead: one sentence
+  pointing at where the explanation lives. `report-format.md` § *One canonical home* has the routing
+  table and the reference form.
+
+  This is the difference between a page a reviewer finishes and one they abandon. A 21-page page from
+  this skill condensed to 9 with nothing of value removed — half of it was the same content arriving
+  again. A reader who thinks *"I have read this already"* stops reading, and every section after that
+  is wasted no matter how good it is.
+- **Prefer an excerpt to a paragraph that narrates code.** Five lines plus one sentence of implication
+  is shorter, checkable and more useful than describing the mechanism in prose. The sentence still has
+  to stand alone with the block closed, because it carries the *implication* — what you drop is the
+  narration, never the consequence. See `report-format.md` § *Excerpts are also the shortest way to say
+  what code does*.
 - **The template is the design system — do not load `artifact-design` to re-derive one.** That skill
   exists to choose a palette and pair typefaces; those decisions are already made here, and its own
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
@@ -263,6 +282,30 @@ Everything else about writing holds at every stage:
 - Diagrams are hand-authored inline SVG using the template's classes, so they work in a local file as
   well as when published. A diagram must show a mechanism a table cannot; delete any that merely
   restates a list.
+- **Generate source excerpts, do not type them.** Where a claim would otherwise be taken on faith —
+  above all in *affected but unchanged*, whose lines no diff view can address — quote the code inline
+  as a collapsed excerpt, from the generator:
+
+  ```sh
+  <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --why "..."
+  <skill base directory>/scripts/excerpt.sh --diff app/models/project.rb --base BASE --why "..."
+  ```
+
+  An excerpt is a *quotation*, and that is why it is generated. A mistyped ledger row fails the gate
+  loudly; a paraphrased quotation is a false quotation, and nothing in the page or in the reader's
+  experience catches it. The script reads the real bytes and does the HTML escaping, which matters
+  more than it sounds — ERB and TSX are full of `<`, `>` and `&`.
+
+  Two rules travel with them. The page must read completely with every excerpt **closed** — that one
+  is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
+  citation that is **load-bearing for a decision the reviewer has to make**, not by a citation merely
+  pointing at unchanged code — otherwise every *affected but unchanged* entry earns one automatically
+  and the budget caps nothing.
+
+  **Do not carry a number in your head for this.** The budget, the locations excerpts may appear in,
+  and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and
+  they live there only — an earlier version of this bullet restated the cap in slightly different
+  words and the two drifted apart within one run.
 - Render citations in the mode chosen in step 1. Prefer blob permalinks over diff anchors where
   linking is possible: most of the best citations in this page point at *unchanged* lines, which a
   diff anchor cannot address at all.
@@ -276,7 +319,7 @@ republish — one link, mentioned once, then a note when it is complete.
 
 - **Remove the build banner and every pending marker.** A finished page still carrying "2 of 3
   stages" is the worst outcome of staged delivery: it undersells work that is actually done, and the
-  next reader cannot tell whether you stopped early or forgot the banner. If a part really was left
+  next reader cannot tell whether you stopped early or forgot the banner. If a section really was left
   unwritten, say so in prose as a stated limit — that is a different sentence from "pending".
 - **Generate the ledger, do not type it.** Run the bundled generator from the repository under review
   and paste its output into the ledger table:
@@ -287,9 +330,22 @@ republish — one link, mentioned once, then a note when it is complete.
 
   It emits one row per changed path with the `data-path` attribute already set, each preceded by a
   hint comment carrying the git status letter and line counts — usually enough to decide the attention
-  level without opening the file. Three cells are left as placeholders for you to fill: which part
+  level without opening the file. Three cells are left as placeholders for you to fill: which section
   covers the file, its attention level, and its group. A row still reading `{{SECTION}}` is a row
   nobody classified, which is the point.
+
+  **Pass the link option your rung earned**, so the rows come out linked and you never type inside the
+  cell the gate reads:
+
+  ```sh
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --pr owner/repo#N        # rung 1
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --blob owner/repo@sha    # rung 2
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD                          # rungs 3 and 4
+  ```
+
+  Rung 1 wants the Files-tab anchor, whose fragment is the SHA-256 of the path — `--pr` computes it.
+  A run without that flag hand-inserted seven such anchors into the very `<td>` that carries
+  `data-path`, which is typing inside the one cell this script exists to keep untyped.
 
   This exists because the gate below compares sets, and a hand-typed hundred-path ledger fails it for
   boring reasons: one truncation, one stale row after a rebase. Generating the rows makes the gate a
@@ -326,7 +382,7 @@ Sometimes a run ends before the page is finished — the diff was larger than th
 called it, something failed. The page is already published, so the question is what it should say.
 
 **Not the draft banner.** "Still being written, stage 2 of 3" is a promise, and nothing is writing it
-any more. A reader who comes back an hour later to the parts they were told were coming has been
+any more. A reader who comes back an hour later to the sections they were told were coming has been
 misled by a page that was accurate when it shipped.
 
 Convert it instead into a stated limit — the same components, different words:
@@ -334,7 +390,7 @@ Convert it instead into a stated limit — the same components, different words:
 - The banner says what was covered, that the run stopped, and that the absence of the rest is not a
   finding about the change.
 - Every marker changes from *pending* to *not written*. Pending is a promise; not written is a fact.
-- The ledger note says the gate did not run, and warns against reading the written parts as a full
+- The ledger note says the gate did not run, and warns against reading the written sections as a full
   account of the diff.
 
 `evals/check.sh --stopped` checks all four. This is the third legitimate state of the page, alongside
@@ -366,6 +422,11 @@ reporting, not one to hide: if you had to skim a region to fit, say which region
   "looks good". The reviewer decides; the page equips them. Evidence, relationships, invariants,
   uncertainty, and validation steps are the output — verdicts are not.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
+- **The page must read completely with every source excerpt closed.** An excerpt confirms a claim the
+  prose already made; it never carries one. A claim that exists only inside a collapsed block is
+  hidden content wearing the clothes of progressive disclosure. Judge this **field by field**: a
+  citation that appears elsewhere on the page does not rescue a field whose only `file:line` is inside
+  the block a reader has not opened.
 - **Never imply the page found everything.** It did not, and measurably so: three independent
   analyses of the same 109-file diff produced eight distinct headline findings between them, with
   only *one* appearing in all three. Explanation is reproducible; defect discovery is sampling. Say

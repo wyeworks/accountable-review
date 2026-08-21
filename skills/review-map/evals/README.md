@@ -47,6 +47,16 @@ double as a weak trigger test. That does conflate two failures — if the skill 
 fires you learn nothing about the page — so `trigger-eval.json` tests triggering
 separately, and is the file to grow when the description changes.
 
+`check.sh` also owns the mechanical half of the source excerpts: that `data-path` never
+escapes the ledger (the coverage gate reads it page-wide, so an excerpt using it breaks
+the gate), that every excerpt ships collapsed with a real summary, and that the two
+excerpt tints exist in all three theme blocks.
+
+The half it cannot own is the one that matters: **does the page still read completely
+with every excerpt closed?** That needs a reader, so it lives in `expectations`. It is
+the rule that separates progressive disclosure from hidden content, and a script has no
+way to tell whether a sentence still makes sense once the block under it is shut.
+
 ## Why the expectations are split
 
 `check.sh` owns the yes-or-no facts: does the ledger account for every changed path,

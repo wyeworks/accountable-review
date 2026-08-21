@@ -148,7 +148,87 @@ else
   bad "no evidence tier labels — inference is being presented as fact, or none was marked"
 fi
 
-# 6 · Dead links. When the head commit is on no remote, every permalink to it 404s.
+# 6 · Reserved attribute. coverage-gate.sh greps data-path across the whole page, so
+#     any component other than a ledger row that emits it injects a surplus path and
+#     breaks the gate. Source excerpts carry data-src for that reason. This check is
+#     here rather than in the gate because the gate would just report a confusing
+#     surplus; this names the actual cause.
+dp=$(grep -o 'data-path="' "$PAGE" | wc -l | tr -d ' ')
+dp_td=$(grep -o '<td data-path="' "$PAGE" | wc -l | tr -d ' ')
+if [ "$dp" -eq "$dp_td" ]; then
+  ok "data-path is only on ledger rows ($dp)"
+else
+  bad "$((dp - dp_td)) data-path attribute(s) outside a <td> — the coverage gate reads them as ledger paths; excerpts must use data-src"
+fi
+
+# 7 · Source excerpts. Three things a script can settle. The fourth and most important
+#     one — does the page still read completely with every excerpt closed — needs a
+#     reader, and lives in evals.json.
+ex=$(grep -o 'class="excerpt' "$PAGE" | wc -l | tr -d ' ')
+if [ "$ex" -gt 0 ]; then
+  det=$(grep -o '<details' "$PAGE" | wc -l | tr -d ' ')
+  sum=$(grep -o '<summary' "$PAGE" | wc -l | tr -d ' ')
+  if [ "$det" -eq "$sum" ]; then
+    ok "$ex source excerpt(s), each with a summary"
+  else
+    bad "$det <details> but $sum <summary> — a disclosure with no summary is an unlabelled black box"
+  fi
+
+  # Collapsed by default. An excerpt that ships open is just a code dump, and it is
+  # the reader who decides when they are ready to check the claim.
+  if grep -Eq '<details[^>]*[[:space:]]open([[:space:]>]|=)' "$PAGE"; then
+    bad "an excerpt is open by default — excerpts are revealed by the reader, not shipped expanded"
+  else
+    ok "every excerpt is collapsed by default"
+  fi
+
+  # A closed excerpt is the state most readers see, so its summary has to say what is
+  # inside. "View diff" is not a summary.
+  if grep -Eiq '<summary>[[:space:]]*(view|show|see) (diff|code|source)' "$PAGE"; then
+    bad "a summary reads 'view diff'/'show code' — say the location and why to open it"
+  else
+    ok "no placeholder summaries"
+  fi
+
+  # The excerpt tints are the newest colours in the system, which makes them the most
+  # likely to be declared in one theme block and forgotten in the other two.
+  exadd=$(grep -o '\-\-ex-add' "$PAGE" | wc -l | tr -d ' ')
+  if [ "$exadd" -ge 3 ]; then
+    ok "excerpt tints defined in all three theme blocks"
+  else
+    bad "--ex-add appears $exadd time(s), needs 3 — bare :root plus both dark blocks"
+  fi
+
+  # Exact-duplicate excerpts. The budget forbids quoting the same lines twice — if a
+  # start-here entry and its cohort field rest on one citation, the excerpt goes in
+  # one of them. Near-duplicates (structurally identical code a few lines apart) are
+  # the more common waste and need a reader; this catches only the literal case.
+  # Placeholders are excluded: an unfilled template legitimately repeats {{PATH}}:{{LINES}}.
+  dup=$(grep -o 'class="ex-loc">[^<]*' "$PAGE" | grep -v '{{' | sort | uniq -d | head -3)
+  if [ -z "$dup" ]; then
+    ok "no excerpt quotes the same lines twice"
+  else
+    bad "the same range is excerpted more than once: $(echo "$dup" | sed 's/class="ex-loc">//' | tr '\n' ' ')"
+  fi
+fi
+
+
+# 8 · The comprehension checkpoint is capped at five. The old standalone part had no cap
+#     and grew into a quiz that restated the page; five forces the questions to be the ones
+#     that join things the page established separately. Whether a given question is
+#     restatement needs a reader — this only holds the count.
+if grep -q 'id="approving"' "$PAGE"; then
+  cp_items=$(awk '/id="approving"/,0' "$PAGE" | awk '/<ol class="firstlook"/,/<\/ol>/' | grep -c '<li' || true)
+  if [ "${cp_items:-0}" -eq 0 ]; then
+    maybe "no comprehension checkpoint found inside 'Before approving'"
+  elif [ "${cp_items:-0}" -le 5 ]; then
+    ok "comprehension checkpoint has $cp_items question(s), within the cap of 5"
+  else
+    bad "comprehension checkpoint has $cp_items questions — the cap is 5, and past it they turn into a quiz that restates the page"
+  fi
+fi
+
+# 9 · Dead links. When the head commit is on no remote, every permalink to it 404s.
 unpushed=$(git -C "$REPO" branch -r --contains "$HEAD_REF" 2>/dev/null || true)
 if [ -z "$unpushed" ]; then
   if grep -Eq 'https://github\.com/[^"]*/(blob|pull)/' "$PAGE"; then
@@ -160,7 +240,7 @@ else
   ok "head is on a remote: permalinks are legitimate (link form not checked here)"
 fi
 
-# 7 · The three theme states. A colour defined only inside a media query is the classic
+# 10 · The three theme states. A colour defined only inside a media query is the classic
 #     unreadable-artifact bug; this catches the structural version of it.
 missing_theme=
 grep -q 'prefers-color-scheme: dark' "$PAGE" || missing_theme="$missing_theme prefers-color-scheme"
@@ -172,7 +252,7 @@ else
   bad "theme states missing:$missing_theme"
 fi
 
-# 8 · Case-specific: the planted findings, and whatever this case forbids.
+# 11 · Case-specific: the planted findings, and whatever this case forbids.
 TMPF=$(mktemp)
 trap 'rm -f "$TMPF"' EXIT
 echo "$EXPECTS" | while IFS= read -r e; do
