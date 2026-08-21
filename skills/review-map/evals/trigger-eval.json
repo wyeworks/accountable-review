@@ -1,0 +1,10 @@
+[
+  {"query": "just got assigned to review PR 412 in the timesheet repo, its like 60 files and i honestly have no idea where to start. can you make me something i can actually read", "should_trigger": true},
+  {"query": "before i approve this branch i want to understand what it breaks — especially whether anything outside the diff depends on the projects.archived_at column we just added", "should_trigger": true},
+  {"query": "our new dev is picking up the project-archival PR tomorrow. can you write up what it does and what order she should read the files in", "should_trigger": true},
+  {"query": "does the web app actually handle every error the api can return after this branch? i want to see both sides of the contract for the archive endpoint", "should_trigger": true},
+  {"query": "review this PR and leave inline comments on anything that looks wrong to you", "should_trigger": false},
+  {"query": "spec/requests/projects_spec.rb has been failing on main since the archived_at migration landed. can you work out why", "should_trigger": false},
+  {"query": "write a migration adding archived_at to projects with an index, and update ProjectSerializer to expose it", "should_trigger": false},
+  {"query": "summarize the last 20 commits on main so i can put together release notes for friday", "should_trigger": false}
+]

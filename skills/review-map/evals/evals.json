@@ -1,0 +1,68 @@
+{
+  "skill_name": "review-map",
+  "notes": "Each eval runs against a fixture repository built by fixtures/make-fixtures.sh. Run the agent with its working directory inside that repo — the prompts are written the way a user would say them from there. The `fixture` and `check` fields are additions to the skill-creator schema: `fixture` names the repo, `check` is the mechanical half of the expectations, runnable as one command.",
+  "evals": [
+    {
+      "id": 1,
+      "fixture": "rails-only-small",
+      "prompt": "I need to review the add-project-archival branch before standup tomorrow and I've never touched this part of the app. Can you give me something that explains what it actually changes?",
+      "expected_output": "A published review map for the five-file diff. Citations are plain text because nothing is pushed to a remote. No backend/frontend contract part, because there is no client. The page names app/queries/active_projects.rb — which is not in the diff — as affected by archival, and names the new slug uniqueness validation as enforced in Rails with no unique index behind it.",
+      "files": [],
+      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
+      "expectations": [
+        "check.sh passes: coverage gate, no severity chips, no verdict language, evidence tiers used, no dead permalinks, three theme states, and active_projects.rb is named",
+        "The page identifies app/queries/active_projects.rb as affected-but-unchanged, and says why: it scopes the selectable project list, which archival changes the meaning of",
+        "The page notes that the new slug uniqueness validation has no unique index behind it, distinguishing the application invariant from the database invariant",
+        "There is no backend/frontend contract part at all — omitted, not present-and-empty",
+        "The page says once, near the top, why citations are not clickable",
+        "No sentence grades the change, scores its risk, or recommends approving it"
+      ]
+    },
+    {
+      "id": 2,
+      "fixture": "monorepo-contract",
+      "prompt": "The project-archival branch touches both api and web. Before I review it I want to see how the two sides line up — is the frontend actually handling everything the API can now return?",
+      "expected_output": "A review map whose contract part follows archived_at from ProjectSerializer through the JSON to the TypeScript type, and names three things the diff does not state: the backend serializes archived_at as null for unarchived projects while web/src/types/project.ts declares archivedAt as a non-null string; the archive endpoint can return 422 and nothing in web/ handles it; and web/src/queries/selectableProjects.ts, which is not in the diff, filters the project list without knowing about archival.",
+      "files": [],
+      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'selectableProjects' --expect 'archivedAt'",
+      "expectations": [
+        "check.sh passes, including that selectableProjects and archivedAt are both named",
+        "The page identifies the nullable/non-null mismatch between the serializer and the TypeScript type, citing both sides",
+        "The page identifies that the archive endpoint can respond 422 and that no client code handles it",
+        "The page names web/src/queries/selectableProjects.ts as affected-but-unchanged",
+        "The contract part follows one field across the boundary as a chain, rather than reviewing the two sides as separate file lists",
+        "Every claim about intent that is not visible in the diff carries an evidence tier"
+      ]
+    },
+    {
+      "id": 3,
+      "fixture": "trivial",
+      "prompt": "can you do a review map for the fix-typo branch",
+      "expected_output": "No published page. The skill says the diff is a one-line typo fix in the README, that a review map would be ceremony, and offers to stop.",
+      "files": [],
+      "check": "",
+      "expectations": [
+        "No artifact is published",
+        "The response says plainly that this diff does not need a review map, and offers to stop rather than asking permission to continue",
+        "It does not emit sections, tables or diagrams for layers the diff never touches"
+      ]
+    },
+    {
+      "id": 4,
+      "fixture": "monorepo-contract",
+      "prompt": "I've got a review slot on project-archival in about twenty minutes and I don't know the branch at all. Can you get me oriented?",
+      "expected_output": "Staged delivery, which is the default and is not requested here. A URL arrives early, carrying the masthead and the goal, a build banner, and pending markers for the parts this diff earns. It fills in at that same URL. The final state carries no banner and no pending markers, and the coverage gate passes.",
+      "files": [],
+      "check": "snapshot the page file right after the first publish, then run both: evals/check.sh --draft --page <stage-1 snapshot> --repo <fixture> --base HEAD~1 ; evals/check.sh --final --page <final page> --repo <fixture> --base HEAD~1",
+      "expectations": [
+        "check.sh --draft passes on the first published state: banner present, the sentence about a pending part not being a finding intact, pending markers for the parts not yet written",
+        "check.sh --final passes on the last state: no banner, no pending markers, coverage gate green",
+        "The URL reported at the end is the same one reported at the start — one artifact, not two",
+        "The page title and favicon are identical across every stage",
+        "The first publish lands before the behaviour cohorts are written, not after",
+        "Pending stubs say what the part will cover and roughly how big it is, rather than 'coming soon'",
+        "The user is told the URL once, with a note that it will fill in — not re-pasted on every republish"
+      ]
+    }
+  ]
+}

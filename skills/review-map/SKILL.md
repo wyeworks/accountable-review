@@ -1,0 +1,377 @@
+---
+name: review-map
+description: Builds a published HTML review map of a pull request — goal and use cases, blast radius including the unchanged code the change gives new meaning to, API and client contract, behaviour cohorts, and a comprehension checkpoint — so a reviewer can explain the change before judging it. Targets a Rails API with a Next.js client. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. Not for posting review comments or approval verdicts.
+---
+
+# Review Map
+
+Turns a diff into one published page that makes a medium or large change navigable: what it is for,
+what it can break, what the API and the client now agree on, and where the decisions live.
+
+**Do not determine whether the PR is correct. Help a competent reviewer determine whether it is.**
+That is the whole product. A page good enough to approve from without reading code is a failure — the
+reviewer ends up holding a verdict instead of a mental model, and the debt lands on whoever touches
+the code next.
+
+So the page is a navigation aid, never a replacement for reading the code. The question it has to
+pass is: *after following this, can the reviewer explain what changed, why it works, and where the
+important decisions live?* Not: *can a model summarize this diff?*
+
+You are not a code reviewer here. Do not grade the change, do not recommend approval, do not post
+comments on the PR. If the project has a review command, say so at the end and let it do that job.
+
+## What is bundled
+
+The procedure below relies on five bundled files. Read each at the step that needs it rather than up
+front — the procedure itself is the only part that has to be in context the whole way through.
+
+| File | Read at | For |
+|---|---|---|
+| `references/report-format.md` | steps 1, 7, 8, 9 | The review-unit format, the evidence tiers, which parts exist, depth rules, deep-link forms and the degradation ladder |
+| `references/rails-nextjs.md` | step 5, then while reading any layer | What a senior reviewer of this stack looks for, and the search recipes for code the diff did not touch |
+| `references/page-template.html` | step 9 | The design system: tokens, component classes, SVG diagram vocabulary |
+| `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows from the diff |
+| `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
+
+Paths are relative to the base directory named at the top of this skill when it loads. That value is
+how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
+
+## 1. Resolve the target
+
+
+- Argument may be a PR number, a PR URL, a branch, or a diff range. With no argument, use the
+  current branch against its base.
+- Find the base *ref*: the PR's base if there is one, else the default branch
+  (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
+  you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
+  already resolves it, and hand-rolling one is how you end up diffing against a moved base.
+- Use three-dot diffs throughout (`git diff BASE...HEAD`) so you see the branch's own work and not
+  unrelated commits from the base.
+- **Check the working tree** with `git status --porcelain`. Three-dot diffs ignore it entirely, so
+  uncommitted edits mean the page can describe code that differs from what the reviewer has checked
+  out. Say so in the page and cover the committed state only. If the uncommitted changes are
+  substantial enough that the page would be misleading, stop and say why instead.
+- If there is a GitHub PR, capture `owner`, `repo`, number, head SHA, title, author, body via
+  `gh pr view <target> --json number,title,author,body,headRefOid,headRefName,baseRefName,url`.
+  Record the head SHA — deep links depend on it.
+- If `gh` is missing or there is no PR, continue anyway with the local branch. This is a normal
+  case, not an error.
+- **Fix the deep-link mode now, not at render time.** Check whether the head SHA is even reachable
+  on a remote — `git branch -r --contains <HEAD_SHA>`, where empty output means it was never pushed
+  and every permalink to it would 404. Unpushed branches and worktrees are among the most common
+  targets for this skill, so expect this. Pick one mode from the ladder in
+  `references/report-format.md` and use it for every citation.
+
+## 2. Discover the project
+
+Assume nothing about layout or conventions — this skill travels between repos.
+
+**Backend.** Locate the Rails root by finding `config/application.rb`. It may be at the repo root,
+under a subdirectory such as `api/`, or there may be several (engines, monorepo). If more than one is
+touched by the diff, ask which to cover. Detect, don't assume: RSpec vs Minitest; API-only
+(`config.api_only`) vs server-rendered; the authorization library, if any; the serializer library;
+the background job adapter; whether `strong_migrations` is present.
+
+**Frontend.** Locate it the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
+find the seam between the two sides, because that is what section 5 of the page is built from:
+
+- the API client or fetch wrapper, and where base URLs and error handling live;
+- **whether types crossing the boundary are generated from the backend or hand-written.** Generated
+  types drift loudly, at build time. Hand-written ones drift silently, which is the case worth
+  hunting;
+- runtime validation at the boundary (Zod or similar) and whether it is applied to every response or
+  only some;
+- the data-fetching layer: React Query, SWR, server components, route handlers.
+
+**Conventions.** Look for the project's own in `CLAUDE.md`, `AGENTS.md`, `docs/`, `README`,
+`CONTRIBUTING.md`. If found, check the PR against them. If not, infer the house style from adjacent
+unchanged code of the same kind — often more accurate than a stale document.
+
+## 3. Inventory the diff
+
+- `git diff --name-status BASE...HEAD` is the source of truth for what changed.
+- Bucket every path: migrations and schema, models, routes and controllers and serializers, services
+  and jobs and mailers, config and dependencies, backend tests, frontend source, frontend types and
+  API client, frontend tests, agent and developer tooling, generated files.
+- **Keep the full file list.** Every path must appear in the finished page. This is a hard invariant,
+  checked in step 10.
+- If the whole diff is trivial (a few files, no migration, no new behaviour), say so and offer to
+  stop rather than generate ceremony. A page nobody needs is worse than no page.
+
+## 4. Derive the goal and the use cases
+
+Before any layer, establish what the change is *for*. The reviewer cannot judge a mechanism without
+knowing the behaviour it is meant to produce.
+
+Answer, concretely: what problem does this solve; what were the user or system use cases; what was
+possible before; what becomes possible or changes after; which actors are involved; what are the
+primary execution paths.
+
+**Rank your sources by how much they can be trusted:**
+
+| Source | Worth |
+|---|---|
+| Tests | The best available statement of *intended* behaviour, because someone had to write the expectation down |
+| The code itself | What actually happens, which is not always the intent |
+| Commit messages | Often carry the *why* that comments do not |
+| The PR description | A **claim**. Cite it as intent, never as fact — it is frequently stale or thin, and that gap is exactly what this page exists to close |
+
+Write each use case as an actor plus a behaviour plus a path, not as a feature name:
+
+```
+Use case A — A workspace admin archives a project
+Archiving prevents new time entries but preserves historical ones.
+
+ProjectSettings → PATCH /api/projects/:id → ProjectsController#update
+  → Projects::Archive → Project → projects.archived_at
+```
+
+**Say which parts you inferred.** Where the intended behaviour is not pinned by a test or spelled out
+in code, name the gap instead of smoothing it over: *"It is unclear whether existing time entries stay
+editable after archival. No test covers it."* An honest gap is more useful to a reviewer than a
+confident guess, and it is the kind of thing they can resolve in one question to the author.
+
+## 5. Trace the flows and find affected-but-unchanged code
+
+**This is the step that makes the page worth generating.** A diff already shows changed lines well.
+What no diff shows is the unchanged code those lines just changed the meaning of — and that is where
+the expensive bugs are. Spend more turns here than on prose.
+
+Work outward from each changed thing to its consumers:
+
+| Changed thing | Who you have to go find |
+|---|---|
+| A method or class | Its callers, and anything that subclasses or includes it |
+| A column | Serializers exposing it, scopes and queries filtering on it, factories setting it, forms writing it |
+| A validation or callback | Every write path that now behaves differently — `update_all` and `insert_all` bypass it |
+| An enum or status value | Every branch on that value, on both sides of the boundary |
+| A JSON key or response shape | The API client, the TS type, and every component reading it |
+| A route | Anything constructing that URL, including the client and any external caller |
+| A job or its arguments | Every enqueue site, plus in-flight jobs already queued with the old shape |
+
+`references/rails-nextjs.md` carries the concrete search patterns per artifact kind. Use them; do not
+improvise a grep and call the area clear.
+
+**Record what you searched, not just what you found.** An empty result is a real finding — "no other
+caller of `Project#archive`, searched `rg 'archive[!?]?\b' app lib`" — but only if the reader can see
+the search. Unrecorded, absence and omission look identical, and the reviewer has to redo the work.
+
+Then draw the primary flow end to end, from user action to persistence and back, and list the
+secondary effects hanging off it. That flow is the page's backbone: sections 3 through 6 are its parts.
+
+## 6. Cluster into cohorts, then classify
+
+**Group by behaviour, never by directory.** `Services / Models / Hooks / Components` is the repository's
+structure, not the change's, and a reviewer who reads it still has to assemble the behaviour themselves.
+Group into vertical slices instead — one per use case, each cutting through controller, service, model,
+client and tests:
+
+```
+Cohort A — Archiving a project
+Cohort B — Preventing time entries against archived projects
+Cohort C — Showing archived projects in historical reports
+```
+
+Say why you split it that way. The split *is* the insight, and a defensible one is the backbone of
+the whole section.
+
+Then label each cohort and each leftover file:
+
+- **Primary** — directly implements the stated use cases.
+- **Supporting** — refactors or infrastructure the primary behaviour needed.
+- **Secondary** — independently reviewable, outside the primary mental model.
+
+**Stay neutral about secondary work.** The point is to tell the reviewer which changes they can hold
+separately, not to criticize the author for bundling. "Appears unrelated to archival; no correctness
+concern identified; review independently" is the whole register.
+
+## 7. Build the review units
+
+Every meaningful change gets the same seven-field shape, defined in `references/report-format.md`:
+why this exists · implementation · relevant tests · affected but unchanged · things to understand ·
+how to validate · reviewer questions.
+
+Two rules keep it from becoming ceremony:
+
+- **Units are for meaningful changes only.** A file whose whole story is "regenerated by the
+  migration" gets a ledger row, not seven fields. If you cannot fill *things to understand* with
+  something a reader would not have guessed, it is not a unit.
+- **Validation steps must be real.** The actual rake task, the actual route, the actual factory in
+  this repo — a command a reviewer can paste. Invented steps are worse than none, because they burn
+  the reader's trust in the whole page on the first paste that fails.
+
+## 8. Verify before asserting — at every publish boundary
+
+This is not a phase that happens once, before writing. The page ships in stages (step 9), so it is a
+gate each stage passes before it goes out. Content that has been published cannot be unpublished from
+the reader's memory, and a wrong claim corrected in stage 3 was still wrong in stage 1.
+
+- **Read the file yourself before any claim reaches the page.** Not the diff hunk — the file. This is
+  the single difference between a page that can be trusted and one that cannot.
+- **Label the tier of anything the diff does not show directly.** Five tiers, rendered per
+  `references/report-format.md`: explicitly changed · evidenced by unchanged code · inferred from
+  tests · inferred from naming or architecture · uncertain. Silence means the first one. Never let an
+  inference sit in the page wearing the clothes of a fact.
+- **Tests are evidence of intent, not proof of correctness.** Say which behaviour they pin, which
+  branch they leave open, and what still needs a human to exercise it.
+- Where you could not confirm something, put it in the page as an open question. Do not round
+  uncertainty up.
+- Drop any finding that does not survive the check, and do not backfill it with something weaker.
+
+## 9. Write and publish in stages
+
+A large diff takes many turns to explain, and a reviewer holding a ticket does not want to wait for
+all of them. Publish early and republish as parts complete: **the same file path every time, so the
+URL never changes.** The reader can open it at minute two, watch it fill in, and start reading the
+moment the part they need lands.
+
+The mechanics are simply the `Artifact` tool's: republishing the same file path redeploys in place.
+
+**Three milestones.** Each is a coherent thing to read, which is the point — a URL that changes under
+someone mid-paragraph is worse than one that arrives late.
+
+| Stage | After step | The page holds |
+|---|---|---|
+| 1 · Orientation | 4 | Masthead, goal and behavioural change, and the outline of the parts this diff earns, each marked pending |
+| 2 · Map | 5 | Adds the review map: blast radius, start here, reading order, where the attention goes |
+| 3 · Complete | 10 | Everything else, gate passed, build banner gone |
+
+Between stages 2 and 3 the bulk gets written. If that stretches over many turns, republish as each
+cohort or part completes — those intermediate saves cost one tool call and mean a crash leaves a
+useful page rather than nothing.
+
+**The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
+than no page at all: a reviewer sees no contract part, concludes there was nothing to say about the
+contract, and moves on. It was simply not written yet. So until the final publish the page carries a
+build-state banner naming which parts are still pending, and every pending part appears in the rail
+and in place as an explicit *pending* marker — not as an absence, and not as an "N/A" placeholder.
+The two look nothing alike on purpose. `references/report-format.md` § *Build state* has the form.
+
+**Pin the title and favicon at the first publish** and do not change them, even if your understanding
+of the PR improves. Readers find a tab by its name and icon; a page that renames itself mid-run reads
+as a different page.
+
+Everything else about writing holds at every stage:
+
+- Follow `references/report-format.md` for what parts exist, when they appear, and how deep they go.
+  Follow `references/page-template.html` for the design system, layout, and diagram styles.
+- **The template is the design system — do not load `artifact-design` to re-derive one.** That skill
+  exists to choose a palette and pair typefaces; those decisions are already made here, and its own
+  first instruction is to apply an existing system when one exists. Loading it costs a turn and
+  yields nothing. Load it only if you have a deliberate reason to depart from the template, and
+  `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
+- Diagrams are hand-authored inline SVG using the template's classes, so they work in a local file as
+  well as when published. A diagram must show a mechanism a table cannot; delete any that merely
+  restates a list.
+- Render citations in the mode chosen in step 1. Prefer blob permalinks over diff anchors where
+  linking is possible: most of the best citations in this page point at *unchanged* lines, which a
+  diff anchor cannot address at all.
+- Write the file to a scratch location, not into the repo. The page must never become part of the
+  diff it describes.
+
+Tell the user the URL when stage 1 goes out, say it will fill in, and do not repeat it on every
+republish — one link, mentioned once, then a note when it is complete.
+
+## 10. Complete the page and gate it
+
+- **Remove the build banner and every pending marker.** A finished page still carrying "2 of 3
+  stages" is the worst outcome of staged delivery: it undersells work that is actually done, and the
+  next reader cannot tell whether you stopped early or forgot the banner. If a part really was left
+  unwritten, say so in prose as a stated limit — that is a different sentence from "pending".
+- **Generate the ledger, do not type it.** Run the bundled generator from the repository under review
+  and paste its output into the ledger table:
+
+  ```sh
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD
+  ```
+
+  It emits one row per changed path with the `data-path` attribute already set, each preceded by a
+  hint comment carrying the git status letter and line counts — usually enough to decide the attention
+  level without opening the file. Three cells are left as placeholders for you to fill: which part
+  covers the file, its attention level, and its group. A row still reading `{{SECTION}}` is a row
+  nobody classified, which is the point.
+
+  This exists because the gate below compares sets, and a hand-typed hundred-path ledger fails it for
+  boring reasons: one truncation, one stale row after a rebase. Generating the rows makes the gate a
+  check on your classification rather than on your typing.
+- **Completeness gate.** Then run the gate from the same place:
+
+  ```sh
+  <skill base directory>/scripts/coverage-gate.sh <page.html> BASE HEAD
+  ```
+
+  The base directory is named at the top of this skill when it loads; `$CLAUDE_PLUGIN_ROOT` is *not*
+  set in the shell, so do not reach for it.
+
+  Use the script rather than improvising the check. Not because improvising is forbidden, but because
+  the tempting improvisation — grepping the page for each path — silently passes on truncated paths:
+  `api/Gemfile` matches inside `api/Gemfile.lock`. The script compares sets as whole strings, prints
+  what is missing and what is surplus, and fails loudly when the `data-path` attributes are absent
+  instead of reporting a pass it did not earn.
+
+  The gate runs once, here, against the finished page. Earlier stages ship with the ledger visibly
+  marked partial; a gate that passed on a partial ledger would mean nothing.
+- Confirm the page renders: no horizontal overflow on `body`, diagrams fit or scroll in their own
+  container, and all three theme states resolve (`data-theme="dark"`, `data-theme="light"`, and the
+  unstamped `prefers-color-scheme` default most viewers get).
+- Publish the final state to the same path. Report that it is complete, what the change does in two or
+  three lines, and anything you could not verify. Mention the project's own review command if it has
+  one.
+- On a re-run for the same PR, use the **same file path again** so the URL survives across pushes as
+  well as across stages. One PR, one link, however many times this runs.
+
+## When a run stops early
+
+Sometimes a run ends before the page is finished — the diff was larger than the context, the user
+called it, something failed. The page is already published, so the question is what it should say.
+
+**Not the draft banner.** "Still being written, stage 2 of 3" is a promise, and nothing is writing it
+any more. A reader who comes back an hour later to the parts they were told were coming has been
+misled by a page that was accurate when it shipped.
+
+Convert it instead into a stated limit — the same components, different words:
+
+- The banner says what was covered, that the run stopped, and that the absence of the rest is not a
+  finding about the change.
+- Every marker changes from *pending* to *not written*. Pending is a promise; not written is a fact.
+- The ledger note says the gate did not run, and warns against reading the written parts as a full
+  account of the diff.
+
+`evals/check.sh --stopped` checks all four. This is the third legitimate state of the page, alongside
+in-progress and complete, and the only one that requires a deliberate edit rather than a deletion.
+
+## Working in a worktree
+
+Worktrees are among this skill's most common targets, and a worktree-isolated session sandboxes shell
+commands: compound one-liners that chain `git` with `grep`, `&&`, or a redirect are refused as
+unverifiable. Run those as separate plain commands. Budget a few extra turns for it rather than
+fighting the sandbox with quoting.
+
+## How big should the page be?
+
+Adaptivity trims ceremony on small PRs; it does not cap large ones. A hundred-file diff legitimately
+produces a long reference document — the run this guidance came from wrote ~135 KB and that was
+right. The pressure while writing is always to cut, so: **do not trim a large page toward some
+imagined ideal length.** Trim only content that fails its own test — a diagram that restates a table,
+a paragraph without a citation, a section the diff did not earn, a review unit with nothing in
+*things to understand*.
+
+This runs in a single context by design, so a very large diff will strain it. That is a signal worth
+reporting, not one to hide: if you had to skim a region to fit, say which region, in the page.
+
+## Hard rules
+
+- Every claim carries a `file:line`, linked when a link is possible.
+- **Never grade the PR.** No approval recommendation, no risk score, no confidence percentage, no
+  "looks good". The reviewer decides; the page equips them. Evidence, relationships, invariants,
+  uncertainty, and validation steps are the output — verdicts are not.
+- **Never present inference as fact.** If the diff does not show it, the page says how you know.
+- **Never imply the page found everything.** It did not, and measurably so: three independent
+  analyses of the same 109-file diff produced eight distinct headline findings between them, with
+  only *one* appearing in all three. Explanation is reproducible; defect discovery is sampling. Say
+  plainly that what the page surfaced is a pass, not an audit, and never let it read as a clean bill
+  of health. Where a reviewer needs assurance rather than orientation, point them at a dedicated
+  review pass.
+- Never drop a file from the page to keep it tidy.
+- Never post to GitHub, Linear, or anywhere outside the artifact.
+- Never commit the page into the repo under review.

@@ -1,5 +1,5 @@
 <!--
-  rails-review-guide · page template
+  accountable-review · review-map page template
 
   Copy this file, fill in the content, delete unused component examples and any
   section the diff does not touch. Everything below is verified working: no
@@ -12,7 +12,40 @@
   states are: explicit dark, explicit light, and the unstamped default that most
   viewers actually get, where only prefers-color-scheme applies.
 
+  NO SEVERITY VOCABULARY, also by design: this system has no chip that grades the
+  PR. Claims carry an evidence tier (span.tier) where the diff does not show them
+  directly, and the neutral .chip is for attention level, change shape and side
+  effects. See report-format.md.
+
   Placeholders are written as {{LIKE_THIS}}.
+
+  MAP — the style block first, then the body skeleton at the bottom of the file.
+
+    :root tokens .......... colours, fonts, shadow. Declared three times: bare
+                            :root, prefers-color-scheme dark, [data-theme="dark"]
+    shell, grid, rail ..... page frame and the sticky contents rail
+    type .................. headings, .prose, .lede, .note, .eyebrow, .cite
+    rhythm ................ .stack, .layer-head, .two-col
+    masthead .............. .meta-strip, .meta-cell
+    chips ................. neutral .chip, .chip-accent. No severity chips exist
+    build state ........... .buildstate banner and .pending markers — deleted at the
+                            final publish, never left on a finished page
+    evidence tier ......... .tier
+    cards and callouts .... .card, .callout, .callout-block/watch/good
+    start here ............ .firstlook — also used for the comprehension checkpoint
+    reading order ......... .readorder
+    wide blocks ........... .wide, .scroller — diagrams and wide tables
+    tables ................ base table styles
+    endpoint cards ........ .endpoint, .endpoint-head, .verb-*, .ep-row
+    review units .......... .unit — the core primitive; its fields are .ep-row rows
+    code .................. pre.codeblock
+    cohorts ............... .cohort, .cohort-letter, .cohort-foot
+    step chains ........... ol.steps — call chains and contract chains
+    decisions ............. .decisions > .decision
+    SVG vocabulary ........ .box, .node, .node-dead, .edge, .edge-dash, .lifeline,
+                            and the svg text classes
+    body skeleton ......... masthead, rail, Part 1 → Part 12, and a filled-in
+                            review-unit example
 -->
 <title>{{PR_TITLE_OR_BRANCH}} Review</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -125,6 +158,7 @@ main { min-width: 0; }
 }
 .rail a:hover, .rail a:focus-visible { color: var(--accent); border-left-color: var(--accent); }
 .rail .rail-sub { padding-left: 24px; font-size: 12px; }
+.rail .pending { font-size: 8.5px; padding: 1px 4px; letter-spacing: .08em; vertical-align: 1px; }
 .rail-title {
   font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   color: var(--ink-3); margin: 0 0 12px 14px;
@@ -194,11 +228,39 @@ header.masthead { padding: 64px 0 0; }
   padding: 3px 8px; border-radius: 3px; white-space: nowrap;
   background: var(--surface-2); color: var(--ink-2); border: 1px solid transparent;
 }
-.chip-block { background: var(--block-soft); color: var(--block); border-color: color-mix(in srgb, var(--block) 24%, transparent); }
-.chip-watch { background: var(--watch-soft); color: var(--watch); border-color: color-mix(in srgb, var(--watch) 24%, transparent); }
-.chip-good  { background: var(--good-soft);  color: var(--good);  border-color: color-mix(in srgb, var(--good) 24%, transparent); }
 .chip-accent{ background: var(--accent-soft); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 24%, transparent); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* No severity vocabulary here on purpose: the page reports what the code does, never a grade.
+   The chip above is neutral (attention level, change shape, side effects). */
+
+/* ---------- build state ---------- */
+/* The page publishes in stages at one URL, so it has to say so. Both of these are
+   deleted at the final publish — a finished page still wearing them undersells
+   itself and leaves the reader unable to tell whether the run stopped early. */
+.buildstate {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px;
+  margin: 0 0 28px; padding: 12px 18px; font-size: 14px; line-height: 1.5;
+  background: var(--accent-soft); color: var(--ink-2);
+  border: 1px dashed color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 5px;
+}
+.buildstate strong { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.pending {
+  display: inline-block; font-family: var(--font-display); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px;
+  background: var(--surface-2); color: var(--ink-3);
+  border: 1px dashed var(--rule-strong); white-space: nowrap;
+}
+
+/* ---------- evidence tier ---------- */
+/* Marks a claim the diff does not show directly. Never on an explicitly-changed claim —
+   silence means the diff shows it, and labelling everything is noise that gets skipped. */
+.tier {
+  display: inline-block; font-family: var(--font-display); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px;
+  background: var(--surface-2); color: var(--ink-3); border: 1px solid var(--rule);
+  white-space: nowrap; vertical-align: 1px;
+}
 
 /* ---------- cards and callouts ---------- */
 .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px 22px; box-shadow: var(--shadow); }
@@ -275,6 +337,14 @@ td .chip { font-size: 9.5px; }
 .ep-row > dd { margin: 0; font-size: 14.5px; line-height: 1.5; }
 .ep-row > dd > ul { margin: 0; padding-left: 18px; }
 
+/* ---------- review units ---------- */
+/* The report's core primitive. Same card shell as .endpoint; the seven fields are .ep-row rows. */
+.unit { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; box-shadow: var(--shadow); overflow: hidden; }
+.unit-head { padding: 15px 20px; background: var(--surface-2); border-bottom: 1px solid var(--rule); }
+.unit-head h3 { margin-bottom: 4px; }
+.unit-head p { font-size: 15px; margin: 0; color: var(--ink-2); }
+.unit-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 13px; }
+
 /* ---------- code ---------- */
 pre.codeblock {
   margin: 0; padding: 13px 16px; background: var(--surface-2); border: 1px solid var(--rule);
@@ -297,33 +367,44 @@ pre.codeblock b { color: var(--ink); font-weight: 600; }
 .cohort-foot strong { font-family: var(--font-display); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 4px; }
 
 /* ---------- step chains ---------- */
+/* The counter is absolutely positioned rather than occupying a grid column, and that
+   is the whole point. As a grid cell it made every child of the li a grid item, so a
+   second <code> — or even the bare "→" text between two of them — auto-placed into
+   the 26px counter column and appeared stranded under the number. Normal flow with a
+   padded gutter accepts any markup: one path, two with an arrow between them, a
+   trailing .anno, without a placement rule per case. */
 .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; counter-reset: st; }
 .steps > li {
-  counter-increment: st; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 12px;
-  padding: 8px 0; border-top: 1px solid var(--rule); font-family: var(--font-mono);
+  counter-increment: st; position: relative; padding: 8px 0 8px 38px;
+  border-top: 1px solid var(--rule); font-family: var(--font-mono);
   font-size: 12.5px; line-height: 1.5;
 }
 .steps > li:first-child { border-top: 0; }
-.steps > li::before { content: counter(st); color: var(--accent); font-size: 11px; font-weight: 600; padding-top: 2px; font-variant-numeric: tabular-nums; }
-.steps .anno { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-3); display: block; }
-
-/* ---------- flags ---------- */
-.flags { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.flags > li {
-  display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 14px; align-items: start;
-  padding: 13px 17px; background: var(--surface); border: 1px solid var(--rule);
-  border-radius: 5px; font-size: 15px; line-height: 1.5;
+.steps > li::before {
+  /* left: 24px, not 0: a .steps list sits inside a .cohort card with no inset of its
+     own, so a counter at 0 lands flush against the card border. Verified by eye. */
+  content: counter(st); position: absolute; left: 24px; top: 10px; width: 26px;
+  color: var(--accent); font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums;
 }
-.flags .chip { margin-top: 2px; }
-.flags p { margin: 0; }
-.flags .src { display: block; margin-top: 5px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
-
+.steps .anno { display: block; margin-top: 3px; font-family: var(--font-body); font-size: 13.5px; color: var(--ink-3); }
+ . "
+"
 /* ---------- decisions ---------- */
 .decisions { counter-reset: dec; }
-.decision { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px; padding: 16px 0; border-top: 1px solid var(--rule); counter-increment: dec; }
-.decision::before { content: counter(dec, decimal-leading-zero); font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent); padding-top: 4px; font-variant-numeric: tabular-nums; }
+/* Absolutely positioned counter, same reasoning as .steps: it keeps the content in
+   normal flow, so the markup inside a decision can be anything. */
+.decision {
+  counter-increment: dec; position: relative; padding: 16px 0 16px 44px;
+  border-top: 1px solid var(--rule);
+}
+.decision::before {
+  content: counter(dec, decimal-leading-zero); position: absolute; left: 0; top: 20px;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
 .decision h4 { margin-bottom: 6px; }
-.decision p { font-size: 15px; margin-bottom: 8px; }
+ . "
+".decision p { font-size: 15px; margin-bottom: 8px; }
 .decision .risk { font-size: 14.5px; color: var(--ink-2); margin-bottom: 0; }
 .decision .risk b { font-family: var(--font-display); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--watch); margin-right: 6px; }
 
@@ -349,6 +430,13 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
 
 <div class="shell">
 
+<!-- Build banner: present from the first publish until the last, then deleted along with
+     every .pending marker. The final sentence is the load-bearing one — keep it. -->
+<div class="buildstate">
+  <strong>Still being written</strong> — stage {{N}} of 3, updated {{HH:MM}}.
+  Parts marked pending below are not yet written. Their absence is not a finding.
+</div>
+
 <header class="masthead">
   <div class="grid">
     <div></div>
@@ -372,59 +460,182 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
   <nav class="rail" aria-label="Sections">
     <p class="rail-title">Contents</p>
     <ol>
-      <li><a href="#orientation">Where to start</a></li>
-      <!-- one entry per emitted layer section -->
+      <li><a href="#goal">What this does</a></li>
+      <li><a href="#map">Review map</a></li>
+      <!-- one entry per emitted part; a part not yet written keeps its place -->
+      <li><a href="#{{ID}}">{{PART}} <span class="pending">pending</span></a></li>
+      <li><a href="#checkpoint">Comprehension checkpoint</a></li>
       <li><a href="#coverage">Coverage ledger</a></li>
     </ol>
   </nav>
 
   <main>
 
-    <!-- ===== Part 1 · Orientation ===== -->
-    <section id="orientation">
-      <div class="layer-head"><p class="eyebrow">Orientation</p><h2>Where to start</h2></div>
+    <!-- ===== Part 1 · Goal and behavioural change ===== -->
+    <section id="goal">
+      <div class="layer-head"><p class="eyebrow">What this does</p><h2>{{BEHAVIOURAL_CHANGE}}</h2></div>
 
-      <!-- Start here: 2-5 verified items. If none, say so plainly instead. -->
+      <!-- One block per use case. Actor + behaviour, before/after, then the path. -->
+      <article class="cohort">
+        <div class="cohort-head">
+          <div class="cohort-letter">A</div>
+          <div>
+            <h3>{{ACTOR_DOES_THING}}</h3>
+            <p>{{WHAT_WAS_POSSIBLE_BEFORE_AND_WHAT_IS_NOW}}
+               <span class="tier">inferred from tests</span></p>
+          </div>
+        </div>
+        <!-- Any markup works here: the step number is absolutely positioned, so the
+             content is in normal flow. One path, two with an arrow between them, and a
+             trailing span.anno all lay out without extra rules. -->
+        <ol class="steps">
+          <li><code>{{UI_ENTRY}}</code><span class="anno">{{WHAT_HAPPENS_HERE}}</span></li>
+          <li><code>{{VERB_AND_ROUTE}}</code></li>
+          <li><code>{{CONTROLLER_ACTION}}</code></li>
+          <li><code>{{OPERATION_OR_SERVICE}}</code></li>
+          <li><code>{{MODEL_OR_COLUMN}}</code></li>
+        </ol>
+      </article>
+    </section>
+
+    <!-- ===== Part 2 · Review map ===== -->
+    <section id="map">
+      <div class="layer-head"><p class="eyebrow">Blast radius</p><h2>Review map</h2></div>
+
+      <!-- The one diagram that earns its place on almost every PR: the primary flow, with
+           secondary effects branching off it. Changed nodes use .node; affected-but-unchanged
+           nodes use .node-dead (already dashed). A legend is REQUIRED — a dashed box with no
+           legend reads as "deleted", which is the opposite of what it means here. -->
+      <figure class="wide">
+        <div class="scroller"><svg viewBox="0 0 880 320" role="img" aria-label="{{DESCRIBE}}">
+          <!-- ... -->
+        </svg></div>
+        <figcaption class="note">Solid: changed by this PR. Dashed: unchanged, and affected.</figcaption>
+      </figure>
+
+      <div class="two-col">
+        <div class="card">
+          <p class="eyebrow">Changed</p>
+          <ul><li><a class="cite" href="{{LINK}}">{{PATH}}</a></li></ul>
+        </div>
+        <div class="card">
+          <p class="eyebrow">Affected, not changed</p>
+          <!-- Each entry needs a WHY clause. If a search came up empty, say what was searched. -->
+          <ul><li><a class="cite" href="{{LINK}}">{{PATH}}</a> &mdash; {{WHY_AFFECTED}}</li></ul>
+        </div>
+      </div>
+
+      <!-- Start here: statements about the code plus why they are load-bearing, each linking to
+           its unit. No grades, no severity chips, no approval language. If nothing rises to this
+           level, say so plainly instead of manufacturing items. -->
       <ol class="firstlook">
         <li><div>
-          <h4>{{FINDING}}</h4>
-          <p>{{WHAT_AND_WHY_IT_MATTERS}}</p>
+          <h4>{{WHAT_IS_TRUE_OF_THE_CODE}}</h4>
+          <p>{{WHY_IT_IS_LOAD_BEARING}} <a href="#{{UNIT_ID}}">{{WHERE_IT_IS_COVERED}}</a></p>
         </div></li>
       </ol>
+      <p class="note">{{THESE_ARE_WHAT_THIS_PASS_SURFACED_NOT_AN_AUDIT}}</p>
 
       <ol class="readorder">
         <li><div><code>{{PATH}}</code> &mdash; <span class="why">{{WHY_THIS_BEFORE_THAT}}</span></div></li>
       </ol>
     </section>
 
-    <!-- ===== Part 2 · One section per non-empty layer =====
-         Emit in dependency order: data, interface, domain logic,
-         boundaries, tests, paired frontend. Omit any layer the diff
-         does not touch — no "N/A" placeholders. See guide-outline.md.
+    <!-- ===== Parts 3-10 · one section per part the diff earns =====
+         In order: state and persistence, API surface, backend/frontend contract,
+         behaviour cohorts, cross-cutting concerns, test harness, agentic and developer
+         tooling, primary/supporting/secondary. Omit any part the diff does not touch —
+         no "N/A" placeholders. See report-format.md.
 
          Component reference:
+           article.unit                    review units — the core primitive, example below
+           .buildstate + .pending          staged-publish banner and markers, both deleted at the end
+           span.tier                       evidence tier, only when not "explicitly changed"
            figure.wide > .scroller > svg   diagrams
            .wide.scroller > table          wide tables
            article.endpoint                API contract cards
-           article.cohort                  service groupings
+           article.cohort                  use-case and cohort headers
            .decisions > .decision          decisions to pay attention to
-           ul.flags > li + .chip           review flags
-           .callout-block/watch/good       emphasis
-           ol.steps                        call chains
+           .callout-block/watch/good       emphasis (not grading)
+           ol.steps                        call chains and contract chains
+           .two-col                        side-by-side lists, app vs DB invariants
     -->
 
-    <!-- ===== Part 3 · Closing ===== -->
+    <!-- A part this diff earns but that is not written yet. One line of substance —
+         how many files, what it will cover — makes a placeholder informative.
+         "Coming soon" does not. Deleted when the part is written. -->
+    <section id="{{ID}}">
+      <div class="layer-head"><p class="eyebrow">{{EYEBROW}}</p><h2>{{PART}}</h2></div>
+      <p class="note"><span class="pending">pending</span> {{WHAT_IT_WILL_COVER_AND_HOW_BIG}}</p>
+    </section>
+
+    <!-- The review unit. Omit a field rather than fake it; keep the order. -->
+    <article class="unit" id="{{UNIT_ID}}">
+      <div class="unit-head">
+        <h3>{{WHAT_THIS_CHANGE_IS}}</h3>
+        <p>{{WHY_THIS_EXISTS}}</p>
+      </div>
+      <dl class="unit-body">
+        <div class="ep-row"><dt>Implementation</dt><dd>
+          <ul><li><a class="cite" href="{{LINK}}">{{PATH}}:{{LINES}}</a> &mdash; {{WHAT_IT_DOES}}</li></ul>
+        </dd></div>
+        <div class="ep-row"><dt>Tests</dt><dd>
+          <ul><li><a class="cite" href="{{LINK}}">{{SPEC}}:{{LINES}}</a> &mdash; {{WHAT_IT_PINS}}</li></ul>
+          <p class="note">{{WHAT_THEY_LEAVE_OPEN}}</p>
+        </dd></div>
+        <div class="ep-row"><dt>Affected, unchanged</dt><dd>
+          <ul><li><a class="cite" href="{{LINK}}">{{PATH}}:{{LINE}}</a> &mdash; {{WHY_AFFECTED}}</li></ul>
+        </dd></div>
+        <div class="ep-row"><dt>Understand</dt><dd>
+          <ul><li>{{NON_OBVIOUS_INVARIANT_OR_DECISION}}</li></ul>
+        </dd></div>
+        <div class="ep-row"><dt>Validate</dt><dd>
+          <ol><li>{{REAL_PASTEABLE_STEP_FROM_THIS_REPO}}</li></ol>
+        </dd></div>
+        <div class="ep-row"><dt>Questions</dt><dd>
+          <ul><li>{{QUESTION_PHRASED_AS_A_QUESTION}}</li></ul>
+        </dd></div>
+      </dl>
+    </article>
+
+    <!-- Decisions to pay attention to. The number is absolutely positioned, so the
+         contents are ordinary flow content — structure them however the decision reads
+         best. -->
+    <div class="decisions">
+      <div class="decision">
+        <h4>{{THE_DECISION}}</h4>
+        <p>{{WHY_IT_MATTERS}} <span class="cite">{{PATH}}:{{LINE}}</span></p>
+        <p class="risk"><b>Tradeoff</b> {{WHAT_WAS_ACCEPTED}}</p>
+      </div>
+    </div>
+
+    <!-- ===== Part 11 · Comprehension checkpoint ===== -->
+    <section id="checkpoint">
+      <div class="layer-head"><p class="eyebrow">Before approving</p><h2>Comprehension checkpoint</h2></div>
+      <p class="prose">You should be able to answer these from this page and the code it links to.</p>
+      <!-- PR-specific questions only. A generic checklist teaches nothing. -->
+      <ol class="firstlook">
+        <li><div><h4>{{PR_SPECIFIC_QUESTION}}</h4></div></li>
+      </ol>
+    </section>
+
+    <!-- ===== Part 12 · Coverage ledger ===== -->
     <section id="coverage">
       <div class="layer-head"><p class="eyebrow">Completeness</p><h2>Coverage ledger</h2></div>
-      <p class="prose">Every file in the diff, and where this guide covers it.</p>
+      <p class="prose">Every file in the diff, and where this page covers it.</p>
+      <!-- Until the final publish, say so here: the gate has not run, and a short ledger
+           must not be allowed to imply a short diff. Delete this line when it has. -->
+      <p class="note"><span class="pending">partial</span> The ledger fills in as parts are written.</p>
       <div class="wide scroller">
         <table>
-          <thead><tr><th>File</th><th>Section</th><th>Attention</th></tr></thead>
+          <thead><tr><th>File</th><th>Section</th><th>Attention</th><th>Group</th></tr></thead>
           <tbody>
             <tr>
-              <td><a class="cite" href="{{DEEP_LINK}}">{{PATH}}</a></td>
+              <!-- data-path is what scripts/coverage-gate.sh reads. Without it the gate cannot run. -->
+              <td data-path="{{PATH}}"><a class="cite" href="{{DEEP_LINK}}">{{PATH}}</a></td>
               <td>{{SECTION}}</td>
               <td><span class="chip">{{read | skim | mechanical}}</span></td>
+              <td><span class="chip">{{primary | supporting | secondary}}</span></td>
             </tr>
           </tbody>
         </table>
