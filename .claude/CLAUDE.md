@@ -181,11 +181,10 @@ orchestrator's job is reconnecting them into end-to-end behaviours.
 the one thing a 112-file run exposed that has not been fixed. Naming it here so the next iteration
 starts from the real question rather than rediscovering it.
 
-The run in question — `experiment/ai-hours-assistant` in wye-time, 112 files, 14.8k insertions, a
-Rails API and a Next.js client in one diff — got through the goal, the blast radius and five verified
-affected-but-unchanged findings, and would have needed several times that budget to finish the
-behaviour flows and a 112-row ledger. Nothing about it failed. It simply ran out of room, in a way
-the procedure has no policy for.
+The run in question — 112 files, 14.8k insertions, a Rails API and a Next.js client in one diff — got
+through the goal, the blast radius and five verified affected-but-unchanged findings, and would have
+needed several times that budget to finish the behaviour flows and a 112-row ledger. Nothing about it
+failed. It simply ran out of room, in a way the procedure has no policy for.
 
 What makes this hard is that the honest sampling strategy runs against the skill's own instincts:
 

@@ -680,10 +680,11 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
           <details class="excerpt excerpt--diff">
             <summary><span class="ex-loc">{{PATH}}:{{LINES}}</span> <span class="ex-why">{{WHY_THIS_MATTERS}}</span></summary>
             <div class="ex-body">
-<pre class="codeblock" data-src="{{PATH}}" style="counter-reset: exl {{START_MINUS_1}}"><span class="l"><span class="sig"> </span>  def require_profile_setup</span>
-<span class="l del"><span class="sig">-</span>    return if current_user.organizer?</span>
-<span class="l add"><span class="sig">+</span>    return if current_user.organizer? || current_user.communities.any?</span>
-<span class="l"><span class="sig"> </span>    redirect_to step_profile_setup_path</span>
+<pre class="codeblock" data-src="{{PATH}}" style="counter-reset: exl {{START_MINUS_1}}"><span class="l"><span class="sig"> </span>  def archive!</span>
+<span class="l del"><span class="sig">-</span>    return if archived?</span>
+<span class="l add"><span class="sig">+</span>    raise ArchiveError if time_entries.open.exists?</span>
+<span class="l"><span class="sig"> </span>    update!(archived_at: Time.current)</span>
+<span class="l"><span class="sig"> </span>  end</span>
 </pre>
               <p class="note">Changed at <a class="cite" href="{{LINK}}">{{PATH}}:{{LINES}}</a></p>
             </div>
@@ -702,8 +703,10 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
           <details class="excerpt excerpt--source">
             <summary><span class="ex-loc">{{PATH}}:{{LINES}}</span> <span class="ex-why">{{WHY_THIS_MATTERS}}</span></summary>
             <div class="ex-body">
-<pre class="codeblock" data-src="{{PATH}}" style="counter-reset: exl {{START_MINUS_1}}"><span class="l">User.class_eval do</span>
-<span class="l">  after_create :auto_complete_profile_for_test</span>
+<pre class="codeblock" data-src="{{PATH}}" style="counter-reset: exl {{START_MINUS_1}}"><span class="l">class ActiveProjects</span>
+<span class="l">  def call</span>
+<span class="l">    Project.where(discarded_at: nil).order(:name)</span>
+<span class="l">  end</span>
 <span class="l">end</span>
 </pre>
               <p class="note">Unchanged at <a class="cite" href="{{LINK}}">{{PATH}}:{{LINES}}</a></p>

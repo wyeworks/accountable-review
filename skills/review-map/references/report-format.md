@@ -133,8 +133,8 @@ to the test below.
 
 The last two were added after a run showed the original list barred excerpts from the two densest
 concentrations of unchanged-code claims a server-rendered Rails PR produces. § 5 is the sharper
-case: *"no unique index on `communities.organizer_id`, `db/schema.rb:332`"* is one line inside a
-twelve-hundred-line generated file, and no reviewer opens that file to check it. The general rule
+case: *"no unique index on `projects.slug`, `db/schema.rb:141`"* is one line inside a generated file
+twelve hundred lines long, and no reviewer opens that file to check it. The general rule
 against excerpting `db/schema.rb` is about **churn** — do not quote a migration's regenerated diff. It
 was never about quoting one committed line that a claim turns on.
 
@@ -153,8 +153,8 @@ was never about quoting one committed line that a claim turns on.
 - **An excerpt is evidence for one claim, not coverage of a file.** Never a whole file, never every
   hunk. Completeness belongs to the ledger.
 - **The field carries its own citation, not one from elsewhere on the page.** The closed-page rule is
-  easy to satisfy globally and still fail locally: a run wrote *"an unchanged monkey-patch in
-  `test_helper.rb` adds an `after_create` callback"* with the path as bare prose, the only `file:line`
+  easy to satisfy globally and still fail locally: a run wrote *"an unchanged trait in
+  `spec/factories/projects.rb` stamps `archived_at`"* with the path as bare prose, the only `file:line`
   for it being the excerpt's own footer. The same citation did appear linked in § 2 and in the
   reading order, so the page as a whole was fine — but a reader working through that field with the
   block shut had nothing to click. Judge the rule field by field, not page-wide. `check.sh` cannot
@@ -226,17 +226,18 @@ A paragraph describing what a guard does is longer than the guard, less precise,
 where you are about to write prose that narrates code, show the code and write one sentence of
 **implication** instead:
 
-> Before — 78 words narrating the method:
+> Before — 65 words narrating the method:
 >
-> *"The guard first returns early when no user is signed in, then again for admins, then checks whether
-> the user has an accepted organization role. Previously it also admitted anyone whose `user_type` was
-> organizer, which meant a community organizer with no role would be redirected to `/organizer`,
-> bounced back by the section's own guard, and loop indefinitely."*
+> *"The guard first returns early when the project is already archived, then again when the caller is a
+> workspace admin, then checks whether any time entries are still open. Previously the admin branch
+> skipped the open-entry check entirely, which meant an admin could archive a project underneath
+> entries still being edited, and those entries would then fail to save against a project no selector
+> offers."*
 >
-> After — 24 words plus the excerpt:
+> After — 23 words plus the excerpt:
 >
-> *"Admission is now the accepted role alone; the `user_type` clause is gone, which is what breaks the
-> loop."* ▸ `application_controller.rb:125-131`
+> *"Archival now runs the open-entry check for everyone; the admin bypass is gone, which is what
+> prevents entries stranded against an archived project."* ▸ `projects_controller.rb:41-52`
 
 Shorter, checkable, and the reader who trusts it can move on without opening the block.
 
@@ -278,7 +279,7 @@ reading, and everything after that point is wasted regardless of how good it is.
 
 The reference form is one sentence, no re-explanation:
 
-> The `require_profile_setup` consequence under *Start here* applies to this flow too.
+> The `ActiveProjects` consequence under *Start here* applies to this flow too.
 
 Not a summary of that consequence, not its citation again, not its tier label again.
 
@@ -290,11 +291,11 @@ section, not the file.
 **Where synthesis beats deletion.** When two sections hold overlapping but non-identical facts, merge
 them into one sentence that carries both rather than keeping the better one:
 
-> Because invite acceptance no longer writes `user_type: :organizer`, community organizers now enter
-> `User.recommendable`, so the background jobs consuming that scope may process them. Whether that is
+> Because archival writes `archived_at` and leaves `discarded_at` untouched, archived projects stay
+> inside `ActiveProjects`, so every selectable-project list keeps offering them. Whether that is
 > intended is an author question.
 
-Three separate paragraphs — one for the write, one for the scope, one for the jobs — say less than
+Three separate paragraphs — one for the write, one for the scope, one for the lists — say less than
 that, at four times the length.
 
 ## Depth rules
@@ -615,9 +616,9 @@ The reviewer's action list. Compact, and nothing here restates an explanation fr
   join two things the page established separately:
 
   ```
-  1. Which authorization rule admits a user to the organizer section now, and which sibling
-     guards still read the old flag?
-  2. What happens to a user who is mid-flow when the two sides deploy at different times?
+  1. Which query decides whether a project can still be selected now, and which callers reach it
+     through the scope this PR did not change?
+  2. What happens to a time entry submitted against a project archived between page load and submit?
   ```
 
   If the page cannot lead a reader to the answer at all, that is a gap in the page, not a challenge for
