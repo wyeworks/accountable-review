@@ -55,6 +55,14 @@ sha, so a pass rate is attributable to a version of the prose. `--judge` adds th
 model pass per fragment over the written expectations, anchored by running inside the fixture with
 the frozen upstream, its counts under their own keys and never summed with the mechanical ones.
 
+Every second of that loop is the model — the fixtures build in under a second and `check.sh` in under
+two tenths — so `run.sh` takes `-j N` to run the repetitions at once and `--fast` (`--model sonnet
+--effort low`) to read each one more cheaply. The first is free; the second is not, and the price is
+comparability, which is why the model and effort land on every result line and `report.sh` makes them
+part of the group key. Shape a wording change on the fast loop, then re-measure on the shipping model
+before quoting a number. `--fast` leaves the judge alone deliberately: the producer is what is under
+test, the judge is the measurement, and a cheap measurement is not a faster loop.
+
 Section files are named by slug, never by number: `report-format.md`'s numbering is already the
 source of order, and a filename repeating it only makes the reader look the number up. Read
 `evals/README.md` before adding a case. Two things there are worth preserving above the rest — the

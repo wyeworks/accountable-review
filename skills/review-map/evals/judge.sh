@@ -2,6 +2,7 @@
 # judge.sh — the judged half of a section eval, in one pass over one fragment.
 #
 #   ./judge.sh --fragment <file> --case behaviour-flows --fixture monorepo-contract
+#   ./judge.sh --fragment <file> --case behaviour-flows --fixture monorepo-contract --model sonnet --effort low
 #
 # checks/ settles the yes-or-no facts. The expectations in cases/<slug>.json are the other half, and
 # until now nothing read them: run.sh printed "read the fragments against them", which made the cheap
@@ -18,24 +19,34 @@
 #
 # The judge never sees the mechanical results. Two independent readings are worth more than one
 # reading anchored to another.
+#
+# --model and --effort exist for symmetry with run.sh, not because they are a good idea here. The
+# producer is the thing under test and can be read by a cheaper model while a wording change is
+# being shaped; the judge IS the reading, so a cheap judge does not make the loop faster, it makes
+# the number softer. Whatever is used lands in results/<case>.jsonl under judge_model, so a run
+# graded by a cheaper reader is at least labelled as one.
 set -eu
 
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 SKILL_DIR=$(dirname "$HERE")
 
 FRAGMENT=; CASE=; FIXTURE=; OUTDIR=
+MODEL=${EVAL_JUDGE_MODEL:-}; EFFORT=${EVAL_JUDGE_EFFORT:-}
 while [ $# -gt 0 ]; do
   case $1 in
     --fragment) FRAGMENT=$2; shift 2 ;;
     --case)     CASE=$2;     shift 2 ;;
     --fixture)  FIXTURE=$2;  shift 2 ;;
     --out)      OUTDIR=$2;   shift 2 ;;
+    --model)    MODEL=$2;    shift 2 ;;
+    --effort)   EFFORT=$2;   shift 2 ;;
     *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
 done
 
 if [ -z "$FRAGMENT" ] || [ -z "$CASE" ] || [ -z "$FIXTURE" ]; then
   echo "usage: judge.sh --fragment <file> --case <slug> --fixture <name> [--out <dir>]" >&2
+  echo "                [--model M] [--effort low|medium|high|xhigh|max]" >&2
   exit 2
 fi
 [ -r "$FRAGMENT" ] || { echo "fragment is not readable: $FRAGMENT" >&2; exit 2; }
@@ -87,6 +98,7 @@ rm -f "$VERDICT"
 set +e
 ( cd "$FIXTURE_DIR" && ${TIMEOUT:+$TIMEOUT $LIMIT} claude -p \
     --permission-mode "$PERM" \
+    ${MODEL:+--model $MODEL} ${EFFORT:+--effort $EFFORT} \
     --add-dir "$OUT" "$HERE" "$(dirname "$FRAGMENT")" \
     < "$PROMPT" ) > "$LOG" 2>&1
 judge_exit=$?
@@ -99,7 +111,7 @@ fi
 
 # Parsing and tallying live in verdict-tally.sh, so run.sh reads the same file the same way and
 # self-test.sh can exercise it without a model.
-echo "verdicts: $VERDICT"
+echo "verdicts: $VERDICT  (judge ${MODEL:--}/${EFFORT:--})"
 echo
 # The tally goes last, and stays last: run.sh reports each run with tail -1, so anything printed
 # after it replaces the number in the log.

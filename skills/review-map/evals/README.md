@@ -59,6 +59,7 @@ should a summary built from it.
 ```sh
 ./run.sh behaviour-flows -n 3
 ./run.sh behaviour-flows -n 3 --judge          # and grade the judged expectations too
+./run.sh behaviour-flows -n 3 --judge --fast -j 3   # the iteration loop; see below
 ./run.sh diagrams --fixture monorepo-contract --visual
 ./report.sh behaviour-flows
 ```
@@ -80,6 +81,42 @@ expectations are still yours to read by hand; `judge.sh` also runs standalone on
 
 **Three runs, not one.** Variance is the measurement. One green run of a section says almost nothing;
 three runs where the same expectation fails twice is a finding about the spec.
+
+## Where the time goes
+
+All of it is the model. Measured on this machine: `make-fixtures.sh` 0.6s, `check.sh` on a written
+fragment 0.15s, `checks/self-test.sh` 1.5s, `verdict-tally.sh` a few milliseconds. Producing one
+fragment took 345–490s on the first recorded runs, and `--judge` adds a second call of the same order.
+So `-n 3 --judge` over both fixtures is a dozen model calls and most of an hour, and nothing in the
+harness is worth optimising.
+
+Which leaves two levers — run the repetitions at once, or read each one with a cheaper model. `run.sh`
+has both:
+
+| | Costs | Buys |
+|---|---|---|
+| `-j N` | nothing but concurrent API load | wall clock: the N repetitions run at once, in batches of `N` |
+| `--model` / `--effort`, or `--fast` for the pair | comparability | a cheaper reader per run |
+| `--judge-model` / `--judge-effort` | comparability of the judged half | a cheaper grader |
+
+`-j` is free of consequence — the runs are independent, each writes its own `$RUNDIR`, and each prints
+its tally as a single labelled line so parallel output stays attributable. `--fast` is not free, which
+is why what it changed is recorded: `model` and `effort` go on every jsonl line beside the sha, and
+`report.sh` makes them part of the group key. A sonnet/low row can therefore never be averaged into a
+row measured on the shipping model — the fast loop tells you which wording to keep, and the last pass
+before believing a number runs on the model the skill ships against. A row printed as `-/-` was
+produced by whatever the ambient config was that day, which is not a fact about anything; name the
+model when you intend to compare.
+
+`--fast` deliberately leaves the judge alone. The producer is the thing under test and a cheaper
+reader of it is a legitimate cheaper experiment; the judge **is** the measurement, so a cheap judge
+does not make the loop faster, it makes the number softer. `--judge-model` and `--judge-effort` are
+there for when you mean it, and `report.sh` prints the judge's model on the judged line rather than in
+the group key — it does not affect the checks, so splitting the whole group by it would claim a
+dependency that is not there. Two graders in one group get two judged lines, never a mean over both.
+
+Every knob has an environment variable, for a shell you keep open: `EVAL_MODEL`, `EVAL_EFFORT`,
+`EVAL_JUDGE_MODEL`, `EVAL_JUDGE_EFFORT`, plus the existing `EVAL_PERMISSION_MODE` and `EVAL_TIMEOUT`.
 
 ## Running a page
 

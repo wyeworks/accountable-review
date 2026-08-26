@@ -2,6 +2,8 @@
 # run.sh — produce one section N times and check each one.
 #
 #   ./run.sh behaviour-flows -n 3
+#   ./run.sh behaviour-flows -n 3 --judge --fast
+#   ./run.sh behaviour-flows -n 3 --judge -j 3
 #   ./run.sh diagrams --fixture monorepo-contract --visual
 #
 # The point is repetition. CLAUDE.md already says a single run is weak evidence, because
@@ -13,6 +15,20 @@
 # git sha. The judged expectations in cases/<slug>.json need a reader and stay out of the
 # file: a number that silently mixes the two is worse than two numbers.
 #
+# A run costs minutes and every second of it is the model: the fixtures rebuild in under a
+# second, check.sh in under two tenths, the tally is awk. So there are exactly two ways to
+# make the loop faster and this script offers both. --model / --effort (--fast for the pair)
+# buy a cheaper reader per run; -j runs the repetitions at once and buys nothing but wall
+# clock. The first has a consequence and it is recorded rather than argued about: model and
+# effort go on every line beside the sha, and report.sh groups by them, so a fast row can
+# never be averaged into a row measured on the shipping model. That grouping is the whole
+# safety property — the fast loop tells you which wording to keep, and the last pass before
+# believing a number runs on the model the skill actually ships against.
+#
+# --fast leaves the judge alone on purpose. The judge is the measurement; downgrading the
+# measurement to iterate faster on the thing being measured is backwards. --judge-model and
+# --judge-effort are there for when you mean it.
+#
 # Needs jq, and a `claude` on PATH. Fragments and logs go under $TMPDIR, never into the repo.
 set -eu
 
@@ -20,21 +36,31 @@ HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 SKILL_DIR=$(dirname "$HERE")
 PLUGIN_ROOT=$(dirname "$(dirname "$SKILL_DIR")")
 
-CASE=; N=1; ONLY_FIXTURE=; VISUAL=; BASE=HEAD~1; JUDGE=
+CASE=; N=1; ONLY_FIXTURE=; VISUAL=; BASE=HEAD~1; JUDGE=; JOBS=1
+MODEL=${EVAL_MODEL:-}; EFFORT=${EVAL_EFFORT:-}
+JUDGE_MODEL=${EVAL_JUDGE_MODEL:-}; JUDGE_EFFORT=${EVAL_JUDGE_EFFORT:-}
 while [ $# -gt 0 ]; do
   case $1 in
-    -n)        N=$2; shift 2 ;;
-    --fixture) ONLY_FIXTURE=$2; shift 2 ;;
-    --base)    BASE=$2; shift 2 ;;
-    --visual)  VISUAL=--visual; shift ;;
-    --judge)   JUDGE=1; shift ;;
+    -n)             N=$2; shift 2 ;;
+    -j|--jobs)      JOBS=$2; shift 2 ;;
+    --fixture)      ONLY_FIXTURE=$2; shift 2 ;;
+    --base)         BASE=$2; shift 2 ;;
+    --model)        MODEL=$2; shift 2 ;;
+    --effort)       EFFORT=$2; shift 2 ;;
+    --judge-model)  JUDGE_MODEL=$2; shift 2 ;;
+    --judge-effort) JUDGE_EFFORT=$2; shift 2 ;;
+    # Sugar, and order-independent: an explicit --model or --effort wins wherever it appears.
+    --fast)         MODEL=${MODEL:-sonnet}; EFFORT=${EFFORT:-low}; shift ;;
+    --visual)       VISUAL=--visual; shift ;;
+    --judge)        JUDGE=1; shift ;;
     -*) echo "unknown option: $1" >&2; exit 2 ;;
     *)  CASE=$1; shift ;;
   esac
 done
 
 if [ -z "$CASE" ]; then
-  echo "usage: run.sh <case> [-n N] [--fixture NAME] [--base REF] [--visual] [--judge]" >&2
+  echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--visual] [--judge]" >&2
+  echo "                     [--fast] [--model M] [--effort L] [--judge-model M] [--judge-effort L]" >&2
   echo "cases:  $(ls "$HERE/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
   exit 2
 fi
@@ -67,94 +93,132 @@ TIMEOUT=
 for t in timeout gtimeout; do command -v $t >/dev/null && { TIMEOUT=$t; break; }; done
 LIMIT=${EVAL_TIMEOUT:-1800}
 
-total=0; clean=0
-jq -r '.cases[] | [.id, .fixture] | @tsv' "$CASEFILE" | while IFS='	' read -r id fixture; do
+# "-" is what an unset knob records: it means the ambient config decided, which is honest and
+# is also why such a row is not comparable to one from another machine or another week.
+MODEL_TAG=${MODEL:--}; EFFORT_TAG=${EFFORT:--}
+JUDGE_MODEL_TAG=${JUDGE_MODEL:--}; JUDGE_EFFORT_TAG=${JUDGE_EFFORT:--}
+
+# One repetition, start to appended line. A function because -j runs several of these at once,
+# and because everything it prints has to name its own run: with jobs in flight, an unlabelled
+# tally belongs to nobody.
+one_run() {
+  rid=$1; rfixture=$2; rnum=$3
+  FIXTURE_DIR=$FIXTURES/$rfixture
+  stamp=$(date +%Y%m%dT%H%M%S)
+  RUNDIR=$RUNS/$CASE/$rfixture/$stamp-$rnum
+  mkdir -p "$RUNDIR"
+  OUT=$RUNDIR/$CASE.html
+
+  sed -e "s|{{SKILL_DIR}}|$SKILL_DIR|g" \
+      -e "s|{{FIXTURE_DIR}}|$FIXTURE_DIR|g" \
+      -e "s|{{FROZEN}}|$HERE/frozen/$rfixture|g" \
+      -e "s|{{BASE}}|$BASE|g" \
+      -e "s|{{OUT}}|$OUT|g" \
+      "$DRIVER" > "$RUNDIR/prompt.md"
+
+  echo "· $rid  run $rnum/$N  $MODEL_TAG/$EFFORT_TAG  → $RUNDIR"
+  started=$(date +%s)
+  set +e
+  # The prompt goes in on STDIN, not as an argument. --add-dir is variadic, so a trailing
+  # positional prompt is swallowed as one more directory and claude exits with "Input must be
+  # provided either through stdin or as a prompt argument" — one second, exit 1, no fragment.
+  ( cd "$FIXTURE_DIR" && ${TIMEOUT:+$TIMEOUT $LIMIT} claude -p \
+      --permission-mode "$PERM" \
+      ${MODEL:+--model $MODEL} ${EFFORT:+--effort $EFFORT} \
+      --add-dir "$RUNDIR" "$SKILL_DIR" \
+      < "$RUNDIR/prompt.md" ) > "$RUNDIR/agent.log" 2>&1
+  agent_exit=$?
+  set -e
+  seconds=$(( $(date +%s) - started ))
+
+  # Whether a fragment exists is the only trustworthy signal that the run happened: claude -p
+  # exits 0 even when it prints nothing but "Execution error", so agent_exit cannot be used to
+  # tell a dead run from a bad one — and a dead run averaged in reads as a quality regression.
+  if [ -r "$OUT" ]; then
+    written=true
+    set +e
+    "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" $VISUAL > "$RUNDIR/check.txt" 2>&1
+    check_exit=$?
+    set -e
+  else
+    written=false
+    echo "FAIL  the driver produced no fragment at $OUT" > "$RUNDIR/check.txt"
+    check_exit=1
+  fi
+
+  p=$(grep -c '^PASS' "$RUNDIR/check.txt" || true)
+  f=$(grep -c '^FAIL' "$RUNDIR/check.txt" || true)
+  w=$(grep -c '^WARN' "$RUNDIR/check.txt" || true)
+  s=$(grep -c '^SKIP' "$RUNDIR/check.txt" || true)
+
+  # The judged half, and only if asked: it costs a second model call per run, and the mechanical
+  # half is worth having on its own. It runs after the check and never sees it.
+  jp=0; jf=0; ju=0; judged=false
+  if [ -n "$JUDGE" ] && [ -r "$OUT" ]; then
+    set +e
+    "$HERE/judge.sh" --fragment "$OUT" --case "$CASE" --fixture "$rfixture" --out "$RUNDIR" \
+      ${JUDGE_MODEL:+--model $JUDGE_MODEL} ${JUDGE_EFFORT:+--effort $JUDGE_EFFORT} \
+      > "$RUNDIR/judge.txt" 2>&1
+    set -e
+    set +e
+    counts=$("$HERE/verdict-tally.sh" "$RUNDIR/verdicts.json" --counts)
+    tally_ok=$?
+    set -e
+    if [ "$tally_ok" -eq 0 ]; then
+      jp=${counts%% *}; rest=${counts#* }; jf=${rest%% *}; ju=${rest#* }
+      judged=true
+    fi
+  fi
+
+  # judged=false is why the judged counts are a separate flag rather than three zeroes: a run
+  # nobody judged and a run that scored zero must not aggregate the same way.
+  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}\n' \
+    "$CASE" "$rfixture" "$rnum" "$stamp" "$p" "$f" "$w" "$s" "$check_exit" "$agent_exit" "$seconds" \
+    "$written" "$judged" "$jp" "$jf" "$ju" \
+    "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" \
+    "$SKILL_SHA" "$DIRTY" "$DRIVER_SHA" "$OUT" >> "$HERE/results/$CASE.jsonl"
+
+  # One printf, so a parallel run's result arrives as one piece instead of interleaved with
+  # another's.
+  report=$(tail -1 "$RUNDIR/check.txt")
+  if [ "$judged" = true ]; then report="$report
+  $(tail -1 "$RUNDIR/judge.txt")"; fi
+  printf '  %s run %d: %s\n' "$rid" "$rnum" "$report"
+  return 0
+}
+
+# The case list goes through a file rather than a pipe so the loop runs in this shell: a piped
+# `while read` is a subshell, and -j needs to hold job state across iterations.
+CASELIST=${TMPDIR:-/tmp}/run-$CASE-$$.tsv
+trap 'rm -f "$CASELIST"' EXIT INT TERM
+jq -r '.cases[] | [.id, .fixture] | @tsv' "$CASEFILE" > "$CASELIST"
+
+inflight=0
+while IFS='	' read -r id fixture; do
   [ -z "$ONLY_FIXTURE" ] || [ "$fixture" = "$ONLY_FIXTURE" ] || continue
-  FIXTURE_DIR=$FIXTURES/$fixture
-  [ -d "$FIXTURE_DIR" ] || { echo "fixture not built: $FIXTURE_DIR" >&2; exit 1; }
+  [ -d "$FIXTURES/$fixture" ] || { echo "fixture not built: $FIXTURES/$fixture" >&2; exit 1; }
 
   i=0
   while [ "$i" -lt "$N" ]; do
     i=$((i + 1))
-    stamp=$(date +%Y%m%dT%H%M%S)
-    RUNDIR=$RUNS/$CASE/$fixture/$stamp-$i
-    mkdir -p "$RUNDIR"
-    OUT=$RUNDIR/$CASE.html
-
-    sed -e "s|{{SKILL_DIR}}|$SKILL_DIR|g" \
-        -e "s|{{FIXTURE_DIR}}|$FIXTURE_DIR|g" \
-        -e "s|{{FROZEN}}|$HERE/frozen/$fixture|g" \
-        -e "s|{{BASE}}|$BASE|g" \
-        -e "s|{{OUT}}|$OUT|g" \
-        "$DRIVER" > "$RUNDIR/prompt.md"
-
-    echo "· $id  run $i/$N  → $RUNDIR"
-    started=$(date +%s)
-    set +e
-    # The prompt goes in on STDIN, not as an argument. --add-dir is variadic, so a trailing
-    # positional prompt is swallowed as one more directory and claude exits with "Input must be
-    # provided either through stdin or as a prompt argument" — one second, exit 1, no fragment.
-    ( cd "$FIXTURE_DIR" && ${TIMEOUT:+$TIMEOUT $LIMIT} claude -p \
-        --permission-mode "$PERM" \
-        --add-dir "$RUNDIR" "$SKILL_DIR" \
-        < "$RUNDIR/prompt.md" ) > "$RUNDIR/agent.log" 2>&1
-    agent_exit=$?
-    set -e
-    seconds=$(( $(date +%s) - started ))
-
-    # Whether a fragment exists is the only trustworthy signal that the run happened: claude -p
-    # exits 0 even when it prints nothing but "Execution error", so agent_exit cannot be used to
-    # tell a dead run from a bad one — and a dead run averaged in reads as a quality regression.
-    if [ -r "$OUT" ]; then
-      written=true
-      set +e
-      "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" $VISUAL > "$RUNDIR/check.txt" 2>&1
-      check_exit=$?
-      set -e
+    if [ "$JOBS" -gt 1 ]; then
+      one_run "$id" "$fixture" "$i" &
+      inflight=$((inflight + 1))
+      # A barrier at every J rather than a proper pool: J is 3, the runs take about the same
+      # time, and a scheduler here would be more code than the minutes it saves.
+      if [ "$inflight" -ge "$JOBS" ]; then wait || true; inflight=0; fi
     else
-      written=false
-      echo "FAIL  the driver produced no fragment at $OUT" > "$RUNDIR/check.txt"
-      check_exit=1
+      one_run "$id" "$fixture" "$i"
     fi
-
-    p=$(grep -c '^PASS' "$RUNDIR/check.txt" || true)
-    f=$(grep -c '^FAIL' "$RUNDIR/check.txt" || true)
-    w=$(grep -c '^WARN' "$RUNDIR/check.txt" || true)
-    s=$(grep -c '^SKIP' "$RUNDIR/check.txt" || true)
-
-    # The judged half, and only if asked: it costs a second model call per run, and the mechanical
-    # half is worth having on its own. It runs after the check and never sees it.
-    jp=0; jf=0; ju=0; judged=false
-    if [ -n "$JUDGE" ] && [ -r "$OUT" ]; then
-      set +e
-      "$HERE/judge.sh" --fragment "$OUT" --case "$CASE" --fixture "$fixture" --out "$RUNDIR" \
-        > "$RUNDIR/judge.txt" 2>&1
-      set -e
-      set +e
-      counts=$("$HERE/verdict-tally.sh" "$RUNDIR/verdicts.json" --counts)
-      tally_ok=$?
-      set -e
-      if [ "$tally_ok" -eq 0 ]; then
-        jp=${counts%% *}; rest=${counts#* }; jf=${rest%% *}; ju=${rest#* }
-        judged=true
-      fi
-    fi
-
-    # judged=false is why the judged counts are a separate flag rather than three zeroes: a run
-    # nobody judged and a run that scored zero must not aggregate the same way.
-    printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}\n' \
-      "$CASE" "$fixture" "$i" "$stamp" "$p" "$f" "$w" "$s" "$check_exit" "$agent_exit" "$seconds" \
-      "$written" "$judged" "$jp" "$jf" "$ju" \
-      "$SKILL_SHA" "$DIRTY" "$DRIVER_SHA" "$OUT" >> "$HERE/results/$CASE.jsonl"
-
-    tail -1 "$RUNDIR/check.txt"
-    [ "$judged" = true ] && tail -1 "$RUNDIR/judge.txt"
-    total=$((total + 1)); [ "$f" -eq 0 ] && clean=$((clean + 1))
   done
-done
+done < "$CASELIST"
+wait || true
 
 echo
 echo "results appended to results/$CASE.jsonl — ./report.sh $CASE for the aggregate"
+if [ "$MODEL_TAG" != "-" ] || [ "$EFFORT_TAG" != "-" ]; then
+  echo "produced on $MODEL_TAG/$EFFORT_TAG — report.sh keeps it in its own group; re-run on the shipping model before believing the number"
+fi
 if [ -n "$JUDGE" ]; then
   echo "verdicts per run are in verdicts.json beside each fragment; read the fails and the notes"
 else
