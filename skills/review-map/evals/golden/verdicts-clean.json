@@ -1,0 +1,11 @@
+{
+  "verdicts": [
+    {"n": 1, "verdict": "pass", "evidence": "\"Following archived_at from the column to the <option>\"", "why": "The chain is followed inside Flow A."},
+    {"n": 2, "verdict": "pass", "evidence": "serializer.rb:11 and project.ts:4", "why": "Both mismatches named, each with a citation."},
+    {"n": 3, "verdict": "pass", "evidence": "\"The 422 body is read by nothing\"", "why": "Identified once, in the flow that owns it."},
+    {"n": 4, "verdict": "pass", "evidence": "selectableProjects.ts:5", "why": "Named with the reason it is affected."},
+    {"n": 5, "verdict": "pass", "evidence": "\"uncertain Whether the association is missing\"", "why": "Tiered as uncertain, not asserted."},
+    {"n": 6, "verdict": "pass", "evidence": "three excerpts, each on a decision", "why": "No whole-file or duplicate quotation."}
+  ],
+  "notes": ""
+}

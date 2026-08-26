@@ -1,0 +1,7 @@
+{
+  "verdicts": [
+    {"n": 1, "verdict": "pass", "evidence": "x", "why": "y"},
+    {"n": 2, "verdict": "mostly", "evidence": "x", "why": "a value the rubric does not offer"}
+  ],
+  "notes": ""
+}

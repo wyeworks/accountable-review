@@ -1,0 +1,11 @@
+{
+  "verdicts": [
+    {"n": 1, "verdict": "pass", "evidence": "Flow A opens with the chain", "why": "Followed end to end."},
+    {"n": 2, "verdict": "fail", "evidence": "only the nullability half appears", "why": "The key rename is never named, so the sharper of the two mismatches is missing."},
+    {"n": 3, "verdict": "pass", "evidence": "useProjects.ts:19", "why": "The discarded body is named."},
+    {"n": 4, "verdict": "unclear", "evidence": "selectableProjects is cited but the why is a fragment", "why": "Cannot tell from the text whether the consequence was understood or restated."},
+    {"n": 5, "verdict": "pass", "evidence": "tier on the association claim", "why": "Marked uncertain."},
+    {"n": 6, "verdict": "pass", "evidence": "two excerpts", "why": "Both earned."}
+  ],
+  "notes": "Expectation 4 asks for a 'why' without saying what would count as one; two readings of the same sentence disagree."
+}

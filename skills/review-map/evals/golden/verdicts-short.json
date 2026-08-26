@@ -1,0 +1,8 @@
+{
+  "verdicts": [
+    {"n": 1, "verdict": "pass", "evidence": "x", "why": "y"},
+    {"n": 2, "verdict": "pass", "evidence": "x", "why": "y"},
+    {"n": 3, "verdict": "fail", "evidence": "x", "why": "y"}
+  ],
+  "notes": ""
+}

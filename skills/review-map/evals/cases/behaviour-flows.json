@@ -11,7 +11,7 @@
       "check": "check.sh --fragment <out> --scope behaviour-flows",
       "expected_output": "Two flows: archiving a project, and listing projects to choose from. The second is built entirely from unchanged code, and saying why that is a flow at all is the insight. Citations are plain text throughout.",
       "expectations": [
-        "Flow B exists, contains no changed file, and the fragment says why an unchanged-only flow is a flow — that archival changed what the selectable list means",
+        "Flow B exists, contains no changed LINE, and the fragment says why an unchanged-only flow is a flow — that archival changed what the selectable list means. Note the granularity: Flow B runs through ProjectsController#index, which lives in a file the diff modifies elsewhere, so a fragment saying 'no changed file' is the imprecise one",
         "app/queries/active_projects.rb is named in Flow B's affected-but-unchanged field with a clause tying it to archival, not merely listed",
         "The gaps from the frozen goal survive as gaps with an evidence tier — nothing prevents archiving twice, nothing prevents new entries against an archived project — rather than being smoothed into a description of working code",
         "No route is presented as fact: there is no routes.rb, and a fragment that writes POST /projects/:id/archive as though it existed has invented the most pasteable thing on the page",

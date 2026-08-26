@@ -20,6 +20,8 @@ evals/
 ├── checks/                  one script per rule family, plus self-test.sh
 ├── golden/                  fragments with known verdicts, for self-test.sh
 ├── run.sh / report.sh       produce a section N times; aggregate the results
+├── judge.sh / judge-prompt.md  grade one fragment against the written expectations
+├── verdict-tally.sh         read one verdicts.json, shared by judge.sh and run.sh
 └── results/                 one jsonl line per run (gitignored)
 ```
 
@@ -56,6 +58,7 @@ should a summary built from it.
 
 ```sh
 ./run.sh behaviour-flows -n 3
+./run.sh behaviour-flows -n 3 --judge          # and grade the judged expectations too
 ./run.sh diagrams --fixture monorepo-contract --visual
 ./report.sh behaviour-flows
 ```
@@ -70,9 +73,10 @@ packaging is what the page cases exercise. And it defaults to `--permission-mode
 because the fixtures are disposable repositories under `$TMPDIR` and the alternative is a runner that
 hangs overnight on a prompt nobody is watching. `EVAL_PERMISSION_MODE` overrides it.
 
-Then read the fragments against the judged expectations in `cases/<slug>.json`. Those stay out of the
-jsonl deliberately: a number that silently mixes mechanical checks with a reader's judgement is worse
-than two numbers.
+`--judge` runs `judge.sh` after the check, and its counts land in the jsonl under their own keys with
+a `judged` flag beside them — never summed with the mechanical ones, because a number that silently
+mixes a script's verdict with a model's reading is worse than two numbers. Without `--judge` the
+expectations are still yours to read by hand; `judge.sh` also runs standalone on any fragment.
 
 **Three runs, not one.** Variance is the measurement. One green run of a section says almost nothing;
 three runs where the same expectation fails twice is a finding about the spec.
@@ -124,6 +128,39 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 `SKIP` is load-bearing. A check that cannot run on this input says so out loud — a fragment has no
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
 thoroughly verified as a page.
+
+## The judge
+
+One pass over one fragment, all the expectations at once. That is the cheaper arrangement, and its
+failure mode is the one this file already names: a grader asked to verify many things at once verifies
+each of them less carefully. Six is small enough to be worth trying before paying for a call per
+expectation, and the per-expectation variant is the obvious next step if verdicts start looking thin.
+
+What makes the verdicts worth anything is not the rubric, it is the anchoring. The judge runs **inside
+the fixture**, with the frozen upstream, so "is this claim right" is settled by opening the file the
+claim cites. Take that away and it decays into a second opinion about prose. It also never sees the
+mechanical results: two independent readings beat one reading anchored to the other.
+
+Three verdicts, not two. `unclear` exists so the judge does not have to guess — including when it
+cannot tell what an expectation is asking. A judge forced into a binary invents confidence, and an
+invented verdict is worse than an honest gap because it survives into a number.
+
+And a `notes` field, for when **the expectation is the problem** rather than the fragment. That is not
+a courtesy — it has corrected this repository's ground truth twice in two runs. On `monorepo-contract`
+it reported no ill-posed expectation but volunteered a factual error no expectation covered: a diagram
+caption claiming a component reads a field it never touches, inherited from the specimen label in the
+template's own catalogue. On `rails-only-small` it rejected the wording of an expectation outright —
+"contains no changed file" is false at line granularity, because the flow's entry point lives in a
+file the diff modifies elsewhere — and pointed out that the fragment's own phrasing was the sharper
+one. Both fixes are in the repo; neither was a change to the section under test.
+
+Which is the argument for reading `notes` before reading the verdicts. A judged run that comes back
+all-pass has still told you something if the notes are not empty.
+
+`verdict-tally.sh` does the parsing for both `judge.sh` and `run.sh`, so there is one implementation
+and `self-test.sh` can exercise it against `golden/verdicts-*.json` without a model — a tally that
+reads a truncated file as "no fails" is the same defect as a check that always passes, and worse here
+because what it emits looks like a measurement.
 
 ## The mechanical / judged line
 

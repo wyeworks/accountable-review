@@ -9,9 +9,14 @@ Flow A — Archiving a project              primary
 Flow B — Listing projects to choose from  primary, and entirely outside the diff
 ```
 
-`Flow B` is the one that justifies the split. It contains no changed file at all — its
-subject, `app/queries/active_projects.rb`, is unchanged — and it exists because after this
-PR the list means something it did not mean before. A split by directory cannot produce it.
+`Flow B` is the one that justifies the split. Not one **line** of it is in the diff — its subject,
+`app/queries/active_projects.rb`, is untouched — and it exists because after this PR the list means
+something it did not mean before. A split by directory cannot produce it.
+
+Say *line*, not *file*: the flow's entry point is `ProjectsController#index`, and the diff modifies
+that file a few lines away. An earlier version of this paragraph said "no changed file", which is
+false at line granularity — and the first judged run caught it in a fragment that had inherited the
+phrasing from here.
 
 Leftover, not a flow of its own:
 

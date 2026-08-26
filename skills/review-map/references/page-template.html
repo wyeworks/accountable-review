@@ -808,7 +808,12 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
          Mark the mismatch on the HOP it happens at, with .edge-dash and a .t-edge label above
          it. Fewer than five stops is normal; keep the ones the field actually passes through.
          An edge label has to fit its 30px gap or sit above the row — checks/diagram.sh warns
-         when one runs under a box, which is how the ER label below got caught. -->
+         when one runs under a box, which is how the ER label below got caught.
+
+         INHERIT THE GEOMETRY, NEVER THE STRINGS. Every label here is a claim about a file, and a
+         claim copied out of a specimen is a false claim nothing catches: a run inherited the last
+         box's caption onto a component that never touches the field, and only a reader comparing the
+         figure with the code noticed. The x/y numbers are the reusable part. -->
       <figure class="wide">
         <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="archived_at crosses the boundary as null and arrives in a type that declares it non-null">
           <text class="t-edge" x="353" y="34" text-anchor="middle">null vs. string</text>
@@ -835,7 +840,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
           <rect class="box" x="724" y="48" width="148" height="54" rx="5"/>
           <text class="t-lbl" x="798" y="68" text-anchor="middle">COMPONENT</text>
           <text class="t-col" x="798" y="86" text-anchor="middle">ProjectSelector</text>
-          <text class="t-dim" x="798" y="122" text-anchor="middle">reads it as present</text>
+          <text class="t-dim" x="798" y="122" text-anchor="middle">never reads the field</text>
           <text class="t-dim" x="12" y="154">Dashed: the hop where the two sides stop agreeing.</text>
         </svg></div>
         <figcaption class="note">The type is hand-written, so this drift appears at runtime, not at build time.</figcaption>

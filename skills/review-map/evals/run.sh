@@ -20,20 +20,21 @@ HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 SKILL_DIR=$(dirname "$HERE")
 PLUGIN_ROOT=$(dirname "$(dirname "$SKILL_DIR")")
 
-CASE=; N=1; ONLY_FIXTURE=; VISUAL=; BASE=HEAD~1
+CASE=; N=1; ONLY_FIXTURE=; VISUAL=; BASE=HEAD~1; JUDGE=
 while [ $# -gt 0 ]; do
   case $1 in
     -n)        N=$2; shift 2 ;;
     --fixture) ONLY_FIXTURE=$2; shift 2 ;;
     --base)    BASE=$2; shift 2 ;;
     --visual)  VISUAL=--visual; shift ;;
+    --judge)   JUDGE=1; shift ;;
     -*) echo "unknown option: $1" >&2; exit 2 ;;
     *)  CASE=$1; shift ;;
   esac
 done
 
 if [ -z "$CASE" ]; then
-  echo "usage: run.sh <case> [-n N] [--fixture NAME] [--base REF] [--visual]" >&2
+  echo "usage: run.sh <case> [-n N] [--fixture NAME] [--base REF] [--visual] [--judge]" >&2
   echo "cases:  $(ls "$HERE/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
   exit 2
 fi
@@ -101,12 +102,17 @@ jq -r '.cases[] | [.id, .fixture] | @tsv' "$CASEFILE" | while IFS='	' read -r id
     set -e
     seconds=$(( $(date +%s) - started ))
 
+    # Whether a fragment exists is the only trustworthy signal that the run happened: claude -p
+    # exits 0 even when it prints nothing but "Execution error", so agent_exit cannot be used to
+    # tell a dead run from a bad one — and a dead run averaged in reads as a quality regression.
     if [ -r "$OUT" ]; then
+      written=true
       set +e
       "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" $VISUAL > "$RUNDIR/check.txt" 2>&1
       check_exit=$?
       set -e
     else
+      written=false
       echo "FAIL  the driver produced no fragment at $OUT" > "$RUNDIR/check.txt"
       check_exit=1
     fi
@@ -116,15 +122,41 @@ jq -r '.cases[] | [.id, .fixture] | @tsv' "$CASEFILE" | while IFS='	' read -r id
     w=$(grep -c '^WARN' "$RUNDIR/check.txt" || true)
     s=$(grep -c '^SKIP' "$RUNDIR/check.txt" || true)
 
-    printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}\n' \
+    # The judged half, and only if asked: it costs a second model call per run, and the mechanical
+    # half is worth having on its own. It runs after the check and never sees it.
+    jp=0; jf=0; ju=0; judged=false
+    if [ -n "$JUDGE" ] && [ -r "$OUT" ]; then
+      set +e
+      "$HERE/judge.sh" --fragment "$OUT" --case "$CASE" --fixture "$fixture" --out "$RUNDIR" \
+        > "$RUNDIR/judge.txt" 2>&1
+      set -e
+      set +e
+      counts=$("$HERE/verdict-tally.sh" "$RUNDIR/verdicts.json" --counts)
+      tally_ok=$?
+      set -e
+      if [ "$tally_ok" -eq 0 ]; then
+        jp=${counts%% *}; rest=${counts#* }; jf=${rest%% *}; ju=${rest#* }
+        judged=true
+      fi
+    fi
+
+    # judged=false is why the judged counts are a separate flag rather than three zeroes: a run
+    # nobody judged and a run that scored zero must not aggregate the same way.
+    printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}\n' \
       "$CASE" "$fixture" "$i" "$stamp" "$p" "$f" "$w" "$s" "$check_exit" "$agent_exit" "$seconds" \
+      "$written" "$judged" "$jp" "$jf" "$ju" \
       "$SKILL_SHA" "$DIRTY" "$DRIVER_SHA" "$OUT" >> "$HERE/results/$CASE.jsonl"
 
     tail -1 "$RUNDIR/check.txt"
+    [ "$judged" = true ] && tail -1 "$RUNDIR/judge.txt"
     total=$((total + 1)); [ "$f" -eq 0 ] && clean=$((clean + 1))
   done
 done
 
 echo
 echo "results appended to results/$CASE.jsonl — ./report.sh $CASE for the aggregate"
-echo "the judged expectations are in cases/$CASE.json; read the fragments against them"
+if [ -n "$JUDGE" ]; then
+  echo "verdicts per run are in verdicts.json beside each fragment; read the fails and the notes"
+else
+  echo "the judged expectations are in cases/$CASE.json — ./run.sh $CASE --judge grades them too"
+fi

@@ -50,12 +50,16 @@ hand-authored upstream in `frozen/` and grades that — which is what makes "run
 affordable, and three runs is the smallest sample that separates a wording change from noise. A
 **component** check runs on a script's output or on one `<svg>`.
 
-`./run.sh behaviour-flows -n 3` then `./report.sh` is the loop; results carry the skill's git sha,
-so a pass rate is attributable to a version of the prose. Section files are named by slug, never by
-number: `report-format.md`'s numbering is already the source of order, and a filename repeating it
-only makes the reader look the number up. Read `evals/README.md` before adding a case. Two things
-there are worth preserving above the rest — the split between mechanical and judged expectations,
-and the plainly stated limit that a section eval cannot see whether the page repeats itself.
+`./run.sh behaviour-flows -n 3 --judge` then `./report.sh` is the loop; results carry the skill's git
+sha, so a pass rate is attributable to a version of the prose. `--judge` adds the other half: one
+model pass per fragment over the written expectations, anchored by running inside the fixture with
+the frozen upstream, its counts under their own keys and never summed with the mechanical ones.
+
+Section files are named by slug, never by number: `report-format.md`'s numbering is already the
+source of order, and a filename repeating it only makes the reader look the number up. Read
+`evals/README.md` before adding a case. Two things there are worth preserving above the rest — the
+split between mechanical and judged expectations, and the plainly stated limit that a section eval
+cannot see whether the page repeats itself.
 
 ## How the documents divide the work
 

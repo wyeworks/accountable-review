@@ -1,0 +1,8 @@
+```json
+{
+  "verdicts": [
+    {"n": 1, "verdict": "pass", "evidence": "x", "why": "wrapped in a fence"}
+  ],
+  "notes": ""
+}
+```

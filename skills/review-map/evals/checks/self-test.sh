@@ -67,6 +67,35 @@ excerpts.sh         | excerpt-open.html             | 1 | open by default
 excerpts.sh         | excerpt-duplicate.html        | 1 | same range is excerpted more than once
 CASES
 
+# The judged half has one piece a script can test: reading a verdict file. A tally that reads a
+# truncated or fenced file as "no fails" is the same defect as a check that always passes, and it is
+# worse here because the number it produces looks like a measurement.
+tally() {
+  fragment=$1; want_exit=$2; want_text=$3; shift 3
+  out=$(CHECK_TALLY=0 "$EVALS/verdict-tally.sh" "$GOLD/$fragment" "$@" 2>&1) && got=0 || got=$?
+  problem=
+  [ "$got" = "$want_exit" ] || problem="exit $got, wanted $want_exit"
+  case $out in
+    *"$want_text"*) : ;;
+    *) problem="${problem:+$problem; }no line matching \"$want_text\"" ;;
+  esac
+  if [ -z "$problem" ]; then
+    pass=$((pass + 1)); echo "ok    verdict-tally.sh  $fragment"
+  else
+    fail=$((fail + 1)); echo "BAD   verdict-tally.sh  $fragment — $problem"
+    echo "$out" | sed 's/^/        /'
+  fi
+}
+
+tally verdicts-clean.json     0 "judged: 6 pass, 0 fail, 0 unclear" --expected 6
+tally verdicts-mixed.json     0 "judged: 4 pass, 1 fail, 1 unclear" --expected 6
+tally verdicts-mixed.json     0 "note on the expectations:"         --expected 6
+tally verdicts-short.json     0 "3 verdict(s) for 6 expectation(s)" --expected 6
+tally verdicts-fenced.json    0 "judged: 1 pass"                    --expected 1
+tally verdicts-prose.json     1 "is not JSON"                       --expected 6
+tally verdicts-bad-value.json 0 "carry a value that is not"         --expected 2
+tally verdicts-clean.json     0 "6 0 0"                             --counts
+
 # The page-only checks refuse a fragment rather than passing on evidence they do not have.
 # That refusal is itself a rule worth pinning: exit 3, and a SKIP line saying why.
 for s in completeness.sh build-state.sh; do
