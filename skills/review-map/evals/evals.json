@@ -1,6 +1,6 @@
 {
   "skill_name": "review-map",
-  "notes": "Each eval runs against a fixture repository built by fixtures/make-fixtures.sh. Run the agent with its working directory inside that repo — the prompts are written the way a user would say them from there. The `fixture` and `check` fields are additions to the skill-creator schema: `fixture` names the repo, `check` is the mechanical half of the expectations, runnable as one command.",
+  "notes": "PAGE cases: one whole run each, graded on what only a whole page can carry — completeness, one canonical home, the page-wide excerpt budget, the build state, the seven-section shape, and never a verdict. Everything internal to a single section moved to cases/<slug>.json, where it is graded on a fragment produced from frozen upstream; the `section_cases` field on each case says which ones own what. Run the agent with its working directory inside the fixture — the prompts are written the way a user would say them from there. `fixture` and `check` are additions to the skill-creator schema: `fixture` names the repo, `check` is the mechanical half, runnable as one command.",
   "evals": [
     {
       "id": 1,
@@ -9,14 +9,17 @@
       "expected_output": "A published review map for the five-file diff. Citations are plain text because nothing is pushed to a remote. No boundary material anywhere, because there is no client — and no section for it to be missing from. The page names app/queries/active_projects.rb — which is not in the diff — as affected by archival, and names the new slug uniqueness validation as enforced in Rails with no unique index behind it.",
       "files": [],
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
+      "section_cases": [
+        "cases/blast-radius.json — whether active_projects.rb is found, why, and with which search recorded",
+        "cases/behaviour-flows.json — the flow split, the unit fields, the excerpt that rung 4 earns",
+        "cases/diagrams.json — the blast-radius diagram, and the lifecycle diagram this diff does not earn"
+      ],
       "expectations": [
         "check.sh passes: coverage gate, no severity chips, no verdict language, evidence tiers used, no dead permalinks, three theme states, and active_projects.rb is named",
-        "The page identifies app/queries/active_projects.rb as affected-but-unchanged, and says why: it scopes the selectable project list, which archival changes the meaning of",
         "The page notes that the new slug uniqueness validation has no unique index behind it, distinguishing the application invariant from the database invariant",
         "No section, subsection or paragraph discusses a client that does not exist; the absence is stated once, in section 1, not left as a gap",
         "The page says once, near the top, why citations are not clickable",
         "No sentence grades the change, scores its risk, or recommends approving it",
-        "Because nothing is clickable, the affected-but-unchanged finding on app/queries/active_projects.rb carries a collapsed source excerpt of the unchanged lines — at rung 4 an excerpt is the only followable evidence on the page",
         "Judged field by field, not page-wide: every field carrying an excerpt still holds its own file:line outside the collapsed block. A citation that appears elsewhere on the page does not rescue a field whose only one is inside the excerpt",
         "Excerpts are earned by citations that are load-bearing for a decision, not by every affected-but-unchanged entry — a five-file diff should not produce one per cohort automatically",
         "Seven sections, not twelve: persistence and any endpoint contract appear inside the behaviour flow they serve, not as sections of their own",
@@ -28,22 +31,23 @@
       "id": 2,
       "fixture": "monorepo-contract",
       "prompt": "The project-archival branch touches both api and web. Before I review it I want to see how the two sides line up — is the frontend actually handling everything the API can now return?",
-      "expected_output": "A review map whose contract part follows archived_at from ProjectSerializer through the JSON to the TypeScript type, and names three things the diff does not state: the backend serializes archived_at as null for unarchived projects while web/src/types/project.ts declares archivedAt as a non-null string; the archive endpoint can return 422 and nothing in web/ handles it; and web/src/queries/selectableProjects.ts, which is not in the diff, filters the project list without knowing about archival.",
+      "expected_output": "A review map that follows archived_at from ProjectSerializer through the JSON to the TypeScript type inside the flow that owns it, and names the things the diff does not state: the wire key is archived_at while the client type declares archivedAt with no transform between them, and the serializer emits null against that non-null declaration; the archive endpoint can return 422 and nothing in web/ handles it; and web/src/queries/selectableProjects.ts, which is not in the diff, filters the project list without knowing about archival.",
       "files": [],
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'selectableProjects' --expect 'archivedAt'",
+      "section_cases": [
+        "cases/behaviour-flows.json — the boundary chain, the nullable/non-null mismatch, the unhandled 422, selectableProjects",
+        "cases/blast-radius.json — whether affected code is found on both sides of the boundary",
+        "cases/diagrams.json — the boundary-chain diagram and the budget across two sections"
+      ],
       "expectations": [
         "check.sh passes, including that selectableProjects and archivedAt are both named",
-        "The page identifies the nullable/non-null mismatch between the serializer and the TypeScript type, citing both sides",
-        "The page identifies that the archive endpoint can respond 422 and that no client code handles it",
-        "The page names web/src/queries/selectableProjects.ts as affected-but-unchanged",
-        "The boundary is covered inside the flow that uses the field, following it as a chain rather than reviewing the two sides as separate file lists",
         "Every claim about intent that is not visible in the diff carries an evidence tier",
-        "The nullable/non-null mismatch carries a collapsed source excerpt of the unchanged archivedAt declaration in web/src/types/project.ts — the claim a reviewer would otherwise have to take on faith",
         "No excerpt quotes a whole file or every hunk of one, and none quotes a generated file, a lockfile or a pure rename",
         "No two excerpts are near-duplicates of each other — structurally identical code quoted twice teaches once and costs twice",
         "Where a start-here entry and its cohort field rest on the same citation, only one carries the excerpt; the other cites in prose, and the page does not quote a neighbouring range to dodge the duplication",
         "The nullable/non-null mismatch, the unhandled 422 and selectableProjects each have exactly one canonical explanation; later mentions are one-sentence references",
-        "Where prose would narrate what a guard or serializer does, the page shows the lines and states the implication instead"
+        "Where prose would narrate what a guard or serializer does, the page shows the lines and states the implication instead",
+        "Deploy ordering appears in section 5, because the two sides ship separately — and it names a safe order rather than observing that ordering matters"
       ]
     },
     {

@@ -35,6 +35,9 @@
     start here ............ .firstlook — also used for the comprehension checkpoint
     reading order ......... .readorder
     wide blocks ........... .wide, .scroller — diagrams and wide tables
+    diagram catalogue ..... four worked layouts, to scale: blast radius in section 2, then
+                            boundary chain, ER fragment and lifecycle before section 6. Fill
+                            in the text, keep the geometry
     tables ................ base table styles
     endpoint cards ........ .endpoint, .endpoint-head, .verb-*, .ep-row
     review units .......... .unit — the core primitive; its fields are .ep-row rows
@@ -582,15 +585,55 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
     <section id="map">
       <div class="layer-head"><p class="eyebrow">Blast radius</p><h2>Review map</h2></div>
 
-      <!-- The one diagram that earns its place on almost every PR: the primary flow, with
-           secondary effects branching off it. Changed nodes use .node; affected-but-unchanged
-           nodes use .node-dead (already dashed). A legend is REQUIRED — a dashed box with no
-           legend reads as "deleted", which is the opposite of what it means here. -->
+      <!-- DIAGRAM 1 of 4 · BLAST RADIUS. The one that earns its place on almost every PR.
+           The catalogue below section 5 holds the other three; all four are complete and to
+           scale, so fill in the text and leave the geometry alone. Inventing a layout per run
+           is how diagrams stop being comparable between pages.
+
+           GRID, 880 x 250: four columns at x = 24 / 244 / 464 / 684, node 172 x 46, rows at
+           y = 40 and 116, arrow gap 48. Text baselines y+20 and y+36, anchored middle on the
+           node centre (110 / 330 / 550 / 770).
+
+           Changed nodes use .node; affected-but-unchanged use .node-dead (already dashed).
+           The LEGEND is drawn inside the svg, not in the figcaption: an svg gets read on its
+           own — in a screenshot, in a PNG, in a viewer — and a dashed box with no key reads as
+           "deleted", which is the opposite of what it means. The figcaption then carries what
+           the figure IMPLIES, which is not the same sentence.
+
+           Draw every path with explicit M/L pairs. Arrowheads are two strokes on the same
+           .edge path, so there are no <defs>, no <marker>, and no fill to theme. -->
       <figure class="wide">
-        <div class="scroller"><svg viewBox="0 0 880 320" role="img" aria-label="{{DESCRIBE}}">
-          <!-- ... -->
+        <div class="scroller"><svg viewBox="0 0 880 250" role="img" aria-label="Archival reaches from the controller through the model to the new column, and on to an unchanged query that scopes the picker list">
+          <!-- Row 1: the primary path, left to right. -->
+          <rect class="node" x="24" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="110" y="60" text-anchor="middle">ProjectsController</text>
+          <text class="t-dim" x="110" y="76" text-anchor="middle">#archive</text>
+          <path class="edge" d="M196 63 L236 63 M230 58 L236 63 L230 68"/>
+          <rect class="node" x="244" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="330" y="60" text-anchor="middle">Project#archive!</text>
+          <text class="t-dim" x="330" y="76" text-anchor="middle">app/models/project.rb:9</text>
+          <path class="edge" d="M416 63 L456 63 M450 58 L456 63 L450 68"/>
+          <rect class="node" x="464" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="550" y="60" text-anchor="middle">projects.archived_at</text>
+          <text class="t-dim" x="550" y="76" text-anchor="middle">migration and schema.rb</text>
+          <path class="edge-dash" d="M636 63 L676 63 M670 58 L676 63 L670 68"/>
+          <rect class="node-dead" x="684" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="770" y="60" text-anchor="middle">ActiveProjects#call</text>
+          <text class="t-dim" x="770" y="76" text-anchor="middle">scopes the picker list</text>
+          <!-- Row 2: a secondary effect hanging off the primary path. -->
+          <path class="edge" d="M330 86 L330 139 L456 139 M450 134 L456 139 L450 144"/>
+          <rect class="node" x="464" y="116" width="172" height="46" rx="5"/>
+          <text class="t-col" x="550" y="136" text-anchor="middle">Project.archived</text>
+          <text class="t-dim" x="550" y="152" text-anchor="middle">new scope, no reader yet</text>
+          <text class="t-dim" x="24" y="196">Searched rg 'archived' app lib spec — nothing else reads the scope.</text>
+          <!-- Legend, inside the drawing: an svg is often read on its own, and a dashed
+               box with no key reads as "deleted". -->
+          <rect class="node" x="24" y="214" width="18" height="12" rx="2"/>
+          <text class="t-dim" x="50" y="224">changed by this PR</text>
+          <rect class="node-dead" x="210" y="214" width="18" height="12" rx="2"/>
+          <text class="t-dim" x="236" y="224">unchanged, and affected</text>
         </svg></div>
-        <figcaption class="note">Solid: changed by this PR. Dashed: unchanged, and affected.</figcaption>
+        <figcaption class="note">Two of these five nodes are not in the diff.</figcaption>
       </figure>
 
       <div class="two-col">
@@ -717,10 +760,10 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
           <ul><li>{{NON_OBVIOUS_INVARIANT_OR_DECISION}}</li></ul>
         </dd></div>
         <div class="ep-row"><dt>Validate</dt><dd>
-          <ol><li>{{REAL_PASTEABLE_STEP_FROM_THIS_REPO}}</li></ol>
+          <ol><li><code>{{REAL_PASTEABLE_STEP_FROM_THIS_REPO}}</code></li></ol>
         </dd></div>
         <div class="ep-row"><dt>Questions</dt><dd>
-          <ul><li>{{QUESTION_PHRASED_AS_A_QUESTION}}</li></ul>
+          <ul><li>{{QUESTION_PHRASED_AS_A_QUESTION}}?</li></ul>
         </dd></div>
       </dl>
     </article>
@@ -736,6 +779,133 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
       </div>
     </div>
 
+    <!-- ===== THE DIAGRAM CATALOGUE · 2, 3 and 4 of 4 =====
+         Four kinds, and a diff earns a kind or it does not. Pick from these; do not derive a
+         layout. Every one is complete, to scale, and passes evals/checks/diagram.sh — which is
+         the point: the geometry is settled, so the run spends its attention on whether the
+         edges are TRUE.
+
+           1 · Blast radius     section 2, almost always      drawn above
+           2 · Boundary chain   inside the flow owning the field
+           3 · ER fragment      section 5, if the schema moved
+           4 · Lifecycle        section 5, ONLY if a status column, enum or state machine
+                                changed — a nullable timestamp is not a state machine, and
+                                drawing one invents states the code does not have
+
+         The budget is in report-format.md § Depth rules and lives there only. Rules that hold
+         for all four: every colour comes from a class, never a literal; explicit M/L pairs;
+         the legend goes inside the svg; a diagram that restates a list gets deleted, not
+         shrunk. ===== -->
+
+    <!-- DIAGRAM 2 of 4 · BOUNDARY CHAIN. Belongs inside the flow that owns the field, never in
+         a section of its own — following one field end to end teaches more than reviewing two
+         file trees, and this is that walk drawn.
+
+         GRID, 880 x 170: five stops at x = 12 / 190 / 368 / 546 / 724, box 148 x 54 at y=48,
+         gap 30 for the arrow. Layer name (.t-lbl) at y=68, symbol (.t-col) at y=86, citation
+         (.t-dim) below the box at y=122, all anchored middle on the box centre.
+
+         Mark the mismatch on the HOP it happens at, with .edge-dash and a .t-edge label above
+         it. Fewer than five stops is normal; keep the ones the field actually passes through.
+         An edge label has to fit its 30px gap or sit above the row — checks/diagram.sh warns
+         when one runs under a box, which is how the ER label below got caught. -->
+      <figure class="wide">
+        <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="archived_at crosses the boundary as null and arrives in a type that declares it non-null">
+          <text class="t-edge" x="353" y="34" text-anchor="middle">null vs. string</text>
+          <rect class="box" x="12" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="86" y="68" text-anchor="middle">SERIALIZER</text>
+          <text class="t-col" x="86" y="86" text-anchor="middle">archived_at</text>
+          <text class="t-dim" x="86" y="122" text-anchor="middle">serializer.rb:9</text>
+          <path class="edge" d="M160 75 L186 75 M180 70 L186 75 L180 80"/>
+          <rect class="box" x="190" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="264" y="68" text-anchor="middle">JSON</text>
+          <text class="t-col" x="264" y="86" text-anchor="middle">"archived_at": null</text>
+          <text class="t-dim" x="264" y="122" text-anchor="middle">nil for the unarchived</text>
+          <path class="edge-dash" d="M338 75 L364 75 M358 70 L364 75 L358 80"/>
+          <rect class="box" x="368" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="442" y="68" text-anchor="middle">TYPE</text>
+          <text class="t-col" x="442" y="86" text-anchor="middle">archivedAt: string</text>
+          <text class="t-dim" x="442" y="122" text-anchor="middle">project.ts:4, by hand</text>
+          <path class="edge" d="M516 75 L542 75 M536 70 L542 75 L536 80"/>
+          <rect class="box" x="546" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="620" y="68" text-anchor="middle">HOOK</text>
+          <text class="t-col" x="620" y="86" text-anchor="middle">useProjects()</text>
+          <text class="t-dim" x="620" y="122" text-anchor="middle">no runtime parse</text>
+          <path class="edge" d="M694 75 L720 75 M714 70 L720 75 L714 80"/>
+          <rect class="box" x="724" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="798" y="68" text-anchor="middle">COMPONENT</text>
+          <text class="t-col" x="798" y="86" text-anchor="middle">ProjectSelector</text>
+          <text class="t-dim" x="798" y="122" text-anchor="middle">reads it as present</text>
+          <text class="t-dim" x="12" y="154">Dashed: the hop where the two sides stop agreeing.</text>
+        </svg></div>
+        <figcaption class="note">The type is hand-written, so this drift appears at runtime, not at build time.</figcaption>
+      </figure>
+
+    <!-- DIAGRAM 3 of 4 · ER FRAGMENT. Section 5, once for the diff: touched tables plus
+         immediate neighbours, never the whole schema.
+
+         GRID, 880 x 215: two tables at x = 40 and 560, width 280. Header .box-hd 30 high at
+         y=28, body .box 110 high at y=58, rows every 22px from y=80. Column name (.t-col) at
+         x+12, type (.t-dim) at x+130 — two text elements per row, because runs of spaces
+         collapse in SVG and the column will not line up.
+
+         Draw an ABSENT relationship where the absence is the point: dashed table, dashed edge,
+         and the label split across two lines so it fits the gap between the tables. The
+         .t-lbl NEW badge is anchored end, inside the body box. -->
+      <figure class="wide">
+        <div class="scroller"><svg viewBox="0 0 880 215" role="img" aria-label="projects gains archived_at, and the association the model calls is not declared anywhere">
+          <rect class="box-hd" x="40" y="28" width="280" height="30" rx="5"/>
+          <text class="t-title" x="52" y="48">projects</text>
+          <rect class="box" x="40" y="58" width="280" height="110"/>
+          <text class="t-col" x="52" y="80">id</text>
+          <text class="t-dim" x="170" y="80">bigint</text>
+          <text class="t-col" x="52" y="102">name</text>
+          <text class="t-dim" x="170" y="102">varchar not null</text>
+          <text class="t-col" x="52" y="124">slug</text>
+          <text class="t-dim" x="170" y="124">varchar</text>
+          <text class="t-col" x="52" y="146">archived_at</text>
+          <text class="t-dim" x="170" y="146">datetime</text>
+          <text class="t-lbl" x="308" y="146" text-anchor="end">NEW</text>
+          <path class="edge-dash" d="M320 113 L556 113"/>
+          <text class="t-edge" x="438" y="103" text-anchor="middle">time_entries.running</text>
+          <text class="t-dim" x="438" y="131" text-anchor="middle">no has_many declared</text>
+          <rect class="node-dead" x="560" y="28" width="280" height="30" rx="5"/>
+          <text class="t-title" x="572" y="48">time_entries</text>
+          <rect class="node-dead" x="560" y="58" width="280" height="110"/>
+          <text class="t-dim" x="572" y="82">not present in this repository</text>
+          <text class="t-dim" x="572" y="104">called from project.rb:5</text>
+          <text class="t-dim" x="40" y="196">Dashed: referenced by the code under review, absent from the schema.</text>
+        </svg></div>
+        <figcaption class="note">The guard cannot raise ArchiveError as written; it raises NoMethodError.</figcaption>
+      </figure>
+
+    <!-- DIAGRAM 4 of 4 · LIFECYCLE. Section 5, and only when a status column, enum or state
+         machine changed. It is the figure that reveals whether transitions are guarded at all,
+         which is why each one carries the file:line that performs it.
+
+         GRID, 880 x 170: states at x = 60 / 460, box 200 x 52 at y=64. Transition label
+         (.t-edge) at y=82 with its citation (.t-dim) at y=98, both centred in the gap. A
+         self-transition loops out of the box top at one x and back in at another — an
+         arrowhead that lands beside the box instead of on it is invisible to every check and
+         obvious in a screenshot. -->
+      <figure class="wide">
+        <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="A project moves from active to archived, and nothing stops it being archived twice">
+          <rect class="node" x="60" y="64" width="200" height="52" rx="5"/>
+          <text class="t-col" x="160" y="86" text-anchor="middle">active</text>
+          <text class="t-dim" x="160" y="104" text-anchor="middle">archived_at IS NULL</text>
+          <text class="t-edge" x="360" y="82" text-anchor="middle">Project#archive!</text>
+          <text class="t-dim" x="360" y="98" text-anchor="middle">project.rb:9</text>
+          <path class="edge-accent" d="M260 112 L456 112 M450 107 L456 112 L450 117"/>
+          <rect class="node" x="460" y="64" width="200" height="52" rx="5"/>
+          <text class="t-col" x="560" y="86" text-anchor="middle">archived</text>
+          <text class="t-dim" x="560" y="104" text-anchor="middle">archived_at set</text>
+          <path class="edge-dash" d="M620 64 L620 34 L520 34 L520 64 M515 58 L520 64 L525 58"/>
+          <text class="t-edge" x="570" y="26" text-anchor="middle">archive! again re-stamps it</text>
+          <text class="t-dim" x="60" y="152">No guard refuses the second call, and no test covers it.</text>
+        </svg></div>
+        <figcaption class="note">Two states, and one transition that is not idempotent in effect.</figcaption>
+      </figure>
+
     <!-- ===== Section 6 · Before approving — questions, validations, gaps, and a
          checkpoint of AT MOST FIVE questions. See report-format.md. ===== -->
     <section id="approving">
@@ -744,7 +914,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
       <!-- Questions only the AUTHOR can settle. Distinct from uncertainty already recorded
            above: this is what no amount of reading will resolve. -->
       <h3>Ask the author</h3>
-      <ul><li>{{QUESTION_PHRASED_AS_A_QUESTION}}</li></ul>
+      <ul><li>{{QUESTION_PHRASED_AS_A_QUESTION}}?</li></ul>
 
       <!-- Real commands against THIS repo, plus the setup needed to reach a runnable
            state. Per-flow validations stay with their flow. -->

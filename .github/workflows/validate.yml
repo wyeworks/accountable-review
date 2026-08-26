@@ -17,3 +17,12 @@ jobs:
       # Validates the manifest plus the skills, agents and commands in the tree.
       # Needs no API key — validation is local and offline.
       - run: claude plugin validate . --strict
+
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The checks, checked: every fragment in evals/golden plants one defect and asserts the
+      # verdict. No model, no API key, about a second. A check script that always passes is
+      # worse than none, so this runs on every push.
+      - run: skills/review-map/evals/checks/self-test.sh

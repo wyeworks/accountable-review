@@ -1,272 +1,94 @@
 #!/bin/sh
-# check.sh — the mechanical half of an eval.
+# check.sh — the mechanical half of an eval, dispatched.
 #
-#   Usage: check.sh --page <file> --repo <dir> --base <ref> [--head <ref>]
-#                   [--draft | --final] [--expect <substring>]... [--forbid <substring>]...
+#   Page, the whole thing:
+#     check.sh --page page.html --repo DIR --base REF [--head REF]
+#              [--draft | --final | --stopped] [--expect S]... [--forbid S]...
 #
-# Some expectations in evals.json need a reader: whether the grouping is
-# defensible, whether a decision was worth naming. Those belong to a human or a
-# grader agent. The ones here do not — they are yes-or-no facts about the page,
-# and a script checks them the same way every time, for free, in CI.
+#   One section, produced by a driver in drivers/ from the frozen upstream:
+#     check.sh --fragment behaviour-flows.html --scope behaviour-flows
 #
-# The split matters: a grader asked to check thirty things does all of them
-# sloppily. Take the mechanical ones away and it can spend its attention on
-# judgement.
+#   Just the diagrams, optionally rendered to PNGs for a person to look at:
+#     check.sh --page page.html --scope diagram [--visual]
 #
-# Three page states, three modes:
-#   --draft    published mid-run. It must admit it is unfinished.
-#   --final    the last publish of a completed run. The gate runs; no build-state
-#              markers may remain.
-#   --stopped  a run that ended early on purpose. The banner has to state what was
-#              not written, rather than promise stages that are never coming.
-
+# Three grading scopes, and the difference matters. A PAGE carries invariants no fragment
+# can: completeness, one canonical home, the excerpt budget, the build state. A FRAGMENT is
+# one section, graded on its own so a wording change in one part of report-format.md can be
+# measured without paying for a whole run. A section that passes therefore says nothing
+# about whether the page repeats itself — that is the page's job, and README.md says so.
+#
+# Each check lives in checks/ and prints PASS / FAIL / WARN / SKIP lines. This script only
+# decides which ones apply and adds up what they printed. Exit code follows the FAILs.
 set -eu
 
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-PAGE=; REPO=; BASE=; HEAD_REF=HEAD; MODE=final
-EXPECTS=; FORBIDS=
-pass=0; fail=0; warn=0
+CHECKS_DIR=$HERE/checks
+. "$CHECKS_DIR/lib.sh"
 
-while [ $# -gt 0 ]; do
-  case $1 in
-    --page)   PAGE=$2; shift 2 ;;
-    --repo)   REPO=$2; shift 2 ;;
-    --base)   BASE=$2; shift 2 ;;
-    --head)   HEAD_REF=$2; shift 2 ;;
-    --draft)  MODE=draft; shift ;;
-    --final)  MODE=final; shift ;;
-    --stopped) MODE=stopped; shift ;;
-    --expect) EXPECTS="$EXPECTS$2
-"; shift 2 ;;
-    --forbid) FORBIDS="$FORBIDS$2
-"; shift 2 ;;
-    *) echo "unknown argument: $1" >&2; exit 2 ;;
-  esac
+parse_args "$@"
+require_input
+
+if [ -z "$SCOPE" ]; then
+  if [ "$IN_KIND" = page ]; then
+    SCOPE=all
+  else
+    echo "a fragment needs --scope: blast-radius | behaviour-flows | before-approving | diagram" >&2
+    exit 2
+  fi
+fi
+
+case $SCOPE in
+  all)              RUN="completeness build-state page-invariants excerpts blast-radius behaviour-flows before-approving diagram" ;;
+  core)             RUN="completeness build-state page-invariants excerpts before-approving" ;;
+  blast-radius)     RUN="page-invariants excerpts blast-radius diagram" ;;
+  behaviour-flows)  RUN="page-invariants excerpts behaviour-flows diagram" ;;
+  before-approving) RUN="page-invariants before-approving" ;;
+  diagram)          RUN="diagram" ;;
+  *) echo "unknown scope: $SCOPE" >&2; exit 2 ;;
+esac
+[ "$VISUAL" = 1 ] && RUN="$RUN diagram-shot"
+
+# Rebuild the child argument list from what was parsed, so every child sees the same input
+# and nobody re-parses the command line.
+set -- "--${IN_KIND}" "$IN"
+[ -n "$REPO" ] && set -- "$@" --repo "$REPO"
+[ -n "$BASE" ] && set -- "$@" --base "$BASE"
+set -- "$@" --head "$HEAD_REF" "--$MODE"
+[ -n "$OUTDIR" ] && set -- "$@" --out "$OUTDIR"
+
+TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
+
+for c in $RUN; do
+  CHECK_TALLY=0 "$CHECKS_DIR/$c.sh" "$@" >> "$TMP/out" 2>&1 || rc=$?
+  : "${rc:=0}"
+  if [ "$rc" -eq 2 ]; then
+    echo "FAIL  $c.sh was called wrongly — see the usage above" >> "$TMP/out"
+  fi
+  rc=0
 done
 
-if [ -z "$PAGE" ] || [ -z "$REPO" ] || [ -z "$BASE" ]; then
-  echo "usage: check.sh --page <file> --repo <dir> --base <ref> [--head <ref>]" >&2
-  echo "                [--draft | --final] [--expect <substring>]... [--forbid <substring>]..." >&2
-  exit 2
-fi
-[ -r "$PAGE" ] || { echo "FAIL  page is not readable: $PAGE"; exit 1; }
-
-ok()    { pass=$((pass+1)); echo "PASS  $1"; }
-bad()   { fail=$((fail+1)); echo "FAIL  $1"; }
-maybe() { warn=$((warn+1)); echo "WARN  $1"; }
-
-# 1 · Completeness. Delegated, so there is exactly one implementation of the rule.
-#     A draft ships before the ledger is complete, so this is a final-only check —
-#     running it on a draft would only teach people to ignore a red line.
-if [ "$MODE" = final ]; then
-  if (cd "$REPO" && "$HERE/../scripts/coverage-gate.sh" "$PAGE" "$BASE" "$HEAD_REF" >/dev/null 2>&1); then
-    ok "coverage gate: every changed path is in the ledger"
-  else
-    bad "coverage gate failed — run scripts/coverage-gate.sh directly to see which paths"
-  fi
-fi
-
-# 2 · Build state, which has three legitimate shapes. A draft must admit it is one.
-#     A finished page must not still claim to be one — that undersells completed work.
-#     A stopped run is the third: it must state what was not written rather than leave
-#     a promise of stages that are never coming.
-case $MODE in
-  draft)
-    if grep -q 'class="buildstate"' "$PAGE"; then
-      ok "draft carries the build banner"
-    else
-      bad "draft has no build banner — a half-written page that looks finished"
-    fi
-    if grep -Fq "absence is not a finding" "$PAGE"; then
-      ok "banner says a pending part is not an absent one"
-    else
-      bad "banner is missing the sentence that stops a pending part reading as nothing to say"
-    fi
-    if grep -q 'class="pending"' "$PAGE"; then
-      ok "pending markers present ($(grep -c 'class="pending"' "$PAGE"))"
-    else
-      bad "no pending markers — the reader cannot see what is still coming"
-    fi
-    ;;
-  stopped)
-    if grep -q 'class="buildstate"' "$PAGE"; then
-      ok "stopped run still explains its own state"
-    else
-      bad "a stopped run with no banner reads as a finished page with parts missing"
-    fi
-    if grep -Fq "Still being written" "$PAGE"; then
-      bad "banner still says 'still being written' — nothing is writing it any more"
-    else
-      ok "banner does not promise work that is not coming"
-    fi
-    if grep -Fq "not written" "$PAGE"; then
-      ok "the limit is stated in words"
-    else
-      bad "no statement of what was left unwritten — that is the whole point of this state"
-    fi
-    if grep -q 'class="pending">pending' "$PAGE"; then
-      bad "markers still say 'pending', which is a promise; a stopped run says 'not written'"
-    else
-      ok "markers state a fact rather than a promise"
-    fi
-    ;;
-  *)
-    leftover=$(grep -c 'class="buildstate"\|class="pending"' "$PAGE" || true)
-    if [ "${leftover:-0}" -eq 0 ]; then
-      ok "no build banner or pending markers left on the finished page"
-    else
-      bad "finished page still carries $leftover build-state element(s) — they were not removed"
-    fi
-    ;;
-esac
-
-# 3 · The severity vocabulary is gone from the design system. If these class names
-#     are back, the page is grading again, whatever its prose says.
-if grep -Eq 'chip-(block|watch|good)' "$PAGE"; then
-  bad "severity chips reintroduced (chip-block/chip-watch/chip-good)"
-else
-  ok "no severity chips"
-fi
-
-# 4 · Verdict language. Deliberately high-precision patterns: 'blocking' alone is a
-#     false positive ('blocks the request', 'locks the table'), so it is a WARN below
-#     rather than a failure here.
-if grep -Eiq 'LGTM|looks good to me|recommend (approv|merg)|approve this|ready to merge|risk score|overall risk' "$PAGE"; then
-  bad "verdict language found: $(grep -Eio 'LGTM|looks good to me|recommend (approv|merg)[a-z]*|approve this|ready to merge|risk score|overall risk' "$PAGE" | sort -u | tr '\n' ' ')"
-else
-  ok "no verdict or approval language"
-fi
-if grep -Eq '>[[:space:]]*(Blocking|Watch)[[:space:]]*<' "$PAGE"; then
-  maybe "a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name"
-fi
-
-# 5 · Evidence tiers. A page with no tier label either had nothing to infer, which is
-#     rare, or presented inference as fact, which is the failure this catches.
-if grep -q 'class="tier"' "$PAGE"; then
-  ok "evidence tiers used ($(grep -c 'class="tier"' "$PAGE") label(s))"
-else
-  bad "no evidence tier labels — inference is being presented as fact, or none was marked"
-fi
-
-# 6 · Reserved attribute. coverage-gate.sh greps data-path across the whole page, so
-#     any component other than a ledger row that emits it injects a surplus path and
-#     breaks the gate. Source excerpts carry data-src for that reason. This check is
-#     here rather than in the gate because the gate would just report a confusing
-#     surplus; this names the actual cause.
-dp=$(grep -o 'data-path="' "$PAGE" | wc -l | tr -d ' ')
-dp_td=$(grep -o '<td data-path="' "$PAGE" | wc -l | tr -d ' ')
-if [ "$dp" -eq "$dp_td" ]; then
-  ok "data-path is only on ledger rows ($dp)"
-else
-  bad "$((dp - dp_td)) data-path attribute(s) outside a <td> — the coverage gate reads them as ledger paths; excerpts must use data-src"
-fi
-
-# 7 · Source excerpts. Three things a script can settle. The fourth and most important
-#     one — does the page still read completely with every excerpt closed — needs a
-#     reader, and lives in evals.json.
-ex=$(grep -o 'class="excerpt' "$PAGE" | wc -l | tr -d ' ')
-if [ "$ex" -gt 0 ]; then
-  det=$(grep -o '<details' "$PAGE" | wc -l | tr -d ' ')
-  sum=$(grep -o '<summary' "$PAGE" | wc -l | tr -d ' ')
-  if [ "$det" -eq "$sum" ]; then
-    ok "$ex source excerpt(s), each with a summary"
-  else
-    bad "$det <details> but $sum <summary> — a disclosure with no summary is an unlabelled black box"
-  fi
-
-  # Collapsed by default. An excerpt that ships open is just a code dump, and it is
-  # the reader who decides when they are ready to check the claim.
-  if grep -Eq '<details[^>]*[[:space:]]open([[:space:]>]|=)' "$PAGE"; then
-    bad "an excerpt is open by default — excerpts are revealed by the reader, not shipped expanded"
-  else
-    ok "every excerpt is collapsed by default"
-  fi
-
-  # A closed excerpt is the state most readers see, so its summary has to say what is
-  # inside. "View diff" is not a summary.
-  if grep -Eiq '<summary>[[:space:]]*(view|show|see) (diff|code|source)' "$PAGE"; then
-    bad "a summary reads 'view diff'/'show code' — say the location and why to open it"
-  else
-    ok "no placeholder summaries"
-  fi
-
-  # The excerpt tints are the newest colours in the system, which makes them the most
-  # likely to be declared in one theme block and forgotten in the other two.
-  exadd=$(grep -o '\-\-ex-add' "$PAGE" | wc -l | tr -d ' ')
-  if [ "$exadd" -ge 3 ]; then
-    ok "excerpt tints defined in all three theme blocks"
-  else
-    bad "--ex-add appears $exadd time(s), needs 3 — bare :root plus both dark blocks"
-  fi
-
-  # Exact-duplicate excerpts. The budget forbids quoting the same lines twice — if a
-  # start-here entry and its cohort field rest on one citation, the excerpt goes in
-  # one of them. Near-duplicates (structurally identical code a few lines apart) are
-  # the more common waste and need a reader; this catches only the literal case.
-  # Placeholders are excluded: an unfilled template legitimately repeats {{PATH}}:{{LINES}}.
-  dup=$(grep -o 'class="ex-loc">[^<]*' "$PAGE" | grep -v '{{' | sort | uniq -d | head -3)
-  if [ -z "$dup" ]; then
-    ok "no excerpt quotes the same lines twice"
-  else
-    bad "the same range is excerpted more than once: $(echo "$dup" | sed 's/class="ex-loc">//' | tr '\n' ' ')"
-  fi
-fi
-
-
-# 8 · The comprehension checkpoint is capped at five. The old standalone part had no cap
-#     and grew into a quiz that restated the page; five forces the questions to be the ones
-#     that join things the page established separately. Whether a given question is
-#     restatement needs a reader — this only holds the count.
-if grep -q 'id="approving"' "$PAGE"; then
-  cp_items=$(awk '/id="approving"/,0' "$PAGE" | awk '/<ol class="firstlook"/,/<\/ol>/' | grep -c '<li' || true)
-  if [ "${cp_items:-0}" -eq 0 ]; then
-    maybe "no comprehension checkpoint found inside 'Before approving'"
-  elif [ "${cp_items:-0}" -le 5 ]; then
-    ok "comprehension checkpoint has $cp_items question(s), within the cap of 5"
-  else
-    bad "comprehension checkpoint has $cp_items questions — the cap is 5, and past it they turn into a quiz that restates the page"
-  fi
-fi
-
-# 9 · Dead links. When the head commit is on no remote, every permalink to it 404s.
-unpushed=$(git -C "$REPO" branch -r --contains "$HEAD_REF" 2>/dev/null || true)
-if [ -z "$unpushed" ]; then
-  if grep -Eq 'https://github\.com/[^"]*/(blob|pull)/' "$PAGE"; then
-    bad "page emits GitHub permalinks, but the head commit is on no remote — those 404"
-  else
-    ok "unpushed head: citations are plain text, no dead permalinks"
-  fi
-else
-  ok "head is on a remote: permalinks are legitimate (link form not checked here)"
-fi
-
-# 10 · The three theme states. A colour defined only inside a media query is the classic
-#     unreadable-artifact bug; this catches the structural version of it.
-missing_theme=
-grep -q 'prefers-color-scheme: dark' "$PAGE" || missing_theme="$missing_theme prefers-color-scheme"
-grep -Eq '\[data-theme="dark"\]' "$PAGE"     || missing_theme="$missing_theme data-theme=dark"
-grep -Eq '\[data-theme="light"\]|:root:not\(\[data-theme="light"\]\)|^:root|[^-]:root[[:space:]]*\{' "$PAGE" || missing_theme="$missing_theme bare-:root"
-if [ -z "$missing_theme" ]; then
-  ok "all three theme states present"
-else
-  bad "theme states missing:$missing_theme"
-fi
-
-# 11 · Case-specific: the planted findings, and whatever this case forbids.
-TMPF=$(mktemp)
-trap 'rm -f "$TMPF"' EXIT
+# Case-specific: the planted findings, and whatever this case forbids. These stay here
+# rather than in a check script because they are the one part that differs per case.
 echo "$EXPECTS" | while IFS= read -r e; do
   [ -z "$e" ] && continue
-  if grep -Fq "$e" "$PAGE"; then echo "PASS  mentions: $e"; else echo "FAIL  never mentions: $e"; fi
-done > "$TMPF"
+  if grep -Fq "$e" "$IN"; then echo "PASS  mentions: $e"; else echo "FAIL  never mentions: $e"; fi
+done >> "$TMP/out"
 echo "$FORBIDS" | while IFS= read -r f; do
   [ -z "$f" ] && continue
-  if grep -Fq "$f" "$PAGE"; then echo "FAIL  should not contain: $f"; else echo "PASS  absent, as required: $f"; fi
-done >> "$TMPF"
-cat "$TMPF"
-pass=$((pass + $(grep -c '^PASS' "$TMPF" || true)))
-fail=$((fail + $(grep -c '^FAIL' "$TMPF" || true)))
+  if grep -Fq "$f" "$IN"; then echo "FAIL  should not contain: $f"; else echo "PASS  absent, as required: $f"; fi
+done >> "$TMP/out"
+
+cat "$TMP/out"
+
+pass=$(grep -c '^PASS' "$TMP/out" || true)
+fail=$(grep -c '^FAIL' "$TMP/out" || true)
+warn=$(grep -c '^WARN' "$TMP/out" || true)
+skipped=$(grep -c '^SKIP' "$TMP/out" || true)
 
 echo
-echo "$MODE: $pass passed, $fail failed, $warn warning(s)"
+if [ "$IN_KIND" = page ]; then
+  echo "$SCOPE / $MODE: $pass passed, $fail failed, $warn warning(s), $skipped skipped"
+else
+  echo "$SCOPE fragment: $pass passed, $fail failed, $warn warning(s), $skipped skipped"
+fi
 [ "$fail" -eq 0 ]

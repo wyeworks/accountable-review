@@ -329,6 +329,20 @@ wanting a second diagram, the honest question is whether the first one is doing 
 transition table with a `file:line` per row is often better than a second figure anyway. Never exceed
 two in one section.
 
+**Four kinds, and which section each belongs to.** The layouts are worked out in
+`page-template.html` — complete, to scale, and to be filled in rather than re-derived, because a
+layout invented per run makes two pages from this skill incomparable for no gain.
+
+| Kind | Home |
+|---|---|
+| Blast radius | § 2, on almost every PR |
+| Boundary chain | inside the flow that owns the field, never a section of its own |
+| ER fragment | § 5, if the schema moved |
+| Lifecycle | § 5, and only if a status column, enum or state machine changed |
+
+The last row is the one that gets abused: a nullable timestamp is not a state machine, and drawing one
+invents states the code does not have.
+
 Excerpts have their own budget, in § *Source excerpts*. Keep the two apart when judging a section: a
 diagram is earned by mechanism complexity, an excerpt by a claim the reader would otherwise have to
 take on faith. Neither is earned by file count.

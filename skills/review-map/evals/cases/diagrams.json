@@ -1,0 +1,37 @@
+{
+  "section": "diagrams",
+  "of": "page-template.html § the diagram catalogue, report-format.md § Depth rules",
+  "produced_by": "drivers/diagrams.md",
+  "scope": "diagram",
+  "notes": "Not a section — a primitive that appears in several, and the one component with no generator behind it. checks/diagram.sh settles conformance: template classes only, no literal colours, nothing off-canvas, labels that fit, a legend behind every dashed node. What it cannot settle is whether the diagram is TRUE, and whether it is legible. Run with --visual and look at the PNGs; that is what the last two expectations are for.",
+  "cases": [
+    {
+      "id": "diagrams/rails-only-small",
+      "fixture": "rails-only-small",
+      "check": "check.sh --fragment <out> --scope diagram --visual",
+      "expected_output": "One diagram: the blast radius, reaching from the new column through the model to the unchanged query that scopes the selectable list. No lifecycle diagram — archived_at is a timestamp, not a state machine — and no ER diagram for a single-column add.",
+      "expectations": [
+        "Exactly the diagrams this diff earns: a blast radius, and no lifecycle diagram, because a nullable timestamp is not a state machine and drawing one would invent states the code does not have",
+        "The diagram shows something the two side-by-side lists cannot: the reach from the changed column to the unchanged consumer, as a path rather than as two sets",
+        "Every edge matches a real call in the repository — a followable edge that is wrong costs the reviewer more than no diagram at all",
+        "Solid is changed, dashed is unchanged-and-affected, and the caption says which is which",
+        "The layout follows the catalogue's grid rather than inventing geometry: same column positions, node size and row pitch as the worked layout in page-template.html",
+        "Read the PNGs from --visual: nothing overlaps, no label leaves its box or collides with an edge, and both themes are legible"
+      ]
+    },
+    {
+      "id": "diagrams/monorepo-contract",
+      "fixture": "monorepo-contract",
+      "check": "check.sh --fragment <out> --scope diagram --visual",
+      "expected_output": "Two diagrams at most: the blast radius for section 2, and a boundary chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch marked on the edge where it happens.",
+      "expectations": [
+        "A boundary-chain diagram exists for archived_at and marks the mismatch on the edge it occurs at, rather than leaving the reader to compare two boxes",
+        "The budget is respected: one per section, and a second only where the mechanism is genuinely different — a boundary chain and a blast radius qualify, two views of the same call path do not",
+        "No ER diagram, or one restricted to projects plus immediate neighbours — and if the missing time_entries association is drawn, it is drawn as absent, which is the point of drawing it",
+        "The dashed nodes are exactly the unchanged consumers, selectableProjects and ProjectSelector, and nothing changed by the diff is dashed",
+        "The layout follows the catalogue's grid, and the chain reads left to right in one row rather than as a re-invented layout per run",
+        "Read the PNGs from --visual: nothing overlaps, the mismatch marker is legible at the size it renders, and both themes work"
+      ]
+    }
+  ]
+}

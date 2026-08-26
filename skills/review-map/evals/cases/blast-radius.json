@@ -1,0 +1,37 @@
+{
+  "section": "blast-radius",
+  "of": "report-format.md § Section 2 · Review map",
+  "produced_by": "drivers/blast-radius.md",
+  "scope": "blast-radius",
+  "notes": "The section a diff cannot produce at all, so the eval is mostly about the searching. Presence of an affected-but-unchanged list is mechanical and lives in checks/blast-radius.sh; whether the entries are RIGHT is the product and is judged here.",
+  "cases": [
+    {
+      "id": "blast-radius/rails-only-small",
+      "fixture": "rails-only-small",
+      "check": "check.sh --fragment <out> --scope blast-radius --expect 'active_projects'",
+      "expected_output": "A blast-radius diagram reaching from the new column to the unchanged query that scopes the selectable list, two lists side by side, a reading order with reasons, and a statement of which of the five files carry design.",
+      "expectations": [
+        "app/queries/active_projects.rb is in the affected list with a why clause, and the search that found it is written down",
+        "At least one empty search is recorded as a search — an unrecorded absence cannot be told from an omission, and this diff has real ones (no other caller of archive!, no other reader of the archived scope)",
+        "The dashed nodes in the diagram are exactly the unchanged-and-affected ones, and the solid ones exactly the changed ones",
+        "The reading order puts the migration and schema before the code that reads the column, and each why is a reason rather than a restatement of the filename",
+        "Where the attention goes distinguishes the files carrying design from db/schema.rb, which is generated output — and ranks without excusing anything from coverage",
+        "The slug uniqueness validation appears as secondary work in a neutral register: independently reviewable, no criticism of the author for bundling it"
+      ]
+    },
+    {
+      "id": "blast-radius/monorepo-contract",
+      "fixture": "monorepo-contract",
+      "check": "check.sh --fragment <out> --scope blast-radius --expect 'selectableProjects'",
+      "expected_output": "A blast radius that crosses the boundary: the new column and the serialized field on one side, the hand-written type and the unchanged picker query on the other.",
+      "expectations": [
+        "web/src/queries/selectableProjects.ts is in the affected list with the reason it is affected, and the search that found it is recorded",
+        "Affected code is found on both sides of the boundary, not only in api/ — a section that searched one side and stopped is the failure this fixture is built to catch",
+        "The diagram crosses the boundary rather than stopping at the serializer, and marks the unchanged client consumers as unchanged",
+        "The reading order follows dependency rather than directory: it does not read all of api/ and then all of web/ when the interesting pair is the serializer and the type",
+        "Rung 3 is stated once and correctly — a remote exists but the head is unpushed, so citations are plain text — without repeating the explanation at each citation",
+        "Nothing in the section grades the change, scores it, or recommends a decision"
+      ]
+    }
+  ]
+}

@@ -42,12 +42,20 @@ Two checks are worth making on every run, because they are where this version is
 wrong: open two entries from *affected but unchanged* and confirm the cited file really consumes the
 changed thing, and confirm no sentence anywhere grades the PR.
 
-`skills/review-map/evals/` holds a seed set for both. `fixtures/make-fixtures.sh` builds three
-repositories whose interesting findings sit deliberately *outside* the diff, so there is a written
-right answer to check against, and `check.sh` runs the expectations a script can settle — the coverage
-gate, severity chips, verdict language, unlabelled inference, dead permalinks, theme states. Read
-`evals/README.md` before adding a case; the split between mechanical and judged expectations is the
-part worth preserving.
+`skills/review-map/evals/` is where that judging happens, at three scopes.
+`fixtures/make-fixtures.sh` builds three repositories whose interesting findings sit deliberately
+*outside* the diff, so there is a written right answer to check against. A **page** case is a whole
+run, graded on what only a whole page carries. A **section** case produces one fragment from the
+hand-authored upstream in `frozen/` and grades that — which is what makes "run it three times"
+affordable, and three runs is the smallest sample that separates a wording change from noise. A
+**component** check runs on a script's output or on one `<svg>`.
+
+`./run.sh behaviour-flows -n 3` then `./report.sh` is the loop; results carry the skill's git sha,
+so a pass rate is attributable to a version of the prose. Section files are named by slug, never by
+number: `report-format.md`'s numbering is already the source of order, and a filename repeating it
+only makes the reader look the number up. Read `evals/README.md` before adding a case. Two things
+there are worth preserving above the rest — the split between mechanical and judged expectations,
+and the plainly stated limit that a section eval cannot see whether the page repeats itself.
 
 ## How the documents divide the work
 
@@ -58,11 +66,12 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
 | `references/report-format.md` | Page structure — the seven sections and what triggers each, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the search recipes for affected-but-unchanged code |
-| `references/page-template.html` | Design system — tokens, component classes, SVG diagram vocabulary |
+| `references/page-template.html` | Design system — tokens, component classes, the SVG vocabulary, and the diagram catalogue: four worked layouts, to scale |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
-| `evals/` | Fixtures with planted findings, the cases, and `check.sh`. Not loaded at runtime; see `evals/README.md` |
+| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, and `checks/`. Not loaded at runtime; see `evals/README.md` |
+| `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs
 them. That is why `SKILL.md` says *when* to load each one, and why detail belongs in the reference
@@ -154,6 +163,20 @@ Editing one of these means checking the others still agree.
   nothing. The budget, the permitted locations and the rung adjustment live in `report-format.md`
   **only**; `SKILL.md` points at them. An earlier version restated the cap in slightly different words
   and the two drifted apart within one run — hence the rule that this one has a single home.
+- **Diagram layouts come from the catalogue, not from the run.** Four kinds — blast radius, boundary
+  chain, ER fragment, lifecycle — worked out complete and to scale in `page-template.html`, with
+  the grid stated in a comment above each. Four files have to agree: the template holds the
+  geometry, `report-format.md` § *Depth rules* holds which kind belongs to which section and the
+  budget (and holds them **only** — the template does not restate the budget), `SKILL.md` step 9
+  points at the catalogue, and `evals/checks/diagram.sh` carries the class vocabulary the template
+  defines. A class added to one and not the other is either unstyled or reported as invented.
+
+  The reason this is an invariant rather than a nicety: a diagram is the one component with no
+  generator behind it, so a layout derived per run spends the run's attention on geometry instead of
+  on whether the edges are true — and makes two pages from this skill incomparable. What a script
+  can check is conformance; crowding, overlap and an arrowhead landing beside its box need eyes,
+  which is what `checks/diagram-shot.sh --visual` and a judged expectation are for. Both defects in
+  that sentence were found in diagrams the script had just called clean.
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
   the classic unreadable-artifact bug.

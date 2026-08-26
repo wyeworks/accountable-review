@@ -207,11 +207,12 @@ skills/review-map/
 ├── references/
 │   ├── report-format.md           parts, review-unit format, evidence tiers, deep links
 │   ├── rails-nextjs.md            what to look for per layer, and the search recipes
-│   └── page-template.html         design system and component vocabulary
+│   └── page-template.html         design system, components, and the diagram catalogue
 ├── scripts/
+│   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
 │   ├── ledger-rows.sh             generates the ledger rows from the diff
 │   └── coverage-gate.sh           asserts the ledger accounts for every changed path
-└── evals/                         fixtures, cases, and the mechanical checks
+└── evals/                         fixtures, page and section cases, and the mechanical checks
 ```
 
 ## Contributing

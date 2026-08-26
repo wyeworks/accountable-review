@@ -281,7 +281,11 @@ Everything else about writing holds at every stage:
   `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
 - Diagrams are hand-authored inline SVG using the template's classes, so they work in a local file as
   well as when published. A diagram must show a mechanism a table cannot; delete any that merely
-  restates a list.
+  restates a list. **Take the layout from the catalogue in `page-template.html` — four worked
+  diagrams, to scale — and fill in the text rather than deriving geometry.** Which kind belongs to
+  which section is in `report-format.md` § *Depth rules*, beside the budget. Deriving a layout spends
+  the run's attention on the part that does not matter: what matters is whether the edges are true,
+  and a followable edge that is wrong costs the reviewer more than no diagram.
 - **Generate source excerpts, do not type them.** Where a claim would otherwise be taken on faith —
   above all in *affected but unchanged*, whose lines no diff view can address — quote the code inline
   as a collapsed excerpt, from the generator:

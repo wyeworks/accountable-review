@@ -1,0 +1,37 @@
+{
+  "section": "behaviour-flows",
+  "of": "report-format.md § Section 4",
+  "produced_by": "drivers/behaviour-flows.md",
+  "scope": "behaviour-flows",
+  "notes": "Two of these expectations were sharpened by the first live run rather than written in advance: the mismatch expectation, because the run found a second and sharper mismatch the frozen upstream had missed, and the excerpt expectation, because the original wording demanded a disclosure around a one-line declaration the prose had already quoted in full. Section evals grade one fragment produced from the frozen upstream. They cannot see whether the page repeats itself, cannot run the completeness gate, and cannot judge the page-wide excerpt budget — those stay with the page cases in ../evals.json. Six judged expectations per case, deliberately: a grader asked to verify thirty does all of them badly.",
+  "cases": [
+    {
+      "id": "behaviour-flows/rails-only-small",
+      "fixture": "rails-only-small",
+      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "expected_output": "Two flows: archiving a project, and listing projects to choose from. The second is built entirely from unchanged code, and saying why that is a flow at all is the insight. Citations are plain text throughout.",
+      "expectations": [
+        "Flow B exists, contains no changed file, and the fragment says why an unchanged-only flow is a flow — that archival changed what the selectable list means",
+        "app/queries/active_projects.rb is named in Flow B's affected-but-unchanged field with a clause tying it to archival, not merely listed",
+        "The gaps from the frozen goal survive as gaps with an evidence tier — nothing prevents archiving twice, nothing prevents new entries against an archived project — rather than being smoothed into a description of working code",
+        "No route is presented as fact: there is no routes.rb, and a fragment that writes POST /projects/:id/archive as though it existed has invented the most pasteable thing on the page",
+        "Every field carrying a source excerpt still holds its own file:line outside the collapsed block, judged field by field — a citation elsewhere in the fragment does not rescue it",
+        "Validation steps name files that exist in this fixture, and the excerpts are earned by a decision the reviewer has to make rather than by every unchanged citation"
+      ]
+    },
+    {
+      "id": "behaviour-flows/monorepo-contract",
+      "fixture": "monorepo-contract",
+      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "expected_output": "Two flows. Flow A follows archived_at across the boundary as one chain and carries the endpoint contract including the 422. Flow B is selectableProjects, unchanged and outside the diff.",
+      "expectations": [
+        "archived_at is followed as a chain — serializer, JSON, type, hook, component — inside the flow that owns it, not reviewed as two file lists or split into a backend part and a frontend part",
+        "Both type mismatches on the field are identified, with a citation on each side: the wire key archived_at against the declared archivedAt, with no transform between them, so the property is undefined; and the serializer emitting nil against a non-null declaration. Finding only the nullability half is a partial pass",
+        "The 422 the controller can return is identified as unhandled by the client, explained once, in one flow, and referenced rather than re-explained anywhere else",
+        "web/src/queries/selectableProjects.ts is named with the why: it filters the picker list in ignorance of archival, so an archived project stays selectable",
+        "archive! calling time_entries.running against a model that declares no such association is named as uncertain, not described as a working guard",
+        "Every excerpt is earned by a decision the reviewer has to make, and no excerpt quotes a whole file except where the file IS the finding, a near-duplicate of another, or a generated file. A single-line declaration already quoted verbatim in the prose does not need a block — the test is whether a claim rests on lines the reader cannot see, not whether every citation has a disclosure"
+      ]
+    }
+  ]
+}
