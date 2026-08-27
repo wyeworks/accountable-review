@@ -295,9 +295,11 @@ Everything else about writing holds at every stage:
   which section is in `report-format.md` § *Depth rules*, beside the budget. Deriving a layout spends
   the run's attention on the part that does not matter: what matters is whether the edges are true,
   and a followable edge that is wrong costs the reviewer more than no diagram.
-- **Generate source excerpts, do not type them.** Where a claim would otherwise be taken on faith —
-  above all in *affected but unchanged*, whose lines no diff view can address — quote the code inline
-  as a collapsed excerpt, from the generator:
+- **Generate source excerpts, do not type them.** Two things get quoted, not one. The lines a claim
+  would otherwise ask the reader to take on faith — above all *affected but unchanged*, which no diff
+  view can address — and **the changed hunk each behaviour flow turns on**, because § 2 is read before
+  the reviewer opens the diff in § 3, so a flow that only describes its change is asking to be
+  believed until then. Quote both inline as collapsed excerpts, from the generator:
 
   ```sh
   <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --why "..."
@@ -313,7 +315,8 @@ Everything else about writing holds at every stage:
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
   citation that is **load-bearing for a decision the reviewer has to make**, not by a citation merely
   pointing at unchanged code — otherwise every *affected but unchanged* entry earns one automatically
-  and the budget caps nothing.
+  and the budget caps nothing. That test rations what sits on top of the per-flow hunk; it is never a
+  reason a flow goes without showing its own change.
 
   **Do not carry a number in your head for this.** The budget, the locations excerpts may appear in,
   and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and

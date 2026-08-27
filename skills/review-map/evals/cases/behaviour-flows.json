@@ -16,7 +16,7 @@
         "The gaps from the frozen goal survive as gaps with an evidence tier — nothing prevents archiving twice, nothing prevents new entries against an archived project — rather than being smoothed into a description of working code",
         "No route is presented as fact: there is no routes.rb, and a fragment that writes POST /projects/:id/archive as though it existed has invented the most pasteable thing on the page",
         "Every field carrying a source excerpt still holds its own file:line outside the collapsed block, judged field by field — a citation elsewhere in the fragment does not rescue it",
-        "Validation steps name files that exist in this fixture, and the excerpts are earned by a decision the reviewer has to make rather than by every unchanged citation"
+        "Validation steps name files that exist in this fixture; the excerpts are earned by a decision the reviewer has to make rather than by every unchanged citation; and Flow A shows the archival hunk itself as a --diff excerpt rather than describing it — a fragment whose only quoted code is unchanged has explained everything except the change"
       ]
     },
     {
@@ -30,7 +30,7 @@
         "The 422 the controller can return is identified as unhandled by the client, explained once, in one flow, and referenced rather than re-explained anywhere else",
         "web/src/queries/selectableProjects.ts is named with the why: it filters the picker list in ignorance of archival, so an archived project stays selectable",
         "archive! calling time_entries.running against a model that declares no such association is named as uncertain, not described as a working guard",
-        "Every excerpt is earned by a decision the reviewer has to make, and no excerpt quotes a whole file except where the file IS the finding, a near-duplicate of another, or a generated file. A single-line declaration already quoted verbatim in the prose does not need a block — the test is whether a claim rests on lines the reader cannot see, not whether every citation has a disclosure"
+        "Every excerpt is earned by a decision the reviewer has to make, and no excerpt quotes a whole file except where the file IS the finding, a near-duplicate of another, or a generated file. A single-line declaration already quoted verbatim in the prose does not need a block — the test is whether a claim rests on lines the reader cannot see, not whether every citation has a disclosure. That test rations the unchanged citations only: the flow that changed code still shows its own hunk as a --diff excerpt"
       ]
     },
     {

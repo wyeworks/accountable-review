@@ -57,6 +57,19 @@ else
   maybe "no ol.steps — the end-to-end path is what makes a flow a flow"
 fi
 
+# The flows have to show the change, not only the unchanged code around it. A section whose
+# only excerpts are --source has explained everything except the diff, and that is the failure
+# this check exists to catch: the budget used to be read as rationing changed-code hunks too.
+# WARN and not FAIL, because a fragment can legitimately hold a flow built entirely from
+# unchanged code — and because "which flow lacks one" needs a reader, not a grep.
+if grep -q 'class="excerpt' "$IN"; then
+  if grep -q 'excerpt--diff' "$IN"; then
+    ok "the flows quote changed lines, not only unchanged ones"
+  else
+    maybe "every excerpt here is --source — no flow shows the hunk its behaviour turns on"
+  fi
+fi
+
 # Per unit, the two guards.
 awk -v d="$TMP" '
   /<article class="unit/ { n++; f=1 }

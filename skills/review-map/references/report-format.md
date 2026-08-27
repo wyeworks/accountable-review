@@ -110,17 +110,26 @@ The PR description is never evidence. Where the page reports intent from it, att
 The page's third primitive. A verbatim quotation of code, collapsed until the reader decides to check
 the claim it supports.
 
-It exists because of an asymmetry the deep links cannot fix. A citation to a *changed* line is cheap
-to follow — the reviewer has the diff open anyway. A citation to an *unchanged* line sends them into
-an unfamiliar file with no context, and the ones who do not go take the finding **on faith**. Faith is
-what this page is built to remove, so the lines come to the reader instead.
+It exists because of two things a deep link cannot fix.
+
+The first is an asymmetry. A citation to an *unchanged* line sends the reader into an unfamiliar file
+with no context, and the ones who do not go take the finding **on faith**. Faith is what this page is
+built to remove, so the lines come to the reader instead.
+
+The second is this page's own ordering. § 2 comes *before* § 3, and § 3 is the moment the reviewer
+opens the code — so while they are reading the flows they do not have the diff in front of them. An
+earlier version of this section assumed they did — *"a citation to a changed line is cheap to follow,
+the reviewer has the diff open anyway"* — and rationed `--diff` excerpts on that basis. What it
+produced was flows whose only quoted code was code the PR never touched. A flow teaches a mechanism,
+and the shortest way to teach a mechanism is to show the lines that make it, so changed lines belong
+in the flows too.
 
 Two variants:
 
 | Variant | Shows | Used for |
 |---|---|---|
 | `.excerpt--source` | Lines at the head SHA, no signs | Unchanged code, which has no diff to show. The variant that carries the product |
-| `.excerpt--diff` | A hunk with `+`/`−` gutters | Changed code, where *what moved* is the reviewer's question |
+| `.excerpt--diff` | A hunk with `+`/`−` gutters | Changed code, where *what moved* is the reviewer's question. The variant that lets a flow be read with no diff open |
 
 **Where they may appear.** Not in the coverage ledger — a ledger row is a checklist entry, not a
 claim, and a hundred collapsed hunks is a page nobody can load. Everywhere else on this list, subject
@@ -129,7 +138,7 @@ to the test below.
 | Location | Variant |
 |---|---|
 | § 2 · a flow's *affected but unchanged* | `--source` |
-| § 2 · a flow's *implementation* | `--diff`, the one hunk carrying the decision |
+| § 2 · a flow's *implementation* | `--diff`, the hunk the behaviour turns on. Expected on every flow with changed code — a floor, not a ration |
 | § 2 · a flow's *things to understand* | Either, whichever fits the claim |
 | § 3 · *start here*, an entry whose finding is not already excerpted in its flow | Either |
 | § 4 · *changed vs potentially affected*, the affected column | `--source` |
@@ -148,6 +157,11 @@ was never about quoting one committed line that a claim turns on.
   citation may live only inside one. An excerpt *confirms* what the prose already said; it never
   *carries* it. This is the whole difference between progressive disclosure and hidden content, and it
   is the rule to check first when reviewing a page that uses them.
+- **Every flow shows the change itself.** A behaviour flow whose only excerpts are `--source` has
+  explained everything except the change. The *implementation* field carries the hunk the behaviour
+  turns on — the guard, the new branch, the changed default — as a `--diff` excerpt. If a flow's
+  implementation is one import or one rename, it was a ledger row and not a flow. This is a floor;
+  the budget below rations what sits on top of it, never the hunk itself.
 - **The closed summary says what the reader will see and why to open it** — `path:lines`, then a
   clause. `View diff` and `Show code` are not summaries: a closed excerpt has to be informative,
   because most of them stay closed.
@@ -194,6 +208,11 @@ author about, or have to weigh. Most *affected but unchanged* entries are contex
 reason the section exists, and those are the ones that get the lines brought to them. This test came
 out of a run that hit the circularity above and had to invent something to escape it.
 
+**The test rations; it does not gate the floor.** A flow's own `--diff` hunk is not competing under
+it — that hunk *is* what the flow explains. Applying the test uniformly is what produced the failure
+this section was rewritten to fix: pages that quoted unchanged code well and never once showed the
+change. Apply it to everything beyond one hunk per flow.
+
 Then the mechanical limits:
 
 - **One excerpt per field or entry**, never two.
@@ -211,10 +230,13 @@ Then the mechanical limits:
 - **Never excerpt** lockfiles, generated API types, compiled assets, pure renames, import-only edits
   or test boilerplate — ledger rows by definition, and an excerpt of one teaches nothing. `db/schema.rb`
   is the one nuanced case; see the note under the location table.
-- **A page-wide sense of scale**, since the per-field cap alone does not bound the total: on a
-  small diff, roughly half a dozen is where a page stops rewarding another one. On a large diff the
-  number does not grow with the file count — it grows with the number of load-bearing findings, which
-  is a much slower curve. If a section has more than two, ask whether the prose is doing its job.
+- **A page-wide sense of scale**, since the per-field cap alone does not bound the total: the count
+  grows with the number of flows and the number of load-bearing findings, never with the file count,
+  which is a far slower curve. Two per flow is the ordinary shape — the hunk the behaviour turns on,
+  plus the one unchanged citation the flow rests on — and a third wants a reason. **Count per flow,
+  not per section, inside § 2**: a section-wide limit of two there is a limit of two across the bulk
+  of the page, which is how this format ended up under-quoting the diff. Outside § 2, more than two
+  in a section is still the sign that the prose is not doing its job.
 
 **Link rung changes the budget, in one direction only.** At rungs 3 and 4 nothing is clickable, so an
 excerpt is the only followable evidence there is: lean towards more. At rungs 1 and 2 the budget above
@@ -547,6 +569,11 @@ unit*) plus whatever of this it actually needs:
   *why*, commit messages, named constants, transaction boundaries, `rescue` clauses, and anything the
   code deliberately refuses to do.
 - **Validation** for this behaviour, if it needs its own. Setup and seeds go to § 6.
+
+**A flow shows the code it is about.** The *implementation* field carries the hunk the behaviour
+turns on as a `--diff` excerpt — a floor rather than something the budget rations, per § *Source
+excerpts*. The reader has not opened the diff yet; § 3 is where they do that, and until then a flow
+that only describes its change is asking to be believed.
 
 **A flow explains; it does not defer.** Nothing here is held back for § 3 or § 4 to say properly —
 those sections come after this one and point at it. The only forward reference a flow makes is to

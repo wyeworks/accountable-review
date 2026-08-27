@@ -11,11 +11,11 @@
     <dl class="unit-body">
       <div class="ep-row"><dt>Implementation</dt><dd>
         <ul><li><a class="cite" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</li></ul>
-        <details class="excerpt excerpt--diff">
+        <details class="excerpt excerpt--source">
           <summary><span class="ex-loc">app/models/project.rb:29-33</span>
-            <span class="ex-why">the guard the behaviour turns on</span></summary>
+            <span class="ex-why">the guard as it already stood</span></summary>
           <div class="ex-body">
-<pre class="codeblock" data-src="app/models/project.rb"><span class="l add"><span class="sig">+</span>    return false if time_entries.running.exists?</span>
+<pre class="codeblock" data-src="app/models/project.rb"><span class="l">    return false if time_entries.running.exists?</span>
 </pre>
           </div>
         </details>

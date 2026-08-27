@@ -177,6 +177,13 @@ Editing one of these means checking the others still agree.
   unchanged code — the gate would fail on the page's best content. Excerpts carry `data-src`.
   `evals/check.sh` holds the mechanical half of all three; whether the prose survives with the blocks
   shut is a judged expectation, because no script can tell.
+  A third thing, added after a run whose flows quoted only unchanged code: the `--diff` excerpt is a
+  **floor, not a ration**. Each behaviour flow shows the hunk its behaviour turns on, because § 2 is
+  read before the reviewer opens the diff in § 3; the load-bearing test rations everything on top of
+  that. The old framing ("a changed line is cheap to follow, the reviewer has the diff open anyway")
+  plus a section-wide cap of two is what suppressed it, so the cap now counts per flow inside § 2.
+  `evals/checks/behaviour-flows.sh` warns when every excerpt in the flows is `--source`.
+
   Two things the first live run changed, both worth keeping stated. The closed-page rule is judged
   **field by field**: a citation elsewhere on the page does not rescue a field whose only `file:line`
   sits inside the collapsed block, and `check.sh` cannot see that. And the budget's test is that the
