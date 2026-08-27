@@ -106,8 +106,31 @@ Editing one of these means checking the others still agree.
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
 - **The review unit** is the page's primitive: seven fields, fixed order, defined in
-  `report-format.md` and rendered as `article.unit`. Two guards keep it from becoming ceremony — a
-  unit needs a non-obvious *things to understand*, and fields may be omitted but never faked.
+  `report-format.md` and rendered as `article.unit` — **and rendered nowhere else.** A behaviour
+  flow's body *is* a unit; the path, the endpoint card, the diagram and the decisions block sit
+  beside it inside the flow section, with decisions last. Two guards keep the unit from becoming
+  ceremony — a unit needs a non-obvious *things to understand*, and fields may be omitted but never
+  faked.
+
+  Four files have to agree, the same way the diagram catalogue's four do:
+  `page-template.html` holds one behaviour flow **assembled whole** and the `<dt>` labels,
+  `report-format.md` § *The review unit* holds those labels in a column of their own plus § 2's
+  split between what the unit carries and what sits beside it,
+  `evals/checks/behaviour-flows.sh` counts field rows outside a unit and refuses a flows region
+  with none, and `evals/golden/flows-clean.html` is the reference markup. One subtlety the check
+  has to keep: `.ep-row` is **shared** with `article.endpoint`, so an endpoint card is a second
+  legitimate home for a field row — counting only units reported three correct eval runs as
+  flattened.
+
+  The reason this is an invariant and not a convention: the template used to show the section
+  shell, the unit and the decisions block as three *detached* siblings, with the composition stated
+  only in prose. A run read the prose, copied the markup as shown, and flattened all three flows
+  into loose `.ep-row` blocks parented to the `<section>` — losing the card, handing field spacing
+  to `section > * + *`, un-scoping every `.unit ...` rule, and dropping one flow's *things to
+  understand* entirely when a decisions block took its slot. Nothing errored and no check fired:
+  `behaviour-flows.sh` accepted `article.cohort` as a substitute, which § 1 always supplies. **A
+  composition that is described but never shown assembled does not survive a weaker reader** — the
+  same reasoning that puts diagram geometry in a catalogue instead of deriving it per run.
 - **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the search recipes in
   `rails-nextjs.md` are how, and it surfaces twice, at different depths: the review-unit field inside
   the flow that owns it **explains** it, and § 4 *Blast radius* shows the whole set at once, pointing

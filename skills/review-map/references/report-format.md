@@ -58,15 +58,23 @@ ladder. Settle the mode once, in step 1 of the procedure.
 The page's reusable primitive. Every meaningful change — usually one per behaviour flow, sometimes
 one per significant standalone change — renders as a unit with these seven fields, in this order:
 
-| Field | Carries |
-|---|---|
-| **Why this exists** | One or two sentences of purpose, in behavioural terms |
-| **Implementation** | The `file:line` citations that make up the change, in reading order |
-| **Relevant tests** | The specs that pin this behaviour, cited the same way, plus what they leave open |
-| **Affected but unchanged** | Code the change gives new meaning to, with a citation and a clause on why it is affected |
-| **Things to understand** | The invariants, defaults and decisions a reader would not have guessed from the diff |
-| **How to validate** | Numbered, pasteable steps against this repository |
-| **Reviewer questions** | Open questions, phrased as questions |
+| Field | `<dt>` | Carries |
+|---|---|---|
+| **Why this exists** | — | One or two sentences of purpose, in behavioural terms |
+| **Implementation** | `Implementation` | The `file:line` citations that make up the change, in reading order |
+| **Relevant tests** | `Tests` | The specs that pin this behaviour, cited the same way, plus what they leave open |
+| **Affected but unchanged** | `Affected, unchanged` | Code the change gives new meaning to, with a citation and a clause on why it is affected |
+| **Things to understand** | `Understand` | The invariants, defaults and decisions a reader would not have guessed from the diff |
+| **How to validate** | `Validate` | Numbered, pasteable steps against this repository |
+| **Reviewer questions** | `Questions` | Open questions, phrased as questions |
+
+The middle column is the label text, **verbatim**, and it is deliberately shorter than the field
+name: the label column is 108px wide, and a label that wraps to two lines turns the gutter into
+noise. It is a column rather than an inference because the two drifted the moment the mapping was
+only implied — this file said *relevant tests* and *things to understand* while the template emitted
+`Tests` and `Understand`, and a run reading both wrote `Understand` in one flow and `Things to
+understand` in the next, leaving the reader to work out whether they were the same field. *Why this
+exists* has no label at all: it renders as the `.unit-head` paragraph, above the field rows.
 
 Rules that keep units from becoming ceremony:
 
@@ -76,7 +84,11 @@ Rules that keep units from becoming ceremony:
   worth reporting? Say what you searched and that nothing consumes it. That sentence is the finding.
 - **Validation steps must exist in this repo.** The real rake task, the real route, the real factory.
   One invented command spends the reader's trust in the entire page.
-- Render as `article.unit` with `.ep-row` field rows — see `page-template.html`.
+- **Render as `article.unit`, and render the fields nowhere else.** The `.ep-row` rows go inside
+  that article's `dl.unit-body`; loose in a section they lose the card, take their spacing from
+  `section > * + *` instead of the unit's own gap, and fall out of scope of every `.unit ...` rule.
+  Take the composition from the assembled behaviour flow in `page-template.html` rather than from
+  this sentence — a run that had only the sentence flattened all three of its flows.
 - Three of the fields may carry a collapsed source excerpt: *implementation*, *affected but unchanged*
   and *things to understand*. See § *Source excerpts* for the budget and for the rule that the field
   still has to read complete with the excerpt closed.
@@ -540,35 +552,57 @@ directory**. `Services / Models / Hooks / Components` is the repository's struct
 and a reviewer who reads it still has to assemble the behaviour themselves. State the grouping
 principle before the flows — the split *is* the insight.
 
-Each flow carries **only what is specific to that behaviour**, as a review unit (see § *The review
-unit*) plus whatever of this it actually needs:
+Each flow carries **only what is specific to that behaviour**. Its **body is a review unit** (see
+§ *The review unit*) — `article.unit`, the seven fields inside its `dl.unit-body` — and everything
+else the flow needs sits *beside* that unit, inside the flow section. Which side of the boundary a
+part falls on is settled here rather than per run, because a run given the list without the split
+put the fields loose in the section and a decisions block in the middle of them.
 
-- **Before / after** — what was possible, what is now, what is now prevented.
+**Beside the unit, in this order.** Take what the flow needs and omit the rest:
+
+- **Before / after** — what was possible, what is now, what is now prevented. `dl.ba`, per § 1's rule
+  that the two are rows and never one sentence.
 - **The path**, as `ol.steps`: UI → request → controller → operation → model → column, and the
   response path back if it carries anything interesting. Where the chain is non-trivial, draw it.
-- **Persistence for this behaviour** — the column written, the callback fired, the validation added,
-  the state transition performed. Schema-wide structure is § 5's.
+- **The field crossing the boundary**, if it does, as a second chain — serializer → JSON → type → hook →
+  component. Following one field teaches more than reviewing both sides as separate file trees. The
+  mismatches worth hunting: nullable backend field typed non-null, backend enum value missing from the
+  frontend union, a new error status nothing handles, a required param the client never sends. If the
+  client is in another repository or simply absent, say which and build the backend half only — do not
+  guess at code you cannot read.
 - **The endpoint** it goes through, if the diff changed one: params with required/optional and where
   they are coerced, a real success body, the **full** error list with statuses, and a side-effects row
   — reads only / writes / calls an external service / idempotent or not. That last row is the
   reviewer's actual question and no diff answers it. Render as `article.endpoint`. Server-rendered
   instead? Then the flow is page → action → redirect or render, with forms, permitted params and
   flash states.
-- **The field crossing the boundary**, if it does, as a chain — serializer → JSON → type → hook →
-  component. Following one field teaches more than reviewing both sides as separate file trees. The
-  mismatches worth hunting: nullable backend field typed non-null, backend enum value missing from the
-  frontend union, a new error status nothing handles, a required param the client never sends. If the
-  client is in another repository or simply absent, say which and build the backend half only — do not
-  guess at code you cannot read.
-- **Affected but unchanged**, for this behaviour, with the clause on why. This is where such a
-  finding is *explained*; § 4 points back at it rather than restating it.
-- **Tests, and the gap.** Which behaviour they pin, which branch they leave open. One sentence per test
-  capturing its behavioural guarantee — never a walk through its assertions.
+- **A diagram**, where one shows a mechanism a list cannot. Layout from the catalogue in
+  `page-template.html`; which kind and how many, per § *Depth rules*.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
   decision, where it lives, why it matters, the tradeoff accepted. Mine them from comments explaining
   *why*, commit messages, named constants, transaction boundaries, `rescue` clauses, and anything the
   code deliberately refuses to do.
-- **Validation** for this behaviour, if it needs its own. Setup and seeds go to § 6.
+
+  **Last in the flow, after the unit's closing tag.** `.decision` has no card of its own — a
+  border-top and a number in a 44px gutter — so it needs the unit's edge to read against; between two
+  fields it becomes a full-width rule with a number hanging in a margin the field labels do not share,
+  and it reads as a new section starting mid-flow.
+
+  And writing decisions here does **not** discharge *things to understand*. That field is defined to
+  carry decisions too, so a flow that moves them out here and leaves the field empty has turned itself
+  into a ledger row — which is how one run lost the best finding on its page.
+
+**Inside the unit, as its fields:**
+
+- **Persistence for this behaviour** — the column written, the callback fired, the validation added,
+  the state transition performed — cited in *implementation*, with whatever a reader would not have
+  guessed in *things to understand*. Schema-wide structure is § 5's.
+- **Affected but unchanged**, for this behaviour, with the clause on why. This is where such a
+  finding is *explained*; § 4 points back at it rather than restating it.
+- **Tests, and the gap**, in *relevant tests*. Which behaviour they pin, which branch they leave open.
+  One sentence per test capturing its behavioural guarantee — never a walk through its assertions.
+- **Validation** for this behaviour, if it needs its own, in *how to validate*. Setup and seeds go
+  to § 6.
 
 **A flow shows the code it is about.** The *implementation* field carries the hunk the behaviour
 turns on as a `--diff` excerpt — a floor rather than something the budget rations, per § *Source
