@@ -8,10 +8,15 @@
 # No model, no fixtures, about a second. That is why it belongs in CI next to
 # `claude plugin validate`.
 #
-#   script | golden fragment | expected exit | a substring the output must contain
+#   script | golden fragment | expected exit | a substring the output must contain | extra args
 #
 # Expected exit is 0 or 1. A WARN is not a failure, so a fragment that only warns expects
 # 0 and is pinned by its substring instead.
+#
+# The fifth column is optional and exists for a check that needs more than a fragment. @GOLD@
+# expands to the golden directory, so searches.sh can be handed a repository to search: it is
+# the one check whose rule is a relation between the page and a repo, and a check that can only
+# SKIP here is exactly what this file exists to prevent.
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 EVALS=$(dirname "$HERE")
@@ -20,8 +25,14 @@ GOLD=$EVALS/golden
 pass=0; fail=0
 
 run_case() {
-  script=$1; fragment=$2; want_exit=$3; want_text=$4
-  out=$(CHECK_TALLY=0 "$HERE/$script" --fragment "$GOLD/$fragment" 2>&1) && got=0 || got=$?
+  script=$1; fragment=$2; want_exit=$3; want_text=$4; extra=$5
+  # Trim the column padding. It used to be harmless, because want_text ran to end of line; with
+  # a fifth column it ends at a "|" and carries the spaces before it, so an untrimmed substring
+  # matches nothing and every row with extra args fails for a reason that is not about the check.
+  want_text=$(printf '%s' "$want_text" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+  extra=$(printf '%s' "$extra" | sed "s|@GOLD@|$GOLD|g")
+  # Unquoted on purpose: the column is a short argument list, not one argument.
+  out=$(CHECK_TALLY=0 "$HERE/$script" --fragment "$GOLD/$fragment" $extra 2>&1) && got=0 || got=$?
   problem=
   [ "$got" = "$want_exit" ] || problem="exit $got, wanted $want_exit"
   case $out in
@@ -36,9 +47,9 @@ run_case() {
   fi
 }
 
-while IFS='|' read -r s f e t; do
+while IFS='|' read -r s f e t x; do
   case $s in ''|\#*) continue ;; esac
-  run_case "$(echo "$s" | tr -d ' ')" "$(echo "$f" | tr -d ' ')" "$(echo "$e" | tr -d ' ')" "$t"
+  run_case "$(echo "$s" | tr -d ' ')" "$(echo "$f" | tr -d ' ')" "$(echo "$e" | tr -d ' ')" "$t" "$x"
 done <<'CASES'
 diagram.sh          | diagram-clean.html            | 0 | labels fit their boxes
 diagram.sh          | diagram-literal-colour.html   | 1 | is a literal colour
@@ -56,6 +67,10 @@ behaviour-flows.sh  | flows-unit-uncited.html       | 1 | makes claims with no f
 blast-radius.sh     | blast-clean.html              | 0 | point into the flows that explain them
 blast-radius.sh     | blast-readorder.html          | 1 | the reading order lives in section 3
 blast-radius.sh     | blast-no-pointer.html         | 0 | an in-page anchor works at every link rung
+blast-radius.sh     | blast-pointer-restated.html   | 1 | carry more than one citation
+searches.sh         | searches-clean.html           | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
+searches.sh         | searches-unreachable.html     | 1 | reachable from no recorded search | --repo @GOLD@/searches-repo
+searches.sh         | searches-clean.html           | 0 | needs --repo to re-run
 start-here.sh       | start-here-clean.html         | 0 | each with a why
 start-here.sh       | start-here-no-why.html        | 1 | is not a reading order
 start-here.sh       | start-here-two-lists.html     | 1 | it is one list

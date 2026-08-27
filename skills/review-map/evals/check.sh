@@ -38,11 +38,11 @@ if [ -z "$SCOPE" ]; then
 fi
 
 case $SCOPE in
-  all)              RUN="completeness build-state page-invariants excerpts behaviour-flows start-here blast-radius before-approving diagram" ;;
+  all)              RUN="completeness build-state page-invariants excerpts behaviour-flows start-here blast-radius before-approving searches diagram" ;;
   core)             RUN="completeness build-state page-invariants excerpts before-approving" ;;
-  behaviour-flows)  RUN="page-invariants excerpts behaviour-flows diagram" ;;
+  behaviour-flows)  RUN="page-invariants excerpts behaviour-flows searches diagram" ;;
   start-here)       RUN="page-invariants start-here" ;;
-  blast-radius)     RUN="page-invariants excerpts blast-radius diagram" ;;
+  blast-radius)     RUN="page-invariants excerpts blast-radius searches diagram" ;;
   before-approving) RUN="page-invariants before-approving" ;;
   diagram)          RUN="diagram" ;;
   *) echo "unknown scope: $SCOPE" >&2; exit 2 ;;

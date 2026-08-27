@@ -166,7 +166,8 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice | page and fragment |
 | `behaviour-flows.sh` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
 | `start-here.sh` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
-| `blast-radius.sh` | § 4: a diagram, an affected list, pointers into the flows, recorded searches, and no reading order left here | page and fragment |
+| `blast-radius.sh` | § 4: a diagram, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
+| `searches.sh` | whether a recorded search **reproduces** the entry it is offered for — re-run inside `--repo` | page and fragment |
 | `before-approving.sh` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
 | `diagram.sh` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.sh` | renders each diagram in both themes to PNG | page and fragment |
@@ -174,6 +175,17 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 `SKIP` is load-bearing. A check that cannot run on this input says so out loud — a fragment has no
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
 thoroughly verified as a page.
+
+**`run.sh` passes `--repo`**, so the two checks that need the repository run on a section fragment
+rather than skipping: `searches.sh` re-runs the recorded searches inside it, and
+`page-invariants.sh` asks git whether the head is pushed — which is how the link rung finally became
+mechanical for section runs instead of a thing only a reader could catch.
+
+`searches.sh` is the one check whose rule is a relation between the page and a repository, so it is
+also the one whose *coverage* has to be reported: it prints how many entries it skipped as pointers,
+how many it could not resolve to a file, and — when nothing was recorded at all — that provenance was
+unverifiable rather than false. A handful of FAILs over an unstated denominator would read as a clean
+sweep of everything else.
 
 ## The judge
 

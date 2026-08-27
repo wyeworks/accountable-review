@@ -1,0 +1,33 @@
+<section id="blast">
+  <div class="layer-head"><p class="eyebrow">Beyond the diff</p><h2>Blast radius</h2></div>
+  <figure class="wide">
+    <div class="scroller"><svg viewBox="0 0 880 200" role="img" aria-label="Archival path and the query it touches">
+      <rect class="node" x="40" y="40" width="180" height="44" rx="5"/>
+      <text class="t-col" x="130" y="67" text-anchor="middle">archive!</text>
+      <path class="edge-dash" d="M220 62 L 300 62"/>
+      <rect class="node-dead" x="300" y="40" width="200" height="44" rx="5"/>
+      <text class="t-col" x="400" y="67" text-anchor="middle">ActiveProjects</text>
+    </svg></div>
+    <figcaption class="note">Solid: changed. Dashed: unchanged, and affected.</figcaption>
+  </figure>
+  <div class="two-col">
+    <div class="card"><p class="eyebrow">Changed</p>
+      <ul><li><a class="cite" href="#">app/models/project.rb</a></li></ul></div>
+    <div class="card">
+      <p class="eyebrow">Affected, not changed</p>
+      <p class="eyebrow" style="margin-top:14px">Archiving a project &middot; Flow A</p>
+      <!-- The planted defect: the entry belongs to a flow, and instead of naming the finding and
+           linking there it explains the mechanism again, at flow length, with three citations.
+           A pointer is one clause, one citation and the link. -->
+      <ul>
+        <li><a class="cite" href="#">app/queries/active_projects.rb:3</a> &mdash; the scope filters
+          on <code>discarded_at</code> and archival writes <code>archived_at</code>
+          (<a class="cite" href="#">app/models/project.rb:41</a>), so an archived project stays
+          inside it and every selectable-project list keeps offering it. The picker reads the same
+          scope at <a class="cite" href="#">app/views/entries/_form.html.erb:12</a>.
+          <a href="#flow-a">Flow A</a></li>
+      </ul>
+      <p class="note">Searched <code>rg 'ActiveProjects' app lib</code> &mdash; two callers.</p>
+    </div>
+  </div>
+</section>

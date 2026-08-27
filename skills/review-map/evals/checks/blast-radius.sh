@@ -62,6 +62,36 @@ else
   maybe "no href=\"#flow\" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung"
 fi
 
+# And a pointer has a SHAPE, because "and nothing more" is not self-enforcing: a run wrote a
+# 150-word paragraph carrying eight citations under a "— Flow C" heading and read it as a
+# pointer. One clause, ONE citation, a link. A second citation means the mechanism is being
+# explained again, here, after the flow already explained it.
+#
+# FAIL rather than WARN, and the asymmetry with the presence check above is the point: there is
+# no reading of a linked entry with four citations that is still a pointer.
+# An entry is flow-owned if it links to one, OR if it sits under a group heading naming one —
+# the run that prompted this grouped by eyebrow text ("... · Flow C") and linked nothing, so a
+# link-only rule would have passed the very fragment the judge failed. A heading like "Reaches
+# more than one flow · explained here" is the explained-here group and does not match, which is
+# what "Flow" followed by a capital discriminates.
+restated=$(awk '
+  /class="eyebrow"/ { group = ($0 ~ /Flow [A-Z]/) ? 1 : 0 }
+  /<li/ { inli = 1; buf = "" }
+  inli  { buf = buf " " $0 }
+  inli && /<\/li>/ {
+    inli = 0
+    if (buf !~ /href="#flow/ && group != 1) next
+    n = 0; rest = buf
+    while (match(rest, /class="cite"/)) { n++; rest = substr(rest, RSTART + RLENGTH) }
+    if (n > 1) print n
+  }
+' "$REGION" | wc -l | tr -d ' ')
+if [ "${restated:-0}" -eq 0 ]; then
+  ok "entries that point at a flow carry at most one citation each"
+else
+  bad "$restated entr(ies) belong to a flow (linked, or under its group heading) and carry more than one citation — a pointer is one clause, one citation and the link; more than that is the flow's explanation written twice"
+fi
+
 # Recorded searches. Unrecorded, absence and omission look identical, and the reviewer
 # has to redo the work to tell which it was.
 if grep -Eq '\brg |\bgrep |\bag |searched' "$REGION"; then

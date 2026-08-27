@@ -137,7 +137,10 @@ one_run() {
   if [ -r "$OUT" ]; then
     written=true
     set +e
-    "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" $VISUAL > "$RUNDIR/check.txt" 2>&1
+    # --repo is what lets the checks that need the repository actually run on a fragment:
+    # searches.sh re-runs the recorded searches inside it, and page-invariants.sh asks git
+    # whether the head is pushed. Without it both skip, and a skip reads as verified.
+    "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" --repo "$FIXTURE_DIR" $VISUAL > "$RUNDIR/check.txt" 2>&1
     check_exit=$?
     set -e
   else

@@ -1,0 +1,17 @@
+<section id="blast">
+  <div class="layer-head"><p class="eyebrow">Beyond the diff</p><h2>Blast radius</h2></div>
+  <div class="two-col">
+    <div class="card"><p class="eyebrow">Changed</p>
+      <ul><li><span class="cite">db/migrate/20260101000000_add_archived_at.rb</span></li></ul></div>
+    <div class="card"><p class="eyebrow">Affected, not changed</p>
+      <ul>
+        <li><span class="cite">app/models/project.rb:2</span> &mdash; the selectable scope reads the
+          new column, so archival changes what it returns
+          <span class="tier">evidenced by unchanged code</span></li>
+      </ul></div>
+  </div>
+  <h3>What was searched</h3>
+  <ul>
+    <li><code>rg -n 'archived_at' app</code> &mdash; the column by name, one reader.</li>
+  </ul>
+</section>
