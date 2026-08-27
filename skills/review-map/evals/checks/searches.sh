@@ -65,20 +65,21 @@ while IFS= read -r cmd; do
   [ -n "$cmd" ] || continue
   # Split into pattern and paths without eval. A quoted pattern first; failing that, the first
   # token that is not a flag.
-  rest=${cmd#*[[:space:]]}
-  pat=; paths=
+  pat=; paths=; prefix=
   case $cmd in
     *\'*\'*)
+      prefix=${cmd%%\'*}
       pat=${cmd#*\'}; pat=${pat%%\'*}
       paths=${cmd#*\'}; paths=${paths#*\'} ;;
     *\"*\"*)
+      prefix=${cmd%%\"*}
       pat=${cmd#*\"}; pat=${pat%%\"*}
       paths=${cmd#*\"}; paths=${paths#*\"} ;;
     *)
       # rg -n foo app lib — walk the tokens, first non-flag after the tool is the pattern.
-      set -- $cmd; shift
+      set -- $cmd; prefix=$1; shift
       while [ $# -gt 0 ]; do
-        case $1 in -*) shift ;; *) pat=$1; shift; break ;; esac
+        case $1 in -*) prefix="$prefix $1"; shift ;; *) pat=$1; shift; break ;; esac
       done
       paths=$* ;;
   esac
@@ -93,15 +94,33 @@ while IFS= read -r cmd; do
   [ -n "$cleaned" ] || cleaned=.
   ncmd=$((ncmd + 1))
 
-  # rg is what these patterns are written for; grep -E is the fallback so CI without rg still
-  # fires the check rather than skipping it.
-  if command -v rg >/dev/null 2>&1; then
-    ( cd "$REPO" && rg --no-heading --line-number --no-messages --regexp "$pat" -- $cleaned ) \
-      2>/dev/null | cut -d: -f1,2 >> "$TMP/hits" || true
-  else
-    ( cd "$REPO" && grep -rEn --no-messages -- "$pat" $cleaned ) \
-      2>/dev/null | cut -d: -f1,2 >> "$TMP/hits" || true
-  fi
+  # RE-RUN IT WITH THE DIALECT IT WAS WRITTEN IN. This is not fussiness: `\|` is alternation
+  # in grep's default BRE and a LITERAL PIPE in rg, so running a recorded
+  # `grep -rn "recommendable\|general_recommendations_eligible" app` through rg matches
+  # nothing — and the check then reports every entry that search found as unreachable. A check
+  # that invents failures is worse than no check, and this one invented ten before it was fixed.
+  tool=${prefix%%[[:space:]]*}; tool=${tool##*/}
+  case $tool in
+    rg|ag)  engine=rg ;;
+    egrep)  engine=ere ;;
+    grep)
+      case " $prefix " in
+        *\ -*E*\ *|*\ -*P*\ *) engine=ere ;;
+        *\ -*F*\ *)            engine=fixed ;;
+        *)                     engine=bre ;;
+      esac ;;
+    *) engine=ere ;;
+  esac
+  # No rg on this machine and an rg pattern: grep -E is close enough for the alternation and
+  # character classes these patterns actually use, and firing approximately beats skipping.
+  [ "$engine" != rg ] || command -v rg >/dev/null 2>&1 || engine=ere
+
+  case $engine in
+    rg)    ( cd "$REPO" && rg --no-heading --line-number --no-messages --regexp "$pat" -- $cleaned ) ;;
+    ere)   ( cd "$REPO" && grep -rEn --no-messages -e "$pat" -- $cleaned ) ;;
+    fixed) ( cd "$REPO" && grep -rFn --no-messages -e "$pat" -- $cleaned ) ;;
+    *)     ( cd "$REPO" && grep -rn  --no-messages -e "$pat" -- $cleaned ) ;;
+  esac 2>/dev/null | cut -d: -f1,2 >> "$TMP/hits" || true
 done < "$TMP/commands"
 
 sort -u "$TMP/hits" -o "$TMP/hits" 2>/dev/null || true

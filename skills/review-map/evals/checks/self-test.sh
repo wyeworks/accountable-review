@@ -70,6 +70,7 @@ blast-radius.sh     | blast-no-pointer.html         | 0 | an in-page anchor work
 blast-radius.sh     | blast-pointer-restated.html   | 1 | carry more than one citation
 searches.sh         | searches-clean.html           | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
 searches.sh         | searches-unreachable.html     | 1 | reachable from no recorded search | --repo @GOLD@/searches-repo
+searches.sh         | searches-bre-dialect.html     | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
 searches.sh         | searches-clean.html           | 0 | needs --repo to re-run
 start-here.sh       | start-here-clean.html         | 0 | each with a why
 start-here.sh       | start-here-no-why.html        | 1 | is not a reading order
