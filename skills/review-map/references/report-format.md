@@ -496,6 +496,13 @@ overlap.
 
   The **execution path** for each belongs to that behaviour's flow in § 2, not here. Naming the use
   case is what § 1 owes the reader; tracing it is § 2's job.
+- **Before and after are two rows, never one paragraph.** Rendered as `dl.ba`: a *Before* row for the
+  state that no longer holds, an *After* row for the one that does. Written as a sentence — *"…was
+  possible. After: it is not"* — the second clause reads as a subordinate aside and gets skipped, and
+  it is the half the reviewer came for. Where the behaviour is new rather than changed, drop the pair
+  and state what is now possible; *"before: this did not exist"* is filler. One evidence tier for the
+  pair, on the *After* row: the claim is the transition, so labelling both rows states the same
+  evidence twice.
 - **Evidence tier on the intent itself.** Behaviour pinned by a test is a different claim from
   behaviour inferred from a service class's name, and the reviewer's next move differs. Where intent
   cannot be established, state the gap as a gap.
