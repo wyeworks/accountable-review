@@ -47,6 +47,14 @@ A **section** eval cannot see duplication across sections, cannot run the comple
 cannot judge the page-wide excerpt budget — one canonical home is a relation *between* sections, and a
 fragment has no other sections to relate to. Those stay with the page cases.
 
+**The reorder gave that limit a sharper edge, worth stating before someone writes another expectation
+across it.** § 4's rule that a consequence a flow owns is compressed to a pointer is a relation
+between § 2 and § 4, so a § 4 fragment can only be judged on its *shape* — one clause, one citation,
+a link — and never on whether the compression was safe, because the flow it points at is not there
+and neither is a reader who has read it. The first run against `monolith-guard-chain` restated a
+flow-owned entry at full length, and part of why is that a standalone fragment has nothing to point
+at. Judge the form here; the page cases judge whether anything was lost.
+
 Freezing the upstream also removes the step whose variance the page cases measure. A section at 100%
 is therefore compatible with poor pages; it just locates the defect upstream, which is a useful
 reading rather than a contradiction.
@@ -158,7 +166,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice | page and fragment |
 | `behaviour-flows.sh` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
 | `start-here.sh` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
-| `blast-radius.sh` | § 4: a diagram, an affected list, recorded searches, and no reading order left here | page and fragment |
+| `blast-radius.sh` | § 4: a diagram, an affected list, pointers into the flows, recorded searches, and no reading order left here | page and fragment |
 | `before-approving.sh` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
 | `diagram.sh` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.sh` | renders each diagram in both themes to PNG | page and fragment |
@@ -315,9 +323,10 @@ In rough order of value:
    trusting that the gate is wired up.
 4. **A repo with no `config/application.rb`** at the root, so Rails-root discovery has to discover
    something.
-5. **Section cases for `monolith-guard-chain`.** Its frozen upstream is written; the three existing
-   drivers have never been run against it. It is the fixture where *affected but unchanged* carries
-   the most weight, so it is the one where a section pass-rate would say the most.
+5. **A `diagrams` case for `monolith-guard-chain`.** `behaviour-flows` and `blast-radius` now have
+   one each and have been run; `diagrams` has not. This is the fixture where *affected but unchanged*
+   carries the most weight, which makes it the one whose blast-radius figure has the most to get
+   wrong — writers, the fact, and readers, with the readers outnumbering everything else.
 
 `monolith-guard-chain` closed what used to be item 4 here — a Rails-only monolith with
 server-rendered views, to exercise the other branch of the behaviour flows.

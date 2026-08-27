@@ -49,6 +49,19 @@ else
   ok "no reading order here: it belongs to section 3"
 fi
 
+# Pointers into the flows. A consequence a flow owns is named here and explained there, and
+# the link is an in-page anchor — the deep-link rung governs file:line citations into a
+# remote, not #flow-b. A run at rung 3 emitted this section with no <a> at all.
+#
+# WARN, not FAIL, and the asymmetry with start-here.sh is deliberate: every section-3 entry
+# routes somewhere, but a section 4 whose affected code is genuinely owned by no flow is a
+# legitimate page — on a one-flow diff it is the expected one.
+if grep -q 'href="#flow' "$REGION"; then
+  ok "entries point into the flows that explain them"
+else
+  maybe "no href=\"#flow\" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung"
+fi
+
 # Recorded searches. Unrecorded, absence and omission look identical, and the reviewer
 # has to redo the work to tell which it was.
 if grep -Eq '\brg |\bgrep |\bag |searched' "$REGION"; then

@@ -32,6 +32,20 @@
         "archive! calling time_entries.running against a model that declares no such association is named as uncertain, not described as a working guard",
         "Every excerpt is earned by a decision the reviewer has to make, and no excerpt quotes a whole file except where the file IS the finding, a near-duplicate of another, or a generated file. A single-line declaration already quoted verbatim in the prose does not need a block — the test is whether a claim rests on lines the reader cannot see, not whether every citation has a disclosure"
       ]
+    },
+    {
+      "id": "behaviour-flows/monolith-guard-chain",
+      "fixture": "monolith-guard-chain",
+      "check": "check.sh --fragment <out> --scope behaviour-flows --expect 'application_controller.rb' --expect 'test_helper.rb'",
+      "expected_output": "Three flows split by who is affected, not by directory. The surface each has to describe is the global before_action chain and the set of redirect destinations — there is no JSON contract to fall back on. Most of the weight is unchanged code, which is what this fixture exists to press on.",
+      "expectations": [
+        "The grouping is by who is affected, not by directory or by file, and the fragment says so before the flows. application_controller.rb appearing in two flows is the evidence the split is behavioural — a fragment that gives that file its own flow has grouped by file",
+        "The surface described is the guard chain and the redirect destinations, cited by line in the order the filters run, rather than a params/response contract borrowed from an API this repository does not have",
+        "The sibling guards forty lines below the changed hunk — require_active_plan and require_profile_setup in the same file — are named as affected but unchanged with the reason: the fix removed the account_type coupling from one guard of three",
+        "The flow that owns the redirect says its behaviour is unresolved: chapters_controller.rb skips the plan guard but not require_profile_setup, and chapters is absent from profile_setup_not_required? while present in plan_not_required?, so the invitee is bounced on rather than landing on their chapter",
+        "switch_to_free!'s new caller is explained as holding by conjunction — has_paid_subscription? requires plan_active?, and the call site runs only unless plan_active? — and not asserted to be either safe or broken. Its own comment names a controller guard the new caller is not behind",
+        "The test gap is stated at the right width: the test_helper.rb after_create patch blinds tests that build users with User.create!, and fixture users never fire it, so a fixture-based test is the thing that would have caught this. 'No test in the suite can see it' is the overclaim to avoid"
+      ]
     }
   ]
 }

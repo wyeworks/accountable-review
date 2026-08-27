@@ -594,8 +594,27 @@ and now sees the same change as one system, with the edges that leave it.
   *"`ActiveProjects` scopes the selectable list — Flow B"* — and nothing more. What this section
   explains canonically is what no single flow owns: unchanged code several flows reach, or that none
   of them do.
-- **What was searched.** Where a search came up empty, say so and say what it was — unrecorded,
-  absence and omission look identical, and the reviewer has to redo the work to tell which it was.
+
+  **A pointer has a shape, because "nothing more" is not self-enforcing.** A run produced a
+  150-word paragraph with eight citations under a *"— Flow C"* heading and read it as a pointer.
+  So: one clause naming what the code is and why the change reaches it, **one** citation, and a
+  link to the flow. No second citation, no tier — the flow carried both. If you are writing the
+  mechanism again, it is not a pointer, and the test is whether a reader who skipped § 2 would
+  learn the finding here. They should not: they should learn that it exists and where it lives.
+
+  **The link is an in-page anchor, and the deep-link rung does not govern it.** `href="#flow-b"`
+  works at every rung — the ladder is about `file:line` citations into a remote, and a run at rung
+  3 emitted a section with no `<a>` at all, pointers included.
+- **What was searched, and what that search could not have found.** Where a search came up empty,
+  say so and say what it was — unrecorded, absence and omission look identical, and the reviewer has
+  to redo the work to tell which it was.
+
+  **A recorded search has to reproduce the entries it is offered for.** This is the half that
+  decays quietly. A run listed `rg -n 'account_type' app test` and claimed it returned every reader
+  of the column — but the two guards it had just cited read the column through an enum predicate,
+  `steward?`, which that pattern does not match. The search was real, the entries were right, and
+  the provenance was still false. Where one pattern does not reach an entry, record the one that
+  did; where a search's coverage has a hole, name the hole.
 
 The prose here explains what the diagram *implies*. It does not transcribe the diagram — if a paragraph
 lists the same nodes and edges the figure already shows, delete the paragraph, not the figure.
