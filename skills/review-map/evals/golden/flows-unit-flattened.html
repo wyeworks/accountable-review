@@ -1,0 +1,32 @@
+<!-- Planted defect: the seven fields are rendered loose in the <section>, with no article.unit
+     around them, so <dt>/<dd> sit outside any <dl>. Everything else here is correct — which is
+     the point: the page renders, and nothing about it looks broken until you notice the flow has
+     no card, and that every `.unit ...` rule has silently stopped matching. -->
+<section id="flow-a">
+  <div class="layer-head"><p class="eyebrow">Flow A</p><h2>Archiving a project</h2></div>
+  <p class="prose">Split by behaviour: archiving, and reading a list archival changes the meaning of.</p>
+  <ol class="steps">
+    <li><code>PATCH /api/projects/:id</code><span class="anno">params permitted in the controller</span></li>
+    <li><code>Project#archive!</code></li>
+  </ol>
+
+  <div class="ep-row"><dt>Implementation</dt><dd>
+    <ul><li><a class="cite" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</li></ul>
+    <details class="excerpt excerpt--diff">
+      <summary><span class="ex-loc">app/models/project.rb:29-33</span>
+        <span class="ex-why">the guard the behaviour turns on</span></summary>
+      <div class="ex-body">
+<pre class="codeblock" data-src="app/models/project.rb"><span class="l add"><span class="sig">+</span>    return false if time_entries.running.exists?</span>
+</pre>
+      </div>
+    </details>
+  </dd></div>
+
+  <div class="ep-row"><dt>Understand</dt><dd>
+    <ul><li>The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></li></ul>
+  </dd></div>
+
+  <div class="ep-row"><dt>Validate</dt><dd>
+    <ol><li><code>bundle exec rspec spec/models/project_spec.rb</code></li></ol>
+  </dd></div>
+</section>

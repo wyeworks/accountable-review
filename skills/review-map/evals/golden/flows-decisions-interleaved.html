@@ -1,0 +1,30 @@
+<!-- Planted defect: a well-formed article.unit whose fields are interrupted by a .decisions
+     block. This is the harder half to see — the unit is there, the card is there, and the only
+     thing wrong is that .decision's border-top and its 44px number gutter now cut across the
+     field list instead of reading against the card's bottom edge. -->
+<section id="flow-a">
+  <div class="layer-head"><p class="eyebrow">Flow A</p><h2>Archiving a project</h2></div>
+  <p class="prose">Split by behaviour: archiving, and reading a list archival changes the meaning of.</p>
+  <article class="unit">
+    <div class="unit-head"><h3>Project#archive!</h3><p>Archival had to preserve historical entries.</p></div>
+    <dl class="unit-body">
+      <div class="ep-row"><dt>Implementation</dt><dd>
+        <ul><li><a class="cite" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</li></ul>
+      </dd></div>
+      <div class="ep-row"><dt>Understand</dt><dd>
+        <ul><li>The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></li></ul>
+      </dd></div>
+
+      <div class="decisions">
+        <div class="decision">
+          <h4>Archival is soft, and reversible only by hand</h4>
+          <p>archived_at is set rather than the row discarded <span class="cite">app/models/project.rb:31</span></p>
+        </div>
+      </div>
+
+      <div class="ep-row"><dt>Validate</dt><dd>
+        <ol><li><code>bundle exec rspec spec/models/project_spec.rb</code></li></ol>
+      </dd></div>
+    </dl>
+  </article>
+</section>

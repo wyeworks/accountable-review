@@ -7,6 +7,10 @@
 # reads it still has to assemble the behaviour themselves. That failure is visible in the
 # headings, so it is checkable.
 #
+# Then the SHAPE, which a script can settle outright: a flow body is article.unit, its seven
+# fields live inside, and .decisions sits after it. That is a check rather than a convention
+# because a run flattened all three flows into loose .ep-row blocks and the page still rendered.
+#
 # The rest is per-unit. Two guards keep the review unit from becoming ceremony: it needs a
 # non-obvious "things to understand", and every claim in it carries a file:line. Both are
 # countable. Whether the split is DEFENSIBLE is the insight of the section and needs a
@@ -39,12 +43,16 @@ fi
 
 # The grouping principle, stated before the flows. The split is the insight; an unstated
 # one leaves the reader to reverse-engineer it.
-first_flow=$(grep -n '<article class="\(unit\|cohort\)' "$IN" | head -1 | cut -d: -f1 || true)
+#
+# article.unit only. article.cohort used to satisfy this as well, and that is exactly how a page
+# with zero units got through: section 1 always supplies a cohort, so the substitute was always
+# present no matter what section 2 did.
+first_flow=$(grep -n '<article class="unit' "$IN" | head -1 | cut -d: -f1 || true)
 if [ -z "${first_flow:-}" ]; then
-  maybe "no article.unit or article.cohort found — section 2 is built from them"
+  maybe "no article.unit found — a flow's body is one, so there is nothing for the grouping principle to precede"
 # Truncate at the opening tag rather than taking whole lines: generated HTML is not always one
 # element per line, and a first flow on line 1 is not the same thing as a missing one.
-elif head -n "$first_flow" "$IN" | sed 's/<article class="\(unit\|cohort\).*//' | grep -q '<p'; then
+elif head -n "$first_flow" "$IN" | sed 's/<article class="unit.*//' | grep -q '<p'; then
   ok "prose precedes the first flow, where the grouping principle belongs"
 else
   maybe "the first flow opens with no prose before it — say why the split is what it is"
@@ -70,19 +78,84 @@ if grep -q 'class="excerpt' "$IN"; then
   fi
 fi
 
-# Per unit, the two guards.
+# ---- The shape of a flow ----
+#
+# A flow's body is article.unit, and the seven fields live in its dl.unit-body and nowhere else.
+# That is checked rather than trusted because a run flattened all three of its flows into loose
+# .ep-row blocks parented straight to the <section>, and nothing broke loudly: the fields still
+# rendered, having quietly lost the card, their own spacing and every `.unit ...` rule. The guards
+# below it could not see that at all — with no unit to extract, there was nothing to guard.
+#
+# article.endpoint is extracted alongside, and not because it is a flow body. .ep-row is SHARED:
+# the endpoint card's Params / Success / Errors / Side effects rows use the same class, so an
+# endpoint card is a second legitimate home for a field row. Counting only units reported three
+# correct runs as flattened, which is the false positive this extraction exists to prevent.
 awk -v d="$TMP" '
-  /<article class="unit/ { n++; f=1 }
-  f { print > (d "/unit-" n) }
-  /<\/article>/ { f=0 }
+  /<article class="unit/     { u++; fu=1 }
+  fu                         { print > (d "/unit-" u) }
+  /<article class="endpoint/ { e++; fe=1 }
+  fe                         { print > (d "/endpoint-" e) }
+  /<\/article>/              { fu=0; fe=0 }
 ' "$IN"
 
 units=0
 for u in "$TMP"/unit-*; do
   [ -e "$u" ] || break
   units=$((units + 1))
+done
+
+# Fields outside a component that may hold them. Counted, not grepped, because the defect is a
+# RATIO: a page can hold one correct unit and still spill fields beside it, which is the half that
+# is hard to see by eye.
+rows_total=$(grep -c 'class="ep-row"' "$IN" || true)
+rows_in_units=0
+rows_housed=0
+for f in "$TMP"/unit-* "$TMP"/endpoint-*; do
+  [ -e "$f" ] || continue
+  n=$(grep -c 'class="ep-row"' "$f" || true)
+  rows_housed=$((rows_housed + n))
+  case $f in *"/unit-"*) rows_in_units=$((rows_in_units + n)) ;; esac
+done
+if [ "$rows_total" -gt "$rows_housed" ]; then
+  bad "$((rows_total - rows_housed)) of $rows_total field rows are outside article.unit — loose .ep-row blocks lose the card, the unit's own spacing and every .unit-scoped rule"
+elif [ "$rows_total" -gt 0 ]; then
+  ok "every field row is inside a unit or an endpoint card"
+fi
+
+# Decisions are pinned after the unit. .decision has no card of its own — a border-top and a number
+# in a 44px gutter — so interleaved with the fields it reads as a new section starting mid-flow.
+if grep -q 'class="decisions"' "$IN"; then
+  if [ "$units" -eq 0 ]; then
+    # Do not report a placement as correct when there is no unit to place it against: the flow
+    # this landed on had exactly that shape, and a PASS here would have read as absolution.
+    skip "cannot check where the decisions block sits — there is no unit for it to sit after"
+  elif grep -q 'class="decisions"' "$TMP"/unit-*; then
+    bad "a .decisions block sits inside a unit — it belongs after the closing </article>, where .decision's border-top has the card's edge to read against"
+  else
+    ok "decisions sit outside the unit, where .decision reads correctly"
+  fi
+fi
+
+# Label drift. WARN, not FAIL: fields may be legitimately omitted, and a wrong label costs the
+# reader a moment wondering whether two fields mean the same thing — it is not a false claim.
+if [ "$rows_in_units" -gt 0 ]; then
+  stray=$(grep -ho '<dt>[^<]*' "$TMP"/unit-* | sed 's/.*<dt>//' \
+    | grep -vixE 'implementation|tests|affected, unchanged|understand|validate|questions' \
+    | sort -u | tr '\n' ' ')
+  if [ -n "$stray" ]; then
+    maybe "field labels outside the canonical set: $stray— report-format.md § The review unit names them verbatim"
+  else
+    ok "field labels match the canonical set"
+  fi
+fi
+
+# ---- Per unit, the two guards ----
+n=0
+for u in "$TMP"/unit-*; do
+  [ -e "$u" ] || break
+  n=$((n + 1))
   label=$(grep -o '<h3[^>]*>[^<]*' "$u" | head -1 | sed 's/.*>//' | cut -c1-48)
-  [ -n "$label" ] || label="unit $units"
+  [ -n "$label" ] || label="unit $n"
 
   if grep -Eqi '<dt>[^<]*understand' "$u"; then
     ok "unit \"$label\" fills things-to-understand"
@@ -106,7 +179,14 @@ for u in "$TMP"/unit-*; do
 done
 
 if [ "$units" -eq 0 ]; then
-  maybe "no review units in this input"
+  # A flow still carrying a pending marker has no shape to check yet, and saying so out loud is
+  # the difference between "not written" and "written wrong" — the two build states this section
+  # most needs to keep apart.
+  if grep -q 'class="pending"' "$IN"; then
+    skip "no article.unit yet — the flows here are still pending, so their shape cannot be checked"
+  else
+    bad "no article.unit — a behaviour flow's body IS a unit, and fields rendered without one lose the card that boxes them"
+  fi
 else
   ok "$units review unit(s) inspected"
 fi
