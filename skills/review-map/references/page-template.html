@@ -24,7 +24,7 @@
     :root tokens .......... colours, fonts, shadow. Declared three times: bare
                             :root, prefers-color-scheme dark, [data-theme="dark"]
     shell, grid, rail ..... page frame and the sticky contents rail
-    type .................. headings, .prose, .lede, .note, .eyebrow, .cite
+    type .................. headings, .lede, .note, .eyebrow, .cite
     rhythm ................ .stack, .layer-head, .two-col
     masthead .............. .meta-strip, .meta-cell
     chips ................. neutral .chip, .chip-accent. No severity chips exist
@@ -175,7 +175,6 @@ main { min-width: 0; }
 }
 
 /* ---------- type ---------- */
-.prose { max-width: 66ch; }
 h1, h2, h3, h4 { font-family: var(--font-display); color: var(--ink); text-wrap: balance; margin: 0; }
 h1 { font-size: clamp(30px, 4.4vw, 46px); font-weight: 700; letter-spacing: -.022em; line-height: 1.06; }
 h2 { font-size: clamp(23px, 2.6vw, 30px); font-weight: 700; letter-spacing: -.016em; line-height: 1.14; }
@@ -320,7 +319,7 @@ header.masthead { padding: 64px 0 0; }
    illegibility. min-width is the floor where 10-11px labels stay readable. */
 .scroller > svg { display: block; width: 100%; min-width: 880px; height: auto; }
 figure { margin: 0; }
-figcaption { font-size: 14px; color: var(--ink-3); margin-top: 10px; max-width: 72ch; }
+figcaption { font-size: 14px; color: var(--ink-3); margin-top: 10px; }
 figcaption strong { color: var(--ink-2); }
 
 /* ---------- tables ---------- */
@@ -350,7 +349,8 @@ td .chip { font-size: 9.5px; }
 @media (max-width: 620px) { .ep-row { grid-template-columns: minmax(0, 1fr); gap: 5px; } }
 .ep-row > dt { font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--ink-3); padding-top: 3px; }
 .ep-row > dd { margin: 0; font-size: 14.5px; line-height: 1.5; }
-.ep-row > dd > ul { margin: 0; padding-left: 18px; }
+.ep-row > dd > ul, ol { margin: 0; padding-left: 18px; }
+.ep-row > dd > ul, ol { padding-bottom: 10px;}
 
 /* ---------- review units ---------- */
 /* The report's core primitive. Same card shell as .endpoint; the seven fields are .ep-row rows. */
@@ -530,7 +530,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
     <div>
       <p class="eyebrow">{{REPO}} &middot; PR #{{N}} &middot; {{AUTHOR}}</p>
       <h1>{{ONE_LINE_WHAT_THIS_DOES}}</h1>
-      <p class="lede prose" style="margin-top:18px">{{PARAGRAPH_FROM_THE_CODE_NOT_THE_PR_BODY}}</p>
+      <p class="lede" style="margin-top:18px">{{PARAGRAPH_FROM_THE_CODE_NOT_THE_PR_BODY}}</p>
 
       <dl class="meta-strip">
         <div class="meta-cell"><dt>Branch</dt><dd>{{HEAD}} &rarr; {{BASE}}</dd></div>
@@ -976,7 +976,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
     <!-- ===== Section 7 · Coverage ===== -->
     <section id="coverage">
       <div class="layer-head"><p class="eyebrow">Completeness</p><h2>Coverage ledger</h2></div>
-      <p class="prose">Every file in the diff, and where this page covers it.</p>
+      <p>Every file in the diff, and where this page covers it.</p>
       <!-- Until the final publish, say so here: the gate has not run, and a short ledger
            must not be allowed to imply a short diff. Delete this line when it has. -->
       <p class="note"><span class="pending">partial</span> The ledger fills in as sections are written.</p>
