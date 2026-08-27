@@ -273,6 +273,7 @@ header.masthead { padding: 64px 0 0; }
 
 /* ---------- cards and callouts ---------- */
 .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px 22px; box-shadow: var(--shadow); }
+.card > h3 { margin-bottom: 12px; }
 .callout { border-left: 3px solid var(--rule-strong); background: var(--surface); border-radius: 0 5px 5px 0; padding: 16px 20px; }
 .callout-block { border-left-color: var(--block); background: var(--block-soft); }
 .callout-watch { border-left-color: var(--watch); background: var(--watch-soft); }
@@ -281,7 +282,7 @@ header.masthead { padding: 64px 0 0; }
 .callout p { font-size: 15.5px; }
 
 /* ---------- comprehension checkpoint (section 6) ---------- */
-.firstlook { display: flex; flex-direction: column; gap: 14px; counter-reset: fl; margin: 0; padding: 0; }
+.firstlook { display: flex; flex-direction: column; gap: 14px; counter-reset: fl; padding: 0; }
 .firstlook > li {
   list-style: none; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px;
   background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--block);
@@ -825,13 +826,18 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
         <figcaption class="note">Two of these five nodes are not in the diff.</figcaption>
       </figure>
 
-      <div class="two-col">
+      <!-- Stacked, each the full measure — NOT .two-col, which is what this was. Both
+           lists run on inline code and file paths, and at half the column width a path
+           wrapped mid-token every few lines; the affected list also carries excerpts, which
+           have no room at all in a 400px column. The two lists are read one after the other
+           anyway, not compared row against row, so the column bought nothing. -->
+      <div class="stack">
         <div class="card">
-          <p class="eyebrow">Changed</p>
+          <h3>Changed</h3>
           <ul><li><a class="cite" href="{{LINK}}">{{PATH}}</a></li></ul>
         </div>
         <div class="card">
-          <p class="eyebrow">Affected, not changed</p>
+          <h3>Affected, not changed</h3>
           <!-- Where a flow already explained it, the entry is a POINTER and nothing more.
                Where no single flow owns it, the why clause is the explanation, and this is
                its canonical home. If a search came up empty, say what was searched. -->

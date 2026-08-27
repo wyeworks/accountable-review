@@ -594,8 +594,10 @@ and now sees the same change as one system, with the edges that leave it.
   nodes solid, affected-but-unchanged nodes dashed (`.node-dead`), legend required. The one diagram
   that earns its place on almost every PR. Arriving after § 2, it is a synthesis figure: it shows
   flows the page explained separately reaching the same unchanged code.
-- **Changed vs potentially affected**, two lists side by side, across the whole diff. The second is
-  the point: every entry carries a citation and a clause on *why* it is affected.
+- **Changed vs potentially affected**, two lists across the whole diff, stacked and each the full
+  measure — not columns. Both run on paths and inline code, which wrap mid-token at half width, and
+  the affected list carries the excerpts. They are read one after the other, not compared row against
+  row. The second is the point: every entry carries a citation and a clause on *why* it is affected.
 - **One clause where a flow already owns it.** Most affected code belongs to exactly one behaviour,
   and that flow's *affected but unchanged* field has explained it. Here it is a named pointer —
   *"`ActiveProjects` scopes the selectable list — Flow B"* — and nothing more. What this section

@@ -74,8 +74,10 @@ fi
 # link-only rule would have passed the very fragment the judge failed. A heading like "Reaches
 # more than one flow · explained here" is the explained-here group and does not match, which is
 # what "Flow" followed by a capital discriminates.
+# Either kind of heading resets the state — the two list titles are h3 now, and a group that
+# ended at one of them must not leak its Flow into the next block's entries.
 restated=$(awk '
-  /class="eyebrow"/ { group = ($0 ~ /Flow [A-Z]/) ? 1 : 0 }
+  /class="eyebrow"|<h3/ { group = ($0 ~ /Flow [A-Z]/) ? 1 : 0 }
   /<li/ { inli = 1; buf = "" }
   inli  { buf = buf " " $0 }
   inli && /<\/li>/ {
