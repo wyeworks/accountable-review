@@ -80,6 +80,30 @@
         "Pending stubs say what the part will cover and roughly how big it is, rather than 'coming soon'",
         "The user is told the URL once, with a note that it will fill in — not re-pasted on every republish"
       ]
+    },
+    {
+      "id": 5,
+      "fixture": "monolith-guard-chain",
+      "prompt": "Someone reported they can't log in — the browser just bounces until it gives up. The fix is on fix/steward-redirect-loop and it's four lines, but I don't trust that it's only four lines. Can you map what this actually changes?",
+      "expected_output": "A review map for a server-rendered monolith, where the surface a flow has to describe is the global before_action chain and the set of redirect destinations, not a JSON contract. Citations are plain text with the reason stated once — rung 3, because nothing is pushed and acme/commons does not resolve. The page's centre of gravity is code the diff does not touch: the two sibling guards in application_controller.rb that still key on `steward?` forty lines below the changed ones, the two `steward?` rejections in matching/eligibility_filter.rb plus User.recommendable, switch_to_free!'s comment naming a controller guard the new caller is not behind, chapters_controller.rb skipping the plan guard but not the profile-setup guard, and test/test_helper.rb completing every test user's profile so a green suite cannot see any of it.",
+      "files": [],
+      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'test/test_helper.rb' --expect 'require_profile_setup' --expect 'eligibility_filter.rb' --expect 'switch_to_free!' --forbid 'N/A'",
+      "section_cases": [
+        "cases/blast-radius.json — whether the unchanged readers of account_type are found, and with which search recorded",
+        "cases/behaviour-flows.json — the who-is-affected split, the guard chain as the surface, the excerpt on an unchanged sibling guard",
+        "cases/diagrams.json — writers/fact/readers as a blast radius, and the before/after lifecycle of the loop"
+      ],
+      "expectations": [
+        "check.sh passes: coverage gate over seven paths, no severity chips, no verdict language, evidence tiers used, three theme states, and all four planted findings named",
+        "No GitHub permalink is emitted anywhere, and the reason is stated once in the masthead rather than left as a puzzle. This is not covered mechanically — page-invariants.sh only fails dead links when refs/remotes is empty, so a run that emits them against a non-existent repo has to be caught by reading",
+        "Affected-but-unchanged entries in the *same file as a changed hunk* are found and cited by line, not skipped because the file already appears in the ledger — application_controller.rb's other two guards are the test of this",
+        "The page states that no test in the suite can observe the profile-setup interception, and attributes it to test/test_helper.rb rather than to a missing test",
+        "The switch_to_free! guard is explained as holding by conjunction — has_paid_subscription? requires plan_active? — and not merely asserted to be safe or unsafe",
+        "No persistence section and no endpoint-contract section of their own: there is no schema change to give one a subject, and the redirect surface lives inside the flow that owns it",
+        "The absence of a separate client package is stated once, and distinguished from having no client at all — the client here is the browser and the ERB views in this repository",
+        "Nothing claims the loop is fixed for users who already hold the column; the page says no migration touches existing rows and that the repository cannot say how many there are",
+        "No sentence grades the change, scores its risk, or recommends approving it — including in the flow whose behaviour is unresolved"
+      ]
     }
   ]
 }

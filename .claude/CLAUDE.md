@@ -43,7 +43,7 @@ wrong: open two entries from *affected but unchanged* and confirm the cited file
 changed thing, and confirm no sentence anywhere grades the PR.
 
 `skills/review-map/evals/` is where that judging happens, at three scopes.
-`fixtures/make-fixtures.sh` builds three repositories whose interesting findings sit deliberately
+`fixtures/make-fixtures.sh` builds four repositories whose interesting findings sit deliberately
 *outside* the diff, so there is a written right answer to check against. A **page** case is a whole
 run, graded on what only a whole page carries. A **section** case produces one fragment from the
 hand-authored upstream in `frozen/` and grades that — which is what makes "run it three times"

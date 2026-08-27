@@ -235,6 +235,44 @@ They are the ground truth the expectations check against:
 | `rails-only-small` | 5 files, no client, **no remote** (link rung 4) | `app/queries/active_projects.rb` scopes the selectable list; new slug uniqueness validation has no unique index |
 | `monorepo-contract` | 7 files across `api/` and `web/`, **remote configured but nothing pushed** (link rung 3) | the wire key is `archived_at` and the type declares `archivedAt`, with no case transform anywhere, so the field is `undefined` for every project; the serializer also emits `null` against a non-null type; the archive endpoint can 422 and no client handles it; `web/src/queries/selectableProjects.ts` filters the list; `archive!` calls an association the model never declares |
 | `trivial` | 1 file, a README typo | nothing — the right output is a refusal to generate ceremony |
+| `monolith-guard-chain` | 7 files, server-rendered monolith, no client package, **GitHub remote, nothing pushed** (link rung 3) | the two sibling guards in the *changed* `application_controller.rb` still key on `steward?`, forty lines below the changed hunk; `steward/base_controller.rb` is the admission test the fix was aligned to, and its own profile guard is now unreachable; `matching/eligibility_filter.rb` rejects on `steward?` twice and `User.recommendable` does it again in SQL for four jobs, while `general_recommendations_eligible` excludes the free plan this same diff grants — so the two scopes disagree; `switch_to_free!`'s comment names a controller guard the new caller is not behind, and the protection survives only because `has_paid_subscription?` requires `plan_active?`; `chapters_controller.rb` skips the plan guard but not the profile-setup guard, and `chapters` is absent from `profile_setup_not_required?`, so the new redirect target bounces on the users `generate_steward_invite!` selects for; `load_management` reads approved memberships and acceptance creates none; `test/test_helper.rb` completes every test user's profile, so a green suite cannot observe any of it |
+
+### Two page runs against `monolith-guard-chain`, and how not to score them
+
+Two cold runs, same fixture, same prompt, same model (opus, skill at `eda1bf3`):
+
+| | Planted findings named | `check.sh --final` |
+|---|---|---|
+| Run 1 | 15 / 15 | 53 passed, 0 failed |
+| Run 2 | 15 / 15 | 48 passed, **1 failed**, 3 warnings |
+
+**Read the pages to score them; do not grep for identifiers.** The first attempt at the table above
+scored 14/15 and 12/15 by grepping each page for a method or index name. All three "misses" were
+false negatives. Run 1 covers the roster gap at `chapters_controller.rb:88-91` and
+`manage.html.erb` without ever writing `load_management`; run 2 writes "the invite guard at
+`chapter.rb:89-93`" rather than `generate_steward_invite!`, and cites `db/schema.rb:25-27` rather
+than `index_chapters_on_steward_id`. A page that cites a line range instead of a name is following
+the citation rules, so grep-scoring penalises exactly the behaviour the format asks for.
+
+So this pair says something narrower than "findings are a sample" and something sharper. **Recall on
+findings that were deliberately planted was total, twice.** Where the runs genuinely diverged was
+everywhere else:
+
+- *Beyond* the planted set. Run 1 alone found that no fixture or test represents an **unaccepted**
+  `institute_roles` row — a third producer of flagged-but-not-admitted — and that the success notice
+  is probably swept by the second redirect. Run 2 alone found that `ProfileSetupController#update`
+  returns the user to the dashboard rather than the chapter, that `chapter_steward` is a sticky
+  boolean `dependent: :nullify` can falsify, and that the stewarded chapter appears in no navigation.
+- In structure. Run 1 split the flows by *which decision is being made*; run 2 split them by *who the
+  user is*, and built a six-column guard-chain table run 1 has no equivalent of.
+
+Neither is a superset of the other, and neither missed anything the fixture planted. Treat a planted
+set as a floor test — it measures whether the skill finds what is known to be there, not the tail,
+and the tail is where the variance lives.
+
+Run 2's hard failure is the thing to carry into reading any green run: a diagram using `.node-dead`
+with no legend behind it, plus a label overflowing its box by 4px. Diagrams are the component with no
+generator, and they are where two runs most reliably differ.
 
 If you change a fixture, change `frozen/` and the expectations with it. A fixture whose planted finding
 has been edited away turns a real eval into one that always passes; a frozen upstream that has drifted
@@ -244,8 +282,8 @@ turns every section eval into a test of agreement with a stale document.
 
 Four files, and the fifth is optional:
 
-1. `frozen/<fixture>/` — already there for both real fixtures; extend it if the section needs upstream
-   that is not yet written down.
+1. `frozen/<fixture>/` — already there for all three real fixtures; extend it if the section needs
+   upstream that is not yet written down.
 2. `drivers/<slug>.md` — the prompt. Read `drivers/README.md` first: a driver pins inputs and must not
    restate a rule from `SKILL.md` or `report-format.md`.
 3. `cases/<slug>.json` — at most six judged expectations.
@@ -268,9 +306,29 @@ In rough order of value:
    reports the strain or hides it.
 3. **A dropped file.** Feed a page with one ledger row deleted and confirm the run notices, rather than
    trusting that the gate is wired up.
-4. **A Rails-only monolith** with server-rendered views, to exercise the other branch of § 4.
-5. **A repo with no `config/application.rb`** at the root, so Rails-root discovery has to discover
+4. **A repo with no `config/application.rb`** at the root, so Rails-root discovery has to discover
    something.
+5. **Section cases for `monolith-guard-chain`.** Its frozen upstream is written; the three existing
+   drivers have never been run against it. It is the fixture where *affected but unchanged* carries
+   the most weight, so it is the one where a section pass-rate would say the most.
+
+`monolith-guard-chain` closed what used to be item 4 here — a Rails-only monolith with
+server-rendered views, to exercise the other branch of the behaviour flows.
+
+**Rungs 1 and 2 are not reachable offline, and trying was instructive.** The fixture originally
+pushed its branch to a local bare repository and then rewrote the remote URL to
+`github.com/acme/commons`, so that `git branch -r --contains HEAD` — the ladder's reachability
+test, which reads `refs/remotes` and never contacts a server — would report the head as pushed.
+That bought a rung-2 label on paper. The first live run ignored it: it ran `gh`, got
+`Could not resolve to a Repository`, and emitted plain text, which is correct, because a permalink
+into a repository that does not exist 404s regardless of what `refs/remotes` says.
+
+Two things to take from that. A fictional remote can never reach rung 2, so a fixture claiming it
+is claiming something a good run will refuse. And the trick had punched a hole in
+`checks/page-invariants.sh` § 5: with `refs/remotes` populated, that check passes a page of dead
+permalinks — the always-passing check this file warns about two sections up. The push is reverted
+and the fixture is an honest rung 3. Reaching rung 1 or 2 needs a real repository, which means
+network, which means it is not a fixture concern.
 
 ## On harnesses
 
