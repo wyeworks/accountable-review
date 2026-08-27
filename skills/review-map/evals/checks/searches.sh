@@ -45,13 +45,19 @@ fi
 
 # ---------------------------------------------------------------- the recorded searches
 #
-# Every <code> block on the page, then the ones that look like a search invocation. A block
-# spanning lines is not extracted and is counted as unparsed rather than silently dropped.
+# Every element-delimited text node, then the ones that look like a search invocation.
+#
+# Not just <code>: nothing in the format says a recorded search has to be one, and a run put its
+# whole search table in <td><span class="cite">grep -rn ...</span></td>, which a <code>-only
+# extractor read as ONE recorded search out of ten — and then failed the nine entries the other
+# nine would have found. Text nodes are element-delimited by construction, so requiring the node
+# to BEGIN with the tool keeps prose like "one grep is not enough" out.
 awk '{
   line = $0
-  while (match(line, /<code>[^<]*<\/code>/)) {
-    print substr(line, RSTART + 6, RLENGTH - 13)
-    line = substr(line, RSTART + RLENGTH)
+  while (match(line, />[^<]*</)) {
+    seg = substr(line, RSTART + 1, RLENGTH - 2)
+    if (seg ~ /^[[:space:]]*(rg|grep|egrep|ag)[[:space:]]/) print seg
+    line = substr(line, RSTART + RLENGTH - 1)
   }
 }' "$IN" > "$TMP/code-blocks"
 
