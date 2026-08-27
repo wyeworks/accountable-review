@@ -181,7 +181,6 @@ h2 { font-size: clamp(23px, 2.6vw, 30px); font-weight: 700; letter-spacing: -.01
 h3 { font-size: 18.5px; font-weight: 600; letter-spacing: -.008em; line-height: 1.25; }
 h4 { font-size: 14px; font-weight: 600; letter-spacing: .01em; }
 p { margin: 0 0 15px; }
-p:last-child { margin-bottom: 0; }
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 strong { font-weight: 600; }
@@ -359,6 +358,13 @@ td .chip { font-size: 9.5px; }
 .unit-head h3 { margin-bottom: 4px; }
 .unit-head p { font-size: 15px; margin: 0; color: var(--ink-2); }
 .unit-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 13px; }
+/* A note directly inside a field — what the tests leave open, what a citation does not
+   settle. Boxed, because sitting under the field's list it otherwise reads as one more
+   bullet's continuation. Scoped to the unit deliberately: .note is also on the diagram
+   figcaptions and the build-state lines, and a tinted block under every diagram is not
+   what this is for. --surface-2, never a literal like whitesmoke — a light box keeps its
+   --ink-3 text in dark mode and stops being readable. */
+.unit .ep-row > dd > .note { margin: 16px; padding: 10px; background: var(--surface-2); }
 
 /* ---------- code ---------- */
 pre.codeblock {
