@@ -307,6 +307,12 @@ header.masthead { padding: 64px 0 0; }
   font-weight: 600; color: var(--accent); padding-top: 4px; font-variant-numeric: tabular-nums;
 }
 .readorder .why { color: var(--ink-3); }
+/* The pointer into the flow that explains the entry, on its own line under it. .anno is
+   the label, and its only rule was `.steps .anno` — outside a step chain the span came out
+   at the entry's own size in full ink, louder than the .why clause above it. The link is
+   sized with the label so the line reads as one aside rather than two voices. */
+.readorder .anno, .readorder .anno + a { font-size: 13.5px; }
+.readorder .anno { color: var(--ink-3); }
 /* An entry carries more than a path: the why clause, its citation, an evidence tier
    where one applies, and a link into the flow that explains it. They wrap as ordinary
    inline flow inside the second column. */
@@ -760,7 +766,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
           <code>{{WHERE_TO_GO}}</code> &mdash; <span class="why">{{WHY_THIS_BEFORE_THAT_OR_WHY_IT_NEEDS_JUDGMENT}}</span>
           <a class="cite" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
           <span class="tier">{{TIER_IF_NOT_EXPLICITLY_CHANGED}}</span>
-          <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a>
+          <br/> <span class="anno">Explained in</span> <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a>
         </div></li>
       </ol>
       <!-- The sampling caveat lives HERE, once, and nowhere else in the page. -->
