@@ -1,21 +1,21 @@
 {
   "section": "blast-radius",
-  "of": "report-format.md § Section 2 · Review map",
+  "of": "report-format.md § Section 4 · Blast radius",
   "produced_by": "drivers/blast-radius.md",
   "scope": "blast-radius",
-  "notes": "The section a diff cannot produce at all, so the eval is mostly about the searching. Presence of an affected-but-unchanged list is mechanical and lives in checks/blast-radius.sh; whether the entries are RIGHT is the product and is judged here.",
+  "notes": "The section a diff cannot produce at all, so the eval is mostly about the searching — and, since the reorder, about ROUTING. Section 4 now runs after the behaviour flows, so an affected entry a flow already explained belongs here as a named pointer and nothing more; only code no single flow owns is explained here. That is why whether an entry is RIGHT is graded in cases/behaviour-flows.json, where the explanation lives, and what is graded here is whether the pairing is complete, correctly routed and honestly searched. Presence of the lists is mechanical and lives in checks/blast-radius.sh, which also fails a reading order left in this section: that moved to section 3.",
   "cases": [
     {
       "id": "blast-radius/rails-only-small",
       "fixture": "rails-only-small",
       "check": "check.sh --fragment <out> --scope blast-radius --expect 'active_projects'",
-      "expected_output": "A blast-radius diagram reaching from the new column to the unchanged query that scopes the selectable list, two lists side by side, a reading order with reasons, and a statement of which of the five files carry design.",
+      "expected_output": "A blast-radius diagram reaching from the new column to the unchanged query that scopes the selectable list, and two lists side by side. app/queries/active_projects.rb belongs to Flow B, so it appears as a named pointer to that flow rather than as an explanation. No reading order and no ranking of files: those live in section 3 now.",
       "expectations": [
-        "app/queries/active_projects.rb is in the affected list with a why clause, and the search that found it is written down",
+        "app/queries/active_projects.rb is in the affected list, and the search that found it is written down",
         "At least one empty search is recorded as a search — an unrecorded absence cannot be told from an omission, and this diff has real ones (no other caller of archive!, no other reader of the archived scope)",
         "The dashed nodes in the diagram are exactly the unchanged-and-affected ones, and the solid ones exactly the changed ones",
-        "The reading order puts the migration and schema before the code that reads the column, and each why is a reason rather than a restatement of the filename",
-        "Where the attention goes distinguishes the files carrying design from db/schema.rb, which is generated output — and ranks without excusing anything from coverage",
+        "Routing is right: an entry a flow already explains is a named pointer to that flow — a clause and a link, not the finding again with its citation and tier repeated. Anything explained in full here is genuinely owned by no single flow",
+        "It reads as a second pass rather than a first screen: it assumes the flows have been read, and does not re-teach the archival mechanism in order to make its own entries intelligible",
         "The slug uniqueness validation appears as secondary work in a neutral register: independently reviewable, no criticism of the author for bundling it"
       ]
     },
@@ -23,12 +23,12 @@
       "id": "blast-radius/monorepo-contract",
       "fixture": "monorepo-contract",
       "check": "check.sh --fragment <out> --scope blast-radius --expect 'selectableProjects'",
-      "expected_output": "A blast radius that crosses the boundary: the new column and the serialized field on one side, the hand-written type and the unchanged picker query on the other.",
+      "expected_output": "A blast radius that crosses the boundary: the new column and the serialized field on one side, the hand-written type and the unchanged picker query on the other. Entries the flows own are pointers into them.",
       "expectations": [
-        "web/src/queries/selectableProjects.ts is in the affected list with the reason it is affected, and the search that found it is recorded",
+        "web/src/queries/selectableProjects.ts is in the affected list and the search that found it is recorded",
         "Affected code is found on both sides of the boundary, not only in api/ — a section that searched one side and stopped is the failure this fixture is built to catch",
         "The diagram crosses the boundary rather than stopping at the serializer, and marks the unchanged client consumers as unchanged",
-        "The reading order follows dependency rather than directory: it does not read all of api/ and then all of web/ when the interesting pair is the serializer and the type",
+        "Routing is right: the contract findings the flows own — the archivedAt key mismatch, the unhandled 422 — appear here as pointers into their flow, not as second explanations carrying the citation and tier again",
         "Rung 3 is stated once and correctly — a remote exists but the head is unpushed, so citations are plain text — without repeating the explanation at each citation",
         "Nothing in the section grades the change, scores it, or recommends a decision"
       ]

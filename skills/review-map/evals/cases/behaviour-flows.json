@@ -1,6 +1,6 @@
 {
   "section": "behaviour-flows",
-  "of": "report-format.md § Section 4",
+  "of": "report-format.md § Section 2 · Behaviour flows",
   "produced_by": "drivers/behaviour-flows.md",
   "scope": "behaviour-flows",
   "notes": "Two of these expectations were sharpened by the first live run rather than written in advance: the mismatch expectation, because the run found a second and sharper mismatch the frozen upstream had missed, and the excerpt expectation, because the original wording demanded a disclosure around a one-line declaration the prose had already quoted in full. Section evals grade one fragment produced from the frozen upstream. They cannot see whether the page repeats itself, cannot run the completeness gate, and cannot judge the page-wide excerpt budget — those stay with the page cases in ../evals.json. Six judged expectations per case, deliberately: a grader asked to verify thirty does all of them badly.",

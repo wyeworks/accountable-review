@@ -1,0 +1,19 @@
+<section id="start">
+  <div class="layer-head"><p class="eyebrow">Where to begin</p><h2>Start here</h2></div>
+  <ol class="readorder">
+    <li><div><code>db/migrate/20260101000000_add_archived_at_to_projects.rb</code> &mdash;
+      <span class="why">the column before the code that reads it</span>
+      <a class="cite" href="#">db/migrate/20260101000000_add_archived_at_to_projects.rb:5</a>
+      <a href="#flow-a">Flow A</a></div></li>
+    <li><div><code>Project#archive!</code> &mdash;
+      <span class="why">the smallest complete example of the new behaviour</span>
+      <a class="cite" href="#">app/models/project.rb:41</a>
+      <a href="#flow-a">Flow A</a></div></li>
+    <li><div><code>ActiveProjects#call</code> &mdash;
+      <span class="why">unchanged, and it decides what the picker still offers</span>
+      <a class="cite" href="#">app/queries/active_projects.rb:3</a>
+      <span class="tier">evidenced by unchanged code</span>
+      <a href="#flow-b">Flow B</a></div></li>
+  </ol>
+  <p class="note">These are what this pass surfaced, not an exhaustive list.</p>
+</section>

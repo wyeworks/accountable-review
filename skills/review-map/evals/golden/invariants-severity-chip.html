@@ -1,7 +1,8 @@
 <section id="start">
-  <ol class="firstlook">
-    <li><div><h4>Missing unique index</h4>
-      <p><span class="chip chip-block">Blocking</span> Two writes can both pass the validation.
-        <span class="tier">uncertain</span></p></div></li>
+  <ol class="readorder">
+    <li><div><span class="chip chip-block">Blocking</span> <code>Project#slug</code> &mdash;
+      <span class="why">two writes can both pass the validation, and no unique index stops them</span>
+      <a class="cite" href="#">app/models/project.rb:22</a>
+      <span class="tier">uncertain</span> <a href="#flow-a">Flow A</a></div></li>
   </ol>
 </section>

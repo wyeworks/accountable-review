@@ -1,5 +1,6 @@
 #!/bin/sh
-# behaviour-flows.sh — section 4, the bulk of the page.
+# behaviour-flows.sh — section 2, the bulk of the page, and the canonical home for
+# everything one behaviour owns.
 #
 # The failure this section is most prone to is grouping by directory: Services / Models /
 # Hooks / Components is the repository's structure, not the change's, and a reviewer who
@@ -40,7 +41,7 @@ fi
 # one leaves the reader to reverse-engineer it.
 first_flow=$(grep -n '<article class="\(unit\|cohort\)' "$IN" | head -1 | cut -d: -f1 || true)
 if [ -z "${first_flow:-}" ]; then
-  maybe "no article.unit or article.cohort found — section 4 is built from them"
+  maybe "no article.unit or article.cohort found — section 2 is built from them"
 # Truncate at the opening tag rather than taking whole lines: generated HTML is not always one
 # element per line, and a first flow on line 1 is not the same thing as a missing one.
 elif head -n "$first_flow" "$IN" | sed 's/<article class="\(unit\|cohort\).*//' | grep -q '<p'; then

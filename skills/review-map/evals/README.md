@@ -30,7 +30,7 @@ evals/
 Before this, an eval was a whole run: one page, one 272-line script, twelve judged expectations. Three
 things were wrong with that as a way to *improve* the skill.
 
-- **Attribution.** A weak § 4 could be step 6's grouping, step 4's goal, or § 4's own spec. The score
+- **Attribution.** A weak § 2 could be step 6's grouping, step 4's goal, or § 2's own spec. The score
   could not say which.
 - **Cost.** Re-measuring a three-word change cost a full multi-turn run, and `CLAUDE.md` already says
   one run is weak evidence. Repetition was the thing that was unaffordable.
@@ -156,8 +156,9 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `build-state.sh` | draft / final / stopped | page |
 | `completeness.sh` | the gate, delegated to `scripts/coverage-gate.sh` | page |
 | `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice | page and fragment |
-| `blast-radius.sh` | § 2: a diagram, an affected list, a reading order with reasons, recorded searches | page and fragment |
-| `behaviour-flows.sh` | § 4: no layer grouping, and the two review-unit guards, per unit | page and fragment |
+| `behaviour-flows.sh` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
+| `start-here.sh` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
+| `blast-radius.sh` | § 4: a diagram, an affected list, recorded searches, and no reading order left here | page and fragment |
 | `before-approving.sh` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
 | `diagram.sh` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.sh` | renders each diagram in both themes to PNG | page and fragment |
@@ -291,8 +292,14 @@ Four files, and the fifth is optional:
 5. `checks/<slug>.sh` plus a golden fragment, if the section has anything mechanically checkable.
 
 Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a filename that repeats
-it only makes the reader look the number up. The remaining sections are `what-changed`, `start-here`,
-`cross-cutting` and `coverage-ledger`.
+it only makes the reader look the number up. That rule earned itself when §§ 2 and 4 swapped places:
+`blast-radius` and `behaviour-flows` kept their names, their files and their history, and only their
+prose had to move.
+
+The remaining sections are `what-changed`, `start-here`, `cross-cutting` and `coverage-ledger`.
+`start-here` is half built — `checks/start-here.sh` and its three goldens exist and run standalone
+via `check.sh --fragment <file> --scope start-here` — but it has no driver and no case, so
+`run.sh start-here` will not find one. Adding those two files is what makes it a section eval.
 
 ## Next cases worth adding
 

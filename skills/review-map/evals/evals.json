@@ -10,8 +10,8 @@
       "files": [],
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
       "section_cases": [
-        "cases/blast-radius.json — whether active_projects.rb is found, why, and with which search recorded",
-        "cases/behaviour-flows.json — the flow split, the unit fields, the excerpt that rung 4 earns",
+        "cases/behaviour-flows.json — the flow split, the unit fields, whether active_projects.rb is found and why, the excerpt that rung 4 earns",
+        "cases/blast-radius.json — whether the pairing is complete, and whether entries a flow owns are routed to it rather than restated",
         "cases/diagrams.json — the blast-radius diagram, and the lifecycle diagram this diff does not earn"
       ],
       "expectations": [
@@ -23,7 +23,7 @@
         "Judged field by field, not page-wide: every field carrying an excerpt still holds its own file:line outside the collapsed block. A citation that appears elsewhere on the page does not rescue a field whose only one is inside the excerpt",
         "Excerpts are earned by citations that are load-bearing for a decision, not by every affected-but-unchanged entry — a five-file diff should not produce one per cohort automatically",
         "Seven sections, not twelve: persistence and any endpoint contract appear inside the behaviour flow they serve, not as sections of their own",
-        "No fact is explained twice. A finding in Start here is referenced from its flow in a clause, never re-explained",
+        "No fact is explained twice. A finding is explained inside the flow that owns it; Start here names it and links to that flow, and the blast radius points at it in a clause — neither re-explains it, repeats its citation or repeats its tier",
         "The comprehension checkpoint holds at most five questions, and none is answerable by copying a single sentence from earlier in the page"
       ]
     },
@@ -36,7 +36,7 @@
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'selectableProjects' --expect 'archivedAt'",
       "section_cases": [
         "cases/behaviour-flows.json — the boundary chain, the nullable/non-null mismatch, the unhandled 422, selectableProjects",
-        "cases/blast-radius.json — whether affected code is found on both sides of the boundary",
+        "cases/blast-radius.json — whether affected code is found on both sides of the boundary, and whether the flows own its explanation",
         "cases/diagrams.json — the boundary-chain diagram and the budget across two sections"
       ],
       "expectations": [
@@ -44,7 +44,7 @@
         "Every claim about intent that is not visible in the diff carries an evidence tier",
         "No excerpt quotes a whole file or every hunk of one, and none quotes a generated file, a lockfile or a pure rename",
         "No two excerpts are near-duplicates of each other — structurally identical code quoted twice teaches once and costs twice",
-        "Where a start-here entry and its cohort field rest on the same citation, only one carries the excerpt; the other cites in prose, and the page does not quote a neighbouring range to dodge the duplication",
+        "Where a flow field and the start-here entry pointing at it rest on the same citation, the flow carries the excerpt and the other cites in prose, and the page does not quote a neighbouring range to dodge the duplication",
         "The nullable/non-null mismatch, the unhandled 422 and selectableProjects each have exactly one canonical explanation; later mentions are one-sentence references",
         "Where prose would narrate what a guard or serializer does, the page shows the lines and states the implication instead",
         "Deploy ordering appears in section 5, because the two sides ship separately — and it names a safe order rather than observing that ordering matters"

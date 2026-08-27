@@ -32,16 +32,17 @@ if [ -z "$SCOPE" ]; then
   if [ "$IN_KIND" = page ]; then
     SCOPE=all
   else
-    echo "a fragment needs --scope: blast-radius | behaviour-flows | before-approving | diagram" >&2
+    echo "a fragment needs --scope: behaviour-flows | start-here | blast-radius | before-approving | diagram" >&2
     exit 2
   fi
 fi
 
 case $SCOPE in
-  all)              RUN="completeness build-state page-invariants excerpts blast-radius behaviour-flows before-approving diagram" ;;
+  all)              RUN="completeness build-state page-invariants excerpts behaviour-flows start-here blast-radius before-approving diagram" ;;
   core)             RUN="completeness build-state page-invariants excerpts before-approving" ;;
-  blast-radius)     RUN="page-invariants excerpts blast-radius diagram" ;;
   behaviour-flows)  RUN="page-invariants excerpts behaviour-flows diagram" ;;
+  start-here)       RUN="page-invariants start-here" ;;
+  blast-radius)     RUN="page-invariants excerpts blast-radius diagram" ;;
   before-approving) RUN="page-invariants before-approving" ;;
   diagram)          RUN="diagram" ;;
   *) echo "unknown scope: $SCOPE" >&2; exit 2 ;;

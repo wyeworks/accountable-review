@@ -6,7 +6,7 @@ what makes the page a review map rather than a change summary.
 
 The first target stack is a Rails API with a Next.js client, and the boundary between them gets the
 sharpest lenses here because it is the one seam with no compiler behind it. Everything is still
-discovered, never assumed: a Rails-only repo simply never reaches those sections.
+discovered, never assumed: a Rails-only repo simply never reaches those lenses.
 
 **Apply these as lenses while reading, never as a checklist in the output.** The page reports what
 was actually found, with `file:line`. It never says "we checked for N+1" as reassurance — an absent
@@ -108,8 +108,9 @@ finding is reported by absence, not by a green tick.
 
 ## The boundary: serializers to types
 
-This is the one place in the stack with no compiler and no test that spans it, which is why it gets
-its own section on the page. What to look for:
+This is the one place in the stack with no compiler and no test that spans it, which is why the page
+follows one field across it end to end — inside the flow that owns the field, not as a section of
+its own. What to look for:
 
 - A **nullable backend field typed non-null** on the client. The Ruby side returns `nil` on some path;
   the TS side declares `string`. Nothing fails until that path runs in production.

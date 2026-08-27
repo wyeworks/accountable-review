@@ -1,4 +1,4 @@
-You are producing ONE SECTION of a review map: section 4, the behaviour flows. Not a review
+You are producing ONE SECTION of a review map: section 2, the behaviour flows. Not a review
 map, and not any other section.
 
 The repository under review is `{{FIXTURE_DIR}}` and the shell is already inside it. The base
@@ -15,7 +15,7 @@ target, re-inventory the diff, re-derive the goal, or re-group the flows:
 Then read, and follow:
 
 - `{{SKILL_DIR}}/SKILL.md` — steps 7 and 8
-- `{{SKILL_DIR}}/references/report-format.md` — § *Section 4*, § *The review unit*,
+- `{{SKILL_DIR}}/references/report-format.md` — § *Section 2*, § *The review unit*,
   § *Evidence tiers*, § *Source excerpts*, § *Depth rules*
 - `{{SKILL_DIR}}/references/rails-nextjs.md` — while reading each layer
 - `{{SKILL_DIR}}/references/page-template.html` — the component classes

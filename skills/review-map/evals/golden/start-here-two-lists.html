@@ -1,0 +1,25 @@
+<section id="start">
+  <div class="layer-head"><p class="eyebrow">Where to begin</p><h2>Start here</h2></div>
+  <!-- The planted defect: the findings and the route as two lists over the same files,
+       which is the shape this section was merged to remove. -->
+  <ol class="firstlook">
+    <li><div>
+      <h4>Archived projects stay selectable</h4>
+      <p>Archival writes <code>archived_at</code> and leaves the scope untouched.
+         <a class="cite" href="#">app/queries/active_projects.rb:3</a>
+         <span class="tier">evidenced by unchanged code</span>
+         <a href="#flow-b">Flow B</a></p>
+    </div></li>
+  </ol>
+  <ol class="readorder">
+    <li><div><code>db/migrate/20260101000000_add_archived_at_to_projects.rb</code> &mdash;
+      <span class="why">the column before the code that reads it</span>
+      <a class="cite" href="#">db/migrate/20260101000000_add_archived_at_to_projects.rb:5</a>
+      <a href="#flow-a">Flow A</a></div></li>
+    <li><div><code>ActiveProjects#call</code> &mdash;
+      <span class="why">unchanged, and it decides what the picker still offers</span>
+      <a class="cite" href="#">app/queries/active_projects.rb:3</a>
+      <a href="#flow-b">Flow B</a></div></li>
+  </ol>
+  <p class="note">These are what this pass surfaced, not an exhaustive list.</p>
+</section>

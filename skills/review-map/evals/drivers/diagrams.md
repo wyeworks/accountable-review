@@ -15,7 +15,7 @@ Then read, and follow:
 
 - `{{SKILL_DIR}}/references/page-template.html` — the SVG vocabulary and the diagram
   catalogue: the worked layouts, their grids, and which kind belongs where
-- `{{SKILL_DIR}}/references/report-format.md` — § *Depth rules* for the budget, § *Section 2*
+- `{{SKILL_DIR}}/references/report-format.md` — § *Depth rules* for the budget, § *Section 4*
   and § *Section 5* for what each diagram has to show
 - `{{SKILL_DIR}}/SKILL.md` — step 9's rules on diagrams
 

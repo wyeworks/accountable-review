@@ -1,12 +1,13 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, blast radius including the unchanged code the change gives new meaning to, the API and client contract, behaviour flows, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
 
 Turns a diff into one published page that makes a medium or large change navigable: what it is for,
-what it can break, what the API and the client now agree on, and where the decisions live.
+how its behaviours work, what the API and the client now agree on, where the decisions live, where to
+start reading, and what it can break.
 
 **Do not determine whether the PR is correct. Help a competent reviewer determine whether it is.**
 That is the whole product. A page good enough to approve from without reading code is a failure — the
@@ -160,7 +161,7 @@ the search. Unrecorded, absence and omission look identical, and the reviewer ha
 
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the page's backbone: the behaviour flows in
-section 4 are its parts.
+section 2 are its parts, and section 4 is the same picture seen whole.
 
 ## 6. Cluster into behaviour flows, then classify
 
@@ -236,12 +237,20 @@ someone mid-paragraph is worse than one that arrives late.
 | Stage | After step | The page holds |
 |---|---|---|
 | 1 · Orientation | 4 | Section 1 (what changed), and the outline of the sections this diff earns, each marked pending |
-| 2 · Map | 5 | Adds the review map: blast radius, start here, reading order, where the attention goes |
+| 2 · Blast radius | 5 | Adds section 4: the blast-radius diagram, changed vs potentially affected, and what was searched |
 | 3 · Complete | 10 | Everything else, gate passed, build banner gone |
+
+**The page fills in out of document order, and that is fine.** Step 5 produces the blast radius; step
+6 produces the flows. So section 4 lands while section 2 is still a pending stub, and a reader
+arriving at stage 2 sees a gap above written material. The pending marker is what makes that
+readable — the risk the build state exists to prevent is an unwritten section looking like an empty
+one, not a section arriving early.
 
 Between stages 2 and 3 the bulk gets written. If that stretches over many turns, republish as each
 flow or section completes — those intermediate saves cost one tool call and mean a crash leaves a
-useful page rather than nothing.
+useful page rather than nothing. **Write section 3 last of the prose sections**: it is a route
+through the flows and an index into them, so it cannot be written before they exist without being
+guessed at.
 
 **The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
 than no page at all: a reviewer sees no cross-cutting section, concludes there was nothing to say

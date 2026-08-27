@@ -1,4 +1,4 @@
-You are producing ONE SECTION of a review map: section 2, the review map itself — where
+You are producing ONE SECTION of a review map: section 4, the blast radius — where
 consequences leave the diff. Not the whole page, and not any other section.
 
 The repository under review is `{{FIXTURE_DIR}}` and the shell is already inside it. The base
@@ -16,8 +16,8 @@ Then read, and follow:
 
 - `{{SKILL_DIR}}/SKILL.md` — steps 5, 6 and 8
 - `{{SKILL_DIR}}/references/rails-nextjs.md` — the search recipes per artifact kind
-- `{{SKILL_DIR}}/references/report-format.md` — § *Section 2*, § *Evidence tiers*,
-  § *Source excerpts*, § *Depth rules*
+- `{{SKILL_DIR}}/references/report-format.md` — § *Section 4*, § *One canonical home*,
+  § *Evidence tiers*, § *Source excerpts*, § *Depth rules*
 - `{{SKILL_DIR}}/references/page-template.html` — the component classes and the SVG vocabulary
 
 The work of this section is the searching. The frozen upstream names the flows; it does not

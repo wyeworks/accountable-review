@@ -1,9 +1,9 @@
 # Accountable Review
 
 A [Claude Code](https://claude.com/claude-code) plugin that turns a pull request into a published
-HTML **review map** — what the change is for, what it can break, what the API and the client now
-agree on, and where the decisions live. It ships one skill, `review-map`, targeting a Rails API with
-a Next.js client.
+HTML **review map** — what the change is for, how its behaviours work, what the API and the client
+now agree on, where the decisions live, where to start reading, and what it can break. It ships one
+skill, `review-map`, targeting a Rails API with a Next.js client.
 
 It does not grade the PR. The product principle is narrower and more useful than that:
 
@@ -68,20 +68,26 @@ pushes instead of scattering links.
 
 ## What it produces
 
-Seven sections, each owning one kind of thing, with any the diff does not earn omitted outright:
+Seven sections in the order a reviewer actually works, each owning one kind of thing, with any the
+diff does not earn omitted outright:
 
 - **What changed** — intent, scope and the central behavioural change, with the use cases named as
   actor plus behaviour. Derived from tests, code and commits rather than copied from a possibly-stale
   PR description.
-- **Review map** — the blast radius. The primary flow end to end, plus the code that is *affected but
-  unchanged*: the callers, serializers, queries, factories, policies and TypeScript types whose meaning
-  this diff just changed. This is the part no diff can produce, and the reason the page exists.
-- **Start here** — the two to five things most needing human judgment, and the one place each of them
-  is explained.
-- **Behaviour flows** — the bulk, grouped by behaviour rather than by directory. Each flow carries only
-  what is specific to it: before and after, the path through the stack, the column it writes, the
-  endpoint it goes through, the field crossing the backend/frontend boundary, its tests and its test
-  gap, and the decisions worth pausing on.
+- **Behaviour flows** — the bulk, grouped by behaviour rather than by directory, and the one place
+  each finding is explained. Each flow carries only what is specific to it: before and after, the
+  path through the stack, the column it writes, the endpoint it goes through, the field crossing the
+  backend/frontend boundary, the unchanged code it gives new meaning to, its tests and its test gap,
+  and the decisions worth pausing on. It comes second because everything after it is easier to read
+  once the mechanisms are known.
+- **Start here** — the moment you open the code: one list, in the order to read it, of where to go
+  and why. What most needs judgment and what to read first are the same question, so it is answered
+  once. Each entry links into the flow that explains it.
+- **Blast radius** — the same change seen whole, after the flows: the primary path end to end, plus
+  the code that is *affected but unchanged* — the callers, serializers, queries, factories, policies
+  and TypeScript types whose meaning this diff just changed. Where a flow already explained one,
+  this is a pointer back to it; what no single flow owns is explained here. This is the part no diff
+  can produce, and the reason the page exists.
 - **Cross-cutting consequences** — only what genuinely spans flows: schema structure and migration
   safety, application invariants set beside database invariants, the authorization model, background
   jobs, deploy ordering, test infrastructure that changes how other specs behave, and changes to
@@ -102,6 +108,10 @@ Now every fact, finding, risk and reviewer action is explained in exactly one pl
 from anywhere else in a sentence. On a real PR that took a 21-page page to 9 with nothing of value
 removed. The reader who thinks *"I already read this"* stops reading, and everything after that is
 wasted no matter how good it is.
+
+The section order is what makes that affordable. The flows come before the starting list and before
+the blast radius, so those two can point at a flow — *"`ActiveProjects` is explained in Flow B"* —
+instead of carrying enough of the mechanism to be readable on their own.
 
 ### It arrives in stages
 

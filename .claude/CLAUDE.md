@@ -109,9 +109,11 @@ Editing one of these means checking the others still agree.
   `report-format.md` and rendered as `article.unit`. Two guards keep it from becoming ceremony — a
   unit needs a non-obvious *things to understand*, and fields may be omitted but never faked.
 - **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the search recipes in
-  `rails-nextjs.md` are how, § 2 and the review-unit field are where it surfaces. The rule that
-  makes it honest: **record what was searched**, so an empty result reads as evidence rather than as
-  omission.
+  `rails-nextjs.md` are how, and it surfaces twice, at different depths: the review-unit field inside
+  the flow that owns it **explains** it, and § 4 *Blast radius* shows the whole set at once, pointing
+  at that flow in a clause rather than restating it. Code no single flow owns is explained in § 4
+  instead — that is what makes it a section rather than an index. The rule that makes the whole thing
+  honest: **record what was searched**, so an empty result reads as evidence rather than as omission.
 - **Completeness, and the one mechanical check.** Every path in the diff appears in the page. Stated
   in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and enforced in
   step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work: the script
@@ -147,6 +149,15 @@ Editing one of these means checking the others still agree.
   one-sentence reference form; § *Where the old per-layer material goes* maps the old twelve parts onto
   the seven. Reintroducing a per-layer section is how this regression comes back, and it will look like
   an improvement when it does.
+- **The order is the reviewer's path, and the flow owns the explanation.** § 2 *Behaviour flows*
+  teaches the mechanisms; § 3 *Start here* is the moment they open the code; § 4 *Blast radius* is a
+  second pass over the same change through one lens. Everything after § 2 therefore **points back**
+  at it — a flow never defers an explanation forward, and §§ 3 and 4 never re-explain one. The
+  earlier ordering put the blast radius and a findings list before the flows, which forced both to
+  carry enough mechanism to stand alone, and that was the page's main source of duplication. § 3 is
+  **one list**: what most needs judgment and what to read first are the same question, and answering
+  it twice is the shape to watch for coming back. Where the attention goes is expressed by what is on
+  that list; every other file is accounted for by § 7's attention column.
 - **The comprehension checkpoint is capped at five questions**, and each must be answerable from the
   page but **not by copying one sentence out of it**. A question whose verbatim answer sits in a
   paragraph above is restatement wearing a question mark. It lives inside § 6 *Before approving*

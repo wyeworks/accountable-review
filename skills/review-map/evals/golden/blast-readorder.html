@@ -1,7 +1,7 @@
-<section id="map">
-  <div class="layer-head"><p class="eyebrow">Blast radius</p><h2>Review map</h2></div>
+<section id="blast">
+  <div class="layer-head"><p class="eyebrow">Beyond the diff</p><h2>Blast radius</h2></div>
   <figure class="wide">
-    <div class="scroller"><svg viewBox="0 0 880 200" role="img" aria-label="Archival path and the query it affects">
+    <div class="scroller"><svg viewBox="0 0 880 200" role="img" aria-label="Archival path and the query it touches">
       <rect class="node" x="40" y="40" width="180" height="44" rx="5"/>
       <text class="t-col" x="130" y="67" text-anchor="middle">archive!</text>
       <path class="edge-dash" d="M220 62 L 300 62"/>
@@ -15,9 +15,11 @@
       <ul><li><a class="cite" href="#">app/models/project.rb</a></li></ul></div>
     <div class="card"><p class="eyebrow">Affected, not changed</p>
       <ul><li><a class="cite" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes the selectable
-        list, which archival changes the meaning of <span class="tier">evidenced by unchanged code</span></li></ul>
+        list <span class="tier">evidenced by unchanged code</span> <a href="#flow-a">Flow A</a></li></ul>
       <p class="note">Searched <code>rg 'Project\.(where|all)' app lib</code> — one other caller.</p></div>
   </div>
+  <!-- The planted defect: the route through the code, written into this section as it was
+       when this section came second. It belongs in section 3 now, after the flows. -->
   <ol class="readorder">
     <li><div><code>db/migrate/20260101000000_add_archived_at_to_projects.rb</code> &mdash;
       <span class="why">the column before the code that reads it</span></div></li>

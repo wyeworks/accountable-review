@@ -32,10 +32,11 @@
                             final publish, never left on a finished page
     evidence tier ......... .tier
     cards and callouts .... .card, .callout, .callout-block/watch/good
-    start here ............ .firstlook — also used for the comprehension checkpoint
-    reading order ......... .readorder
+    start here ............ .readorder — one list: the route through the code, and what on it
+                            needs judgment. Entries link into the flow that explains them
+    comprehension check ... .firstlook — section 6 only
     wide blocks ........... .wide, .scroller — diagrams and wide tables
-    diagram catalogue ..... four worked layouts, to scale: blast radius in section 2, then
+    diagram catalogue ..... four worked layouts, to scale: blast radius in section 4, then
                             boundary chain, ER fragment and lifecycle before section 6. Fill
                             in the text, keep the geometry
     tables ................ base table styles
@@ -280,7 +281,7 @@ header.masthead { padding: 64px 0 0; }
 .callout h4 { margin-bottom: 6px; }
 .callout p { font-size: 15.5px; }
 
-/* ---------- "start here" ---------- */
+/* ---------- comprehension checkpoint (section 6) ---------- */
 .firstlook { display: flex; flex-direction: column; gap: 14px; counter-reset: fl; margin: 0; padding: 0; }
 .firstlook > li {
   list-style: none; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px;
@@ -294,7 +295,7 @@ header.masthead { padding: 64px 0 0; }
 .firstlook h4 { margin-bottom: 5px; }
 .firstlook p { font-size: 15px; margin-bottom: 0; }
 
-/* ---------- reading order ---------- */
+/* ---------- "start here": the route through the code (section 3) ---------- */
 .readorder { margin: 0; padding: 0; list-style: none; counter-reset: ro; display: flex; flex-direction: column; }
 .readorder li {
   counter-increment: ro; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px;
@@ -306,6 +307,11 @@ header.masthead { padding: 64px 0 0; }
   font-weight: 600; color: var(--accent); padding-top: 4px; font-variant-numeric: tabular-nums;
 }
 .readorder .why { color: var(--ink-3); }
+/* An entry carries more than a path: the why clause, its citation, an evidence tier
+   where one applies, and a link into the flow that explains it. They wrap as ordinary
+   inline flow inside the second column. */
+.readorder li > div { min-width: 0; }
+.readorder li .cite, .readorder li .tier { white-space: nowrap; }
 
 /* ---------- wide blocks ---------- */
 .wide { max-width: 100%; }
@@ -542,10 +548,12 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
     <p class="rail-title">Contents</p>
     <ol>
       <li><a href="#changed">What changed</a></li>
-      <li><a href="#map">Review map</a></li>
+      <li><a href="#flows">Behaviour flows</a></li>
+      <!-- one .rail-sub entry per flow in section 2; a section not yet written keeps its
+           place, carrying a pending marker rather than disappearing -->
+      <li><a class="rail-sub" href="#{{ID}}">{{SECTION}} <span class="pending">pending</span></a></li>
       <li><a href="#start">Start here</a></li>
-      <!-- one entry per flow in section 4; a section not yet written keeps its place -->
-      <li><a href="#{{ID}}">{{SECTION}} <span class="pending">pending</span></a></li>
+      <li><a href="#blast">Blast radius</a></li>
       <li><a href="#crosscutting">Cross-cutting consequences</a></li>
       <li><a href="#approving">Before approving</a></li>
       <li><a href="#coverage">Coverage</a></li>
@@ -581,101 +589,21 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
       </article>
     </section>
 
-    <!-- ===== Section 2 · Review map ===== -->
-    <section id="map">
-      <div class="layer-head"><p class="eyebrow">Blast radius</p><h2>Review map</h2></div>
-
-      <!-- DIAGRAM 1 of 4 · BLAST RADIUS. The one that earns its place on almost every PR.
-           The catalogue below section 5 holds the other three; all four are complete and to
-           scale, so fill in the text and leave the geometry alone. Inventing a layout per run
-           is how diagrams stop being comparable between pages.
-
-           GRID, 880 x 250: four columns at x = 24 / 244 / 464 / 684, node 172 x 46, rows at
-           y = 40 and 116, arrow gap 48. Text baselines y+20 and y+36, anchored middle on the
-           node centre (110 / 330 / 550 / 770).
-
-           Changed nodes use .node; affected-but-unchanged use .node-dead (already dashed).
-           The LEGEND is drawn inside the svg, not in the figcaption: an svg gets read on its
-           own — in a screenshot, in a PNG, in a viewer — and a dashed box with no key reads as
-           "deleted", which is the opposite of what it means. The figcaption then carries what
-           the figure IMPLIES, which is not the same sentence.
-
-           Draw every path with explicit M/L pairs. Arrowheads are two strokes on the same
-           .edge path, so there are no <defs>, no <marker>, and no fill to theme. -->
-      <figure class="wide">
-        <div class="scroller"><svg viewBox="0 0 880 250" role="img" aria-label="Archival reaches from the controller through the model to the new column, and on to an unchanged query that scopes the picker list">
-          <!-- Row 1: the primary path, left to right. -->
-          <rect class="node" x="24" y="40" width="172" height="46" rx="5"/>
-          <text class="t-col" x="110" y="60" text-anchor="middle">ProjectsController</text>
-          <text class="t-dim" x="110" y="76" text-anchor="middle">#archive</text>
-          <path class="edge" d="M196 63 L236 63 M230 58 L236 63 L230 68"/>
-          <rect class="node" x="244" y="40" width="172" height="46" rx="5"/>
-          <text class="t-col" x="330" y="60" text-anchor="middle">Project#archive!</text>
-          <text class="t-dim" x="330" y="76" text-anchor="middle">app/models/project.rb:9</text>
-          <path class="edge" d="M416 63 L456 63 M450 58 L456 63 L450 68"/>
-          <rect class="node" x="464" y="40" width="172" height="46" rx="5"/>
-          <text class="t-col" x="550" y="60" text-anchor="middle">projects.archived_at</text>
-          <text class="t-dim" x="550" y="76" text-anchor="middle">migration and schema.rb</text>
-          <path class="edge-dash" d="M636 63 L676 63 M670 58 L676 63 L670 68"/>
-          <rect class="node-dead" x="684" y="40" width="172" height="46" rx="5"/>
-          <text class="t-col" x="770" y="60" text-anchor="middle">ActiveProjects#call</text>
-          <text class="t-dim" x="770" y="76" text-anchor="middle">scopes the picker list</text>
-          <!-- Row 2: a secondary effect hanging off the primary path. -->
-          <path class="edge" d="M330 86 L330 139 L456 139 M450 134 L456 139 L450 144"/>
-          <rect class="node" x="464" y="116" width="172" height="46" rx="5"/>
-          <text class="t-col" x="550" y="136" text-anchor="middle">Project.archived</text>
-          <text class="t-dim" x="550" y="152" text-anchor="middle">new scope, no reader yet</text>
-          <text class="t-dim" x="24" y="196">Searched rg 'archived' app lib spec — nothing else reads the scope.</text>
-          <!-- Legend, inside the drawing: an svg is often read on its own, and a dashed
-               box with no key reads as "deleted". -->
-          <rect class="node" x="24" y="214" width="18" height="12" rx="2"/>
-          <text class="t-dim" x="50" y="224">changed by this PR</text>
-          <rect class="node-dead" x="210" y="214" width="18" height="12" rx="2"/>
-          <text class="t-dim" x="236" y="224">unchanged, and affected</text>
-        </svg></div>
-        <figcaption class="note">Two of these five nodes are not in the diff.</figcaption>
-      </figure>
-
-      <div class="two-col">
-        <div class="card">
-          <p class="eyebrow">Changed</p>
-          <ul><li><a class="cite" href="{{LINK}}">{{PATH}}</a></li></ul>
-        </div>
-        <div class="card">
-          <p class="eyebrow">Affected, not changed</p>
-          <!-- Each entry needs a WHY clause. If a search came up empty, say what was searched. -->
-          <ul><li><a class="cite" href="{{LINK}}">{{PATH}}</a> &mdash; {{WHY_AFFECTED}}</li></ul>
-        </div>
-      </div>
-
-      <ol class="readorder">
-        <li><div><code>{{PATH}}</code> &mdash; <span class="why">{{WHY_THIS_BEFORE_THAT}}</span></div></li>
-      </ol>
+    <!-- ===== Section 2 · Behaviour flows =====
+         The lead-in, which states the grouping principle before the flows themselves — the
+         split IS the insight, and it is what makes the rest of the page readable. Give it a
+         stable id: the rail links here, and this is the anchor a pending marker uses while the
+         flows are still being written. Each flow then follows as its own section, id="flow-a"
+         and so on, built from the generic shell below. ===== -->
+    <section id="flows">
+      <div class="layer-head"><p class="eyebrow">Behaviour</p><h2>Behaviour flows</h2></div>
+      <p class="lede">{{HOW_THE_CHANGE_WAS_SPLIT_AND_WHY_THAT_SPLIT}}</p>
     </section>
 
-    <!-- ===== Section 3 · Start here =====
-         The CANONICAL HOME for the 2-5 highest-value findings. Each is a statement about the
-         code, why it matters, and what stays uncertain. A flow in section 4 refers back to one
-         of these in a clause; it never re-explains the finding, the citation or the tier.
-         No grades, no severity chips, no approval language. If nothing rises to this level, say
-         so plainly instead of manufacturing items. ===== -->
-    <section id="start">
-      <div class="layer-head"><p class="eyebrow">Highest value</p><h2>Start here</h2></div>
-      <ol class="firstlook">
-        <li><div>
-          <h4>{{WHAT_IS_TRUE_OF_THE_CODE}}</h4>
-          <p>{{WHY_IT_MATTERS_BEHAVIOURALLY}} {{WHAT_STAYS_UNCERTAIN}}
-             <span class="tier">{{TIER_IF_NOT_EXPLICITLY_CHANGED}}</span>
-             <a href="#{{FLOW_ID}}">{{WHICH_FLOW_COVERS_IT}}</a></p>
-        </div></li>
-      </ol>
-      <!-- The sampling caveat lives HERE, once, and nowhere else in the page. -->
-      <p class="note">{{THESE_ARE_WHAT_THIS_PASS_SURFACED_NOT_AN_AUDIT}}</p>
-    </section>
-
-    <!-- ===== Sections 3-5 · start here, behaviour flows, cross-cutting =====
-         Section 3 is the canonical home for the 2-5 highest-value findings; a flow in
-         section 4 refers back to one in a clause and never re-explains it. Persistence,
+    <!-- ===== Sections 2 and 5 · behaviour flows, cross-cutting =====
+         Section 2 is the CANONICAL HOME for everything one behaviour owns — the mechanism,
+         the findings, the unchanged code it gives new meaning to. Sections 3 and 4 come after
+         it and point back at it; a flow never defers an explanation to them. Persistence,
          the endpoint contract and the boundary all live INSIDE the flow they serve —
          they have no sections of their own. Section 5 carries only what genuinely spans
          flows. Omit anything the diff does not touch — no "N/A" placeholders.
@@ -697,7 +625,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
            .two-col                        side-by-side lists, app vs DB invariants
     -->
 
-    <!-- The generic section shell. Use it for each flow in section 4 (id="flow-a" and so
+    <!-- The generic section shell. Use it for each flow in section 2 (id="flow-a" and so
          on) and for section 5 (id="crosscutting", which the rail links to).
 
          Shown here in its PENDING state: a section this diff earns but that is not written
@@ -779,14 +707,119 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1.25; stroke-dasharray: 3 4; 
       </div>
     </div>
 
+    <!-- ===== Section 3 · Start here =====
+         ONE list, not two. What most needs judgment and what to read first are the same
+         question, so the route through the code and the highest-value findings are the same
+         ordered list. Each entry names a finding and says why it matters, then links to the
+         flow in section 2 that EXPLAINS it — it never re-explains it, and never repeats the
+         flow's citation or tier.
+
+         The list is also how the page says where the attention goes: a 71-file PR whose six
+         load-bearing files are the only ones here has said so. Everything else is accounted
+         for in section 7, with its own read / skim / mechanical level.
+
+         Roughly five to eight entries, never one per changed file. No grades, no severity
+         chips, no approval language. ===== -->
+    <section id="start">
+      <div class="layer-head"><p class="eyebrow">Where to begin</p><h2>Start here</h2></div>
+      <ol class="readorder">
+        <li><div>
+          <code>{{WHERE_TO_GO}}</code> &mdash; <span class="why">{{WHY_THIS_BEFORE_THAT_OR_WHY_IT_NEEDS_JUDGMENT}}</span>
+          <a class="cite" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+          <span class="tier">{{TIER_IF_NOT_EXPLICITLY_CHANGED}}</span>
+          <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a>
+        </div></li>
+      </ol>
+      <!-- The sampling caveat lives HERE, once, and nowhere else in the page. -->
+      <p class="note">{{THESE_ARE_WHAT_THIS_PASS_SURFACED_NOT_AN_AUDIT}}</p>
+    </section>
+
+    <!-- ===== Section 4 · Blast radius =====
+         A SECOND PASS, not a first screen: the reader has been through the flows one at a
+         time and now sees the change as one system. Most affected code was explained inside
+         the flow that owns it, so here it is a named pointer to that flow — never the finding
+         again. What this section explains canonically is what no single flow owns. ===== -->
+    <section id="blast">
+      <div class="layer-head"><p class="eyebrow">Beyond the diff</p><h2>Blast radius</h2></div>
+
+      <!-- DIAGRAM 1 of 4 · BLAST RADIUS. The one that earns its place on almost every PR.
+           The catalogue further down holds the other three; all four are complete and to
+           scale, so fill in the text and leave the geometry alone. Inventing a layout per run
+           is how diagrams stop being comparable between pages.
+
+           GRID, 880 x 250: four columns at x = 24 / 244 / 464 / 684, node 172 x 46, rows at
+           y = 40 and 116, arrow gap 48. Text baselines y+20 and y+36, anchored middle on the
+           node centre (110 / 330 / 550 / 770).
+
+           Changed nodes use .node; affected-but-unchanged use .node-dead (already dashed).
+           The LEGEND is drawn inside the svg, not in the figcaption: an svg gets read on its
+           own — in a screenshot, in a PNG, in a viewer — and a dashed box with no key reads as
+           "deleted", which is the opposite of what it means. The figcaption then carries what
+           the figure IMPLIES, which is not the same sentence.
+
+           Draw every path with explicit M/L pairs. Arrowheads are two strokes on the same
+           .edge path, so there are no <defs>, no <marker>, and no fill to theme. -->
+      <figure class="wide">
+        <div class="scroller"><svg viewBox="0 0 880 250" role="img" aria-label="Archival reaches from the controller through the model to the new column, and on to an unchanged query that scopes the picker list">
+          <!-- Row 1: the primary path, left to right. -->
+          <rect class="node" x="24" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="110" y="60" text-anchor="middle">ProjectsController</text>
+          <text class="t-dim" x="110" y="76" text-anchor="middle">#archive</text>
+          <path class="edge" d="M196 63 L236 63 M230 58 L236 63 L230 68"/>
+          <rect class="node" x="244" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="330" y="60" text-anchor="middle">Project#archive!</text>
+          <text class="t-dim" x="330" y="76" text-anchor="middle">app/models/project.rb:9</text>
+          <path class="edge" d="M416 63 L456 63 M450 58 L456 63 L450 68"/>
+          <rect class="node" x="464" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="550" y="60" text-anchor="middle">projects.archived_at</text>
+          <text class="t-dim" x="550" y="76" text-anchor="middle">migration and schema.rb</text>
+          <path class="edge-dash" d="M636 63 L676 63 M670 58 L676 63 L670 68"/>
+          <rect class="node-dead" x="684" y="40" width="172" height="46" rx="5"/>
+          <text class="t-col" x="770" y="60" text-anchor="middle">ActiveProjects#call</text>
+          <text class="t-dim" x="770" y="76" text-anchor="middle">scopes the picker list</text>
+          <!-- Row 2: a secondary effect hanging off the primary path. -->
+          <path class="edge" d="M330 86 L330 139 L456 139 M450 134 L456 139 L450 144"/>
+          <rect class="node" x="464" y="116" width="172" height="46" rx="5"/>
+          <text class="t-col" x="550" y="136" text-anchor="middle">Project.archived</text>
+          <text class="t-dim" x="550" y="152" text-anchor="middle">new scope, no reader yet</text>
+          <text class="t-dim" x="24" y="196">Searched rg 'archived' app lib spec — nothing else reads the scope.</text>
+          <!-- Legend, inside the drawing: an svg is often read on its own, and a dashed
+               box with no key reads as "deleted". -->
+          <rect class="node" x="24" y="214" width="18" height="12" rx="2"/>
+          <text class="t-dim" x="50" y="224">changed by this PR</text>
+          <rect class="node-dead" x="210" y="214" width="18" height="12" rx="2"/>
+          <text class="t-dim" x="236" y="224">unchanged, and affected</text>
+        </svg></div>
+        <figcaption class="note">Two of these five nodes are not in the diff.</figcaption>
+      </figure>
+
+      <div class="two-col">
+        <div class="card">
+          <p class="eyebrow">Changed</p>
+          <ul><li><a class="cite" href="{{LINK}}">{{PATH}}</a></li></ul>
+        </div>
+        <div class="card">
+          <p class="eyebrow">Affected, not changed</p>
+          <!-- Where a flow already explained it, the entry is a POINTER and nothing more.
+               Where no single flow owns it, the why clause is the explanation, and this is
+               its canonical home. If a search came up empty, say what was searched. -->
+          <ul>
+            <li><a class="cite" href="{{LINK}}">{{PATH}}</a> &mdash; {{ONE_CLAUSE}} <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a></li>
+            <li><a class="cite" href="{{LINK}}">{{PATH}}</a> &mdash; {{WHY_AFFECTED}} <span class="tier">{{TIER}}</span></li>
+          </ul>
+          <p class="note">{{WHAT_WAS_SEARCHED_AND_CAME_UP_EMPTY}}</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== THE DIAGRAM CATALOGUE · 2, 3 and 4 of 4 =====
          Four kinds, and a diff earns a kind or it does not. Pick from these; do not derive a
          layout. Every one is complete, to scale, and passes evals/checks/diagram.sh — which is
          the point: the geometry is settled, so the run spends its attention on whether the
          edges are TRUE.
 
-           1 · Blast radius     section 2, almost always      drawn above
-           2 · Boundary chain   inside the flow owning the field
+           1 · Blast radius     section 4, almost always      drawn above
+           2 · Boundary chain   section 2, inside the flow owning the field
            3 · ER fragment      section 5, if the schema moved
            4 · Lifecycle        section 5, ONLY if a status column, enum or state machine
                                 changed — a nullable timestamp is not a state machine, and

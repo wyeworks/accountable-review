@@ -23,7 +23,7 @@
       "id": "diagrams/monorepo-contract",
       "fixture": "monorepo-contract",
       "check": "check.sh --fragment <out> --scope diagram --visual",
-      "expected_output": "Two diagrams at most: the blast radius for section 2, and a boundary chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch marked on the edge where it happens.",
+      "expected_output": "Two diagrams at most: the blast radius for section 4, and a boundary chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch marked on the edge where it happens.",
       "expectations": [
         "A boundary-chain diagram exists for archived_at and marks the mismatch on the edge it occurs at, rather than leaving the reader to compare two boxes",
         "The budget is respected: one per section, and a second only where the mechanism is genuinely different — a boundary chain and a blast radius qualify, two views of the same call path do not",

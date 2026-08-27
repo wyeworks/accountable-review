@@ -33,12 +33,16 @@ it, do not duplicate it.
 | | Section | Appears | Owns |
 |---|---|---|---|
 | 1 | What changed | always | Intent, scope, the metric strip, the use cases named |
-| 2 | Review map | always | The blast radius — where consequences leave the diff |
-| 3 | Start here | always | The 2–5 highest-value findings, canonically |
-| 4 | Behaviour flows | the bulk | One flow per behaviour, carrying only what is specific to it |
+| 2 | Behaviour flows | the bulk | One flow per behaviour, canonically — the mechanism, and the findings inside it |
+| 3 | Start here | always | One prioritized list: where to go in the code, in the order to go there |
+| 4 | Blast radius | always | Where consequences leave the diff, seen across every flow at once |
 | 5 | Cross-cutting consequences | anything genuinely spans flows | Schema structure, authorization, jobs, deploy order, test infrastructure |
 | 6 | Before approving | always | Author questions, validations, test gaps, a ≤5-question checkpoint |
 | 7 | Coverage | always | The ledger. No findings |
+
+The order is the reviewer's path, and each section assumes the ones before it. § 2 teaches the
+mechanisms; § 3 is the moment the reviewer opens the code, holding §§ 1–2; § 4 is a second pass over
+the same change through one lens, so it can point at a flow instead of re-explaining it.
 
 *Where the old per-layer material goes* maps the previous twelve-part format onto these, since
 persistence, API surface and contract no longer have sections of their own — they are covered inside
@@ -124,11 +128,11 @@ to the test below.
 
 | Location | Variant |
 |---|---|
-| § 4 · a flow's *affected but unchanged* | `--source` |
-| § 4 · a flow's *implementation* | `--diff`, the one hunk carrying the decision |
-| § 4 · a flow's *things to understand* | Either, whichever fits the claim |
-| § 3 · *start here*, each finding | Either |
-| § 2 · *changed vs potentially affected*, the affected column | `--source` |
+| § 2 · a flow's *affected but unchanged* | `--source` |
+| § 2 · a flow's *implementation* | `--diff`, the one hunk carrying the decision |
+| § 2 · a flow's *things to understand* | Either, whichever fits the claim |
+| § 3 · *start here*, an entry whose finding is not already excerpted in its flow | Either |
+| § 4 · *changed vs potentially affected*, the affected column | `--source` |
 | § 5 · the application-vs-database invariants block | `--source` |
 
 The last two were added after a run showed the original list barred excerpts from the two densest
@@ -155,7 +159,7 @@ was never about quoting one committed line that a claim turns on.
 - **The field carries its own citation, not one from elsewhere on the page.** The closed-page rule is
   easy to satisfy globally and still fail locally: a run wrote *"an unchanged trait in
   `spec/factories/projects.rb` stamps `archived_at`"* with the path as bare prose, the only `file:line`
-  for it being the excerpt's own footer. The same citation did appear linked in § 2 and in the
+  for it being the excerpt's own footer. The same citation did appear linked in § 4 and in § 3's
   reading order, so the page as a whole was fine — but a reader working through that field with the
   block shut had nothing to click. Judge the rule field by field, not page-wide. `check.sh` cannot
   catch this: it checks summaries and collapse state, never whether a citation survives the block
@@ -193,9 +197,9 @@ out of a run that hit the circularity above and had to invent something to escap
 Then the mechanical limits:
 
 - **One excerpt per field or entry**, never two.
-- **Never twice for the same lines.** If a start-here entry and its flow field rest on the same
-  citation, the excerpt goes in **one** of them — the start-here entry, since that is the screen where
-  the reader decides what to trust — and the other cites in prose. Do not solve the duplication by
+- **Never twice for the same lines.** If a flow field and the § 3 entry pointing at it rest on the
+  same citation, the excerpt goes in **one** of them — the flow, which is where the finding is
+  explained — and the other cites in prose. Do not solve the duplication by
   quoting a *neighbouring* range instead: a run did exactly that, and the near-identical second
   excerpt was the one excerpt it regretted.
 - **Never a near-duplicate.** Two excerpts of structurally identical code — the same guard chain, the
@@ -271,15 +275,21 @@ reading, and everything after that point is wasted regardless of how good it is.
 
 | The concept | Lives in | Referenced from |
 |---|---|---|
-| A high-value finding | *Start here* | The flow it belongs to, in one clause |
+| A high-value finding | The flow it belongs to | *Start here*, as one prioritized entry; *Blast radius*, in one clause |
+| Unchanged code one flow gives new meaning to | That flow's *affected but unchanged* | *Blast radius*, as a named pointer |
+| Unchanged code no single flow owns | *Blast radius* | The flows it touches, in one clause |
 | A consequence spanning flows | *Cross-cutting consequences* | Each flow it touches, in one clause |
 | Behaviour specific to one flow | That flow | Nowhere else |
 | An open question for the author | *Before approving* | The flow that raised it, if the reader needs it there |
 | A validation step | The flow it validates, or *Before approving* if it is setup | Not both |
 
+**The flow owns the explanation, and the sections after it point back.** That is what the ordering
+buys: §§ 3 and 4 both come after § 2, so neither has to re-explain a mechanism to be readable. A
+section that finds itself explaining a flow's finding a second time is in the wrong section.
+
 The reference form is one sentence, no re-explanation:
 
-> The `ActiveProjects` consequence under *Start here* applies to this flow too.
+> The `ActiveProjects` consequence is explained in Flow B.
 
 Not a summary of that consequence, not its citation again, not its tier label again.
 
@@ -335,8 +345,8 @@ layout invented per run makes two pages from this skill incomparable for no gain
 
 | Kind | Home |
 |---|---|
-| Blast radius | § 2, on almost every PR |
-| Boundary chain | inside the flow that owns the field, never a section of its own |
+| Blast radius | § 4, on almost every PR |
+| Boundary chain | § 2, inside the flow that owns the field, never a section of its own |
 | ER fragment | § 5, if the schema moved |
 | Lifecycle | § 5, and only if a status column, enum or state machine changed |
 
@@ -361,7 +371,7 @@ needing no discussion are still listed, batched into a compact table with a one-
 pure moves get a line saying so, which is itself useful.
 
 **The invariant is one-directional.** Every path in the diff must appear in the page. The reverse does
-*not* hold: the page cites unchanged files everywhere by design — that is what § 2 and the
+*not* hold: the page cites unchanged files everywhere by design — that is what § 4 and the
 *affected but unchanged* field are for. So the check is a subset test, never set equality:
 
 ```
@@ -445,13 +455,13 @@ global, because they genuinely are:
 | Material | Now lives in |
 |---|---|
 | Schema structure: ER diagram, migration safety, schema-vs-migration consistency | § 5, once for the whole diff |
-| Persistence detail for one behaviour: the column it writes, the callback it fires | § 4, in that flow |
-| One endpoint's contract: params, response, errors, side effects | § 4, in the flow that calls it |
+| Persistence detail for one behaviour: the column it writes, the callback it fires | § 2, in that flow |
+| One endpoint's contract: params, response, errors, side effects | § 2, in the flow that calls it |
 | The authorization matrix across endpoints | § 5, once |
-| One field crossing the backend/frontend boundary | § 4, in its flow |
+| One field crossing the backend/frontend boundary | § 2, in its flow |
 | Deploy-ordering hazard between the two sides | § 5, once |
 | Test *infrastructure* that changes how other specs behave | § 5, once |
-| Tests for one behaviour, and its test gap | § 4, in that flow |
+| Tests for one behaviour, and its test gap | § 2, in that flow |
 | Primary / supporting / secondary classification | § 7, the ledger's group column — it was never worth a section |
 
 ## Section 1 · What changed — always
@@ -484,54 +494,17 @@ overlap.
   A workspace admin archives a project — new time entries are prevented, historical ones preserved.
   ```
 
-  The **execution path** for each belongs to that behaviour's flow in § 4, not here. Naming the use
-  case is what § 1 owes the reader; tracing it is § 4's job.
+  The **execution path** for each belongs to that behaviour's flow in § 2, not here. Naming the use
+  case is what § 1 owes the reader; tracing it is § 2's job.
 - **Evidence tier on the intent itself.** Behaviour pinned by a test is a different claim from
   behaviour inferred from a service class's name, and the reviewer's next move differs. Where intent
   cannot be established, state the gap as a gap.
 
-## Section 2 · Review map — always
+## Section 2 · Behaviour flows — the bulk
 
-Where consequences extend beyond the diff. This is the section a diff cannot produce at all.
-
-- **Blast-radius diagram** — the primary flow end to end, secondary effects branching off it. Changed
-  nodes solid, affected-but-unchanged nodes dashed (`.node-dead`), legend required. The one diagram
-  that earns its place on almost every PR.
-- **Changed vs potentially affected**, two lists side by side. The second is the point: every entry
-  carries a citation and a clause on *why* it is affected. If a search came up empty, say what was
-  searched — unrecorded, absence and omission look identical.
-- **Reading order** — a numbered path through the files, each with a one-line *why this before that*.
-  Good defaults: schema before the code that uses it; the smallest complete example before the bulk;
-  irreversible code last, read twice.
-- **Where the attention goes** — which handful of files carry the design, which are mechanical. A
-  71-file PR where 6 files matter should say so on the first screen. This ranks the work; it excuses
-  nothing from coverage.
-
-The prose here explains what the diagram *implies*. It does not transcribe the diagram — if a paragraph
-lists the same nodes and edges the figure already shows, delete the paragraph, not the figure.
-
-## Section 3 · Start here — always
-
-The two to five things most needing human judgment, and the **canonical home** for each of them. This
-is the section most at risk of being re-explained later; it must not be.
-
-Each entry, compactly:
-
-- **What changed** — a statement about the code, with its citation.
-- **Why it matters** — the consequence, in behavioural terms.
-- **What remains uncertain**, if anything, with its evidence tier and what would settle it.
-
-Never a grade. No severity chips, no approval language. If nothing rises to this level, say so plainly
-rather than manufacturing concerns.
-
-Carry the sampling caveat here, once, and nowhere else in the page: these are what this pass surfaced,
-not an exhaustive list. Repeated runs over the same diff surface overlapping but different sets — the
-explanation is stable, the findings are a sample.
-
-A § 4 flow that touches one of these refers to it in a clause. It does not restate the finding, the
-citation or the tier.
-
-## Section 4 · Behaviour flows — the bulk
+The reader's way into the change, and the **canonical home** for everything one behaviour owns. It
+comes before the route through the code and before the blast radius because both of those are easier
+to write, and far easier to read, once the mechanisms are known.
 
 One flow per behaviour or user cohort, grouped as decided in step 6 of the procedure and **never by
 directory**. `Services / Models / Hooks / Components` is the repository's structure, not the change's,
@@ -558,7 +531,8 @@ unit*) plus whatever of this it actually needs:
   frontend union, a new error status nothing handles, a required param the client never sends. If the
   client is in another repository or simply absent, say which and build the backend half only — do not
   guess at code you cannot read.
-- **Affected but unchanged**, for this behaviour, with the clause on why.
+- **Affected but unchanged**, for this behaviour, with the clause on why. This is where such a
+  finding is *explained*; § 4 points back at it rather than restating it.
 - **Tests, and the gap.** Which behaviour they pin, which branch they leave open. One sentence per test
   capturing its behavioural guarantee — never a walk through its assertions.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
@@ -567,7 +541,69 @@ unit*) plus whatever of this it actually needs:
   code deliberately refuses to do.
 - **Validation** for this behaviour, if it needs its own. Setup and seeds go to § 6.
 
-Anything already explained in § 2, § 3 or § 5 is referenced in a clause, never re-explained.
+**A flow explains; it does not defer.** Nothing here is held back for § 3 or § 4 to say properly —
+those sections come after this one and point at it. The only forward reference a flow makes is to
+§ 5, for a consequence that genuinely spans flows, and that is one clause.
+
+## Section 3 · Start here — always
+
+Where the reviewer stops reading and opens the code. They arrive holding § 1's intent and § 2's
+mechanisms; what they still lack is a route through the diff. This section is that route, and it is
+**one list** — what most needs judgment and what to read first are the same question, and answering
+it twice is what used to make this section restate the rest of the page.
+
+Render as `ol.readorder`. Each entry carries:
+
+- **Where to go** — the file, the method or the flow, with its citation.
+- **Why here**, in a `span.why` — why this before the next thing, or what makes it worth judgment. A
+  reason, never a restatement of the filename.
+- **What remains uncertain**, if anything, with its evidence tier and what would settle it.
+- **Which flow explains it** — a link into § 2. The entry *names* the finding and says why it
+  matters; it never re-explains it, and it does not repeat the flow's citation or tier.
+
+Ordering defaults worth keeping: schema before the code that uses it; the smallest complete example
+before the bulk; irreversible code last, read twice.
+
+**Roughly five to eight entries, and never one per changed file.** An entry earns its place by being
+somewhere the reviewer must *go*, not by being a file that changed. The list is also how the page
+says where the attention goes — a 71-file PR whose six load-bearing files are the only ones on it
+has said so, without a second list ranking the rest. Every other file is still accounted for, in
+§ 7, with its own attention level of read, skim or mechanical. Ranking excuses nothing from coverage.
+
+Never a grade. No severity chips, no approval language. If nothing rises to the level of judgment,
+say so plainly rather than manufacturing concerns — the route through the code stands on its own.
+
+Carry the sampling caveat here, once, and nowhere else in the page: these are what this pass
+surfaced, not an exhaustive list. Repeated runs over the same diff surface overlapping but different
+sets — the explanation is stable, the findings are a sample.
+
+## Section 4 · Blast radius — always
+
+Where consequences extend beyond the diff. This is the section a diff cannot produce at all, and by
+this point in the page it is a **second pass**: the reader has been through the flows one at a time,
+and now sees the same change as one system, with the edges that leave it.
+
+- **Blast-radius diagram** — the primary flow end to end, secondary effects branching off it. Changed
+  nodes solid, affected-but-unchanged nodes dashed (`.node-dead`), legend required. The one diagram
+  that earns its place on almost every PR. Arriving after § 2, it is a synthesis figure: it shows
+  flows the page explained separately reaching the same unchanged code.
+- **Changed vs potentially affected**, two lists side by side, across the whole diff. The second is
+  the point: every entry carries a citation and a clause on *why* it is affected.
+- **One clause where a flow already owns it.** Most affected code belongs to exactly one behaviour,
+  and that flow's *affected but unchanged* field has explained it. Here it is a named pointer —
+  *"`ActiveProjects` scopes the selectable list — Flow B"* — and nothing more. What this section
+  explains canonically is what no single flow owns: unchanged code several flows reach, or that none
+  of them do.
+- **What was searched.** Where a search came up empty, say so and say what it was — unrecorded,
+  absence and omission look identical, and the reviewer has to redo the work to tell which it was.
+
+The prose here explains what the diagram *implies*. It does not transcribe the diagram — if a paragraph
+lists the same nodes and edges the figure already shows, delete the paragraph, not the figure.
+
+Completeness in this section is about consequences, not paths. § 7 is what accounts for every file,
+and this must not become a second ledger. What it owes the reader is that every consequence the page
+found has a place in the affected column — as a pointer where a flow explained it, as its own
+paragraph where nothing did.
 
 ## Section 5 · Cross-cutting consequences — only what genuinely spans flows
 

@@ -53,8 +53,11 @@ behaviour-flows.sh  | flows-clean.html              | 0 | no flow is grouped by 
 behaviour-flows.sh  | flows-layer-grouped.html      | 1 | is a layer name
 behaviour-flows.sh  | flows-unit-no-understand.html | 1 | has no things-to-understand
 behaviour-flows.sh  | flows-unit-uncited.html       | 1 | makes claims with no file:line
-blast-radius.sh     | map-clean.html                | 0 | each with a why
-blast-radius.sh     | map-readorder-no-why.html     | 1 | is not a reading order
+blast-radius.sh     | blast-clean.html              | 0 | it belongs to section 3
+blast-radius.sh     | blast-readorder.html          | 1 | the reading order lives in section 3
+start-here.sh       | start-here-clean.html         | 0 | each with a why
+start-here.sh       | start-here-no-why.html        | 1 | is not a reading order
+start-here.sh       | start-here-two-lists.html     | 1 | it is one list
 before-approving.sh | approving-clean.html          | 0 | within the cap of 5
 before-approving.sh | approving-six-questions.html  | 1 | the cap is 5
 page-invariants.sh  | invariants-clean.html         | 0 | no severity chips
