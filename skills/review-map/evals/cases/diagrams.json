@@ -3,34 +3,34 @@
   "of": "page-template.html § the diagram catalogue, report-format.md § Depth rules",
   "produced_by": "drivers/diagrams.md",
   "scope": "diagram",
-  "notes": "Not a section — a primitive that appears in several, and the one component with no generator behind it. checks/diagram.sh settles conformance: template classes only, no literal colours, nothing off-canvas, labels that fit, a legend behind every dashed node. What it cannot settle is whether the diagram is TRUE, and whether it is legible. Run with --visual and look at the PNGs; that is what the last two expectations are for.",
+  "notes": "Not a section — a primitive that appears in several. Two of the four kinds are now CSS components, not drawings: the blast radius is a .blast box grid and the boundary chain is a .pipe spine. So the first thing this case tests is that a run reaches for the COMPONENT and does not draw an SVG out of habit — checks/diagram.sh will report `legend` and `box-json` as invented classes, but a run that hand-rolls a blast radius from .box and .edge passes every mechanical check while throwing away reflow and comparability. That needs a reader. The two surviving SVG kinds are the ER fragment and the lifecycle, and NO FIXTURE HERE EARNS EITHER: rails-only-small adds one nullable column, monorepo-contract has no state machine. Covering them needs a new fixture with a migration and a status enum; until then diagram.sh checks those two layouts against the template itself and nothing else does. What no script settles either way: whether the figure is TRUE, and whether it is legible. Run with --visual and look at the PNGs.",
   "cases": [
     {
       "id": "diagrams/rails-only-small",
       "fixture": "rails-only-small",
-      "check": "check.sh --fragment <out> --scope diagram --visual",
-      "expected_output": "One diagram: the blast radius, reaching from the new column through the model to the unchanged query that scopes the selectable list. No lifecycle diagram — archived_at is a timestamp, not a state machine — and no ER diagram for a single-column add.",
+      "check": "check.sh --fragment <out> --scope blast-radius; then --scope diagram",
+      "expected_output": "A .blast box grid in section 4, reaching from the new column through the model to the unchanged query that scopes the selectable list, with a .legend. NO SVG at all: no lifecycle, because archived_at is a timestamp and not a state machine, and no ER fragment for a single-column add.",
       "expectations": [
-        "Exactly the diagrams this diff earns: a blast radius, and no lifecycle diagram, because a nullable timestamp is not a state machine and drawing one would invent states the code does not have",
-        "The diagram shows something the two side-by-side lists cannot: the reach from the changed column to the unchanged consumer, as a path rather than as two sets",
-        "Every edge matches a real call in the repository — a followable edge that is wrong costs the reviewer more than no diagram at all",
-        "Solid is changed, dashed is unchanged-and-affected, and the caption says which is which",
-        "The layout follows the catalogue's grid rather than inventing geometry: same column positions, node size and row pitch as the worked layout in page-template.html",
-        "Read the PNGs from --visual: nothing overlaps, no label leaves its box or collides with an edge, and both themes are legible"
+        "The blast radius is a .blast box grid with a .legend, not an SVG — a run that draws it with .box and .edge has thrown away reflow and comparability while passing every mechanical check",
+        "Exactly the figures this diff earns: no lifecycle, because a nullable timestamp is not a state machine and drawing one would invent states the code does not have, and no ER fragment for one column",
+        "Solid border is changed, dashed is unchanged-and-affected, and the legend says which is which",
+        "The panel shows something the two lists cannot: the unchanged query sitting beside the changed column, as one frame rather than two sets",
+        "Where the finding is that something STOPS at a hop, the note under the panel says so in words — adjacency cannot express a directed edge, and this is the case where a run is most likely to reach for SVG instead",
+        "Read the PNGs from --visual if any SVG was drawn at all: nothing overlaps, no label leaves its box, and both themes are legible"
       ]
     },
     {
       "id": "diagrams/monorepo-contract",
       "fixture": "monorepo-contract",
-      "check": "check.sh --fragment <out> --scope diagram --visual",
-      "expected_output": "Two diagrams at most: the blast radius for section 4, and a boundary chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch marked on the edge where it happens.",
+      "check": "check.sh --fragment <out> --scope behaviour-flows; then --scope diagram",
+      "expected_output": "A .pipe chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch named at the hop it happens, plus the .blast grid for section 4. Still no SVG: no state machine, and one column does not earn an ER fragment.",
       "expectations": [
-        "A boundary-chain diagram exists for archived_at and marks the mismatch on the edge it occurs at, rather than leaving the reader to compare two boxes",
-        "The budget is respected: one per section, and a second only where the mechanism is genuinely different — a boundary chain and a blast radius qualify, two views of the same call path do not",
-        "No ER diagram, or one restricted to projects plus immediate neighbours — and if the missing time_entries association is drawn, it is drawn as absent, which is the point of drawing it",
-        "The dashed nodes are exactly the unchanged consumers, selectableProjects and ProjectSelector, and nothing changed by the diff is dashed",
-        "The layout follows the catalogue's grid, and the chain reads left to right in one row rather than as a re-invented layout per run",
-        "Read the PNGs from --visual: nothing overlaps, the mismatch marker is legible at the size it renders, and both themes work"
+        "A .pipe chain exists for archived_at and names the mismatch at the hop it occurs, rather than leaving the reader to compare two boxes",
+        "The chain is a .pipe, not an SVG boundary chain — the terminal node is filled, so the thing the chain arrives at is last",
+        "The budget is respected: one figure per section, and a second only where the mechanism is genuinely different — a chain inside a flow and a blast grid in section 4 qualify, two views of one call path do not",
+        "No ER fragment: one column plus its immediate neighbours does not earn one, and if the missing time_entries association is mentioned it is mentioned as ABSENT, which is the only reason to raise it",
+        "The dashed boxes in section 4 are exactly the unchanged consumers, selectableProjects and ProjectSelector, and nothing changed by the diff is dashed",
+        "Read the PNGs from --visual if any SVG was drawn: nothing overlaps, and both themes work"
       ]
     }
   ]

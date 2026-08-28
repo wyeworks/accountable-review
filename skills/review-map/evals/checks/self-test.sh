@@ -65,9 +65,10 @@ behaviour-flows.sh  | flows-layer-grouped.html      | 1 | is a layer name
 behaviour-flows.sh  | flows-unit-no-understand.html | 1 | has no things-to-understand
 behaviour-flows.sh  | flows-unit-uncited.html       | 1 | makes claims with no file:line
 behaviour-flows.sh  | flows-source-only.html        | 0 | no flow shows the hunk its behaviour turns on
-behaviour-flows.sh  | flows-unit-flattened.html     | 1 | outside article.unit
+behaviour-flows.sh  | flows-unit-flattened.html     | 1 | outside a dl.rows
 behaviour-flows.sh  | flows-decisions-interleaved.html | 1 | belongs after the closing
-behaviour-flows.sh  | flows-endpoint-rows.html      | 0 | inside a unit or an endpoint card
+behaviour-flows.sh  | flows-blast-rows.html         | 0 | every field row is inside a dl.rows
+behaviour-flows.sh  | flows-pending-page.html       | 0 | section 2 is still pending | --page @GOLD@/flows-pending-page.html
 blast-radius.sh     | blast-clean.html              | 0 | point into the flows that explain them
 blast-radius.sh     | blast-readorder.html          | 1 | the reading order lives in section 3
 blast-radius.sh     | blast-no-pointer.html         | 0 | an in-page anchor works at every link rung
@@ -85,7 +86,7 @@ page-invariants.sh  | invariants-clean.html         | 0 | no severity chips
 page-invariants.sh  | invariants-severity-chip.html | 1 | severity chips reintroduced
 page-invariants.sh  | invariants-verdict.html       | 1 | verdict language found
 page-invariants.sh  | invariants-no-tier.html       | 1 | no evidence tier labels
-page-invariants.sh  | invariants-loose-data-path.html | 1 | outside a <td>
+page-invariants.sh  | invariants-loose-data-path.html | 1 | outside a ledger cell
 excerpts.sh         | excerpt-clean.html            | 0 | collapsed by default
 excerpts.sh         | excerpt-open.html             | 1 | open by default
 excerpts.sh         | excerpt-duplicate.html        | 1 | same range is excerpted more than once

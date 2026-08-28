@@ -16,7 +16,7 @@ Flow B — Listing selectable projects       primary, and entirely outside the d
 - the endpoint contract: 200 with the serialized project, 422 with `{ error }`, and the
   side-effects row a diff cannot answer — it writes, it is not idempotent in effect (a second
   call re-stamps), it calls nothing external;
-- the boundary chain for `archived_at`: `ProjectSerializer` → JSON → `Project.archivedAt` →
+- the boundary chain (a .pipe, not an SVG) for `archived_at`: `ProjectSerializer` → JSON → `Project.archivedAt` →
   `useProjects` → `ProjectSelector`, and the three mismatches on it:
   - **the key is renamed and nothing renames it.** The wire carries `archived_at`; the type declares
     `archivedAt`; there is no API client, no case transform and no runtime parse between them

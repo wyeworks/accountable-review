@@ -78,7 +78,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
 | `references/report-format.md` | Page structure — the seven sections and what triggers each, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the search recipes for affected-but-unchanged code |
-| `references/page-template.html` | Design system — tokens, component classes, the SVG vocabulary, and the diagram catalogue: four worked layouts, to scale |
+| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
@@ -106,31 +106,41 @@ Editing one of these means checking the others still agree.
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
 - **The review unit** is the page's primitive: seven fields, fixed order, defined in
-  `report-format.md` and rendered as `article.unit` — **and rendered nowhere else.** A behaviour
-  flow's body *is* a unit; the path, the endpoint card, the diagram and the decisions block sit
-  beside it inside the flow section, with decisions last. Two guards keep the unit from becoming
-  ceremony — a unit needs a non-obvious *things to understand*, and fields may be omitted but never
-  faked.
+  `report-format.md` and rendered as a `.mech` block followed by one `dl.rows` — **and rendered
+  nowhere else.** A behaviour flow's body *is* a unit; the path, the diagram and the decisions block
+  sit beside it inside the flow section, with decisions after the closing `</dl>`. There is no
+  endpoint card: the contract is the flow's own material and lives in its `.pipe` and its field rows.
+  Two guards keep the unit from becoming ceremony — a unit needs a non-obvious *things to
+  understand*, and fields may be omitted but never faked.
 
-  Four files have to agree, the same way the diagram catalogue's four do:
-  `page-template.html` holds one behaviour flow **assembled whole** and the `<dt>` labels,
-  `report-format.md` § *The review unit* holds those labels in a column of their own plus § 2's
-  split between what the unit carries and what sits beside it,
-  `evals/checks/behaviour-flows.sh` counts field rows outside a unit and refuses a flows region
-  with none, and `evals/golden/flows-clean.html` is the reference markup. One subtlety the check
-  has to keep: `.ep-row` is **shared** with `article.endpoint`, so an endpoint card is a second
-  legitimate home for a field row — counting only units reported three correct eval runs as
-  flattened.
+  Four files have to agree: `page-template.html` holds one behaviour flow **assembled whole** and
+  the `<dt>` labels, `report-format.md` § *The review unit* holds those labels in a column of their
+  own plus § 2's split between what the unit carries and what sits beside it,
+  `evals/checks/behaviour-flows.sh` checks the `.mech`-per-`dl.rows` pairing and counts field labels
+  outside a grid, and `evals/golden/flows-clean.html` is the reference markup.
+
+  Two subtleties the check has to keep. It takes **two extractions, not one**: unit regions anchored
+  on `.mech` for the per-unit guards and for naming, and the grids alone for the housing census — a
+  flattened flow keeps its `.mech`, so a census over unit regions counts loose fields as housed and
+  misreports the defect as something else. And `dl.rows` is **shared** with § 4, which renders
+  Changed / Affected-not-changed with the same grid, so the check narrows to `id="flow-"` *before*
+  counting; `evals/golden/flows-blast-rows.html` pins that. It replaced
+  `flows-endpoint-rows.html`, which pinned the same class of false positive when `.ep-row` was
+  shared with `article.endpoint` — the sharing moved, the trap did not go away.
 
   The reason this is an invariant and not a convention: the template used to show the section
   shell, the unit and the decisions block as three *detached* siblings, with the composition stated
   only in prose. A run read the prose, copied the markup as shown, and flattened all three flows
-  into loose `.ep-row` blocks parented to the `<section>` — losing the card, handing field spacing
+  into loose field blocks parented to the `<section>` — losing the card, handing field spacing
   to `section > * + *`, un-scoping every `.unit ...` rule, and dropping one flow's *things to
-  understand* entirely when a decisions block took its slot. Nothing errored and no check fired:
-  `behaviour-flows.sh` accepted `article.cohort` as a substitute, which § 1 always supplies. **A
-  composition that is described but never shown assembled does not survive a weaker reader** — the
-  same reasoning that puts diagram geometry in a catalogue instead of deriving it per run.
+  understand* entirely when a decisions block took its slot. Nothing errored and no check fired.
+  **A composition that is described but never shown assembled does not survive a weaker reader** —
+  the same reasoning that puts diagram geometry in a catalogue instead of deriving it per run.
+
+  **This is now more fragile, not less.** The unit used to be a bordered card, so a flattened flow
+  visibly lost its box. A `.mech` plus a hairline grid is borderless by design: a flow that spills
+  its rows into the `<section>` looks very nearly correct, which is why the pairing is checked rather
+  than the presence of a wrapper.
 - **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the search recipes in
   `rails-nextjs.md` are how, and it surfaces twice, at different depths: the review-unit field inside
   the flow that owns it **explains** it, and § 4 *Blast radius* shows the whole set at once, pointing
@@ -140,7 +150,8 @@ Editing one of these means checking the others still agree.
 - **Completeness, and the one mechanical check.** Every path in the diff appears in the page. Stated
   in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and enforced in
   step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work: the script
-  reads a `data-path` attribute, the template emits it on the ledger's path cell, `report-format.md`
+  reads a `data-path` attribute, the template emits it on the ledger's grid cell
+  (`<div class="c" data-path="…">`, not a `<td>` — the ledger is a CSS grid now), `report-format.md`
   § 7 requires it, and `SKILL.md` step 10 runs the script. Break any one and the gate stops
   checking. Note the asymmetry in the invariant itself: the page-wide rule is a subset test (the page
   cites unchanged files everywhere by design), while the gate is exact set equality against
@@ -227,13 +238,19 @@ Editing one of these means checking the others still agree.
   nothing. The budget, the permitted locations and the rung adjustment live in `report-format.md`
   **only**; `SKILL.md` points at them. An earlier version restated the cap in slightly different words
   and the two drifted apart within one run — hence the rule that this one has a single home.
-- **Diagram layouts come from the catalogue, not from the run.** Four kinds — blast radius, boundary
-  chain, ER fragment, lifecycle — worked out complete and to scale in `page-template.html`, with
-  the grid stated in a comment above each. Four files have to agree: the template holds the
-  geometry, `report-format.md` § *Depth rules* holds which kind belongs to which section and the
-  budget (and holds them **only** — the template does not restate the budget), `SKILL.md` step 9
-  points at the catalogue, and `evals/checks/diagram.sh` carries the class vocabulary the template
-  defines. A class added to one and not the other is either unstyled or reported as invented.
+- **Diagram layouts come from the catalogue, not from the run — and only two kinds are drawings.**
+  Blast radius is a `.blast` box grid and boundary chain is a `.pipe` spine: both carry membership of
+  a set and order along a chain, which a component shows as well as geometry did, reflows on a phone,
+  and cannot be drawn wrong. ER fragment and lifecycle stay as inline SVG, worked out complete and to
+  scale in `page-template.html`, with the grid stated in a comment above each.
+
+  Four files have to agree: the template holds the geometry and the SVG class vocabulary,
+  `report-format.md` § *Depth rules* holds which kind belongs to which section and the budget (and
+  holds them **only** — the template does not restate the budget), `SKILL.md` step 9 points at the
+  catalogue and says which two are components, and `evals/checks/diagram.sh` carries the class
+  vocabulary the template defines. A class added to one and not the other is either unstyled or
+  reported as invented. `legend` and `box-json` were removed from that vocabulary deliberately, not
+  renamed: a run drawing a blast radius as SVG should be told to use the component instead.
 
   The reason this is an invariant rather than a nicety: a diagram is the one component with no
   generator behind it, so a layout derived per run spends the run's attention on geometry instead of
@@ -241,9 +258,27 @@ Editing one of these means checking the others still agree.
   can check is conformance; crowding, overlap and an arrowhead landing beside its box need eyes,
   which is what `checks/diagram-shot.sh --visual` and a judged expectation are for. Both defects in
   that sentence were found in diagrams the script had just called clean.
+
+  Two rules no check can enforce, so they live in `report-format.md` § *Depth rules*: a box grid
+  cannot express a **directed edge** (when the finding is "the code stops being produced at this
+  hop", the note under the panel has to say it), and **a diagram carries labels, not sentences** —
+  prose in an 880-wide scroller cannot reflow, so searches and caveats go in the `figcaption`.
+
+  **No current fixture earns either surviving kind.** `rails-only-small` adds one nullable column and
+  `monorepo-contract` has no state machine, so `evals/cases/diagrams.json` now tests that a run
+  reaches for the *components* rather than SVG. Covering ER and lifecycle properly needs a new
+  fixture with a migration and a status enum; until then those two catalogue layouts are checked by
+  `diagram.sh` against the template itself and by nothing else.
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
-  the classic unreadable-artifact bug.
+  the classic unreadable-artifact bug. `evals/checks/page-invariants.sh` § 6 enforces the three
+  states and `excerpts.sh` enforces it for the excerpt tints specifically, which are the newest
+  colours and so the likeliest to be forgotten in two of the three.
+
+  Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
+  pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.bx-on` — are written
+  against tokens rather than literals precisely so they keep inverting *relative to the page* rather
+  than flipping to an unreadable combination in one theme.
 
 ## Deliberately single-context
 

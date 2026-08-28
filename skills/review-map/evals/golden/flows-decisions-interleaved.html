@@ -1,30 +1,57 @@
-<!-- Planted defect: a well-formed article.unit whose fields are interrupted by a .decisions
-     block. This is the harder half to see — the unit is there, the card is there, and the only
-     thing wrong is that .decision's border-top and its 44px number gutter now cut across the
-     field list instead of reading against the card's bottom edge. -->
+<!-- Planted defect: a well-formed unit whose fields are interrupted by a .decisions block.
+     This is the harder half to see — the .mech is there, the grid is there, and the only
+     thing wrong is that a bordered card now cuts across the field list instead of reading
+     against the grid's bottom edge. -->
 <section id="flow-a">
-  <div class="layer-head"><p class="eyebrow">Flow A</p><h2>Archiving a project</h2></div>
-  <p class="prose">Split by behaviour: archiving, and reading a list archival changes the meaning of.</p>
-  <article class="unit">
-    <div class="unit-head"><h3>Project#archive!</h3><p>Archival had to preserve historical entries.</p></div>
-    <dl class="unit-body">
-      <div class="ep-row"><dt>Implementation</dt><dd>
-        <ul><li><a class="cite" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</li></ul>
-      </dd></div>
-      <div class="ep-row"><dt>Understand</dt><dd>
-        <ul><li>The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></li></ul>
-      </dd></div>
-
-      <div class="decisions">
-        <div class="decision">
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Archiving a project</h3></div>
+  <p class="lede">Split by behaviour: archiving, and reading a list that archival changes the
+    meaning of. Each cuts through controller, model and query.</p>
+  <div class="pipe">
+    <span class="lbl">Path of a write</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span><span class="t">PATCH /api/projects/:id</span><span class="s">params permitted in the controller</span></span></li>
+      <li><span class="n"><b>2</b><i></i></span><span class="t">Project#archive!</span></li>
+    </ol>
+  </div>
+  <div class="mech">
+    <b>Project#archive!</b>
+    <p>Archival had to preserve historical entries.</p>
+  </div>
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</div>
+      <details class="excerpt excerpt--diff">
+        <summary>
+          <span class="chev">&#9656;</span>
+          <span class="ex-loc">app/models/project.rb:29-33</span>
+          <span class="tag">Changed</span>
+          <span class="ex-why">the guard the behaviour turns on</span>
+        </summary>
+        <div class="ex-body">
+<pre data-src="app/models/project.rb"><span class="l add"><span class="sig">+</span>    return false if time_entries.running.exists?</span>
+</pre>
+        </div>
+      </details>
+    </dd>
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></div>
+    </dd>
+  <div class="decisions">
+      <span class="lbl">Decisions to pay attention to</span>
+      <div class="decision">
+        <div class="dn">01</div>
+        <div>
           <h4>Archival is soft, and reversible only by hand</h4>
-          <p>archived_at is set rather than the row discarded <span class="cite">app/models/project.rb:31</span></p>
+          <div class="why">archived_at is set rather than the row discarded <span class="cite">app/models/project.rb:31</span></div>
+          <div class="trade"><span class="tag">Tradeoff</span><span>historical entries keep resolving, at the cost of no un-archive path.</span></div>
         </div>
       </div>
-
-      <div class="ep-row"><dt>Validate</dt><dd>
-        <ol><li><code>bundle exec rspec spec/models/project_spec.rb</code></li></ol>
-      </dd></div>
-    </dl>
-  </article>
+    </div>
+    <dt>Validate</dt>
+    <dd>
+      <div class="item"><code>bundle exec rspec spec/models/project_spec.rb</code></div>
+    </dd>
+  </dl>
 </section>

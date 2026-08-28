@@ -28,10 +28,10 @@ REGION=$TMP/region
 
 # One list, and it is an order with reasons. A path list in some order is not a reading
 # order, which is the whole distinction the .why span carries.
-ro_items=$(awk '/<ol class="readorder"/,/<\/ol>/' "$REGION" | grep -c '<li' || true)
-ro_why=$(awk '/<ol class="readorder"/,/<\/ol>/' "$REGION" | grep -c 'class="why"' || true)
+ro_items=$(awk '/<ol class="begin"/,/<\/ol>/' "$REGION" | grep -c '<li' || true)
+ro_why=$(awk '/<ol class="begin"/,/<\/ol>/' "$REGION" | grep -c 'class="why"' || true)
 if [ "${ro_items:-0}" -eq 0 ]; then
-  bad "no ol.readorder — section 3 is one ordered list, and this fragment has none"
+  bad "no ol.begin — section 3 is one ordered list, and this fragment has none"
 elif [ "${ro_why:-0}" -ge "${ro_items:-0}" ]; then
   ok "start here: $ro_items entr(ies), each with a why"
 else
@@ -58,7 +58,10 @@ else
 fi
 
 # Citations. Every entry names somewhere to go, and somewhere to go has a file:line.
-cites=$(grep -c 'class="cite"' "$REGION" || true)
+# A .begin entry leads with <a class="path">; .cite is accepted too, both because a
+# tier-4 run renders the citation as plain text in a span.cite and because a page built
+# before the .begin list used .cite throughout.
+cites=$(grep -Ec 'class="cite"|class="path"' "$REGION" || true)
 if [ "${ro_items:-0}" -gt 0 ] && [ "${cites:-0}" -lt 1 ]; then
   bad "section 3 has $ro_items entr(ies) and no citation at all"
 elif [ "${ro_items:-0}" -gt 0 ]; then

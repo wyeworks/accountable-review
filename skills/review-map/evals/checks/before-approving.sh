@@ -30,7 +30,17 @@ REGION=$TMP/region
 
 # The cap. Five forces the questions to be the ones that join things the page
 # established separately.
-cp_items=$(awk '/<ol class="firstlook"/,/<\/ol>/' "$REGION" | grep -c '<li' || true)
+# The checkpoint is a grid of inverted tiles, so its questions are <div>s inside
+# .checkpoint rather than <li>s. ol.firstlook is still counted so a page built before
+# the tiles keeps being checked rather than silently skipped.
+cp_items=$(awk '/class="checkpoint"/{f=1} f&&/<\/div>[[:space:]]*$/&&d==0{exit} f{print}' "$REGION" \
+  | grep -c '<div><b>' || true)
+if [ "${cp_items:-0}" -eq 0 ]; then
+  cp_items=$(awk '/class="checkpoint"/,/<\/section/' "$REGION" | grep -c '<b>' || true)
+fi
+if [ "${cp_items:-0}" -eq 0 ]; then
+  cp_items=$(awk '/<ol class="firstlook"/,/<\/ol>/' "$REGION" | grep -c '<li' || true)
+fi
 if [ "${cp_items:-0}" -eq 0 ]; then
   maybe "no comprehension checkpoint found inside 'Before approving'"
 elif [ "${cp_items:-0}" -le 5 ]; then
@@ -42,7 +52,7 @@ fi
 # Author questions, phrased as questions. Counting question marks against list items is
 # crude on purpose: it is a WARN, and a reader settles it.
 if grep -qi 'ask the author' "$REGION"; then
-  awk '/[Aa]sk the author/{f=1} f&&/<h3|<\/section/{if(seen)exit} f{print; seen=1}' "$REGION" > "$TMP/ask"
+  awk '/[Aa]sk the author/{f=1} f&&/<h3|act-group|<\/section/{if(seen)exit} f{print; seen=1}' "$REGION" > "$TMP/ask"
   a_items=$(grep -c '<li' "$TMP/ask" || true)
   a_marks=$(grep -c '?' "$TMP/ask" || true)
   if [ "${a_items:-0}" -eq 0 ]; then
