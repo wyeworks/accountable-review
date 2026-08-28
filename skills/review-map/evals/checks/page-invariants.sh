@@ -60,7 +60,7 @@ if [ -z "$REPO" ]; then
 else
   unpushed=$(git -C "$REPO" branch -r --contains "$HEAD_REF" 2>/dev/null || true)
   if [ -z "$unpushed" ]; then
-    if grep -Eq 'https://github\.com/[^"]*/(blob|pull)/' "$IN"; then
+    if grep -Eq 'https://github\.com/[^"]*/(blob|pull|compare)/' "$IN"; then
       bad "emits GitHub permalinks, but the head commit is on no remote — those 404"
     else
       ok "unpushed head: citations are plain text, no dead permalinks"

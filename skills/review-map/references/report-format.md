@@ -48,8 +48,9 @@ the same change through one lens, so it can point at a flow instead of re-explai
 persistence, API surface and contract no longer have sections of their own — they are covered inside
 the behaviour they serve.
 
-**Citations** — *Deep links*, the two URL forms, and *Choosing a mode*, the four-rung degradation
-ladder. Settle the mode once, in step 1 of the procedure.
+**Citations** — *Deep links*, the two URL forms and which lines each one can address, and *Choosing a
+mode*, the four-rung degradation ladder. Settle the rung once, in step 1 of the procedure; the form
+then follows the line, not the run's taste.
 
 ---
 
@@ -786,31 +787,54 @@ never a criticism of the author for bundling.
 
 ## Deep links
 
-Every `file:line` should be clickable, so a reader goes from claim to source in one click.
+Every `file:line` should be clickable, so a reader goes from claim to source in one click. There are
+two URL forms, and **which one a citation uses is not a preference — it follows from the line.** A
+line the diff contains links into the diff. A line the diff does not contain links into the file.
 
-**Primary form — blob permalink at the head SHA:**
-
-```
-https://github.com/{owner}/{repo}/blob/{head_sha}/{path}#L{line}
-https://github.com/{owner}/{repo}/blob/{head_sha}/{path}#L{start}-L{end}
-```
-
-Pin the SHA rather than the branch, so links stay correct after later pushes.
-
-This is the primary form, not the diff anchor, for a reason: **many of the most valuable citations in
-this page point at lines that are not in the diff at all** — the *affected but unchanged* field
-consists of nothing else. A diff anchor cannot address an unchanged line. Blob permalinks mean every
-citation links, not only the ones that happen to fall inside a hunk.
-
-**Secondary form — the Files-tab anchor**, for lines genuinely inside the diff:
+**Primary form — the diff anchor, for any line inside the diff:**
 
 ```
 https://github.com/{owner}/{repo}/pull/{n}/files#diff-{sha256(path)}R{line}
+https://github.com/{owner}/{repo}/pull/{n}/files#diff-{sha256(path)}L{line}
 ```
 
-The hash is the SHA-256 of the file path as it appears in the diff; `R` and `L` select the right and
-left side. Worth using in the coverage ledger and wherever landing in review context beats landing in
-the file.
+The fragment is the SHA-256 of the path *as the diff spells it* — for a rename, the new path. `R`
+selects the right side of the hunk (the line after the change), `L` the left (the line before).
+
+Land the reviewer where the reviewing happens. A blob link takes them out of the diff and into the
+file at head, where the change is invisible: the new code is there, but nothing marks what it
+replaced, the hunk around it is gone, and so are the comment box and the *viewed* checkbox they are
+working through. A diff anchor puts the cited line in front of them with its before and after side by
+side, on the page they were going to type their comments into anyway. So every citation that *can* be
+a diff anchor is one.
+
+**One limitation, and it degrades gently.** GitHub loads a large Files tab incrementally and keeps
+very large or generated files behind *Load diff*, so an anchor into one of those lands on the right
+diff but not on the line. That is a worse landing, not a dead link, and it is no reason to go back to
+blob links — it is a reason the collapsed excerpt beside the claim keeps earning its place.
+
+**Second form — the blob permalink, for the lines a diff cannot address:**
+
+```
+https://github.com/{owner}/{repo}/blob/{sha}/{path}#L{line}
+https://github.com/{owner}/{repo}/blob/{sha}/{path}#L{start}-L{end}
+```
+
+This is not a fallback for when the first form is unavailable. It is the only form that can address
+two kinds of line this page cites constantly, and both of them are the product:
+
+- **Unchanged code — pin the head SHA.** A diff anchor addresses a line in a hunk and nothing else,
+  and the *affected but unchanged* field consists of nothing but lines outside every hunk. No diff
+  view can point at them, which is exactly why they are the part of the page a reviewer cannot get
+  anywhere else.
+- **Code as it was — pin the base SHA.** A line this change deleted, or a file it removed, does not
+  exist at head: a blob permalink there 404s, or worse resolves to an unrelated line that happens to
+  carry that number. Inside the diff, the `L` anchor covers this and is better. Outside it — when a
+  sentence explains how a file behaved before, and the file is not in the diff — pin the base SHA and
+  **say in the sentence that the citation is pre-change**, because a line number that is only true at
+  some other commit is one the reader mis-reads without ever noticing.
+
+Pin a SHA rather than a branch in either form, so links stay correct after later pushes.
 
 ### Choosing a mode — check reachability first
 
@@ -826,12 +850,19 @@ git branch -r --contains <HEAD_SHA>     # empty output ⇒ the commit is on no r
 
 | # | Condition | Citations render as |
 |---|---|---|
-| 1 | GitHub PR exists | Diff anchors in the ledger, blob permalinks elsewhere |
-| 2 | No PR, GitHub remote, **head SHA reachable on a remote** | Blob permalinks at the head SHA |
+| 1 | GitHub PR exists | Diff anchors into `pull/{n}/files` for lines in the diff, blob permalinks for the rest |
+| 2 | No PR, GitHub remote, **head SHA reachable on a remote** | Diff anchors into `compare/{base}...{head}` if the base SHA is reachable too, blob permalinks for the rest |
 | 3 | GitHub remote, **head SHA not pushed** | Plain text, plus the note below |
 | 4 | No GitHub remote, or no remote at all | Plain text |
 
-Resolve remote, PR, and reachability once up front and pick one mode; never decide per citation.
+Resolve remote, PR, and reachability once up front and pick one rung; never re-decide the rung per
+citation. Choosing *between the two forms* is different, and is decided per citation because it is
+not a judgement: ask whether the line is in a hunk.
+
+Rung 2 has no PR page, but a pushed head still has a diff page —
+`https://github.com/{owner}/{repo}/compare/{base_sha}...{head_sha}`, whose line anchors take the same
+`#diff-{sha256(path)}R{line}` form. It needs both SHAs on the remote, so check the base the same way
+you checked the head; if it is not there, rung 2 is blob permalinks throughout.
 
 At rung 3, say so once in the masthead rather than leaving the reader wondering why nothing is
 clickable — one line is enough: *"Citations are plain text: this branch is not pushed, so there is no
@@ -843,6 +874,7 @@ is the only way a reader can follow a citation without leaving the page — so o
 excerpt budget goes *up*, not down. This is the opposite of the instinct to do less when the tooling
 gives you less. See § *Source excerpts*.
 
-A force-push after publishing can also orphan a rung-1 or rung-2 SHA. GitHub keeps orphaned commits
-reachable by SHA for a while, so this degrades slowly rather than breaking at once — but it is a
-reason to prefer republishing the page over treating an old URL as permanent.
+A force-push after publishing can also orphan a rung-1 or rung-2 SHA, and it rewrites the diff a
+rung-1 anchor points into: the fragment survives, the line numbers behind it may not. GitHub keeps
+orphaned commits reachable by SHA for a while, so this degrades slowly rather than breaking at once —
+but it is a reason to prefer republishing the page over treating an old URL as permanent.

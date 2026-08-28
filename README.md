@@ -203,10 +203,13 @@ usually more accurate than a stale document anyway.
 The frontend sections need both sides in the diff. In a repository with no client, or a PR that does
 not touch one, they are omitted rather than filled in.
 
-`gh` is used when present, for PR metadata and deep links. Without it, or without a PR, the skill
-falls back to the local branch and still links citations as long as the commit is pushed. On an
-unpushed branch it degrades to plain text rather than emitting permalinks that would 404, and says
-so in the page.
+`gh` is used when present, for PR metadata and deep links. A citation to a changed line lands on the
+PR's diff page, on that line — the page the reviewer is already working in, where what the line
+replaced is still visible. A citation to code the change did not touch cannot: no diff view can
+address a line outside a hunk, so those land in the file at a pinned commit, which is also how the
+page cites code as it was before the change. Without `gh`, or without a PR, the skill falls back to
+the local branch and still links citations as long as the commit is pushed. On an unpushed branch it
+degrades to plain text rather than emitting permalinks that would 404, and says so in the page.
 
 ## Layout
 

@@ -479,10 +479,9 @@ commit "$F3" "Fix typo in README"
 # destinations rather than a JSON contract. Seven files: four production lines
 # and 102 lines of test.
 #
-# The branch is pushed to a local bare repo before the remote URL is rewritten to
-# a GitHub one, so the head SHA is reachable on a remote-tracking ref and `gh`
-# finds no PR — deep-link rung 2, blob permalinks at the head SHA. F1 is rung 4
-# and F2 rung 3; this is the rest of the ladder a page can reach with no network.
+# A GitHub remote is configured and nothing is pushed, so this is deep-link rung 3,
+# same as F2 — see the long note beside the remote below for why an offline fixture
+# cannot honestly reach rung 2, let alone the diff-page anchors of rung 1.
 #
 # The bug is a name collision. "Steward" means three separate things:
 # `users.account_type` is an enum column, an accepted `InstituteRole` is a row in

@@ -55,14 +55,21 @@ how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
   substantial enough that the page would be misleading, stop and say why instead.
 - If there is a GitHub PR, capture `owner`, `repo`, number, head SHA, title, author, body via
   `gh pr view <target> --json number,title,author,body,headRefOid,headRefName,baseRefName,url`.
-  Record the head SHA — deep links depend on it.
+  The number and the head SHA are what the links are built from.
+- **Record the SHA the diff's left side comes from** as well — `git merge-base <BASE> HEAD` — with or
+  without a PR. Deep links need both ends: head for a line that still exists, the left side for a line
+  the change removed or for behaviour cited as it was. This is the one legitimate merge-base here, a
+  permalink needs a commit rather than a range; keep using `BASE...HEAD` for every diff.
 - If `gh` is missing or there is no PR, continue anyway with the local branch. This is a normal
   case, not an error.
 - **Fix the deep-link mode now, not at render time.** Check whether the head SHA is even reachable
   on a remote — `git branch -r --contains <HEAD_SHA>`, where empty output means it was never pushed
   and every permalink to it would 404. Unpushed branches and worktrees are among the most common
-  targets for this skill, so expect this. Pick one mode from the ladder in
-  `references/report-format.md` and use it for every citation.
+  targets for this skill, so expect this. Pick one rung from the ladder in
+  `references/report-format.md` and hold it for every citation. The rung decides whether anything is
+  clickable; it does not decide the form — inside a rung, a line in the diff links to the diff page
+  and a line outside it links to a blob. At rung 2 there is no PR page, so check the base SHA for
+  reachability too: without it there is no `compare` view to anchor into.
 
 ## 2. Discover the project
 
@@ -327,9 +334,12 @@ Everything else about writing holds at every stage:
   and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and
   they live there only — an earlier version of this bullet restated the cap in slightly different
   words and the two drifted apart within one run.
-- Render citations in the mode chosen in step 1. Prefer blob permalinks over diff anchors where
-  linking is possible: most of the best citations in this page point at *unchanged* lines, which a
-  diff anchor cannot address at all.
+- Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
+  the diff contains gets the PR diff anchor, so the reviewer lands in the review they are already
+  working in rather than in the file at head, where nothing marks what the line replaced. A line the
+  diff does not contain gets a blob permalink at the SHA that line actually exists at — head for
+  unchanged code, base for code the change removed or for behaviour described as it was. Both forms,
+  and the rung table, are in `references/report-format.md` § *Deep links*.
 - Write the file to a scratch location, not into the repo. The page must never become part of the
   diff it describes.
 
@@ -359,14 +369,17 @@ republish — one link, mentioned once, then a note when it is complete.
   cell the gate reads:
 
   ```sh
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --pr owner/repo#N        # rung 1
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --blob owner/repo@sha    # rung 2
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD                          # rungs 3 and 4
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --pr owner/repo#N                 # rung 1
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --compare owner/repo@base...head  # rung 2
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --blob owner/repo@sha             # rung 2, base unpushed
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD                                   # rungs 3 and 4
   ```
 
-  Rung 1 wants the Files-tab anchor, whose fragment is the SHA-256 of the path — `--pr` computes it.
-  A run without that flag hand-inserted seven such anchors into the very `<td>` that carries
-  `data-path`, which is typing inside the one cell this script exists to keep untyped.
+  Rungs 1 and 2 both land on a diff page, whose fragment is the SHA-256 of the path — `--pr` and
+  `--compare` compute it. A row names a file, so these link the file, not a line: the row is the
+  reviewer's way into the diff. A run without the flag hand-inserted seven such anchors into the very
+  `<td>` that carries `data-path`, which is typing inside the one cell this script exists to keep
+  untyped.
 
   This exists because the gate below compares sets, and a hand-typed hundred-path ledger fails it for
   boring reasons: one truncation, one stale row after a rebase. Generating the rows makes the gate a

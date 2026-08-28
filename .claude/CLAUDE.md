@@ -160,6 +160,17 @@ Editing one of these means checking the others still agree.
 - **Deep-link mode is chosen once**, in step 1, from the four-rung ladder in `report-format.md` —
   driven by whether the head SHA is reachable on a remote. Unpushed branches are the common case, and
   the correct behaviour there is plain text, not a permalink that 404s.
+
+  The rung decides whether anything is clickable. It does **not** decide the form, and the form is not
+  a taste: a line inside the diff links to the diff page — `pull/{n}/files` at rung 1,
+  `compare/{base}...{head}` at rung 2 — because that is the page the reviewer is working in and a blob
+  at head shows the new line with no trace of what it replaced. A line outside the diff links to a
+  blob at the commit that line exists at: head for unchanged code, the diff's left side for code the
+  change removed or for behaviour cited as it was. Neither form is the fallback; *affected but
+  unchanged* is the page's product and no diff view can address it. Three files have to agree —
+  `report-format.md` § *Deep links* owns both forms and the ladder, `SKILL.md` steps 1, 9 and 10 point
+  at them and record both SHAs, and `ledger-rows.sh` takes `--pr`, `--compare` or `--blob` so a run
+  never types an href into the `<td>` the coverage gate reads.
 - **Seven sections, and each fact has one home.** The format is deliberately *not* one section per
   architectural layer. It was, and that guaranteed restatement: one behaviour crosses persistence, the
   API, the boundary and its cohort, so it got described four times, and three further parts existed
