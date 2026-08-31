@@ -349,8 +349,13 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   invariants, uncertainty and validation steps. It never carries a verdict. `/code-review` is a
   different tool answering a different question.
 - It never posts to GitHub or anywhere outside the artifact.
-- It never writes the page into the repository under review — scratch location only.
-- It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes.
+- It never writes the page into the repository under review — a work directory under `$TMPDIR` only,
+  **derived** in step 1 from the repo and the target rather than chosen per run.
+- It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes. That is
+  the reason the path is derived and not picked: a session-scoped scratch directory is a different
+  directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
+  had no rule found nine calls and seventy seconds spent re-establishing a path and moving excerpt
+  files that had been written somewhere else first.
 - It assumes only Claude Code plus a git repo containing a Rails app. Everything else — Rails root
   location, RSpec vs Minitest, API-only vs server-rendered, auth library, whether a frontend exists
   and where its client and types live — is discovered, never assumed. Adding an assumption about

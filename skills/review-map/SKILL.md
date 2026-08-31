@@ -62,6 +62,21 @@ how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
   permalink needs a commit rather than a range; keep using `BASE...HEAD` for every diff.
 - If `gh` is missing or there is no PR, continue anyway with the local branch. This is a normal
   case, not an error.
+- **Fix the work directory now, and derive it rather than choosing it.** Everything this run writes
+  goes in one place, named after the target so a re-run recomputes it instead of remembering it:
+
+  ```sh
+  W="${TMPDIR:-/tmp}/review-map/<repo>-pr-<N>"      # a PR
+  W="${TMPDIR:-/tmp}/review-map/<repo>-<branch>"    # no PR; / in the branch becomes -
+  mkdir -p "$W"                                     # the page is $W/page.html
+  ```
+
+  Derived, not invented, because step 9 republishes to the same file path and step 10 reuses it on a
+  re-run — one PR, one URL, across pushes as well as stages — and a session-scoped scratch directory
+  cannot satisfy that: the next session gets a different one. Export `W` once and use it in every
+  later command. A run that instead picked a path per command spent nine calls and seventy seconds
+  re-establishing it while splicing excerpt files it had first written somewhere else and then had
+  to move.
 - **Fix the deep-link mode now, not at render time.** Check whether the head SHA is even reachable
   on a remote — `git branch -r --contains <HEAD_SHA>`, where empty output means it was never pushed
   and every permalink to it would 404. Unpushed branches and worktrees are among the most common
@@ -348,8 +363,9 @@ Everything else about writing holds at every stage:
   diff does not contain gets a blob permalink at the SHA that line actually exists at — head for
   unchanged code, base for code the change removed or for behaviour described as it was. Both forms,
   and the rung table, are in `references/report-format.md` § *Deep links*.
-- Write the file to a scratch location, not into the repo. The page must never become part of the
-  diff it describes.
+- Write the page to `$W/page.html` — the work directory derived in step 1 — and never into the repo.
+  The page must never become part of the diff it describes. Excerpt fragments go in the same
+  directory, so splicing them in is a path away rather than a move.
 
 Tell the user the URL when stage 1 goes out, say it will fill in, and do not repeat it on every
 republish — one link, mentioned once, then a note when it is complete.
@@ -421,8 +437,9 @@ republish — one link, mentioned once, then a note when it is complete.
 - Publish the final state to the same path. Report that it is complete, what the change does in two or
   three lines, and anything you could not verify. Mention the project's own review command if it has
   one.
-- On a re-run for the same PR, use the **same file path again** so the URL survives across pushes as
-  well as across stages. One PR, one link, however many times this runs.
+- On a re-run for the same PR, the path is the **same one step 1 derives** — that derivation is what
+  makes the URL survive across pushes as well as across stages. One PR, one link, however many times
+  this runs, without having to remember where the last run put it.
 
 ## When a run stops early
 
