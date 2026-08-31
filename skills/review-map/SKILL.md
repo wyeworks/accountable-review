@@ -361,6 +361,10 @@ Everything else about writing holds at every stage:
   end. Retyping is how a generated quotation quietly becomes a typed one — the failure this bullet
   exists to prevent — and it pays for every excerpt twice in generated tokens.
 
+  **Generate all of them in one call.** The excerpts do not depend on each other, so one call with a
+  line per excerpt costs one round trip where seven calls cost seven. A run that did it one at a time
+  spent ten requests on work worth two.
+
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
   citation that is **load-bearing for a decision the reviewer has to make**, not by a citation merely

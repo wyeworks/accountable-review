@@ -20,8 +20,11 @@
 #   streaming        per requestId, ts(last block) - ts(first block)
 #   before-first-token   ts(first block) - ts(previous event)
 #   model            streaming + before-first-token
-# On that run: 6% tool, 36% streaming, 58% waiting for a request to start producing, at ~182k
-# context per request. So the levers are turn count and context size, not faster scripts.
+# On that run: 6% tool, 36% streaming, 58% before a request produced its first block. Most of that
+# last part is thinking, not prefill — requests over 2000 thinking tokens averaged 56.9s to first
+# block, requests under 200 averaged 2.8s. Context barely enters it: at near-zero thinking, 77k of
+# context cost 2.3s and 274k cost 3.1s. So ~2.5s per request is FIXED, thinking is the product, and
+# the only lever is fewer requests — 95 of them paid ~240s of that fixed cost for nothing.
 #
 # What it will NOT do is reconstruct the ten steps, because the transcript does not carry a
 # position in a procedure. See `bucket()` below and evals/README.md § "Where the time goes".

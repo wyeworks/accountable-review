@@ -66,10 +66,13 @@ test, the judge is the measurement, and a cheap measurement is not a faster loop
 When the question is where the minutes went rather than whether the page was right,
 `evals/profile.sh` reads the transcript of a run — an eval repetition or a real PR — and splits its
 wall clock into tool execution, streaming, and the wait before each request produces its first token.
-On the run it was built against, that last part was 58% of the total and tool execution was 6%, which
-is the argument for spending an iteration on turn count and context size rather than on anything the
-harness runs. Two `Write`s of the page accounted for 329 of the 457 seconds of streaming. It infers
-nothing the transcript does not carry: publish stages are mechanical, the ten steps are **not** —
+On the run it was built against, that last part was 58% of the total and tool execution was 6%. Split
+that 58% before concluding anything from it: most of it is thinking, and only about **2.5s per request
+is fixed** — 95 requests paid roughly 240s of that for nothing, while tripling the context cost 0.8s.
+So the one lever is **fewer requests**, which is why § *Fewer turns, same work* and its pointers in
+steps 2, 5 and 9 exist, and why context reduction is not worth prose. Two `Write`s of the page
+accounted for 329 of the 457 seconds of streaming. It infers nothing the transcript does not carry:
+publish stages are mechanical, the ten steps are **not** —
 `ledger-rows.sh` fires at minute four and again at minute thirteen — and steps 4, 6 and 8 leave no
 trace at all, so they get no row. Read `evals/README.md` § *Where the time goes* and § *Profiling one
 run* before quoting one of its numbers.

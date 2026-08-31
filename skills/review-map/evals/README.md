@@ -144,9 +144,23 @@ skill is instrumented, and it works on runs that happened before it existed:
 It splits wall clock four ways, and **the split is the finding.** One whole-page run against a real
 39-file PR: **1284.7s, of which 1203.4s was the model and 81.2s was tool execution — and inside the
 model share, 457.2s was streaming output while 746.2s was spent before a request produced its first
-token.** 95 requests carrying an average 182k-token context. So the levers are the number of requests
-and the size of the context each one carries. Making the harness faster cannot buy back more than six
-percent of a run, and that six percent is the part already measured in tenths of a second.
+token.** 95 requests carrying an average 182k-token context. Making the harness faster cannot buy back
+more than six percent of a run, and that six percent is the part already measured in tenths of a
+second.
+
+**Break that 746s down before drawing a conclusion from it, because "before first token" sounds like
+prefill and mostly is not.** Hold thinking near zero and vary context: 77k costs 2.3s, 146k costs
+2.8s, 274k costs 3.1s. Tripling the context buys 0.8s. Now hold context and vary thinking: requests
+over 2000 thinking tokens averaged **56.9s** to their first block, requests under 200 averaged
+**2.8s**. So the 746s is one small fixed cost plus a lot of reasoning:
+
+| | |
+|---|---|
+| ~2.5s per request | fixed — queue and first-token latency. 95 requests ≈ **240s, 19% of the run, buying nothing** |
+| the remainder | thinking, which is the product and not overhead |
+
+Which leaves exactly one lever, and it is neither context nor scripts: **fewer requests.** An earlier
+version of this section named context size as a second lever; the numbers above are what retired it.
 
 The other reading from the same run: the slowest *tool call* was 4.5s (`git fetch`), while the slowest
 *request* was 264.5s — 35k output tokens streamed into one `Write` of the page. **The request is the
@@ -197,6 +211,48 @@ Eval runs need `--all`, and `--rundir` implies it. The driver inlines the sectio
 of invoking the skill, so those transcripts carry no `attributionSkill` and there is nothing to filter
 on — which is also why `--all` is never the default: with the filter off, neighbouring work in the
 same session is counted.
+
+### What the loop said about batching, and why almost none of it shipped
+
+Worth keeping as a worked example, because the profile pointed at a real inefficiency and the obvious
+fix still failed the measurement twice.
+
+The profile found that a run issued **exactly one tool call per turn, across 95 turns, never two** —
+while about 2.5s of every turn is fixed cost, so roughly 240s of that run was per-turn overhead. Claude
+Code runs several `tool_use` blocks from one turn concurrently, so batching looked like free money.
+
+It was not. Three runs per wording, one fixture, one model:
+
+| `SKILL.md` prose | n | turns | model | quality |
+|---|---|---|---|---|
+| none | 1 | 9 | 114s | clean |
+| a "probe wide" section, plus pointers in steps 2 and 5 | 3 | 15 | 142s | clean |
+| the same, reworded to "consolidation, not volume" | 3 | 21 | 171s | clean |
+| **only the narrow step-9 line, for excerpts** | **3** | **11** | **107s** | **clean** |
+
+Quality never moved — 0.0 fail/run and 0.0 warn/run throughout. Turns moved the wrong way, twice, and
+the *better-written* version was worse. Batching did start happening (up to five blocks in one turn,
+where before there were none), so the instruction was followed; it simply cost more than it saved.
+
+Two readings, and the second is the one to act on. The first wording said "running twenty probes you
+may not need is cheaper than four adaptive rounds of five", which literally instructs a reader to probe
+more — and recorded searches duly rose. But rewording it to lead with consolidation made turns *worse*,
+which that explanation does not cover. What is left is that a section about turn efficiency in the
+always-loaded file makes a run spend turns on turn efficiency, and a section eval has almost nothing to
+batch, so the cost lands with none of the benefit.
+
+So only the step-9 line survived, where the fan-out is real and named — the excerpts of one page are
+independent by construction, and one run spent ten requests generating seven of them. It measures as
+neutral, not as a win: 107s over three runs is the lowest figure recorded here, but the 9-turn baseline
+is a single run and the honest reading of 11 against 9-10 is "no difference".
+
+**The limit this ran into is the instrument, and it is worth stating before anyone re-runs the
+experiment.** A section eval produces one fragment from the frozen upstream. It does no project
+discovery and no tracing across a real diff, so the two phases with a genuine fan-out are exactly the
+ones it cannot exercise — it can detect the cost of the prose and never the benefit. Deciding whether
+batching helps needs a whole-page run against a fixture, profiled. Until that exists, the general
+version stays out: on the only evidence available it is a regression, and "the benefit is somewhere the
+harness cannot see" is an argument, not a measurement.
 
 ## Running a page
 
