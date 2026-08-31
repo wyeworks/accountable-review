@@ -37,6 +37,7 @@ SKILL_DIR=$(dirname "$HERE")
 PLUGIN_ROOT=$(dirname "$(dirname "$SKILL_DIR")")
 
 CASE=; N=1; ONLY_FIXTURE=; VISUAL=; BASE=HEAD~1; JUDGE=; JOBS=1
+LEVEL=
 MODEL=${EVAL_MODEL:-}; EFFORT=${EVAL_EFFORT:-}
 JUDGE_MODEL=${EVAL_JUDGE_MODEL:-}; JUDGE_EFFORT=${EVAL_JUDGE_EFFORT:-}
 while [ $# -gt 0 ]; do
@@ -44,6 +45,7 @@ while [ $# -gt 0 ]; do
     -n)             N=$2; shift 2 ;;
     -j|--jobs)      JOBS=$2; shift 2 ;;
     --fixture)      ONLY_FIXTURE=$2; shift 2 ;;
+    --level)        LEVEL=$2; shift 2 ;;
     --base)         BASE=$2; shift 2 ;;
     --model)        MODEL=$2; shift 2 ;;
     --effort)       EFFORT=$2; shift 2 ;;
@@ -59,7 +61,8 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$CASE" ]; then
-  echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--visual] [--judge]" >&2
+  echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--level brief|full]" >&2
+  echo "                     [--visual] [--judge]" >&2
   echo "                     [--fast] [--model M] [--effort L] [--judge-model M] [--judge-effort L]" >&2
   echo "cases:  $(ls "$HERE/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
   exit 2
@@ -71,6 +74,15 @@ command -v claude >/dev/null || { echo "run.sh needs claude on PATH" >&2; exit 2
 
 DRIVER=$HERE/$(jq -r .produced_by "$CASEFILE")
 SCOPE=$(jq -r .scope "$CASEFILE")
+# The detail level a case is written for. A case file that declares none means `full`, which is
+# what every case written before levels existed meant — and the reason this defaults rather than
+# being required is that a silent reinterpretation of the existing corpus would make old result
+# lines incomparable with new ones. --level on the command line overrides the case.
+[ -n "$LEVEL" ] || LEVEL=$(jq -r '.level // "full"' "$CASEFILE")
+case $LEVEL in
+  brief|full) ;;
+  *) echo "unknown level: $LEVEL (brief | full)" >&2; exit 2 ;;
+esac
 [ -r "$DRIVER" ] || { echo "driver missing: $DRIVER" >&2; exit 2; }
 
 FIXTURES=${REVIEW_MAP_FIXTURES:-${TMPDIR:-/tmp}/review-map-fixtures}
@@ -127,10 +139,11 @@ one_run() {
       -e "s|{{FIXTURE_DIR}}|$FIXTURE_DIR|g" \
       -e "s|{{FROZEN}}|$HERE/frozen/$rfixture|g" \
       -e "s|{{BASE}}|$BASE|g" \
+      -e "s|{{LEVEL}}|$LEVEL|g" \
       -e "s|{{OUT}}|$OUT|g" \
       "$DRIVER" > "$RUNDIR/prompt.md"
 
-  echo "· $rid  run $rnum/$N  $MODEL_TAG/$EFFORT_TAG  → $RUNDIR"
+  echo "· $rid  run $rnum/$N  $LEVEL  $MODEL_TAG/$EFFORT_TAG  → $RUNDIR"
   started=$(date +%s)
   set +e
   # The prompt goes in on STDIN, not as an argument. --add-dir is variadic, so a trailing
@@ -155,7 +168,7 @@ one_run() {
     # --repo is what lets the checks that need the repository actually run on a fragment:
     # searches.sh re-runs the recorded searches inside it, and page-invariants.sh asks git
     # whether the head is pushed. Without it both skip, and a skip reads as verified.
-    "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" --repo "$FIXTURE_DIR" $VISUAL > "$RUNDIR/check.txt" 2>&1
+    "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" --repo "$FIXTURE_DIR" --level "$LEVEL" $VISUAL > "$RUNDIR/check.txt" 2>&1
     check_exit=$?
     set -e
   else
@@ -205,11 +218,12 @@ one_run() {
 
   # judged=false is why the judged counts are a separate flag rather than three zeroes: a run
   # nobody judged and a run that scored zero must not aggregate the same way.
-  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"session":"%s","requests":%d,"model_seconds":%s,"tool_seconds":%s,"ttft_seconds":%s,"stream_seconds":%s,"output_tokens":%d,"thinking_tokens":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}\n' \
+  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"session":"%s","requests":%d,"model_seconds":%s,"tool_seconds":%s,"ttft_seconds":%s,"stream_seconds":%s,"output_tokens":%d,"thinking_tokens":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"level":"%s","model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}
+' \
     "$CASE" "$rfixture" "$rnum" "$stamp" "$p" "$f" "$w" "$s" "$check_exit" "$agent_exit" "$seconds" \
     "$rsession" "$preq" "$pmodel" "$ptool" "$pttft" "$pstream" "$pout" "$pthink" \
     "$written" "$judged" "$jp" "$jf" "$ju" \
-    "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" \
+    "$LEVEL" "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" \
     "$SKILL_SHA" "$DIRTY" "$DRIVER_SHA" "$OUT" >> "$HERE/results/$CASE.jsonl"
 
   # One printf, so a parallel run's result arrives as one piece instead of interleaved with

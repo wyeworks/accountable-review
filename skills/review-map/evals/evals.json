@@ -1,11 +1,12 @@
 {
   "skill_name": "review-map",
-  "notes": "PAGE cases: one whole run each, graded on what only a whole page can carry — completeness, one canonical home, the page-wide excerpt budget, the build state, the seven-section shape, and never a verdict. Everything internal to a single section moved to cases/<slug>.json, where it is graded on a fragment produced from frozen upstream; the `section_cases` field on each case says which ones own what. Run the agent with its working directory inside the fixture — the prompts are written the way a user would say them from there. `fixture` and `check` are additions to the skill-creator schema: `fixture` names the repo, `check` is the mechanical half, runnable as one command.",
+  "notes": "PAGE cases: one whole run each, graded on what only a whole page can carry — completeness, one canonical home, the page-wide excerpt budget, the build state, the section shape the run's detail level calls for, and never a verdict. Everything internal to a single section moved to cases/<slug>.json, where it is graded on a fragment produced from frozen upstream; the `section_cases` field on each case says which ones own what. Run the agent with its working directory inside the fixture — the prompts are written the way a user would say them from there. `fixture`, `check` and `level` are additions to the skill-creator schema: `fixture` names the repo, `check` is the mechanical half runnable as one command, and `level` is the skill's detail level the prompt asks for. A case with no `level` means `full`; cases 1 to 5 name it explicitly because their prompts do, and because the default level changed under them — a prompt that asks for nothing now gets `brief`, so a case wanting seven sections has to say so in the prompt as a user would.",
   "evals": [
     {
       "id": 1,
       "fixture": "rails-only-small",
-      "prompt": "I need to review the add-project-archival branch before standup tomorrow and I've never touched this part of the app. Can you give me something that explains what it actually changes?",
+      "level": "full",
+      "prompt": "I need to review the add-project-archival branch before standup tomorrow and I've never touched this part of the app. Can you give me something that explains what it actually changes? Give me the full version, not the short one — I'd rather read too much than miss something.",
       "expected_output": "A published review map for the five-file diff. Citations are plain text because nothing is pushed to a remote. No boundary material anywhere, because there is no client — and no section for it to be missing from. The page names app/queries/active_projects.rb — which is not in the diff — as affected by archival, and names the new slug uniqueness validation as enforced in Rails with no unique index behind it.",
       "files": [],
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
@@ -22,7 +23,7 @@
         "No sentence grades the change, scores its risk, or recommends approving it",
         "Judged field by field, not page-wide: every field carrying an excerpt still holds its own file:line outside the collapsed block. A citation that appears elsewhere on the page does not rescue a field whose only one is inside the excerpt",
         "Excerpts are earned by citations that are load-bearing for a decision, not by every affected-but-unchanged entry — a five-file diff should not produce one per cohort automatically",
-        "Seven sections, not twelve: persistence and any endpoint contract appear inside the behaviour flow they serve, not as sections of their own",
+        "Seven sections, not twelve, because this prompt asked for the full level: persistence and any endpoint contract appear inside the behaviour flow they serve, not as sections of their own",
         "No fact is explained twice. A finding is explained inside the flow that owns it; Start here names it and links to that flow, and the blast radius points at it in a clause — neither re-explains it, repeats its citation or repeats its tier",
         "The comprehension checkpoint holds at most five questions, and none is answerable by copying a single sentence from earlier in the page"
       ]
@@ -30,7 +31,8 @@
     {
       "id": 2,
       "fixture": "monorepo-contract",
-      "prompt": "The project-archival branch touches both api and web. Before I review it I want to see how the two sides line up — is the frontend actually handling everything the API can now return?",
+      "level": "full",
+      "prompt": "The project-archival branch touches both api and web. Before I review it I want to see how the two sides line up — is the frontend actually handling everything the API can now return? Go deep on it, all seven sections.",
       "expected_output": "A review map that follows archived_at from ProjectSerializer through the JSON to the TypeScript type inside the flow that owns it, and names the things the diff does not state: the wire key is archived_at while the client type declares archivedAt with no transform between them, and the serializer emits null against that non-null declaration; the archive endpoint can return 422 and nothing in web/ handles it; and web/src/queries/selectableProjects.ts, which is not in the diff, filters the project list without knowing about archival.",
       "files": [],
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'selectableProjects' --expect 'archivedAt'",
@@ -47,12 +49,13 @@
         "Where a flow field and the start-here entry pointing at it rest on the same citation, the flow carries the excerpt and the other cites in prose, and the page does not quote a neighbouring range to dodge the duplication",
         "The nullable/non-null mismatch, the unhandled 422 and selectableProjects each have exactly one canonical explanation; later mentions are one-sentence references",
         "Where prose would narrate what a guard or serializer does, the page shows the lines and states the implication instead",
-        "Deploy ordering appears in section 5, because the two sides ship separately — and it names a safe order rather than observing that ordering matters"
+        "Deploy ordering appears in section 5, because the two sides ship separately and this prompt asked for the full level — and it names a safe order rather than observing that ordering matters"
       ]
     },
     {
       "id": 3,
       "fixture": "trivial",
+      "level": "brief",
       "prompt": "can you do a review map for the fix-typo branch",
       "expected_output": "No published page. The skill says the diff is a one-line typo fix in the README, that a review map would be ceremony, and offers to stop.",
       "files": [],
@@ -67,16 +70,19 @@
     {
       "id": 4,
       "fixture": "monorepo-contract",
+      "level": "brief",
       "prompt": "I've got a review slot on project-archival in about twenty minutes and I don't know the branch at all. Can you get me oriented?",
       "expected_output": "Staged delivery, which is the default and is not requested here. A URL arrives early, carrying the masthead and the goal, a build banner, and pending markers for the parts this diff earns. It fills in at that same URL. The final state carries no banner and no pending markers, and the coverage gate passes.",
       "files": [],
       "check": "snapshot the page file right after the first publish, then run both: evals/check.sh --draft --page <stage-1 snapshot> --repo <fixture> --base HEAD~1 ; evals/check.sh --final --page <final page> --repo <fixture> --base HEAD~1",
       "expectations": [
         "check.sh --draft passes on the first published state: banner present, the sentence about a pending part not being a finding intact, pending markers for the parts not yet written",
+        "This run is at the default brief level, so the tail is one section written in parts: a half-written section 4 marks its h3 sub-parts pending in place, and the rail's single 04 entry carries a marker until they are all written. The failure to catch is the section reading as finished because its first part is.",
         "check.sh --final passes on the last state: no banner, no pending markers, coverage gate green",
         "The URL reported at the end is the same one reported at the start — one artifact, not two",
         "The page title and favicon are identical across every stage",
         "The first publish lands before the behaviour cohorts are written, not after",
+        "Four sections, not seven: the prompt asks for no level, and the default merges the tail. Nothing is labelled section 5, 6 or 7, and no part is marked pending that this level does not produce at all",
         "Pending stubs say what the part will cover and roughly how big it is, rather than 'coming soon'",
         "The user is told the URL once, with a note that it will fill in — not re-pasted on every republish"
       ]
@@ -84,7 +90,8 @@
     {
       "id": 5,
       "fixture": "monolith-guard-chain",
-      "prompt": "Someone reported they can't log in — the browser just bounces until it gives up. The fix is on fix/steward-redirect-loop and it's four lines, but I don't trust that it's only four lines. Can you map what this actually changes?",
+      "level": "full",
+      "prompt": "Someone reported they can't log in — the browser just bounces until it gives up. The fix is on fix/steward-redirect-loop and it's four lines, but I don't trust that it's only four lines. Can you map what this actually changes? Don't skimp — I want every section.",
       "expected_output": "A review map for a server-rendered monolith, where the surface a flow has to describe is the global before_action chain and the set of redirect destinations, not a JSON contract. Citations are plain text with the reason stated once — rung 3, because nothing is pushed and acme/commons does not resolve. The page's centre of gravity is code the diff does not touch: the two sibling guards in application_controller.rb that still key on `steward?` forty lines below the changed ones, the two `steward?` rejections in matching/eligibility_filter.rb plus User.recommendable, switch_to_free!'s comment naming a controller guard the new caller is not behind, chapters_controller.rb skipping the plan guard but not the profile-setup guard, and test/test_helper.rb completing every test user's profile so a green suite cannot see any of it.",
       "files": [],
       "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'test/test_helper.rb' --expect 'require_profile_setup' --expect 'eligibility_filter.rb' --expect 'switch_to_free!' --forbid 'N/A'",
@@ -103,6 +110,29 @@
         "The absence of a separate client package is stated once, and distinguished from having no client at all — the client here is the browser and the ERB views in this repository",
         "Nothing claims the loop is fixed for users who already hold the column; the page says no migration touches existing rows and that the repository cannot say how many there are",
         "No sentence grades the change, scores its risk, or recommends approving it — including in the flow whose behaviour is unresolved"
+      ]
+    },
+    {
+      "id": 6,
+      "fixture": "rails-only-small",
+      "level": "brief",
+      "prompt": "quick review map for add-project-archival please",
+      "expected_output": "The same five-file diff as case 1, at the default level. Four sections: what changed, the behaviour flows at their usual depth, where to begin, and one merged tail section built around the blast radius. Every changed path is under that section's Changed list, generated, unclassified. No section 5, 6 or 7 exists, and nothing is marked pending or N/A in their place. The coverage gate still passes.",
+      "files": [],
+      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --level brief --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
+      "section_cases": [
+        "cases/brief-tail.json — the merged section: whether the panel stays the spine, whether the diff is still accounted for once the classification is gone, and what must not leak in from full",
+        "cases/behaviour-flows.json — the flows, which this level does not change",
+        "cases/blast-radius.json — the panel and the affected list, whose rules the merged section keeps verbatim"
+      ],
+      "expectations": [
+        "check.sh passes at --level brief, including the coverage gate: the merged section's Changed list carries all five paths with data-path, so a shorter page is still an accounted-for one",
+        "Four sections and four rail entries. No section 5, 6 or 7, and their absence is silent — not an N/A row, not an empty shell, not a pending marker for something this level never produces",
+        "The behaviour flows are at their full depth: same review unit, same seven fields, same diff excerpt on the hunk each behaviour turns on. Nothing about section 2 is thinner than it would be at --full",
+        "No comprehension checkpoint anywhere, and no ER or lifecycle figure. The migration's safety, if it has anything worth saying, is a row rather than a diagram",
+        "app/queries/active_projects.rb is still found and still explained in the flow that owns it, with the merged section pointing at that flow in a clause. The shorter shape has not cost the finding the page exists for",
+        "The page says which detail level produced it, so a reader who wanted more knows there is more to ask for — and says it once, not as a caveat on each section",
+        "No sentence grades the change, and nothing reads as a clean bill of health because the page is short"
       ]
     }
   ]

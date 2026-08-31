@@ -34,6 +34,16 @@
 # signs *are* text: they make a copied hunk a valid patch, and they mean the marker
 # survives for anyone who cannot distinguish the two row tints.
 #
+# SYNTAX. In --at mode the <pre> also carries data-lang, guessed from the path and
+# overridable with --lang (--lang none suppresses it). It is a *label*, not colour:
+# the page's script tints the excerpt from it at runtime, so the bytes this script
+# writes stay the bytes git gave it, and a page read with no script — or with the
+# CDN blocked — shows exactly what it shows today. --diff hunks are deliberately
+# left untagged: a hunk is not one lexical stream (a '-' line and the '+' line
+# replacing it are alternate realities, and a lexer fed both mis-reads everything
+# after the first unbalanced quote), and their rows already carry colour that means
+# added and removed. Two colour systems in one block make both harder to read.
+#
 # The path goes in data-src. It must never go in data-path: coverage-gate.sh greps
 # that attribute across the whole page and compares it to the diff as a set, so an
 # excerpt citing an unchanged file would register as a surplus path and fail the
@@ -54,10 +64,11 @@ HUNK=
 WHY=
 LINK=
 BLOB=
+SYNLANG=
 SOFT_MAX=24
 
 usage() {
-  echo "usage: excerpt.sh --at PATH:START-END [--rev REV] [--why TEXT] [--blob URL|--link URL]" >&2
+  echo "usage: excerpt.sh --at PATH:START-END [--rev REV] [--why TEXT] [--lang L] [--blob URL|--link URL]" >&2
   echo "       excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT] [--blob URL|--link URL]" >&2
   exit 2
 }
@@ -73,6 +84,7 @@ while [ $# -gt 0 ]; do
     --why)  WHY=${2:-}; shift 2 ;;
     --link) LINK=${2:-}; shift 2 ;;
     --blob) BLOB=${2:-}; shift 2 ;;
+    --lang) SYNLANG=${2:-}; shift 2 ;;
     *) usage ;;
   esac
 done
@@ -100,7 +112,7 @@ cite() {
 # wraps onto its own row underneath. The why stays in the SUMMARY, never in the
 # body: the page has to read complete with every excerpt closed, and a why the
 # reader has to open the block to see defeats the whole point of the component.
-open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state tag
+open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state tag, $6 lang
   printf '<details class="excerpt excerpt--%s">\n' "$1"
   printf '  <summary>\n'
   printf '    <span class="chev">&#9656;</span>\n'
@@ -109,14 +121,44 @@ open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state t
   printf '    <span class="ex-why">%s</span>\n' "$WHY_HTML"
   printf '  </summary>\n'
   printf '  <div class="ex-body">\n'
-  printf '<pre data-src="%s" style="counter-reset: exl %s">' \
-    "$(escattr "$2")" "$4"
+  printf '<pre data-src="%s"%s style="counter-reset: exl %s">' \
+    "$(escattr "$2")" "$( [ -n "${6:-}" ] && printf ' data-lang="%s"' "$(escattr "$6")" )" "$4"
 }
 
 close_block() {  # $1 kind word, $2 loc label
   printf '</pre>\n'
   printf '    <p class="ex-src">%s %s</p>\n' "$1" "$(cite "$2")"
   printf '  </div>\n</details>\n'
+}
+
+# Extension → highlight.js language. Only names in the library's common bundle,
+# plus erb, which the page loads separately because Rails views are exactly the
+# kind of unchanged code this component quotes. Anything unlisted emits no
+# data-lang at all: no tint is correct, and a wrong tint is a small lie about
+# code the reader is being asked to trust.
+guess_lang() {
+  case $(basename "$1") in
+    Gemfile|Rakefile|Brewfile|Podfile|Fastfile|*.rb|*.rake|*.gemspec|*.ru) echo ruby; return ;;
+    Makefile|makefile) echo makefile; return ;;
+    Dockerfile|*.dockerfile) return ;;
+  esac
+  case $1 in
+    *.erb) echo erb ;;
+    *.ts|*.tsx|*.mts|*.cts) echo typescript ;;
+    *.js|*.jsx|*.mjs|*.cjs) echo javascript ;;
+    *.json) echo json ;;
+    *.yml|*.yaml) echo yaml ;;
+    *.sql) echo sql ;;
+    *.css) echo css ;;
+    *.scss|*.sass) echo scss ;;
+    *.html|*.xml|*.svg|*.vue|*.haml) echo xml ;;
+    *.md|*.markdown) echo markdown ;;
+    *.sh|*.bash|*.zsh) echo bash ;;
+    *.py) echo python ;;
+    *.graphql|*.gql) echo graphql ;;
+    *.toml|*.ini|*.env) echo ini ;;
+    *) : ;;
+  esac
 }
 
 warn_long() {
@@ -155,8 +197,16 @@ at)
     LINK="${BLOB%%#*}#L$start-L$end"
   fi
 
+  # --lang wins over the guess; --lang none is how a run says "leave this plain",
+  # for a file whose extension lies about its contents.
+  case $SYNLANG in
+    none) lang= ;;
+    '')   lang=$(guess_lang "$path") ;;
+    *)    lang=$SYNLANG ;;
+  esac
+
   loc="$path:$start-$end"
-  open_block source "$path" "$loc" "$((start - 1))" "Unchanged"
+  open_block source "$path" "$loc" "$((start - 1))" "Unchanged" "$lang"
   printf '%s\n' "$body" | esc | awk '{ printf "<span class=\"l\">%s</span>\n", $0 }'
   close_block "Unchanged at" "$loc"
   ;;

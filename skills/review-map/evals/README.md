@@ -56,6 +56,14 @@ and neither is a reader who has read it. The first run against `monolith-guard-c
 flow-owned entry at full length, and part of why is that a standalone fragment has nothing to point
 at. Judge the form here; the page cases judge whether anything was lost.
 
+**The merged tail section is that limit one size larger, so `brief-tail` is worth reading with it in
+mind.** At the default level, § 4's material and §§ 5–7's share one section, which means the pointer
+relation and the canonical-home rule now run *inside* the fragment as well as across it — and the
+fragment still cannot settle either, for the same reason. What it also cannot see is the failure the
+merge specifically invites: a section that carries both a flow's explanation and the pointer back to
+it, two paragraphs apart. That is duplication at conversational distance, it looks like thoroughness,
+and only a page case reads far enough to catch it.
+
 Freezing the upstream also removes the step whose variance the page cases measure. A section at 100%
 is therefore compatible with poor pages; it just locates the defect upstream, which is a useful
 reading rather than a contradiction.
@@ -70,6 +78,8 @@ should a summary built from it.
 ./run.sh behaviour-flows -n 3 --judge          # and grade the judged expectations too
 ./run.sh behaviour-flows -n 3 --judge --fast -j 3   # the iteration loop; see below
 ./run.sh diagrams --fixture monorepo-contract --visual
+./run.sh brief-tail -n 3 --judge                # the default level's merged tail section
+./run.sh blast-radius -n 3 --level brief        # the same case, other level: override the case file
 ./report.sh behaviour-flows
 ```
 
@@ -126,6 +136,26 @@ dependency that is not there. Two graders in one group get two judged lines, nev
 
 Every knob has an environment variable, for a shell you keep open: `EVAL_MODEL`, `EVAL_EFFORT`,
 `EVAL_JUDGE_MODEL`, `EVAL_JUDGE_EFFORT`, plus the existing `EVAL_PERMISSION_MODE` and `EVAL_TIMEOUT`.
+
+### The detail level is the third axis, on the same argument
+
+The skill produces two page shapes — `--brief`, the default, merges sections 4 to 7 into one; `--full`
+writes all seven (`report-format.md` § *Detail levels*). Those are different documents from the same
+diff, so a pass rate averaged over both describes neither, exactly as with model and effort.
+
+So a case declares its level, `--level` overrides it, `run.sh` writes it on the jsonl line, and
+`report.sh` makes it part of the group key. **A case file that declares no `level` means `full`** — the
+default is the *harness's*, not the skill's, and the two differ on purpose: reading the existing corpus
+as brief because the skill's default changed would silently reinterpret every result line already on
+disk. `check.sh` takes `--level` too, and defaults it the same way.
+
+Only one check reads it: `before-approving.sh`, because a missing comprehension checkpoint is correct
+at brief and worth a WARN at full. Everything else survives the merge without a flag, because the
+merged section keeps the `id="blast"` and `id="approving"` anchors the region extractors read — which
+is a property of the markup, and therefore a thing to break by accident. `golden/approving-brief-*.html`
+and the `self-test.sh` rows over them are what notice: three rows for the level's own rule, and two more
+running `blast-radius.sh` and `page-invariants.sh` over the merged shape, whose whole job is to fail the
+day the anchors move.
 
 ## Profiling one run
 
@@ -326,7 +356,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `page-invariants.sh` | severity chips, verdict language, evidence tiers, `data-path`, dead links, themes | page and fragment |
 | `build-state.sh` | draft / final / stopped | page |
 | `completeness.sh` | the gate, delegated to `scripts/coverage-gate.sh` | page |
-| `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice | page and fragment |
+| `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice, no syntax colouring written into the quotation, `data-lang` on unchanged blocks only | page and fragment |
 | `behaviour-flows.sh` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
 | `start-here.sh` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
 | `blast-radius.sh` | § 4: a diagram, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
@@ -470,8 +500,10 @@ Four files, and the fifth is optional:
    upstream that is not yet written down.
 2. `drivers/<slug>.md` — the prompt. Read `drivers/README.md` first: a driver pins inputs and must not
    restate a rule from `SKILL.md` or `report-format.md`.
-3. `cases/<slug>.json` — at most six judged expectations.
-4. `check.sh` — add the slug to the `RUN` table.
+3. `cases/<slug>.json` — at most six judged expectations, plus `level` if the section belongs to one
+   detail level rather than both. Leave it out and the case runs at `full`.
+4. `check.sh` — add the slug to the `RUN` table. A case reusing an existing scope at another level, as
+   `brief-tail` reuses `blast-radius`, needs nothing here: the level rides on `--level`, not the scope.
 5. `checks/<slug>.sh` plus a golden fragment, if the section has anything mechanically checkable.
 
 Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a filename that repeats
@@ -479,7 +511,9 @@ it only makes the reader look the number up. That rule earned itself when §§ 2
 `blast-radius` and `behaviour-flows` kept their names, their files and their history, and only their
 prose had to move.
 
-The remaining sections are `what-changed`, `start-here`, `cross-cutting` and `coverage-ledger`.
+The remaining sections are `what-changed`, `start-here`, `cross-cutting` and `coverage-ledger`. The last
+two exist only at `--full`, which is worth knowing before writing them: a case for either has to declare
+`"level": "full"` or it will grade a fragment the default level does not produce at all.
 `start-here` is half built — `checks/start-here.sh` and its three goldens exist and run standalone
 via `check.sh --fragment <file> --scope start-here` — but it has no driver and no case, so
 `run.sh start-here` will not find one. Adding those two files is what makes it a section eval.
@@ -523,8 +557,9 @@ network, which means it is not a fixture concern.
 
 ## On harnesses
 
-The page cases use the schema `skill-creator` documents, with two additions: `fixture` names the repo
-a case runs in, and `check` is its mechanical command. The section cases add `driver` and `scope`.
+The page cases use the schema `skill-creator` documents, with three additions: `fixture` names the repo
+a case runs in, `check` is its mechanical command, and `level` is the detail level its prompt asks for.
+The section cases add `driver` and `scope`, and `level` there too.
 
 `claude plugin eval` is the better long-term home, since it lives in the CLI, runs a no-plugin baseline
 arm for free, and belongs in CI. It is early access and not enabled on this account, so nothing here is
