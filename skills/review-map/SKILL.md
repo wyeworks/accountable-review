@@ -520,3 +520,10 @@ reporting, not one to hide: if you had to skim a region to fit, say which region
 - Never drop a file from the page to keep it tidy.
 - Never post to GitHub, Linear, or anywhere outside the artifact.
 - Never commit the page into the repo under review.
+- **Do this work yourself; spawn no subagents.** Steps 5 and 6 span the whole diff by nature — step 5
+  traces consumers across both sides of the stack, step 6 groups behaviour no single layer contains —
+  and handing either to an agent with its own context moves comprehension fragmentation from the
+  reviewer to the agents, which is the problem the page exists to solve. It is also slower in
+  practice, not faster: a run that reached for one `Explore` agent stalled the parent for 997
+  seconds, 41% of its wall clock, in a single blocked turn. If the diff is too large to hold, say
+  which region you skimmed — that is the honest failure and it is a signal worth having.

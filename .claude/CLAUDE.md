@@ -306,6 +306,10 @@ Editing one of these means checking the others still agree.
 The skill runs in one context. It spawns no subagents, and that is a choice, not an omission — an
 earlier iteration fanned out to `Explore` agents per layer, and it came out.
 
+`SKILL.md`'s hard rules now say so outright, which they did not before: a real run reached for one
+`Explore` agent and stalled the parent for 997 seconds — 41% of its wall clock — in a single blocked
+turn. A boundary stated only here is a boundary the skill has never been told about.
+
 The reason is that the decomposition is the *next* thing to get right, not something to inherit
 half-specified. Two of this version's steps span the whole diff by nature: step 5 traces consumers
 across both sides of the stack, and step 6 groups behaviour that no single layer contains. Splitting

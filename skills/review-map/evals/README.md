@@ -212,6 +212,41 @@ of invoking the skill, so those transcripts carry no `attributionSkill` and ther
 on — which is also why `--all` is never the default: with the filter off, neighbouring work in the
 same session is counted.
 
+### The PR-528 rerun, and why its timing is void
+
+The first attempt to measure the staged-fill and work-directory changes on a real target was a rerun
+of the exact diff the baseline came from — fayron PR #528, `a963bf65...d831b8c6`, 21 files, same model
+and effort. Same diff on both sides removes the largest variance source, which is why it was the right
+target. **The timing still came out unusable, and the reasons are worth writing down.**
+
+Two things did land, and they are mechanical enough to read off the transcript directly:
+
+- The derived work directory is used verbatim — `W="${TMPDIR:-/tmp}/review-map/fayron-pr-528"`, **112
+  uses of `$W` and zero `SCRATCH=` re-exports**, against seven in the baseline.
+- The page is filled in rather than rewritten: one `Write` of `page.html` plus nine `Edit`s, with a
+  new section written to its own fragment file and spliced. **88.4 KB of page bytes emitted against
+  the baseline's 105.2 KB, and the page is never re-emitted** — though 16% is well under the 28%
+  predicted from the redundancy in the baseline's second `Write`.
+
+What makes the wall clock meaningless is everything else. The run **spawned an `Explore` subagent**,
+and a blocking subagent's whole runtime lands in the parent's next before-first-token gap: one request
+absorbed **997.5s, 41% of the run**, and five requests over 60s accounted for 64% of model time
+against the baseline's 43%. It also made **zero `Artifact` calls** — the tool is not available under
+`claude -p` — so it skipped the publishing the baseline did twice. Net 2435.1s against 1284.7s, which
+is not attributable to anything in the prose.
+
+Three lessons, in descending order of how much they cost:
+
+1. **`claude -p` is not the harness for a page-scope timing comparison.** No `Artifact` tool means the
+   run cannot do the last step, and a run that stops early is not a faster run.
+2. **The subagent had no rule against it.** `CLAUDE.md` said the skill spawns none and treated that as
+   settled; `SKILL.md` never said so, and a run duly reached for one. It is a hard rule now.
+3. **`--json` drops the diagnostics, and a consumer that ignores them gets a confident wrong answer.**
+   The comparison script read `--json` and never printed the `WARN` about the session having split into
+   two runs, so it compared one half of the new run against the whole baseline and reported a 50%
+   improvement. The warning was there; nothing forced it to be read. The gap threshold is 45 minutes
+   now rather than 15, because a single legitimate run held a 16.6-minute blocked turn.
+
 ### What the loop said about batching, and why almost none of it shipped
 
 Worth keeping as a worked example, because the profile pointed at a real inefficiency and the obvious

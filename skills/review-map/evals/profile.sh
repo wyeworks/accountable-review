@@ -29,6 +29,10 @@
 # What it will NOT do is reconstruct the ten steps, because the transcript does not carry a
 # position in a procedure. See `bucket()` below and evals/README.md § "Where the time goes".
 #
+# Two runs in one session are split on a long gap, and the threshold is 45 minutes rather than the
+# 15 it started at: a single run was measured holding a 997s (16.6 min) gap while a blocking subagent
+# ran, which the smaller threshold reported as two runs — and a consumer reading --json without the
+# diagnostics then silently compared one half against a whole baseline.
 # Needs jq. Reads only; writes nothing outside stdout.
 set -eu
 
@@ -38,7 +42,7 @@ SKILL_ATTR=accountable-review:review-map
 
 TRANSCRIPT=; SESSION=; RUNDIR=; CWD=; WANT_CWD=
 LIST=; JSON=; TIMELINE=; ALL=; TOP=10; RUN=; ALL_RUNS=
-GAP_MIN=15
+GAP_MIN=45
 
 usage() {
   # The header block is the help text, so it stops at the first line that is not a comment
