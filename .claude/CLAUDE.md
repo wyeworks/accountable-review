@@ -11,8 +11,11 @@ the decisions live. The first target stack is a Rails API with a Next.js client.
 
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
-command. The "source" is prose
-that another Claude instance executes, so the unit of quality is instruction clarity, not compilation.
+command. It takes a target and a **detail level** — `--brief` (the default), `--full`, `--review` —
+parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
+frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. The "source" is
+prose that another Claude instance executes, so the unit of quality is instruction clarity, not
+compilation.
 
 There is no build, no test suite, and no linter. Changes are verified by running the skill against a
 real PR and reading the page it produces. `claude plugin validate . --strict` checks the manifest,
@@ -41,6 +44,11 @@ failure modes.
 Two checks are worth making on every run, because they are where this version is most likely to be
 wrong: open two entries from *affected but unchanged* and confirm the cited file really consumes the
 changed thing, and confirm no sentence anywhere grades the PR.
+
+Run both levels. They fail differently: `--full` strains the context and duplicates across seven
+sections, `--brief` compresses four kinds of material into one section and its characteristic defect
+is a tail that has quietly become a list of four things with the blast radius as one item. A wording
+change judged at one level says little about the other.
 
 `skills/review-map/evals/` is where that judging happens, at three scopes.
 `fixtures/make-fixtures.sh` builds four repositories whose interesting findings sit deliberately
@@ -76,11 +84,11 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the seven sections and what triggers each, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
+| `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the search recipes for affected-but-unchanged code |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
-| `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing |
+| `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, and `checks/`. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire |
@@ -97,6 +105,26 @@ the only place skipping is impossible.
 
 Editing one of these means checking the others still agree.
 
+- **Two page shapes, and one of them is the default.** `--brief` merges §§ 4–7 into one section;
+  `--full` writes all seven; `--review` stops. The level is settled in `SKILL.md` step 1 beside the
+  target and the link rung, and `report-format.md` § *Detail levels* and § *Section 4 at brief* own
+  what it produces — **and own it alone.** Every other file points at them.
+
+  Two rules make the level cheap instead of a second product. **It changes how many sections there
+  are, never what a section teaches**: §§ 1–3 are byte-for-byte the same spec at both levels, and a
+  run reading a shorter page as licence to explain less has misread the option. And **the merged
+  section keeps the anchors**: `id="blast"` on the `<section>`, `id="approving"` on its last `<h3>`,
+  the `Changed` / `Affected, not changed` `<dt>` labels verbatim, and `<ul>` rather than
+  `<ol class="begin">` in the approving part. That is why exactly one check knows the level —
+  `evals/checks/before-approving.sh`, for the checkpoint — while `blast-radius.sh`, `searches.sh` and
+  `page-invariants.sh` read the merged shape unchanged.
+
+  That second rule is markup, so it is breakable by accident and invisible when broken: with the
+  anchor gone, `before-approving.sh` prints a **SKIP**, which reads as verified.
+  `golden/approving-brief-clean.html` plus the `self-test.sh` rows running `blast-radius.sh` and
+  `page-invariants.sh` over it exist for the day someone moves one.
+
+  `--brief` is the default, so it is what almost every real page will be. Judge it first.
 - **The page never grades the change.** No severity scale, no risk score, no confidence percentage,
   no approval language. Stated as the product principle at the top of `SKILL.md`, repeated in its hard
   rules, and enforced structurally: the template has no chip that expresses a verdict, and
@@ -147,7 +175,15 @@ Editing one of these means checking the others still agree.
   at that flow in a clause rather than restating it. Code no single flow owns is explained in § 4
   instead — that is what makes it a section rather than an index. The rule that makes the whole thing
   honest: **record what was searched**, so an empty result reads as evidence rather than as omission.
-- **Completeness, and the one mechanical check.** Every path in the diff appears in the page. Stated
+- **Completeness, and the one mechanical check. It has no detail level.** Every path in the diff
+  appears in the page, at every level, and the gate runs at every level. What the level changes is the
+  *carrier*: § 7's classified ledger at `--full`, the merged section's `Changed` list at `--brief`,
+  generated by `ledger-rows.sh --paths-only` as `.gt-paths` cells that still carry `data-path`. That is
+  the whole reason the brief carrier is a grid cell rather than a list item — `coverage-gate.sh` greps
+  `data-path` page-wide and `page-invariants.sh` § 4 requires it on a `div class="c"`, so a `.filelist`
+  would have cost the gate. `--brief` declines to *classify* the diff; it never declines to account for
+  it, and a run that skipped the gate for want of a § 7 has turned a shorter page into one that may
+  have dropped a file. Stated
   in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and enforced in
   step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work: the script
   reads a `data-path` attribute, the template emits it on the ledger's grid cell
@@ -158,7 +194,10 @@ Editing one of these means checking the others still agree.
   `git diff --name-only`, compared as whole strings — never substring matching, because `api/Gemfile`
   matches inside `api/Gemfile.lock`.
 - **A staged page must never look finished.** The page publishes early and fills in at one URL
-  (`SKILL.md` step 9), which is only safe because an unfinished page says so: a build banner while it
+  (`SKILL.md` step 9) at both levels — the three milestones are cuts through the procedure, not through
+  the section list. What the level moves is where a marker attaches: a section at `--full`, an `<h3>`
+  sub-part at `--brief`, where the tail is one section written in pieces and the hazard is its first
+  part making the whole thing read as done. Staging is only safe because an unfinished page says so: a build banner while it
   is being written, an explicit *pending* marker for every part that is coming, and both removed at
   the final publish. Four states have to stay distinguishable — written, pending, *not written*
   because the run stopped, and omitted because the diff did not earn it — since the whole risk is a
@@ -182,7 +221,8 @@ Editing one of these means checking the others still agree.
   `report-format.md` § *Deep links* owns both forms and the ladder, `SKILL.md` steps 1, 9 and 10 point
   at them and record both SHAs, and `ledger-rows.sh` takes `--pr`, `--compare` or `--blob` so a run
   never types an href into the `<td>` the coverage gate reads.
-- **Seven sections, and each fact has one home.** The format is deliberately *not* one section per
+- **Seven sections at `--full`, four at `--brief`, and each fact has one home either way.** The format
+  is deliberately *not* one section per
   architectural layer. It was, and that guaranteed restatement: one behaviour crosses persistence, the
   API, the boundary and its cohort, so it got described four times, and three further parts existed
   only to restate — findings surfaced in *start here* and re-explained inside a cohort, cross-cutting
@@ -194,6 +234,12 @@ Editing one of these means checking the others still agree.
   one-sentence reference form; § *Where the old per-layer material goes* maps the old twelve parts onto
   the seven. Reintroducing a per-layer section is how this regression comes back, and it will look like
   an improvement when it does.
+
+  **The merged tail section is a second way for it to come back**, and a subtler one, because merging
+  four sections is not the same as merging four *kinds of thing*. At `--brief` the routing table still
+  applies with fewer destinations, and the failure to watch for is a section carrying both a flow's
+  explanation and the pointer back to it two paragraphs apart — duplication at conversational distance,
+  which reads as thoroughness. A section eval cannot see it; `evals.json` case 6 can.
 - **The order is the reviewer's path, and the flow owns the explanation.** § 2 *Behaviour flows*
   teaches the mechanisms; § 3 *Start here* is the moment they open the code; § 4 *Blast radius* is a
   second pass over the same change through one lens. Everything after § 2 therefore **points back**
@@ -252,6 +298,11 @@ Editing one of these means checking the others still agree.
   reported as invented. `legend` and `box-json` were removed from that vocabulary deliberately, not
   renamed: a run drawing a blast radius as SVG should be told to use the component instead.
 
+  `--brief` draws no § 5 figures at all — no ER fragment, no lifecycle; migration safety is a row
+  there — so its merged section holds the `.blast` panel and nothing that could compete for the
+  budget, and `diagram.sh`'s per-`<section>` count needs no level awareness. What it must not become is
+  a reason to skip the one figure a *flow* earns.
+
   The reason this is an invariant rather than a nicety: a diagram is the one component with no
   generator behind it, so a layout derived per run spends the run's attention on geometry instead of
   on whether the edges are true — and makes two pages from this skill incomparable. What a script
@@ -308,6 +359,11 @@ through the goal, the blast radius and five verified affected-but-unchanged find
 needed several times that budget to finish the behaviour flows and a 112-row ledger. Nothing about it
 failed. It simply ran out of room, in a way the procedure has no policy for.
 
+**`--brief` is not the answer to this, and it will be reached for as though it were.** It reduces the
+number of sections; the 112-file run did not run out of room writing section shells, it ran out
+tracing consumers and explaining flows, and `--brief` changes neither. A strained run at `--brief` owes
+the same statement of which region it skimmed.
+
 What makes this hard is that the honest sampling strategy runs against the skill's own instincts:
 
 - **The completeness invariant is not the same as reading everything.** Every path must appear in the
@@ -330,13 +386,59 @@ Decomposition may dissolve some of this: a per-flow agent has its own context, s
 budget grows. It does not dissolve all of it — the orchestrator still has to decide how many flows
 are worth an agent, and that is the same question one level up.
 
+## The other unsolved half: `--review`
+
+`--review` is declared, parsed, and stops. `SKILL.md` § *The review level is not implemented yet* has
+the runtime behaviour; this is the design brief, written down so the next iteration starts from the
+real question. It is meant to run the project's code-review pass as well and thread its findings
+through the map.
+
+**It is not "run `/code-review` and paste the output", and the reason is the product principle.** A
+code-review pass produces graded findings — severity, confidence, a ranked list. This page carries no
+verdict, structurally: the template has no chip that expresses one, and reintroducing a severity
+vocabulary is named above as the single easiest way to undo this iteration. So the naive
+implementation breaks the invariant the whole format is built to hold, and it will look like a feature
+while doing it.
+
+**The seam that resolves it, and the reason this level is worth building at all:** a review finding
+enters the page as a **claim to verify**, never as a finding to display. Two steps already do that
+work. Step 8 says read the file yourself before any claim reaches the page, and drop what does not
+survive. Step 5 routes a consequence to the code it reaches. So a verified finding lands in the flow
+that owns it — in *things to understand*, or *reviewer questions*, or *affected but unchanged* — in
+the page's own voice, with the review's severity label stripped. An unverified one is dropped, by a
+rule that already exists. The review pass becomes a *search strategy* feeding step 5, which is
+exactly where this skill is weakest, rather than a section of imported conclusions.
+
+Four things to settle before writing it:
+
+- **It probably needs a sixth evidence tier**, something like *reported by the review pass, verified
+  against the file*. Five tiers are an invariant four files agree on (`report-format.md`, the
+  template's `span.tier`, `page-invariants.sh` § 3, and the cases), and the asymmetry that only four
+  of them carry a label is deliberate. Adding one is a real change, not a footnote — and the
+  alternative is defensible: a verified finding is just *evidenced by unchanged code* or *explicitly
+  changed* like any other, and where the claim came from is provenance rather than evidence.
+- **It is the first place the skill depends on something outside itself.** Everything else assumes
+  only Claude Code plus a git repo. `/code-review` ships with the CLI, but a project may have its own,
+  and the boundary against assuming project layout applies here too: discover the review command,
+  do not assume it. A repo with none should degrade to `--full`, saying so.
+- **Findings and flows do not line up one to one.** A review comments per hunk; this page is organised
+  per behaviour. A finding spanning two flows, or landing in a file no flow owns, needs the same
+  routing decision § *One canonical home* already answers — which is encouraging, because it means the
+  rule exists, and it means the mapping has to be written down rather than left to the run.
+- **The hard rule against posting anywhere is not relaxed.** A page that now contains review material
+  is still a page, and still never a comment on the PR.
+
+One thing not to do: publish a page and mark the review part *pending*. Pending is a promise, and
+nothing is writing it.
+
 ## Boundaries the skill must keep
 
 These are deliberate scope limits, not omissions — do not "improve" the skill past them.
 
 - **It helps a reviewer decide; it does not decide.** The page carries evidence, relationships,
   invariants, uncertainty and validation steps. It never carries a verdict. `/code-review` is a
-  different tool answering a different question.
+  different tool answering a different question — and `--review`, when it exists, will not change
+  that: it borrows the review's *search*, not its conclusions. See § *The other unsolved half*.
 - It never posts to GitHub or anywhere outside the artifact.
 - It never writes the page into the repository under review — scratch location only.
 - It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes.

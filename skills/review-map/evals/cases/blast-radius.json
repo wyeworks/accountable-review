@@ -9,7 +9,7 @@
       "id": "blast-radius/rails-only-small",
       "fixture": "rails-only-small",
       "check": "check.sh --fragment <out> --scope blast-radius --expect 'active_projects'",
-      "expected_output": "A blast-radius panel reaching from the new column to the unchanged query that scopes the selectable list, and two lists stacked one after the other, each the full measure. app/queries/active_projects.rb belongs to Flow B, so it appears as a named pointer to that flow rather than as an explanation. No reading order and no ranking of files: those live in section 3 now.",
+      "expected_output": "A blast-radius panel reaching from the new column to the unchanged query that scopes the selectable list, and two lists stacked one after the other, each the full measure. app/queries/active_projects.rb belongs to Flow B, so it appears as a named pointer to that flow rather than as an explanation. No reading order and no ranking of files: those live in section 3 now. This case is the full level, where section 4 is a section of its own; cases/brief-tail.json is the same material as the default level's merged tail section.",
       "expectations": [
         "app/queries/active_projects.rb is in the affected list, and the search that found it is written down",
         "At least one empty search is recorded as a search — an unrecorded absence cannot be told from an omission, and this diff has real ones (no other caller of archive!, no other reader of the archived scope)",
