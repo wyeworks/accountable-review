@@ -22,7 +22,7 @@ it, do not duplicate it.
 - *The review unit* — the seven fields every meaningful change gets
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
 - *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
-  what code does
+  what code does, and the syntax tint that unchanged code gets and a hunk does not
 - *One canonical home* — every fact explained once, referenced from everywhere else
 - *Depth rules* — how much treatment a section earns, and the diagram budget
 - *The completeness invariant* — why every diff path appears, and why the check is one-directional
@@ -212,6 +212,37 @@ was never about quoting one committed line that a claim turns on.
   greps `data-path` across the whole page and compares it to the diff as a set, so an excerpt using it
   would register as a surplus path — and would do so most reliably when citing unchanged code, which
   is to say on the page's best content.
+- **The tint is applied to the quotation, never written into it.** `--source` excerpts are
+  syntax-coloured; `--diff` excerpts are not. See § *Syntax tint* below for why the two differ. An
+  `hljs-` class in the HTML a run writes is a defect whichever variant it is on: the colouring is the
+  page script's job at read time, so the bytes on the page stay the bytes `git` produced.
+
+### Syntax tint
+
+`excerpt.sh --at` puts a `data-lang` on the `<pre>`, guessed from the path (`--lang` overrides it,
+`--lang none` suppresses it). The page's script reads that attribute and colours the block with
+highlight.js, loaded from cdnjs — the one script host a published artifact may load. Its *stylesheets*
+are not loadable, so the theme for it is ours, defined as `--syn-*` tokens in all three theme states
+like every other colour on the page.
+
+Three properties make this safe to do to a quotation, and they are the reason it is worth stating
+here rather than leaving as template detail:
+
+- **It degrades to today's page.** No script, no network, a blocked CDN, a language outside the
+  library — each of those leaves the excerpt rendering in one ink, exactly as it did before the tint
+  existed. Nothing on the page depends on colour to be understood.
+- **It cannot alter the quotation.** The script highlights the slice as one stream, splits the result
+  back onto the generator's lines, and compares the reconstruction to the original character by
+  character before touching the DOM. Any mismatch and the line is left alone. It sets no weight and no
+  background either: bold code reads as an emphasis the author never wrote.
+- **`--diff` is deliberately excluded.** A hunk is not one lexical stream — a removed line and the
+  line replacing it are alternate realities, and a lexer fed both mis-reads everything after the first
+  unbalanced quote. Its rows already use colour to mean *added* and *removed*, and a second colour
+  system on top of that makes both harder to read.
+
+The reason to have it at all is the same asymmetry that produced the `--source` variant: unchanged
+code arrives with no diff view and no familiarity behind it, so anything that lets the reader find the
+one line the claim rests on is doing the component's job.
 
 ### Budget
 

@@ -222,6 +222,19 @@ Editing one of these means checking the others still agree.
   unchanged code — the gate would fail on the page's best content. Excerpts carry `data-src`.
   `evals/check.sh` holds the mechanical half of all three; whether the prose survives with the blocks
   shut is a judged expectation, because no script can tell.
+  **The tint is applied, never authored.** `--source` excerpts are syntax-coloured at read time and
+  `--diff` excerpts are not, and the asymmetry is the same one that produced the two variants: a hunk
+  is not one lexical stream (a removed line and its replacement are alternate realities, and a lexer
+  fed both mis-reads everything after the first unbalanced quote), and its rows already spend colour
+  on *added* and *removed*. Four files agree: `excerpt.sh` puts a `data-lang` on the `--at` block and
+  nothing else, `page-template.html` holds the `--syn-*` tokens, the `.hljs-*` rules and the script
+  that does it, `report-format.md` § *Syntax tint* owns the rule, and `evals/checks/excerpts.sh`
+  fails a page that ships `hljs-` classes in its markup — a hand-coloured quotation is a quotation
+  someone edited. The script verifies its own reconstruction character by character before touching
+  the DOM and leaves the line alone on any mismatch, which is the only reason a script may touch a
+  quotation at all. Everything about it degrades to the untinted page: no script, no network, a
+  blocked CDN or an unknown language each leave the block in one ink.
+
   A third thing, added after a run whose flows quoted only unchanged code: the `--diff` excerpt is a
   **floor, not a ration**. Each behaviour flow shows the hunk its behaviour turns on, because § 2 is
   read before the reviewer opens the diff in § 3; the load-bearing test rations everything on top of
@@ -274,6 +287,10 @@ Editing one of these means checking the others still agree.
   the classic unreadable-artifact bug. `evals/checks/page-invariants.sh` § 6 enforces the three
   states and `excerpts.sh` enforces it for the excerpt tints specifically, which are the newest
   colours and so the likeliest to be forgotten in two of the three.
+
+  The `--syn-*` syntax tints are the newest of these and the easiest to half-declare, because nothing
+  on the page depends on them to be readable — a set missing from the dark blocks is invisible until
+  someone opens an excerpt with the OS in dark mode.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
   pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.bx-on` — are written
