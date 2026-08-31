@@ -186,6 +186,32 @@ One rule keeps this from turning into a diff viewer: **the page reads completely
 closed.** The sentence carries the consequence, which is the thing the code does not say; the excerpt
 carries the proof. What gets dropped is narration, never the finding.
 
+### It anchors Rails behaviour, and proposes ways to see it
+
+A lot of what a reviewer needs to know about a Rails change is not in the change. `update_all` at a
+call site the diff never opened skips the validation this PR adds; a uniqueness validation is not a
+unique index; `--sandbox` rolls back, so `after_commit` never fires there. So the page carries two
+anchors for a claim that rests on Rails behaving as Rails.
+
+**A link to where the rule is written down** — the Rails guides, the API, or the gem's own docs. It sits
+beside the claim's `file:line`, never instead of it: a link to the guides says nothing about *your*
+application, and the finding is always about your application. URLs come from a catalogue that ships
+with the skill, verified by hand, because a run cannot open a URL to check it and a plausible-looking
+API path is a 404 you discover on the reader's behalf.
+
+**A console probe** — `bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'`,
+`puts Project.archived.to_sql`, `connection.indexes(:projects)`. For an ActiveRecord change this is
+usually better than a paragraph, because ActiveRecord's behaviour is assembled at boot from the class,
+its concerns, its parents and the schema — the things a diff cannot show you together. A probe that
+settles a claim goes in *how to validate*; one that makes a mechanism legible goes in *things to
+understand*.
+
+Probes are **proposed, not run**. The skill never boots your app, so the page shows the command and
+never its output — an invented `=> true` would be the most concrete-looking thing on the page and the
+only part of it that was fiction. Read-only reflection is written for `bin/rails runner`; anything that
+writes is written for `bin/rails console --sandbox`, and the page says which, because a reviewer should
+not be able to change a database by pasting what it told them to.
+
 ### It separates evidence from inference
 
 A claim the diff shows directly carries no label. Anything else is marked — *from unchanged code*,
@@ -249,7 +275,8 @@ skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
 │   ├── report-format.md           parts, review-unit format, evidence tiers, deep links
-│   ├── rails-nextjs.md            what to look for per layer, and the search recipes
+│   ├── rails-nextjs.md            what to look for per layer, runtime probes, search recipes
+│   ├── rails-docs.md              the Rails documentation URLs the page may cite
 │   └── page-template.html         design system, components, and the diagram catalogue
 ├── scripts/
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations

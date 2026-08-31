@@ -51,6 +51,7 @@ which component carries the paths.
 - *Detail levels* — brief, full and review, and what the level does and does not change
 - *The review unit* — the seven fields every meaningful change gets
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
+- *Framework anchors* — the doc link and the runtime probe, and why neither is evidence
 - *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
   what code does
 - *One canonical home* — every fact explained once, referenced from everywhere else
@@ -84,7 +85,9 @@ the behaviour they serve.
 
 **Citations** — *Deep links*, the two URL forms and which lines each one can address, and *Choosing a
 mode*, the four-rung degradation ladder. Settle the rung once, in step 1 of the procedure; the form
-then follows the line, not the run's taste.
+then follows the line, not the run's taste. A documentation link is not one of those forms and the
+ladder does not reach it: see *Framework anchors*, and take the URL from
+`references/rails-docs.md`.
 
 ---
 
@@ -117,8 +120,10 @@ Rules that keep units from becoming ceremony:
   restatements of the diff, this change is not a unit — it is a ledger row.
 - **Fields may be omitted, but never faked.** No *affected but unchanged* code found, after a search
   worth reporting? Say what you searched and that nothing consumes it. That sentence is the finding.
-- **Validation steps must exist in this repo.** The real rake task, the real route, the real factory.
-  One invented command spends the reader's trust in the entire page.
+- **Validation steps must exist in this repo.** The real rake task, the real route, the real factory,
+  the real scope inside a console probe. One invented command spends the reader's trust in the entire
+  page. For a change to persistence, the runtime probes in `references/rails-nextjs.md` are usually
+  the most precise step available; § *Framework anchors* says which field one lands in.
 - **Render as a `.mech` block followed by one `dl.rows`, and render the fields nowhere else.**
   The seven fields are `<dt>`/`<dd>` pairs inside that single `dl`; loose in a section they lose the
   row hairlines, the 132px label gutter and every `.rows`-scoped rule. `.decisions` goes *after* the
@@ -158,6 +163,64 @@ worse than being wrong loudly.
 
 The PR description is never evidence. Where the page reports intent from it, attribute it —
 *"the description says …"* — so a stale description cannot masquerade as a property of the code.
+
+## Framework anchors
+
+Two ways to anchor a claim that rests on Rails behaving as Rails rather than on anything this diff
+contains. Neither is an evidence tier, and neither changes one.
+
+| Anchor | Is | Renders as |
+|---|---|---|
+| **Documentation link** | Provenance: where the framework's rule is written down | `<a class="doc" href="…">` around the concept, from the catalogue |
+| **Runtime probe** | A question to the reviewer's own application, which they run | `<pre class="probe">`, one command |
+
+**A doc link is provenance, not evidence.** "`update_all` skips callbacks" is a property of Rails; the
+claim the page is making is that *this call site* now bypasses the validation this PR adds, and that
+claim rests on the citation to the call site, at whatever tier it already carried — usually
+`from unchanged code`. The link explains why the consequence follows. So:
+
+- **Never a doc link on a claim with no `file:line`**, and never one instead of a `file:line`. A link
+  to the Rails guides says nothing about this repository, and a claim anchored only there is an
+  unevidenced claim wearing a citation.
+- **Never inside a collapsed excerpt.** The page reads complete with every excerpt closed, and a link
+  the reader has to open a block to find is not part of the page they read.
+- **Never a verdict by reference.** "See the security guide" is not a finding. If the change has a
+  security consequence, state it, cite the line, and let the link explain the mechanism.
+
+**Cite only from `references/rails-docs.md`.** That file is the allowlist, and the reason is that the
+run cannot check a URL — there is no fetch step, and egress to those hosts is commonly blocked. A
+concept the catalogue does not carry gets explained in prose with a repo citation, which is the
+ordinary case and not a degraded one. Constructing a plausible URL is the failure this rule exists to
+prevent: it looks like diligence and it lands the reader on a 404.
+
+**A probe is a question, never an answer.** The skill does not boot the application under review, so
+the page shows a command and never its output. No `=>` line, no SQL presented as what the query
+printed, no invented row count. `references/rails-nextjs.md` § *Runtime probes* has the probes, the
+`runner`-versus-`console --sandbox` rule, and the reason a sandbox session cannot see `after_commit`.
+Every constant, scope and association a probe names must exist in this repository — the same rule as
+*validation steps must exist in this repo*, and it fails the same way when broken.
+
+**Routing.** One anchor per claim, not both:
+
+| The claim needs | Goes in | Because |
+|---|---|---|
+| Running something to be believed | *How to validate*, or § 6 *Validations worth running* if it needs setup | It is an action the reviewer takes |
+| A mechanism made legible | *Things to understand* | It deepens what the page established |
+| The framework's general rule | The sentence that states the consequence | The link is an aside, not a step |
+
+Prefer the probe where this application's own configuration decides the answer — a real
+`dependent:`, a real scope's SQL, the indexes that actually exist. Prefer the doc link where the
+framework's rule is the whole point and this app cannot vary it.
+
+**Earned by a decision the reviewer has to make.** The same test the excerpt budget uses, and for the
+same reason: a behaviour every Rails developer already knows earns nothing, and a page that links
+each one has become a tutorial with a diff attached. **At most one doc link per field**, and a section
+where most fields carry one has stopped selecting. Probes are scarcer still: a flow earns one where
+its change is ActiveRecord-shaped, and a second wants a reason.
+
+**The deep-link ladder does not govern either.** The four rungs are about `file:line` citations into a
+git remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is plain
+text — exactly as an in-page `href="#flow-b"` does. A probe has no href at all.
 
 ## Source excerpts
 
@@ -846,7 +909,8 @@ The reviewer's action list. Compact, and nothing here restates an explanation fr
 - **Validations worth running** — real commands against this repository: the actual rake task, the
   actual route, the actual factory. Plus setup and seeds, so a reviewer can get to a state where the
   per-flow validations can be run at all. One invented command spends the reader's trust in the whole
-  page.
+  page. This is where a runtime probe that needs seeded data belongs, beside the command that seeds
+  it — a probe that answers on an empty database stays in the flow instead.
 - **Test gaps** that matter, gathered from the flows in one place so a reviewer sees the shape of what
   is unproven.
 - **Production and data checks**, if the change touches existing rows or deploy order.

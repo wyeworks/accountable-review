@@ -85,7 +85,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
 | `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
-| `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the search recipes for affected-but-unchanged code |
+| `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code |
+| `references/rails-docs.md` | The documentation catalogue — the Rails and gem URLs the page may cite, and nothing else. Data, not lenses: an allowlist a human verified once |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
@@ -133,6 +134,33 @@ Editing one of these means checking the others still agree.
 - **Evidence tiers.** Five of them, listed in `report-format.md` § *Evidence tiers*, rendered as
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
+- **Framework anchors are provenance, not evidence, and there is still no sixth tier.** A doc link
+  explains why a Rails consequence follows; a console probe asks the reviewer's own application. The
+  claim underneath keeps resting on a repo `file:line` at the tier it already carried, which is what
+  keeps the five-tier invariant — four files agreeing — untouched. It is also the answer already
+  written down for `--review`: where a claim came from is provenance, and provenance is not evidence.
+
+  Two rules carry the whole feature, and both are the kind that look like diligence when broken.
+  **A doc link may only be a row of `references/rails-docs.md`**, because the run cannot open a URL —
+  no fetch step, and egress to those hosts is commonly blocked — so a constructed API path is a 404
+  the reader finds on the page's behalf. **A probe is proposed, never run**, so the page shows a
+  command and never output: a fabricated `=> …` is the most concrete-looking thing on the page and the
+  one part of it that is fiction. `report-format.md` § *Framework anchors* owns both, plus the routing
+  (verify → *Validate*, explain → *Understand*) and the budget, **and owns them alone**; `SKILL.md`
+  steps 7 and 9 point at it, `rails-nextjs.md` § *Runtime probes* holds the probes and the
+  `runner`-versus-`console --sandbox` rule, and `evals/checks/rails-anchors.sh` derives its allowlist
+  from the catalogue file rather than hard-coding hosts.
+
+  Two things worth knowing before editing. The anchors are **level-independent** — they live in fields
+  `--brief` leaves alone — so `rails-anchors.sh` must not read `LEVEL`, and `before-approving.sh` stays
+  the only check that knows the level. And the components are built from **existing** tokens on
+  purpose: `a.doc` and `pre.probe` introduce no colour, so there is nothing new to declare in three
+  theme blocks and forget in one.
+
+  The failure mode to watch is not a wrong link. It is a page that links everything, becomes a Rails
+  tutorial with a diff attached, and reads as more thorough while getting less navigable — the
+  canonical-home regression arriving as citation instead of as repetition. The rule against it is the
+  excerpt budget's: an anchor is earned by a decision the reviewer has to make.
 - **The review unit** is the page's primitive: seven fields, fixed order, defined in
   `report-format.md` and rendered as a `.mech` block followed by one `dl.rows` — **and rendered
   nowhere else.** A behaviour flow's body *is* a unit; the path, the diagram and the decisions block
@@ -439,6 +467,11 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   invariants, uncertainty and validation steps. It never carries a verdict. `/code-review` is a
   different tool answering a different question — and `--review`, when it exists, will not change
   that: it borrows the review's *search*, not its conclusions. See § *The other unsolved half*.
+- **It links to the manual; it does not reproduce it.** The catalogue exists so a framework
+  consequence is followable, not so the page can teach Rails to a reader who does not need it. And it
+  never executes what it proposes: the skill does not boot the application under review, which is why
+  no probe output ever appears. Changing that is a new decision with its own safety design, not an
+  extension of this one.
 - It never posts to GitHub or anywhere outside the artifact.
 - It never writes the page into the repository under review — scratch location only.
 - It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes.

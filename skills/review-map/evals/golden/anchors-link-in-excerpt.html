@@ -1,0 +1,51 @@
+<!-- Defect: a link only the reader who opens the block ever sees. -->
+<section id="flow-a">
+  <h3>Flow A &mdash; Archiving a project</h3>
+
+  <div class="mech">
+    <b>PATCH /api/projects/:id &rarr; Project#archive! &rarr; projects.archived_at</b>
+    <p>Archiving stamps a timestamp rather than deleting the row, so historical time entries survive.</p>
+  </div>
+
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><span class="path">app/models/project.rb:4</span> &mdash; the stamp itself</div>
+    </dd>
+
+    <dt>Affected, unchanged</dt>
+    <dd>
+      <div class="item"><span class="path">app/controllers/projects_controller.rb:5</span> &mdash; filters on the predicate, not the column</div>
+      <details class="excerpt excerpt--source">
+        <summary>
+          <span class="chev">&#9656;</span>
+          <span class="ex-loc">app/controllers/projects_controller.rb:3-5</span>
+          <span class="tag">Unchanged</span>
+          <span class="ex-why">The reader this filter serves.</span>
+        </summary>
+        <div class="ex-body">
+<pre data-src="app/controllers/projects_controller.rb" style="counter-reset: exl 2"><span class="l">    @projects = Project.all.reject(&amp;:archived?)</span>
+</pre>
+          <p class="ex-src">Reads the column through
+            <a class="doc" href="https://api.rubyonrails.org/classes/ActiveRecord/Enum.html">a generated predicate</a></p>
+        </div>
+      </details>
+    </dd>
+
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The scope at <span class="path">app/models/project.rb:2</span> is the selectable
+        list, and a bulk write would not run the stamp &mdash;
+        <a class="doc" href="https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
+        skips validations and callbacks. <span class="tier">from unchanged code</span></div>
+      <span class="lbl">rails runner &middot; read-only</span>
+<pre class="probe">bin/rails runner 'pp Project.validators_on(:archived_at).map { |v| [v.class, v.options] }'</pre>
+      <div class="item">Names every validation on the column, including any a concern adds.</div>
+    </dd>
+
+    <dt>Validate</dt>
+    <dd>
+      <div class="item"><code>bundle exec rspec spec/models/project_spec.rb</code> &mdash; pins the stamp</div>
+    </dd>
+  </dl>
+</section>

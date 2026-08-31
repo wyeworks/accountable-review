@@ -199,6 +199,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `blast-radius.sh` | § 4: a diagram, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
 | `searches.sh` | whether a recorded search **reproduces** the entry it is offered for — re-run inside `--repo` | page and fragment |
 | `before-approving.sh` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
+| `rails-anchors.sh` | doc links against the catalogue and never standing alone; probes with no fabricated output, no unsandboxed write, and identifiers that exist in `--repo` | page and fragment |
 | `diagram.sh` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.sh` | renders each diagram in both themes to PNG | page and fragment |
 
@@ -206,10 +207,11 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
 thoroughly verified as a page.
 
-**`run.sh` passes `--repo`**, so the two checks that need the repository run on a section fragment
-rather than skipping: `searches.sh` re-runs the recorded searches inside it, and
-`page-invariants.sh` asks git whether the head is pushed — which is how the link rung finally became
-mechanical for section runs instead of a thing only a reader could catch.
+**`run.sh` passes `--repo`**, so the three checks that need the repository run on a section fragment
+rather than skipping: `searches.sh` re-runs the recorded searches inside it, `rails-anchors.sh` asks
+whether the constants a probe names exist there, and `page-invariants.sh` asks git whether the head is
+pushed — which is how the link rung finally became mechanical for section runs instead of a thing only
+a reader could catch.
 
 `searches.sh` is the one check whose rule is a relation between the page and a repository, so it is
 also the one whose *coverage* has to be reported: it prints how many entries it skipped as pointers,
@@ -249,6 +251,19 @@ all-pass has still told you something if the notes are not empty.
 and `self-test.sh` can exercise it against `golden/verdicts-*.json` without a model — a tally that
 reads a truncated file as "no fails" is the same defect as a check that always passes, and worse here
 because what it emits looks like a measurement.
+
+### rails-anchors.sh
+
+The two framework anchors, and the one check whose allowlist lives in another file: it derives the
+permitted documentation URLs from `references/rails-docs.md`, so a row added there is legal here
+without touching this directory, and a URL a run invented is not. Beyond that it settles what a script
+can settle about a probe — no fabricated output beneath a command nobody ran, no write outside a
+sandboxed console, no production environment, and, given `--repo`, every constant and attribute a
+probe names existing in the repository. That last one is `searches.sh`'s argument applied to commands
+instead of searches: a plausible identifier is the failure mode, and it stays invisible until someone
+pastes it.
+
+It says SKIP on a page with neither anchor, which is most pages produced before this existed.
 
 ## The mechanical / judged line
 
@@ -347,6 +362,11 @@ Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a
 it only makes the reader look the number up. That rule earned itself when §§ 2 and 4 swapped places:
 `blast-radius` and `behaviour-flows` kept their names, their files and their history, and only their
 prose had to move.
+
+`rails-anchors` reuses the `behaviour-flows` scope rather than adding one, the way `brief-tail` reuses
+`blast-radius`: the anchors live inside the review unit's fields, so what it grades is a § 2 fragment.
+It is a case about restraint more than presence — the mechanical half already settles whether an anchor
+is real, and what a reader has to settle is whether it was worth making.
 
 The remaining sections are `what-changed`, `start-here`, `cross-cutting` and `coverage-ledger`. The last
 two exist only at `--full`, which is worth knowing before writing them: a case for either has to declare
