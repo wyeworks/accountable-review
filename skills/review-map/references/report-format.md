@@ -3,7 +3,8 @@
 What sections exist, when each appears, how deep it goes, and the primitives the page is built from —
 the review unit, the evidence tier, the source excerpt, and the rule that each fact has one home.
 
-Seven sections, and the order below is the default review path rather than a mould. Derive the actual
+Seven sections at `--full`, four at the default `--brief` — see § *Detail levels* — and the order
+below is the default review path rather than a mould. Derive the actual
 order from the PR's own goals: if the change is a client-side refactor with one new field behind it,
 the boundary leads and persistence is a sentence. A section the diff does not earn is **omitted**,
 never filled with generic content and never left as an "N/A" placeholder.
@@ -15,10 +16,39 @@ it, do not duplicate it.
 
 ---
 
+## Detail levels
+
+How much page the run produces. Settled once, in step 1 of the procedure, from the flag on the
+invocation; there is no per-section renegotiation of it.
+
+| Level | Flag | Shape |
+|---|---|---|
+| **brief** | `--brief`, or no flag | §§ 1–3 as written below. §§ 4–7 collapse into **one** section, § *Section 4 at brief* |
+| **full** | `--full` | The seven sections below, exactly as written |
+| **review** | `--review` | Full, plus a code-review pass threaded through it. **Not implemented** — the skill stops and says so |
+
+**The level changes what the tail of the page is; it never changes what a section teaches.**
+§§ 1–3 are identical at both levels — same depth rules, same excerpt budget, same review unit, same
+rules about what a flow owns. The behaviour flows are the product, and a level that thinned them
+would be selling the thing the page exists for. What `--brief` does is decline to spend four section
+shells on material that is often one screen: it merges, it drops the ranking, and it drops the
+comprehension checkpoint. It does not summarise § 2.
+
+So the two things that scale a page are **orthogonal**, and confusing them is the way to get this
+wrong: § *Depth rules* scales each section by what the diff puts into it, at either level, and the
+level decides how many sections there are to scale.
+
+**One thing is level-independent, deliberately:** every path in the diff still appears in the page,
+and the coverage gate still runs. § *The completeness invariant* says why, and what changes is only
+which component carries the paths.
+
+---
+
 ## Contents
 
 **Primitives and rules** — read these before writing anything.
 
+- *Detail levels* — brief, full and review, and what the level does and does not change
 - *The review unit* — the seven fields every meaningful change gets
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
 - *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
@@ -28,21 +58,25 @@ it, do not duplicate it.
 - *The completeness invariant* — why every diff path appears, and why the check is one-directional
 - *Build state* — the banner and pending markers that keep a staged page honest while it fills in
 
-**The seven sections, in default order** — each with what triggers it.
+**The seven sections, in default order** — each with what triggers it, and what becomes of it at
+`--brief`.
 
-| | Section | Appears | Owns |
-|---|---|---|---|
-| 1 | What changed | always | Intent, scope, the metric strip, the use cases named |
-| 2 | Behaviour flows | the bulk | One flow per behaviour, canonically — the mechanism, and the findings inside it |
-| 3 | Start here | always | One prioritized list: where to go in the code, in the order to go there |
-| 4 | Blast radius | always | Where consequences leave the diff, seen across every flow at once |
-| 5 | Cross-cutting consequences | anything genuinely spans flows | Schema structure, authorization, jobs, deploy order, test infrastructure |
-| 6 | Before approving | always | Author questions, validations, test gaps, a ≤5-question checkpoint |
-| 7 | Coverage | always | The ledger. No findings |
+| | Section | Appears | At `--brief` | Owns |
+|---|---|---|---|---|
+| 1 | What changed | always | unchanged | Intent, scope, the metric strip, the use cases named |
+| 2 | Behaviour flows | the bulk | unchanged | One flow per behaviour, canonically — the mechanism, and the findings inside it |
+| 3 | Start here | always | unchanged | One prioritized list: where to go in the code, in the order to go there |
+| 4 | Blast radius | always | **the merged section** | Where consequences leave the diff, seen across every flow at once |
+| 5 | Cross-cutting consequences | anything genuinely spans flows | folded in, consequential rows only | Schema structure, authorization, jobs, deploy order, test infrastructure |
+| 6 | Before approving | always | folded in, questions and validations | Author questions, validations, test gaps, a ≤5-question checkpoint |
+| 7 | Coverage | always | folded in as paths, unclassified | The ledger. No findings |
 
 The order is the reviewer's path, and each section assumes the ones before it. § 2 teaches the
 mechanisms; § 3 is the moment the reviewer opens the code, holding §§ 1–2; § 4 is a second pass over
 the same change through one lens, so it can point at a flow instead of re-explaining it.
+
+*Section 4 at brief* follows § 7, since it is built out of all four of §§ 4–7 and only reads once they
+have been read.
 
 *Where the old per-layer material goes* maps the previous twelve-part format onto these, since
 persistence, API surface and contract no longer have sections of their own — they are covered inside
@@ -338,6 +372,14 @@ The reference form is one sentence, no re-explanation:
 
 Not a summary of that consequence, not its citation again, not its tier label again.
 
+**At `--brief` the routing has fewer destinations, and the rule is unchanged.** Rows 3, 4, 6 and 7
+above all name a section that does not exist at that level; each resolves to the merged § 4, and the
+concept keeps exactly one home there. The one that needs care is row 4: a consequence spanning flows
+lands under the merged section's `<h3 id="crosscutting">`, still explained once, still referenced from
+each flow it touches in one clause. Fewer sections is not licence to explain something twice because
+the second place is now the same place — a merged section that carries both a flow's explanation and
+the pointer back to it has restated it at a distance of two paragraphs, which is the worst version.
+
 **Two consequences worth stating plainly.** A caveat belongs in the page once — *"these findings are a
 pass, not an audit"* is said in *start here* and nowhere else. And a `file:line` is not repeated every
 time its fact is mentioned; it sits with the canonical explanation, and later references point at the
@@ -423,6 +465,14 @@ take on faith. Neither is earned by file count.
 Adaptivity trims ceremony on small PRs. It never trims teaching on a large one — on a big change,
 explanation is the whole product.
 
+**The detail level is a different axis, and the two multiply rather than substitute.** Everything
+above applies unchanged at `--brief`; what the level decides is how many sections there are to weigh,
+not how heavily each one is weighed. Two consequences for diagrams specifically: `--brief` draws no
+§ 5 figures at all (no ER fragment, no lifecycle — migration safety is a row there), so its merged
+tail section holds the `.blast` panel and nothing else that could compete for the budget. And a run
+at `--brief` must not read the shorter page as licence to skimp on a flow's diagram, which is the
+one figure § 2 earns.
+
 ## The completeness invariant
 
 **Every file in the diff appears somewhere in the page.** A reviewer who wants to read all of it must
@@ -444,6 +494,15 @@ set(paths cited in page) == set(diff paths)    ❌ impossible by construction
 
 The one place equality *is* asserted is the coverage ledger, which is machine-generated from the diff
 for exactly that reason. Never "fix" a surplus elsewhere by deleting a citation to unchanged code.
+
+**The invariant does not have a detail level; only its carrier does.** At `--full` the paths live in
+§ 7's classified ledger. At `--brief` they live in the merged section's `Changed` list, generated by
+`ledger-rows.sh --paths-only` — one `.gt-paths` cell each, still carrying `data-path`, so
+`coverage-gate.sh` greps them page-wide and asserts the same equality it always did. That is the whole
+reason the brief carrier is a grid cell rather than a list item, and it is why a shorter page is
+legitimate rather than a silent gap: what `--brief` declines to do is *classify* the diff, never
+account for it. `data-path` stays reserved to whichever of the two carries it — an excerpt using it
+would register as a surplus path at either level.
 
 ---
 
@@ -502,6 +561,13 @@ from *pending* to *not written*, and the ledger note says the gate never ran. Th
 whole point — *pending* is a promise, *not written* is a fact, and a page left promising work that is
 not coming is the one outcome worse than publishing late. `SKILL.md` § *When a run stops early* has
 the wording.
+
+**Pending attaches to whatever a reader could mistake for finished.** At `--full` that is a section,
+and the stub above is a section. At `--brief` the tail is one section written in parts, so a
+half-written § 4 marks its `<h3>` sub-parts pending in place, and the rail's one `04` entry carries a
+marker until all of them are written. The mistake to avoid is the section reading as complete because
+its first part is: a reader who finds a blast panel and no *before approving* has to be able to tell
+that one is coming from that the diff earned nothing there.
 
 **At the final publish, all of it goes**: banner, rail markers, stubs. A finished page still saying
 "stage 2 of 3" undersells completed work and leaves the reader unable to tell whether the run
@@ -681,7 +747,9 @@ sets — the explanation is stable, the findings are a sample.
 
 ## Section 4 · Blast radius — always
 
-Where consequences extend beyond the diff. This is the section a diff cannot produce at all, and by
+**This spec has two consumers.** It is § 4 at `--full`, and it is the spine of the merged section at
+`--brief` — so a change here lands in both, and § *Section 4 at brief* says only what differs. Where
+consequences extend beyond the diff. This is the section a diff cannot produce at all, and by
 this point in the page it is a **second pass**: the reader has been through the flows one at a time,
 and now sees the same change as one system, with the edges that leave it.
 
@@ -817,6 +885,55 @@ cannot run must not report a pass.
 is all that split was ever worth — it tells a reviewer which changes they may hold as a separate mental
 model. Neutrally framed: "appears unrelated to archival; review independently" is the whole register,
 never a criticism of the author for bundling.
+
+## Section 4 at brief · Blast radius and what to check — replaces §§ 4–7
+
+At `--brief` there is no § 5, § 6 or § 7. Sections 4 to 7 above are **one** section, whose spine is
+§ 4 unchanged and whose tail is the part of §§ 5–7 a reviewer acts on. Take it from the assembled
+block in `page-template.html` — it is a novel composition of five components that each came from a
+different section, which is exactly the shape a run flattens when it is only described.
+
+**The parts, in this order.** § 4's own three come first and keep their specs verbatim; the folded-in
+material sits after them and must not dilute them.
+
+| Part | From | At this level |
+|---|---|---|
+| The `.blast` panel, `.legend`, and the note under it | § 4 | Unchanged, including what adjacency cannot say |
+| `Changed` | § 7 | **Every path in the diff**, generated by `ledger-rows.sh --paths-only`, as `.gt-paths` cells |
+| `Affected, not changed`, and the `.searched` blocks | § 4 | Unchanged, pointers and all |
+| `<h3 id="crosscutting">` | § 5 | Rows, and only what is both flow-spanning **and** consequential. Omitted outright if nothing is |
+| `<h3 id="approving">` | § 6 | Author questions and validations. **Last in the section** |
+
+**What `--brief` drops, and what it does not.**
+
+- **The ranking goes; the coverage does not.** `Changed` carries the whole diff, so the section still
+  accounts for every path and `coverage-gate.sh` still passes. What is lost is the attention level and
+  the primary / supporting / secondary group — a ledger row's three judgements, which are ranking. § 3
+  is still where the page says where the attention goes, and it says it by what is on that list.
+- **No figures beyond the panel.** The ER fragment and the lifecycle belong to `--full`. Migration
+  *safety* is a row here; schema *structure* is not.
+- **No comprehension checkpoint.** It is a comprehension test rather than something to weigh before
+  approving, and it is § 6's most expensive item to write well. `--full` is where it lives.
+- **Test gaps are not gathered.** Each flow already carries its own in *relevant tests*; collecting
+  them in one place was § 6's job, and there is no § 6.
+- **Nothing about §§ 1–3 changes**, and nothing here summarises § 2. A finding a flow explains is a
+  pointer here, in the pointer shape § 4 defines, exactly as at `--full`.
+
+**Three things the markup has to keep, because a check reads each of them.** Every one of these is
+why the merge costs the eval harness almost nothing:
+
+- `id="blast"` on the `<section>`, and `id="approving"` on the **last** `<h3>`.
+  `evals/checks/blast-radius.sh` takes its region from the first anchor to the next `<section`, and
+  `before-approving.sh` from the second anchor onward. Lose them and `before-approving.sh` prints a
+  SKIP, which reads as verified.
+- The approving part is `<ul class="actions">`, **never** `<ol class="begin">`. An `ol.begin` inside
+  the region is how `blast-radius.sh` recognises the format's old ordering, where the reading list
+  came before the flows it depends on, and it fails on one.
+- The two `<dt>` labels stay `Changed` and `Affected, not changed`, verbatim. `evals/checks/searches.sh`
+  scopes by those markers rather than by any section id.
+
+**Build state inside one section.** With one tail section rather than four, *pending* attaches to the
+`<h3>` sub-parts rather than to the section — see § *Build state*.
 
 ---
 

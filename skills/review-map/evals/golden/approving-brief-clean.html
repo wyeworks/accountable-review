@@ -1,0 +1,47 @@
+<!-- Sections 4 to 7 as ONE section, which is what the brief detail level produces.
+     Nothing is planted here: this is the shape the other approving-brief-* fragments
+     deviate from, and the reason it is a whole merged section rather than just the
+     before-approving part is that the anchors are the thing under test. id="blast" on
+     the <section> is what blast-radius.sh reads; id="approving" on the LAST <h3> is
+     what before-approving.sh reads. No .checkpoint: it belongs to --full. -->
+<section id="blast">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>Blast radius and what to check</h2>
+
+  <div class="blast">
+    <div class="blast-row">
+      <div class="bx bx-on"><b>Projects::Archive</b><span>writes projects.archived_at</span></div>
+      <div class="bx bx-off"><b>ActiveProjects</b><span>still offers the project</span></div>
+    </div>
+    <div class="legend">
+      <span><i class="key-on"></i>Changed by this PR</span>
+      <span><i class="key-off"></i>Unchanged, and affected</span>
+    </div>
+    <p class="note">Adjacency cannot show direction: the scope is read by the selector, never written by this diff.</p>
+  </div>
+
+  <dl class="rows">
+    <dt class="lbl-ink">Changed</dt>
+    <dd>
+      <div class="gt gt-paths">
+        <div class="c" data-path="app/models/project.rb"><a class="path" href="#">app/models/project.rb</a></div>
+        <div class="c" data-path="db/schema.rb"><a class="path" href="#">db/schema.rb</a></div>
+      </div>
+      <p class="note">All 2 changed paths. The model is the one worth opening; the schema is regenerated.</p>
+    </dd>
+
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; scopes the selectable list, and archival does not narrow it <a href="#flow-b">Flow B</a></div>
+      <div class="item"><a class="path" href="#">spec/factories/projects.rb</a> &mdash; an unchanged trait stamps archived_at <a class="cite" href="#">spec/factories/projects.rb:14</a> <span class="tier">from unchanged code</span></div>
+      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong> <code>rg -n 'archived' app lib</code> found the scope; <code>rg -n 'archive[!?]?\b' app lib</code> found no other caller.</div>
+      <div class="searched"><strong>What these searches could not have found:</strong> a reader reaching the column through an enum predicate rather than by name.</div>
+    </dd>
+  </dl>
+
+  <h3 class="cc-h" id="approving">Before approving</h3>
+  <span class="lbl act-group">Ask the author</span>
+  <ul class="actions"><li>Should existing time entries stay editable after archival?</li></ul>
+  <span class="lbl act-group">Run</span>
+  <ul class="actions"><li><code>bundle exec rspec spec/models/project_spec.rb</code> &mdash; pins the guard</li></ul>
+</section>

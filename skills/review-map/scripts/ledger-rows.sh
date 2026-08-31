@@ -4,6 +4,7 @@
 #   Usage: ledger-rows.sh <BASE> [HEAD] [--pr <owner/repo#N>]
 #                                       [--compare <owner/repo@base...head>]
 #                                       [--blob <owner/repo@sha>]
+#                                       [--paths-only]
 #          (run from inside the repository)
 #
 # The ledger has to list every changed path exactly, and coverage-gate.sh compares
@@ -18,6 +19,14 @@
 #
 # Placeholders left in the output are deliberate. A row that still says {{SECTION}}
 # is a row nobody classified, and it is meant to be obvious.
+#
+# --paths-only emits ONE cell per path instead of four: no section, no attention
+# level, no group. It is what the brief detail level's merged tail section carries in
+# place of the classified ledger, and the reason it is still a .gt grid cell rather
+# than a list item is that data-path has to stay on a `div class="c"` — that is what
+# coverage-gate.sh compares and what page-invariants.sh checks it sits on. So the
+# classification goes and the completeness gate keeps running, at every level. The
+# three judgements are what --paths-only drops; accounting for the diff is not.
 #
 # LINKS. report-format.md § 7 wants a deep link per row, and at link rungs 1 and 2
 # that link is a diff-page anchor, whose fragment is the SHA-256 of the path. Pass
@@ -44,12 +53,14 @@ HEAD_REF=HEAD
 PR=
 COMPARE=
 BLOB=
+PATHS_ONLY=0
 
 while [ $# -gt 0 ]; do
   case $1 in
     --pr)      PR=${2:-};      shift 2 ;;
     --compare) COMPARE=${2:-}; shift 2 ;;
     --blob)    BLOB=${2:-};    shift 2 ;;
+    --paths-only) PATHS_ONLY=1;  shift ;;
     -*) echo "ledger-rows.sh: unknown option $1" >&2; exit 2 ;;
     *)
       if [ -z "$BASE" ]; then BASE=$1; else HEAD_REF=$1; fi
@@ -58,7 +69,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$BASE" ]; then
-  echo "usage: ledger-rows.sh <BASE> [HEAD] [--pr owner/repo#N] [--compare owner/repo@base...head] [--blob owner/repo@sha]" >&2
+  echo "usage: ledger-rows.sh <BASE> [HEAD] [--pr owner/repo#N] [--compare owner/repo@base...head] [--blob owner/repo@sha] [--paths-only]" >&2
   exit 2
 fi
 n=0
@@ -107,10 +118,14 @@ git diff --numstat "$BASE...$HEAD_REF" | sort -k3 | while IFS='	' read -r add de
   status=$(git diff --name-status "$BASE...$HEAD_REF" -- "$path" | cut -f1 | head -1)
   safe=$(printf '%s' "$path" | esc)
   printf '<!-- %s +%s/-%s -->\n' "${status:-?}" "$add" "$del"
-  # Four grid cells, not a <tr>: the ledger is a CSS grid so every seam is a rule at
-  # any wrap point. data-path stays on the first cell — coverage-gate.sh greps it
+  # Grid cells, not a <tr>: the ledger is a CSS grid so every seam is a rule at any
+  # wrap point. data-path stays on the first cell — coverage-gate.sh greps it
   # page-wide and compares it to the diff as a set, and it is RESERVED to this cell.
   printf '<div class="c" data-path="%s">%s</div>' "$safe" "$(cell "$path")"
+  if [ "$PATHS_ONLY" = 1 ]; then
+    printf '\n'
+    continue
+  fi
   printf '<div class="c"><span class="sec">{{SECTION}}</span></div>'
   printf '<div class="c"><span class="att att-{{read|skim|mech}}">{{READ|SKIM|MECHANICAL}}</span></div>'
   printf '<div class="c"><span class="grp">{{PRIMARY|SUPPORTING|SECONDARY}}</span></div>\n'

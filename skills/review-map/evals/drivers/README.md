@@ -18,4 +18,9 @@ instructions, because the instructions are what is being measured. A driver that
 explaining the review unit is measuring itself.
 
 `{{DOUBLE_BRACED}}` names are substituted by `../run.sh`: `SKILL_DIR`, `FIXTURE_DIR`,
-`FROZEN`, `BASE`, `OUT`.
+`FROZEN`, `BASE`, `LEVEL`, `OUT`.
+
+`LEVEL` is the skill's detail level, which a case file declares and `--level` overrides. It is
+substituted rather than hard-coded for the usual reason: a driver naming its level in prose
+would be a second copy of what the case file already says, and the run's result line records
+the one the harness actually used.

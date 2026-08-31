@@ -9,6 +9,13 @@
 #
 # What no script can settle: whether a question is answerable by copying one sentence
 # from earlier in the page. That is the cap's actual purpose and it lives in the case.
+#
+# DETAIL LEVEL. At --level brief there is no section 6: its anchor is an <h3> inside the
+# merged tail section, and the checkpoint is not there at all — it is a comprehension test
+# rather than something to weigh before approving, so it belongs to --full. That inverts
+# the cap check rather than relaxing it: at brief, no checkpoint is a PASS and a present
+# one is a FAIL. The rest of this script is level-agnostic, because author questions and
+# real commands are what the brief level keeps.
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd); CHECKS_DIR=$HERE; . "$HERE/lib.sh"
 parse_args "$@"
@@ -16,11 +23,20 @@ require_input
 
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 
-# On a page, section 6 is the region from its anchor onward. A fragment is already it.
+# On a page, section 6 is the region from its anchor onward — which is also true at brief,
+# where the anchor is an <h3> and is deliberately the LAST part of the merged section. A
+# fragment is already the region.
 if grep -q 'id="approving"' "$IN"; then
   awk '/id="approving"/,0' "$IN" > "$TMP/region"
 elif [ "$IN_KIND" = fragment ]; then
   cp "$IN" "$TMP/region"
+elif [ "$LEVEL" = brief ]; then
+  # At brief the anchor is not optional: it is the merged section's last <h3>, and
+  # without it this whole script goes quiet on a page that has a before-approving part.
+  # A SKIP here would read as verified, which is the failure this branch exists to stop.
+  bad "no id=\"approving\" anchor at --brief — the merged tail section carries it on its last <h3>, and without it none of section 6's rules can be checked"
+  finish
+  exit
 else
   skip "no section 6 on this page (id=\"approving\" absent)"
   finish
@@ -41,7 +57,13 @@ fi
 if [ "${cp_items:-0}" -eq 0 ]; then
   cp_items=$(awk '/<ol class="firstlook"/,/<\/ol>/' "$REGION" | grep -c '<li' || true)
 fi
-if [ "${cp_items:-0}" -eq 0 ]; then
+if [ "$LEVEL" = brief ]; then
+  if [ "${cp_items:-0}" -eq 0 ]; then
+    ok "no comprehension checkpoint, which is right at --brief: it belongs to --full"
+  else
+    bad "a comprehension checkpoint with $cp_items question(s) at --brief — the checkpoint belongs to --full, and this level's tail carries author questions and validations only"
+  fi
+elif [ "${cp_items:-0}" -eq 0 ]; then
   maybe "no comprehension checkpoint found inside 'Before approving'"
 elif [ "${cp_items:-0}" -le 5 ]; then
   ok "comprehension checkpoint has $cp_items question(s), within the cap of 5"

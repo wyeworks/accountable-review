@@ -11,6 +11,16 @@
 #   Just the diagrams, optionally rendered to PNGs for a person to look at:
 #     check.sh --page page.html --scope diagram [--visual]
 #
+#   A page or fragment produced at the skill's brief detail level, where sections 4 to 7
+#   are one merged section (report-format.md § Detail levels):
+#     check.sh --page page.html --repo DIR --base REF --level brief
+#
+# --level defaults to `full`. It is a third axis, separate from build state and from the
+# section slug, and only one check reads it: before-approving.sh, because a missing
+# comprehension checkpoint is correct at brief and a WARN at full. Everything else keeps
+# working across the merge because the merged section keeps the section anchors the region
+# extractors read — see report-format.md § Section 4 at brief.
+#
 # Three grading scopes, and the difference matters. A PAGE carries invariants no fragment
 # can: completeness, one canonical home, the excerpt budget, the build state. A FRAGMENT is
 # one section, graded on its own so a wording change in one part of report-format.md can be
@@ -54,7 +64,7 @@ esac
 set -- "--${IN_KIND}" "$IN"
 [ -n "$REPO" ] && set -- "$@" --repo "$REPO"
 [ -n "$BASE" ] && set -- "$@" --base "$BASE"
-set -- "$@" --head "$HEAD_REF" "--$MODE"
+set -- "$@" --head "$HEAD_REF" "--$MODE" --level "$LEVEL"
 [ -n "$OUTDIR" ] && set -- "$@" --out "$OUTDIR"
 
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
@@ -88,8 +98,8 @@ skipped=$(grep -c '^SKIP' "$TMP/out" || true)
 
 echo
 if [ "$IN_KIND" = page ]; then
-  echo "$SCOPE / $MODE: $pass passed, $fail failed, $warn warning(s), $skipped skipped"
+  echo "$SCOPE / $MODE / $LEVEL: $pass passed, $fail failed, $warn warning(s), $skipped skipped"
 else
-  echo "$SCOPE fragment: $pass passed, $fail failed, $warn warning(s), $skipped skipped"
+  echo "$SCOPE fragment / $LEVEL: $pass passed, $fail failed, $warn warning(s), $skipped skipped"
 fi
 [ "$fail" -eq 0 ]

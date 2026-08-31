@@ -32,7 +32,14 @@ skip()  { skipped=$((skipped+1)); echo "SKIP  $1"; }
 # Two kinds of input. A page is a whole published document; a fragment is one section,
 # produced by a driver in ../drivers from the frozen upstream in ../frozen. Checks that
 # need the whole document refuse a fragment rather than passing vacuously on it.
+#
+# LEVEL is the skill's detail level, and it is a THIRD axis: MODE is build state
+# (draft/final/stopped) and SCOPE is which section, neither of which says how many
+# sections the page was supposed to have. It defaults to `full` so every existing
+# golden fragment and page case keeps meaning exactly what it meant — a check that
+# quietly reinterpreted its own corpus would be measuring the wrong thing.
 IN=; IN_KIND=; REPO=; BASE=; HEAD_REF=HEAD; MODE=final; SCOPE=; VISUAL=0; OUTDIR=
+LEVEL=full
 EXPECTS=; FORBIDS=
 
 parse_args() {
@@ -47,6 +54,7 @@ parse_args() {
       --final)    MODE=final;   shift ;;
       --stopped)  MODE=stopped; shift ;;
       --scope)    SCOPE=$2;  shift 2 ;;
+      --level)    LEVEL=$2;  shift 2 ;;
       --out)      OUTDIR=$2; shift 2 ;;
       --visual)   VISUAL=1;  shift ;;
       --expect)   EXPECTS="$EXPECTS$2

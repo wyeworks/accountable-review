@@ -66,10 +66,38 @@ You get back a URL. The page is a private Claude Artifact until you share it.
 Re-running for the same PR republishes to the same URL, so the review map tracks the PR across
 pushes instead of scattering links.
 
+### How much page
+
+```
+/accountable-review:review-map 412              # --brief, the default
+/accountable-review:review-map 412 --full
+```
+
+**`--brief`** merges the tail of the page — blast radius, cross-cutting consequences, before
+approving, coverage — into **one** section built around the blast radius, with the questions and
+commands a reviewer acts on attached. Four sections instead of seven.
+
+**`--full`** writes all seven, and is the shape described in *What it produces* below.
+
+What `--brief` does **not** do is thin out the first three sections. The behaviour flows are the
+product, and a level that summarised them would be selling the thing the page exists for — so §§ 1–3
+are identical at both levels, same depth, same excerpts, same rules. What it declines to spend is
+four section shells on material that is often one screen: it merges, it drops the coverage ledger's
+attention and grouping columns, and it drops the comprehension checkpoint. Every changed file still
+appears, and the completeness check still runs, at both levels.
+
+Reach for `--full` on a diff you are going to live inside for an hour — a migration, a change
+spanning both sides of the API, someone else's hundred-file feature.
+
+**`--review`** is planned: a code-review pass on top of the map, with its findings verified and
+threaded into the flow that owns each one. It is not implemented, and passing it stops the run and
+says so rather than producing a page that quietly leaves it out.
+
 ## What it produces
 
-Seven sections in the order a reviewer actually works, each owning one kind of thing, with any the
-diff does not earn omitted outright:
+At `--full`, seven sections in the order a reviewer actually works, each owning one kind of thing,
+with any the diff does not earn omitted outright. At the default `--brief`, the first three are these
+unchanged and the last four are one section — see *How much page* above:
 
 - **What changed** — intent, scope and the central behavioural change, with the use cases named as
   actor plus behaviour. Derived from tests, code and commits rather than copied from a possibly-stale
@@ -168,7 +196,9 @@ intent cannot be established, the page says so instead of guessing:
 
 ### It adapts to the PR
 
-Parts appear only when the diff earns them, and depth scales with weight. A four-file bugfix produces
+The detail level decides how many sections there are; this decides how heavily each one is weighed,
+and the two are separate axes. Parts appear only when the diff earns them, and depth scales with
+weight. A four-file bugfix produces
 a one-screen page, not an empty template. If a PR genuinely does not need one, the skill says so
 instead of generating ceremony.
 
