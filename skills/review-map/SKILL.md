@@ -278,11 +278,21 @@ arriving at stage 2 sees a gap above written material. The pending marker is wha
 readable — the risk the build state exists to prevent is an unwritten section looking like an empty
 one, not a section arriving early.
 
-Between stages 2 and 3 the bulk gets written. If that stretches over many turns, republish as each
-flow or section completes — those intermediate saves cost one tool call and mean a crash leaves a
-useful page rather than nothing. **Write section 3 last of the prose sections**: it is a route
-through the flows and an index into them, so it cannot be written before they exist without being
-guessed at.
+Between stages 2 and 3 the bulk gets written. If that stretches over many turns, save as each flow or
+section completes — a crash then leaves a useful page rather than nothing.
+
+**Fill the page in; do not rewrite it.** After the first `Write`, every later stage replaces that
+section's *pending* marker with the written section, using `Edit` on the block the marker sits in.
+The file is already on disk and the earlier sections have not changed, so re-emitting them buys
+nothing and costs the whole page again in generated tokens. This is not a small saving and it is the
+single largest cost a profile of this skill finds: one run wrote a 23 KB staged page, then produced
+its finished 82 KB version as one 35,000-token `Write` that re-emitted the first 23 KB byte for byte
+— 258 seconds, 56% of everything that run spent streaming output. An intermediate save is one tool
+call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
+anchor you already have.
+
+**Write section 3 last of the prose sections**: it is a route through the flows and an index into
+them, so it cannot be written before they exist without being guessed at.
 
 **The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
 than no page at all: a reviewer sees no cross-cutting section, concludes there was nothing to say
@@ -345,6 +355,11 @@ Everything else about writing holds at every stage:
   loudly; a paraphrased quotation is a false quotation, and nothing in the page or in the reader's
   experience catches it. The script reads the real bytes and does the HTML escaping, which matters
   more than it sounds — ERB and TSX are full of `<`, `>` and `&`.
+
+  So **do not read the generated HTML back and retype it into the page.** Send each excerpt to a file
+  in `$W`, leave a one-line placeholder where it belongs, and splice the files in with shell at the
+  end. Retyping is how a generated quotation quietly becomes a typed one — the failure this bullet
+  exists to prevent — and it pays for every excerpt twice in generated tokens.
 
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a

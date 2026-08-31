@@ -176,6 +176,13 @@ Editing one of these means checking the others still agree.
   reader taking any of the last three for "nothing to say here". A stopped run is the one that needs a
   deliberate edit: pending is a promise, and leaving one behind is worse than publishing late. The form lives in `report-format.md` § *Build state*, the components are
   `.buildstate` and `.pending`, and `evals/check.sh --draft` / `--final` check both ends of it.
+
+  The pending marker earns a second keep, found by profiling rather than by reading: it is the
+  **anchor a later stage edits**, which is what keeps staging from costing the whole document per
+  stage. A run that instead re-`Write`s the file pays for every already-written section again — one
+  did, producing its finished 82 KB page as a single 35,000-token write that re-emitted the staged
+  23 KB byte for byte, 56% of everything that run spent streaming. Staging is only cheap if a stage
+  writes what is new, so `SKILL.md` step 9 says fill in with `Edit`, never rewrite.
 - **Findings are a sample, not an audit.** The page must never read as a clean bill of health. This is
   load-bearing, not hedging: the skill explains, and explanation is reproducible, but defect discovery
   is not.
