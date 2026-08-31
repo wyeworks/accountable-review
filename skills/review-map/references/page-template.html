@@ -636,6 +636,14 @@ section > .cc-h:first-of-type { margin-top: 0; }
    written because the run stopped, and omitted because the diff
    did not earn it. Both of these are DELETED at the final publish;
    leaving a .pending behind is worse than publishing late.
+
+   .pending attaches at three granularities: a whole <section>, an
+   <h3> sub-part of the merged tail at --brief, and a BEHAVIOUR FLOW,
+   since section 2 is delivered one flow at a time. The markup for
+   that third one is already here and needs nothing added — the rail
+   carries a per-flow marker below, and each flow is its own
+   <section id="flow-x">, so the generic pending section IS the flow
+   stub with the flow's id on it.
    ============================================================ */
 .buildstate {
   display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
@@ -697,7 +705,12 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
          <a data-rail="blast" href="#blast"><span class="n">04</span>Reach &amp; checks</a>
 
        Nothing else about the rail changes — same numbering, same scroll-spy,
-       same .pending markers. ===== -->
+       same .pending markers.
+
+       The per-flow sub-entries below are also the staging markers for section 2,
+       which arrives one flow at a time: entry 02 keeps a .pending until every
+       flow under it is written. That is why a flow gets a rail entry of its own
+       and section 5's subheadings do not. ===== -->
   <nav class="rail" aria-label="Sections">
     <div class="rail-id">
       <div class="lbl" style="letter-spacing:.18em">Review map</div>
@@ -724,8 +737,8 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
          at the final publish. A staged page that looks finished is the whole risk
          the staged publish creates. ===== -->
     <div class="buildstate">
-      <strong>Still being written</strong> &mdash; stage {{N}} of 3, updated {{HH:MM}}.
-      Sections marked <span class="pending">pending</span> are coming; anything not marked is written.
+      <strong>Still being written</strong> &mdash; {{N}} parts still pending, updated {{HH:MM}}.
+      Parts marked <span class="pending">pending</span> below are not yet written. Their absence is not a finding.
     </div>
 
     <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
@@ -786,11 +799,28 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
     <!-- ===== A PENDING SECTION, while the page is staged. Say what it will cover
          and roughly how big it is, so a reader can tell "coming" from "nothing to
          say here". Delete the marker when the section lands; if the run STOPS,
-         edit this into a stated limit — a promise left behind is worse. ===== -->
+         edit this into a stated limit — a promise left behind is worse.
+
+         A pending FLOW is the same idea with a flow's own header — shown
+         assembled below, because section 2 arrives one flow at a time. ===== -->
     <section id="{{ID}}">
       <div class="eyebrow"><span class="lbl lbl-a">{{EYEBROW}}</span><i></i></div>
       <h2>{{SECTION}}</h2>
       <p class="note" style="margin-top:18px"><span class="pending">pending</span> {{WHAT_IT_WILL_COVER_AND_HOW_BIG}}</p>
+    </section>
+
+    <!-- ===== A PENDING FLOW, while section 2 fills in one flow at a time. Same
+         .subhead as a written flow, so the reader sees the split's real shape
+         before any of it is written; the line of substance is the flow's NAME and
+         what it covers, never "coming soon". The whole <section> is the anchor the
+         later Edit replaces, which is what keeps a stage from re-writing the page.
+
+         It carries no .mech and no dl.rows, and that is deliberate: it therefore
+         adds nothing to the unit census in evals/checks/behaviour-flows.sh, so a
+         half-written section 2 is not read as a flattened one. ===== -->
+    <section id="flow-{{X}}" style="padding-top:52px">
+      <div class="subhead"><span class="lbl lbl-wide">Flow {{X}}</span><h3>{{THE_BEHAVIOUR}} <span class="pending">pending</span></h3></div>
+      <p class="note">{{WHAT_THIS_FLOW_WILL_COVER_AND_WHICH_FILES}}</p>
     </section>
 
     <!-- ==========================================================================

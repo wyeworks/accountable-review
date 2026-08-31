@@ -147,6 +147,9 @@ A large diff takes a while to explain, and a reviewer holding a ticket should no
 The page is published early and republished as parts complete, always to the same URL: open it at
 minute two, watch it fill in, start reading the moment the part you need lands.
 
+The behaviour flows are the bulk of the page, so they arrive **one flow at a time** rather than all
+together — the split and what each flow will cover land first, then each flow as it is written.
+
 While it is still being written it says so, in a banner, and every part that is coming but not yet
 written is marked pending in the contents and in place. That is the difference between a useful
 early page and a dangerous one — a reader who sees no contract section should be able to tell whether

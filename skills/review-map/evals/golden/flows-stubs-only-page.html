@@ -1,0 +1,28 @@
+<!-- No planted defect. Stage 3 the moment it opens: the split is published and every flow is still
+     a stub. The region the census narrows to is NOT empty — a stub is a <section id="flow-b"> — so
+     the "section 2 is still pending" branch cannot fire, and without a guard the checks report
+     "no .mech block found" and "no .pipe": wording complaints about prose nobody has written.
+
+     What must happen instead is one SKIP that says so. The pending marker is the precondition for
+     it, so the skip is unreachable on a finished page — a SKIP that could fire on a real page
+     would read as verified. -->
+<div class="buildstate">
+  <strong>Still being written</strong> &mdash; 4 parts still pending, updated 14:19.
+  Parts marked <span class="pending">pending</span> below are not yet written. Their absence is not a finding.
+</div>
+<section id="flows">
+  <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
+  <h2>Behaviour flows</h2>
+  <p>Split by behaviour: archiving, and reading a list that archival changes the meaning of. Each
+    cuts through controller, model and query.</p>
+</section>
+<section id="flow-a">
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Archiving a project <span class="pending">pending</span></h3></div>
+  <p class="note">Three files: the model guard, the controller action permitting the param, and its
+    spec.</p>
+</section>
+<section id="flow-b">
+  <div class="subhead"><span class="lbl lbl-wide">Flow B</span><h3>Showing archived projects in reports <span class="pending">pending</span></h3></div>
+  <p class="note">Two files: the query that still offers archived rows, and the report component
+    reading its result.</p>
+</section>

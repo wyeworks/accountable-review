@@ -208,7 +208,7 @@ Editing one of these means checking the others still agree.
   `git diff --name-only`, compared as whole strings — never substring matching, because `api/Gemfile`
   matches inside `api/Gemfile.lock`.
 - **A staged page must never look finished.** The page publishes early and fills in at one URL
-  (`SKILL.md` step 9) at both levels — the three milestones are cuts through the procedure, not through
+  (`SKILL.md` step 9) at both levels — the four milestones are cuts through the procedure, not through
   the section list. What the level moves is where a marker attaches: a section at `--full`, an `<h3>`
   sub-part at `--brief`, where the tail is one section written in pieces and the hazard is its first
   part making the whole thing read as done. Staging is only safe because an unfinished page says so: a build banner while it
@@ -225,6 +225,27 @@ Editing one of these means checking the others still agree.
   did, producing its finished 82 KB page as a single 35,000-token write that re-emitted the staged
   23 KB byte for byte, 56% of everything that run spent streaming. Staging is only cheap if a stage
   writes what is new, so `SKILL.md` step 9 says fill in with `Edit`, never rewrite.
+
+  **The behaviour flow — not § 2 — is the unit of staging**, which is the third granularity a
+  `.pending` attaches at. This is what the milestone count moved for: §§ 1–3 and 5–7 have three
+  arrivals between them and § 2 has as many as the diff earns flows, so a stage that delivered § 2
+  whole would put the longest wait of the run behind one arrival, which is the thing staging exists
+  to prevent. It cost no markup — `<section id="flows">` was already just the intro, each flow was
+  already its own `<section id="flow-x">`, and the rail already rendered a per-flow marker. What was
+  missing was the instruction to use them, and the instruction it replaced was conditional
+  (*"if that stretches over many turns"*), which is why every real run delivered the tail in one
+  chunk. Consequence for the banner: it counts **parts still pending** rather than *stage N of M*,
+  because the total now depends on the flow count and a run would have to commit to it before
+  knowing one. Nothing greps the count; `checks/build-state.sh` greps "absence is not a finding",
+  which is why that sentence is the one that must survive editing.
+
+  The flow stub is assembled in `page-template.html` beside the pending section, for the reason
+  every composition there is: it carries no `.mech` and no `dl.rows`, which is what keeps it out of
+  both censuses in `checks/behaviour-flows.sh` — a half-written § 2 must not read as a flattened one.
+  `golden/flows-partial-page.html` pins that, and `golden/flows-stubs-only-page.html` pins the one
+  narrow `skip` for the moment stage 3 opens and no flow is written yet. That skip takes a pending
+  marker as its precondition deliberately: a SKIP reads as verified, so it has to be unreachable on
+  a finished page.
 - **Findings are a sample, not an audit.** The page must never read as a clean bill of health. This is
   load-bearing, not hedging: the skill explains, and explanation is reproducible, but defect discovery
   is not.

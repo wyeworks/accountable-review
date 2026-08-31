@@ -556,12 +556,18 @@ boundary material, concluding the change has no contract implications, and being
 
 ```html
 <div class="buildstate">
-  <strong>Still being written</strong> — stage 2 of 3, updated 14:32.
+  <strong>Still being written</strong> — 3 parts still pending, updated 14:32.
   Parts marked pending below are not yet written. Their absence is not a finding.
 </div>
 ```
 
 That last sentence is the load-bearing one. Keep it.
+
+**It counts what is pending, not which stage this is.** The banner used to read *stage 2 of 3*, and the
+denominator stopped being true once the behaviour flow became the unit of staging: the number of
+arrivals now depends on how many flows the diff earns, so a run would have to commit to a total before
+it knows one. A count of parts still pending needs no total, and it is the number the reader wanted
+anyway — *how much is still coming*, not *how far through its own plan the run is*.
 
 **Pending in the rail** so the reader can see the shape of what is coming:
 
@@ -598,15 +604,30 @@ whole point — *pending* is a promise, *not written* is a fact, and a page left
 not coming is the one outcome worse than publishing late. `SKILL.md` § *When a run stops early* has
 the wording.
 
-**Pending attaches to whatever a reader could mistake for finished.** At `--full` that is a section,
-and the stub above is a section. At `--brief` the tail is one section written in parts, so a
-half-written § 4 marks its `<h3>` sub-parts pending in place, and the rail's one `04` entry carries a
-marker until all of them are written. The mistake to avoid is the section reading as complete because
-its first part is: a reader who finds a blast panel and no *before approving* has to be able to tell
-that one is coming from that the diff earned nothing there.
+**Pending attaches to whatever a reader could mistake for finished**, which means three
+granularities, not one.
+
+A **section**, which is the stub above, and the case at `--full`.
+
+A **`<h3>` sub-part**, at `--brief`, where the tail is one section written in parts: a half-written § 4
+marks its sub-parts pending in place, and the rail's one `04` entry carries a marker until all of them
+are written. The mistake to avoid is the section reading as complete because its first part is — a
+reader who finds a blast panel and no *before approving* has to be able to tell that one is coming
+from that the diff earned nothing there.
+
+A **behaviour flow**, at both levels, because § 2 is delivered one flow at a time
+(`SKILL.md` step 9). An un-written flow is a whole `<section id="flow-x">` stub carrying the same
+`.subhead` a written flow has — assembled in `page-template.html` beside the pending section, and
+copied from there rather than rebuilt — and § 2's rail entry keeps a marker until every flow is
+written, exactly as the `--brief` `04` entry does. A flow stub's line of substance is the flow's
+**name and what it covers**: that is what lets the split be read before any flow exists, and it is
+the reason opening stage 3 is worth a publish of its own.
+
+The third case needs **no markup of its own**: the rail already carries a per-flow marker and each
+flow is already its own `<section>`. A parallel mechanism for it is a regression, not an addition.
 
 **At the final publish, all of it goes**: banner, rail markers, stubs. A finished page still saying
-"stage 2 of 3" undersells completed work and leaves the reader unable to tell whether the run
+"2 parts still pending" undersells completed work and leaves the reader unable to tell whether the run
 stopped early. If a section genuinely was left unwritten — the diff was too large, a region got skimmed
 — that is a sentence of prose stating the limit, not a pending marker. The two mean different things:
 pending is a promise, a stated limit is a fact.

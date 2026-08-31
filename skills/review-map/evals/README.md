@@ -343,6 +343,13 @@ nothing to say. `--stopped` is for a run that ended early on purpose — the ban
 not written rather than promise stages that are never coming. Page case 4 needs the first two, so copy
 the page file aside right after the first publish; that snapshot is the only record of stage 1.
 
+Three states, but **four milestones**, and the two numbers are unrelated: § 2 arrives one behaviour
+flow at a time, so how many times a run republishes depends on how many flows the diff earns. A draft
+snapshot is worth taking mid-§ 2 as well as at stage 1 — `golden/flows-partial-page.html` is what that
+shape looks like, and `golden/flows-stubs-only-page.html` is the moment before it. Neither state is
+visible to any check that reads the publish *sequence*, because none does: every check grades a
+snapshot.
+
 `--scope core` runs exactly the five checks the old single script ran, which is the comparison to make
 if a page starts failing for a reason you did not expect.
 
