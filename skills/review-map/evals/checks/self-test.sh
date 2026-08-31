@@ -101,6 +101,8 @@ page-invariants.sh  | invariants-loose-data-path.html | 1 | outside a ledger cel
 excerpts.sh         | excerpt-clean.html            | 0 | collapsed by default
 excerpts.sh         | excerpt-open.html             | 1 | open by default
 excerpts.sh         | excerpt-duplicate.html        | 1 | same range is excerpted more than once
+excerpts.sh         | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
+excerpts.sh         | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang
 CASES
 
 # The judged half has one piece a script can test: reading a verdict file. A tally that reads a

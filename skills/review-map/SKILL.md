@@ -345,7 +345,10 @@ Everything else about writing holds at every stage:
   An excerpt is a *quotation*, and that is why it is generated. A mistyped ledger row fails the gate
   loudly; a paraphrased quotation is a false quotation, and nothing in the page or in the reader's
   experience catches it. The script reads the real bytes and does the HTML escaping, which matters
-  more than it sounds — ERB and TSX are full of `<`, `>` and `&`.
+  more than it sounds — ERB and TSX are full of `<`, `>` and `&`. It also tags the `--source` block
+  with the language, which is what the page tints from at read time — pass `--lang` only when the
+  extension lies, and never write a colour class into the code yourself: a hand-coloured quotation is
+  a quotation someone edited.
 
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
@@ -445,9 +448,10 @@ republish — one link, mentioned once, then a note when it is complete.
   `data-theme="light"`, and the unstamped `prefers-color-scheme` default most viewers get). The design
   is warm-paper light; the dark half is ours, so a colour declared in only one place is a bug the
   reader sees and you will not.
-- Carry the template's `<script>` across **verbatim, and add nothing to it.** It is a scroll-progress
-  bar and a rail scroll-spy: two navigation aids, and the page reads correctly with the whole block
-  deleted. Do not give § 6 checkboxes, tick state or an "n of m" counter — a count of cleared items
+- Carry the template's `<script>` block across **verbatim, and add nothing to it** — including the two
+  `<script src>` lines above it. It is a scroll-progress bar, a rail scroll-spy and the syntax tint on
+  unchanged excerpts: presentation only, and the page reads correctly with the whole block deleted, in
+  one ink. Do not give § 6 checkboxes, tick state or an "n of m" counter — a count of cleared items
   reads as progress toward approval, which is the verdict this page does not carry.
 - Publish the final state to the same path. Report that it is complete, what the change does in two or
   three lines, and anything you could not verify. Mention the project's own review command if it has

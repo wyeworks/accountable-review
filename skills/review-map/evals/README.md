@@ -193,7 +193,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `page-invariants.sh` | severity chips, verdict language, evidence tiers, `data-path`, dead links, themes | page and fragment |
 | `build-state.sh` | draft / final / stopped | page |
 | `completeness.sh` | the gate, delegated to `scripts/coverage-gate.sh` | page |
-| `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice | page and fragment |
+| `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice, no syntax colouring written into the quotation, `data-lang` on unchanged blocks only | page and fragment |
 | `behaviour-flows.sh` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
 | `start-here.sh` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
 | `blast-radius.sh` | § 4: a diagram, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
