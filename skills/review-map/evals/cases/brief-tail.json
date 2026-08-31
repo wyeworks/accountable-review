@@ -1,0 +1,38 @@
+{
+  "section": "brief-tail",
+  "of": "report-format.md § Detail levels, § Section 4 at brief · Blast radius and what to check",
+  "produced_by": "drivers/brief-tail.md",
+  "scope": "blast-radius",
+  "level": "brief",
+  "notes": "The default detail level's whole tail: sections 4 to 7 in one. It reuses the blast-radius scope because the mechanical rules that apply are the same ones — the merged section keeps the anchors those checks read, which is the design claim this case exists to keep honest. What it can settle beyond blast-radius.json: whether the folded-in material stays subordinate to the panel, whether the diff is still fully accounted for once the ledger's classification is gone, and whether a run reads a shorter page as licence to explain less. What it cannot settle is the same limit every section case has, one size larger: it cannot see whether the merge caused the page to say something twice, because both homes are now inside one section and the flows it would duplicate are not in the fragment.",
+  "cases": [
+    {
+      "id": "brief-tail/rails-only-small",
+      "fixture": "rails-only-small",
+      "check": "check.sh --fragment <out> --scope blast-radius --level brief --expect 'active_projects'",
+      "expected_output": "One section: the blast-radius panel and its legend, the changed and affected lists, the recorded searches, then at most two h3 sub-parts — what spans flows, and what to do before approving. Every one of the five changed paths appears under Changed, generated, with data-path, and none of them carries a section, attention level or group. app/queries/active_projects.rb belongs to Flow B, so it is a named pointer to that flow. No comprehension checkpoint, no ER fragment, no lifecycle. The slug uniqueness validation with no unique index behind it is consequential and spans nothing, so it is an author question rather than a cross-cutting row.",
+      "expectations": [
+        "The panel is still the spine: the folded-in material sits after the two lists and does not push the blast radius into being one item among four. A reader arriving here learns where consequences leave the diff first, and what to do about it second",
+        "All five changed paths are present under Changed with data-path, and not one of them carries an attention level or a primary/supporting/secondary group — the level drops the ledger's three judgements and keeps its one guarantee",
+        "app/queries/active_projects.rb is in the affected list with the search that found it written down, and it is a pointer to Flow B rather than an explanation: one clause, one citation, a link",
+        "At least one empty search is recorded as a search — this diff has real ones (no other caller of archive!, no other reader of the archived scope), and unrecorded, absence cannot be told from omission",
+        "Nothing that belongs to --full has leaked in: no comprehension checkpoint, no ER fragment, no lifecycle diagram, and no gathered list of test gaps pulled out of the flows",
+        "The shorter shape has not become a thinner account: the entries that are here carry the same clause on why the change reaches them, with the same evidence tiers, as they would at --full. No sentence grades the change"
+      ]
+    },
+    {
+      "id": "brief-tail/monorepo-contract",
+      "fixture": "monorepo-contract",
+      "check": "check.sh --fragment <out> --scope blast-radius --level brief --expect 'selectableProjects'",
+      "expected_output": "The same section over a diff that crosses the backend/frontend boundary. Affected code on both sides, api/app/serializers and web/lib/selectableProjects.ts among it, each with the search that found it. Deploy ordering between the two sides is the one thing here that genuinely spans flows, so it is a row under the cross-cutting h3 rather than an author question. Citations are plain text: nothing is pushed. Every changed path under Changed, unclassified.",
+      "expectations": [
+        "web/lib/selectableProjects.ts is in the affected list, on the client side of the boundary, with the search that found it recorded",
+        "Affected code appears on both sides of the boundary, not just the Rails half — a section that stops at the API is describing half the blast radius",
+        "Deploy ordering is a cross-cutting row here, because it reaches more than one behaviour; a consequence that belongs to a single flow is a pointer into that flow instead. Nothing is explained in both places",
+        "Every changed path is under Changed with data-path and no classification, and the count in the prose matches the number of cells rather than being asserted",
+        "The link rung is stated once, and no citation is emitted as a dead permalink",
+        "No comprehension checkpoint and no schema figures, and no sentence grades the change or recommends approving it"
+      ]
+    }
+  ]
+}

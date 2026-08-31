@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -28,7 +28,7 @@ front — the procedure itself is the only part that has to be in context the wh
 
 | File | Read at | For |
 |---|---|---|
-| `references/report-format.md` | steps 1, 7, 8, 9 | The seven sections, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
+| `references/report-format.md` | steps 1, 7, 8, 9 | The detail levels, the sections each one produces, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | step 5, then while reading any layer | What a senior reviewer of this stack looks for, and the search recipes for code the diff did not touch |
 | `references/page-template.html` | step 9 | The design system: tokens (light and dark), component classes, the two SVG diagram layouts, and the page's one small script |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
@@ -38,11 +38,20 @@ front — the procedure itself is the only part that has to be in context the wh
 Paths are relative to the base directory named at the top of this skill when it loads. That value is
 how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
 
-## 1. Resolve the target
-
+## 1. Resolve the target and the detail level
 
 - Argument may be a PR number, a PR URL, a branch, or a diff range. With no argument, use the
   current branch against its base.
+- **Read the detail level off the invocation, and hold it for the whole run.** One of `--brief`,
+  `--full`, `--review`, in any position; **no flag means `--brief`**. What each level produces is in
+  `references/report-format.md` § *Detail levels* — read it now, with the rest of that file, rather
+  than inferring the shape from the section list. Three rules about the flag itself:
+  - `--review` **stops the run.** It is not implemented; see § *The review level is not implemented
+    yet* below for what to say. Do not fall back to another level and do not write a page.
+  - An argument starting with `--` that is none of the three is **reported, not guessed at**. A
+    misread flag silently produces the wrong shape of page, and the reader has no way to tell.
+  - Say which level you are producing when you first speak, in the same breath as the URL — a reader
+    who wanted the full page should find that out at minute two, not at the end.
 - Find the base *ref*: the PR's base if there is one, else the default branch
   (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
   you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
@@ -257,6 +266,13 @@ someone mid-paragraph is worse than one that arrives late.
 | 2 · Blast radius | 5 | Adds section 4: the blast-radius diagram, changed vs potentially affected, and what was searched |
 | 3 · Complete | 10 | Everything else, gate passed, build banner gone |
 
+**The three milestones are the same at `--brief`**, because they are cuts through the *procedure*, not
+through the section list. What differs is where the pending markers go: with one tail section rather
+than four, stage 2 writes the top of section 4 and marks its `<h3>` sub-parts pending in place. Take
+that section from the block assembled whole in `references/page-template.html` — it composes five
+components that each came from a different section, and a composition that is only described is the
+one that gets flattened.
+
 **The page fills in out of document order, and that is fine.** Step 5 produces the blast radius; step
 6 produces the flows. So section 4 lands while section 2 is still a pending stub, and a reader
 arriving at stage 2 sees a gap above written material. The pending marker is what makes that
@@ -329,10 +345,10 @@ Everything else about writing holds at every stage:
   An excerpt is a *quotation*, and that is why it is generated. A mistyped ledger row fails the gate
   loudly; a paraphrased quotation is a false quotation, and nothing in the page or in the reader's
   experience catches it. The script reads the real bytes and does the HTML escaping, which matters
-  more than it sounds — ERB and TSX are full of `<`, `>` and `&`. It also tags the `--source` block with the language,
-  which is what the page tints from at read time — pass `--lang` only when the extension lies, and
-  never write a colour class into the code yourself: a hand-coloured quotation is a quotation someone
-  edited.
+  more than it sounds — ERB and TSX are full of `<`, `>` and `&`. It also tags the `--source` block
+  with the language, which is what the page tints from at read time — pass `--lang` only when the
+  extension lies, and never write a colour class into the code yourself: a hand-coloured quotation is
+  a quotation someone edited.
 
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
@@ -376,6 +392,17 @@ republish — one link, mentioned once, then a note when it is complete.
   covers the file, its attention level, and its group. A row still reading `{{SECTION}}` is a row
   nobody classified, which is the point.
 
+  **At `--brief`, add `--paths-only`** and paste the result into the merged section's `Changed` list:
+
+  ```sh
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only
+  ```
+
+  One cell per path instead of four — no section, no attention level, no group, because those three
+  judgements are the ledger's ranking and `--brief` declines to do it. The path and its `data-path`
+  are unchanged, which is what keeps the gate below running at both levels. Combine it with the link
+  flag your rung earned exactly as at `--full`.
+
   **Pass the link option your rung earned**, so the rows come out linked and you never type inside the
   cell the gate reads:
 
@@ -410,8 +437,12 @@ republish — one link, mentioned once, then a note when it is complete.
   what is missing and what is surplus, and fails loudly when the `data-path` attributes are absent
   instead of reporting a pass it did not earn.
 
-  The gate runs once, here, against the finished page. Earlier stages ship with the ledger visibly
-  marked partial; a gate that passed on a partial ledger would mean nothing.
+  The gate runs once, here, against the finished page, **at every detail level**. `--brief` produces a
+  shorter page, not an unaccounted-for one: it drops the ledger's three judgements and keeps its one
+  guarantee. A run that skipped the gate because the page has no section 7 has quietly turned a
+  shorter page into a page that may have dropped a file, which is the one thing the level was never
+  allowed to do. Earlier stages ship with the path list visibly marked partial; a gate that passed on
+  a partial list would mean nothing.
 - Confirm the page renders: no horizontal overflow on `body`, diagrams and wide tables fit or scroll
   in their own container, and all three theme states resolve (`data-theme="dark"`,
   `data-theme="light"`, and the unstamped `prefers-color-scheme` default most viewers get). The design
@@ -448,6 +479,24 @@ Convert it instead into a stated limit — the same components, different words:
 `evals/check.sh --stopped` checks all four. This is the third legitimate state of the page, alongside
 in-progress and complete, and the only one that requires a deliberate edit rather than a deletion.
 
+## The review level is not implemented yet
+
+`--review` is meant to run the project's code-review pass as well, and thread its findings through
+the map. That is not built. **Stop, and say so** — do not fall back to another level and do not write
+a page:
+
+> `--review` runs a code-review pass on top of the review map, and is not implemented yet. Re-run
+> with `--brief` for the default page or `--full` for all seven sections. Nothing was published.
+
+Offer the project's own review command if it has one, and say plainly that it answers a different
+question — that offer is the same one step 10 makes at the end of an ordinary run.
+
+Publishing a page and labelling the review part *pending* is the wrong answer here, for the reason
+`references/report-format.md` § *Build state* gives: pending is a promise, and nothing is coming.
+`.claude/CLAUDE.md` carries the design notes on what this level has to solve before it can ship —
+the short version is that a code-review pass produces graded findings and this page carries no
+verdicts, so a finding has to enter as a *claim to verify* rather than as a finding to display.
+
 ## Working in a worktree
 
 Worktrees are among this skill's most common targets, and a worktree-isolated session sandboxes shell
@@ -466,6 +515,10 @@ a paragraph without a citation, a section the diff did not earn, a review unit w
 
 This runs in a single context by design, so a very large diff will strain it. That is a signal worth
 reporting, not one to hide: if you had to skim a region to fit, say which region, in the page.
+
+**The detail level is not a budget for this.** `--brief` produces fewer sections; it does not licence
+a thinner account of the ones it does produce, and it is not the answer to a diff that will not fit.
+A strained run at `--brief` still says which region it skimmed.
 
 ## Hard rules
 

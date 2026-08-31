@@ -16,7 +16,9 @@
 # The fifth column is optional and exists for a check that needs more than a fragment. @GOLD@
 # expands to the golden directory, so searches.sh can be handed a repository to search: it is
 # the one check whose rule is a relation between the page and a repo, and a check that can only
-# SKIP here is exactly what this file exists to prevent.
+# SKIP here is exactly what this file exists to prevent. It also carries --level for a fragment
+# produced at the skill's brief detail level, and --page for a rule that only holds on a whole
+# page — the same fragment is then named twice, in column two and after --page.
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 EVALS=$(dirname "$HERE")
@@ -82,6 +84,15 @@ start-here.sh       | start-here-no-why.html        | 1 | is not a reading order
 start-here.sh       | start-here-two-lists.html     | 1 | it is one list
 before-approving.sh | approving-clean.html          | 0 | within the cap of 5
 before-approving.sh | approving-six-questions.html  | 1 | the cap is 5
+# The brief detail level, where sections 4 to 7 are one section. The first three rows are
+# the level's own rule (the checkpoint belongs to --full); the last two are the ones that
+# matter more, because they pin that the merge did NOT need a flag: blast-radius.sh and
+# page-invariants.sh read the merged section through the anchors it kept, unchanged.
+before-approving.sh | approving-brief-clean.html      | 0 | right at --brief | --level brief
+before-approving.sh | approving-brief-checkpoint.html | 1 | the checkpoint belongs to --full | --level brief
+before-approving.sh | approving-brief-no-anchor.html  | 1 | carries it on its last | --page @GOLD@/approving-brief-no-anchor.html --level brief
+blast-radius.sh     | approving-brief-clean.html      | 0 | no reading order here | --level brief
+page-invariants.sh  | approving-brief-clean.html      | 0 | data-path is only on ledger rows | --level brief
 page-invariants.sh  | invariants-clean.html         | 0 | no severity chips
 page-invariants.sh  | invariants-severity-chip.html | 1 | severity chips reintroduced
 page-invariants.sh  | invariants-verdict.html       | 1 | verdict language found

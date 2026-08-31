@@ -1,5 +1,6 @@
 #!/bin/sh
-# report.sh — what the runs add up to, per case, per fixture, per skill sha, per model.
+# report.sh — what the runs add up to, per case, per fixture, per skill sha, per detail level,
+# per model.
 #
 #   ./report.sh                  every case
 #   ./report.sh behaviour-flows  one
@@ -13,6 +14,10 @@
 # its own — a fail on sonnet/low may be the wording or may be the reader. So model and effort
 # are part of the group key and nothing averages across them. A row reading `-/-` was produced
 # by whatever the ambient config was that day, which is not a fact about anything.
+#
+# The detail level is the third axis on the same argument. --brief and --full produce different
+# pages from the same case, so a pass rate averaged over both describes neither. Lines written
+# before levels existed carry none, and are reported as `full`, which is what they were.
 #
 # Two blocks per group, and they never merge. CHECKS are the mechanical verdicts — a script
 # says the same thing every time, so a change in that column is a change in the fragment.
@@ -41,6 +46,8 @@ for f in $files; do
       # Lines written before the knobs existed carry no model, and "-" is the same thing they
       # meant: the ambient config decided.
       model = "-"; effort = "-"; jmodel = "-"; jeffort = "-"
+      # Lines written before detail levels existed were all produced at what is now `full`.
+      level = "full"
       if (match($0, /"fixture":"[^"]*"/))     fixture = substr($0, RSTART + 11, RLENGTH - 12)
       if (match($0, /"skill_sha":"[^"]*"/))   sha     = substr($0, RSTART + 13, RLENGTH - 14)
       if (match($0, /"dirty":[a-z]*/))        dirty   = substr($0, RSTART + 8, RLENGTH - 8)
@@ -54,10 +61,14 @@ for f in $files; do
       if (match($0, /"judge_unclear":[0-9]+/)) ju     = substr($0, RSTART + 16, RLENGTH - 16) + 0
       if (match($0, /"model":"[^"]*"/))       model   = substr($0, RSTART + 9, RLENGTH - 10)
       if (match($0, /"effort":"[^"]*"/))      effort  = substr($0, RSTART + 10, RLENGTH - 11)
+      if (match($0, /"level":"[^"]*"/))       level   = substr($0, RSTART + 9, RLENGTH - 10)
       if (match($0, /"judge_model":"[^"]*"/)) jmodel  = substr($0, RSTART + 15, RLENGTH - 16)
       if (match($0, /"judge_effort":"[^"]*"/)) jeffort = substr($0, RSTART + 16, RLENGTH - 17)
 
-      k = sha (dirty == "true" ? "+dirty" : "") "\t" fixture "\t" model "/" effort
+      # The detail level is part of the group key for the same reason model and effort are: a
+      # brief run and a full run of the same case are two different pages, and a pass rate
+      # averaged over both belongs to neither.
+      k = sha (dirty == "true" ? "+dirty" : "") "\t" fixture "\t" level "\t" model "/" effort
       keys[k] = 1
 
       # A run whose agent died produced nothing to grade, and averaging it in reads as a quality
@@ -74,7 +85,7 @@ for f in $files; do
     END {
       for (k in keys) {
         n = split(k, part, "\t")
-        printf "  %-18s %-20s %s\n", part[1], part[2], part[3]
+        printf "  %-18s %-20s %-6s %s\n", part[1], part[2], part[3], part[4]
         if (runs[k] > 0)
           printf "    checks   %d run(s)  %d clean  %.1f fail/run  %.1f warn/run  %ds avg%s\n",
             runs[k], green[k], fails[k] / runs[k], warns[k] / runs[k],
@@ -88,10 +99,10 @@ for f in $files; do
           m = split(jorder[k], jks, SUBSEP)
           for (x = 1; x <= m; x++) {
             jk = jks[x]; if (jk == "") continue
-            split(jk, jpart, "\t")
+            split(jk, jpart, "\t")   # sha, fixture, level, model/effort, judge model/effort
             printf "    judged   %d run(s)  %d clean  %.1f pass  %.1f fail  %.1f unclear  per run  · judge %s\n",
               jruns[jk], jclean[jk], jpass[jk] / jruns[jk], jfail[jk] / jruns[jk], junc[jk] / jruns[jk],
-              jpart[4]
+              jpart[5]
           }
         } else
           printf "    judged   none — ./run.sh %s --judge\n", FILENAME
