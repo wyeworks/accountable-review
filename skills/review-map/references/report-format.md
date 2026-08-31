@@ -583,6 +583,11 @@ That last sentence is the load-bearing one. Keep it.
 One line of substance in the stub — how many files, what it will cover — turns a placeholder into
 information. "Coming soon" does not.
 
+Note that the stub is a whole `<section>` with its own `id`, which makes it a unique anchor a later
+stage can `Edit` in place. That is deliberate and worth keeping: it is what lets a stage write only
+what is new instead of re-emitting the document, which `SKILL.md` step 9 requires and which a profile
+found to be the largest single cost in a run.
+
 **The coverage ledger is marked partial** until the final publish, because the gate has not run. Say
 so above the table rather than letting a short ledger imply a short diff.
 

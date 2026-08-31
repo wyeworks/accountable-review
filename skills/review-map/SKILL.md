@@ -71,6 +71,21 @@ how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
   permalink needs a commit rather than a range; keep using `BASE...HEAD` for every diff.
 - If `gh` is missing or there is no PR, continue anyway with the local branch. This is a normal
   case, not an error.
+- **Fix the work directory now, and derive it rather than choosing it.** Everything this run writes
+  goes in one place, named after the target so a re-run recomputes it instead of remembering it:
+
+  ```sh
+  W="${TMPDIR:-/tmp}/review-map/<repo>-pr-<N>"      # a PR
+  W="${TMPDIR:-/tmp}/review-map/<repo>-<branch>"    # no PR; / in the branch becomes -
+  mkdir -p "$W"                                     # the page is $W/page.html
+  ```
+
+  Derived, not invented, because step 9 republishes to the same file path and step 10 reuses it on a
+  re-run — one PR, one URL, across pushes as well as stages — and a session-scoped scratch directory
+  cannot satisfy that: the next session gets a different one. Export `W` once and use it in every
+  later command. A run that instead picked a path per command spent nine calls and seventy seconds
+  re-establishing it while splicing excerpt files it had first written somewhere else and then had
+  to move.
 - **Fix the deep-link mode now, not at render time.** Check whether the head SHA is even reachable
   on a remote — `git branch -r --contains <HEAD_SHA>`, where empty output means it was never pushed
   and every permalink to it would 404. Unpushed branches and worktrees are among the most common
@@ -279,11 +294,21 @@ arriving at stage 2 sees a gap above written material. The pending marker is wha
 readable — the risk the build state exists to prevent is an unwritten section looking like an empty
 one, not a section arriving early.
 
-Between stages 2 and 3 the bulk gets written. If that stretches over many turns, republish as each
-flow or section completes — those intermediate saves cost one tool call and mean a crash leaves a
-useful page rather than nothing. **Write section 3 last of the prose sections**: it is a route
-through the flows and an index into them, so it cannot be written before they exist without being
-guessed at.
+Between stages 2 and 3 the bulk gets written. If that stretches over many turns, save as each flow or
+section completes — a crash then leaves a useful page rather than nothing.
+
+**Fill the page in; do not rewrite it.** After the first `Write`, every later stage replaces that
+section's *pending* marker with the written section, using `Edit` on the block the marker sits in.
+The file is already on disk and the earlier sections have not changed, so re-emitting them buys
+nothing and costs the whole page again in generated tokens. This is not a small saving and it is the
+single largest cost a profile of this skill finds: one run wrote a 23 KB staged page, then produced
+its finished 82 KB version as one 35,000-token `Write` that re-emitted the first 23 KB byte for byte
+— 258 seconds, 56% of everything that run spent streaming output. An intermediate save is one tool
+call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
+anchor you already have.
+
+**Write section 3 last of the prose sections**: it is a route through the flows and an index into
+them, so it cannot be written before they exist without being guessed at.
 
 **The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
 than no page at all: a reviewer sees no cross-cutting section, concludes there was nothing to say
@@ -350,6 +375,15 @@ Everything else about writing holds at every stage:
   extension lies, and never write a colour class into the code yourself: a hand-coloured quotation is
   a quotation someone edited.
 
+  So **do not read the generated HTML back and retype it into the page.** Send each excerpt to a file
+  in `$W`, leave a one-line placeholder where it belongs, and splice the files in with shell at the
+  end. Retyping is how a generated quotation quietly becomes a typed one — the failure this bullet
+  exists to prevent — and it pays for every excerpt twice in generated tokens.
+
+  **Generate all of them in one call.** The excerpts do not depend on each other, so one call with a
+  line per excerpt costs one round trip where seven calls cost seven. A run that did it one at a time
+  spent ten requests on work worth two.
+
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
   citation that is **load-bearing for a decision the reviewer has to make**, not by a citation merely
@@ -367,8 +401,9 @@ Everything else about writing holds at every stage:
   diff does not contain gets a blob permalink at the SHA that line actually exists at — head for
   unchanged code, base for code the change removed or for behaviour described as it was. Both forms,
   and the rung table, are in `references/report-format.md` § *Deep links*.
-- Write the file to a scratch location, not into the repo. The page must never become part of the
-  diff it describes.
+- Write the page to `$W/page.html` — the work directory derived in step 1 — and never into the repo.
+  The page must never become part of the diff it describes. Excerpt fragments go in the same
+  directory, so splicing them in is a path away rather than a move.
 
 Tell the user the URL when stage 1 goes out, say it will fill in, and do not repeat it on every
 republish — one link, mentioned once, then a note when it is complete.
@@ -456,8 +491,9 @@ republish — one link, mentioned once, then a note when it is complete.
 - Publish the final state to the same path. Report that it is complete, what the change does in two or
   three lines, and anything you could not verify. Mention the project's own review command if it has
   one.
-- On a re-run for the same PR, use the **same file path again** so the URL survives across pushes as
-  well as across stages. One PR, one link, however many times this runs.
+- On a re-run for the same PR, the path is the **same one step 1 derives** — that derivation is what
+  makes the URL survive across pushes as well as across stages. One PR, one link, however many times
+  this runs, without having to remember where the last run put it.
 
 ## When a run stops early
 
@@ -541,3 +577,10 @@ A strained run at `--brief` still says which region it skimmed.
 - Never drop a file from the page to keep it tidy.
 - Never post to GitHub, Linear, or anywhere outside the artifact.
 - Never commit the page into the repo under review.
+- **Do this work yourself; spawn no subagents.** Steps 5 and 6 span the whole diff by nature — step 5
+  traces consumers across both sides of the stack, step 6 groups behaviour no single layer contains —
+  and handing either to an agent with its own context moves comprehension fragmentation from the
+  reviewer to the agents, which is the problem the page exists to solve. It is also slower in
+  practice, not faster: a run that reached for one `Explore` agent stalled the parent for 997
+  seconds, 41% of its wall clock, in a single blocked turn. If the diff is too large to hold, say
+  which region you skimmed — that is the honest failure and it is a signal worth having.
