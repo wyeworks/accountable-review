@@ -72,7 +72,7 @@
       "fixture": "monorepo-contract",
       "level": "brief",
       "prompt": "I've got a review slot on project-archival in about twenty minutes and I don't know the branch at all. Can you get me oriented?",
-      "expected_output": "Staged delivery, which is the default and is not requested here. A URL arrives early, carrying the masthead and the goal, a build banner, and pending markers for the parts this diff earns. It fills in at that same URL. The final state carries no banner and no pending markers, and the coverage gate passes.",
+      "expected_output": "Staged delivery, which is the default and is not requested here. A URL arrives early, carrying the masthead and the goal, a build banner, and pending markers for the parts this diff earns. It fills in at that same URL, and section 2 fills in one behaviour flow at a time rather than arriving whole. The final state carries no banner, no pending markers and no flow stubs, and the coverage gate passes.",
       "files": [],
       "check": "snapshot the page file right after the first publish, then run both: evals/check.sh --draft --page <stage-1 snapshot> --repo <fixture> --base HEAD~1 ; evals/check.sh --final --page <final page> --repo <fixture> --base HEAD~1",
       "expectations": [
@@ -81,7 +81,9 @@
         "check.sh --final passes on the last state: no banner, no pending markers, coverage gate green",
         "The URL reported at the end is the same one reported at the start — one artifact, not two",
         "The page title and favicon are identical across every stage",
-        "The first publish lands before the behaviour cohorts are written, not after",
+        "The first publish lands before the behaviour flows are written, not after",
+        "Section 2 is delivered per flow: if this diff earns more than one flow, an intermediate state shows at least one written flow beside at least one <section id=\"flow-x\"> still marked pending, and the rail's 02 entry keeps a marker until they are all written. A single-flow diff cannot show this and is not a failure",
+        "No flow stub survives on the final page — the per-flow markers go with the banner, not after it",
         "Four sections, not seven: the prompt asks for no level, and the default merges the tail. Nothing is labelled section 5, 6 or 7, and no part is marked pending that this level does not produce at all",
         "Pending stubs say what the part will cover and roughly how big it is, rather than 'coming soon'",
         "The user is told the URL once, with a note that it will fill in — not re-pasted on every republish"

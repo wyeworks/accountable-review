@@ -45,6 +45,21 @@ TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 awk '/<section [^>]*id="flow-/{f=1} f{print} /<\/section>/{f=0}' "$IN" > "$TMP/region"
 if [ -s "$TMP/region" ]; then
   IN=$TMP/region
+  # STAGE 3 JUST OPENED: every flow exists as a stub and none is written yet. The region is not
+  # empty — a stub is a <section id="flow-b"> — so the pending branch below cannot fire, and the
+  # checks would instead report "no .mech block found" and "no .pipe", which describe a wording
+  # problem when the truth is "not written yet".
+  #
+  # Narrow on purpose, and the pending marker is the precondition rather than a detail: a SKIP
+  # reads as verified, so this must be unreachable on a finished page. No .mech AND a pending
+  # marker is the only shape that means what it says. One written flow beside a stub falls
+  # through to the real checks, which is correct — the stub carries no .mech and no dl.rows, so
+  # it adds nothing to either census.
+  if ! grep -q 'class="mech"' "$TMP/region" && grep -q 'class="pending"' "$TMP/region"; then
+    skip "every flow is still a stub — section 2's shape cannot be checked until one is written"
+    finish
+    exit
+  fi
 elif [ "$IN_KIND" = page ]; then
   # A PAGE with no flow sections at all. Falling back to the whole page here is what produced a
   # false positive on a real staged run: section 4 renders Changed / Affected-not-changed with the

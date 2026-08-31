@@ -249,7 +249,7 @@ Two rules keep it from becoming ceremony:
 
 This is not a phase that happens once, before writing. The page ships in stages (step 9), so it is a
 gate each stage passes before it goes out. Content that has been published cannot be unpublished from
-the reader's memory, and a wrong claim corrected in stage 3 was still wrong in stage 1.
+the reader's memory, and a wrong claim corrected in the last stage was still wrong in the first.
 
 - **Read the file yourself before any claim reaches the page.** Not the diff hunk — the file. This is
   the single difference between a page that can be trusted and one that cannot.
@@ -272,30 +272,56 @@ moment the part they need lands.
 
 The mechanics are simply the `Artifact` tool's: republishing the same file path redeploys in place.
 
-**Three milestones.** Each is a coherent thing to read, which is the point — a URL that changes under
+**Four milestones.** Each is a coherent thing to read, which is the point — a URL that changes under
 someone mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
 | 1 · Orientation | 4 | Section 1 (what changed), and the outline of the sections this diff earns, each marked pending |
 | 2 · Blast radius | 5 | Adds section 4: the blast-radius diagram, changed vs potentially affected, and what was searched |
-| 3 · Complete | 10 | Everything else, gate passed, build banner gone |
+| 3 · Flows | 6, then per flow | Section 2's intro and the split — plus one pending stub per flow, named. Then each flow replaces its own stub as it is written |
+| 4 · Complete | 10 | Sections 3, 5, 6 and 7, gate passed, build banner and every marker gone |
 
-**The three milestones are the same at `--brief`**, because they are cuts through the *procedure*, not
+**The behaviour flow is the unit of staging, not section 2.** Section 2 is the bulk, so a stage that
+delivered it whole would put the longest wait of the run behind one arrival — which is the shape
+staging exists to avoid. Nothing new is needed to split it: `<section id="flows">` carries only the
+intro, and each flow is already its own sibling `<section id="flow-x">` with a unique `id`, which is
+exactly the anchor a later stage edits. The rail already renders a per-flow marker — take it and the
+pending-section shape from `references/page-template.html` rather than inventing markup.
+
+So stage 3 **opens with a cheap publish**: the split rationale, and one named stub per flow saying what
+it will cover. That arrival is worth having on its own — a reader learns the shape of the change before
+any flow is written. Each flow then lands in its own republish. Two rules keep this from becoming a
+republish per paragraph:
+
+- **One publish per flow that lands, not per edit.** If two flows land in the same turn, one publish
+  covers both. That bounds the arrivals by turns, which is the right bound: the turn is what a reader
+  waits through.
+- **Step 8 is the gate on each of them.** More publish boundaries means more gates, not a looser one.
+  A flow is published when it is verified, not when it is drafted — a wrong claim corrected two flows
+  later was still wrong when it shipped.
+
+Sections 3, 5, 6 and 7 land together in stage 4 rather than one at a time, and that is not
+inconsistency: section 3 is a route through the flows and cannot precede them, section 7's ledger and
+the completeness gate both belong to step 10, and sections 5 and 6 are small. A stage has to be worth
+opening the tab for.
+
+**The four milestones are the same at `--brief`**, because they are cuts through the *procedure*, not
 through the section list. What differs is where the pending markers go: with one tail section rather
 than four, stage 2 writes the top of section 4 and marks its `<h3>` sub-parts pending in place. Take
 that section from the block assembled whole in `references/page-template.html` — it composes five
 components that each came from a different section, and a composition that is only described is the
-one that gets flattened.
+one that gets flattened. Stage 3 is unchanged by the level: section 2 is identical at both.
 
 **The page fills in out of document order, and that is fine.** Step 5 produces the blast radius; step
 6 produces the flows. So section 4 lands while section 2 is still a pending stub, and a reader
-arriving at stage 2 sees a gap above written material. The pending marker is what makes that
-readable — the risk the build state exists to prevent is an unwritten section looking like an empty
-one, not a section arriving early.
+arriving at stage 2 sees a gap above written material — and once stage 3 is under way, a written flow
+sits above a pending sibling flow. The pending marker is what makes both readable — the risk the
+build state exists to prevent is an unwritten section looking like an empty one, not a section
+arriving early.
 
-Between stages 2 and 3 the bulk gets written. If that stretches over many turns, save as each flow or
-section completes — a crash then leaves a useful page rather than nothing.
+Saving as each flow completes has a second payoff worth stating: a crash then leaves a useful page
+rather than nothing.
 
 **Fill the page in; do not rewrite it.** After the first `Write`, every later stage replaces that
 section's *pending* marker with the written section, using `Edit` on the block the marker sits in.
@@ -307,8 +333,9 @@ its finished 82 KB version as one 35,000-token `Write` that re-emitted the first
 call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
 anchor you already have.
 
-**Write section 3 last of the prose sections**: it is a route through the flows and an index into
-them, so it cannot be written before they exist without being guessed at.
+**Write section 3 last of the prose sections** — which is why it sits in stage 4 above. It is a route
+through the flows and an index into them, so it cannot be written before they exist without being
+guessed at.
 
 **The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
 than no page at all: a reviewer sees no cross-cutting section, concludes there was nothing to say
@@ -410,10 +437,11 @@ republish — one link, mentioned once, then a note when it is complete.
 
 ## 10. Complete the page and gate it
 
-- **Remove the build banner and every pending marker.** A finished page still carrying "2 of 3
-  stages" is the worst outcome of staged delivery: it undersells work that is actually done, and the
-  next reader cannot tell whether you stopped early or forgot the banner. If a section really was left
-  unwritten, say so in prose as a stated limit — that is a different sentence from "pending".
+- **Remove the build banner and every pending marker** — including the per-flow stubs and the rail's
+  flow markers from stage 3. A finished page still carrying "2 parts still pending" is the worst
+  outcome of staged delivery: it undersells work that is actually done, and the next reader cannot
+  tell whether you stopped early or forgot the banner. If a section really was left unwritten, say so
+  in prose as a stated limit — that is a different sentence from "pending".
 - **Generate the ledger, do not type it.** Run the bundled generator from the repository under review
   and paste its output into the ledger table:
 
@@ -500,9 +528,9 @@ republish — one link, mentioned once, then a note when it is complete.
 Sometimes a run ends before the page is finished — the diff was larger than the context, the user
 called it, something failed. The page is already published, so the question is what it should say.
 
-**Not the draft banner.** "Still being written, stage 2 of 3" is a promise, and nothing is writing it
-any more. A reader who comes back an hour later to the sections they were told were coming has been
-misled by a page that was accurate when it shipped.
+**Not the draft banner.** "Still being written, 3 parts still pending" is a promise, and nothing is
+writing it any more. A reader who comes back an hour later to the sections they were told were coming
+has been misled by a page that was accurate when it shipped.
 
 Convert it instead into a stated limit — the same components, different words:
 

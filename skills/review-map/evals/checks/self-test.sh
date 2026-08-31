@@ -71,6 +71,8 @@ behaviour-flows.sh  | flows-unit-flattened.html     | 1 | outside a dl.rows
 behaviour-flows.sh  | flows-decisions-interleaved.html | 1 | belongs after the closing
 behaviour-flows.sh  | flows-blast-rows.html         | 0 | every field row is inside a dl.rows
 behaviour-flows.sh  | flows-pending-page.html       | 0 | section 2 is still pending | --page @GOLD@/flows-pending-page.html
+behaviour-flows.sh  | flows-stubs-only-page.html    | 0 | every flow is still a stub | --page @GOLD@/flows-stubs-only-page.html
+behaviour-flows.sh  | flows-partial-page.html       | 0 | every dl.rows is introduced by a .mech block | --page @GOLD@/flows-partial-page.html
 blast-radius.sh     | blast-clean.html              | 0 | point into the flows that explain them
 blast-radius.sh     | blast-readorder.html          | 1 | the reading order lives in section 3
 blast-radius.sh     | blast-no-pointer.html         | 0 | an in-page anchor works at every link rung

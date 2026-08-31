@@ -1,0 +1,65 @@
+<!-- No planted defect. A staged PAGE mid-stage-3: flow A is written, flow B is still a stub.
+     The trap it pins: a pending flow is a <section id="flow-b"> with no .mech and no dl.rows, so
+     it lands inside the flow region the census is taken over. If the region were read as "one
+     unit per flow section", the stub would register as a flow whose mechanism statement went
+     missing — the same false positive flows-blast-rows.html pins for section 4's dl.rows, one
+     stage later.
+
+     The census must instead report exactly one clean unit and say nothing about the stub. -->
+<div class="buildstate">
+  <strong>Still being written</strong> &mdash; 2 parts still pending, updated 14:32.
+  Parts marked <span class="pending">pending</span> below are not yet written. Their absence is not a finding.
+</div>
+<section id="flows">
+  <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
+  <h2>Behaviour flows</h2>
+  <p>Split by behaviour: archiving, and reading a list that archival changes the meaning of. Each
+    cuts through controller, model and query.</p>
+</section>
+<section id="flow-a">
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Archiving a project</h3></div>
+  <p class="lede">Archival is a column write plus a guard, and the guard is what the behaviour turns
+    on.</p>
+  <div class="pipe">
+    <span class="lbl">Path of a write</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span><span class="t">PATCH /api/projects/:id</span><span class="s">params permitted in the controller</span></span></li>
+      <li><span class="n"><b>2</b><i></i></span><span class="t">Project#archive!</span></li>
+    </ol>
+  </div>
+  <div class="mech">
+    <b>Project#archive!</b>
+    <p>Archival had to preserve historical entries.</p>
+  </div>
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</div>
+      <details class="excerpt excerpt--diff">
+        <summary>
+          <span class="chev">&#9656;</span>
+          <span class="ex-loc">app/models/project.rb:29-33</span>
+          <span class="tag">Changed</span>
+          <span class="ex-why">the guard the behaviour turns on</span>
+        </summary>
+        <div class="ex-body">
+<pre data-src="app/models/project.rb"><span class="l add"><span class="sig">+</span>    return false if time_entries.running.exists?</span>
+</pre>
+        </div>
+      </details>
+    </dd>
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></div>
+    </dd>
+    <dt>Validate</dt>
+    <dd>
+      <div class="item"><code>bundle exec rspec spec/models/project_spec.rb</code></div>
+    </dd>
+  </dl>
+</section>
+<section id="flow-b">
+  <div class="subhead"><span class="lbl lbl-wide">Flow B</span><h3>Showing archived projects in reports <span class="pending">pending</span></h3></div>
+  <p class="note">Two files: the query that still offers archived rows, and the report component
+    reading its result.</p>
+</section>
