@@ -96,18 +96,26 @@ cite() {
   fi
 }
 
-open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed
+# The summary is a three-column grid: chevron, location, state tag — and the why
+# wraps onto its own row underneath. The why stays in the SUMMARY, never in the
+# body: the page has to read complete with every excerpt closed, and a why the
+# reader has to open the block to see defeats the whole point of the component.
+open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state tag
   printf '<details class="excerpt excerpt--%s">\n' "$1"
-  printf '  <summary><span class="ex-loc">%s</span> <span class="ex-why">%s</span></summary>\n' \
-    "$(esc1 "$3")" "$WHY_HTML"
+  printf '  <summary>\n'
+  printf '    <span class="chev">&#9656;</span>\n'
+  printf '    <span class="ex-loc">%s</span>\n' "$(esc1 "$3")"
+  printf '    <span class="tag">%s</span>\n' "$(esc1 "$5")"
+  printf '    <span class="ex-why">%s</span>\n' "$WHY_HTML"
+  printf '  </summary>\n'
   printf '  <div class="ex-body">\n'
-  printf '<pre class="codeblock" data-src="%s" style="counter-reset: exl %s">' \
+  printf '<pre data-src="%s" style="counter-reset: exl %s">' \
     "$(escattr "$2")" "$4"
 }
 
 close_block() {  # $1 kind word, $2 loc label
   printf '</pre>\n'
-  printf '    <p class="note">%s %s</p>\n' "$1" "$(cite "$2")"
+  printf '    <p class="ex-src">%s %s</p>\n' "$1" "$(cite "$2")"
   printf '  </div>\n</details>\n'
 }
 
@@ -148,7 +156,7 @@ at)
   fi
 
   loc="$path:$start-$end"
-  open_block source "$path" "$loc" "$((start - 1))"
+  open_block source "$path" "$loc" "$((start - 1))" "Unchanged"
   printf '%s\n' "$body" | esc | awk '{ printf "<span class=\"l\">%s</span>\n", $0 }'
   close_block "Unchanged at" "$loc"
   ;;
@@ -173,9 +181,14 @@ diff)
       if (want == "" || want + 0 == idx) {
         loc = path ":" nstart "-" (nstart + nspan - 1)
         printf "<details class=\"excerpt excerpt--diff\">\n"
-        printf "  <summary><span class=\"ex-loc\">%s</span> <span class=\"ex-why\">%s</span></summary>\n", esc(loc), why
+        printf "  <summary>\n"
+        printf "    <span class=\"chev\">&#9656;</span>\n"
+        printf "    <span class=\"ex-loc\">%s</span>\n", esc(loc)
+        printf "    <span class=\"tag\">Changed</span>\n"
+        printf "    <span class=\"ex-why\">%s</span>\n", why
+        printf "  </summary>\n"
         printf "  <div class=\"ex-body\">\n"
-        printf "<pre class=\"codeblock\" data-src=\"%s\" style=\"counter-reset: exl %d\">", escattr(path), nstart - 1
+        printf "<pre data-src=\"%s\" style=\"counter-reset: exl %d\">", escattr(path), nstart - 1
         printf "%s", buf
         printf "</pre>\n"
         # The hunk range belongs to the script, so the href has to come from it too. A --link
@@ -192,9 +205,9 @@ diff)
           }
         }
         if (href != "")
-          printf "    <p class=\"note\">Changed at <a class=\"cite\" href=\"%s\">%s</a></p>\n", escattr(href), esc(loc)
+          printf "    <p class=\"ex-src\">Changed at <a class=\"cite\" href=\"%s\">%s</a></p>\n", escattr(href), esc(loc)
         else
-          printf "    <p class=\"note\">Changed at <span class=\"cite\">%s</span></p>\n", esc(loc)
+          printf "    <p class=\"ex-src\">Changed at <span class=\"cite\">%s</span></p>\n", esc(loc)
         printf "  </div>\n</details>\n"
         if (rows > softmax)
           printf "excerpt.sh: hunk %d is %d lines — past the %d-line budget; consider --at with a tighter range.\n", idx, rows, softmax | "cat 1>&2"

@@ -86,20 +86,20 @@ cell() {
   if [ -n "$PR" ]; then
     _repo=${PR%#*}
     _num=${PR##*#}
-    printf '<a class="cite" href="https://github.com/%s/pull/%s/files#diff-%s"><code>%s</code></a>' \
+    printf '<a class="path" href="https://github.com/%s/pull/%s/files#diff-%s">%s</a>' \
       "$_repo" "$_num" "$(sha256of "$_p")" "$_safe"
   elif [ -n "$COMPARE" ]; then
     _repo=${COMPARE%@*}
     _range=${COMPARE##*@}
-    printf '<a class="cite" href="https://github.com/%s/compare/%s#diff-%s"><code>%s</code></a>' \
+    printf '<a class="path" href="https://github.com/%s/compare/%s#diff-%s">%s</a>' \
       "$_repo" "$_range" "$(sha256of "$_p")" "$_safe"
   elif [ -n "$BLOB" ]; then
     _repo=${BLOB%@*}
     _sha=${BLOB##*@}
-    printf '<a class="cite" href="https://github.com/%s/blob/%s/%s"><code>%s</code></a>' \
+    printf '<a class="path" href="https://github.com/%s/blob/%s/%s">%s</a>' \
       "$_repo" "$_sha" "$_safe" "$_safe"
   else
-    printf '<code>%s</code>' "$_safe"
+    printf '<span class="path">%s</span>' "$_safe"
   fi
 }
 
@@ -107,9 +107,13 @@ git diff --numstat "$BASE...$HEAD_REF" | sort -k3 | while IFS='	' read -r add de
   status=$(git diff --name-status "$BASE...$HEAD_REF" -- "$path" | cut -f1 | head -1)
   safe=$(printf '%s' "$path" | esc)
   printf '<!-- %s +%s/-%s -->\n' "${status:-?}" "$add" "$del"
-  printf '<tr><td data-path="%s">%s</td><td>{{SECTION}}</td>' "$safe" "$(cell "$path")"
-  printf '<td><span class="chip">{{read|skim|mechanical}}</span></td>'
-  printf '<td><span class="chip">{{primary|supporting|secondary}}</span></td></tr>\n'
+  # Four grid cells, not a <tr>: the ledger is a CSS grid so every seam is a rule at
+  # any wrap point. data-path stays on the first cell — coverage-gate.sh greps it
+  # page-wide and compares it to the diff as a set, and it is RESERVED to this cell.
+  printf '<div class="c" data-path="%s">%s</div>' "$safe" "$(cell "$path")"
+  printf '<div class="c"><span class="sec">{{SECTION}}</span></div>'
+  printf '<div class="c"><span class="att att-{{read|skim|mech}}">{{READ|SKIM|MECHANICAL}}</span></div>'
+  printf '<div class="c"><span class="grp">{{PRIMARY|SUPPORTING|SECONDARY}}</span></div>\n'
 done
 
 count=$(git diff --name-only "$BASE...$HEAD_REF" | wc -l | tr -d ' ')

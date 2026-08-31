@@ -1,14 +1,54 @@
+<!-- Planted defect: the flow is named after a layer, so it is the repository's structure and
+     not the change's. A reviewer reading it still has to assemble the behaviour themselves. -->
 <section id="flow-a">
-  <div class="layer-head"><p class="eyebrow">Flow A</p><h2>Models</h2></div>
-  <p class="prose">Grouped by where the files live.</p>
-  <article class="unit">
-    <div class="unit-head"><h3>Project</h3><p>Gains archived_at.</p></div>
-    <dl class="unit-body">
-      <div class="ep-row"><dt>Implementation</dt><dd>
-        <ul><li><a class="cite" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</li></ul>
-      </dd></div>
-      <div class="ep-row"><dt>Understand</dt><dd><ul><li>Validation is app-level only <span class="tier">uncertain</span></li></ul></dd></div>
-    </dl>
-  </article>
-  <h3>Hooks</h3>
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Models</h3></div>
+  <p class="lede">Grouped by where the files live.</p>
+  <div class="pipe">
+    <span class="lbl">Path of a write</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span><span class="t">PATCH /api/projects/:id</span><span class="s">params permitted in the controller</span></span></li>
+      <li><span class="n"><b>2</b><i></i></span><span class="t">Project#archive!</span></li>
+    </ol>
+  </div>
+  <div class="mech">
+    <b>Project#archive!</b>
+    <p>Archival had to preserve historical entries.</p>
+  </div>
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</div>
+      <details class="excerpt excerpt--diff">
+        <summary>
+          <span class="chev">&#9656;</span>
+          <span class="ex-loc">app/models/project.rb:29-33</span>
+          <span class="tag">Changed</span>
+          <span class="ex-why">the guard the behaviour turns on</span>
+        </summary>
+        <div class="ex-body">
+<pre data-src="app/models/project.rb"><span class="l add"><span class="sig">+</span>    return false if time_entries.running.exists?</span>
+</pre>
+        </div>
+      </details>
+    </dd>
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></div>
+    </dd>
+    <dt>Validate</dt>
+    <dd>
+      <div class="item"><code>bundle exec rspec spec/models/project_spec.rb</code></div>
+    </dd>
+  </dl>
+  <div class="decisions">
+    <span class="lbl">Decisions to pay attention to</span>
+    <div class="decision">
+      <div class="dn">01</div>
+      <div>
+        <h4>Archival is soft, and reversible only by hand</h4>
+        <div class="why">archived_at is set rather than the row discarded <span class="cite">app/models/project.rb:31</span></div>
+        <div class="trade"><span class="tag">Tradeoff</span><span>historical entries keep resolving, at the cost of no un-archive path.</span></div>
+      </div>
+    </div>
+  </div>
 </section>

@@ -45,12 +45,16 @@ fi
 #     the gate. Source excerpts carry data-src for that reason. This check is here rather
 #     than in the gate because the gate would only report a confusing surplus; this names
 #     the cause.
+#
+#     The ledger is a CSS grid, not a <table>, so the cell that carries the path is
+#     <div class="c" data-path="...">. Both forms are accepted: the old <td> so a page
+#     built before the grid ledger still passes, and the grid cell for everything since.
 dp=$(grep -o 'data-path="' "$IN" | wc -l | tr -d ' ')
-dp_td=$(grep -o '<td data-path="' "$IN" | wc -l | tr -d ' ')
-if [ "$dp" -eq "$dp_td" ]; then
+dp_cell=$(grep -oE '<(td|div class="c")[[:space:]]+data-path="' "$IN" | wc -l | tr -d ' ')
+if [ "$dp" -eq "$dp_cell" ]; then
   ok "data-path is only on ledger rows ($dp)"
 else
-  bad "$((dp - dp_td)) data-path attribute(s) outside a <td> — the coverage gate reads them as ledger paths; excerpts must use data-src"
+  bad "$((dp - dp_cell)) data-path attribute(s) outside a ledger cell — the coverage gate reads them as ledger paths; excerpts must use data-src"
 fi
 
 # 5 · Dead links. When the head commit is on no remote, every permalink to it 404s, and

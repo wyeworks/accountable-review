@@ -30,7 +30,7 @@ front — the procedure itself is the only part that has to be in context the wh
 |---|---|---|
 | `references/report-format.md` | steps 1, 7, 8, 9 | The seven sections, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | step 5, then while reading any layer | What a senior reviewer of this stack looks for, and the search recipes for code the diff did not touch |
-| `references/page-template.html` | step 9 | The design system: tokens, component classes, SVG diagram vocabulary |
+| `references/page-template.html` | step 9 | The design system: tokens (light and dark), component classes, the two SVG diagram layouts, and the page's one small script |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
@@ -202,10 +202,15 @@ Every meaningful change gets the same seven-field shape, defined in `references/
 why this exists · implementation · relevant tests · affected but unchanged · things to understand ·
 how to validate · reviewer questions.
 
-A behaviour flow's **body is a unit** — the fields go inside `article.unit` and never loose in the
-section, and the flow's path, endpoint, diagram and decisions sit beside it. Build it from the
-assembled flow in `references/page-template.html` rather than from a description of it; the labels
-and the boundary are in `report-format.md` § *The review unit* and § *Section 2*.
+A behaviour flow's **body is a unit** — a `.mech` block stating the mechanism, then the seven fields
+as `<dt>`/`<dd>` pairs in one `dl.rows`, never loose in the section — and the flow's path, diagram and
+decisions sit beside it, with decisions after the closing `</dl>`. Build it from the assembled flow in
+`references/page-template.html` rather than from a description of it; the labels and the boundary are
+in `report-format.md` § *The review unit* and § *Section 2*.
+
+The unit is **borderless by design**, which makes this easier to get wrong than it looks: a flow that
+spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
+example.
 
 Two rules keep it from becoming ceremony:
 
@@ -300,13 +305,16 @@ Everything else about writing holds at every stage:
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
   yields nothing. Load it only if you have a deliberate reason to depart from the template, and
   `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
-- Diagrams are hand-authored inline SVG using the template's classes, so they work in a local file as
-  well as when published. A diagram must show a mechanism a table cannot; delete any that merely
-  restates a list. **Take the layout from the catalogue in `page-template.html` — four worked
-  diagrams, to scale — and fill in the text rather than deriving geometry.** Which kind belongs to
-  which section is in `report-format.md` § *Depth rules*, beside the budget. Deriving a layout spends
-  the run's attention on the part that does not matter: what matters is whether the edges are true,
-  and a followable edge that is wrong costs the reviewer more than no diagram.
+- **Two of the four diagram kinds are components, not drawings.** The blast radius is a `.blast` box
+  grid and the boundary chain is a `.pipe` spine — build those from the template's markup, not as SVG.
+  The ER fragment and the lifecycle are still hand-authored inline SVG using the template's classes,
+  so they work in a local file as well as when published. **Take those two layouts from the catalogue
+  in `page-template.html` — worked out to scale — and fill in the text rather than deriving geometry.**
+  Which kind belongs to which section is in `report-format.md` § *Depth rules*, beside the budget and
+  beside the two rules a check cannot enforce: a box grid cannot show a directed edge, and a diagram
+  carries labels rather than sentences. Deriving a layout spends the run's attention on the part that
+  does not matter: what matters is whether the edges are true, and a followable edge that is wrong
+  costs the reviewer more than no diagram.
 - **Generate source excerpts, do not type them.** Two things get quoted, not one. The lines a claim
   would otherwise ask the reader to take on faith — above all *affected but unchanged*, which no diff
   view can address — and **the changed hunk each behaviour flow turns on**, because § 2 is read before
@@ -401,9 +409,15 @@ republish — one link, mentioned once, then a note when it is complete.
 
   The gate runs once, here, against the finished page. Earlier stages ship with the ledger visibly
   marked partial; a gate that passed on a partial ledger would mean nothing.
-- Confirm the page renders: no horizontal overflow on `body`, diagrams fit or scroll in their own
-  container, and all three theme states resolve (`data-theme="dark"`, `data-theme="light"`, and the
-  unstamped `prefers-color-scheme` default most viewers get).
+- Confirm the page renders: no horizontal overflow on `body`, diagrams and wide tables fit or scroll
+  in their own container, and all three theme states resolve (`data-theme="dark"`,
+  `data-theme="light"`, and the unstamped `prefers-color-scheme` default most viewers get). The design
+  is warm-paper light; the dark half is ours, so a colour declared in only one place is a bug the
+  reader sees and you will not.
+- Carry the template's `<script>` across **verbatim, and add nothing to it.** It is a scroll-progress
+  bar and a rail scroll-spy: two navigation aids, and the page reads correctly with the whole block
+  deleted. Do not give § 6 checkboxes, tick state or an "n of m" counter — a count of cleared items
+  reads as progress toward approval, which is the verdict this page does not carry.
 - Publish the final state to the same path. Report that it is complete, what the change does in two or
   three lines, and anything you could not verify. Mention the project's own review command if it has
   one.

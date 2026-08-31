@@ -1,0 +1,49 @@
+<!-- No planted defect: this is the shape a too-narrow shape check would call broken. dl.rows is
+     SHARED — section 4 renders Changed / Affected-not-changed with the same grid — so a fragment
+     carrying both a flow and a blast radius holds field-shaped rows in two places, and only the
+     ones inside a flow are units. behaviour-flows.sh narrows to id="flow-" BEFORE counting, which
+     is what keeps section 4's rows out of the census.
+
+     This case replaces flows-endpoint-rows.html. That one guarded the same class of false
+     positive for .ep-row, which article.endpoint shared with article.unit; this design has no
+     endpoint card, so the old sharing cannot arise and the new sharing can. -->
+<section id="flow-a">
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Archiving a project</h3></div>
+  <p class="lede">Split by behaviour: archiving, and reading a list archival changes the meaning of.</p>
+  <div class="pipe">
+    <span class="lbl">Path of a write</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span class="t">PATCH /api/projects/:id</span></li>
+    </ol>
+  </div>
+  <div class="mech">
+    <b>Project#archive!</b>
+    <p>Archival had to preserve historical entries.</p>
+  </div>
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd><div class="item"><a class="path" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</div></dd>
+    <dt>Understand</dt>
+    <dd><div class="item">The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></div></dd>
+  </dl>
+</section>
+<section id="blast">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>Blast radius</h2>
+  <div class="blast">
+    <div class="blast-row">
+      <div class="bx bx-on"><b>Project#archive!</b><span>sets archived_at</span></div>
+      <div class="bx bx-off"><b>ActiveProjects#call</b><span>unchanged, still offers archived rows</span></div>
+    </div>
+    <div class="legend">
+      <span><i class="key-on"></i>Changed by this PR</span>
+      <span><i class="key-off"></i>Unchanged, and affected</span>
+    </div>
+  </div>
+  <dl class="rows">
+    <dt class="lbl-ink">Changed</dt>
+    <dd><div class="item"><a class="path" href="#">app/models/project.rb</a> &mdash; <a href="#flow-a">Flow A</a></div></dd>
+    <dt>Affected, not changed</dt>
+    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; unchanged, and it decides what the picker still offers <a href="#flow-a">Flow A</a></div></dd>
+  </dl>
+</section>

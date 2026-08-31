@@ -15,15 +15,22 @@
 # could not, and whether its edges match the real call path. Those are in the case, and
 # the PNGs from diagram-shot.sh are how a reader settles the last one.
 #
-# The vocabulary below is the template's. Extend both together — a class added here but
+# The vocabulary below is the template's, and it is now exactly the two surviving SVG kinds'
+# vocabulary: the ER fragment and the lifecycle. Extend both together — a class added here but
 # not to page-template.html has no styles, and one added there but not here is reported
 # as invented.
+#
+# Two class families that used to be here are gone, not renamed. The blast radius is a .blast
+# box grid and the boundary chain is a .pipe spine — both CSS components, neither an SVG — so
+# `legend` and `box-json` no longer style anything inside an <svg> and would be reported as
+# invented if a run reached for them. That is the intended behaviour: a run drawing a blast
+# radius as SVG should be told to use the component instead.
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd); CHECKS_DIR=$HERE; . "$HERE/lib.sh"
 parse_args "$@"
 require_input
 
-VOCAB="t-title t-col t-dim t-lbl t-edge box box-hd box-json edge edge-dash edge-accent node node-dead lifeline legend"
+VOCAB="t-title t-col t-dim t-lbl t-edge box box-hd edge edge-dash edge-accent node node-dead lifeline"
 
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 

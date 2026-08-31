@@ -2,12 +2,17 @@
 # blast-radius.sh — section 4, the section a diff cannot produce at all.
 #
 # It runs after the behaviour flows, so it is a second pass rather than a first screen.
-# Three of its structural claims are checkable: there is a diagram, there is an affected list
-# beside the changed one, and an empty search is recorded as a search rather than left as
-# silence. The SVG itself belongs to diagram.sh — one home per check.
+# Three of its structural claims are checkable: there is a blast panel, there is an affected
+# list beside the changed one, and an empty search is recorded as a search rather than left as
+# silence.
+#
+# The panel is a .blast box grid, not an SVG: solid border changed, dashed unchanged-and-
+# affected. It replaced the blast-radius SVG because the information here is membership of two
+# sets, which adjacency shows as well as geometry did. What adjacency CANNOT show is a directed
+# edge, so the legend and the note carry that — both are checked below.
 #
 # The reading order used to live here and now lives in section 3, so its absence is checked
-# too: an ol.readorder inside this region is the old shape, and the old shape puts the route
+# too: an ol.begin inside this region is the old shape, and the old shape puts the route
 # through the code before the flows that make it readable.
 #
 # What needs a reader: whether the affected entries are RIGHT, and whether an entry a flow
@@ -26,12 +31,23 @@ else
 fi
 REGION=$TMP/region
 
-# The diagram. Almost every PR earns this one, and it is the only place the page shows
-# changed and affected in the same frame.
-if grep -q '<svg' "$REGION"; then
-  ok "blast-radius diagram present"
+# The panel. Almost every PR earns this one, and it is the only place the page shows
+# changed and affected in the same frame. An <svg> is accepted so a page built before the
+# box grid still passes.
+if grep -Eq '<svg|class="blast"' "$REGION"; then
+  ok "blast-radius panel present"
 else
-  bad "no diagram in section 4 — the changed/affected split is what a table cannot show"
+  bad "no blast panel in section 4 — the changed/affected split is what a list alone cannot show"
+fi
+
+# The legend is not decoration. A dashed box with nothing explaining it reads as "deleted",
+# which is the opposite of "unchanged, and therefore worth reading".
+if grep -q 'class="blast"' "$REGION"; then
+  if grep -q 'class="legend"' "$REGION"; then
+    ok "the blast panel carries a legend"
+  else
+    bad "a .blast panel with no .legend — dashed-means-unchanged has to be stated, or it reads as deleted"
+  fi
 fi
 
 # Changed beside affected. The second list is the point of the section.
@@ -43,8 +59,8 @@ fi
 
 # The reading order moved to section 3. Finding one here means the fragment was written
 # against the old ordering, where section 2 was this section.
-if grep -q '<ol class="readorder"' "$REGION"; then
-  bad "an ol.readorder inside section 4 — the reading order lives in section 3 now, after the flows"
+if grep -q '<ol class="begin"' "$REGION"; then
+  bad "an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows"
 else
   ok "no reading order here: it belongs to section 3"
 fi

@@ -70,12 +70,12 @@ one per significant standalone change — renders as a unit with these seven fie
 | **Reviewer questions** | `Questions` | Open questions, phrased as questions |
 
 The middle column is the label text, **verbatim**, and it is deliberately shorter than the field
-name: the label column is 108px wide, and a label that wraps to two lines turns the gutter into
+name: the label column is 132px wide, and a label that wraps to two lines turns the gutter into
 noise. It is a column rather than an inference because the two drifted the moment the mapping was
 only implied — this file said *relevant tests* and *things to understand* while the template emitted
 `Tests` and `Understand`, and a run reading both wrote `Understand` in one flow and `Things to
 understand` in the next, leaving the reader to work out whether they were the same field. *Why this
-exists* has no label at all: it renders as the `.unit-head` paragraph, above the field rows.
+exists* has no label at all: it renders as the `.mech` block, above the field rows.
 
 Rules that keep units from becoming ceremony:
 
@@ -85,11 +85,18 @@ Rules that keep units from becoming ceremony:
   worth reporting? Say what you searched and that nothing consumes it. That sentence is the finding.
 - **Validation steps must exist in this repo.** The real rake task, the real route, the real factory.
   One invented command spends the reader's trust in the entire page.
-- **Render as `article.unit`, and render the fields nowhere else.** The `.ep-row` rows go inside
-  that article's `dl.unit-body`; loose in a section they lose the card, take their spacing from
-  `section > * + *` instead of the unit's own gap, and fall out of scope of every `.unit ...` rule.
+- **Render as a `.mech` block followed by one `dl.rows`, and render the fields nowhere else.**
+  The seven fields are `<dt>`/`<dd>` pairs inside that single `dl`; loose in a section they lose the
+  row hairlines, the 132px label gutter and every `.rows`-scoped rule. `.decisions` goes *after* the
+  closing `</dl>`, never inside it.
   Take the composition from the assembled behaviour flow in `page-template.html` rather than from
   this sentence — a run that had only the sentence flattened all three of its flows.
+  **This shape is more fragile than the card it replaced, not less.** The unit used to be a bordered
+  `article.unit`, so a flattened flow visibly lost its box. A `.mech` plus a hairline grid is
+  borderless by design, so a flow that spills its rows straight into the `<section>` looks very
+  nearly correct. `evals/checks/behaviour-flows.sh` therefore checks the *pairing* — one `.mech` per
+  `dl.rows` — and counts field labels inside grids rather than inside units, because a flattened flow
+  keeps its `.mech` and a census taken over units counts loose fields as housed.
 - Three of the fields may carry a collapsed source excerpt: *implementation*, *affected but unchanged*
   and *things to understand*. See § *Source excerpts* for the budget and for the rule that the field
   still has to read complete with the excerpt closed.
@@ -154,7 +161,7 @@ to the test below.
 | § 2 · a flow's *implementation* | `--diff`, the hunk the behaviour turns on. Expected on every flow with changed code — a floor, not a ration |
 | § 2 · a flow's *things to understand* | Either, whichever fits the claim |
 | § 3 · *start here*, an entry whose finding is not already excerpted in its flow | Either |
-| § 4 · *changed vs potentially affected*, the affected column | `--source` |
+| § 4 · *changed vs affected-not-changed*, the affected list | `--source` |
 | § 5 · the application-vs-database invariants block | `--source` |
 
 The last two were added after a run showed the original list barred excerpts from the two densest
@@ -175,9 +182,12 @@ was never about quoting one committed line that a claim turns on.
   turns on — the guard, the new branch, the changed default — as a `--diff` excerpt. If a flow's
   implementation is one import or one rename, it was a ledger row and not a flow. This is a floor;
   the budget below rations what sits on top of it, never the hunk itself.
-- **The closed summary says what the reader will see and why to open it** — `path:lines`, then a
-  clause. `View diff` and `Show code` are not summaries: a closed excerpt has to be informative,
-  because most of them stay closed.
+- **The closed summary says what the reader will see and why to open it** — `path:lines`, a state
+  tag (`Changed` / `Unchanged` / `Added`), then the clause, all inside the `<summary>`. `View diff`
+  and `Show code` are not summaries: a closed excerpt has to be informative, because most of them
+  stay closed. The clause lives in the summary rather than at the top of the body **because of the
+  closed-page rule above** — a why the reader has to open the block to see is exactly the hidden
+  content the rule forbids. `excerpt.sh` emits it there; do not move it.
 - **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped ledger row fails the
   coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
   catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
@@ -374,19 +384,37 @@ wanting a second diagram, the honest question is whether the first one is doing 
 transition table with a `file:line` per row is often better than a second figure anyway. Never exceed
 two in one section.
 
-**Four kinds, and which section each belongs to.** The layouts are worked out in
-`page-template.html` — complete, to scale, and to be filled in rather than re-derived, because a
-layout invented per run makes two pages from this skill incomparable for no gain.
+**Four kinds, and which section each belongs to — but only two are SVG.** Two of these outgrew
+being drawings: what they carry is membership of a set and order along a chain, and a component
+shows both as well as geometry did, reflows on a phone, and cannot be drawn wrong. The two that
+stayed SVG are the ones where the information genuinely *is* geometry.
 
-| Kind | Home |
-|---|---|
-| Blast radius | § 4, on almost every PR |
-| Boundary chain | § 2, inside the flow that owns the field, never a section of its own |
-| ER fragment | § 5, if the schema moved |
-| Lifecycle | § 5, and only if a status column, enum or state machine changed |
+| Kind | Rendered as | Home |
+|---|---|---|
+| Blast radius | `.blast` box grid + `.legend` | § 4, on almost every PR |
+| Boundary chain | `.pipe` numbered spine | § 2, inside the flow that owns the field, never a section of its own |
+| ER fragment | **SVG**, from the catalogue | § 5, if the schema moved |
+| Lifecycle | **SVG**, from the catalogue | § 5, and only if a status column, enum or state machine changed |
 
 The last row is the one that gets abused: a nullable timestamp is not a state machine, and drawing one
 invents states the code does not have.
+
+The SVG layouts are worked out in `page-template.html` — complete, to scale, and to be filled in
+rather than re-derived, because a layout invented per run makes two pages from this skill
+incomparable for no gain.
+
+**What the box grid cannot do, and what to do instead.** `.blast` shows two sets — solid border
+changed, dashed unchanged-and-affected — and convergence, by spanning a box across columns. It
+cannot show a *directed edge*. So when the finding is "the shared error code stops being produced at
+this hop", adjacency will not say it: put it in the note under the panel, in words. The legend is not
+optional either — a dashed box with nothing explaining it reads as *deleted*, which is the opposite
+of *unchanged, and therefore worth reading*.
+
+**A diagram carries labels, not sentences.** Prose inside an 880-wide scroller cannot reflow, so a
+reader on a phone scrolls sideways to read it, and it is set in whatever size the diagram's own type
+scale allows rather than the page's. Searches, caveats and conclusions go in the `figcaption`. This
+is the one rule the diagram checks cannot enforce, because a `<text>` element carrying a sentence is
+structurally identical to one carrying a label.
 
 Excerpts have their own budget, in § *Source excerpts*. Keep the two apart when judging a section: a
 diagram is earned by mechanism complexity, an excerpt by a claim the reader would otherwise have to
@@ -455,7 +483,8 @@ That last sentence is the load-bearing one. Keep it.
 
 ```html
 <section id="flows">
-  <div class="layer-head"><p class="eyebrow">Flows</p><h2>Behaviour flows</h2></div>
+  <div class="eyebrow"><span class="lbl lbl-a">Flows</span><i></i></div>
+  <h2>Behaviour flows</h2>
   <p class="note"><span class="pending">pending</span> Three flows across seven files; this section is
   being written.</p>
 </section>
@@ -554,8 +583,9 @@ and a reviewer who reads it still has to assemble the behaviour themselves. Stat
 principle before the flows — the split *is* the insight.
 
 Each flow carries **only what is specific to that behaviour**. Its **body is a review unit** (see
-§ *The review unit*) — `article.unit`, the seven fields inside its `dl.unit-body` — and everything
-else the flow needs sits *beside* that unit, inside the flow section. Which side of the boundary a
+§ *The review unit*) — a `.mech` block stating the mechanism, then the seven fields as `<dt>`/`<dd>`
+pairs in one `dl.rows` — and everything else the flow needs sits *beside* that unit, inside the flow
+section. Which side of the boundary a
 part falls on is settled here rather than per run, because a run given the list without the split
 put the fields loose in the section and a decisions block in the middle of them.
 
@@ -563,8 +593,9 @@ put the fields loose in the section and a decisions block in the middle of them.
 
 - **Before / after** — what was possible, what is now, what is now prevented. `dl.ba`, per § 1's rule
   that the two are rows and never one sentence.
-- **The path**, as `ol.steps`: UI → request → controller → operation → model → column, and the
-  response path back if it carries anything interesting. Where the chain is non-trivial, draw it.
+- **The path**, as `.pipe`: UI → request → controller → operation → model → column, and the
+  response path back if it carries anything interesting. The numbered spine fills its terminal node,
+  so put the thing the chain arrives at last.
 - **The field crossing the boundary**, if it does, as a second chain — serializer → JSON → type → hook →
   component. Following one field teaches more than reviewing both sides as separate file trees. The
   mismatches worth hunting: nullable backend field typed non-null, backend enum value missing from the
@@ -574,9 +605,11 @@ put the fields loose in the section and a decisions block in the middle of them.
 - **The endpoint** it goes through, if the diff changed one: params with required/optional and where
   they are coerced, a real success body, the **full** error list with statuses, and a side-effects row
   — reads only / writes / calls an external service / idempotent or not. That last row is the
-  reviewer's actual question and no diff answers it. Render as `article.endpoint`. Server-rendered
-  instead? Then the flow is page → action → redirect or render, with forms, permitted params and
-  flash states.
+  reviewer's actual question and no diff answers it. There is **no endpoint card**: the contract is
+  the flow's own material, so it goes in the `.pipe` chain and the field rows that already exist.
+  A separate card was a second home for the same facts, and § *One canonical home* is the rule it
+  broke. Server-rendered instead? Then the flow is page → action → redirect or render, with forms,
+  permitted params and flash states.
 - **A diagram**, where one shows a mechanism a list cannot. Layout from the catalogue in
   `page-template.html`; which kind and how many, per § *Depth rules*.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
@@ -621,7 +654,7 @@ mechanisms; what they still lack is a route through the diff. This section is th
 **one list** — what most needs judgment and what to read first are the same question, and answering
 it twice is what used to make this section restate the rest of the page.
 
-Render as `ol.readorder`. Each entry carries:
+Render as `ol.begin`. Each entry carries:
 
 - **Where to go** — the file, the method or the flow, with its citation.
 - **Why here**, in a `span.why` — why this before the next thing, or what makes it worth judgment. A
@@ -652,10 +685,12 @@ Where consequences extend beyond the diff. This is the section a diff cannot pro
 this point in the page it is a **second pass**: the reader has been through the flows one at a time,
 and now sees the same change as one system, with the edges that leave it.
 
-- **Blast-radius diagram** — the primary flow end to end, secondary effects branching off it. Changed
-  nodes solid, affected-but-unchanged nodes dashed (`.node-dead`), legend required. The one diagram
-  that earns its place on almost every PR. Arriving after § 2, it is a synthesis figure: it shows
-  flows the page explained separately reaching the same unchanged code.
+- **Blast-radius panel** — the primary flow end to end, secondary effects beside it, as a `.blast`
+  box grid. Changed boxes solid (`.bx-on`), affected-but-unchanged dashed (`.bx-off`), `.legend`
+  required. Span a box across columns to show convergence. The one figure that earns its place on
+  almost every PR. Arriving after § 2, it is a synthesis view: it shows flows the page explained
+  separately reaching the same unchanged code. It is not an SVG — see § *Depth rules* for why, and
+  for the one thing adjacency cannot say that the note underneath has to.
 - **Changed vs potentially affected**, two lists across the whole diff, stacked and each the full
   measure — not columns. Both run on paths and inline code, which wrap mid-token at half width, and
   the affected list carries the excerpts. They are read one after the other, not compared row against
@@ -747,7 +782,7 @@ The reviewer's action list. Compact, and nothing here restates an explanation fr
 - **Test gaps** that matter, gathered from the flows in one place so a reviewer sees the shape of what
   is unproven.
 - **Production and data checks**, if the change touches existing rows or deploy order.
-- **Comprehension checkpoint** — **at most five** questions, rendered as `ol.firstlook`, that a reviewer
+- **Comprehension checkpoint** — **at most five** questions, rendered as `.checkpoint` tiles, that a reviewer
   should be able to answer before approving.
 
   The rule that keeps these from being a quiz: **answerable from the page, but not by copying one
@@ -773,7 +808,7 @@ Every changed file, the section covering it, its attention level (read / skim / 
 working through the whole diff.
 
 **Each row carries its path in a `data-path` attribute** on the path cell:
-`<td data-path="app/models/project.rb">`. That attribute is the whole interface to the gate — it is
+`<div class="c" data-path="app/models/project.rb">`. That attribute is the whole interface to the gate — it is
 what lets the check compare sets exactly instead of searching the rendered page, where `api/Gemfile`
 matches inside `api/Gemfile.lock`. Omit it and the gate fails loudly, which is intended: a check that
 cannot run must not report a pass.

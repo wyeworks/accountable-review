@@ -1,14 +1,30 @@
+<!-- The planted defect: paths in an order, with no reason for the order. A list of files the
+     reviewer could have got from the diff is not a route through it. -->
 <section id="start">
-  <div class="layer-head"><p class="eyebrow">Where to begin</p><h2>Start here</h2></div>
-  <!-- The planted defect: paths in an order, with no reason for the order. A list of files
-       the reviewer could have got from the diff is not a route through it. -->
-  <ol class="readorder">
-    <li><div><code>db/schema.rb</code>
-      <a class="cite" href="#">db/schema.rb:141</a>
-      <a href="#flow-a">Flow A</a></div></li>
-    <li><div><code>app/models/project.rb</code>
-      <a class="cite" href="#">app/models/project.rb:41</a>
-      <a href="#flow-a">Flow A</a></div></li>
+  <div class="eyebrow"><span class="lbl lbl-a">Where to begin</span><i></i></div>
+  <h2>Where to begin</h2>
+  <ol class="begin">
+    <li>
+      <span class="n">01</span>
+      <span class="t">
+        <a class="path" href="#">db/migrate/20260101000000_add_archived_at_to_projects.rb:5</a>
+      </span>
+      <a class="ptr" href="#flow-a">Flow A &rarr;</a>
+    </li>
+    <li>
+      <span class="n">02</span>
+      <span class="t">
+        <a class="path" href="#">app/models/project.rb:41</a>
+      </span>
+      <a class="ptr" href="#flow-a">Flow A &rarr;</a>
+    </li>
+    <li>
+      <span class="n">03</span>
+      <span class="t">
+        <a class="path" href="#">app/queries/active_projects.rb:3</a>
+      </span>
+      <a class="ptr" href="#flow-b">Flow B &rarr;</a>
+    </li>
   </ol>
   <p class="note">These are what this pass surfaced, not an exhaustive list.</p>
 </section>

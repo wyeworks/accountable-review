@@ -1,0 +1,35 @@
+<!-- No planted defect. A staged PAGE, section 4 written and section 2 still pending. The trap it
+     pins: section 4 renders Changed / Affected-not-changed with dl.rows and legitimately has NO
+     .mech, so a behaviour-flows census that falls back to the whole page when it finds no
+     id="flow-" section reads that grid as a flattened flow. A real run hit exactly this at stage 2.
+
+     Same shape as the older bug where article.cohort satisfied the unit check: section 1 always
+     supplies one, so the substitute was always present no matter what section 2 did. -->
+<div class="buildstate">
+  <strong>Still being written</strong> — stage 2 of 3. Sections marked <span class="pending">pending</span> are coming.
+</div>
+<section id="flows">
+  <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
+  <h2>Behaviour flows</h2>
+  <p class="note"><span class="pending">pending</span> Two flows across five files; being written now.</p>
+</section>
+<section id="blast">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>Blast radius</h2>
+  <div class="blast">
+    <div class="blast-row">
+      <div class="bx bx-on"><b>Project#archive!</b><span>sets archived_at</span></div>
+      <div class="bx bx-off"><b>ActiveProjects#call</b><span>unchanged, still offers archived rows</span></div>
+    </div>
+    <div class="legend">
+      <span><i class="key-on"></i>Changed by this PR</span>
+      <span><i class="key-off"></i>Unchanged, and affected</span>
+    </div>
+  </div>
+  <dl class="rows">
+    <dt class="lbl-ink">Changed</dt>
+    <dd><div class="item"><a class="path" href="#">app/models/project.rb</a></div></dd>
+    <dt>Affected, not changed</dt>
+    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; unchanged, and it decides what the picker still offers <span class="tier">evidenced by unchanged code</span></div></dd>
+  </dl>
+</section>
