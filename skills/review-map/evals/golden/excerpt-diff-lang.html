@@ -1,0 +1,12 @@
+<section id="flow-a">
+  <p class="prose">The guard runs before the write <a class="cite" href="#">app/models/project.rb:31</a>
+    <span class="tier">explicitly changed</span>.</p>
+  <details class="excerpt excerpt--diff">
+    <summary><span class="ex-loc">app/models/project.rb:29-33</span>
+      <span class="ex-why">the hunk the behaviour turns on</span></summary>
+    <div class="ex-body">
+<pre data-src="app/models/project.rb" data-lang="ruby"><span class="l add"><span class="sig">+</span>  return false if archived?</span>
+</pre>
+    </div>
+  </details>
+</section>

@@ -110,6 +110,8 @@ rails-anchors.sh    | anchors-runner-mutates.html   | 1 | no 'console --sandbox'
 rails-anchors.sh    | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-clean.html            | 0 | needs --repo to ask whether
+excerpts.sh         | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
+excerpts.sh         | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang
 CASES
 
 # The judged half has one piece a script can test: reading a verdict file. A tally that reads a

@@ -71,6 +71,20 @@ part of the group key. Shape a wording change on the fast loop, then re-measure 
 before quoting a number. `--fast` leaves the judge alone deliberately: the producer is what is under
 test, the judge is the measurement, and a cheap measurement is not a faster loop.
 
+When the question is where the minutes went rather than whether the page was right,
+`evals/profile.sh` reads the transcript of a run — an eval repetition or a real PR — and splits its
+wall clock into tool execution, streaming, and the wait before each request produces its first token.
+On the run it was built against, that last part was 58% of the total and tool execution was 6%. Split
+that 58% before concluding anything from it: most of it is thinking, and only about **2.5s per request
+is fixed** — 95 requests paid roughly 240s of that for nothing, while tripling the context cost 0.8s.
+So the one lever is **fewer requests**, which is why § *Fewer turns, same work* and its pointers in
+steps 2, 5 and 9 exist, and why context reduction is not worth prose. Two `Write`s of the page
+accounted for 329 of the 457 seconds of streaming. It infers nothing the transcript does not carry:
+publish stages are mechanical, the ten steps are **not** —
+`ledger-rows.sh` fires at minute four and again at minute thirteen — and steps 4, 6 and 8 leave no
+trace at all, so they get no row. Read `evals/README.md` § *Where the time goes* and § *Profiling one
+run* before quoting one of its numbers.
+
 Section files are named by slug, never by number: `report-format.md`'s numbering is already the
 source of order, and a filename repeating it only makes the reader look the number up. Read
 `evals/README.md` before adding a case. Two things there are worth preserving above the rest — the
@@ -91,7 +105,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
-| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, and `checks/`. Not loaded at runtime; see `evals/README.md` |
+| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs
@@ -232,6 +246,13 @@ Editing one of these means checking the others still agree.
   reader taking any of the last three for "nothing to say here". A stopped run is the one that needs a
   deliberate edit: pending is a promise, and leaving one behind is worse than publishing late. The form lives in `report-format.md` § *Build state*, the components are
   `.buildstate` and `.pending`, and `evals/check.sh --draft` / `--final` check both ends of it.
+
+  The pending marker earns a second keep, found by profiling rather than by reading: it is the
+  **anchor a later stage edits**, which is what keeps staging from costing the whole document per
+  stage. A run that instead re-`Write`s the file pays for every already-written section again — one
+  did, producing its finished 82 KB page as a single 35,000-token write that re-emitted the staged
+  23 KB byte for byte, 56% of everything that run spent streaming. Staging is only cheap if a stage
+  writes what is new, so `SKILL.md` step 9 says fill in with `Edit`, never rewrite.
 - **Findings are a sample, not an audit.** The page must never read as a clean bill of health. This is
   load-bearing, not hedging: the skill explains, and explanation is reproducible, but defect discovery
   is not.
@@ -296,6 +317,19 @@ Editing one of these means checking the others still agree.
   unchanged code — the gate would fail on the page's best content. Excerpts carry `data-src`.
   `evals/check.sh` holds the mechanical half of all three; whether the prose survives with the blocks
   shut is a judged expectation, because no script can tell.
+  **The tint is applied, never authored.** `--source` excerpts are syntax-coloured at read time and
+  `--diff` excerpts are not, and the asymmetry is the same one that produced the two variants: a hunk
+  is not one lexical stream (a removed line and its replacement are alternate realities, and a lexer
+  fed both mis-reads everything after the first unbalanced quote), and its rows already spend colour
+  on *added* and *removed*. Four files agree: `excerpt.sh` puts a `data-lang` on the `--at` block and
+  nothing else, `page-template.html` holds the `--syn-*` tokens, the `.hljs-*` rules and the script
+  that does it, `report-format.md` § *Syntax tint* owns the rule, and `evals/checks/excerpts.sh`
+  fails a page that ships `hljs-` classes in its markup — a hand-coloured quotation is a quotation
+  someone edited. The script verifies its own reconstruction character by character before touching
+  the DOM and leaves the line alone on any mismatch, which is the only reason a script may touch a
+  quotation at all. Everything about it degrades to the untinted page: no script, no network, a
+  blocked CDN or an unknown language each leave the block in one ink.
+
   A third thing, added after a run whose flows quoted only unchanged code: the `--diff` excerpt is a
   **floor, not a ration**. Each behaviour flow shows the hunk its behaviour turns on, because § 2 is
   read before the reviewer opens the diff in § 3; the load-bearing test rations everything on top of
@@ -354,6 +388,10 @@ Editing one of these means checking the others still agree.
   states and `excerpts.sh` enforces it for the excerpt tints specifically, which are the newest
   colours and so the likeliest to be forgotten in two of the three.
 
+  The `--syn-*` syntax tints are the newest of these and the easiest to half-declare, because nothing
+  on the page depends on them to be readable — a set missing from the dark blocks is invisible until
+  someone opens an excerpt with the OS in dark mode.
+
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
   pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.bx-on` — are written
   against tokens rather than literals precisely so they keep inverting *relative to the page* rather
@@ -363,6 +401,10 @@ Editing one of these means checking the others still agree.
 
 The skill runs in one context. It spawns no subagents, and that is a choice, not an omission — an
 earlier iteration fanned out to `Explore` agents per layer, and it came out.
+
+`SKILL.md`'s hard rules now say so outright, which they did not before: a real run reached for one
+`Explore` agent and stalled the parent for 997 seconds — 41% of its wall clock — in a single blocked
+turn. A boundary stated only here is a boundary the skill has never been told about.
 
 The reason is that the decomposition is the *next* thing to get right, not something to inherit
 half-specified. Two of this version's steps span the whole diff by nature: step 5 traces consumers
@@ -473,8 +515,13 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   no probe output ever appears. Changing that is a new decision with its own safety design, not an
   extension of this one.
 - It never posts to GitHub or anywhere outside the artifact.
-- It never writes the page into the repository under review — scratch location only.
-- It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes.
+- It never writes the page into the repository under review — a work directory under `$TMPDIR` only,
+  **derived** in step 1 from the repo and the target rather than chosen per run.
+- It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes. That is
+  the reason the path is derived and not picked: a session-scoped scratch directory is a different
+  directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
+  had no rule found nine calls and seventy seconds spent re-establishing a path and moving excerpt
+  files that had been written somewhere else first.
 - It assumes only Claude Code plus a git repo containing a Rails app. Everything else — Rails root
   location, RSpec vs Minitest, API-only vs server-rendered, auth library, whether a frontend exists
   and where its client and types live — is discovered, never assumed. Adding an assumption about

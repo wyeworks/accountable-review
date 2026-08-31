@@ -105,6 +105,12 @@ TIMEOUT=
 for t in timeout gtimeout; do command -v $t >/dev/null && { TIMEOUT=$t; break; }; done
 LIMIT=${EVAL_TIMEOUT:-1800}
 
+# Pinning the session id is the whole reason a finished run can be profiled afterwards: without
+# it the transcript is a uuid under a $TMPDIR fixture slug and nothing connects it to a $RUNDIR.
+# Probed rather than assumed, so an older CLI records "-" instead of failing every run.
+CAN_PIN=; claude --help 2>/dev/null | grep -q -- '--session-id' && CAN_PIN=1
+command -v uuidgen >/dev/null 2>&1 || CAN_PIN=
+
 # "-" is what an unset knob records: it means the ambient config decided, which is honest and
 # is also why such a row is not comparable to one from another machine or another week.
 MODEL_TAG=${MODEL:--}; EFFORT_TAG=${EFFORT:--}
@@ -120,6 +126,14 @@ one_run() {
   RUNDIR=$RUNS/$CASE/$rfixture/$stamp-$rnum
   mkdir -p "$RUNDIR"
   OUT=$RUNDIR/$CASE.html
+
+  # Generated per repetition, never derived from $stamp-$rnum: -j runs several at once and two
+  # fixtures starting inside the same second would collide on an id claude refuses to reuse.
+  rsession=-
+  if [ -n "$CAN_PIN" ]; then
+    rsession=$(uuidgen | tr 'A-Z' 'a-z')
+    printf '%s\n' "$rsession" > "$RUNDIR/session"
+  fi
 
   sed -e "s|{{SKILL_DIR}}|$SKILL_DIR|g" \
       -e "s|{{FIXTURE_DIR}}|$FIXTURE_DIR|g" \
@@ -138,6 +152,7 @@ one_run() {
   ( cd "$FIXTURE_DIR" && ${TIMEOUT:+$TIMEOUT $LIMIT} claude -p \
       --permission-mode "$PERM" \
       ${MODEL:+--model $MODEL} ${EFFORT:+--effort $EFFORT} \
+      ${CAN_PIN:+--session-id $rsession} \
       --add-dir "$RUNDIR" "$SKILL_DIR" \
       < "$RUNDIR/prompt.md" ) > "$RUNDIR/agent.log" 2>&1
   agent_exit=$?
@@ -160,6 +175,21 @@ one_run() {
     written=false
     echo "FAIL  the driver produced no fragment at $OUT" > "$RUNDIR/check.txt"
     check_exit=1
+  fi
+
+  # Profiling is local jq over one file the harness did not write, so it is free and stays
+  # unconditional — a knob nobody sets is a knob that rots. It must never fail the run: a
+  # transcript that moved is a measurement problem, not a result.
+  pmodel=0; ptool=0; pttft=0; pstream=0; pout=0; pthink=0; preq=0
+  if [ "$rsession" != "-" ]; then
+    set +e
+    "$HERE/profile.sh" --rundir "$RUNDIR" --json > "$RUNDIR/profile.json" 2> "$RUNDIR/profile.err"
+    pok=$?
+    "$HERE/profile.sh" --rundir "$RUNDIR" > "$RUNDIR/profile.txt" 2>&1
+    set -e
+    if [ "$pok" -eq 0 ] && [ -s "$RUNDIR/profile.json" ]; then
+      eval "$(jq -r '"pmodel=\(.model_s) ptool=\(.tool_s) pttft=\(.ttft_s) pstream=\(.stream_s) pout=\(.out_tokens) pthink=\(.think_tokens) preq=\(.requests)"' "$RUNDIR/profile.json")"
+    fi
   fi
 
   p=$(grep -c '^PASS' "$RUNDIR/check.txt" || true)
@@ -188,8 +218,10 @@ one_run() {
 
   # judged=false is why the judged counts are a separate flag rather than three zeroes: a run
   # nobody judged and a run that scored zero must not aggregate the same way.
-  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"level":"%s","model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}\n' \
+  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"session":"%s","requests":%d,"model_seconds":%s,"tool_seconds":%s,"ttft_seconds":%s,"stream_seconds":%s,"output_tokens":%d,"thinking_tokens":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"level":"%s","model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}
+' \
     "$CASE" "$rfixture" "$rnum" "$stamp" "$p" "$f" "$w" "$s" "$check_exit" "$agent_exit" "$seconds" \
+    "$rsession" "$preq" "$pmodel" "$ptool" "$pttft" "$pstream" "$pout" "$pthink" \
     "$written" "$judged" "$jp" "$jf" "$ju" \
     "$LEVEL" "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" \
     "$SKILL_SHA" "$DIRTY" "$DRIVER_SHA" "$OUT" >> "$HERE/results/$CASE.jsonl"
