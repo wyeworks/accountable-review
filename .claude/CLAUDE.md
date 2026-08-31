@@ -63,6 +63,17 @@ part of the group key. Shape a wording change on the fast loop, then re-measure 
 before quoting a number. `--fast` leaves the judge alone deliberately: the producer is what is under
 test, the judge is the measurement, and a cheap measurement is not a faster loop.
 
+When the question is where the minutes went rather than whether the page was right,
+`evals/profile.sh` reads the transcript of a run — an eval repetition or a real PR — and splits its
+wall clock into tool execution, streaming, and the wait before each request produces its first token.
+On the run it was built against, that last part was 58% of the total and tool execution was 6%, which
+is the argument for spending an iteration on turn count and context size rather than on anything the
+harness runs. Two `Write`s of the page accounted for 329 of the 457 seconds of streaming. It infers
+nothing the transcript does not carry: publish stages are mechanical, the ten steps are **not** —
+`ledger-rows.sh` fires at minute four and again at minute thirteen — and steps 4, 6 and 8 leave no
+trace at all, so they get no row. Read `evals/README.md` § *Where the time goes* and § *Profiling one
+run* before quoting one of its numbers.
+
 Section files are named by slug, never by number: `report-format.md`'s numbering is already the
 source of order, and a filename repeating it only makes the reader look the number up. Read
 `evals/README.md` before adding a case. Two things there are worth preserving above the rest — the
@@ -82,7 +93,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
-| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, and `checks/`. Not loaded at runtime; see `evals/README.md` |
+| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs

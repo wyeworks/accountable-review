@@ -20,6 +20,7 @@ evals/
 ├── checks/                  one script per rule family, plus self-test.sh
 ├── golden/                  fragments with known verdicts, for self-test.sh
 ├── run.sh / report.sh       produce a section N times; aggregate the results
+├── profile.sh / profile.jq  where one run's wall clock went, from the session transcript
 ├── judge.sh / judge-prompt.md  grade one fragment against the written expectations
 ├── verdict-tally.sh         read one verdicts.json, shared by judge.sh and run.sh
 └── results/                 one jsonl line per run (gitignored)
@@ -92,11 +93,11 @@ three runs where the same expectation fails twice is a finding about the spec.
 
 ## Where the time goes
 
-All of it is the model. Measured on this machine: `make-fixtures.sh` 0.6s, `check.sh` on a written
-fragment 0.15s, `checks/self-test.sh` 1.5s, `verdict-tally.sh` a few milliseconds. Producing one
-fragment took 345–490s on the first recorded runs, and `--judge` adds a second call of the same order.
-So `-n 3 --judge` over both fixtures is a dozen model calls and most of an hour, and nothing in the
-harness is worth optimising.
+All of it is the model, and `profile.sh` is what says which part. Measured on this machine:
+`make-fixtures.sh` 0.6s, `check.sh` on a written fragment 0.15s, `checks/self-test.sh` 1.5s,
+`verdict-tally.sh` a few milliseconds. Producing one fragment took 345–490s on the first recorded
+runs, and `--judge` adds a second call of the same order. So `-n 3 --judge` over both fixtures is a
+dozen model calls and most of an hour, and nothing in the harness is worth optimising.
 
 Which leaves two levers — run the repetitions at once, or read each one with a cheaper model. `run.sh`
 has both:
@@ -125,6 +126,77 @@ dependency that is not there. Two graders in one group get two judged lines, nev
 
 Every knob has an environment variable, for a shell you keep open: `EVAL_MODEL`, `EVAL_EFFORT`,
 `EVAL_JUDGE_MODEL`, `EVAL_JUDGE_EFFORT`, plus the existing `EVAL_PERMISSION_MODE` and `EVAL_TIMEOUT`.
+
+## Profiling one run
+
+`seconds` on a results line is one number for a whole run. It can say a run got slower; it can never
+say where. `profile.sh` reads the session transcript Claude Code already writes — nothing in the
+skill is instrumented, and it works on runs that happened before it existed:
+
+```sh
+./profile.sh                                   # newest run in this directory
+./profile.sh --rundir "$RUNDIR"                # an eval repetition, by its pinned session
+./profile.sh --transcript <file.jsonl> --all   # any transcript
+./profile.sh --list                            # what transcripts exist, newest first
+./profile.sh --timeline                        # call by call, instead of the rollup
+```
+
+It splits wall clock four ways, and **the split is the finding.** One whole-page run against a real
+39-file PR: **1284.7s, of which 1203.4s was the model and 81.2s was tool execution — and inside the
+model share, 457.2s was streaming output while 746.2s was spent before a request produced its first
+token.** 95 requests carrying an average 182k-token context. So the levers are the number of requests
+and the size of the context each one carries. Making the harness faster cannot buy back more than six
+percent of a run, and that six percent is the part already measured in tenths of a second.
+
+The other reading from the same run: the slowest *tool call* was 4.5s (`git fetch`), while the slowest
+*request* was 264.5s — 35k output tokens streamed into one `Write` of the page. **The request is the
+unit, not the tool call**; a profile that ranked tool calls would have reported that run as nearly
+free. Two `Write`s account for 328.7s of the 457.2s of streaming.
+
+**What it attributes, and what it refuses to.** Publish stages are mechanical: an `Artifact` call is a
+boundary, and boundaries cannot arrive out of order. The ten steps are not. In that same run
+`ledger-rows.sh` — a step-10 signature — first ran at 4m15s and again at 13m, and
+`references/page-template.html` (step 9) was read before `references/rails-nextjs.md` (step 5). A
+counter that advanced on first sight of a marker would have reported step 10 at minute four. So the
+activity table charges each request's model time to the bucket of the tool call that request *ended
+in*, names the bucket by purpose rather than by position, and keeps the `≈` in its `≈ step` column.
+Steps 4, 6 and 8 leave no mechanical trace at all and interleave with the rest; their cost is spread
+across the other rows and **there is no row for them**, because a row would be a number with nothing
+behind it. The bucket table lives inline in `profile.jq` next to the paragraph that qualifies it —
+one place, so the two cannot drift.
+
+Read a row with many thinking tokens against a trivial tool call as reasoning parked in front of a
+cheap call, not as the cost of that call. The clearest instance in the recorded run is a `discover`
+row: 107.1s and 9,565 thinking tokens in front of a `find` that executed in 0.1s.
+
+**The transcript is an internal file, and this reads it anyway.** Nothing documents
+`~/.claude/projects/<slug>/<session>.jsonl`, so `profile.sh` asserts what it depends on and prints
+**no tables at all** when an assertion fails: no assistant timestamps is a FAIL, zero `tool_use` →
+`tool_result` pairs is a FAIL naming the key that moved, and a signature that never fires — a page
+published with no `coverage-gate.sh` call, or a quarter of model time landing in `other` — is a WARN
+saying the bucket table is behind `SKILL.md` rather than a row of zeroes. A table built on a schema
+that moved is worse than no table. Two figures come from the `cost-state` record and are printed
+marked *session-wide*, because a session that ran review-map and then other work carries one cost for
+both.
+
+`run.sh` pins a session id with `--session-id` and records it, so a finished repetition can be
+profiled afterwards: the human report lands in `$RUNDIR/profile.txt` beside `check.txt`, the machine
+copy in `profile.json`, and seven scalars — `session`, `requests`, `model_seconds`, `tool_seconds`,
+`ttft_seconds`, `stream_seconds`, `output_tokens`, `thinking_tokens` — go on the jsonl line, where
+`report.sh` prints them as a third `time` block under the same group key. Per-bucket seconds stay in
+`profile.json`: `report.sh` matches flat field names, and the bucket taxonomy describes the current
+procedure rather than stating a fact about a run, so a column per bucket would make old lines and new
+lines incomparable in the one file whose purpose is comparing across shas.
+
+`seconds` is left exactly as it was. It is harness wall clock — fixture rebuild, `claude` startup,
+`check.sh`, the judge — so it exceeds `model_seconds + tool_seconds`, and that difference is the only
+measurement of the harness's own overhead there is. On the run that validated this, 163s against
+158.2s: 4.8s of harness.
+
+Eval runs need `--all`, and `--rundir` implies it. The driver inlines the section instructions instead
+of invoking the skill, so those transcripts carry no `attributionSkill` and there is nothing to filter
+on — which is also why `--all` is never the default: with the filter off, neighbouring work in the
+same session is counted.
 
 ## Running a page
 
@@ -367,3 +439,10 @@ a case runs in, and `check` is its mechanical command. The section cases add `dr
 arm for free, and belongs in CI. It is early access and not enabled on this account, so nothing here is
 written in its `case.yaml` format — config written against an unverifiable schema is guessing. The
 fixtures, the frozen upstream and `checks/` are the durable part and carry over to either.
+
+`profile.sh` is the one piece here written against a schema nobody publishes: the session transcript
+under `~/.claude/projects/`. So it is the first thing to break after a Claude Code upgrade, and it is
+built to break loudly — see § *Profiling one run*. Everything it reports is derived from timestamps
+and `usage` on records the transcript already carries, so there is nothing to migrate if it does
+break, only a reader to repair. The fixtures, the frozen upstream and `checks/` remain the durable
+part.

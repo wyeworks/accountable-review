@@ -38,6 +38,9 @@ for f in $files; do
     {
       fixture = ""; sha = ""; dirty = ""; fail = 0; warn = 0; secs = 0; written = "true"
       judged = "false"; jp = 0; jf = 0; ju = 0
+      # Zero means "this line predates profile.sh", which is why the time block is printed only
+      # when a group has a run that actually carries model seconds.
+      msecs = 0; tsecs = 0; ftsecs = 0; ssecs = 0; otok = 0; ttok = 0; nreq = 0
       # Lines written before the knobs existed carry no model, and "-" is the same thing they
       # meant: the ambient config decided.
       model = "-"; effort = "-"; jmodel = "-"; jeffort = "-"
@@ -47,6 +50,15 @@ for f in $files; do
       if (match($0, /"fail":[0-9]+/))         fail    = substr($0, RSTART + 7, RLENGTH - 7) + 0
       if (match($0, /"warn":[0-9]+/))         warn    = substr($0, RSTART + 7, RLENGTH - 7) + 0
       if (match($0, /"seconds":[0-9]+/))      secs    = substr($0, RSTART + 10, RLENGTH - 10) + 0
+      # These need [0-9.]+ — profile.sh reports tenths. The leading quote in each pattern is what
+      # keeps "seconds" above from matching inside "model_seconds".
+      if (match($0, /"model_seconds":[0-9.]+/))  msecs  = substr($0, RSTART + 16, RLENGTH - 16) + 0
+      if (match($0, /"tool_seconds":[0-9.]+/))   tsecs  = substr($0, RSTART + 15, RLENGTH - 15) + 0
+      if (match($0, /"ttft_seconds":[0-9.]+/))   ftsecs = substr($0, RSTART + 15, RLENGTH - 15) + 0
+      if (match($0, /"stream_seconds":[0-9.]+/)) ssecs  = substr($0, RSTART + 17, RLENGTH - 17) + 0
+      if (match($0, /"output_tokens":[0-9]+/))   otok   = substr($0, RSTART + 16, RLENGTH - 16) + 0
+      if (match($0, /"thinking_tokens":[0-9]+/)) ttok   = substr($0, RSTART + 18, RLENGTH - 18) + 0
+      if (match($0, /"requests":[0-9]+/))        nreq   = substr($0, RSTART + 11, RLENGTH - 11) + 0
       if (match($0, /"fragment_written":[a-z]*/)) written = substr($0, RSTART + 19, RLENGTH - 19)
       if (match($0, /"judged":[a-z]*/))       judged  = substr($0, RSTART + 9, RLENGTH - 9)
       if (match($0, /"judge_pass":[0-9]+/))   jp      = substr($0, RSTART + 13, RLENGTH - 13) + 0
@@ -64,6 +76,11 @@ for f in $files; do
       # regression when it is an API error. Counted, named, and kept out of the averages.
       if (written == "false") { errs[k]++; time[k] += secs; next }
       runs[k]++; if (fail == 0) green[k]++; fails[k] += fail; warns[k] += warn; time[k] += secs
+      # Same denominator as the checks line: a run with no model seconds has nothing to average.
+      if (msecs > 0) {
+        pruns[k]++; pmodel[k] += msecs; ptool[k] += tsecs; pttft[k] += ftsecs
+        pstream[k] += ssecs; pout[k] += otok; pthink[k] += ttok; preq[k] += nreq
+      }
       if (judged == "true") {
         jk = k "\t" jmodel "/" jeffort
         if (!(jk in jseen)) { jseen[jk] = 1; jorder[k] = jorder[k] SUBSEP jk }
@@ -82,6 +99,14 @@ for f in $files; do
             (errs[k] > 0 ? sprintf("  · %d run(s) died before producing anything", errs[k]) : "")
         else
           printf "    checks   no completed run(s); %d died before producing anything\n", errs[k]
+        # A third kind of number, so a third labelled line rather than more columns on the first.
+        # It says where the wall clock went; it says nothing about whether the page was right.
+        # (No apostrophes in here: the whole awk program is inside single quotes.)
+        if (pruns[k] > 0)
+          printf "    time     %d run(s)  %.0fs model [ttft %.0fs · stream %.0fs]  %.0fs tool  ·  %.1fk out (%.1fk think) over %.0f requests  per run\n",
+            pruns[k], pmodel[k] / pruns[k], pttft[k] / pruns[k], pstream[k] / pruns[k],
+            ptool[k] / pruns[k], (pout[k] / pruns[k]) / 1000, (pthink[k] / pruns[k]) / 1000,
+            preq[k] / pruns[k]
         # One judged line per judge model seen in this group: two graders are two readings, and
         # a mean over both is a number with no reader behind it.
         if (k in jorder) {
