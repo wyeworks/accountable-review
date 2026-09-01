@@ -43,6 +43,11 @@ if [ ! -d "$REPO" ]; then
   exit
 fi
 
+# Comments are not markup and must not be read as either a search or an entry — see
+# strip_comments in lib.sh for the case that forced it.
+strip_comments "$IN" "$TMP/src"
+SRC=$TMP/src
+
 # ---------------------------------------------------------------- the recorded searches
 #
 # Every element-delimited text node, then the ones that look like a search invocation.
@@ -56,13 +61,13 @@ awk '{
   line = $0
   while (match(line, />[^<]*</)) {
     seg = substr(line, RSTART + 1, RLENGTH - 2)
-    if (seg ~ /^[[:space:]]*(rg|grep|egrep|ag)[[:space:]]/) print seg
+    if (seg ~ /^[[:space:]]*(git[[:space:]]+)?(rg|grep|egrep|ag)[[:space:]]/) print seg
     line = substr(line, RSTART + RLENGTH - 1)
   }
-}' "$IN" > "$TMP/code-blocks"
+}' "$SRC" > "$TMP/code-blocks"
 
 sed -e 's/&amp;/\&/g; s/&lt;/</g; s/&gt;/>/g; s/&quot;/"/g; s/&#39;/'"'"'/g' \
-    "$TMP/code-blocks" | grep -E '^[[:space:]]*(rg|grep|ag)[[:space:]]' > "$TMP/commands" || true
+    "$TMP/code-blocks" | grep -E '^[[:space:]]*(git[[:space:]]+)?(rg|grep|egrep|ag)[[:space:]]' > "$TMP/commands" || true
 
 : > "$TMP/hits"
 : > "$TMP/unparsed"
@@ -105,6 +110,14 @@ while IFS= read -r cmd; do
   # `grep -rn "recommendable\|general_recommendations_eligible" app` through rg matches
   # nothing — and the check then reports every entry that search found as unreachable. A check
   # that invents failures is worse than no check, and this one invented ten before it was fixed.
+  # `git grep` is grep for every purpose here — same dialect flags, and the `--` that
+  # separates its pattern from its paths is already dropped by the flag filter above. Strip the
+  # `git` so the dispatch below sees the tool it actually is. Not a nicety: a real run recorded
+  # all six of its searches as `git grep -nE "..." -- api/app`, an entirely idiomatic form, and
+  # every one was discarded before reaching here — leaving the page reported as having recorded
+  # NO search at all, which is the opposite of what it had done.
+  set -- $prefix
+  [ "${1:-}" != git ] || { shift; prefix=$*; }
   tool=${prefix%%[[:space:]]*}; tool=${tool##*/}
   case $tool in
     rg|ag)  engine=rg ;;
@@ -134,9 +147,29 @@ sort -u "$TMP/hits" -o "$TMP/hits" 2>/dev/null || true
 # ---------------------------------------------------------------- the affected entries
 #
 # Scoped by the template's own markers, the way blast-radius.sh scopes by id="blast":
-# § 4's card carries <p class="eyebrow">Affected, not changed</p>, § 2's field carries
-# <dt>Affected, unchanged</dt>. Sub-eyebrows inside the affected card (one per flow group) do
-# not reset it; the Changed column, the end of the field, and <h3> do.
+# § 4 carries <dt>Affected, not changed</dt> and § 2's field carries <dt>Affected, unchanged</dt>.
+# Sub-eyebrows inside the affected card (one per flow group) do not reset it; the Changed list,
+# the end of the field, and <h3> do.
+#
+# AN ENTRY IS WHATEVER THE TEMPLATE EMITS, and it stopped being <li>. When the design system
+# moved § 4 from div.two-col > div.card > ul > li > span.cite to dl.rows > dt/dd > div.item >
+# a.path, this extractor was not moved with it — and neither were the goldens self-test.sh
+# measures it against, so the check went on passing its own suite while matching nothing on any
+# real page. Two published runs, one at each detail level, both came back SKIP with checked=0:
+# the header above says a search that finds nothing it claims is the failure this script exists
+# for, and for months it was the script doing exactly that. Both shapes are read now — the <li>
+# accumulation so an older page still grades, and a single-line div.item, which is how
+# page-template.html and every real page write it. Citations likewise: a.path is the current
+# form and span.cite the retired one, and both count.
+#
+# The .item form is read as ONE LINE. That is the template's shape, and it also keeps the
+# <a class="cite"> inside a details.excerpt .ex-src — which sits in the same <dd> — from being
+# mistaken for the entry's own citation, since it is never on an .item line.
+#
+# Ranges arrive with a NON-BREAKING hyphen: real pages write :15&#8209;27, not :15-27. Left
+# undecoded, "15&#8209;27" is not a number, the entry falls through to `unresolved`, and the
+# check reports nothing wrong while checking nothing at all — the same silent-pass shape as
+# the markup drift above, which is why the decode sits with the extraction and not elsewhere.
 #
 # A citation of the form :67, with no path, inherits the file from the entry's first full
 # citation — the form report-format.md itself uses ("the guard at :128"). Resolving it is the
@@ -145,13 +178,15 @@ sort -u "$TMP/hits" -o "$TMP/hits" 2>/dev/null || true
 # column at :67 gets vouched for by a match on :70.
 awk '
   /class="eyebrow"[^>]*>[^<]*[Cc]hanged[^<]*<\/p>/ && !/[Aa]ffected/ { aff = 0 }
+  /<dt[^>]*>[^<]*[Cc]hanged<\/dt>/                  && !/[Aa]ffected/ { aff = 0 }
   /class="eyebrow"[^>]*>[^<]*[Aa]ffected/          { aff = 1 }
-  /<dt>[^<]*[Aa]ffected/                           { aff = 1 }
+  /<dt[^>]*>[^<]*[Aa]ffected/                      { aff = 1 }
   /<\/dd>|<h3|<\/dl>/                              { aff = 0 }
+  aff && /class="item"/ { print; next }
   aff && /<li/ { inli = 1; buf = "" }
   inli { buf = buf " " $0 }
   inli && /<\/li>/ { print buf; inli = 0 }
-' "$IN" > "$TMP/entries"
+' "$SRC" > "$TMP/entries"
 
 checked=0; missing=0; pointers=0; unresolved=0
 : > "$TMP/failures"
@@ -164,13 +199,13 @@ while IFS= read -r entry; do
 
   cites=$(printf '%s\n' "$entry" | awk '{
     line = $0
-    while (match(line, /class="cite"[^>]*>[^<]*</)) {
+    while (match(line, /class="(cite|path)"[^>]*>[^<]*</)) {
       seg = substr(line, RSTART, RLENGTH)
       sub(/^[^>]*>/, "", seg); sub(/<$/, "", seg)
       print seg
       line = substr(line, RSTART + RLENGTH)
     }
-  }')
+  }' | sed 's/&#8209;/-/g; s/&#x2011;/-/g; s/&ndash;/-/g; s/&#8211;/-/g')
   [ -n "$cites" ] || continue
 
   # The entry's SUBJECT is its first full citation; later ones are supporting. A bare :N binds

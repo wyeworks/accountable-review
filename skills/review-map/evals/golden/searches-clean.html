@@ -1,18 +1,30 @@
+<!-- No defect. The recorded search reaches the entry it is offered for: project.rb:2 names
+     archived_at, so a grep for the column finds it.
+
+     Written in the markup page-template.html emits TODAY — dl.rows / dt / dd / div.item /
+     a.path — and that is the point of this file as much as the search is. The version it
+     replaced used div.two-col > div.card > ul > li > span.cite, retired when the design system
+     changed, and because it was never migrated searches.sh went on passing this row while
+     matching nothing on any real page. -->
 <section id="blast">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>Blast radius</h2>
-  <div class="two-col">
-    <div class="card"><p class="eyebrow">Changed</p>
-      <ul><li><span class="cite">db/migrate/20260101000000_add_archived_at.rb</span></li></ul></div>
-    <div class="card"><p class="eyebrow">Affected, not changed</p>
-      <ul>
-        <li><span class="cite">app/models/project.rb:2</span> &mdash; the selectable scope reads the
-          new column, so archival changes what it returns
-          <span class="tier">evidenced by unchanged code</span></li>
-      </ul></div>
-  </div>
-  <h3>What was searched</h3>
-  <ul>
-    <li><code>rg -n 'archived_at' app</code> &mdash; the column by name, one reader.</li>
-  </ul>
+
+  <dl class="rows">
+    <dt class="lbl-ink">Changed</dt>
+    <dd>
+      <div class="gt gt-paths">
+        <div class="c" data-path="db/migrate/20260101000000_add_archived_at.rb"><a class="path" href="#">db/migrate/20260101000000_add_archived_at.rb</a></div>
+      </div>
+    </dd>
+
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:2</a> &mdash; the selectable
+        scope reads the new column, so archival changes what it returns
+        <span class="tier">evidenced by unchanged code</span></div>
+      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong>
+        <code>rg -n 'archived_at' app</code> &mdash; every reader of the column by name.</div>
+    </dd>
+  </dl>
 </section>

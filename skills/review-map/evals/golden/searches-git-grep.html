@@ -1,0 +1,36 @@
+<!-- No defect in the page. Like searches-bre-dialect.html, this pins a defect the CHECK had: a
+     run is free to record `git grep`, and one did — all six of a published page's searches were
+     written that way, an entirely idiomatic form. The extractor required the text node to BEGIN
+     with rg/grep/ag, so every one was discarded, and the check then announced that the page had
+     recorded no search at all. The opposite of what it had done, stated as fact.
+
+     Two details this fixture is shaped to hold. The `--` that separates a git grep's pattern
+     from its paths must not survive into the path list. And `git grep -nE` must dispatch to ERE
+     rather than to the default: the pattern below is alternation, which BRE would read as
+     literal pipes and find nothing, reporting the entry as unreachable.
+
+     Note that searches-repo is deliberately NOT a git repository. Nothing re-runs `git` here —
+     `git grep` is normalised to grep, which is the whole claim: it is the same tool for this
+     check's purposes. -->
+<section id="blast">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>Blast radius</h2>
+
+  <dl class="rows">
+    <dt class="lbl-ink">Changed</dt>
+    <dd>
+      <div class="gt gt-paths">
+        <div class="c" data-path="db/migrate/20260101000000_add_archived_at.rb"><a class="path" href="#">db/migrate/20260101000000_add_archived_at.rb</a></div>
+      </div>
+    </dd>
+
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:2</a> &mdash; the selectable
+        scope reads the new column, so archival changes what it returns
+        <span class="tier">evidenced by unchanged code</span></div>
+      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong>
+        <code>git grep -nE "archived_at|selectable" -- app</code> &mdash; the column and the scope.</div>
+    </dd>
+  </dl>
+</section>
