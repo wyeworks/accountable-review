@@ -5,13 +5,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repository is
 
 There is no application code here. The repository is the `accountable-review` Claude Code plugin. It
-ships a single skill — `skills/review-map/` — that turns a pull request into a published HTML review
-map: what the change is for, what it can break, what the API and its client now agree on, and where
+ships a single skill — `skills/review-map/` — plus the one subagent that skill spawns
+(`agents/claim-falsifier.md`, and only at `--effort high`). The skill turns a pull request into a
+published HTML review map: what the change is for, what it can break, what the API and its client now agree on, and where
 the decisions live. The first target stack is a Rails API with a Next.js client.
 
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
-command. It takes a target and a **detail level** — `--brief` (the default), `--full`, `--review` —
+command. It takes a target, a **detail level** — `--brief` (the default), `--full`, `--review` — and an
+orthogonal **effort** — `--effort normal` (the default) or `--effort high`, which adds an adversarial
+pass over the flows —
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
 frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. The "source" is
 prose that another Claude instance executes, so the unit of quality is instruction clarity, not
@@ -101,6 +104,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the search recipes for affected-but-unchanged code |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script |
+| `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
@@ -246,6 +250,29 @@ Editing one of these means checking the others still agree.
   narrow `skip` for the moment stage 3 opens and no flow is written yet. That skip takes a pending
   marker as its precondition deliberately: a SKIP reads as verified, so it has to be unreachable on
   a finished page.
+- **Effort is orthogonal to the detail level, and invisible on the page.** `--effort normal` (the
+  default) and `--effort high` decide how hard a run works to be right; the level decides how many
+  sections there are. They multiply rather than substitute, and `--brief --effort high` — a short
+  page whose claims were attacked — is the combination worth having. Effort produces **no section, no
+  marker, no chip and no sentence**: two pages of the same target at the two efforts differ in their
+  claims, never in their shape, and a reader cannot tell which produced the one in front of them.
+
+  Six files have to agree: `SKILL.md` step 1 parses it beside the level and step 8 owns what `high`
+  does, `report-format.md` § *Detail levels* states that this file has nothing else to say about it,
+  `page-template.html`'s header comment refuses the badge in the same breath as the severity chip,
+  `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.sh` § 2b fails a page
+  that advertises having been checked, and `README.md` § *How hard it works* is the public wording.
+
+  **A verification badge is the same regression as a severity chip, and it will look more innocent.**
+  Grading the PR is obviously forbidden; grading *the page* — "every claim verified", a count of what
+  the pass corrected, a `.verified` chip — reads as transparency while asserting exactly the assurance
+  the format exists to withhold. That is why the refusal lives beside the severity refusal in the
+  template rather than in a section of its own, and why § 2b's patterns are high-precision: a bare
+  `verified` is a real Rails column name, and the sanctioned "a pass, not an audit" contains *audit*.
+
+  The eval axis is `--skill-effort`, not `--effort`: `evals/run.sh` already had an `--effort` meaning
+  the CLI reasoning effort the reader runs at, and two knobs under one name in one script is a bug
+  waiting for a hurried reader. Both are in `report.sh`'s group key.
 - **Findings are a sample, not an audit.** The page must never read as a clean bill of health. This is
   load-bearing, not hedging: the skill explains, and explanation is reproducible, but defect discovery
   is not.
@@ -390,14 +417,31 @@ Editing one of these means checking the others still agree.
   against tokens rather than literals precisely so they keep inverting *relative to the page* rather
   than flipping to an unreadable combination in one theme.
 
-## Deliberately single-context
+## Deliberately single-context, with one named exception
 
-The skill runs in one context. It spawns no subagents, and that is a choice, not an omission — an
-earlier iteration fanned out to `Explore` agents per layer, and it came out.
+The skill runs in one context. It spawns nothing at its default effort, and that is a choice, not an
+omission — an earlier iteration fanned out to `Explore` agents per layer, and it came out.
 
 `SKILL.md`'s hard rules now say so outright, which they did not before: a real run reached for one
 `Explore` agent and stalled the parent for 997 seconds — 41% of its wall clock — in a single blocked
 turn. A boundary stated only here is a boundary the skill has never been told about.
+
+**The one exception is the falsification pass at `--effort high`** (`SKILL.md` step 8, and
+`agents/claim-falsifier.md`). It is worth understanding why it does not reopen what the paragraphs
+below closed, because the next thing that wants an exception will look similar and probably is not.
+
+The seam is per **behaviour flow**, which is the seam those paragraphs already name as the right one:
+a flow is a whole behaviour, so nothing is fragmented that the page had not already separated, and
+there is no synthesis step afterwards to reassemble what a split threw away. The agent is read-only
+and returns *challenges*, not page content — the parent still writes every word, and still opens
+every cited file before acting on one, so no comprehension moves anywhere. And every agent for a run
+goes out in a single message, which is what bounds the cost: several blocking agents in one message
+stall the parent once, for the slowest, where the same agents one at a time stall it once each. The
+997 seconds were one sequential spawn.
+
+Two things it is not. It is not a licence for step 5 or step 6 to fan out — those still span the
+whole diff by nature, and splitting them is still the mistake. And it is not on by default: `normal`
+is what almost every run will be, so the single-context reading of a profile stays the common case.
 
 The reason is that the decomposition is the *next* thing to get right, not something to inherit
 half-specified. Two of this version's steps span the whole diff by nature: step 5 traces consumers
@@ -462,6 +506,13 @@ verdict, structurally: the template has no chip that expresses one, and reintrod
 vocabulary is named above as the single easiest way to undo this iteration. So the naive
 implementation breaks the invariant the whole format is built to hold, and it will look like a feature
 while doing it.
+
+**`--effort high` has now built half of this**, which is the reason to read the rest of this section
+before writing the level rather than after. The routing it needs — an external challenge arriving,
+being verified against the file, and landing in the flow that owns it in the page's own voice with no
+grade attached — is the mechanism `SKILL.md` step 8 now runs at `high`. What `--review` still has to
+solve is where the claims come from and how a *graded* source is stripped, not what to do with one
+once it arrives.
 
 **The seam that resolves it, and the reason this level is worth building at all:** a review finding
 enters the page as a **claim to verify**, never as a finding to display. Two steps already do that

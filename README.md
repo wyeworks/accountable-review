@@ -93,6 +93,38 @@ spanning both sides of the API, someone else's hundred-file feature.
 threaded into the flow that owns each one. It is not implemented, and passing it stops the run and
 says so rather than producing a page that quietly leaves it out.
 
+### How hard it works
+
+A separate axis, and orthogonal to the one above:
+
+```
+/accountable-review:review-map 412                    # --effort normal, the default
+/accountable-review:review-map 412 --effort high
+/accountable-review:review-map 412 --full --effort high
+```
+
+Everything the skill writes rests on claims it checked itself — and the context that wrote a claim
+is the one least able to see what it assumed. **`--effort high`** adds a second reader that does not
+share that context. Once the behaviour flows are written, one read-only `claim-falsifier` subagent
+is sent at each of them, with a single mandate: assume this flow is wrong in ways that matter, and
+find evidence in the repository that contradicts it. It produces no competing explanation and
+rewrites nothing — it comes back with challenges, each anchored in a line it opened, plus the claims
+it attacked and could not break.
+
+The run then does to those challenges what it does to any other finding: opens the cited file itself,
+and corrects, downgrades or drops the claim. A challenge it cannot confirm is dropped, exactly as an
+unconfirmed finding is.
+
+It is off by default because it is not free. The agents go out together, so the run blocks once
+rather than once per flow, but it does block — an earlier version of this skill spawned a single
+helper agent and paid 997 seconds, 41% of its wall clock, in one stalled turn. That is why the skill
+otherwise spawns nothing at all, and why this is the one carved exception.
+
+**The page looks exactly the same either way.** No badge, no marker, no count of what was corrected.
+Verification is not a feature the page advertises: an evidence tier says how a claim is known, and a
+stamp saying how hard someone looked is the clean bill of health this page must never read as. What
+changed is reported to you in the terminal, not to whoever opens the link.
+
 ## What it produces
 
 At `--full`, seven sections in the order a reviewer actually works, each owning one kind of thing,
@@ -216,7 +248,8 @@ it can, and never has to wonder whether something was quietly dropped.
 Claude Code ships `/code-review`, and many teams add their own. This skill answers a different
 question — *what is this, and where do I look?* — and produces a document that outlives the review
 rather than comments that vanish into it. There is no severity scale, no risk score, no approval
-recommendation: the reviewer decides, the page equips them. It never posts to GitHub.
+recommendation — and no verification badge either: the reviewer decides, the page equips them. It
+never posts to GitHub.
 
 Nor does it claim to have found everything. Three independent passes over the same 109-file diff
 produced eight distinct headline findings between them, with only one appearing in all three.
@@ -248,6 +281,7 @@ degrades to plain text rather than emitting permalinks that would 404, and says 
 
 ```
 .claude-plugin/plugin.json         plugin manifest (name, version, metadata)
+agents/claim-falsifier.md          adversarial verifier, spawned per flow at --effort high
 skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/

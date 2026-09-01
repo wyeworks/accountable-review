@@ -1,0 +1,14 @@
+<!-- Plants exactly one defect: assurance language. The page is not allowed to say that it
+     was checked, at any effort level — page-invariants.sh § 2b. Everything else here is
+     clean: an evidence tier is present so § 3 has something to find, and no data-path
+     appears outside a ledger cell. -->
+<section id="flow-a">
+  <div class="mech">Archiving stamps <code>projects.archived_at</code> and leaves time entries alone.</div>
+  <dl class="rows">
+    <dt>Affected, unchanged</dt>
+    <dd><code>ActiveProjects</code> scopes the selectable list and does not filter on the new column
+      <a class="cite" href="#">app/queries/active_projects.rb:12</a>
+      <span class="tier">from unchanged code</span></dd>
+  </dl>
+  <p class="note">Every claim in this flow was independently verified against the repository.</p>
+</section>

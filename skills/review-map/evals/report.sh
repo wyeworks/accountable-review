@@ -1,6 +1,6 @@
 #!/bin/sh
 # report.sh — what the runs add up to, per case, per fixture, per skill sha, per detail level,
-# per model.
+# per skill effort, per model.
 #
 #   ./report.sh                  every case
 #   ./report.sh behaviour-flows  one
@@ -18,6 +18,12 @@
 # The detail level is the third axis on the same argument. --brief and --full produce different
 # pages from the same case, so a pass rate averaged over both describes neither. Lines written
 # before levels existed carry none, and are reported as `full`, which is what they were.
+#
+# The skill's effort is the fourth, and it is a different thing from the `effort` beside `model`:
+# that one is the CLI reasoning effort the reader was run at, this one is the flag the skill was
+# invoked with, and at `high` the run sends an adversarial pass at its own flows. Two knobs, two
+# columns, and the column here is headed by the value so they cannot be read as one. Lines written
+# before the flag existed are reported as `normal`, which is what they were.
 #
 # Two blocks per group, and they never merge. CHECKS are the mechanical verdicts — a script
 # says the same thing every time, so a change in that column is a change in the fragment.
@@ -51,6 +57,8 @@ for f in $files; do
       model = "-"; effort = "-"; jmodel = "-"; jeffort = "-"
       # Lines written before detail levels existed were all produced at what is now `full`.
       level = "full"
+      # And before the effort flag existed, every run did what `normal` now names.
+      seffort = "normal"
       if (match($0, /"fixture":"[^"]*"/))     fixture = substr($0, RSTART + 11, RLENGTH - 12)
       if (match($0, /"skill_sha":"[^"]*"/))   sha     = substr($0, RSTART + 13, RLENGTH - 14)
       if (match($0, /"dirty":[a-z]*/))        dirty   = substr($0, RSTART + 8, RLENGTH - 8)
@@ -74,13 +82,17 @@ for f in $files; do
       if (match($0, /"model":"[^"]*"/))       model   = substr($0, RSTART + 9, RLENGTH - 10)
       if (match($0, /"effort":"[^"]*"/))      effort  = substr($0, RSTART + 10, RLENGTH - 11)
       if (match($0, /"level":"[^"]*"/))       level   = substr($0, RSTART + 9, RLENGTH - 10)
+      # "skill_effort" cannot collide with "effort" above: that pattern needs a quote immediately
+      # before `effort`, and here the quote sits before `skill_`.
+      if (match($0, /"skill_effort":"[^"]*"/)) seffort = substr($0, RSTART + 16, RLENGTH - 17)
       if (match($0, /"judge_model":"[^"]*"/)) jmodel  = substr($0, RSTART + 15, RLENGTH - 16)
       if (match($0, /"judge_effort":"[^"]*"/)) jeffort = substr($0, RSTART + 16, RLENGTH - 17)
 
       # The detail level is part of the group key for the same reason model and effort are: a
       # brief run and a full run of the same case are two different pages, and a pass rate
-      # averaged over both belongs to neither.
-      k = sha (dirty == "true" ? "+dirty" : "") "\t" fixture "\t" level "\t" model "/" effort
+      # averaged over both belongs to neither. Skill effort joins it on the same argument:
+      # comparing normal against high is the whole point of the flag, so they must not average.
+      k = sha (dirty == "true" ? "+dirty" : "") "\t" fixture "\t" level "\t" "effort=" seffort "\t" model "/" effort
       keys[k] = 1
 
       # A run whose agent died produced nothing to grade, and averaging it in reads as a quality
@@ -102,7 +114,7 @@ for f in $files; do
     END {
       for (k in keys) {
         n = split(k, part, "\t")
-        printf "  %-18s %-20s %-6s %s\n", part[1], part[2], part[3], part[4]
+        printf "  %-18s %-20s %-6s %-14s %s\n", part[1], part[2], part[3], part[4], part[5]
         if (runs[k] > 0)
           printf "    checks   %d run(s)  %d clean  %.1f fail/run  %.1f warn/run  %ds avg%s\n",
             runs[k], green[k], fails[k] / runs[k], warns[k] / runs[k],
@@ -124,10 +136,10 @@ for f in $files; do
           m = split(jorder[k], jks, SUBSEP)
           for (x = 1; x <= m; x++) {
             jk = jks[x]; if (jk == "") continue
-            split(jk, jpart, "\t")   # sha, fixture, level, model/effort, judge model/effort
+            split(jk, jpart, "\t")   # sha, fixture, level, skill effort, model/effort, judge …
             printf "    judged   %d run(s)  %d clean  %.1f pass  %.1f fail  %.1f unclear  per run  · judge %s\n",
               jruns[jk], jclean[jk], jpass[jk] / jruns[jk], jfail[jk] / jruns[jk], junc[jk] / jruns[jk],
-              jpart[5]
+              jpart[6]
           }
         } else
           printf "    judged   none — ./run.sh %s --judge\n", FILENAME

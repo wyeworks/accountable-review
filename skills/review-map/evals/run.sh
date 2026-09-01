@@ -5,6 +5,7 @@
 #   ./run.sh behaviour-flows -n 3 --judge --fast
 #   ./run.sh behaviour-flows -n 3 --judge -j 3
 #   ./run.sh diagrams --fixture monorepo-contract --visual
+#   ./run.sh behaviour-flows -n 3 --judge --skill-effort high
 #
 # The point is repetition. CLAUDE.md already says a single run is weak evidence, because
 # defect discovery is sampling rather than a function of the diff — but until now a second
@@ -29,6 +30,12 @@
 # measurement to iterate faster on the thing being measured is backwards. --judge-model and
 # --judge-effort are there for when you mean it.
 #
+# --skill-effort is a DIFFERENT KNOB FROM --effort and the long name is the whole reason it is
+# spelled out: --effort is the CLI reasoning effort the reader runs at, --skill-effort is the flag
+# the skill is invoked with, and at `high` the run sends an adversarial pass at its own behaviour
+# flows. Two things called effort in one script is a bug waiting for a hurried reader, so they are
+# never abbreviated to the same thing and both go on the results line under their own key.
+#
 # Needs jq, and a `claude` on PATH. Fragments and logs go under $TMPDIR, never into the repo.
 set -eu
 
@@ -37,7 +44,7 @@ SKILL_DIR=$(dirname "$HERE")
 PLUGIN_ROOT=$(dirname "$(dirname "$SKILL_DIR")")
 
 CASE=; N=1; ONLY_FIXTURE=; VISUAL=; BASE=HEAD~1; JUDGE=; JOBS=1
-LEVEL=
+LEVEL=; SKILL_EFFORT=
 MODEL=${EVAL_MODEL:-}; EFFORT=${EVAL_EFFORT:-}
 JUDGE_MODEL=${EVAL_JUDGE_MODEL:-}; JUDGE_EFFORT=${EVAL_JUDGE_EFFORT:-}
 while [ $# -gt 0 ]; do
@@ -46,6 +53,7 @@ while [ $# -gt 0 ]; do
     -j|--jobs)      JOBS=$2; shift 2 ;;
     --fixture)      ONLY_FIXTURE=$2; shift 2 ;;
     --level)        LEVEL=$2; shift 2 ;;
+    --skill-effort) SKILL_EFFORT=$2; shift 2 ;;
     --base)         BASE=$2; shift 2 ;;
     --model)        MODEL=$2; shift 2 ;;
     --effort)       EFFORT=$2; shift 2 ;;
@@ -62,7 +70,7 @@ done
 
 if [ -z "$CASE" ]; then
   echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--level brief|full]" >&2
-  echo "                     [--visual] [--judge]" >&2
+  echo "                     [--skill-effort normal|high] [--visual] [--judge]" >&2
   echo "                     [--fast] [--model M] [--effort L] [--judge-model M] [--judge-effort L]" >&2
   echo "cases:  $(ls "$HERE/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
   exit 2
@@ -83,6 +91,14 @@ case $LEVEL in
   brief|full) ;;
   *) echo "unknown level: $LEVEL (brief | full)" >&2; exit 2 ;;
 esac
+# The skill effort a case is written for, defaulted for the same reason the level is: every case
+# written before the flag existed did what `normal` now names, and reinterpreting the corpus would
+# make old result lines incomparable with new ones. --skill-effort on the command line overrides.
+[ -n "$SKILL_EFFORT" ] || SKILL_EFFORT=$(jq -r '.skill_effort // "normal"' "$CASEFILE")
+case $SKILL_EFFORT in
+  normal|high) ;;
+  *) echo "unknown skill effort: $SKILL_EFFORT (normal | high)" >&2; exit 2 ;;
+esac
 [ -r "$DRIVER" ] || { echo "driver missing: $DRIVER" >&2; exit 2; }
 
 FIXTURES=${REVIEW_MAP_FIXTURES:-${TMPDIR:-/tmp}/review-map-fixtures}
@@ -100,6 +116,31 @@ PERM=${EVAL_PERMISSION_MODE:-bypassPermissions}
 SKILL_SHA=$(git -C "$PLUGIN_ROOT" rev-parse --short HEAD 2>/dev/null || echo unknown)
 if [ -n "$(git -C "$PLUGIN_ROOT" status --porcelain -- skills 2>/dev/null)" ]; then DIRTY=true; else DIRTY=false; fi
 DRIVER_SHA=$(git -C "$PLUGIN_ROOT" hash-object "$DRIVER" 2>/dev/null | cut -c1-8 || echo unknown)
+
+# The falsifier the skill spawns at --skill-effort high. It is registered with --agents rather
+# than by loading the plugin, which keeps the property the README defends: the driver names the
+# skill files by absolute path, so what is measured is the prose and not the packaging. --agents
+# accepts the plugin-scoped identifier verbatim, so the name here is the same one SKILL.md says.
+#
+# Registered on EVERY run, not only the high ones. An agent nobody spawns costs nothing, and the
+# alternative — one arm of the A/B carrying an extra CLI flag — would make the two arms differ by
+# something other than the thing under test. Description and tools are read out of the agent file
+# so there is one copy of them; a second copy here would drift, which is the failure this
+# repository keeps writing down.
+AGENT_FILE=$PLUGIN_ROOT/agents/claim-falsifier.md
+AGENTS_JSON=
+if [ -r "$AGENT_FILE" ]; then
+  a_desc=$(awk '/^description:/{sub(/^description:[[:space:]]*/,""); d=$0
+                  while ((getline line) > 0 && line ~ /^[[:space:]]/) { sub(/^[[:space:]]+/,"",line); d=d " " line }
+                  print d; exit}' "$AGENT_FILE")
+  a_tools=$(sed -n 's/^tools:[[:space:]]*//p' "$AGENT_FILE" | head -1)
+  a_body=$(awk 'n==2{print} /^---$/{n++}' "$AGENT_FILE")
+  AGENTS_JSON=$(jq -n --arg d "$a_desc" --arg p "$a_body" --arg t "$a_tools" \
+    '{"accountable-review:claim-falsifier":
+        {description:$d, prompt:$p, tools:($t|split(",")|map(gsub("^ +| +$";"")))}}')
+else
+  echo "warn: $AGENT_FILE not found — --skill-effort high has no falsifier to spawn" >&2
+fi
 
 TIMEOUT=
 for t in timeout gtimeout; do command -v $t >/dev/null && { TIMEOUT=$t; break; }; done
@@ -140,10 +181,11 @@ one_run() {
       -e "s|{{FROZEN}}|$HERE/frozen/$rfixture|g" \
       -e "s|{{BASE}}|$BASE|g" \
       -e "s|{{LEVEL}}|$LEVEL|g" \
+      -e "s|{{SKILL_EFFORT}}|$SKILL_EFFORT|g" \
       -e "s|{{OUT}}|$OUT|g" \
       "$DRIVER" > "$RUNDIR/prompt.md"
 
-  echo "· $rid  run $rnum/$N  $LEVEL  $MODEL_TAG/$EFFORT_TAG  → $RUNDIR"
+  echo "· $rid  run $rnum/$N  $LEVEL  effort=$SKILL_EFFORT  $MODEL_TAG/$EFFORT_TAG  → $RUNDIR"
   started=$(date +%s)
   set +e
   # The prompt goes in on STDIN, not as an argument. --add-dir is variadic, so a trailing
@@ -152,6 +194,7 @@ one_run() {
   ( cd "$FIXTURE_DIR" && ${TIMEOUT:+$TIMEOUT $LIMIT} claude -p \
       --permission-mode "$PERM" \
       ${MODEL:+--model $MODEL} ${EFFORT:+--effort $EFFORT} \
+      ${AGENTS_JSON:+--agents "$AGENTS_JSON"} \
       ${CAN_PIN:+--session-id $rsession} \
       --add-dir "$RUNDIR" "$SKILL_DIR" \
       < "$RUNDIR/prompt.md" ) > "$RUNDIR/agent.log" 2>&1
@@ -218,12 +261,12 @@ one_run() {
 
   # judged=false is why the judged counts are a separate flag rather than three zeroes: a run
   # nobody judged and a run that scored zero must not aggregate the same way.
-  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"session":"%s","requests":%d,"model_seconds":%s,"tool_seconds":%s,"ttft_seconds":%s,"stream_seconds":%s,"output_tokens":%d,"thinking_tokens":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"level":"%s","model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}
+  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"session":"%s","requests":%d,"model_seconds":%s,"tool_seconds":%s,"ttft_seconds":%s,"stream_seconds":%s,"output_tokens":%d,"thinking_tokens":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"level":"%s","skill_effort":"%s","model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}
 ' \
     "$CASE" "$rfixture" "$rnum" "$stamp" "$p" "$f" "$w" "$s" "$check_exit" "$agent_exit" "$seconds" \
     "$rsession" "$preq" "$pmodel" "$ptool" "$pttft" "$pstream" "$pout" "$pthink" \
     "$written" "$judged" "$jp" "$jf" "$ju" \
-    "$LEVEL" "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" \
+    "$LEVEL" "$SKILL_EFFORT" "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" \
     "$SKILL_SHA" "$DIRTY" "$DRIVER_SHA" "$OUT" >> "$HERE/results/$CASE.jsonl"
 
   # One printf, so a parallel run's result arrives as one piece instead of interleaved with

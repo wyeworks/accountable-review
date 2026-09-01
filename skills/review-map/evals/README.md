@@ -157,6 +157,51 @@ and the `self-test.sh` rows over them are what notice: three rows for the level'
 running `blast-radius.sh` and `page-invariants.sh` over the merged shape, whose whole job is to fail the
 day the anchors move.
 
+### The skill effort is the fourth, and it is not the `--effort` beside it
+
+`run.sh` now takes two things called effort, and they are unrelated. `--effort` is the CLI reasoning
+effort the *producing model* runs at, and it is half of `--fast`. `--skill-effort` is the flag the
+*skill* is invoked with: at `high`, `SKILL.md` step 8 sends one `claim-falsifier` subagent at each
+written behaviour flow to try to break its claims, and the run adjudicates what comes back. Both land
+on the results line under their own keys and both are in `report.sh`'s group key, so a `high` row can
+never be averaged into a `normal` one — the same argument that keeps `--brief` and `--full` apart.
+
+A case declares `skill_effort` and `--skill-effort` overrides it. **A case file that declares none
+means `normal`**, for the reason an absent `level` means `full`: every run recorded before the flag
+existed did what `normal` names, and silently rereading the corpus would make old lines incomparable
+with new ones.
+
+**The falsifier is registered with `--agents`, not by loading the plugin**, which keeps the property
+this file defends two sections up — the driver names the skill files by absolute path, so what is
+measured is the prose rather than the packaging. `--agents` accepts the plugin-scoped identifier
+verbatim, so the eval spawns the same name a real install does, and `run.sh` reads the description
+and the tool list out of `agents/claim-falsifier.md` rather than keeping a second copy of them.
+It is registered on **every** run, including `normal` ones where nothing spawns it: an unused agent
+costs nothing, and an arm of an A/B carrying an extra CLI flag differs by something other than the
+thing under test.
+
+**No case gained an expectation for it, deliberately.** Six per case is a cap this file argues for,
+and a seventh would make the grader worse at the other six — which would be measuring the judge
+rather than the flag. The A/B runs the *existing* expectations at both efforts and compares:
+
+```sh
+./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort normal
+./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort high
+./report.sh behaviour-flows
+```
+
+`checks/searches.sh` is the sharpest mechanical reading available here, because a recorded search
+that does not reproduce is exactly what a falsifier is told to hunt; the judged expectations about
+affected-but-unchanged entries are the other half.
+
+**Nothing has run this yet, and the flag ships unmeasured.** That is a statement of fact rather than
+a hedge: whether `high` is worth a blocked round of agents is the question the axis exists to answer,
+and until the numbers exist the honest claim is that the pass is *available*, not that it *helps*.
+Read § *Two page runs against `monolith-guard-chain`* before scoring it — recall on planted findings
+was total in both runs there, so a fixture whose findings are all true and all plantable cannot show
+a falsifier earning its keep. What would is a fixture planting **plausible-but-wrong invitations**,
+which none of the four does; that belongs in § *Next cases worth adding*.
+
 ## Profiling one run
 
 `seconds` on a results line is one number for a whole run. It can say a run got slower; it can never
@@ -270,7 +315,9 @@ Three lessons, in descending order of how much they cost:
 1. **`claude -p` is not the harness for a page-scope timing comparison.** No `Artifact` tool means the
    run cannot do the last step, and a run that stops early is not a faster run.
 2. **The subagent had no rule against it.** `CLAUDE.md` said the skill spawns none and treated that as
-   settled; `SKILL.md` never said so, and a run duly reached for one. It is a hard rule now.
+   settled; `SKILL.md` never said so, and a run duly reached for one. It is a hard rule now — with
+   one carved exception, the per-flow falsifier at `--skill-effort high`, whose agents go out in a
+   single message precisely because of this measurement.
 3. **`--json` drops the diagnostics, and a consumer that ignores them gets a confident wrong answer.**
    The comparison script read `--json` and never printed the `WARN` about the session having split into
    two runs, so it compared one half of the new run against the whole baseline and reported a 50%
@@ -360,7 +407,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 
 | | Owns | Scope |
 |---|---|---|
-| `page-invariants.sh` | severity chips, verdict language, evidence tiers, `data-path`, dead links, themes | page and fragment |
+| `page-invariants.sh` | severity chips, verdict language, assurance language, evidence tiers, `data-path`, dead links, themes | page and fragment |
 | `build-state.sh` | draft / final / stopped | page |
 | `completeness.sh` | the gate, delegated to `scripts/coverage-gate.sh` | page |
 | `excerpts.sh` | collapsed, summarised, tinted in all three themes, no range quoted twice, no syntax colouring written into the quotation, `data-lang` on unchanged blocks only | page and fragment |
@@ -539,7 +586,13 @@ In rough order of value:
    trusting that the gate is wired up.
 4. **A repo with no `config/application.rb`** at the root, so Rails-root discovery has to discover
    something.
-5. **A `diagrams` case for `monolith-guard-chain`.** `behaviour-flows` and `blast-radius` now have
+5. **A fixture that plants a plausible-but-wrong invitation.** Every fixture here plants findings
+   that are *true* and outside the diff, which measures recall. `--skill-effort high` exists to catch
+   the opposite thing — a claim the run would confidently make and that the code contradicts — and
+   nothing here can show it working. The shape wanted is a file that reads as a consumer of the
+   changed thing and is not one: a serializer whose field is overridden downstream, a scope shadowed
+   by a default, a caller behind a guard the change cannot reach.
+6. **A `diagrams` case for `monolith-guard-chain`.** `behaviour-flows` and `blast-radius` now have
    one each and have been run; `diagrams` has not. This is the fixture where *affected but unchanged*
    carries the most weight, which makes it the one whose blast-radius figure has the most to get
    wrong — writers, the fact, and readers, with the readers outnumbering everything else.

@@ -1,5 +1,6 @@
-You are producing ONE SECTION of a review map: section 2, the behaviour flows. Not a review
-map, and not any other section.
+You are producing ONE SECTION of a review map: section 2, the behaviour flows, at the
+**{{LEVEL}}** detail level and **{{SKILL_EFFORT}}** effort. Not a review map, and not any
+other section.
 
 The repository under review is `{{FIXTURE_DIR}}` and the shell is already inside it. The base
 ref is `{{BASE}}`; the head is `HEAD`.

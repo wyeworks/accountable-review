@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort normal is the default, --effort high additionally tries to falsify the page's own claims before it is finished. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -38,7 +38,11 @@ front — the procedure itself is the only part that has to be in context the wh
 Paths are relative to the base directory named at the top of this skill when it loads. That value is
 how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
 
-## 1. Resolve the target and the detail level
+One thing bundled with the plugin is not a file you read: the `accountable-review:claim-falsifier`
+subagent, spawned by name in step 8 and only at `--effort high`. It is addressed, never loaded — its
+instructions are its own, which is the point of putting them in a separate context.
+
+## 1. Resolve the target, the detail level and the effort
 
 - Argument may be a PR number, a PR URL, a branch, or a diff range. With no argument, use the
   current branch against its base.
@@ -48,10 +52,25 @@ how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
   than inferring the shape from the section list. Three rules about the flag itself:
   - `--review` **stops the run.** It is not implemented; see § *The review level is not implemented
     yet* below for what to say. Do not fall back to another level and do not write a page.
-  - An argument starting with `--` that is none of the three is **reported, not guessed at**. A
-    misread flag silently produces the wrong shape of page, and the reader has no way to tell.
+  - An argument starting with `--` that is none of the three, and is not `--effort` with its value, is
+    **reported, not guessed at**. A misread flag silently produces the wrong shape of page, and the
+    reader has no way to tell.
   - Say which level you are producing when you first speak, in the same breath as the URL — a reader
     who wanted the full page should find that out at minute two, not at the end.
+- **Read the effort off the invocation too, and hold it the same way.** One of `--effort normal`,
+  `--effort high`, in any position; **no flag means `normal`**. It decides how hard the run works to
+  be right, and at `--effort high` that buys exactly one thing today: the falsification pass in
+  step 8. Three rules, two of them the level's own:
+  - **It is a separate axis from the detail level, and they multiply rather than substitute.** Effort
+    produces no section, changes no depth rule and moves no excerpt budget — the page is the same
+    *shape* at either. `--brief --effort high` is the useful combination, not a contradiction: a short
+    page whose claims were attacked.
+  - An `--effort` value that is neither is **reported, not guessed at**, for the level's reason — work
+    that silently differs, with nothing in the output to tell the reader which they got.
+  - `--review` stops the run at every effort level. Effort does not implement it.
+
+  Unlike the level, **do not announce the effort** — nothing about the pass reaches the page, and
+  § *At `--effort high`* in step 8 says why.
 - Find the base *ref*: the PR's base if there is one, else the default branch
   (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
   you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
@@ -263,6 +282,50 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
   uncertainty up.
 - Drop any finding that does not survive the check, and do not backfill it with something weaker.
 
+### At `--effort high`: falsify each flow before the page is finished
+
+Everything above is this run checking its own work. That is the weakest kind of check — the context
+that wrote a claim is the one least able to see what it assumed. At `--effort high` the flows get a
+second reader whose only job is to break them.
+
+**When.** Once, after every behaviour flow has been **written** — which on a staged page means the
+end of stage 3 in step 9, before stage 4. Not per flow as it is drafted: that would serialise a
+blocked turn through the longest phase of the run. The trigger is the flows being written rather
+than the stage, so it still applies when the flows are not being published at all.
+
+**How.** One `accountable-review:claim-falsifier` per written flow, **all spawned in a single
+message.** This is the one exception to the rule against subagents in § *Hard rules*, and the single
+message is most of why it is affordable: several agents in one message block the run once, for the
+slowest, where the same agents one at a time block it once each. A blocking subagent's whole runtime
+lands in the parent's next before-first-token gap, and one run paid 997 seconds — 41% of its wall
+clock — for a single sequential spawn.
+
+Give each agent three things and no more: the repository path, `BASE` and `HEAD`, and **that one
+flow's written HTML**, sliced out of `$W/page.html` by its `<section id="flow-x">` anchor. Not the
+whole page — a falsifier holding the whole document is one long blocked turn again, and it has no way
+to tell which claims are its to attack.
+
+**Cap it at six.** Past that, take the flows carrying the most *affected but unchanged* entries and
+the most `inferred` and `uncertain` tiers. Those are the claims a reader cannot check cheaply, which
+is the only reason to spend an agent on them.
+
+**A challenge is a claim to verify, not a finding to accept.** This step's first rule applies to the
+falsifier exactly as it applies to you: open the cited file yourself. Then correct the flow, downgrade
+its evidence tier, or drop the claim — and do not backfill a dropped claim with something weaker. A
+challenge you cannot confirm is dropped, the same as any other finding that does not survive.
+
+Corrections land as `Edit`s on the flow already in the page, never as a rewrite of it (step 9).
+
+**Nothing about the pass reaches the page.** Not a sentence, not a marker, not a count of what it
+corrected. Two reasons, and both are hard rules already: a tally of corrected claims grades this
+page's own draft, and a page advertising that it was checked reads as the clean bill of health the
+page must never be. Say what changed to the user, in chat, and leave the artifact silent.
+
+A flow published at stage 3 and corrected here **was wrong while it was public**, and that is the
+cost of running this after the flows rather than before each one. It is the right trade — the gate
+above still runs at every flow's publish, and a claim retracted before the final publish beats one
+that is never retracted — but it is a cost, not a free check.
+
 ## 9. Write and publish in stages
 
 A large diff takes many turns to explain, and a reviewer holding a ticket does not want to wait for
@@ -281,6 +344,10 @@ someone mid-paragraph is worse than one that arrives late.
 | 2 · Blast radius | 5 | Adds section 4: the blast-radius diagram, changed vs potentially affected, and what was searched |
 | 3 · Flows | 6, then per flow | Section 2's intro and the split — plus one pending stub per flow, named. Then each flow replaces its own stub as it is written |
 | 4 · Complete | 10 | Sections 3, 5, 6 and 7, gate passed, build banner and every marker gone |
+
+**At `--effort high` the falsification pass sits between stages 3 and 4** — see step 8. It adds no
+milestone: it produces corrections to flows already published, not an arrival worth opening the tab
+for, and the reader never learns it ran.
 
 **The behaviour flow is the unit of staging, not section 2.** Section 2 is the bulk, so a stage that
 delivered it whole would put the longest wait of the run behind one arrival — which is the shape
@@ -546,8 +613,9 @@ in-progress and complete, and the only one that requires a deliberate edit rathe
 ## The review level is not implemented yet
 
 `--review` is meant to run the project's code-review pass as well, and thread its findings through
-the map. That is not built. **Stop, and say so** — do not fall back to another level and do not write
-a page:
+the map. That is not built, and no effort level implements it: `--effort high` falsifies the page's
+own claims, which is a different job from importing someone else's findings. **Stop, and say so** —
+do not fall back to another level and do not write a page:
 
 > `--review` runs a code-review pass on top of the review map, and is not implemented yet. Re-run
 > with `--brief` for the default page or `--full` for all seven sections. Nothing was published.
@@ -584,6 +652,12 @@ reporting, not one to hide: if you had to skim a region to fit, say which region
 a thinner account of the ones it does produce, and it is not the answer to a diff that will not fit.
 A strained run at `--brief` still says which region it skimmed.
 
+**Nor is `--effort high` a way to make a large diff fit** — it points the other way. The falsifier
+has its own context, but every challenge it returns comes back into *yours*, and you have to open
+each cited file to act on it. On a diff already straining this context, that is more pressure, not
+less. Say which region you skimmed at either effort, and let the cap of six do its work: the flows
+carrying the most unverifiable claims are worth the challenges, and the rest are worth the room.
+
 ## Hard rules
 
 - Every claim carries a `file:line`, linked when a link is possible.
@@ -605,10 +679,19 @@ A strained run at `--brief` still says which region it skimmed.
 - Never drop a file from the page to keep it tidy.
 - Never post to GitHub, Linear, or anywhere outside the artifact.
 - Never commit the page into the repo under review.
-- **Do this work yourself; spawn no subagents.** Steps 5 and 6 span the whole diff by nature — step 5
-  traces consumers across both sides of the stack, step 6 groups behaviour no single layer contains —
-  and handing either to an agent with its own context moves comprehension fragmentation from the
-  reviewer to the agents, which is the problem the page exists to solve. It is also slower in
-  practice, not faster: a run that reached for one `Explore` agent stalled the parent for 997
-  seconds, 41% of its wall clock, in a single blocked turn. If the diff is too large to hold, say
-  which region you skimmed — that is the honest failure and it is a signal worth having.
+- **Do this work yourself; spawn no subagents — with exactly one exception, named below.** Steps 5
+  and 6 span the whole diff by nature — step 5 traces consumers across both sides of the stack, step 6
+  groups behaviour no single layer contains — and handing either to an agent with its own context
+  moves comprehension fragmentation from the reviewer to the agents, which is the problem the page
+  exists to solve. It is also slower in practice, not faster: a run that reached for one `Explore`
+  agent stalled the parent for 997 seconds, 41% of its wall clock, in a single blocked turn. If the
+  diff is too large to hold, say which region you skimmed — that is the honest failure and it is a
+  signal worth having.
+
+  **The exception is the falsification pass in step 8, and only at `--effort high`.** It is the one
+  split that does not commit the mistake above: the seam is per *behaviour flow*, and a flow is
+  already a whole behaviour rather than a layer of one, so nothing is fragmented that was not already
+  separate. It is read-only, it returns challenges rather than page content — you still write every
+  word — and its agents go out in a single message, so the run blocks once. Nothing else spawns
+  anything, at any effort level, and a run that reaches for an `Explore` agent to help with step 5 has
+  broken this rule whatever flag it was given.
