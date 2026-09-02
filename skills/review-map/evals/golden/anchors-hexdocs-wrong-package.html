@@ -1,0 +1,22 @@
+<!-- One defect, and the one the Elixir catalogue warns about hardest: the module is right
+     and the PACKAGE is wrong. Ecto.Migration lives in ecto_sql, not ecto, so this URL is a
+     404 that reads as correct — the same class of defect as Rails' insert_all asserted on
+     Persistence::ClassMethods, arriving from the package axis instead of the class one.
+     It is caught because the package is part of the stored path, so it is part of the
+     needle: `ecto/Ecto.Migration.html#index/3` matches no row. -->
+<section id="flow-a">
+  <div class="mech">
+    <b>migration &rarr; projects.archived_at</b>
+    <p>The index is added concurrently, which is why the migration disables its transaction.</p>
+  </div>
+  <dl class="rows">
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The index at <span class="path">priv/repo/migrations/20260901_add_archived_at.exs:6</span>
+        is built without taking a write lock &mdash;
+        <a class="doc" href="https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3">index/3</a>
+        with <code>concurrently: true</code> needs the transaction disabled in the same module.
+        <span class="tier">explicitly changed</span></div>
+    </dd>
+  </dl>
+</section>

@@ -3,7 +3,8 @@
 A [Claude Code](https://claude.com/claude-code) plugin that turns a pull request into a published
 HTML **review map** — what the change is for, how its behaviours work, what the API and the client
 now agree on, where the decisions live, where to start reading, and what it can break. It ships one
-skill, `review-map`, targeting a Rails API with a Next.js client.
+skill, `review-map`, targeting two stacks: Rails, and Elixir/Phoenix — a LiveView app or a JSON API,
+with or without a separate client such as Next.js.
 
 It does not grade the PR. The product principle is narrower and more useful than that:
 
@@ -21,7 +22,7 @@ distance between code that gets produced and code anyone actually understands. G
 thousand lines is now cheap; understanding them is not. A PR approved without being understood was
 waved through, and the debt comes due the first time someone has to change it.
 
-This plugin exists to close that gap, by knowing what a senior reviewer of this stack looks for and
+This plugin exists to close that gap, by knowing what a senior reviewer of your stack looks for and
 rendering it as something you can read. The test it has to pass: after following the page, can the
 reviewer explain what changed, why it works, and where the important decisions live?
 
@@ -221,45 +222,67 @@ One rule keeps this from turning into a diff viewer: **the page reads completely
 closed.** The sentence carries the consequence, which is the thing the code does not say; the excerpt
 carries the proof. What gets dropped is narration, never the finding.
 
-### It anchors Rails behaviour, and proposes ways to see it
+### It anchors framework behaviour, and proposes ways to see it
 
-A lot of what a reviewer needs to know about a Rails change is not in the change. `update_all` at a
-call site the diff never opened skips the validation this PR adds; a uniqueness validation is not a
-unique index; `--sandbox` rolls back, so `after_commit` never fires there. So the page carries two
-anchors for a claim that rests on Rails behaving as Rails.
+A lot of what a reviewer needs to know about a change is not in the change. `update_all` at a call site
+the diff never opened skips the validation this PR adds; a uniqueness validation is not a unique index;
+`--sandbox` rolls back, so `after_commit` never fires there. On the Phoenix side, `Repo.update_all`
+builds no changeset at all, a `unique_constraint` does nothing without the index behind it, and a
+`phx-click` renamed in a template without its `handle_event` clause crashes the LiveView the first time
+someone clicks it. So the page carries two anchors for a claim that rests on the framework behaving as
+the framework.
 
-**A link to where the rule is written down** — the Rails guides, the API, or the gem's own docs. It sits
-beside the claim's `file:line`, never instead of it: a link to the guides says nothing about *your*
-application, and the finding is always about your application. URLs come from a catalogue that ships
-with the skill, because a run cannot open a URL to check it and a plausible-looking API path is a 404
-you discover on the reader's behalf.
+**A link to where the rule is written down** — the Rails guides, the Rails API, hexdocs, or the
+library's own docs. It sits beside the claim's `file:line`, never instead of it: a link to the guides
+says nothing about *your* application, and the finding is always about your application. URLs come from
+a catalogue that ships with the skill, because a run cannot open a URL to check it and a
+plausible-looking API path is a 404 you discover on the reader's behalf.
 
 **Every link is pinned to the version you are running.** The series from your `Gemfile.lock` for the
-Rails hosts, the exact locked version for a gem's tag — so a 7.1 app gets 7.1 documentation, and the
-page you land on prints "Ruby on Rails 7.1.6" in its header for you to check against your own lock
-file. An unpinned link silently means *current stable*, which is how a tool ends up explaining 8.1
-behaviour to a 7.1 app with total confidence. Where the catalogue has no verified page for your
-version, you get no link at all — the mechanism is explained in prose against a line of your code
-instead, because an unlinked explanation cannot mislead and a link to the wrong version can.
+Rails hosts, the exact locked version for a gem's tag, each package's exact version from your
+`mix.lock` for hexdocs — so a 7.1 app gets 7.1 documentation, and the page you land on prints "Ruby on
+Rails 7.1.6" in its header for you to check against your own lock file. An unpinned link silently
+means *current stable*, which is how a tool ends up explaining 8.1 behaviour to a 7.1 app with total
+confidence. Where the catalogue has no verified page for your version, you get no link at all — the
+mechanism is explained in prose against a line of your code instead, because an unlinked explanation
+cannot mislead and a link to the wrong version can.
+
+**On Elixir, that "no link at all" is currently the whole answer, and it is worth being plain about.**
+The Elixir catalogue ships complete — every path, pinned per package, with the same rules — but not one
+of its rows has been opened yet, and its own release gate is a verification run that opens all of them.
+Until that run happens the file withholds every link: an Elixir page anchors with probes and prose, and
+emits no documentation URL. That is a narrower page, not a broken one, and it is the same fail-closed
+rule as above applied to a whole file rather than one row. Shipping an allowlist nobody had opened
+would have been the more impressive-looking choice and the wrong one — a URL constructed from a naming
+pattern is the one defect class no script catches.
 
 Pinning fixes the link, not the sentence, so a handful of concepts get no sentence either. `enum`,
 `perform_later`'s enqueue timing and strong parameters all changed inside the supported range — 8.0
 introduced `params.expect`, 8.0 removed `enum`'s keyword syntax — and no single claim about them is
 true of every app. For those the page names the setting that decides it and proposes a probe rather
-than telling you what Rails does.
+than telling you what Rails does. The Rails marks came out of reading four CHANGELOGs across three
+series; the Elixir ones are a first pass that no equivalent audit has confirmed yet, and the file says
+so of itself rather than letting a reader assume otherwise.
 
 **A console probe** — `bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'`,
-`puts Project.archived.to_sql`, `connection.indexes(:projects)`. For an ActiveRecord change this is
-usually better than a paragraph, because ActiveRecord's behaviour is assembled at boot from the class,
-its concerns, its parents and the schema — the things a diff cannot show you together. A probe that
-settles a claim goes in *how to validate*; one that makes a mechanism legible goes in *things to
-understand*.
+`puts Project.archived.to_sql`, `connection.indexes(:projects)`; or, on Phoenix,
+`mix run -e 'IO.inspect MyApp.Project.changeset(%MyApp.Project{}, %{}).errors'`,
+`Ecto.Adapters.SQL.to_sql(:all, MyApp.Repo, query)`, `mix phx.routes`. For a framework-shaped change
+this is usually better than a paragraph, because the behaviour is assembled from things a diff cannot
+show you together: in Rails at boot, from the class, its concerns, its parents and the schema; in
+Phoenix at compile time, from macros and from the `live_session` block your new route may or may not
+have landed inside.
+
+**And a probe cannot be out of date**, which is why it is the anchor the Elixir half leans on while its
+catalogue is closed. It interrogates the installed code instead of describing it.
 
 Probes are **proposed, not run**. The skill never boots your app, so the page shows the command and
 never its output — an invented `=> true` would be the most concrete-looking thing on the page and the
-only part of it that was fiction. Read-only reflection is written for `bin/rails runner`; anything that
-writes is written for `bin/rails console --sandbox`, and the page says which, because a reviewer should
-not be able to change a database by pasting what it told them to.
+only part of it that was fiction. Read-only reflection is written for `bin/rails runner` or
+`mix run -e`; a write is written for `bin/rails console --sandbox` in Rails, and — because Elixir has
+no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` in
+Phoenix. The page says which, because a reviewer should not be able to change a database by pasting
+what it told them to.
 
 ### It separates evidence from inference
 
@@ -298,16 +321,26 @@ clean bill of health.
 
 ## What it assumes
 
-Only that it is running in Claude Code, against a git repository containing a Rails application.
+Only that it is running in Claude Code, against a git repository containing a Rails or a Phoenix
+application.
 
-Everything else is discovered: where the Rails root is (repo root, a subdirectory, an engine), RSpec
-or Minitest, API-only or server-rendered, the authorization library, whether there is a frontend at
-all and where its API client and types live, and whether the project documents its own conventions.
-Where a project has no convention docs, the skill infers house style from adjacent unchanged code —
-usually more accurate than a stale document anyway.
+**Which of the two is detected, not configured** — a `Gemfile` or `config/application.rb` for Rails, a
+`mix.exs` for Elixir — and it decides which lens file and which doc catalogue the run reads. A repo
+holding both asks you which to cover rather than guessing. A repo holding neither says so and covers
+the diff with the parts of the page that do not depend on a stack, rather than applying a Rails lens
+to something that is not Rails and inventing findings.
 
-The frontend sections need both sides in the diff. In a repository with no client, or a PR that does
-not touch one, they are omitted rather than filled in.
+Everything else is discovered too: where the Rails root is (repo root, a subdirectory, an engine) or
+where `lib/<app>` and `lib/<app>_web` are, RSpec or Minitest or ExUnit, API-only or server-rendered or
+LiveView, how authorization is attached, whether there is a separate frontend at all and where its API
+client and types live, and whether the project documents its own conventions. Where a project has no
+convention docs, the skill infers house style from adjacent unchanged code — usually more accurate than
+a stale document anyway.
+
+The separate-frontend sections need both sides in the diff. In a repository with no client, or a PR
+that does not touch one, they are omitted rather than filled in. A LiveView app has no separate client
+by design, and there the same material goes to the seam it actually has: the `phx-*` attribute and the
+callback that answers it, the form field and the changeset's `cast` list.
 
 `gh` is used when present, for PR metadata and deep links. A citation to a changed line lands on the
 PR's diff page, on that line — the page the reviewer is already working in, where what the line
@@ -326,8 +359,10 @@ skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
 │   ├── report-format.md           parts, review-unit format, evidence tiers, deep links
-│   ├── rails-nextjs.md            what to look for per layer, runtime probes, search recipes
+│   ├── rails-nextjs.md            Rails: what to look for per layer, runtime probes, search recipes
+│   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the other stack
 │   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
+│   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
 │   └── page-template.html         design system, components, and the diagram catalogue
 ├── scripts/
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations

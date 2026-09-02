@@ -8,7 +8,9 @@ There is no application code here. The repository is the `accountable-review` Cl
 ships a single skill — `skills/review-map/` — plus the one subagent that skill spawns
 (`agents/claim-falsifier.md`, and only at `--effort high`). The skill turns a pull request into a
 published HTML review map: what the change is for, what it can break, what the API and its client now agree on, and where
-the decisions live. The first target stack is a Rails API with a Next.js client.
+the decisions live. Two stacks are supported: a Rails API with a Next.js client, which came first, and
+Elixir/Phoenix — a LiveView app or a JSON API. Step 2 detects which, and the run reads that stack's
+lens file and its doc catalogue, never both.
 
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
@@ -26,8 +28,8 @@ not the prose, which is the part that matters here.
 
 ## Working on the skill
 
-Run a Rails project against this checkout — no install, and `/reload-plugins` picks up edits without
-restarting:
+Run a Rails or a Phoenix project against this checkout — no install, and `/reload-plugins` picks up
+edits without restarting:
 
 ```bash
 cd /path/to/app && claude --plugin-dir /path/to/accountable-review
@@ -102,8 +104,10 @@ Each reference owns one axis; keep them from bleeding into each other.
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
 | `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
-| `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code |
-| `references/rails-docs.md` | The documentation catalogue — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
+| `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
+| `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
+| `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
+| `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script |
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
@@ -111,7 +115,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire |
-| `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in `references/rails-docs.md`, across every Rails series the floor admits, and reports dead pages, dead anchors, and the rows that differ by version. Maintenance, never a run — see § *The catalogue is the one thing a run cannot verify* |
+| `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in a catalogue — `rails-docs.md` across every Rails series the floor admits, `elixir-docs.md` at each package's newest release — and reports dead pages, dead anchors, and the rows that differ by version. Maintenance for the first, the **release gate** for the second, never part of a run — see § *The catalogue is the one thing a run cannot verify* |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs
 them. That is why `SKILL.md` says *when* to load each one, and why detail belongs in the reference
@@ -145,6 +149,34 @@ Editing one of these means checking the others still agree.
   `page-invariants.sh` over it exist for the day someone moves one.
 
   `--brief` is the default, so it is what almost every real page will be. Judge it first.
+- **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
+  Rails (`Gemfile`, `config/application.rb`) or Elixir (`mix.exs`) and reads **one** lens file and
+  **one** catalogue. Both roots, or neither, are handled explicitly — ask in the first case, degrade
+  to the stack-independent page and emit no anchor in the second. Defaulting to Rails is the
+  regression: a Rails lens over a Go service invents findings, confidently.
+
+  The stack multiplies with the detail level and the effort exactly as those two multiply with each
+  other, and like effort it **produces no section, no field, no tier, no component and no marker.**
+  What it changes is the content of sentences, the nodes in a `.pipe` chain, and the command inside a
+  `pre.probe`. `report-format.md` § *Detail levels* states this beside the effort paragraph, and
+  `page-template.html`'s header comment refuses a stack badge in the same breath as the severity chip
+  and the verification badge — the three come back the same way and are refused in the same place.
+
+  Two things are deliberately **not** duplicated, and both would look like thoroughness.
+  `rails-nextjs.md`'s three client-side sections (§ *The boundary: serializers to types*, § *Next.js*,
+  § *TypeScript and the client*) are about the client and the wire, not about Rails, so
+  `phoenix-liveview.md` points at them in a clause; restating them would be a second canonical home
+  for the same material. And the file keeps its Rails-shaped name: renaming it costs six references
+  for no behavioural gain, so the pointer says why instead.
+
+  **The LiveView boundary is the payoff, not a footnote.** A LiveView app has no serializer and no
+  generated type, so the naive reading is that it has no contract. It has a sharper one: a `phx-*`
+  attribute value and the `handle_event/3` clause that answers it, with nothing at compile time
+  linking them and a crashed process rather than a wrong render when they disagree. Renaming an event
+  in a `.heex` template without renaming its clause is this stack's canonical piece of
+  affected-but-unchanged code, which is why step 5's table has a row for it, why the search recipes
+  say to search **both directions**, and why `report-format.md` § 2 gives it the second chain the
+  serializer-to-type seam gets in Rails.
 - **The page never grades the change.** No severity scale, no risk score, no confidence percentage,
   no approval language. Stated as the product principle at the top of `SKILL.md`, repeated in its hard
   rules, and enforced structurally: the template has no chip that expresses a verdict, and
@@ -169,9 +201,13 @@ Editing one of these means checking the others still agree.
   proposed, never run**, so the page shows a command and never output: a fabricated `=> …` is the most
   concrete-looking thing on the page and the one part of it that is fiction. `report-format.md` § *Framework anchors* owns both, plus the routing
   (verify → *Validate*, explain → *Understand*) and the budget, **and owns them alone**; `SKILL.md`
-  steps 7 and 9 point at it, `rails-nextjs.md` § *Runtime probes* holds the probes and the
-  `runner`-versus-`console --sandbox` rule, and `evals/checks/rails-anchors.sh` derives its allowlist
-  from the catalogue file rather than hard-coding hosts.
+  steps 7 and 9 point at it, the § *Runtime probes* of whichever lens file the stack selected holds the
+  probes and the rule for running them safely — `runner`-versus-`console --sandbox` in Rails, and in
+  Elixir `mix run -e` plus the fact that there is **no sandbox console at all**, so a write wraps itself
+  in `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` — and `evals/checks/rails-anchors.sh`
+  derives its allowlist from **both** catalogue files rather than hard-coding hosts. Its name is
+  Rails-shaped and its scope is not, deliberately: renaming it would churn six files for no
+  behavioural gain.
 
   Two things worth knowing before editing. The anchors are **level-independent** — they live in fields
   `--brief` leaves alone — so `rails-anchors.sh` must not read `LEVEL`, and `before-approving.sh` stays
@@ -377,7 +413,15 @@ Editing one of these means checking the others still agree.
   nothing else, `page-template.html` holds the `--syn-*` tokens, the `.hljs-*` rules and the script
   that does it, `report-format.md` § *Syntax tint* owns the rule, and `evals/checks/excerpts.sh`
   fails a page that ships `hljs-` classes in its markup — a hand-coloured quotation is a quotation
-  someone edited. The script verifies its own reconstruction character by character before touching
+  someone edited.
+
+  **Two grammars are loaded beside highlight.js's common bundle, because neither is in it**: `erb` for
+  Rails views and `elixir` for Elixir modules. A language added to `excerpt.sh`'s `guess_lang` without
+  its `<script src>` in the template tints nothing, silently — the page still reads, in one ink, which
+  is why nothing catches it. **`.heex` and `.eex` deliberately emit no `data-lang`**: highlight.js
+  ships no HEEx grammar, and both near-misses are wrong invisibly — `elixir` mis-reads the markup
+  around the interpolations, `erb` tints Elixir as Ruby because `<%= %>` is the same delimiter. That
+  omission is commented in both files as intentional, because it reads exactly like a gap. The script verifies its own reconstruction character by character before touching
   the DOM and leaves the line alone on any mismatch, which is the only reason a script may touch a
   quotation at all. Everything about it degrades to the untinted page: no script, no network, a
   blocked CDN or an unknown language each leave the block in one ink.
@@ -451,8 +495,8 @@ Editing one of these means checking the others still agree.
 
 ## The catalogue is the one thing a run cannot verify
 
-`references/rails-docs.md` is an allowlist, and the run takes URLs from it without opening them —
-there is no fetch step and egress to those hosts is commonly blocked. That is the right runtime rule
+Both `references/rails-docs.md` and `references/elixir-docs.md` are allowlists, and the run takes URLs
+from them without opening them — there is no fetch step and egress to those hosts is commonly blocked. That is the right runtime rule
 and it is not up for revisiting: a live search per anchor would add requests to the run's scarcest
 resource, make two runs of the same PR cite different URLs, break `assumes only Claude Code plus a git
 repo`, and put SEO-ranked mirrors of Rails 4 docs inside the trust boundary the allowlist exists to
@@ -464,6 +508,55 @@ version drift the unversioned URLs cannot notice (7.2 moved `insert_all`; the co
 one section twice), a guide page that had never existed in any series, and three fragments GitHub
 stopped emitting. Only the first is what "the docs moved" intuitively means, and only the second is
 catchable by reading.
+
+### `elixir-docs.md` is closed, and that is the feature
+
+The Elixir catalogue ships **complete in structure and content and withholding every link.** Its
+§ *Version* says no row in it has been opened, and instructs the run to emit nothing from it until a
+dated verification line replaces that paragraph. So an Elixir run today anchors with probes and prose
+and carries no documentation URL at all.
+
+This is not a half-finished file, it is the fail-closed rule applied at **file scope** rather than at
+row scope, and the reason is the defect class directly above: the worst thing the Rails sweep found was
+not rot but `active_record_nested_attributes.html`, a plausible URL constructed once and admitted to
+the allowlist, which no script catches and no amount of care while writing prevents. Every Elixir row
+was written the same way that one was — from knowledge, by a process with no egress to hexdocs. Holding
+them closed is the only honest state for rows nobody has opened.
+
+**What lifts it is one command**, and `evals/verify-catalogue.sh --catalogue references/elixir-docs.md`
+is therefore that file's release gate rather than optional maintenance the way it is for the Rails one.
+A clean run prints a dated line and the package versions it checked at; that line replaces the withhold
+and the links go live in the same commit.
+
+Two things worth knowing before touching it. **The marks in it are a first pass**, not the output of a
+CHANGELOG audit like the Rails ones — the file says so of itself, and says that the LiveView `0.20 → 1.x`
+range is where an audit would pay most. And **the probe is unaffected and is the better anchor anyway**,
+which is the position `rails-docs.md` § *Pinning* already argues on its own terms: a probe interrogates
+the installed code instead of describing it, so it cannot be out of date and cannot 404. A closed
+catalogue makes an Elixir page narrower, not wrong.
+
+### Pinning per series, and pinning per package
+
+The two catalogues pin differently, and exactly one page-level rule differs with them.
+
+Rails has a single `major.minor` for the whole framework, so **one app, one series**: a page mixing
+`/v7.1/` with `/v8.0/` pinned from something other than this repo's `Gemfile.lock`, and
+`checks/rails-anchors.sh` fails it. An Elixir app pins `ecto`, `phoenix`, `phoenix_live_view`, `oban`
+and `elixir` independently from `mix.lock`, and hexdocs serves *exact* versions rather than resolving a
+series prefix to the newest patch — so **a correct Elixir page carries several different version
+segments**, and generalizing the one-series rule to hexdocs would fail every correct Phoenix page while
+passing every existing test. `evals/golden/anchors-hexdocs-clean.html` exists for exactly that edit: it
+is a *clean* fragment carrying two package versions on purpose, so the mistake goes red in `self-test.sh`
+instead of in the field.
+
+Two consequences follow for the machinery. The stored path **keeps its package** —
+`ecto/Ecto.Changeset.html#cast/4` — because `Ecto.Migration` under `ecto` rather than `ecto_sql` is a
+404 that reads as correct, and keeping the package in the path is the only thing that makes it
+checkable; `anchors-hexdocs-wrong-package.html` pins that. And `verify-catalogue.sh` checks a hexdocs
+row **once, at its package's newest stable release**, the way it already checks a gem row, because
+there is no series axis to expand along. The six standard-library docs (`elixir`, `eex`, `ex_unit`,
+`iex`, `logger`, `mix`) have no hex package at all and take Elixir's own release version, with
+`--elixir-version` as the override when the GitHub API is unreachable.
 
 ### Pinning, and the two things it does not fix
 
@@ -519,13 +612,14 @@ renamed one section twice, conditional validation gained a plural — and each c
 inline in the cell as `· <series>: <path>`, right where a run is already looking rather than in a
 table it has to remember to consult. Below the floor: no link.
 
-Six files have to agree. `rails-docs.md` § *Pinning* and § *What the marks mean* own the forms and
+Six files have to agree. Each catalogue's § *Pinning* and § *What the marks mean* own the forms and
 the marks **alone**; `report-format.md` § *Framework anchors* states why the page cares and points;
-`SKILL.md` step 2 records the series (a run that skips it cannot emit a doc link) and step 7 carries
+`SKILL.md` step 2 records the versions (a run that skips it cannot emit a doc link) and step 7 carries
 the two rules; `verify-catalogue.sh` verifies the pinned form; and `checks/rails-anchors.sh` enforces
-two things offline that it could not before — **every Rails doc link carries a version segment**, and
-**they all agree on one series**, because one app has one version and a page mixing `/v7.1/` with
-`/v8.0/` pinned from something other than this repo.
+offline what it could not before — **every doc link carries a version segment, in either stack**, and
+**the Rails ones all agree on one series**, because one app has one Rails version and a page mixing
+`/v7.1/` with `/v8.0/` pinned from something other than this repo. That second rule is Rails-only and
+must stay that way: see § *Pinning per series, and pinning per package*.
 
 `page-template.html` is the sixth, and it is the one that was missed first time round: it shows the
 doc link **already pinned**, with the version as a placeholder and a comment saying it is substituted
@@ -707,12 +801,17 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
   had no rule found nine calls and seventy seconds spent re-establishing a path and moving excerpt
   files that had been written somewhere else first.
-- It assumes only Claude Code plus a git repo containing a Rails app. Everything else — Rails root
-  location, RSpec vs Minitest, API-only vs server-rendered, auth library, whether a frontend exists
-  and where its client and types live — is discovered, never assumed. Adding an assumption about
-  project layout is a regression.
+- It assumes only Claude Code plus a git repo containing a Rails or a Phoenix app. Everything else —
+  which of the two it is, the Rails root location or the `lib/<app>` and `lib/<app>_web` split, RSpec
+  vs Minitest vs ExUnit, API-only vs server-rendered vs LiveView, how authorization is attached,
+  whether a separate frontend exists and where its client and types live — is discovered, never
+  assumed. Adding an assumption about project layout is a regression, and **defaulting to a stack when
+  neither is detected is the same regression wearing a helpful face**: the honest output is the
+  stack-independent page with no anchor on it.
 - The frontend is a first-class half of the contract, not a frontend review. The page follows fields
-  and error cases across the boundary; it does not critique component design.
+  and error cases across the boundary; it does not critique component design. In a LiveView app the
+  boundary is the `phx-*` attribute and the callback answering it rather than a JSON contract, and the
+  same limit applies: the page follows the event and the assign, it does not review the markup.
 
 ## Editing style
 

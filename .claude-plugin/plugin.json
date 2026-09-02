@@ -1,8 +1,8 @@
 {
   "name": "accountable-review",
   "displayName": "Accountable Review",
-  "description": "Turns a pull request into a published review map — goal, behaviour flows carrying the API and client contract, where to start reading, blast radius — so a reviewer can explain the change before judging it, at the depth the change is worth. Ships review-map for Rails plus Next.js.",
-  "version": "0.13.0",
+  "description": "Turns a pull request into a published review map — goal, behaviour flows carrying the API and client contract, where to start reading, blast radius — so a reviewer can explain the change before judging it, at the depth the change is worth. Ships review-map for Rails and for Elixir/Phoenix, with or without a separate client.",
+  "version": "0.14.0",
   "author": {
     "name": "WyeWorks",
     "url": "https://github.com/wyeworks"
@@ -15,6 +15,9 @@
     "pull-request",
     "rails",
     "nextjs",
+    "elixir",
+    "phoenix",
+    "liveview",
     "comprehension",
     "documentation"
   ]

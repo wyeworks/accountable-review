@@ -112,7 +112,7 @@ excerpts.sh         | excerpt-clean.html            | 0 | collapsed by default
 excerpts.sh         | excerpt-open.html             | 1 | open by default
 excerpts.sh         | excerpt-duplicate.html        | 1 | same range is excerpted more than once
 rails-anchors.sh    | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
-rails-anchors.sh    | anchors-uncatalogued-url.html | 1 | not in references/rails-docs.md   | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-uncatalogued-url.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-unpinned-link.html    | 1 | unpinned Rails doc link           | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-mixed-series.html     | 1 | different Rails series            | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-link-alone.html       | 1 | with no file:line beside them     | --repo @GOLD@/searches-repo
@@ -121,6 +121,14 @@ rails-anchors.sh    | anchors-fabricated-output.html | 1 | looks like its own ou
 rails-anchors.sh    | anchors-runner-mutates.html   | 1 | no 'console --sandbox' is named   | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
+# The Elixir arms of the same two rules. anchors-hexdocs-clean.html is the row nothing else
+# would have pinned: it carries TWO different package versions on purpose, so a future reader
+# who "generalizes" Rails' one-app-one-series rule to hexdocs turns this row red here instead
+# of turning a correct Phoenix page red in the field. The wrong-package row pins that the needle
+# keeps the package, which is the only reason a right-module-wrong-package 404 fails at all.
+rails-anchors.sh    | anchors-hexdocs-clean.html    | 0 | hexdocs link(s) carry a version segment | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-hexdocs-unpinned.html | 1 | unpinned hexdocs link(s)          | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-hexdocs-wrong-package.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-clean.html            | 0 | needs --repo to ask whether
 excerpts.sh         | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
 excerpts.sh         | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang

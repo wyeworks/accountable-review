@@ -51,6 +51,13 @@ that announced having been checked would be asserting the assurance the format r
 § *Evidence tiers* labels how a claim is known, never how hard someone looked, and *findings are a
 sample, not an audit* is the rule that would break first.
 
+**The stack is not a level either, and it is invisible for the same reason.** Rails and Phoenix change
+which lens file and which catalogue the run reads (`SKILL.md` step 2), what a `.pipe` chain's nodes are
+called, and what a probe's command looks like. They change **no section, no field, no tier, no
+component and no marker.** There is no stack chip and no "reviewed as a Phoenix app" line: two pages of
+equivalent changes in the two stacks differ in their content and not in their shape. What the stack is
+belongs in the sentences that cite this repository, which say it by naming real files.
+
 ---
 
 ## Contents
@@ -95,8 +102,8 @@ the behaviour they serve.
 **Citations** — *Deep links*, the two URL forms and which lines each one can address, and *Choosing a
 mode*, the four-rung degradation ladder. Settle the rung once, in step 1 of the procedure; the form
 then follows the line, not the run's taste. A documentation link is not one of those forms and the
-ladder does not reach it: see *Framework anchors*, and take the URL from
-`references/rails-docs.md`.
+ladder does not reach it: see *Framework anchors*, and take the URL from the catalogue the stack
+selected — `references/rails-docs.md` or `references/elixir-docs.md`.
 
 ---
 
@@ -129,10 +136,11 @@ Rules that keep units from becoming ceremony:
   restatements of the diff, this change is not a unit — it is a ledger row.
 - **Fields may be omitted, but never faked.** No *affected but unchanged* code found, after a search
   worth reporting? Say what you searched and that nothing consumes it. That sentence is the finding.
-- **Validation steps must exist in this repo.** The real rake task, the real route, the real factory,
-  the real scope inside a console probe. One invented command spends the reader's trust in the entire
-  page. For a change to persistence, the runtime probes in `references/rails-nextjs.md` are usually
-  the most precise step available; § *Framework anchors* says which field one lands in.
+- **Validation steps must exist in this repo.** The real rake or mix task, the real route, the real
+  factory or fixture, the real scope or context function inside a console probe. One invented command
+  spends the reader's trust in the entire page. For a change to persistence, the runtime probes in the
+  lens file the stack selected — `references/rails-nextjs.md` or `references/phoenix-liveview.md` —
+  are usually the most precise step available; § *Framework anchors* says which field one lands in.
 - **Render as a `.mech` block followed by one `dl.rows`, and render the fields nowhere else.**
   The seven fields are `<dt>`/`<dd>` pairs inside that single `dl`; loose in a section they lose the
   row hairlines, the 132px label gutter and every `.rows`-scoped rule. `.decisions` goes *after* the
@@ -175,50 +183,67 @@ The PR description is never evidence. Where the page reports intent from it, att
 
 ## Framework anchors
 
-Two ways to anchor a claim that rests on Rails behaving as Rails rather than on anything this diff
-contains. Neither is an evidence tier, and neither changes one.
+Two ways to anchor a claim that rests on the framework behaving as the framework rather than on
+anything this diff contains. Neither is an evidence tier, and neither changes one.
 
 | Anchor | Is | Renders as |
 |---|---|---|
 | **Documentation link** | Provenance: where the framework's rule is written down | `<a class="doc" href="…">` around the concept, from the catalogue |
 | **Runtime probe** | A question to the reviewer's own application, which they run | `<pre class="probe">`, one command |
 
-**A doc link is provenance, not evidence.** "`update_all` skips callbacks" is a property of Rails; the
+**A doc link is provenance, not evidence.** "`update_all` skips callbacks" is a property of Rails,
+and "`insert_all` never builds a struct, so nothing it writes is cast" is a property of Ecto; the
 claim the page is making is that *this call site* now bypasses the validation this PR adds, and that
 claim rests on the citation to the call site, at whatever tier it already carried — usually
 `from unchanged code`. The link explains why the consequence follows. So:
 
 - **Never a doc link on a claim with no `file:line`**, and never one instead of a `file:line`. A link
-  to the Rails guides says nothing about this repository, and a claim anchored only there is an
-  unevidenced claim wearing a citation.
+  to the Rails guides or to hexdocs says nothing about this repository, and a claim anchored only
+  there is an unevidenced claim wearing a citation.
 - **Never inside a collapsed excerpt.** The page reads complete with every excerpt closed, and a link
   the reader has to open a block to find is not part of the page they read.
 - **Never a verdict by reference.** "See the security guide" is not a finding. If the change has a
   security consequence, state it, cite the line, and let the link explain the mechanism.
 
-**Cite only from `references/rails-docs.md`.** That file is the allowlist, and the reason is that the
-run cannot check a URL — there is no fetch step, and egress to those hosts is commonly blocked. A
-concept the catalogue does not carry gets explained in prose with a repo citation, which is the
-ordinary case and not a degraded one. Constructing a plausible URL is the failure this rule exists to
-prevent: it looks like diligence and it lands the reader on a 404.
+**Cite only from the catalogue the stack selected** — `references/rails-docs.md` for Rails,
+`references/elixir-docs.md` for Elixir, and never the other one. That file is the allowlist, and the
+reason is that the run cannot check a URL: there is no fetch step, and egress to those hosts is
+commonly blocked. A concept the catalogue does not carry gets explained in prose with a repo citation,
+which is the ordinary case and not a degraded one. Constructing a plausible URL is the failure this
+rule exists to prevent: it looks like diligence and it lands the reader on a 404.
 
-**Every doc link is pinned to the version this app runs.** The catalogue stores paths without a
-version segment; the run inserts one from the Rails series or the gem version recorded in step 2. The
-mechanics, the placeholder forms, the per-series overrides and what to do above the verified ceiling
-are `rails-docs.md` § *Pinning*, **and live there only** — what belongs here is why the page cares: a
-pinned Rails doc page states its own version in its header, so the reader can check the link against
-their own `Gemfile.lock`. An unpinned link silently means *current stable* and offers nothing to
-check, which is how a page ends up explaining 8.1 behaviour to a 7.1 app in a tone of complete
-confidence.
+**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` § *Version*
+currently withholds every link in it until a verification run has opened its rows, so an Elixir run
+anchors with probes and prose and emits no doc link at all. That is the same fail-closed rule applied
+at file scope rather than at row scope, and the page is shorter rather than wrong. Read the
+catalogue's § *Version* before reaching for a link from it.
+
+**Every doc link is pinned to the version this app runs.** Both catalogues store paths without a
+version segment; the run inserts one from the versions recorded in step 2. The mechanics, the
+placeholder forms, the overrides and what to do above the verified ceiling are each catalogue's
+§ *Pinning*, **and live there only** — what belongs here is why the page cares: a pinned Rails doc page
+states its own version in its header, and a pinned hexdocs page states its own in its version picker,
+so the reader can check the link against their own lock file. An unpinned link silently means *current
+stable* and offers nothing to check, which is how a page ends up explaining 8.1 behaviour to a 7.1 app
+in a tone of complete confidence.
+
+**What gets pinned differs by stack, and one page-level rule differs with it.** Rails has a single
+series for the whole framework, so a page mixing `/v7.1/` and `/v8.0/` has pinned from something other
+than this repo's lock file — one app, one series. An Elixir app pins **each package independently**
+from `mix.lock`, and hexdocs serves exact versions rather than a series prefix, so **a correct Elixir
+page carries several different version segments** and that is not a defect.
+`evals/checks/rails-anchors.sh` encodes both: every doc link must carry a version segment in either
+stack, and only the Rails links must agree on one series.
 
 **A row with no verified path for this app's version yields no link.** Not a nearest-neighbour link,
 not the unpinned one. Explain the mechanism in prose and cite the repo line; the page reads complete
 without it, exactly as it does with every excerpt closed. Failing closed is the whole guarantee: an
 unlinked explanation is never misleading, and a link to the wrong version is.
 
-**Two marks in the catalogue constrain the sentence, not the link.** They are the outcome of an audit
-of the Rails CHANGELOGs across the supported series, and `rails-docs.md` § *What the marks mean* owns
-their definitions:
+**Two marks in the catalogue constrain the sentence, not the link.** In `rails-docs.md` they are the
+outcome of an audit of the Rails CHANGELOGs across the supported series; in `elixir-docs.md` they are
+a first pass that no such audit has yet confirmed, which that file says of itself. Each catalogue's
+§ *What the marks mean* owns their definitions:
 
 - `‡ probe` — the behaviour changed inside the supported range, so **no sentence about it is true of
   every app**. The page may not assert it. Route to a probe and name the setting that decides it:
@@ -231,11 +256,14 @@ their definitions:
   exists to prevent.
 
 **A probe is a question, never an answer.** The skill does not boot the application under review, so
-the page shows a command and never its output. No `=>` line, no SQL presented as what the query
-printed, no invented row count. `references/rails-nextjs.md` § *Runtime probes* has the probes, the
-`runner`-versus-`console --sandbox` rule, and the reason a sandbox session cannot see `after_commit`.
-Every constant, scope and association a probe names must exist in this repository — the same rule as
-*validation steps must exist in this repo*, and it fails the same way when broken.
+the page shows a command and never its output. No `=>` line, no `{:ok, %Project{}}`, no SQL presented
+as what the query printed, no invented row count. The § *Runtime probes* section of whichever lens file
+step 2 selected has the probes and the rule for running them safely — in Rails, `runner` versus
+`console --sandbox` and why a sandbox session cannot see `after_commit`; in Elixir, `mix run -e` versus
+`iex -S mix`, and that there is **no sandbox console at all**, so a write is wrapped in
+`Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it is not proposed. Every constant, scope,
+context and module a probe names must exist in this repository — the same rule as *validation steps
+must exist in this repo*, and it fails the same way when broken.
 
 **Routing.** One anchor per claim, not both:
 
@@ -250,10 +278,11 @@ Prefer the probe where this application's own configuration decides the answer �
 framework's rule is the whole point and this app cannot vary it.
 
 **Earned by a decision the reviewer has to make.** The same test the excerpt budget uses, and for the
-same reason: a behaviour every Rails developer already knows earns nothing, and a page that links
-each one has become a tutorial with a diff attached. **At most one doc link per field**, and a section
-where most fields carry one has stopped selecting. Probes are scarcer still: a flow earns one where
-its change is ActiveRecord-shaped, and a second wants a reason.
+same reason: a behaviour every developer in that stack already knows earns nothing, and a page that
+links each one has become a tutorial with a diff attached. **At most one doc link per field**, and a
+section where most fields carry one has stopped selecting. Probes are scarcer still: a flow earns one
+where its change is framework-shaped — ActiveRecord in Rails, a changeset, a query, an association or
+an `on_mount` chain in Elixir — and a second wants a reason.
 
 **The deep-link ladder does not govern either.** The four rungs are about `file:line` citations into a
 git remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is plain
@@ -299,8 +328,9 @@ to the test below.
 | § 5 · the application-vs-database invariants block | `--source` |
 
 The last two were added after a run showed the original list barred excerpts from the two densest
-concentrations of unchanged-code claims a server-rendered Rails PR produces. § 5 is the sharper
-case: *"no unique index on `projects.slug`, `db/schema.rb:141`"* is one line inside a generated file
+concentrations of unchanged-code claims a server-rendered Rails PR or a LiveView PR produces. § 5 is
+the sharper case: *"no unique index on `projects.slug`, `db/schema.rb:141`"* is one line inside a
+generated file
 twelve hundred lines long, and no reviewer opens that file to check it. The general rule
 against excerpting `db/schema.rb` is about **churn** — do not quote a migration's regenerated diff. It
 was never about quoting one committed line that a claim turns on.
@@ -818,13 +848,23 @@ put the fields loose in the section and a decisions block in the middle of them.
   that the two are rows and never one sentence.
 - **The path**, as `.pipe`: UI → request → controller → operation → model → column, and the
   response path back if it carries anything interesting. The numbered spine fills its terminal node,
-  so put the thing the chain arrives at last.
+  so put the thing the chain arrives at last. In a Phoenix LiveView flow the same chain is
+  event in `.heex` → `handle_event/3` → context → changeset → `Repo` → column, with the return leg
+  assigns → re-render → diff over the socket.
 - **The field crossing the boundary**, if it does, as a second chain — serializer → JSON → type → hook →
   component. Following one field teaches more than reviewing both sides as separate file trees. The
   mismatches worth hunting: nullable backend field typed non-null, backend enum value missing from the
   frontend union, a new error status nothing handles, a required param the client never sends. If the
   client is in another repository or simply absent, say which and build the backend half only — do not
   guess at code you cannot read.
+
+  **A LiveView app has this chain too, and it is a different seam.** There is no serializer and no
+  generated type, but there is still a contract with no compiler behind it: the `phx-*` attribute value
+  and the `handle_event/3` clause that answers it, a form input name and the changeset's `cast` list,
+  `stream_insert` versus an assign the template still reads, and `pushEvent` from a `phx-hook`. Build
+  the second chain from those instead. The mismatches worth hunting are the same shape — an event with
+  no clause (which crashes the process rather than rendering wrong), an input the changeset drops, a
+  broadcast payload no `handle_info` matches.
 - **The endpoint** it goes through, if the diff changed one: params with required/optional and where
   they are coerced, a real success body, the **full** error list with statuses, and a side-effects row
   — reads only / writes / calls an external service / idempotent or not. That last row is the
@@ -832,7 +872,10 @@ put the fields loose in the section and a decisions block in the middle of them.
   the flow's own material, so it goes in the `.pipe` chain and the field rows that already exist.
   A separate card was a second home for the same facts, and § *One canonical home* is the rule it
   broke. Server-rendered instead? Then the flow is page → action → redirect or render, with forms,
-  permitted params and flash states.
+  permitted params and flash states. A LiveView flow has no endpoint at all: what takes its place is
+  the route and the `live_session` it sits in, the events the template can fire, the assigns the
+  template reads, and the same side-effects row — which is the reviewer's actual question in any
+  shape.
 - **A diagram**, where one shows a mechanism a list cannot. Layout from the catalogue in
   `page-template.html`; which kind and how many, per § *Depth rules*.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
