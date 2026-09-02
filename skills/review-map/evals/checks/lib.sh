@@ -91,3 +91,32 @@ finish() {
   fi
   [ "$fail" -eq 0 ]
 }
+
+# strip_comments <src> <dest> — write <src> to <dest> with every HTML comment removed, line
+# structure preserved.
+#
+# A comment is not markup, and no check may let one steer it. The case that forced this: a
+# golden documents its own anchors in a header comment ("id=\"blast\" on the <section> ... is
+# what before-approving.sh reads"), and blast-radius.sh — which bounds section 4 at those
+# anchors — ended the region on the sentence describing it, reporting the fixture as having no
+# blast panel at all. Real pages are exposed the same way, because a published page carries
+# page-template.html's header comments verbatim, and those comments discuss the very class and
+# id names the checks grep for.
+strip_comments() {
+  awk '
+    {
+      s = $0; out = ""
+      while (1) {
+        if (incom) {
+          i = index(s, "-->")
+          if (i == 0) { s = ""; break }
+          incom = 0; s = substr(s, i + 3); continue
+        }
+        i = index(s, "<!--")
+        if (i == 0) { out = out s; break }
+        out = out substr(s, 1, i - 1); s = substr(s, i + 4); incom = 1
+      }
+      print out
+    }
+  ' "$1" > "$2"
+}

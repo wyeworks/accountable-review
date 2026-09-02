@@ -80,6 +80,7 @@ blast-radius.sh     | blast-pointer-restated.html   | 1 | carry more than one ci
 searches.sh         | searches-clean.html           | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
 searches.sh         | searches-unreachable.html     | 1 | reachable from no recorded search | --repo @GOLD@/searches-repo
 searches.sh         | searches-bre-dialect.html     | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
+searches.sh         | searches-git-grep.html        | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
 searches.sh         | searches-clean.html           | 0 | needs --repo to re-run
 start-here.sh       | start-here-clean.html         | 0 | each with a why
 start-here.sh       | start-here-no-why.html        | 1 | is not a reading order
@@ -93,6 +94,12 @@ before-approving.sh | approving-six-questions.html  | 1 | the cap is 5
 before-approving.sh | approving-brief-clean.html      | 0 | right at --brief | --level brief
 before-approving.sh | approving-brief-checkpoint.html | 1 | the checkpoint belongs to --full | --level brief
 before-approving.sh | approving-brief-no-anchor.html  | 1 | carries it on its last | --page @GOLD@/approving-brief-no-anchor.html --level brief
+# And the sharpened version of those last two. approving-brief-clean.html pins the merged SHAPE,
+# and passed the citation rule only because it happens to carry one <a class="cite">; a real
+# --brief page cites section 4 with a.path and carries none, so the rule counted the <li> under
+# "Before approving" as uncited section-4 entries and failed a correct page. This row pins the
+# condition rather than the shape.
+blast-radius.sh     | blast-brief-uncited.html        | 0 | citations present alongside the lists | --level brief
 blast-radius.sh     | approving-brief-clean.html      | 0 | no reading order here | --level brief
 page-invariants.sh  | approving-brief-clean.html      | 0 | data-path is only on ledger rows | --level brief
 page-invariants.sh  | invariants-clean.html         | 0 | no severity chips

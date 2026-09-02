@@ -24,12 +24,65 @@ parse_args "$@"
 require_input
 
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
-if grep -q 'id="blast"' "$IN"; then
-  awk '/id="blast"/{f=1} f&&/<section /&&!/id="blast"/{exit} f{print}' "$IN" > "$TMP/region"
+#
+# The region ends at the next <section> — and ALSO at id="crosscutting" or id="approving",
+# which at --brief are <h3> sub-parts of this very section rather than sections of their own.
+# Without that second bound this check reads the whole merged tail as section 4, and the
+# author questions and validation steps under "Before approving" — <li> items that carry
+# commands, not citations, and correctly so — are counted as uncited section-4 entries. A real
+# --brief page failed exactly that way, on 11 list items that were never section 4's. Both
+# anchors are absent at --full, so this stays level-unaware: report-format.md § Section 4 at
+# brief makes the merged section keep the anchors precisely so a check can read it unchanged,
+# and this is that reading. before-approving.sh remains the only check that takes --level.
+strip_comments "$IN" "$TMP/src"
+SRC=$TMP/src
+if grep -q 'id="blast"' "$SRC"; then
+  awk '
+    /id="blast"/                            { f = 1 }
+    f && /<section /  && !/id="blast"/      { exit }
+    f && /id="crosscutting"|id="approving"/ { exit }
+    f
+  ' "$SRC" > "$TMP/region"
 else
-  cp "$IN" "$TMP/region"
+  cp "$SRC" "$TMP/region"
 fi
 REGION=$TMP/region
+
+# One extraction of the section's ENTRIES, shared by the two rules below.
+#
+# Scoped to the LISTS first. Section 4 holds a good deal that is not an entry — the panel's .bx
+# boxes, the .searched blocks, the notes, and, when a page has regressed, an ol.begin reading
+# order — and counting any of it is how a correct page gets reported as uncited. dl.rows is the
+# current housing for both lists; a region without one is the retired markup, where the whole
+# region is the best available scope.
+if grep -q 'class="rows"' "$REGION"; then
+  awk '/class="rows"/{f=1} f{print} /<\/dl>/{f=0}' "$REGION" > "$TMP/lists"
+else
+  cp "$REGION" "$TMP/lists"
+fi
+
+# An entry is a <div class="item"> — what page-template.html emits today — or an <li> block, the
+# shape it emitted before the design system moved section 4 to dl.rows. Both are read, because
+# reading only the retired one is how both of these rules came to be dead: they went on passing
+# their goldens, which were never migrated, while matching nothing on any page a real run
+# produced.
+#
+# The .item is accumulated to its closing </div> rather than read as one line, even though every
+# real page writes it on one. The rule below that catches a pointer which has become a second
+# explanation is looking for a LONG entry with several citations, and a long entry is the one a
+# run is most likely to wrap — so a first-line-only reader would be blind in exactly the case
+# the rule exists for. It was: the migrated golden passed until this accumulated.
+#
+# Each entry carries the group heading in force when it opened, tab-separated, because the
+# heading is context the entry list would otherwise lose.
+awk '
+  /class="eyebrow"|<h3/ { group = ($0 ~ /Flow [A-Z]/) ? 1 : 0 }
+  /class="item"/ && !inli && !initem { initem = 1; ibuf = "" }
+  initem { ibuf = ibuf " " $0; if (/<\/div>/) { print group "\t" ibuf; initem = 0 } next }
+  /<li/ { inli = 1; buf = "" }
+  inli { buf = buf " " $0 }
+  inli && /<\/li>/ { print group "\t" buf; inli = 0 }
+' "$TMP/lists" > "$TMP/entries"
 
 # The panel. Almost every PR earns this one, and it is the only place the page shows
 # changed and affected in the same frame. An <svg> is accepted so a page built before the
@@ -92,18 +145,16 @@ fi
 # what "Flow" followed by a capital discriminates.
 # Either kind of heading resets the state — the two list titles are h3 now, and a group that
 # ended at one of them must not leak its Flow into the next block's entries.
-restated=$(awk '
-  /class="eyebrow"|<h3/ { group = ($0 ~ /Flow [A-Z]/) ? 1 : 0 }
-  /<li/ { inli = 1; buf = "" }
-  inli  { buf = buf " " $0 }
-  inli && /<\/li>/ {
-    inli = 0
-    if (buf !~ /href="#flow/ && group != 1) next
-    n = 0; rest = buf
-    while (match(rest, /class="cite"/)) { n++; rest = substr(rest, RSTART + RLENGTH) }
-    if (n > 1) print n
-  }
-' "$REGION" | wc -l | tr -d ' ')
+# A citation is a.path today and span.cite in the retired markup; both count, and an entry
+# carrying several of either is the defect.
+restated=$(awk -F'\t' '{
+  group = $1
+  buf = substr($0, index($0, "\t") + 1)
+  if (buf !~ /href="#flow/ && group != 1) next
+  n = 0; rest = buf
+  while (match(rest, /class="(cite|path)"/)) { n++; rest = substr(rest, RSTART + RLENGTH) }
+  if (n > 1) print n
+}' "$TMP/entries" | wc -l | tr -d ' ')
 if [ "${restated:-0}" -eq 0 ]; then
   ok "entries that point at a flow carry at most one citation each"
 else
@@ -118,13 +169,17 @@ else
   maybe "no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission"
 fi
 
-# Citations. Every entry in either list needs one; the hard rule is page-wide.
-li=$(grep -c '<li' "$REGION" || true)
-cites=$(grep -c 'class="cite"' "$REGION" || true)
-if [ "${li:-0}" -gt 0 ] && [ "${cites:-0}" -lt 1 ]; then
-  bad "section 4 has $li list item(s) and no citation at all"
+# Citations. Every entry in either list needs one; the hard rule is page-wide. Counted over
+# the extracted entries, not over the region: grepping the region for class="cite" asked for a
+# class section 4's template never emits, so this rule could only ever pass vacuously (li=0 at
+# --full) or fire on list items borrowed from another part of a merged page (--brief). It now
+# asks the question it always meant to — do the entries carry citations — of the entries.
+nent=$(grep -c . "$TMP/entries" 2>/dev/null || true)
+cites=$(grep -Ec 'class="(cite|path)"' "$TMP/entries" 2>/dev/null || true)
+if [ "${nent:-0}" -gt 0 ] && [ "${cites:-0}" -lt 1 ]; then
+  bad "section 4 has $nent entr(ies) and no citation at all"
 else
-  ok "citations present alongside the lists ($cites)"
+  ok "citations present alongside the lists ($cites of $nent entr(ies))"
 fi
 
 finish

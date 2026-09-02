@@ -1,0 +1,82 @@
+<!-- No defect. Sections 4 to 7 as ONE section, which is what --brief produces, in the markup
+     page-template.html emits today — and shaped to hold the exact condition a real --brief page
+     presents, which approving-brief-clean.html does not.
+
+     The difference is one attribute. That fragment happens to carry an <a class="cite"> on its
+     second affected entry; a real page does not, because section 4 cites with a.path. So the
+     rule "citations present alongside the lists" — which grepped the region for class="cite" —
+     saw cites=1 there and passed, while on a published --brief page it saw cites=0, counted the
+     11 <li> under "Before approving" as uncited section-4 entries, and failed a correct page.
+
+     Three things therefore have to stay true here, or this fragment stops guarding anything:
+
+       1. NO class="cite" anywhere. The affected entries cite with a.path, as the template does.
+       2. The "Before approving" lists carry several <li> with NO citation — author questions and
+          validation steps correctly carry commands, not file:line.
+       3. id="crosscutting" and id="approving" are <h3> sub-parts INSIDE <section id="blast">.
+          That is what makes the region bound load-bearing: at --full they would be sections of
+          their own and the next-<section> bound would already have stopped the region.
+
+     Only three checks may read this file — blast-radius.sh, page-invariants.sh and
+     before-approving.sh — and none of them takes the detail level to do it. -->
+<section id="blast">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>Blast radius and what to check</h2>
+
+  <div class="blast">
+    <div class="blast-row">
+      <div class="bx bx-on"><b>Projects::Archive</b><span>writes projects.archived_at</span></div>
+      <div class="bx bx-off"><b>ActiveProjects</b><span>still offers the project</span></div>
+    </div>
+    <div class="legend">
+      <span><i class="key-on"></i>Changed by this PR</span>
+      <span><i class="key-off"></i>Unchanged, and affected</span>
+    </div>
+    <p class="note">Adjacency cannot show direction: the scope is read by the selector, never written by this diff.</p>
+  </div>
+
+  <dl class="rows">
+    <dt class="lbl-ink">Changed</dt>
+    <dd>
+      <div class="gt gt-paths">
+        <div class="c" data-path="app/models/project.rb"><a class="path" href="#">app/models/project.rb</a></div>
+        <div class="c" data-path="db/schema.rb"><a class="path" href="#">db/schema.rb</a></div>
+      </div>
+      <p class="note">All 2 changed paths. The model is the one worth opening; the schema is regenerated.</p>
+    </dd>
+
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes
+        the selectable list, and archival does not narrow it <a href="#flow-b">Flow B</a></div>
+      <div class="item"><a class="path" href="#">spec/factories/projects.rb:14</a> &mdash; an
+        unchanged trait stamps archived_at <span class="tier">from unchanged code</span></div>
+      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong>
+        <code>rg -n 'archived' app lib</code> found the scope;
+        <code>rg -n 'archive[!?]?\b' app lib</code> found no other caller.</div>
+      <div class="searched"><strong>What these searches could not have found:</strong> a reader
+        reaching the column through an enum predicate rather than by name.</div>
+    </dd>
+  </dl>
+
+  <h3 class="cc-h" id="crosscutting">Spans more than one flow</h3>
+  <div class="gt gt-ripple">
+    <div class="h">What spans</div><div class="h">What a reviewer has to know</div>
+    <div class="c"><a class="path" href="#">Application vs database</a></div>
+    <div class="c"><span class="fix">The column is nullable with no CHECK constraint, so the
+      schema permits a state the model forbids.</span></div>
+  </div>
+
+  <h3 class="cc-h" id="approving">Before approving</h3>
+  <span class="lbl act-group">Ask the author</span>
+  <ul class="actions">
+    <li>Should existing time entries stay editable after archival?</li>
+    <li>Is the factory trait still wanted, now that archival has a service?</li>
+    <li>Was the nullable column deliberate, given the model treats it as required?</li>
+  </ul>
+  <span class="lbl act-group">Run</span>
+  <ul class="actions">
+    <li><code>bundle exec rspec spec/models/project_spec.rb</code> &mdash; pins the guard</li>
+    <li><code>bin/rails db:migrate</code> then <code>git diff db/schema.rb</code> &mdash; confirms the column</li>
+  </ul>
+</section>

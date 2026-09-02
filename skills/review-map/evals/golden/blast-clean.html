@@ -1,23 +1,41 @@
+<!-- No defect. The reference shape for section 4 in the markup page-template.html emits today:
+     a .blast box grid with its legend (not an SVG — the panel carries membership of two sets,
+     which adjacency shows as well as geometry did), then dl.rows / dt / dd / div.item / a.path.
+
+     The version this replaced used div.two-col > div.card > ul > li > span.cite, retired when
+     the design system changed. Because it was never migrated, two of blast-radius.sh's rules
+     went on passing this row while matching nothing on any page a real run produced. -->
 <section id="blast">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>Blast radius</h2>
-  <figure class="wide">
-    <div class="scroller"><svg viewBox="0 0 880 200" role="img" aria-label="Archival path and the query it affects">
-      <rect class="node" x="40" y="40" width="180" height="44" rx="5"/>
-      <text class="t-col" x="130" y="67" text-anchor="middle">archive!</text>
-      <path class="edge-dash" d="M220 62 L 300 62"/>
-      <rect class="node-dead" x="300" y="40" width="200" height="44" rx="5"/>
-      <text class="t-col" x="400" y="67" text-anchor="middle">ActiveProjects</text>
-    </svg></div>
-    <figcaption class="note">Solid: changed. Dashed: unchanged, and affected.</figcaption>
-  </figure>
-  <div class="two-col">
-    <div class="card"><p class="eyebrow">Changed</p>
-      <ul><li><a class="cite" href="#">app/models/project.rb</a></li></ul></div>
-    <div class="card"><p class="eyebrow">Affected, not changed</p>
-      <ul><li><a class="cite" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes the selectable
-        list, which archival changes the meaning of <span class="tier">evidenced by unchanged code</span>
-        <a href="#flow-a">Flow A</a></li></ul>
-      <p class="note">Searched <code>rg 'Project\.(where|all)' app lib</code> — one other caller.</p></div>
+
+  <div class="blast">
+    <div class="blast-row">
+      <div class="bx bx-on"><b>archive!</b><span>writes projects.archived_at</span></div>
+      <div class="bx bx-off"><b>ActiveProjects</b><span>still offers the project</span></div>
+    </div>
+    <div class="legend">
+      <span><i class="key-on"></i>Changed by this PR</span>
+      <span><i class="key-off"></i>Unchanged, and affected</span>
+    </div>
+    <p class="note">Adjacency cannot show direction: the scope is read by the selector, never written by this diff.</p>
   </div>
+
+  <dl class="rows">
+    <dt class="lbl-ink">Changed</dt>
+    <dd>
+      <div class="gt gt-paths">
+        <div class="c" data-path="app/models/project.rb"><a class="path" href="#">app/models/project.rb</a></div>
+      </div>
+    </dd>
+
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes
+        the selectable list, which archival changes the meaning of
+        <span class="tier">evidenced by unchanged code</span> <a href="#flow-a">Flow A</a></div>
+      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong>
+        <code>rg 'Project\.(where|all)' app lib</code> &mdash; one other caller.</div>
+    </dd>
+  </dl>
 </section>
