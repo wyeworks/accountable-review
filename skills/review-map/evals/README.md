@@ -605,14 +605,28 @@ The counterweight is the census: **193 external commands** across the shell chec
   would give the completeness invariant two implementations that could disagree — which is the
   failure the delegation exists to prevent.
 
-### The one intentional difference
+### Two intentional differences
 
-The shell iterated two arrays with `for (key in array)`, whose order POSIX leaves unspecified —
-mawk walks `diagram.sh`'s coordinate names as `x1 cy y2 x2 y x y1 cx`. Both are reachable only
-when one element is off-canvas on several axes at once, or two sections both carry diagrams, and
-neither happens anywhere in the corpus. The Ruby uses declaration order and document order.
-That is a narrowing, not a divergence: the shell's output in those cases was whatever the local
-`awk` happened to do.
+Both were found by constructing inputs the corpus does not contain, which is the only way to
+find them — `equivalence.rb` is silent on behaviour no fixture exercises, and saying so is more
+useful than a clean number.
+
+**Array iteration order.** The shell iterated two arrays with `for (key in array)`, whose order
+POSIX leaves unspecified — mawk walks `diagram.sh`'s coordinate names as `x1 cy y2 x2 y x y1 cx`.
+It is reachable: a `<text x="900" y="300">` in an 880×200 viewBox is off-canvas on both axes, and
+the shell reports `y` first where the Ruby reports `x`. Nothing in `golden/` or the template has
+that shape, and the same goes for the per-section diagram budget, which needs two sections both
+carrying diagrams. The Ruby uses declaration order and document order. That is a narrowing
+rather than a divergence: the shell's output in those cases was whatever the local `awk` did.
+
+**grep's binary-file heuristic.** `diagram.sh` finds its diagrams with `grep -n '<svg'`, and on
+a file containing NUL bytes grep prints `binary file matches` instead of line numbers — so the
+shell reports `SKIP  no diagrams in this input` on a page whose diagrams are all there, and
+warns on stderr while doing it. The Ruby reads the file and checks them. This is declined
+deliberately: reproducing the heuristic would mean writing a NUL-byte test into `Page` in order
+to make the diagram rules silently stop firing, and a published page is HTML written by the
+skill. Only `diagram` is affected, because it is the only check that reads line numbers out of
+grep rather than asking a yes/no question.
 
 ### What is left
 

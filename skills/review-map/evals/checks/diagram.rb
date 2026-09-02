@@ -28,6 +28,13 @@
 # invented if a run reached for them. That is the intended behaviour: a run drawing a blast
 # radius as SVG should be told to use the component instead.
 #
+# TWO PLACES THIS FILE DECLINES TO REPRODUCE THE SHELL, both documented in
+# evals/README.md § Two intentional differences. The second is here: diagram.sh finds its
+# diagrams with `grep -n '<svg'`, and on a file containing NUL bytes grep prints "binary file
+# matches" instead of line numbers — so the shell SKIPs a page whose diagrams are all present.
+# Reproducing that would mean writing a NUL-byte test into Page in order to make these rules
+# stop firing.
+#
 # TWO ORDERS THIS FILE DEFINES AND THE SHELL DID NOT. The awk it replaces iterated the
 # coordinate names and the per-section diagram counts with `for (key in array)`, whose order
 # POSIX leaves unspecified — mawk walks the coords as x1 cy y2 x2 y x y1 cx. Both are reachable
