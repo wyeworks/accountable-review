@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Run it by hand against any branch, from the Actions tab. This is here because a push
+  # made by an agent's credentials does not create a workflow run, so a branch pushed that
+  # way has no CI at all until a person acts — and the only person-shaped action that used
+  # to work was opening the pull request, which fires once and never again as the branch
+  # moves. Re-running that first run is no substitute: it replays the commit it ran on.
+  workflow_dispatch:
 
 jobs:
   manifest:
