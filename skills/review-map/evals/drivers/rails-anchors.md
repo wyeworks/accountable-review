@@ -15,14 +15,23 @@ target, re-inventory the diff, re-derive the goal, or re-group the flows:
 Then read, and follow:
 
 - `{{SKILL_DIR}}/SKILL.md` — steps 7 and 8
-- `{{SKILL_DIR}}/references/report-format.md` — § *Section 2*, § *The review unit*,
-  § *Evidence tiers*, § *Source excerpts*, § *Depth rules*
-- `{{SKILL_DIR}}/references/rails-nextjs.md` — while reading each layer
-- `{{SKILL_DIR}}/references/rails-docs.md` — if a claim earns a documentation link
-- `{{SKILL_DIR}}/references/page-template.html` — the component classes
+- `{{SKILL_DIR}}/references/report-format.md` — § *Framework anchors*, § *The review unit*,
+  § *Evidence tiers*, § *Source excerpts*
+- `{{SKILL_DIR}}/references/rails-nextjs.md` — the lenses, and § *Runtime probes*
+- `{{SKILL_DIR}}/references/rails-docs.md` — the documentation URLs you may cite
+- `{{SKILL_DIR}}/references/page-template.html` — the component classes, including `a.doc`
+  and `pre.probe` as they appear inside the assembled flow
 
 The frozen upstream is context, not a substitute for the code: open the files in the
 repository before making claims about them.
+
+This case grades the framework anchors specifically, so the flows have to carry them where the
+change earns them — and only there. It does not grade them generously: an anchor on a
+behaviour every Rails developer knows, or a probe naming something this repository does not
+have, is worse than none.
+
+You have no network access. You cannot open any documentation URL, which is why the catalogue
+exists.
 
 Write the fragment to `{{OUT}}`.
 
@@ -31,4 +40,5 @@ section, no rail. It will be graded as a fragment, so every claim in it has to s
 the rest of the page around it.
 
 Do not publish an artifact. Do not write into the repository under review. When the file is
-written, reply with one line: the path, and how many flows it contains.
+written, reply with one line: the path, how many flows it contains, and how many documentation
+links and probes.

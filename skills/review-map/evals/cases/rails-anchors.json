@@ -1,0 +1,37 @@
+{
+  "section": "rails-anchors",
+  "of": "report-format.md § Framework anchors, plus rails-nextjs.md § Runtime probes",
+  "produced_by": "drivers/rails-anchors.md",
+  "scope": "behaviour-flows",
+  "notes": "Reuses the behaviour-flows scope rather than adding one: the anchors live inside the review unit's fields, so the fragment under grading is a § 2 fragment and check.sh needs nothing new. rails-anchors.sh settles whether an anchor is REAL — catalogued URL, no fabricated output, identifiers that exist. What only a reader can settle is whether it was worth making: a link on a behaviour every Rails developer knows, or a probe whose output would not change anything the reviewer does, passes every mechanical rule and still makes the page longer and less navigable. That is what these expectations are for, which is why most of them are about restraint rather than presence. No fixture has network access and neither does a real run, so the catalogue is the only source of URLs in both.",
+  "cases": [
+    {
+      "id": "rails-anchors/rails-only-small",
+      "fixture": "rails-only-small",
+      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "expected_output": "Two flows. The planted finding this case turns on is that the new slug uniqueness validation has no unique index behind it, which is exactly a claim that rests on Rails behaving as Rails: the validation cannot see a concurrent insert. Citations are plain text throughout — rung 4 — so the anchors are the only clickable things on the page, which raises rather than lowers the bar for them.",
+      "expectations": [
+        "The uniqueness-without-an-index finding is stated as a consequence of this repository's code, with its own file:line, and the documentation link sits beside that citation rather than in place of it. A finding whose only anchor is a URL has cited the Rails guides about someone else's application",
+        "Every documentation URL appears in references/rails-docs.md. A constructed api.rubyonrails.org path is the failure this catalogue exists to prevent, and it is indistinguishable from a real one to the reader until they click",
+        "At least one runtime probe is proposed for the persistence change, and it is one whose output would actually settle something — the indexes on the table, or the validators on the column — rather than a probe that restates what the diff already shows",
+        "No probe carries output. There is no => line, no invented SQL, no row count: the run did not execute anything, and a transcript here is the most concrete-looking fiction the page could hold",
+        "Probes name only what exists in this fixture: Project, its real scope and its real columns. A probe against a scope or association this repository does not declare is an invented command, and the rule against those is not softened by it looking like Ruby",
+        "Restraint: no anchor on a behaviour a Rails developer already knows, at most one documentation link per field, and the fragment reads as a review map rather than as a Rails tutorial with a diff attached. Count the anchors — if most fields carry one, selection has stopped"
+      ]
+    },
+    {
+      "id": "rails-anchors/monolith-guard-chain",
+      "fixture": "monolith-guard-chain",
+      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "expected_output": "Three flows through a server-rendered monolith on Rails 8.1. The material that earns anchors here is different: enum predicates read through steward?, two scopes that disagree about eligibility, and a before_action chain whose order decides the outcome. Most of the weight is unchanged code.",
+      "expectations": [
+        "Where the fragment explains a predicate or scope, the anchor chosen is the one this application's own configuration decides — a probe showing what the scope compiles to, or the enum values the app admits — rather than a documentation link about enums in general. The routing rule prefers the probe exactly here",
+        "The two scopes that disagree (User.recommendable against general_recommendations_eligible) are explained with citations on both, and any probe proposed for them names the real scopes rather than plausible ones",
+        "Any claim about before_action ordering carries the file:line of the chain it describes; a link to the Action Controller guide is an aside on that sentence, never the evidence for it",
+        "No probe writes without a sandboxed console named alongside it, and no probe targets a production environment. A reviewer who pastes what this fragment tells them to must not thereby change a database",
+        "The Rails version is respected: this fixture is on Rails 8.1, and any version-sensitive behaviour is described as of the version the app runs rather than as of whatever the catalogue was verified against",
+        "Restraint again, and it is harder here because there is more framework surface to point at: the anchors are on the two or three claims a reviewer has to act on, not spread across every guard the fragment mentions"
+      ]
+    }
+  ]
+}

@@ -23,13 +23,14 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## What is bundled
 
-The procedure below relies on six bundled files. Read each at the step that needs it rather than up
+The procedure below relies on seven bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
 | File | Read at | For |
 |---|---|---|
 | `references/report-format.md` | steps 1, 7, 8, 9 | The detail levels, the sections each one produces, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
-| `references/rails-nextjs.md` | step 5, then while reading any layer | What a senior reviewer of this stack looks for, and the search recipes for code the diff did not touch |
+| `references/rails-nextjs.md` | step 5, then while reading any layer | What a senior reviewer of this stack looks for, the runtime probes, and the search recipes for code the diff did not touch |
+| `references/rails-docs.md` | steps 7 and 9 | The Rails documentation URLs the page may cite. It is an allowlist, not a starting point |
 | `references/page-template.html` | step 9 | The design system: tokens (light and dark), component classes, the two SVG diagram layouts, and the page's one small script |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
@@ -104,6 +105,12 @@ under a subdirectory such as `api/`, or there may be several (engines, monorepo)
 touched by the diff, ask which to cover. Detect, don't assume: RSpec vs Minitest; API-only
 (`config.api_only`) vs server-rendered; the authorization library, if any; the serializer library;
 the background job adapter; whether `strong_migrations` is present.
+
+**Record the Rails version**, from the `rails (x.y.z)` line in `Gemfile.lock`, along with the versions
+of the gems above. Two things later depend on it: a version-sensitive behaviour has to be described as
+of the version this app runs, and `references/rails-docs.md` states the version its URLs were verified
+against, so a much older app means saying which version you are describing rather than citing as
+though the current manual applied.
 
 **Frontend.** Locate it the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
 find the seam between the two sides, because that is what the boundary material inside each
@@ -235,6 +242,16 @@ in `report-format.md` § *The review unit* and § *Section 2*.
 The unit is **borderless by design**, which makes this easier to get wrong than it looks: a flow that
 spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
 example.
+
+**Two anchors are available for a claim that rests on Rails rather than on this diff**: a
+documentation link, and a console probe the reviewer runs. Both land inside fields the unit already
+has — *things to understand* to make a mechanism legible, *how to validate* to settle something —
+and `references/report-format.md` § *Framework anchors* owns the routing, the budget and the two
+rules that matter most: a doc link never appears without a `file:line` beside it, and a probe never
+appears with output beneath it. Where a flow's change is ActiveRecord-shaped, reach for a probe before
+reaching for a paragraph: `references/rails-nextjs.md` § *Runtime probes* has them, and the reason is
+that a validation, a scope or a `dependent:` is assembled at boot from places the diff cannot show
+together.
 
 Two rules keep it from becoming ceremony:
 
@@ -422,6 +439,17 @@ Everything else about writing holds at every stage:
   and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and
   they live there only — an earlier version of this bullet restated the cap in slightly different
   words and the two drifted apart within one run.
+- **Take every documentation URL from `references/rails-docs.md`, and never construct one.** You
+  cannot check a URL from here — there is no fetch step, and the sandboxes this runs in commonly block
+  those hosts — so a plausible-looking API path is a 404 the reader finds on your behalf, which costs
+  the same trust as an invented rake task. A concept the catalogue does not carry is explained in prose
+  with the repo citation it applies to; that is the ordinary outcome, not a failure. The rules and the
+  budget are in `references/report-format.md` § *Framework anchors*, and they live there only.
+- **A probe is proposed, never run.** Do not boot the application under review. The page shows the
+  command; it never shows output, because there is none to show — and a fabricated `=>` line is the
+  most concrete-looking thing on the page and the one part of it that is fiction. Name whether the
+  snippet wants `bin/rails runner` or `bin/rails console --sandbox`, and use the project's real
+  constants: a probe naming a scope this repo does not have is an invented command.
 - Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
   the diff contains gets the PR diff anchor, so the reviewer lands in the review they are already
   working in rather than in the file at head, where nothing marks what the line replaced. A line the
@@ -591,6 +619,8 @@ A strained run at `--brief` still says which region it skimmed.
   "looks good". The reviewer decides; the page equips them. Evidence, relationships, invariants,
   uncertainty, and validation steps are the output — verdicts are not.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
+- **Never invent a URL, and never invent output.** Documentation links come from
+  `references/rails-docs.md`; console probes are proposed unrun, with no transcript beneath them.
 - **The page must read completely with every source excerpt closed.** An excerpt confirms a claim the
   prose already made; it never carries one. A claim that exists only inside a collapsed block is
   hidden content wearing the clothes of progressive disclosure. Judge this **field by field**: a

@@ -1,8 +1,13 @@
 # Rails and Next.js lenses
 
-What to look for, per layer, plus the search recipes for finding code the diff did not touch. This is
-the knowledge a senior reviewer applies from memory and that cannot be inferred from a diff — it is
-what makes the page a review map rather than a change summary.
+What to look for, per layer, plus two sets of recipes for reaching past the diff: the **runtime
+probes** that ask the application what its code amounts to, and the **search recipes** that find the
+code the diff did not touch. This is the knowledge a senior reviewer applies from memory and that
+cannot be inferred from a diff — it is what makes the page a review map rather than a change summary.
+
+Where a lens turns on a Rails behaviour the reader might reasonably not know, the canonical URL for it
+is in `references/rails-docs.md`, and `report-format.md` § *Framework anchors* says when a claim has
+earned a link. Do not construct one from memory.
 
 The first target stack is a Rails API with a Next.js client, and the boundary between them gets the
 sharpest lenses here because it is the one seam with no compiler behind it. Everything is still
@@ -184,6 +189,138 @@ its own. What to look for:
 - Tests deleted or skipped as part of the change, which deserves an explicit note either way.
 
 ---
+
+## Runtime probes
+
+A search finds code. A probe asks the running application what that code amounts to — and for an
+ActiveRecord change that is a different and better question, because ActiveRecord's behaviour is
+assembled at boot from things the diff cannot show you together: the class, its concerns, its
+superclass, the schema, and whatever a `default_scope` quietly adds. `Project.validators_on(:slug)`
+answers *what validates this now*, including the validation in a concern nobody touched.
+`Project.archived.to_sql` shows the scope as the database will see it. `reflect_on_association`
+shows the `dependent:` actually in force rather than the one written on the line you are reading.
+
+So for a change to a scope, a validation, an association, a callback or a column, **reach for a probe
+before reaching for a paragraph.** Where a probe would settle a claim the page is making, it belongs
+in *how to validate*; where it makes a mechanism legible that the page has already established, it
+belongs in *things to understand*. `references/report-format.md` § *Framework anchors* owns that
+routing rule and the budget.
+
+**These are proposed, never run.** This skill does not boot the application under review, which means
+the page shows the command and never its output. A fabricated `=> true`, or an invented line of SQL
+presented as what the probe printed, is the console form of an invented rake task: it reads as the
+most concrete thing on the page and it is the one part of it that is fiction.
+
+Three rules make a probe safe to paste, and they matter more than the list below:
+
+- **Read-only reflection under `bin/rails runner`; anything that writes under
+  `bin/rails console --sandbox`**, which wraps the session in a transaction and rolls it back when
+  you exit. Say which one a snippet needs — a reviewer who pastes a `create!` into a plain console
+  has changed their database, and the page told them to.
+- **`--sandbox` never commits, so `after_commit` never fires there.** That is usually the callback an
+  archival or state-transition change turns on, so a sandbox session is the wrong instrument for it
+  and the page should say so rather than let a reviewer conclude the callback is broken. Enqueued
+  jobs, mailers and cache invalidation hanging off commit are all invisible for the same reason.
+- **Prefer a probe that answers on an empty database.** `Model.new`, `.to_sql` and class-level
+  reflection need no rows, so they work in a fresh checkout and expose no real data. A probe that
+  needs seeded records is a validation step with a setup cost: it goes in section 6 beside the seed
+  command, not inside a flow.
+
+Never propose a snippet with `RAILS_ENV=production`, and never one whose output would print personal
+data. Substitute the project's real constants throughout — a probe naming a scope this repository does
+not have is an invented command, and the rule against those is not softened by the fact that this one
+looks like Ruby.
+
+**The schema, as the database actually has it**
+
+```sh
+bin/rails db:migrate:status | tail -5
+bin/rails runner 'pp ActiveRecord::Base.connection.indexes(:projects).map { |i| [i.name, i.columns, i.unique] }'
+bin/rails runner 'c = ActiveRecord::Base.connection.columns_hash["projects"]["archived_at"]; pp [c.type, c.null, c.default]'
+bin/rails runner 'pp ActiveRecord::Base.connection.foreign_keys(:time_entries).map { |k| [k.to_table, k.on_delete] }'
+```
+
+The first says whether this checkout has run the migration at all, which is the usual explanation for
+a reviewer seeing different behaviour from the author. The second is how a uniqueness validation with
+no unique index behind it becomes visible in one line. The fourth separates what the database enforces
+from what `dependent:` does in Ruby.
+
+**What the model actually declares, after concerns and inheritance**
+
+```sh
+bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'
+bin/rails runner 'pp Project.reflect_on_association(:time_entries).options'
+bin/rails runner 'pp Project.reflect_on_all_associations.map { |a| [a.macro, a.name, a.options[:dependent]] }'
+bin/rails runner 'pp Project.defined_enums'
+bin/rails runner 'pp Project._commit_callbacks.map(&:filter)'
+```
+
+Each of these is the answer to a question the diff makes a reviewer ask and cannot settle: which
+validations exist now, what `dependent:` is really set to across every association, which enum values
+the app admits, what runs on commit. The last reads a private-ish API and can change between Rails
+versions — offer it as an aid, not as authority.
+
+**What a scope compiles to**
+
+```sh
+bin/rails runner 'puts Project.archived.to_sql'
+bin/rails runner 'puts Project.all.to_sql'
+bin/rails runner 'puts Project.archived.explain'
+```
+
+The second is how a `default_scope` reveals itself: if `Project.all` carries a `WHERE`, every query in
+the change inherits it. `explain` shows whether the index the migration added is the one the query
+plans to use, and it is read-only, though on a large table it is not instant.
+
+**The wire shape, without touching a row**
+
+```sh
+bin/rails runner 'puts JSON.pretty_generate(ProjectSerializer.new(Project.new).as_json)'
+bin/rails runner 'pp Project.new.as_json.keys'
+```
+
+An unsaved record is enough to see which keys cross the boundary and which are absent, which is the
+backend half of the contract the client's type claims to match. Substitute the project's real
+serializer; if serialization needs a persisted record, this becomes a sandbox probe.
+
+**Routing and authorization**
+
+```sh
+bin/rails routes -g projects
+bin/rails routes -c projects
+bin/rails runner 'pp Rails.application.routes.recognize_path("/api/projects/1", method: :patch)'
+bin/rails runner 'pp ProjectPolicy.instance_methods(false)'
+```
+
+`recognize_path` answers which controller action a URL the client constructs actually reaches, which
+is the one question a route diff leaves open. The last names the policy methods that exist, so an
+action gated by one that does not is visible.
+
+**Jobs**
+
+```sh
+bin/rails runner 'pp [ArchiveProjectJob.queue_name, ArchiveProjectJob.new.serialize.keys]'
+```
+
+The serialized keys are the payload shape a worker will deserialize — the thing that breaks when a
+job's arguments change and yesterday's queue is still full. A job whose arguments include a record
+needs a persisted one, so that variant is a sandbox probe.
+
+**Writes, and only in the sandbox**
+
+```sh
+bin/rails console --sandbox
+```
+
+```ruby
+p = Project.create!(name: "probe")
+p.archive!
+p.reload.attributes.slice("archived_at", "status")
+```
+
+Everything is rolled back on exit — and `after_commit` did not run, per the rule above. When the
+behaviour under review *is* the commit hook, say that this probe cannot see it and name what would:
+a request spec, or the job's own test.
 
 ## Search recipes for affected-but-unchanged code
 

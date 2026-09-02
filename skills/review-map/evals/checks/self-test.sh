@@ -110,6 +110,15 @@ page-invariants.sh  | invariants-loose-data-path.html | 1 | outside a ledger cel
 excerpts.sh         | excerpt-clean.html            | 0 | collapsed by default
 excerpts.sh         | excerpt-open.html             | 1 | open by default
 excerpts.sh         | excerpt-duplicate.html        | 1 | same range is excerpted more than once
+rails-anchors.sh    | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-uncatalogued-url.html | 1 | not in references/rails-docs.md   | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-link-alone.html       | 1 | with no file:line beside them     | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-link-in-excerpt.html  | 1 | inside a collapsed excerpt        | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-fabricated-output.html | 1 | looks like its own output        | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-runner-mutates.html   | 1 | no 'console --sandbox' is named   | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-clean.html            | 0 | needs --repo to ask whether
 excerpts.sh         | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
 excerpts.sh         | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang
 CASES
