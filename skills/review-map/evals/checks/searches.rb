@@ -117,8 +117,18 @@ module Searches
       when "rg", "ag" then :rg
       when "egrep" then :ere
       when "grep"
-        if prefix.match?(/[[:space:]]-[^[:space:]]*[EP]/) then :ere
-        elsif prefix.match?(/[[:space:]]-[^[:space:]]*F/) then :fixed
+        # The shell tested `case " $prefix " in *\ -*E*\ *|*\ -*F*\ *)`, and a glob `*` spans
+        # spaces — so a `-` in one token and an `E` in a LATER one selected ERE. Scoping the
+        # flag letter to its own token, which is what it means, would read `grep -rn NOTE 'a\|b'
+        # app` as BRE where the shell reads it as ERE, and BRE alternation reaches an entry that
+        # ERE does not: a PASS where the shell FAILs. That only happens on a malformed recorded
+        # command, where both are guessing — but this port's contract is byte-identical output,
+        # and a verdict is the last thing it may quietly change. So the looseness is reproduced
+        # here, deliberately. If it is wrong it is wrong in both, and fixing it means a golden
+        # fixture and a change to both, not a silent correction inside a port.
+        padded = " #{prefix} "
+        if padded.match?(/ -.*[EP].* /) then :ere
+        elsif padded.match?(/ -.*F.* /) then :fixed
         else :bre
         end
       else :ere
