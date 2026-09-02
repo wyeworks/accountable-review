@@ -194,9 +194,18 @@ rather than the flag. The A/B runs the *existing* expectations at both efforts a
 that does not reproduce is exactly what a falsifier is told to hunt; the judged expectations about
 affected-but-unchanged entries are the other half.
 
-**Nothing has run this yet, and the flag ships unmeasured.** That is a statement of fact rather than
-a hedge: whether `high` is worth a blocked round of agents is the question the axis exists to answer,
-and until the numbers exist the honest claim is that the pass is *available*, not that it *helps*.
+**One run has fired it end to end; the flag still ships unmeasured, and those are different
+statements.** The mechanism is confirmed — `behaviour-flows/rails-only-small` at `--skill-effort
+high` spawned the falsifier, folded in two of its challenges after verifying them against the files
+(a dead `scope :archived`, and an actor claim the code did not support), came back 28/0/0, and leaked
+nothing about the pass onto the fragment. What that does **not** establish is whether the pass earns
+its cost: n=1, with no `normal` arm on the same sha to compare against. Whether `high` is worth a
+blocked round of agents is the question the axis exists to answer, and until both arms exist the
+honest claim is that the pass is *available*, not that it *helps*.
+
+The one cost signal from that run, offered as an order of magnitude and not as a measurement: 866s
+against the 345–490s this file records for early section runs — on a different sha and a different
+model, so the comparison is suggestive at best. Run both arms before quoting a ratio.
 Read § *Two page runs against `monolith-guard-chain`* before scoring it — recall on planted findings
 was total in both runs there, so a fixture whose findings are all true and all plantable cannot show
 a falsifier earning its keep. What would is a fixture planting **plausible-but-wrong invitations**,
