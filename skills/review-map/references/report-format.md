@@ -60,7 +60,8 @@ sample, not an audit* is the rule that would break first.
 - *Detail levels* — brief, full and review, and what the level does and does not change
 - *The review unit* — the seven fields every meaningful change gets
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
-- *Framework anchors* — the doc link and the runtime probe, and why neither is evidence
+- *Framework anchors* — the doc link, the runtime probe, the primer callout a link escalates
+  into, and why none of the three is evidence
 - *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
   what code does, and the syntax tint that unchanged code gets and a hunk does not
 - *One canonical home* — every fact explained once, referenced from everywhere else
@@ -175,13 +176,14 @@ The PR description is never evidence. Where the page reports intent from it, att
 
 ## Framework anchors
 
-Two ways to anchor a claim that rests on Rails behaving as Rails rather than on anything this diff
-contains. Neither is an evidence tier, and neither changes one.
+Three ways to anchor a claim that rests on Rails behaving as Rails rather than on anything this diff
+contains. None is an evidence tier, and none changes one.
 
 | Anchor | Is | Renders as |
 |---|---|---|
 | **Documentation link** | Provenance: where the framework's rule is written down | `<a class="doc" href="…">` around the concept, from the catalogue |
 | **Runtime probe** | A question to the reviewer's own application, which they run | `<pre class="probe">`, one command |
+| **Primer callout** | What a link escalates into when the reviewer has to *understand* the rule to decide | `<aside class="primer">`, inside the flow it explains |
 
 **A doc link is provenance, not evidence.** "`update_all` skips callbacks" is a property of Rails; the
 claim the page is making is that *this call site* now bypasses the validation this PR adds, and that
@@ -237,7 +239,56 @@ printed, no invented row count. `references/rails-nextjs.md` § *Runtime probes*
 Every constant, scope and association a probe names must exist in this repository — the same rule as
 *validation steps must exist in this repo*, and it fails the same way when broken.
 
-**Routing.** One anchor per claim, not both:
+### The primer callout
+
+A doc link says *where the rule is written down*. A primer is for the narrower case where the
+reviewer cannot make the decision in front of them **without** the rule — where the framework
+behaviour is not an aside to the finding, it is the finding's mechanism. It renders as an
+`aside.primer`, assembled in `page-template.html`: a header naming the API, one or two paragraphs,
+the citation that earned it, the pinned link, and a short `pre.demo` beside them.
+
+**It sits between the flow's `.mech` and its `dl.rows`.** The reader meets the unfamiliar API
+immediately after the mechanism that uses it and before the fields that cite it. It is not a field, it
+carries no `<dt>`, and it never appears outside a behaviour flow: a primer in § 4 or § 6 is a lesson
+with no behaviour attached to it.
+
+**At most one per behaviour flow, and most flows earn none.** An inline `a.doc` is what a citation
+normally looks like; the primer is the exception, taken when a decision turns on the mechanism. A flow
+that wants two is a flow explaining Rails rather than explaining its own change — and the page that
+results reads as more thorough while getting less navigable, which is the failure mode this budget
+exists for. The escalation test is the same one the excerpt budget uses: not *is this interesting*, but
+*would the reviewer decide differently not knowing it*.
+
+**It carries a `file:line` from this repository, like every other doc link.** Two paragraphs of
+framework prose read as self-justifying, which is exactly why the rule is easiest to lose here. The
+citation names the line the callout was earned by, and `evals/checks/rails-anchors.sh` judges the
+whole aside as one block so it can neither omit its own citation nor borrow the one above it.
+
+**`pre.demo` is not `pre.probe`, and the difference is the receiver.** A demo quotes documented
+framework behaviour on a class **this repository does not have**, so it may show a `# =>` line: it is
+a quotation of the manual, and the manual states results. A probe asks *this* application and may
+never show one, because the run did not boot it. Name an application class in a demo and the block
+becomes precisely the fiction the probe rule exists to prevent, with the rule switched off — so a
+demo lives only inside a primer, and nowhere else on the page.
+
+**A `‡ probe` row may not be a primer's subject.** Those behaviours changed inside the supported
+Rails range, so no paragraph about them is true of every app, and a primer's whole form is
+explanatory prose. Route those to a probe and name the setting that decides it, per
+`rails-docs.md` § *What the marks mean*.
+
+**It is not Rails-only.** The catalogue carries gems and client libraries too, and the same callout
+serves them as `aside.primer.primer--lib`: no mark, no trademark line, and a neutral rule instead of
+the red one. Three things differ and nothing else does — the demo rule, the citation rule and the
+budget all apply unchanged. Reach for the variant whenever the link is not a `rubyonrails.org` one,
+because the artwork is an **attribution**: the Rails logotype on a Pundit explanation says the Rails
+Foundation wrote Pundit, and it looks entirely correct on the page. The mark also never appears
+without `.pr-tm` beneath it, which is the notice saying whose mark it is;
+`evals/checks/rails-anchors.sh` enforces both halves.
+
+**Nothing about the primer changes with the detail level.** It lives inside a behaviour flow, and
+§§ 1–3 are the same spec at `--brief` and `--full`.
+
+**Routing.** One anchor per claim, never two:
 
 | The claim needs | Goes in | Because |
 |---|---|---|
@@ -253,11 +304,13 @@ framework's rule is the whole point and this app cannot vary it.
 same reason: a behaviour every Rails developer already knows earns nothing, and a page that links
 each one has become a tutorial with a diff attached. **At most one doc link per field**, and a section
 where most fields carry one has stopped selecting. Probes are scarcer still: a flow earns one where
-its change is ActiveRecord-shaped, and a second wants a reason.
+its change is ActiveRecord-shaped, and a second wants a reason. Primers are the scarcest of the
+three — one per flow is the ceiling and none is the common case.
 
-**The deep-link ladder does not govern either.** The four rungs are about `file:line` citations into a
-git remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is plain
-text — exactly as an in-page `href="#flow-b"` does. A probe has no href at all.
+**The deep-link ladder governs none of the three.** The four rungs are about `file:line` citations
+into a git remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is
+plain text — exactly as an in-page `href="#flow-b"` does. A probe has no href at all, and a primer's
+own citation follows the rung like any other.
 
 ## Source excerpts
 
@@ -833,6 +886,10 @@ put the fields loose in the section and a decisions block in the middle of them.
   A separate card was a second home for the same facts, and § *One canonical home* is the rule it
   broke. Server-rendered instead? Then the flow is page → action → redirect or render, with forms,
   permitted params and flash states.
+- **A Rails primer**, where the decision turns on a framework behaviour the reviewer may not know.
+  It goes between the `.mech` and the grid rather than out here with the rest of this list, because
+  it explains the mechanism the `.mech` has just stated. One per flow at most, and most flows earn
+  none; § *Framework anchors* owns that and everything else about it.
 - **A diagram**, where one shows a mechanism a list cannot. Layout from the catalogue in
   `page-template.html`; which kind and how many, per § *Depth rules*.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The

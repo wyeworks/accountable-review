@@ -225,7 +225,7 @@ carries the proof. What gets dropped is narration, never the finding.
 
 A lot of what a reviewer needs to know about a Rails change is not in the change. `update_all` at a
 call site the diff never opened skips the validation this PR adds; a uniqueness validation is not a
-unique index; `--sandbox` rolls back, so `after_commit` never fires there. So the page carries two
+unique index; `--sandbox` rolls back, so `after_commit` never fires there. So the page carries three
 anchors for a claim that rests on Rails behaving as Rails.
 
 **A link to where the rule is written down** — the Rails guides, the API, or the gem's own docs. It sits
@@ -260,6 +260,24 @@ never its output — an invented `=> true` would be the most concrete-looking th
 only part of it that was fiction. Read-only reflection is written for `bin/rails runner`; anything that
 writes is written for `bin/rails console --sandbox`, and the page says which, because a reviewer should
 not be able to change a database by pasting what it told them to.
+
+**And occasionally a primer** — a short callout inside the flow it belongs to, naming the API, saying
+what the behaviour actually is in two paragraphs, and pointing at the pinned documentation. It is for
+the narrower case where you cannot make the decision in front of you *without* the framework rule:
+which of `archived_at_changed?` and `saved_change_to_archived_at?` a callback wants, say, when the
+answer decides whether the callback fires at all. It cites the line in your code that earned it, like
+any other link, and the four-line snippet beside it runs on a class your app does not have — so its
+`# =>` lines quote the manual rather than claiming something about your application that nothing ran.
+
+It works for the rest of the stack too, minus the branding: a primer about a gem — Pundit's
+`authorize` raising rather than returning false, a Sidekiq job re-running `perform` from the top —
+is the same callout with the mark and the trademark line dropped and a neutral rule in place of the
+red one. The logotype is an attribution, not decoration, so it appears only where the link does.
+
+There is at most one per flow, and most flows get none. That ceiling is the point: the failure mode
+here is not a wrong link, it is a page that explains every mechanism it touches, becomes a Rails
+tutorial with a diff attached, and reads as more thorough while getting harder to navigate. An anchor
+of any kind has to be earned by a decision you have to make.
 
 ### It separates evidence from inference
 

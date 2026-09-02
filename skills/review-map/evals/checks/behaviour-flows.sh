@@ -150,13 +150,18 @@ fi
 # callout's "GAP" often enough to be useless. The region ends at the </dl> that closes its
 # OWN grid; a .mech whose grid never opens ends at the next .mech or </section> instead,
 # rather than running on and swallowing the next flow's dl.ba.
+# The primer callout is dropped before this runs. It sits between the .mech and the grid, so
+# it lands inside a unit region, and it carries a class="path" of its own — which would absolve
+# a unit whose GRID cites nothing from the citation guard below. Its own citation is checked by
+# rails-anchors.sh, where the rule about it belongs.
+awk '/<aside class="primer/{p=1} p&&/<\/aside>/{p=0; next} !p' "$IN" > "$TMP/no-primer"
 awk -v d="$TMP" '
   /class="mech"/     { u++; f = 1; ingrid = 0 }
   /<dl class="rows"/ { if (f) ingrid = 1 }
   f                  { print > (d "/unit-" u) }
   /<\/dl>/           { if (f && ingrid) { f = 0; ingrid = 0 } }
   /<\/section>/      { f = 0; ingrid = 0 }
-' "$IN"
+' "$TMP/no-primer"
 
 # (2) The grids themselves, for the housing census. This has to be a separate region: a
 # flattened flow keeps its .mech, so a census taken over unit regions counts loose fields as

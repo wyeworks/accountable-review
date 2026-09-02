@@ -264,12 +264,15 @@ The unit is **borderless by design**, which makes this easier to get wrong than 
 spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
 example.
 
-**Two anchors are available for a claim that rests on Rails rather than on this diff**: a
-documentation link, and a console probe the reviewer runs. Both land inside fields the unit already
-has — *things to understand* to make a mechanism legible, *how to validate* to settle something —
-and `references/report-format.md` § *Framework anchors* owns the routing, the budget and the two
-rules that matter most: a doc link never appears without a `file:line` beside it, and a probe never
-appears with output beneath it. Where a flow's change is ActiveRecord-shaped, reach for a probe before
+**Three anchors are available for a claim that rests on Rails rather than on this diff**: a
+documentation link, a console probe the reviewer runs, and the primer callout a link escalates into.
+The first two land inside fields the unit already has — *things to understand* to make a mechanism
+legible, *how to validate* to settle something. The third sits between the flow's `.mech` and its
+grid, and is for the narrower case where the reviewer cannot make the decision **without** the
+framework rule: at most one per flow, and most flows earn none.
+`references/report-format.md` § *Framework anchors* owns the routing, the budget and the three
+rules that matter most: a doc link never appears without a `file:line` beside it, a probe never
+appears with output beneath it, and a primer's demo never names a class from this repository. Where a flow's change is ActiveRecord-shaped, reach for a probe before
 reaching for a paragraph: `references/rails-nextjs.md` § *Runtime probes* has them, and the reason is
 that a validation, a scope or a `dependent:` is assembled at boot from places the diff cannot show
 together.
@@ -529,6 +532,12 @@ Everything else about writing holds at every stage:
   most concrete-looking thing on the page and the one part of it that is fiction. Name whether the
   snippet wants `bin/rails runner` or `bin/rails console --sandbox`, and use the project's real
   constants: a probe naming a scope this repo does not have is an invented command.
+- **A primer's demo names nothing from this repository.** `pre.demo` may carry a `# =>` line for one
+  reason only: its receiver is a class the app under review does not have, so the block quotes the
+  manual rather than reporting what this application does. Write it on a generic receiver, and never
+  put a `pre.demo` anywhere but inside a primer — loose on the page it is the fabricated-output
+  defect with the rule switched off. Same budget discipline as the rest: one primer per flow at most,
+  and a flow whose decision does not turn on the framework behaviour earns none.
 - Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
   the diff contains gets the PR diff anchor, so the reviewer lands in the review they are already
   working in rather than in the file at head, where nothing marks what the line replaced. A line the
@@ -706,7 +715,11 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   uncertainty, and validation steps are the output — verdicts are not.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
 - **Never invent a URL, and never invent output.** Documentation links come from
-  `references/rails-docs.md`; console probes are proposed unrun, with no transcript beneath them.
+  `references/rails-docs.md`; console probes are proposed unrun, with no transcript beneath them. The
+  one result line the page may carry is inside a primer's `pre.demo`, and only because its receiver is
+  a class this repository does not have: the block quotes the manual rather than reporting what this
+  application did. Name an application class there and it is invented output again, with the rule
+  switched off.
 - **The page must read completely with every source excerpt closed.** An excerpt confirms a claim the
   prose already made; it never carries one. A claim that exists only inside a collapsed block is
   hidden content wearing the clothes of progressive disclosure. Judge this **field by field**: a

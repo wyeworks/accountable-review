@@ -122,6 +122,38 @@ rails-anchors.sh    | anchors-runner-mutates.html   | 1 | no 'console --sandbox'
 rails-anchors.sh    | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-clean.html            | 0 | needs --repo to ask whether
+# The primer callout. The first row is the clean one; the five after it are the rules that
+# would otherwise be checked by nothing. The demo rows are the pair worth reading together:
+# a demo may carry a result line ONLY because its receiver is not this application's, so one
+# rule asks whether the receiver is generic and the other asks whether the block is inside a
+# primer at all — without the second, pre.demo is a hole through the fabricated-output rule
+# that anything on the page could use.
+rails-anchors.sh    | anchors-primer-clean.html     | 0 | quote the manual                  | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-primer-app-symbol.html | 1 | are classes from this repository | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-demo-outside-primer.html | 1 | outside a primer               | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-primer-no-citation.html | 1 | with no file:line beside them   | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-primer-no-link.html   | 1 | carry no documentation link       | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-primer-two-in-flow.html | 1 | more than one primer            | --repo @GOLD@/searches-repo
+# The component is not Rails-only — a gem or a client library takes .primer--lib, which is the
+# same callout with no mark, no trademark line and a neutral rule. Both failures it guards are
+# attributions rather than layout, and neither looks wrong on the page: the logotype on a gem
+# primer says the Rails Foundation wrote that gem, and the logotype with no .pr-tm shows someone's
+# mark without saying whose. The scaffold row is a REGRESSION rather than a rule — a real eval run
+# had `class Post < ApplicationRecord` reported as naming an application class, which made the
+# idiomatic generic receiver the hardest one to write.
+rails-anchors.sh    | anchors-primer-lib.html       | 0 | quote the manual                  | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-primer-lib-rails-mark.html | 1 | no rubyonrails.org link      | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-primer-no-trademark.html | 1 | no trademark line              | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-primer-scaffold-receiver.html | 0 | quote the manual          | --repo @GOLD@/searches-repo
+# And the two other scripts a primer passes through, which is where it could break something
+# that has nothing to do with it. behaviour-flows.sh must not read a flow with a callout as a
+# flattened one, and must NOT let the callout's own citation stand in for the unit's — the
+# last row is that regression, and it fails only because the unit census is taken over a copy
+# with the primer removed. diagram.sh must not mistake a 34px brand mark for a figure: every
+# rule it has is about a figure, and the first one it would fail is "not inside .scroller".
+behaviour-flows.sh  | anchors-primer-clean.html     | 0 | every dl.rows is introduced by a .mech block
+behaviour-flows.sh  | flows-primer-uncited-unit.html | 1 | makes claims with no file:line
+diagram.sh          | anchors-primer-clean.html     | 0 | no diagrams in this input
 excerpts.sh         | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
 excerpts.sh         | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang
 CASES

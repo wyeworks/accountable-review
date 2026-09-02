@@ -20,6 +20,13 @@
 # not to page-template.html has no styles, and one added there but not here is reported
 # as invented.
 #
+# ONE <svg> on the page is not a diagram: svg.pr-mark, the brand mark in a primer callout
+# (page-template.html § Rails primer). Every rule below is about a figure — it must sit in a
+# .scroller, its classes must be in the vocabulary, its coordinates must be inside an
+# 880x200 canvas — and none of them is true of a 34px decorative badge, which would fail the
+# first one and be reported as an invented class by the second. It is excluded by its class
+# on the opening tag, which is the same convention the doc-link and probe checks rely on.
+#
 # Two class families that used to be here are gone, not renamed. The blast radius is a .blast
 # box grid and the boundary chain is a .pipe spine — both CSS components, neither an SVG — so
 # `legend` and `box-json` no longer style anything inside an <svg> and would be reported as
@@ -34,7 +41,7 @@ VOCAB="t-title t-col t-dim t-lbl t-edge box box-hd edge edge-dash edge-accent no
 
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 
-starts=$(grep -n '<svg' "$IN" | cut -d: -f1 || true)
+starts=$(grep -n '<svg' "$IN" | grep -v 'class="pr-mark"' | cut -d: -f1 || true)
 if [ -z "$starts" ]; then
   skip "no diagrams in this input"
   finish

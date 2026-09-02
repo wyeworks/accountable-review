@@ -154,12 +154,14 @@ Editing one of these means checking the others still agree.
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
 - **Framework anchors are provenance, not evidence, and there is still no sixth tier.** A doc link
-  explains why a Rails consequence follows; a console probe asks the reviewer's own application. The
+  explains why a Rails consequence follows; a console probe asks the reviewer's own application; a
+  primer callout is what a link escalates into when the reviewer cannot make the decision without the
+  rule itself. The
   claim underneath keeps resting on a repo `file:line` at the tier it already carried, which is what
   keeps the five-tier invariant — four files agreeing — untouched. It is also the answer already
   written down for `--review`: where a claim came from is provenance, and provenance is not evidence.
 
-  Two rules carry the whole feature, and both are the kind that look like diligence when broken.
+  Two rules carry the link and the probe, and both are the kind that look like diligence when broken.
   **A doc link may only be a row of `references/rails-docs.md`, pinned to the version this app runs**,
   because the run cannot open a URL — no fetch step, and egress to those hosts is commonly blocked —
   so a constructed API path is a 404 the reader finds on the page's behalf, and an unpinned one is
@@ -167,22 +169,69 @@ Editing one of these means checking the others still agree.
   § *Pinning, and the two things it does not fix* for why the pin is about checkability rather than
   precision, and for the two marks that stop the page asserting a behaviour that moved. **A probe is
   proposed, never run**, so the page shows a command and never output: a fabricated `=> …` is the most
-  concrete-looking thing on the page and the one part of it that is fiction. `report-format.md` § *Framework anchors* owns both, plus the routing
+  concrete-looking thing on the page and the one part of it that is fiction. `report-format.md` § *Framework anchors* owns all of it — the primer included, in § *The primer callout* — plus the routing
   (verify → *Validate*, explain → *Understand*) and the budget, **and owns them alone**; `SKILL.md`
   steps 7 and 9 point at it, `rails-nextjs.md` § *Runtime probes* holds the probes and the
   `runner`-versus-`console --sandbox` rule, and `evals/checks/rails-anchors.sh` derives its allowlist
   from the catalogue file rather than hard-coding hosts.
 
+  **The primer is the third anchor, and it is the one that can undo the other two.** `aside.primer`
+  sits between a flow's `.mech` and its `dl.rows`: a header naming the API, a paragraph or two, the
+  citation that earned it, the pinned link, and a short `pre.demo`. It is the heaviest component on
+  the page carrying no evidence of its own, which is why it has the tightest budget of anything here —
+  **one per behaviour flow, and most flows earn none.**
+
+  **It is not Rails-only, and the artwork is an attribution rather than decoration.** The catalogue
+  carries gems and client libraries, so `.primer--lib` is the same callout with no mark, no
+  trademark line and a neutral rule. Two failures follow from getting that wrong, and neither looks
+  wrong on the page: the Rails logotype on a Pundit primer says the Rails Foundation wrote Pundit,
+  and the logotype with no `.pr-tm` shows someone's mark without saying whose. Both are checked.
+  The logotype is inlined from the official SVG because an external `<img>` is CSP-blocked and the
+  run has no fetch step — it is drawn in `currentColor` off `--rails` rather than the brand hex, so
+  it stays legible on the dark ground.
+
+  A consequence worth knowing before editing a check: `class="primer primer--lib"` does not match
+  `class="primer"`, so **every primer matcher is a prefix match**. Written the obvious way, each rule
+  about primers silently skipped the variant — the failure mode this repository keeps writing down,
+  a rule that passes because it never looked.
+
+  Two rules carry it, and each is invisible when broken. **`pre.demo` is not `pre.probe`, and the
+  difference is the receiver.** A demo may show a `# =>` line *because* it runs on a class the app
+  under review does not have: it quotes the manual, and the manual states results. Name an application
+  class there and it is the fabricated-output defect with the rule switched off — which is why
+  `rails-anchors.sh` asks the *inverse* of the probe-identifier question (a constant that **does**
+  exist in the repo is the failure), and why a `pre.demo` anywhere outside a primer is refused
+  outright. Merging the two classes would open a hole through the one rule protecting the most
+  concrete-looking fiction the page could carry. **And a primer cites a `file:line` like every other
+  doc link** — two paragraphs of framework prose read as self-justifying, so the citation rule
+  flattens the whole aside into one block, which stops it both omitting its own citation and borrowing
+  the one above it.
+
   Two things worth knowing before editing. The anchors are **level-independent** — they live in fields
-  `--brief` leaves alone — so `rails-anchors.sh` must not read `LEVEL`, and `before-approving.sh` stays
-  the only check that knows the level. And the components are built from **existing** tokens on
-  purpose: `a.doc` and `pre.probe` introduce no colour, so there is nothing new to declare in three
-  theme blocks and forget in one.
+  `--brief` leaves alone, and a primer lives in a flow, which §§ 1–3 render identically at both levels
+  — so `rails-anchors.sh` must not read `LEVEL`, and `before-approving.sh` stays the only check that
+  knows the level. And the link and the probe are built from **existing** tokens on purpose: `a.doc`
+  and `pre.probe` introduce no colour. The primer breaks that, knowingly, for exactly one token:
+  `--rails`, declared on bare `:root` and in **both** dark blocks, with `page-invariants.sh` § 6
+  counting it by name — because nothing on the page depends on that colour to be readable, so a half
+  declaration is invisible until someone opens a primer with the OS in dark mode.
+
+  Two other checks had to be taught about it, and both for the same reason: the primer looks like
+  something they already know about. `behaviour-flows.sh` takes its unit census over a **copy with the
+  primer removed**, because the callout lands inside a unit region and carries a `class="path"` — kept,
+  it would absolve a unit whose grid cites nothing, and `golden/flows-primer-uncited-unit.html` is that
+  regression. `diagram.sh` excludes `svg.pr-mark`, because every rule it has is about a figure and the
+  first one a 34px brand badge fails is *not inside `.scroller`*. The mark itself is geometric rather
+  than the official logo: the run cannot fetch artwork and an external `<img>` is blocked by the
+  artifact's CSP, so the trademark line at the foot of the callout is what keeps the stand-in honest.
 
   The failure mode to watch is not a wrong link. It is a page that links everything, becomes a Rails
   tutorial with a diff attached, and reads as more thorough while getting less navigable — the
   canonical-home regression arriving as citation instead of as repetition. The rule against it is the
-  excerpt budget's: an anchor is earned by a decision the reviewer has to make.
+  excerpt budget's: an anchor is earned by a decision the reviewer has to make. **The primer is the
+  most persuasive way for that regression to return**, because a callout that teaches something true
+  looks like care rather than like padding; a script can check that one is placed and cited legally
+  and never that the flow needed it, which is what `evals/cases/rails-anchors.json` is for.
 - **The review unit** is the page's primitive: seven fields, fixed order, defined in
   `report-format.md` and rendered as a `.mech` block followed by one `dl.rows` — **and rendered
   nowhere else.** A behaviour flow's body *is* a unit; the path, the diagram and the decisions block
@@ -440,9 +489,11 @@ Editing one of these means checking the others still agree.
   states and `excerpts.sh` enforces it for the excerpt tints specifically, which are the newest
   colours and so the likeliest to be forgotten in two of the three.
 
-  The `--syn-*` syntax tints are the newest of these and the easiest to half-declare, because nothing
-  on the page depends on them to be readable — a set missing from the dark blocks is invisible until
-  someone opens an excerpt with the OS in dark mode.
+  `--rails` is the newest of these and `--syn-*` the next newest, and both are easy to half-declare for
+  the same reason: nothing on the page depends on either to be readable, so a value missing from the
+  dark blocks is invisible until someone opens a primer or an excerpt with the OS in dark mode. Each is
+  therefore counted by name — `--rails` in `page-invariants.sh` § 6, `--syn-key` in `excerpts.sh` —
+  because the three blocks *existing* is not the same as a colour being in all three.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
   pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.bx-on` — are written

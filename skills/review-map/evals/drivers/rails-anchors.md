@@ -19,8 +19,8 @@ Then read, and follow:
   § *Evidence tiers*, § *Source excerpts*
 - `{{SKILL_DIR}}/references/rails-nextjs.md` — the lenses, and § *Runtime probes*
 - `{{SKILL_DIR}}/references/rails-docs.md` — the documentation URLs you may cite
-- `{{SKILL_DIR}}/references/page-template.html` — the component classes, including `a.doc`
-  and `pre.probe` as they appear inside the assembled flow
+- `{{SKILL_DIR}}/references/page-template.html` — the component classes, including `a.doc`,
+  `pre.probe` and `aside.primer` as they appear inside the assembled flow
 
 The frozen upstream is context, not a substitute for the code: open the files in the
 repository before making claims about them.
@@ -28,7 +28,10 @@ repository before making claims about them.
 This case grades the framework anchors specifically, so the flows have to carry them where the
 change earns them — and only there. It does not grade them generously: an anchor on a
 behaviour every Rails developer knows, or a probe naming something this repository does not
-have, is worse than none.
+have, is worse than none. A primer is the same judgement with more at stake: it is the largest
+component here and the only one that carries no evidence of its own, so write one only where the
+decision genuinely cannot be made without the framework rule, at most one per flow — and most
+flows earn none.
 
 You have no network access. You cannot open any documentation URL, which is why the catalogue
 exists.
@@ -41,4 +44,4 @@ the rest of the page around it.
 
 Do not publish an artifact. Do not write into the repository under review. When the file is
 written, reply with one line: the path, how many flows it contains, and how many documentation
-links and probes.
+links, probes and primers.
