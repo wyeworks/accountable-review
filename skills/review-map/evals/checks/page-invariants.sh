@@ -30,6 +30,21 @@ fi
 if grep -Eq '>[[:space:]]*(Blocking|Watch)[[:space:]]*<' "$IN"; then
   maybe "a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name"
 fi
+# 2b · Assurance language, which is a verdict about the page rather than about the PR and
+#      therefore easy to reintroduce while believing rule 2 still holds. A run at --effort
+#      high sends an adversarial pass at its own flows; nothing about that is allowed to
+#      reach the page (SKILL.md step 8, report-format.md § Detail levels). The patterns are
+#      high-precision on purpose: a bare 'verified' is a real column name in real Rails
+#      apps, and 'audit' appears inside the sanctioned "a pass, not an audit".
+ASSURE='(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (verified|checked|confirmed)|every claim (was|has been) (verified|checked)|class="(verified|checked)"|chip-verified'
+if grep -Eiq "$ASSURE" "$IN"; then
+  bad "assurance language — the page is advertising that it was checked: $(grep -Eio "$ASSURE" "$IN" | sort -u | tr '\n' ' ')"
+else
+  ok "no assurance language — the effort level is invisible on the page"
+fi
+if grep -Eiq 'clean bill of health' "$IN"; then
+  maybe "'clean bill of health' appears — legitimate only as a denial; read the sentence"
+fi
 
 # 3 · Evidence tiers. Silence is the first tier, so a document with no label either had
 #     nothing to infer, which is rare, or presented inference as fact, which is the
