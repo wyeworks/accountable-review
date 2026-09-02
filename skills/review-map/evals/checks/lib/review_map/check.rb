@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "open3"
+
 require_relative "page"
 
 # check.rb — shared plumbing for the check scripts, the port of checks/lib.sh.
@@ -73,6 +75,27 @@ module ReviewMap
 
     def page
       @page ||= Page.read(@input)
+    end
+
+    # lib.sh derived these by walking up from CHECKS_DIR, because POSIX sh cannot find the
+    # path of the file being sourced. Ruby can, so they are just constants — but they stay
+    # here rather than in each check, because a check that computed its own would be one
+    # more place to get wrong.
+    CHECKS_DIR = File.expand_path("../..", __dir__)
+    EVALS_DIR  = File.dirname(CHECKS_DIR)
+    SKILL_DIR  = File.dirname(EVALS_DIR)
+
+    # The one place a check reaches outside itself. Two checks need it and neither should
+    # reimplement what it calls: `completeness` runs scripts/coverage-gate.sh, which is
+    # RUNTIME code invoked by SKILL.md step 10 and stays shell, and `page-invariants` asks
+    # git whether the head is pushed. Returns [stdout, ok?] and never raises — a missing
+    # command is a false answer to the check's question, not a crash in the harness.
+    def shell(*command, chdir: nil)
+      opts = chdir ? { chdir: chdir } : {}
+      out, _err, status = Open3.capture3(*command, **opts)
+      [out, status.success?]
+    rescue SystemCallError
+      ["", false]
     end
 
     def finish

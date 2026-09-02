@@ -40,9 +40,16 @@ module ReviewMap
       @lines.empty?
     end
 
-    # `grep -q`.
+    # `grep -q` for a Regexp, `grep -Fq` for a String. The shell used both and the
+    # distinction is load-bearing: the build-state banner is matched as a fixed sentence,
+    # and a String silently promoted to a pattern is how a literal `.` or `?` in a future
+    # sentence would start matching things it does not say.
     def has?(pattern)
-      @lines.any? { |l| matchable(l).match?(pattern) }
+      if pattern.is_a?(String)
+        @lines.any? { |l| l.include?(pattern) }
+      else
+        @lines.any? { |l| matchable(l).match?(pattern) }
+      end
     end
 
     # `grep -c`: matching LINES, not matches. Two lines of the field census are
@@ -120,6 +127,39 @@ module ReviewMap
       Page.new(regions(**kwargs).flat_map(&:lines))
     end
 
+    # One region, from the first line matching `anchor` to just before `stop` — awk's
+    # `/anchor/{f=1} f&&/stop/{exit} f{print}`, which is how every section in the page is
+    # extracted. With no `stop` it runs to the end of the input (`awk '/anchor/,0'`).
+    #
+    # `stop` may be a Regexp or anything answering `call`, because two of the checks need a
+    # compound terminator: a section ends at the next `<section ` line that is not its own
+    # anchor, which no single pattern expresses.
+    #
+    # `stop_after` is awk's `seen` guard, and it is a real variant rather than a knob. By
+    # default the stop rule can fire on the anchor line itself, because awk's rules run in
+    # order and the print comes last. Section 6's author-question region cannot afford that:
+    # its anchor line is often an <h3> and <h3> is also its terminator, so the region would
+    # come back empty. Passing 1 makes the stop wait until something has been emitted.
+    def from(anchor, stop: nil, stop_after: 0)
+      out = []
+      inside = false
+      @lines.each do |raw|
+        line = matchable(raw)
+        inside = true if !inside && line.match?(anchor)
+        next unless inside
+        break if stop && out.size >= stop_after && stops?(stop, line)
+
+        out << raw
+      end
+      Page.new(out)
+    end
+
+    # The section-region shape both § 3 and § 4 use: from this anchor to the next section
+    # that is not it.
+    def section_from(anchor)
+      from(anchor, stop: ->(line) { line.match?(/<section /) && !line.match?(anchor) })
+    end
+
     private
 
     # grep strips the line terminator before matching, and a page's patterns lean on
@@ -130,6 +170,10 @@ module ReviewMap
     # terminator, because a region is text and gets printed and joined as such.
     def matchable(line)
       line.chomp
+    end
+
+    def stops?(stop, line)
+      stop.respond_to?(:call) ? stop.call(line) : line.match?(stop)
     end
   end
 end

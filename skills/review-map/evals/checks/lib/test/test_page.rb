@@ -138,6 +138,15 @@ class TestCounting < Minitest::Test
     assert_equal ["<dt>Validate"], doc.scan(/<dt>[^<]*/)
   end
 
+  # grep -Fq vs grep -q. The shell used both, so a String here is a fixed string.
+  def test_a_string_pattern_is_a_fixed_string
+    doc = page(%(absence is not a finding\n))
+
+    assert doc.has?("absence is not a finding")
+    refute doc.has?("absence is n.t a finding")
+    assert doc.has?(/absence is n.t a finding/)
+  end
+
   def test_scan_flattens_in_document_order
     doc = page(%(<b>one</b><b>two</b>\n<b>three</b>\n))
 
