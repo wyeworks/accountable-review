@@ -103,7 +103,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
 | `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge — what a senior reviewer of this stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code |
-| `references/rails-docs.md` | The documentation catalogue — the Rails and gem URLs the page may cite, and nothing else. Data, not lenses: an allowlist a human verified once |
+| `references/rails-docs.md` | The documentation catalogue — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script |
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
@@ -111,6 +111,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire |
+| `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in `references/rails-docs.md`, across every Rails series the floor admits, and reports dead pages, dead anchors, and the rows that differ by version. Maintenance, never a run — see § *The catalogue is the one thing a run cannot verify* |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs
 them. That is why `SKILL.md` says *when* to load each one, and why detail belongs in the reference
@@ -159,11 +160,14 @@ Editing one of these means checking the others still agree.
   written down for `--review`: where a claim came from is provenance, and provenance is not evidence.
 
   Two rules carry the whole feature, and both are the kind that look like diligence when broken.
-  **A doc link may only be a row of `references/rails-docs.md`**, because the run cannot open a URL —
-  no fetch step, and egress to those hosts is commonly blocked — so a constructed API path is a 404
-  the reader finds on the page's behalf. **A probe is proposed, never run**, so the page shows a
-  command and never output: a fabricated `=> …` is the most concrete-looking thing on the page and the
-  one part of it that is fiction. `report-format.md` § *Framework anchors* owns both, plus the routing
+  **A doc link may only be a row of `references/rails-docs.md`, pinned to the version this app runs**,
+  because the run cannot open a URL — no fetch step, and egress to those hosts is commonly blocked —
+  so a constructed API path is a 404 the reader finds on the page's behalf, and an unpinned one is
+  documentation for a Rails this app may not be running. Both fail while looking correct. See
+  § *Pinning, and the two things it does not fix* for why the pin is about checkability rather than
+  precision, and for the two marks that stop the page asserting a behaviour that moved. **A probe is
+  proposed, never run**, so the page shows a command and never output: a fabricated `=> …` is the most
+  concrete-looking thing on the page and the one part of it that is fiction. `report-format.md` § *Framework anchors* owns both, plus the routing
   (verify → *Validate*, explain → *Understand*) and the budget, **and owns them alone**; `SKILL.md`
   steps 7 and 9 point at it, `rails-nextjs.md` § *Runtime probes* holds the probes and the
   `runner`-versus-`console --sandbox` rule, and `evals/checks/rails-anchors.sh` derives its allowlist
@@ -444,6 +448,115 @@ Editing one of these means checking the others still agree.
   pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.bx-on` — are written
   against tokens rather than literals precisely so they keep inverting *relative to the page* rather
   than flipping to an unreadable combination in one theme.
+
+## The catalogue is the one thing a run cannot verify
+
+`references/rails-docs.md` is an allowlist, and the run takes URLs from it without opening them —
+there is no fetch step and egress to those hosts is commonly blocked. That is the right runtime rule
+and it is not up for revisiting: a live search per anchor would add requests to the run's scarcest
+resource, make two runs of the same PR cite different URLs, break `assumes only Claude Code plus a git
+repo`, and put SEO-ranked mirrors of Rails 4 docs inside the trust boundary the allowlist exists to
+draw.
+
+What follows from it is that the file's correctness is a **maintenance** property with a date on it,
+not a property of the run. The first re-check found **8 defects in the 88 URLs it then held**, in three classes:
+version drift the unversioned URLs cannot notice (7.2 moved `insert_all`; the controller guide renamed
+one section twice), a guide page that had never existed in any series, and three fragments GitHub
+stopped emitting. Only the first is what "the docs moved" intuitively means, and only the second is
+catchable by reading.
+
+### Pinning, and the two things it does not fix
+
+**Every doc link is pinned to the app's own version** — the Rails `major.minor` from `Gemfile.lock`
+for the two Rails hosts, the exact locked version for a gem's tag. Unconditionally, including for the
+39 rows whose meaning has not moved in a decade. The reason is not precision, it is *checkability*: a
+pinned Rails doc page prints "Ruby on Rails 8.0.5.1" in its header and a GitHub tag shows the tag, so
+the reader can hold the link against their own lock file. An unpinned path silently means current
+stable and offers nothing to check — which is how a page explains 8.1 behaviour to a 7.1 app in a tone
+of complete confidence. Above the verified ceiling the run pins anyway and the script catches it
+later; below the floor, or where a row has no verified path, **it emits no link at all.** Failing
+closed is the guarantee: an unlinked explanation cannot mislead.
+
+Pinning fixes the URL. It does **not** fix the sentence, and that is the part that actually misleads.
+A perfectly pinned 8.0 link under *"`perform_later` enqueues before the transaction commits"* is more
+authoritative and still wrong, because 8.0 defaults `enqueue_after_transaction_commit` on. So an audit
+of the Active Record / Active Job / Action Pack / Active Support CHANGELOGs for 7.2, 8.0 and 8.1
+classified all 47 Rails rows, and the result is two marks that constrain the **claim**, never the link:
+
+- `‡ probe` — the behaviour changed inside the range, so no sentence is true of every app. The page
+  may not assert it: name the setting that decides it and propose a probe. Three rows.
+- `‡ since X` — surface was added in X, the default still holds. State it as the default and name X.
+  Five rows. A probe here would be over-citation, which is the failure the anchor budget exists for.
+
+They are different actions, not severities, and collapsing them costs something either way. The audit
+also found the old single ‡ was catching about a quarter of what it existed to catch: of three marked
+rows two were right, one was over-applied (nested `transaction` join semantics never moved), and six
+version-sensitive rows carried no mark — including strong parameters, where **8.0 introduced
+`params.expect`** and a page could confidently recommend it to a 7.2 app that cannot run it.
+
+**The probe is the version-proof anchor**, and that is why `‡ probe` routes there rather than to a
+better link. A probe interrogates the installed code instead of describing it, so it cannot be out of
+date. The catalogue's whole version problem dissolves for probes and is only ever managed for links.
+
+`evals/verify-catalogue.sh` is the maintenance pass — every row in the **pinned** form a run actually
+emits, every series in the floor, per-series overrides honoured, dated, exit 1 on any defect. Checking
+the unpinned form would be checking a string nothing emits. A clean run now proves something stronger
+than it used to: every row resolves for every app the catalogue admits (currently 322/322). Three
+things about it are load-bearing:
+
+- **It reads table rows only** (`grep '^|'`), because the prose quotes the dead URLs it is warning
+  about, and a whole-file sweep would verify the warnings. `checks/rails-anchors.sh` now narrows the
+  same way, for the same reason — it derives its allowlist from this file, so a URL named in a caveat
+  would otherwise allowlist itself.
+- **It is not under `checks/`.** `check.sh` dispatches offline rules over a page; this needs the
+  network, so it is neither dispatched nor part of `self-test.sh`.
+- **It cannot replace reading the page.** It proves a URL resolves and an anchor exists, never that
+  the page documents the concept the row claims. § *Adding a row* still comes first.
+
+The version floor is **7.1 → current stable**, one string at the top of the script. Three of 57 rows
+resolve to a different path in some series — `insert_all` moved class in 7.2, the controller guide
+renamed one section twice, conditional validation gained a plural — and each carries its override
+inline in the cell as `· <series>: <path>`, right where a run is already looking rather than in a
+table it has to remember to consult. Below the floor: no link.
+
+Six files have to agree. `rails-docs.md` § *Pinning* and § *What the marks mean* own the forms and
+the marks **alone**; `report-format.md` § *Framework anchors* states why the page cares and points;
+`SKILL.md` step 2 records the series (a run that skips it cannot emit a doc link) and step 7 carries
+the two rules; `verify-catalogue.sh` verifies the pinned form; and `checks/rails-anchors.sh` enforces
+two things offline that it could not before — **every Rails doc link carries a version segment**, and
+**they all agree on one series**, because one app has one version and a page mixing `/v7.1/` with
+`/v8.0/` pinned from something other than this repo.
+
+`page-template.html` is the sixth, and it is the one that was missed first time round: it shows the
+doc link **already pinned**, with the version as a placeholder and a comment saying it is substituted
+per run. The assembled example is what step 9 copies markup from, so a template carrying the unpinned
+form teaches a run to publish a page that fails its own check — and one carrying a literal `v8.0`
+teaches one app's version to every other. `golden/anchors-unpinned-link.html` and
+`golden/anchors-mixed-series.html` prove both fire.
+
+Two more rules in that check exist because a review found them missing, and all four bypasses shared
+one shape — **a rule that passes is not a rule that looked**:
+
+- **An unsubstituted `{version}`** matches its own catalogue row perfectly, so the allowlist test
+  waves it through while it is a guaranteed 404. Forgetting the substitution is the likeliest
+  mechanical failure of gem pinning, so it gets its own rule rather than relying on a rule about
+  something else.
+- **A path catalogued only as another series' override.** Pinning
+  `Persistence/ClassMethods.html#method-i-insert_all` at `/v8.0/` returns HTTP 200 on a page that
+  never mentions the method — the exact defect § *Version* calls worse than a 404, reintroduced by the
+  override mechanism meant to fix it. The check knows the page's series and the row knows the
+  override's, and nothing had correlated them.
+
+The allowlist test itself was matching **substrings**, against a comment claiming it did not:
+`guides.rubyonrails.org/v8.0/validations.html` — a 404 — passed because `validations.html` sits inside
+`active_record_validations.html`. It matches whole backticked tokens now. The rule whose stated
+purpose is *"a URL nobody opened is a 404 the reader finds"* was passing a 404.
+
+And the fixtures needed `Gemfile.lock`, which none had: pinning reads the locked version, so every
+fixture run would have been obliged to emit no links at all, making the case expectations
+unsatisfiable. `rails-only-small` and `monorepo-contract` now lock **7.1** deliberately — that is the
+series the `insert_all` override applies to, so the fixtures exercise the override rather than only
+the common path.
 
 ## Deliberately single-context, with one named exception
 

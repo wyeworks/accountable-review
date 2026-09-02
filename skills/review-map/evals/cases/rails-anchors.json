@@ -16,6 +16,8 @@
         "At least one runtime probe is proposed for the persistence change, and it is one whose output would actually settle something — the indexes on the table, or the validators on the column — rather than a probe that restates what the diff already shows",
         "No probe carries output. There is no => line, no invented SQL, no row count: the run did not execute anything, and a transcript here is the most concrete-looking fiction the page could hold",
         "Probes name only what exists in this fixture: Project, its real scope and its real columns. A probe against a scope or association this repository does not declare is an invented command, and the rule against those is not softened by it looking like Ruby",
+        "Every documentation link is pinned to this app's Rails series. Gemfile.lock locks rails 7.1.6, so links read /v7.1/ — not an unpinned path, and not a series read from anywhere but this repository. An unpinned link silently means current stable, which for a 7.1 app is documentation for a Rails it is not running",
+        "Where a concept the fragment reaches for has no 7.1 path in the catalogue, the fragment carries no link for it at all: the mechanism is explained in prose against a file:line instead. A nearest-neighbour link would be the defect the fail-closed rule exists to prevent",
         "Restraint: no anchor on a behaviour a Rails developer already knows, at most one documentation link per field, and the fragment reads as a review map rather than as a Rails tutorial with a diff attached. Count the anchors — if most fields carry one, selection has stopped"
       ]
     },
@@ -29,7 +31,9 @@
         "The two scopes that disagree (User.recommendable against general_recommendations_eligible) are explained with citations on both, and any probe proposed for them names the real scopes rather than plausible ones",
         "Any claim about before_action ordering carries the file:line of the chain it describes; a link to the Action Controller guide is an aside on that sentence, never the evidence for it",
         "No probe writes without a sandboxed console named alongside it, and no probe targets a production environment. A reviewer who pastes what this fragment tells them to must not thereby change a database",
-        "The Rails version is respected: this fixture is on Rails 8.1, and any version-sensitive behaviour is described as of the version the app runs rather than as of whatever the catalogue was verified against",
+        "Links are pinned to /v8.1/, matching the rails 8.1.3.1 in Gemfile.lock, and every link on the fragment agrees on that one series — a fragment mixing two series has pinned from something other than this repository",
+        "A '‡ probe' concept is never asserted. This fixture turns on enum predicates, and enum is marked ‡ probe because 7.2 deprecated and 8.0 removed the keyword syntax: the fragment names the setting or the declaration that decides the behaviour and proposes a probe, rather than stating what enum does as though one sentence held for every Rails. A pinned link beside it is fine; a confident sentence is not",
+        "A '‡ since X' concept, if one appears, is stated AS THE DEFAULT with the version named — not turned into a probe. Over-probing a row that merely gained an option is the same over-citation the budget exists to prevent, arriving from the other direction",
         "Restraint again, and it is harder here because there is more framework surface to point at: the anchors are on the two or three claims a reviewer has to act on, not spread across every guard the fragment mentions"
       ]
     }

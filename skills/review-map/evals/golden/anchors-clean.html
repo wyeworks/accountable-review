@@ -24,7 +24,7 @@
     <dd>
       <div class="item">The scope at <span class="path">app/models/project.rb:2</span> is the selectable
         list, and a bulk write would not run the stamp &mdash;
-        <a class="doc" href="https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
+        <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
         skips validations and callbacks. <span class="tier">from unchanged code</span></div>
       <span class="lbl">rails runner &middot; read-only</span>
 <pre class="probe">bin/rails runner 'pp Project.validators_on(:archived_at).map { |v| [v.class, v.options] }'</pre>
