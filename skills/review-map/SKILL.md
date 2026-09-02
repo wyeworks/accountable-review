@@ -125,11 +125,13 @@ touched by the diff, ask which to cover. Detect, don't assume: RSpec vs Minitest
 (`config.api_only`) vs server-rendered; the authorization library, if any; the serializer library;
 the background job adapter; whether `strong_migrations` is present.
 
-**Record the Rails version**, from the `rails (x.y.z)` line in `Gemfile.lock`, along with the versions
-of the gems above. Two things later depend on it: a version-sensitive behaviour has to be described as
-of the version this app runs, and `references/rails-docs.md` states the version its URLs were verified
-against, so a much older app means saying which version you are describing rather than citing as
-though the current manual applied.
+**Record the Rails version and its series**, from the `rails (x.y.z)` line in `Gemfile.lock`, along
+with the exact locked versions of the gems above. The series is `major.minor` — `rails (8.0.2)` gives
+`8.0` — and it is not bookkeeping: **every documentation link on the page is pinned with it**, so a
+run that skipped this step cannot emit a doc link at all. Gem links pin to the exact locked version,
+which is why those are recorded too. `references/rails-docs.md` § *Pinning* owns the forms; the same
+version also decides what the page may claim, because two marks in that catalogue turn a
+version-sensitive behaviour into a probe rather than a sentence.
 
 **Frontend.** Locate it the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
 find the seam between the two sides, because that is what the boundary material inside each
@@ -506,6 +508,16 @@ Everything else about writing holds at every stage:
   and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and
   they live there only — an earlier version of this bullet restated the cap in slightly different
   words and the two drifted apart within one run.
+- **Pin every documentation URL to the version this app runs**, using the series and gem versions
+  recorded in step 2. The catalogue stores paths with no version segment; a link that reaches the page
+  without one silently means *current stable*, which is how a 7.1 app gets handed 8.1 documentation.
+  Where the catalogue has no verified path for this app's version, **emit no link** — explain it in
+  prose and cite the repo line. `references/rails-docs.md` § *Pinning* owns the forms and the
+  overrides.
+- **A `‡ probe` row may not be asserted.** Those are behaviours that changed inside the supported
+  Rails range, so no sentence about them is true of every app. Name the setting that decides it and
+  propose a probe; the page asks rather than tells. A `‡ since X` row is stated as the default, naming
+  X. `references/rails-docs.md` § *What the marks mean*.
 - **Take every documentation URL from `references/rails-docs.md`, and never construct one.** You
   cannot check a URL from here — there is no fetch step, and the sandboxes this runs in commonly block
   those hosts — so a plausible-looking API path is a 404 the reader finds on your behalf, which costs

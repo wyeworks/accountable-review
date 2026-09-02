@@ -231,8 +231,22 @@ anchors for a claim that rests on Rails behaving as Rails.
 **A link to where the rule is written down** — the Rails guides, the API, or the gem's own docs. It sits
 beside the claim's `file:line`, never instead of it: a link to the guides says nothing about *your*
 application, and the finding is always about your application. URLs come from a catalogue that ships
-with the skill, verified by hand, because a run cannot open a URL to check it and a plausible-looking
-API path is a 404 you discover on the reader's behalf.
+with the skill, because a run cannot open a URL to check it and a plausible-looking API path is a 404
+you discover on the reader's behalf.
+
+**Every link is pinned to the version you are running.** The series from your `Gemfile.lock` for the
+Rails hosts, the exact locked version for a gem's tag — so a 7.1 app gets 7.1 documentation, and the
+page you land on prints "Ruby on Rails 7.1.6" in its header for you to check against your own lock
+file. An unpinned link silently means *current stable*, which is how a tool ends up explaining 8.1
+behaviour to a 7.1 app with total confidence. Where the catalogue has no verified page for your
+version, you get no link at all — the mechanism is explained in prose against a line of your code
+instead, because an unlinked explanation cannot mislead and a link to the wrong version can.
+
+Pinning fixes the link, not the sentence, so a handful of concepts get no sentence either. `enum`,
+`perform_later`'s enqueue timing and strong parameters all changed inside the supported range — 8.0
+introduced `params.expect`, 8.0 removed `enum`'s keyword syntax — and no single claim about them is
+true of every app. For those the page names the setting that decides it and proposes a probe rather
+than telling you what Rails does.
 
 **A console probe** — `bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'`,
 `puts Project.archived.to_sql`, `connection.indexes(:projects)`. For an ActiveRecord change this is
@@ -313,7 +327,7 @@ skills/review-map/
 ├── references/
 │   ├── report-format.md           parts, review-unit format, evidence tiers, deep links
 │   ├── rails-nextjs.md            what to look for per layer, runtime probes, search recipes
-│   ├── rails-docs.md              the Rails documentation URLs the page may cite
+│   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
 │   └── page-template.html         design system, components, and the diagram catalogue
 ├── scripts/
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations

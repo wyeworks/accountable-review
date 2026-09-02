@@ -965,9 +965,16 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
           <div class="item">{{NON_OBVIOUS_INVARIANT_OR_DECISION}}</div>
           <!-- The doc link sits inside the sentence it explains, and the sentence
                still carries its own file:line. A link with no citation beside it is
-               an unevidenced claim wearing one. URL from references/rails-docs.md. -->
+               an unevidenced claim wearing one. URL from references/rails-docs.md.
+
+               THE /v8.0/ IS NOT PART OF THE URL — it is substituted from this app's
+               own Rails series, read from Gemfile.lock in step 1. The catalogue stores
+               the path without it. `v8.0` here is one example app, not a constant to
+               copy: an unpinned link silently means current stable, and
+               evals/checks/rails-anchors.sh fails a page carrying one, or carrying two
+               different series. rails-docs.md § Pinning. -->
           <div class="item">Bulk writes at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a> never
-            run this validation &mdash; <a class="doc" href="https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
+            run this validation &mdash; <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
             skips validations and callbacks. <span class="tier">from unchanged code</span></div>
           <!-- A probe makes the mechanism legible in THIS app. No output line
                follows it: the skill did not run it. -->

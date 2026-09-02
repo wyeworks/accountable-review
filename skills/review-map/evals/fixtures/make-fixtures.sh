@@ -59,6 +59,29 @@ group :development, :test do
   gem "rspec-rails"
 end
 EOF
+
+# A real Rails app has a lock file, and the skill reads its exact versions rather than the
+# Gemfile's constraint: `~> 7.1` does not say which series is installed, and every doc link
+# on the page is pinned with the answer. A fixture without one cannot exercise pinning at all.
+cat > "$F1/Gemfile.lock" <<'EOF'
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activerecord (7.1.6)
+    activesupport (7.1.6)
+    rails (7.1.6)
+    rspec-rails (7.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rails (~> 7.1)
+  rspec-rails
+
+BUNDLED WITH
+   2.5.16
+EOF
 cat > "$F1/app/models/project.rb" <<'EOF'
 class Project < ApplicationRecord
   has_many :time_entries, dependent: :restrict_with_error
@@ -246,6 +269,7 @@ mkdir -p "$F2"/api/app/models "$F2"/api/app/serializers "$F2"/api/app/controller
 init_repo "$F2"
 
 cp "$F1/Gemfile" "$F2/api/Gemfile"
+cp "$F1/Gemfile.lock" "$F2/api/Gemfile.lock"
 cat > "$F2/api/config/application.rb" <<'EOF'
 require "rails/all"
 
@@ -464,6 +488,7 @@ mkdir -p "$F3/config"
 init_repo "$F3"
 cp "$F1/config/application.rb" "$F3/config/application.rb"
 cp "$F1/Gemfile" "$F3/Gemfile"
+cp "$F1/Gemfile.lock" "$F3/Gemfile.lock"
 printf '# Timesheet\n\nA time tracking aplication.\n' > "$F3/README.md"
 commit "$F3" "base"
 printf '# Timesheet\n\nA time tracking application.\n' > "$F3/README.md"
@@ -551,6 +576,41 @@ gem "flipper-active_record"
 group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
+EOF
+
+cat > "$F4/Gemfile.lock" <<'EOF'
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activerecord (8.1.3.1)
+    activesupport (8.1.3.1)
+    devise (5.0.4)
+    flipper (1.3.2)
+    flipper-active_record (1.3.2)
+    pg (1.5.9)
+    propshaft (1.1.0)
+    puma (6.5.0)
+    rails (8.1.3.1)
+    stimulus-rails (1.3.4)
+    turbo-rails (2.0.11)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  devise
+  flipper
+  flipper-active_record
+  pg
+  propshaft
+  puma
+  rails (~> 8.1)
+  rubocop-rails-omakase
+  stimulus-rails
+  turbo-rails
+
+BUNDLED WITH
+   2.6.2
 EOF
 cat > "$F4/CLAUDE.md" <<'EOF'
 # Commons

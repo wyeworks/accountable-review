@@ -113,6 +113,8 @@ excerpts.sh         | excerpt-open.html             | 1 | open by default
 excerpts.sh         | excerpt-duplicate.html        | 1 | same range is excerpted more than once
 rails-anchors.sh    | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-uncatalogued-url.html | 1 | not in references/rails-docs.md   | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-unpinned-link.html    | 1 | unpinned Rails doc link           | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-mixed-series.html     | 1 | different Rails series            | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-link-alone.html       | 1 | with no file:line beside them     | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-link-in-excerpt.html  | 1 | inside a collapsed excerpt        | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-fabricated-output.html | 1 | looks like its own output        | --repo @GOLD@/searches-repo

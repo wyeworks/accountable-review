@@ -41,9 +41,15 @@ unesc() { sed -e 's/&amp;/\&/g; s/&lt;/</g; s/&gt;/>/g; s/&quot;/"/g; s/&#39;/'"
 # github.com is not excluded wholesale: a gem's README anchor is a legitimate doc link and lives in the
 # catalogue like any other, while a blob/pull/compare URL is a code permalink and belongs
 # to the deep-link ladder, which page-invariants.sh § 5 owns.
+#
+# `tree/` is NOT excluded, though it once was. A tag-pinned gem README — the only github.com
+# shape a doc link may take — is exactly `tree/v2.8.0#section`, so excluding it meant the one
+# github doc link the catalogue offers was the one nothing checked. The deep-link ladder does
+# not emit `tree/` for the repo under review (blob at a sha, or pull/compare), so nothing
+# legitimate is caught by tightening this.
 grep -oE '<a [^>]*href="[^"]*"' "$IN" 2>/dev/null | grep -o 'href="[^"]*"' | sed 's/href="//; s/"$//' | unesc \
   | grep -E '^https?://' \
-  | grep -Ev '^https://github\.com/[^/]+/[^/]+/(blob|pull|compare|commit|tree)/' \
+  | grep -Ev '^https://github\.com/[^/]+/[^/]+/(blob|pull|compare|commit)/' \
   | sort -u > "$TMP/external" || true
 
 next=$(grep -c . "$TMP/external" 2>/dev/null || true)
@@ -53,24 +59,123 @@ else
   if [ ! -r "$CATALOGUE" ]; then
     bad "doc links: the catalogue is missing at references/rails-docs.md — nothing can be checked against it"
   else
-    # A catalogue row may carry the URL whole, or as the path half of one of the two
-    # Rails shapes the file documents. Match either, as a whole string: a substring test
-    # would pass ".../Relation.html" against a row for a different class.
+    # The allowlist is the TABLE ROWS, not the file. The file's prose quotes URLs it is
+    # warning about — the dead Persistence/ClassMethods anchor is named there precisely so
+    # nobody re-adds it — and a whole-file grep would allowlist every one of those. A URL
+    # is legal because a row offers it, never because the file mentions it.
+    #
+    # Rows are parsed into `line|applies|path` the way verify-catalogue.sh does: cells split
+    # on `·` first, each segment tested for a leading `<series>:`. That is what makes the
+    # series rule below possible — an override is legal for ITS series and no other, and the
+    # only way to know which is to keep the two attached while parsing.
+    awk -F'|' '
+      function trim(s) { gsub(/^[[:space:]]+|[[:space:]]+$/, "", s); return s }
+      /^\|/ && !/^\|[[:space:]]*-/ {
+        for (i = 3; i <= NF; i++) {
+          n = split($i, seg, "·")
+          for (s = 1; s <= n; s++) {
+            part = seg[s]; applies = "*"
+            if (match(part, /^[[:space:]]*[0-9]+\.[0-9]+:/)) {
+              applies = trim(substr(part, RSTART, RLENGTH - 1)); part = substr(part, RSTART + RLENGTH)
+            }
+            if (!match(part, /`[^`]+`/)) continue
+            print NR "|" applies "|" substr(part, RSTART + 1, RLENGTH - 2)
+          }
+        }
+      }
+    ' "$CATALOGUE" | sort -u > "$TMP/cat-paths"
+
+    # Rails doc links only, partitioned by whether they carry a version segment. The test is
+    # /v<digit>, NOT /v — a guide page whose name merely begins with the letter v
+    # (`validations.html`) took the "pinned" branch under a /v* glob, yielded no series, and
+    # so was recorded in neither list and checked by neither rule.
+    grep -E '^https://(guides|api)\.rubyonrails\.org/' "$TMP/external" > "$TMP/rails-links" || true
+    nrails=$(grep -c . "$TMP/rails-links" 2>/dev/null || true)
+    grep -E '^https://(guides|api)\.rubyonrails\.org/v[0-9]' "$TMP/rails-links" > "$TMP/pinned" || true
+    grep -Ev '^https://(guides|api)\.rubyonrails\.org/v[0-9]' "$TMP/rails-links" > "$TMP/unpinned" || true
+    sed -n 's|^https://[a-z.]*rubyonrails\.org/v\([0-9][0-9.]*\)/.*|\1|p' "$TMP/pinned" | sort -u > "$TMP/seen-series"
+
+    # Pinning, rule 1: a Rails doc link must carry a version segment. An unpinned one
+    # silently means current stable, which is the defect the pinning rule exists for — a
+    # 7.1 app handed 8.1 documentation with nothing on the page to notice it with.
+    #
+    # Skipped rather than passed when the page has no Rails doc link at all: "every link is
+    # pinned" over an empty set is a PASS that reads as verification of something nobody
+    # checked, which is the same defect as a SKIP that reads as verified, in reverse.
+    if [ "${nrails:-0}" -eq 0 ]; then
+      skip "pinning: no Rails documentation links on this input"
+    else
+      nunp=$(grep -c . "$TMP/unpinned" 2>/dev/null || true)
+      if [ "${nunp:-0}" -eq 0 ]; then
+        ok "all $nrails Rails doc link(s) carry a version segment"
+      else
+        bad "$nunp unpinned Rails doc link(s) — an unpinned path silently means current stable: $(tr '\n' ' ' < "$TMP/unpinned")"
+      fi
+
+      # Pinning, rule 2: one app, one series. A page mixing /v7.1/ and /v8.0/ has pinned from
+      # something other than this repo's Gemfile.lock, and the reader cannot tell which link
+      # describes their app.
+      nsee=$(grep -c . "$TMP/seen-series" 2>/dev/null || true)
+      if [ "${nsee:-0}" -gt 1 ]; then
+        bad "doc links pinned to $nsee different Rails series — one app has one version: $(tr '\n' ' ' < "$TMP/seen-series")"
+      elif [ "${nsee:-0}" -eq 1 ]; then
+        ok "all doc links pinned to one series (v$(cat "$TMP/seen-series"))"
+      fi
+    fi
+
+    # Pinning, rule 3: an unsubstituted placeholder. `tree/v{version}` is the literal the
+    # catalogue stores, so it matches its own row perfectly and is invisible to the allowlist
+    # test — while being a guaranteed 404. Forgetting the substitution is the most likely
+    # mechanical failure of gem pinning, so it gets a rule of its own rather than relying on
+    # a rule about something else to catch it.
+    if grep -Fq '{version}' "$TMP/external" || grep -Fq '%7Bversion%7D' "$TMP/external"; then
+      bad "a doc link still carries the {version} placeholder — the catalogue's path reached the page unsubstituted: $(grep -E '\{version\}|%7Bversion%7D' "$TMP/external" | head -1)"
+    else
+      ok "no unsubstituted {version} placeholder"
+    fi
+
+    PAGE_SERIES=$(cat "$TMP/seen-series" 2>/dev/null | head -1)
     : > "$TMP/bad-urls"
+    : > "$TMP/wrong-series"
     while IFS= read -r url; do
       [ -n "$url" ] || continue
-      needle=$(printf '%s' "$url" | sed 's|^https://guides\.rubyonrails\.org/||; s|^https://api\.rubyonrails\.org/classes/||')
-      if grep -Fq "$needle" "$CATALOGUE"; then
+      # The page emits PINNED URLs; the catalogue stores unpinned paths, so the version
+      # segment comes off before matching. A gem tag is reduced to the {version} placeholder
+      # the row actually carries.
+      needle=$(printf '%s' "$url" \
+        | sed -e 's|^https://guides\.rubyonrails\.org/v[0-9][0-9.]*/||' \
+              -e 's|^https://guides\.rubyonrails\.org/||' \
+              -e 's|^https://api\.rubyonrails\.org/v[0-9][0-9.]*/classes/||' \
+              -e 's|^https://api\.rubyonrails\.org/classes/||' \
+              -e 's|/tree/v[0-9][0-9A-Za-z.-]*|/tree/v{version}|')
+      # Matched as a WHOLE backticked token, never as a substring. A bare `grep -F` on the
+      # path passed `guides.rubyonrails.org/v8.0/validations.html` — an HTTP 404 — because
+      # `validations.html` is a substring of the catalogued `active_record_validations.html`.
+      # The one rule whose stated purpose is "a URL nobody opened is a 404 the reader finds"
+      # was passing a 404.
+      hits=$(awk -F'|' -v n="$needle" '$3 == n {print $2}' "$TMP/cat-paths")
+      if [ -z "$hits" ]; then
+        # A fragment the catalogue does not carry is still legal if the page it hangs off is
+        # catalogued: landing at the top of the right page is an outcome the catalogue
+        # explicitly prefers to a guessed anchor.
+        base=${needle%%#*}
+        if [ "$base" != "$needle" ] && awk -F'|' -v n="$base" '$3 == n {found=1} END{exit !found}' "$TMP/cat-paths"; then
+          continue
+        fi
+        echo "$url" >> "$TMP/bad-urls"
         continue
       fi
-      # A fragment the catalogue does not carry is still legal if the page it hangs off
-      # is catalogued: dropping a † anchor is explicitly allowed, and adding a sensible
-      # one is not the failure this rule is about.
-      base=${needle%%#*}
-      if [ "$base" != "$needle" ] && grep -Fq "$base" "$CATALOGUE"; then
-        continue
-      fi
-      echo "$url" >> "$TMP/bad-urls"
+      # Rule 4: the path has to be catalogued FOR THIS SERIES. A per-series override is the
+      # right URL for one series and the wrong page for every other — pinning
+      # `Persistence/ClassMethods.html#method-i-insert_all` at v8.0 returns HTTP 200 on a
+      # page that never mentions the method, which § Version calls out as worse than a 404.
+      case $hits in
+        *'*'*) ;;                                   # a bare path applies unless overridden
+        *)
+          if [ -n "$PAGE_SERIES" ] && ! printf '%s\n' "$hits" | grep -Fqx "$PAGE_SERIES"; then
+            echo "$url  [catalogued only for series $(printf '%s' "$hits" | tr '\n' ' ')— page is pinned at $PAGE_SERIES]" >> "$TMP/wrong-series"
+          fi ;;
+      esac
     done < "$TMP/external"
 
     nbad=$(grep -c . "$TMP/bad-urls" 2>/dev/null || true)
@@ -78,6 +183,13 @@ else
       ok "$next documentation link(s), all from the catalogue"
     else
       bad "$nbad documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: $(tr '\n' ' ' < "$TMP/bad-urls")"
+    fi
+
+    nws=$(grep -c . "$TMP/wrong-series" 2>/dev/null || true)
+    if [ "${nws:-0}" -eq 0 ]; then
+      ok "no doc link uses another series' override path"
+    else
+      bad "$nws doc link(s) pinned to a series the catalogue does not offer that path for: $(head -1 "$TMP/wrong-series")"
     fi
   fi
 

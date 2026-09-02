@@ -202,6 +202,34 @@ concept the catalogue does not carry gets explained in prose with a repo citatio
 ordinary case and not a degraded one. Constructing a plausible URL is the failure this rule exists to
 prevent: it looks like diligence and it lands the reader on a 404.
 
+**Every doc link is pinned to the version this app runs.** The catalogue stores paths without a
+version segment; the run inserts one from the Rails series or the gem version recorded in step 2. The
+mechanics, the placeholder forms, the per-series overrides and what to do above the verified ceiling
+are `rails-docs.md` § *Pinning*, **and live there only** — what belongs here is why the page cares: a
+pinned Rails doc page states its own version in its header, so the reader can check the link against
+their own `Gemfile.lock`. An unpinned link silently means *current stable* and offers nothing to
+check, which is how a page ends up explaining 8.1 behaviour to a 7.1 app in a tone of complete
+confidence.
+
+**A row with no verified path for this app's version yields no link.** Not a nearest-neighbour link,
+not the unpinned one. Explain the mechanism in prose and cite the repo line; the page reads complete
+without it, exactly as it does with every excerpt closed. Failing closed is the whole guarantee: an
+unlinked explanation is never misleading, and a link to the wrong version is.
+
+**Two marks in the catalogue constrain the sentence, not the link.** They are the outcome of an audit
+of the Rails CHANGELOGs across the supported series, and `rails-docs.md` § *What the marks mean* owns
+their definitions:
+
+- `‡ probe` — the behaviour changed inside the supported range, so **no sentence about it is true of
+  every app**. The page may not assert it. Route to a probe and name the setting that decides it:
+  *"whether this enqueue waits for the commit is decided by `enqueue_after_transaction_commit`, which
+  this app sets at `config/application.rb:41`"* — never *"`perform_later` enqueues immediately"*. This
+  is the one place a probe is not rationed by the budget below: the alternative is not a shorter page,
+  it is a wrong one.
+- `‡ since X` — surface was added in X and the default this row describes still holds. State it **as
+  the default** and name X. A probe here would be over-citation, which is the failure mode the budget
+  exists to prevent.
+
 **A probe is a question, never an answer.** The skill does not boot the application under review, so
 the page shows a command and never its output. No `=>` line, no SQL presented as what the query
 printed, no invented row count. `references/rails-nextjs.md` § *Runtime probes* has the probes, the
