@@ -438,6 +438,29 @@ Editing one of these means checking the others still agree.
   plus a section-wide cap of two is what suppressed it, so the cap now counts per flow inside § 2.
   `evals/checks/behaviour-flows.sh` warns when every excerpt in the flows is `--source`.
 
+  **The state tag is the fourth, and it is the only part of an excerpt the bytes cannot vouch for.**
+  `--at` used to hard-code `Unchanged`, which is a claim about the diff the script had never looked
+  at, and a run duly published `db/structure.sql:304-313` tagged Unchanged on a page whose own ledger
+  listed that file as changed. The quotation was verbatim; the label was false; the block read as
+  *more* trustworthy the closer you looked. So `--at` now requires `--base` and computes the tag —
+  `Unchanged`, `Added`, `Removed`, `At head`, `Before the change`, and `Changed` for a hunk — which
+  makes the vocabulary closed, and `evals/checks/excerpts.sh` checks it both ways: an `Unchanged` tag
+  against the changed set (a repo when it has one, otherwise the page's own ledger, which the
+  completeness invariant guarantees is the whole diff), and every tag against the vocabulary, for the
+  inputs where there is nothing to compare against.
+
+  Two things about it are easy to get backwards. **Quoting a changed file at head is right, not the
+  defect** — a hunk of an 18,000-line `structure.sql` cannot show that a table has *no* `CHECK`
+  constraint, which is exactly what § 5's invariants block reads for — so the rule constrains the tag
+  and never the quotation. And **a path the diff touches is never `Unchanged` even where the quoted
+  lines are untouched**, because §§ 4 and 7 split changed from affected-not-changed *by file*: one
+  word in two senses on one page, with nothing to tell the reader which was meant. That precision
+  belongs in the prose, where it can be stated. Four files agree — `scripts/excerpt.sh` computes it,
+  `report-format.md` § *Source excerpts* owns the rule and the vocabulary, `page-template.html` says
+  the tag in its example is computed rather than copied, and `evals/checks/excerpts.sh` plus the three
+  `golden/excerpt-*` rows check it, one of which is the clean counterpart: a rule that fired on every
+  excerpt sitting near a ledger would be worse than the defect.
+
   Two things the first live run changed, both worth keeping stated. The closed-page rule is judged
   **field by field**: a citation elsewhere on the page does not rescue a field whose only `file:line`
   sits inside the collapsed block, and `check.sh` cannot see that. And the budget's test is that the

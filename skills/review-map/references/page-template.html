@@ -1197,7 +1197,14 @@ authorize @post, :update?
                data-lang is the generator's guess from the path, and the only
                reason this variant is tinted and the diff variant is not. Never
                type an hljs- class into the code: the tint is applied at runtime
-               so the quotation stays the bytes git gave the script. -->
+               so the quotation stays the bytes git gave the script.
+
+               THE TAG IS COMPUTED, NOT COPIED. It reads Unchanged here because
+               this path is outside the diff. The generator derives it from
+               --base -- Unchanged, Added, Removed, At head, Before the change --
+               so a changed file quoted at head comes back tagged `At head`, and a
+               page that says Unchanged about a path in its own ledger fails
+               evals/checks/excerpts.sh. report-format.md § Source excerpts. -->
           <details class="excerpt excerpt--source">
             <summary>
               <span class="chev">&#9656;</span>

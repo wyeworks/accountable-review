@@ -1,0 +1,28 @@
+<!-- Planted defect: the excerpt quotes db/structure.sql at head and labels it
+     Unchanged, while the ledger above lists that very path as changed. This is the
+     real one — a run published it, from a generator that hard-coded the tag. -->
+<section id="ledger">
+  <div class="gt">
+    <div class="c" data-path="db/structure.sql">db/structure.sql</div>
+    <div class="c" data-path="app/models/admin_dashboard_report.rb">app/models/admin_dashboard_report.rb</div>
+  </div>
+</section>
+<section id="flow-a">
+  <p class="prose">Both columns are <code>integer NOT NULL DEFAULT 1</code> with no CHECK
+    constraint <a class="cite" href="#">db/structure.sql:311-312</a>
+    <span class="tier">explicitly changed</span>.</p>
+  <details class="excerpt excerpt--source">
+    <summary>
+      <span class="chev">&#9656;</span>
+      <span class="ex-loc">db/structure.sql:304-313</span>
+      <span class="tag">Unchanged</span>
+      <span class="ex-why">the committed table, and what it does not bound</span>
+    </summary>
+    <div class="ex-body">
+<pre data-src="db/structure.sql" data-lang="sql" style="counter-reset: exl 303"><span class="l">CREATE TABLE public.admin_dashboard_reports (</span>
+<span class="l">    rows integer DEFAULT 1 NOT NULL,</span>
+</pre>
+      <p class="ex-src">Unchanged at <span class="cite">db/structure.sql:304-313</span></p>
+    </div>
+  </details>
+</section>

@@ -335,7 +335,7 @@ Two variants:
 
 | Variant | Shows | Used for |
 |---|---|---|
-| `.excerpt--source` | Lines at the head SHA, no signs | Unchanged code, which has no diff to show. The variant that carries the product |
+| `.excerpt--source` | Lines as they stand at one rev, no signs | Unchanged code, which has no diff to show. The variant that carries the product — and committed code a hunk cannot show whole. Its state tag says which |
 | `.excerpt--diff` | A hunk with `+`/`−` gutters | Changed code, where *what moved* is the reviewer's question. The variant that lets a flow be read with no diff open |
 
 **Where they may appear.** Not in the coverage ledger — a ledger row is a checklist entry, not a
@@ -370,7 +370,7 @@ was never about quoting one committed line that a claim turns on.
   implementation is one import or one rename, it was a ledger row and not a flow. This is a floor;
   the budget below rations what sits on top of it, never the hunk itself.
 - **The closed summary says what the reader will see and why to open it** — `path:lines`, a state
-  tag (`Changed` / `Unchanged` / `Added`), then the clause, all inside the `<summary>`. `View diff`
+  tag, then the clause, all inside the `<summary>`. `View diff`
   and `Show code` are not summaries: a closed excerpt has to be informative, because most of them
   stay closed. The clause lives in the summary rather than at the top of the body **because of the
   closed-page rule above** — a why the reader has to open the block to see is exactly the hidden
@@ -378,6 +378,28 @@ was never about quoting one committed line that a claim turns on.
 - **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped ledger row fails the
   coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
   catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
+- **The state tag is read off the diff, never chosen.** `excerpt.sh --at` needs `--base` and
+  computes it: `Unchanged` when the path is outside the diff, and `Added`, `Removed`, `At head` or
+  `Before the change` when it is inside. A `--diff` hunk is `Changed`. That is the whole vocabulary,
+  and it is closed because it is computed. The script used to hard-code `Unchanged` on every
+  `--source` block, and a run published `db/structure.sql:304-313` tagged Unchanged on a page whose
+  own ledger listed that file as changed: verbatim bytes under a false label, which is the one defect
+  in this component a reader has no way to catch — the excerpt looks *more* trustworthy the closer
+  they read it. Two things follow.
+
+  **Quoting a changed file at one rev is legitimate**, and sometimes the only way to show what the
+  committed code now permits: a hunk of an 18,000-line `structure.sql` cannot show that a table has
+  **no** `CHECK` constraint, and § 5's invariants block is built on exactly that reading. It was the
+  label that was wrong, never the excerpt — so the fix is the tag, not a rule against the quotation.
+
+  **And a path the diff touches is never tagged `Unchanged`, even where the quoted lines are
+  untouched**, because §§ 4 and 7 split changed from affected-not-changed **by file**. Two senses of
+  one word on one page, and nothing tells the reader which is meant. Where the range is the point,
+  the prose says it — *"the pre-existing unique index at `:18682`, which this change does not
+  touch"* — which is where it can be said precisely anyway. `evals/checks/excerpts.sh` holds both
+  halves: every `Unchanged` tag against the changed set (from a repo when it has one, otherwise from
+  the page's own ledger, which the completeness invariant guarantees is the whole diff), and every
+  tag against the vocabulary, for the inputs where there is nothing to compare against.
 - **An excerpt is evidence for one claim, not coverage of a file.** Never a whole file, never every
   hunk. Completeness belongs to the ledger.
 - **The field carries its own citation, not one from elsewhere on the page.** The closed-page rule is
