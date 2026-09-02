@@ -630,6 +630,14 @@ grep rather than asking a yes/no question.
 
 ### What is left
 
+`.github/workflows/validate.yml` runs both halves of that on every push, in a third job beside
+`manifest` and `checks`: the library's tests, and `equivalence.rb` over all 968 cases. It is the
+job that earns its place *because* the port coexists — `check.sh` still dispatches only the `.sh`,
+so nothing else in the repository notices when an edit to one makes the pair disagree. Ruby is
+pinned rather than taken from the runner image, because `minitest` is a bundled gem rather than a
+default one. That job is deleted along with the `.sh` files, at which point the library's tests
+become the whole story.
+
 The nine ports coexist with their shell originals, deliberately: `equivalence.rb` needs both
 sides to compare, so deleting the `.sh` would remove the oracle at the moment the port is least
 proven. Flipping `check.sh` and `self-test.sh` over and deleting the shell is a separate change,
