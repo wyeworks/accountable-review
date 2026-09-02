@@ -117,6 +117,88 @@ class TestRegions < Minitest::Test
   end
 end
 
+class TestFrom < Minitest::Test
+  # awk '/anchor/,0' — the shape section 6 uses.
+  def test_from_runs_to_the_end_without_a_stop
+    doc = page(<<~HTML).from(/id="approving"/)
+      <p>before</p>
+      <section id="approving">
+      <p>inside</p>
+    HTML
+
+    refute_includes doc.lines.join, "before"
+    assert_includes doc.lines.join, "inside"
+  end
+
+  # awk '/anchor/{f=1} f&&/stop/{exit} f{print}' — the stop line is NOT part of the region.
+  def test_stop_is_excluded
+    doc = page(<<~HTML).from(/class="checkpoint"/, stop: %r{</div>[[:space:]]*$})
+      <div class="checkpoint">
+        <div><b>one</b>
+        <span>why</span></div>
+      </div>
+      <p>after</p>
+    HTML
+
+    assert_includes doc.lines.join, "one"
+    refute_includes doc.lines.join, "after"
+  end
+
+  # And the same rule read the other way, because it is why before_approving.rb needs
+  # fallbacks rather than trusting this one extractor: a checkpoint tile closed on its own
+  # line ends the region after the anchor, so the count comes back zero on markup that is
+  # perfectly correct.
+  def test_a_tile_closed_on_one_line_ends_the_region_early
+    doc = page(<<~HTML).from(/class="checkpoint"/, stop: %r{</div>[[:space:]]*$})
+      <div class="checkpoint">
+      <div><b>one</b></div>
+      <div><b>two</b></div>
+      </div>
+    HTML
+
+    assert_equal 1, doc.lines.size
+    assert_equal 0, doc.count(%r{<div><b>})
+  end
+
+  # The `seen` guard, and why it is not a knob. Section 6's author-question region is
+  # anchored on a line that is itself an <h3>, and <h3> is also its terminator — so with the
+  # stop rule live on the anchor line the region comes back empty and the whole part goes
+  # unchecked.
+  def test_stop_after_lets_the_anchor_line_survive_its_own_terminator
+    html = <<~HTML
+      <h3>Ask the author</h3>
+      <ul><li>why this default?</li></ul>
+      <h3>Run these</h3>
+      <li>not an author question</li>
+    HTML
+
+    eager = page(html).from(/[Aa]sk the author/, stop: /<h3/)
+    guarded = page(html).from(/[Aa]sk the author/, stop: /<h3/, stop_after: 1)
+
+    assert_empty eager.lines
+    assert_equal 2, guarded.lines.size
+    refute_includes guarded.lines.join, "not an author question"
+  end
+
+  # A section ends at the next section that is not itself — which no single pattern says,
+  # hence a callable stop.
+  def test_section_from_stops_at_the_next_section_but_not_its_own
+    doc = page(<<~HTML).section_from(/id="blast"/)
+      <section id="flows">
+      <p>flows</p>
+      </section>
+      <section class="x" id="blast">
+      <p>blast</p>
+      <section id="start">
+      <p>start</p>
+    HTML
+
+    assert_includes doc.lines.join, "blast"
+    refute_includes doc.lines.join, "flows"
+    refute_includes doc.lines.join, "start"
+  end
+end
+
 class TestCounting < Minitest::Test
   # `grep -c` counts matching LINES. The field census compares two of its results against
   # each other, so counting occurrences instead would change what a "field row" is and turn

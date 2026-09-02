@@ -110,7 +110,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
-| `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire. `behaviour_flows.rb` plus `lib/review_map/` is a Ruby port of one of them, running beside its `.sh` under `equivalence.rb`; `evals/README.md` § *The Ruby spike* has what it measured |
+| `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire. Most also exist as a `.rb` beside the `.sh` — `lib/review_map/` is their shared library, `lib/test/` its tests, and `equivalence.rb` grades each pair byte for byte and names what is still shell; `evals/README.md` § *The Ruby port* has what it cost |
 | `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in `references/rails-docs.md`, across every Rails series the floor admits, and reports dead pages, dead anchors, and the rows that differ by version. Maintenance, never a run — see § *The catalogue is the one thing a run cannot verify* |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs

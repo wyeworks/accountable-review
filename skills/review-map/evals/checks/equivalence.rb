@@ -17,6 +17,13 @@
 #   checks/equivalence.rb                  # every pair, both case sources
 #   checks/equivalence.rb blast-radius     # just this check
 #   checks/equivalence.rb -v               # name every case, not just the differing ones
+#   checks/equivalence.rb -j 1             # serially, when a failure needs isolating
+#
+# It runs the cases concurrently, for the same reason run.sh takes -j: a thousand cases
+# means two thousand processes, and serially that is two minutes, which is long enough that
+# the oracle stops being run. Every case is independent and read-only, so the only thing
+# concurrency costs is that results must be re-ordered before printing — which they are,
+# because a diff report that arrives in a different order each run is not a diff report.
 #
 # TWO case sources, because one is not enough. The corpus sweep runs both kinds over every
 # fragment in golden/ and catches shape divergence. It never passes --repo, --base or
@@ -24,6 +31,7 @@
 # between the page and a repository — and would miss the brief level altogether. So the
 # rows of self-test.sh are replayed as well, with their own arguments.
 
+require "etc"
 require "open3"
 
 HERE  = __dir__
@@ -92,36 +100,46 @@ def report_difference(label, shell_out, ruby_out)
 end
 
 verbose = ARGV.delete("-v")
+jobs = (i = ARGV.index("-j")) ? ARGV.slice!(i, 2).last.to_i : [Etc.nprocessors, 8].min
 wanted = ARGV
 selected = pairs.select { |p| wanted.empty? || wanted.include?(p.name) }
 abort "no check matching: #{wanted.join(", ")}" if selected.empty?
 
+unported = selected.reject(&:ruby).map(&:name) - NOT_PORTED.map { |f| f.delete_suffix(".sh") }
+
+work = selected.select(&:ruby).flat_map do |pair|
+  (sweep_cases + self_test_cases(pair.name)).map { |args| [pair, args] }
+end
+
+results = Array.new(work.size)
+queue = Queue.new
+work.each_index { |i| queue << i }
+jobs = 1 if jobs < 1
+
+Array.new([jobs, work.size].min.clamp(1, nil)) do
+  Thread.new do
+    while (index = queue.pop(true) rescue nil)
+      pair, args = work[index]
+      shell_out, shell_rc = run(pair.shell, args)
+      ruby_out, ruby_rc = run(pair.ruby, args)
+      results[index] = [pair, args, shell_out, shell_rc, ruby_out, ruby_rc]
+    end
+  end
+end.each(&:join)
+
 ok = 0
 bad = 0
-unported = []
-
-selected.each do |pair|
-  if pair.ruby.nil?
-    unported << pair.name unless NOT_PORTED.include?("#{pair.name}.sh")
+results.each do |pair, args, shell_out, shell_rc, ruby_out, ruby_rc|
+  label = "#{pair.name} #{args.map { |a| a.start_with?("/") ? File.basename(a) : a }.join(" ")}"
+  if shell_out == ruby_out && shell_rc == ruby_rc
+    ok += 1
+    puts "same  #{label}" if verbose
     next
   end
 
-  cases = sweep_cases + self_test_cases(pair.name)
-  cases.each do |args|
-    shell_out, shell_rc = run(pair.shell, args)
-    ruby_out, ruby_rc = run(pair.ruby, args)
-    label = "#{pair.name} #{args.map { |a| a.start_with?("/") ? File.basename(a) : a }.join(" ")}"
-
-    if shell_out == ruby_out && shell_rc == ruby_rc
-      ok += 1
-      puts "same  #{label}" if verbose
-      next
-    end
-
-    bad += 1
-    puts "BAD   #{label} — sh exit #{shell_rc}, rb exit #{ruby_rc}"
-    report_difference(label, shell_out, ruby_out)
-  end
+  bad += 1
+  puts "BAD   #{label} — sh exit #{shell_rc}, rb exit #{ruby_rc}"
+  report_difference(label, shell_out, ruby_out)
 end
 
 puts
