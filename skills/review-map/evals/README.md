@@ -429,6 +429,9 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `diagram.sh` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.sh` | renders each diagram in both themes to PNG | page and fragment |
 
+One of them has a Ruby twin: `behaviour_flows.rb` shadows `behaviour-flows.sh` byte for byte while
+the language question is settled — see § *The Ruby spike, and what it measured*.
+
 `SKIP` is load-bearing. A check that cannot run on this input says so out loud — a fragment has no
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
 thoroughly verified as a page.
@@ -516,6 +519,76 @@ than none**, because it turns an unchecked rule into one the reader believes is 
 Adding a check means adding a golden fragment that makes it fire. Adding a golden fragment means
 watching its keyword: two of the first eight passed for the wrong reason because their own `aria-label`
 contained the word the check greps for.
+
+## The Ruby spike, and what it measured
+
+`checks/behaviour_flows.rb` is `checks/behaviour-flows.sh` ported to Ruby, running **beside** it
+rather than instead of it. It exists to settle one question with code instead of taste: the checks
+are the part of this directory a maintainer reads most often, and reading them means reading `awk`.
+
+Its contract is **byte-identical output** — every line, the exit code, and stderr. That is
+deliberate rather than fussy. The `PASS` / `FAIL` / `WARN` / `SKIP` strings *are* this directory's
+product: they are what a maintainer reads when a wording change in the skill moves a number, so a
+port that reworded them would be a rewrite of the thing under measurement, dressed as a refactor.
+`checks/equivalence.rb` enforces it over every fragment in `golden/` and over the real
+`page-template.html`, in both `--page` and `--fragment`: **92 invocations, 0 differing.** The 11
+`behaviour-flows.sh` rows in `self-test.sh` pass unchanged against the Ruby, which follows from the
+byte-identity rather than being separate evidence.
+
+What actually changed, measured:
+
+| | `.sh` | `.rb` |
+|---|---|---|
+| Subprocesses spawned | 41 (`grep`, `awk`, `sed`, `tr`, `cut`, `head`, `sort`) | 0 |
+| Tempfiles written | 3 (`$TMP/region`, `unit-N`, `grid-N`) | 0 |
+| Region extractors | 3 hand-rolled `awk` state machines | 1 scanner, called three ways |
+| Code lines, the check | 137 | 152 |
+| Code lines, the shared library | 55 (`lib.sh`) | 141 (`page.rb` 65, `check.rb` 76) |
+| Comment lines, the check | 101 | 101 |
+| Unit tests | none possible | 123 lines, 32 assertions, 7 of 7 mutations caught |
+| Wall clock per invocation | ~67 ms | ~100 ms |
+
+**The code did not get shorter, and claiming it did would be the wrong reading.** The check grew by
+15 lines and the library more than doubled. Three things are worth the trade:
+
+- **The `awk` flags became arguments.** `f` and `ingrid` were two integers whose meaning lived in an
+  eight-line comment above them. They are now `open:`, `close:`, `arm:` and `hard_close:` on one
+  function, and the rule that a unit ends at the `</dl>` closing *its own* grid — not the next
+  flow's — is the `arm:` parameter rather than a paragraph.
+- **The library is a fixed cost across eleven checks.** 141 lines are paid once; a second ported
+  check writes only its own rules. The 152-vs-137 comparison is the worst the port will ever look.
+- **There was nowhere to assert any of this before.** `checks/lib/test/test_page.rb` pins the
+  properties that were previously only comments: a region includes the line that closes it, `count`
+  counts matching *lines* because `grep -c` does, an unarmed region ignores `close`. Every one of
+  those was load-bearing, and each is now a test that fails when the property is removed.
+
+The comment count is unchanged at 101 on purpose. `.claude/CLAUDE.md` § *Editing style* is explicit
+that a rule stripped to an imperative loses what makes a reader follow it, so the reasoning was
+carried over verbatim; what left the comments is the part that was compensating for unreadable code.
+
+Four costs, none of them hypothetical:
+
+- **Encoding stops being free.** `grep` is byte-oriented and never cared what a page's em dashes
+  were. Ruby honours the locale, and these containers run without a UTF-8 one, so the first match
+  against a line carrying `—` raised `invalid byte sequence in US-ASCII` until `Page.read` declared
+  the encoding. That is one line, and it is the kind of thing a port trades for.
+- **Line-oriented matching has to be asked for.** `grep` strips the line terminator before
+  matching; Ruby's negated classes (`<dt>[^<]*`, `<h[234][^>]*>`) match a newline, so an
+  unterminated tag at end of line pulls the next line into the match. No golden fragment has that
+  shape, so equivalence over the whole corpus did not show it — it came out of re-reading the diff,
+  and it is pinned by a test rather than a fixture.
+- **Ruby is ~33 ms slower to start.** `check.sh` dispatches ten checks, so a fully ported page check
+  costs roughly a third of a second more. Against a run whose cost is the model, that is nothing —
+  but it is the number that moves if this directory's "under two tenths" is ever quoted again.
+- **The names are in the prose.** These scripts are cited by filename in `SKILL.md`,
+  `references/report-format.md`, this file 76 times, `golden/README.md`, `drivers/*.md` and
+  `frozen/monolith-guard-chain/target.md`. Replacing the shell outright is a large documentation
+  edit in a repository where the documentation is the product, and that edit — not the code — is the
+  expensive half.
+
+`checks/equivalence.rb` is scaffolding with a known end: it is deleted along with the `.sh` it
+compares against. While both exist, the Ruby pins its tally line to `behaviour-flows.sh` so the
+comparison stays byte-exact; that argument goes away with the shell script.
 
 ## The fixtures plant their answers
 
