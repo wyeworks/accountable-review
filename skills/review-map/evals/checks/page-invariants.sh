@@ -104,6 +104,20 @@ else
   else
     bad "theme states missing:$missing_theme"
   fi
+
+  # The blocks existing is not the same as a colour being in all three of them. --rails is
+  # checked by name because it is the newest colour and the easiest to half-declare: nothing
+  # on the page depends on it to be readable, so a set missing from the dark blocks is
+  # invisible until someone opens a primer with the OS in dark mode. Same idiom as the
+  # --syn-* sweep in excerpts.sh, and for the same reason.
+  rails=$(grep -c -- '--rails:' "$IN" 2>/dev/null || true)
+  if [ "${rails:-0}" -eq 0 ]; then
+    skip "--rails: this page has no primer colour to check"
+  elif [ "${rails:-0}" -ge 3 ]; then
+    ok "--rails defined in all three theme blocks"
+  else
+    bad "--rails is declared ${rails} time(s), needs 3 — bare :root plus both dark blocks"
+  fi
 fi
 
 finish
