@@ -197,8 +197,13 @@ end
 # (1) Unit regions, for the per-unit guards and for naming. The region ends at the </dl> that
 # closes its OWN grid — hence `arm` — so a .mech whose grid never opens ends at the next .mech
 # or </section> instead, rather than running on and swallowing the next flow's dl.ba.
-unit_regions = doc.regions(open: BehaviourFlows::MECH, close: BehaviourFlows::DL_CLOSE,
-                           arm: BehaviourFlows::GRID, hard_close: BehaviourFlows::SEC_END)
+#
+# The primer callout is dropped before this runs. It sits between the .mech and the grid, so it
+# lands inside a unit region, and it carries a class="path" of its own — which would absolve a
+# unit whose GRID cites nothing from the citation guard below. Its own citation is checked by
+# rails-anchors.sh, where the rule about it belongs.
+unit_regions = doc.without(open: /<aside class="primer/, close: %r{</aside>}).regions(open: BehaviourFlows::MECH, close: BehaviourFlows::DL_CLOSE,
+                                      arm: BehaviourFlows::GRID, hard_close: BehaviourFlows::SEC_END)
 
 # (2) The grids themselves, for the housing census. This has to be a separate region: a
 # flattened flow keeps its .mech, so a census taken over unit regions counts loose fields as

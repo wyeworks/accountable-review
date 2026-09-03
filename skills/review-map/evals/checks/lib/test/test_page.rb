@@ -117,6 +117,72 @@ class TestRegions < Minitest::Test
   end
 end
 
+class TestWithoutComments < Minitest::Test
+  # The case that forced this into existence: a fixture documents its own anchors in a header
+  # comment, and the section-4 region ended on the sentence DESCRIBING the anchor rather than
+  # on the anchor.
+  def test_a_comment_cannot_steer_a_region
+    doc = page(<<~HTML).without_comments
+      <!-- id="blast" on the <section> is what before-approving.sh reads -->
+      <section id="blast">
+      <div class="blast">panel</div>
+    HTML
+
+    refute doc.has?(/before-approving/)
+    assert doc.has?(/<section id="blast">/)
+    assert doc.has?(/class="blast"/)
+  end
+
+  # The reason it is a scan and not a gsub.
+  def test_an_open_comment_blanks_every_line_until_it_closes
+    doc = page(<<~HTML).without_comments
+      before
+      <!-- one
+      two
+      three --> after
+      later
+    HTML
+
+    assert_equal ["before\n", "\n", "\n", " after\n", "later\n"], doc.lines
+  end
+
+  def test_line_structure_survives
+    html = "a\n<!-- x -->\nb\n"
+
+    assert_equal 3, page(html).without_comments.lines.size
+  end
+
+  def test_several_comments_on_one_line
+    doc = page(%(keep<!--a-->this<!--b-->too\n)).without_comments
+
+    assert_equal ["keepthistoo\n"], doc.lines
+  end
+end
+
+class TestWithout < Minitest::Test
+  # awk's `/open/{f=1} f&&/close/{f=0; next} !f` — the `next` is why the CLOSING line goes with
+  # the dropped region rather than the remainder. Nothing in the corpus depended on it, so the
+  # equivalence sweep stayed green with it inverted; a mutation of the library found it.
+  def test_the_closing_line_goes_with_the_dropped_region
+    doc = page(<<~HTML).without(open: /<aside class="primer/, close: %r{</aside>})
+      <div class="mech"><b>Project#archive!</b></div>
+      <aside class="primer">
+      <a class="path">rails/guide.rb:1</a>
+      </aside>
+      <dl class="rows">
+    HTML
+
+    assert_equal ['<div class="mech"><b>Project#archive!</b></div>' + "\n", %(<dl class="rows">\n)], doc.lines
+    refute doc.has?(%r{</aside>})
+  end
+
+  def test_content_outside_the_region_is_untouched
+    doc = page(%(a\n<aside class="primer">x</aside>\nb\n)).without(open: /<aside class="primer/, close: %r{</aside>})
+
+    assert_equal ["a\n", "b\n"], doc.lines
+  end
+end
+
 class TestFrom < Minitest::Test
   # awk '/anchor/,0' — the shape section 6 uses.
   def test_from_runs_to_the_end_without_a_stop
@@ -232,7 +298,21 @@ class TestCounting < Minitest::Test
   def test_scan_flattens_in_document_order
     doc = page(%(<b>one</b><b>two</b>\n<b>three</b>\n))
 
-    assert_equal %w[one two three], doc.scan(/<b>([^<]*)/)
+    assert_equal ["<b>one", "<b>two", "<b>three"], doc.scan(/<b>[^<]*/)
+  end
+
+  # grep -o prints the whole match. String#scan returns capture GROUPS as soon as the pattern
+  # has any, which truncates a scan result to its first alternation branch — and these results
+  # go straight into FAIL messages, so the truncation is a wrong message rather than a wrong
+  # count. It happened once, reporting "independently" where the shell said
+  # "independently verified".
+  def test_a_capture_group_does_not_change_what_scan_returns
+    doc = page(%(independently verified today\n))
+    grouped = /(independently|externally) verified/
+    ungrouped = /(?:independently|externally) verified/
+
+    assert_equal ["independently verified"], doc.scan(grouped)
+    assert_equal doc.scan(ungrouped), doc.scan(grouped)
   end
 end
 

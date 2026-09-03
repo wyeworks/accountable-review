@@ -37,13 +37,18 @@
 require_relative "lib/review_map/check"
 
 module Searches
-  TOOL_PREFIX = /^[[:space:]]*(rg|grep|egrep|ag)[[:space:]]/
-  # egrep is deliberately absent: the shell's second filter dropped it, so a recorded
-  # `egrep ...` is extracted and then discarded, and a port that "fixed" that would start
-  # re-running searches the shell never ran.
-  RERUN_PREFIX = /^[[:space:]]*(rg|grep|ag)[[:space:]]/
+  TOOL_PREFIX = /^[[:space:]]*(git[[:space:]]+)?(rg|grep|egrep|ag)[[:space:]]/
+  RERUN_PREFIX = /^[[:space:]]*(git[[:space:]]+)?(rg|grep|egrep|ag)[[:space:]]/
   ENTITIES = [["&amp;", "&"], ["&lt;", "<"], ["&gt;", ">"], ["&quot;", '"'], ["&#39;", "'"]].freeze
-  CITE = /class="cite"[^>]*>[^<]*</
+  # a.path is the current citation form and span.cite the retired one; both count.
+  # Non-capturing on purpose: these are scanned off a plain String, where a group makes scan
+  # return the group instead of the match. Page#scan is immune to that; String#scan is not.
+  CITE = /class="(?:cite|path)"[^>]*>[^<]*</
+  # Ranges arrive with a NON-BREAKING hyphen: real pages write :15&#8209;27, not :15-27. Left
+  # undecoded, "15&#8209;27" is not a number, the entry falls through to `unresolved`, and the
+  # check reports nothing wrong while checking nothing at all — the same silent-pass shape as
+  # the markup drift below, which is why the decode sits with the extraction.
+  HYPHENS = ["&#8209;", "&#x2011;", "&ndash;", "&#8211;"].freeze
 
   # Every element-delimited text node, then the ones that look like a search invocation.
   #
@@ -111,6 +116,14 @@ module Searches
   # nothing — and the check then reports every entry that search found as unreachable. A check
   # that invents failures is worse than no check, and this one invented ten before it was fixed.
   def self.engine_for(prefix)
+    # `git grep` is grep for every purpose here — same dialect flags, and the `--` that
+    # separates its pattern from its paths is already dropped by the flag filter. Strip the
+    # `git` so the dispatch below sees the tool it actually is. Not a nicety: a real run
+    # recorded all six of its searches as `git grep -nE "..." -- api/app`, an entirely
+    # idiomatic form, and every one was discarded before reaching here — leaving the page
+    # reported as having recorded NO search at all, which is the opposite of what it had done.
+    words = prefix.to_s.split
+    prefix = words.drop(1).join(" ") if words.first == "git"
     tool = File.basename(prefix.to_s.split(/[[:space:]]/).first.to_s)
     engine =
       case tool
@@ -157,6 +170,19 @@ module Searches
   # § 4's card carries <p class="eyebrow">Affected, not changed</p>, § 2's field carries
   # <dt>Affected, unchanged</dt>. Sub-eyebrows inside the affected card (one per flow group) do
   # not reset it; the Changed column, the end of the field, and <h3> do.
+  # AN ENTRY IS WHATEVER THE TEMPLATE EMITS, and it stopped being <li>. When the design system
+  # moved § 4 from div.two-col > div.card > ul > li > span.cite to dl.rows > dt/dd > div.item >
+  # a.path, this extractor was not moved with it — and neither were the goldens self-test.sh
+  # measures it against, so the check went on passing its own suite while matching nothing on
+  # any real page. Two published runs, one at each detail level, both came back SKIP with
+  # checked=0: the header above says a search that finds nothing it claims is the failure this
+  # script exists for, and for months it was the script doing exactly that. Both shapes are read
+  # now — the <li> accumulation so an older page still grades, and a single-line div.item, which
+  # is how page-template.html and every real page write it.
+  #
+  # The .item form is read as ONE LINE. That is the template's shape, and it also keeps the
+  # <a class="cite"> inside a details.excerpt .ex-src — which sits in the same <dd> — from being
+  # mistaken for the entry's own citation, since it is never on an .item line.
   def self.affected_entries(page)
     affected = false
     in_li = false
@@ -166,9 +192,15 @@ module Searches
     page.lines.each do |raw|
       line = raw.chomp
       affected = false if line.match?(%r{class="eyebrow"[^>]*>[^<]*[Cc]hanged[^<]*</p>}) && !line.match?(/[Aa]ffected/)
+      affected = false if line.match?(%r{<dt[^>]*>[^<]*[Cc]hanged</dt>}) && !line.match?(/[Aa]ffected/)
       affected = true if line.match?(/class="eyebrow"[^>]*>[^<]*[Aa]ffected/)
-      affected = true if line.match?(/<dt>[^<]*[Aa]ffected/)
+      affected = true if line.match?(/<dt[^>]*>[^<]*[Aa]ffected/)
       affected = false if line.match?(%r{</dd>|<h3|</dl>})
+
+      if affected && line.match?(/class="item"/)
+        entries << line
+        next
+      end
 
       if affected && line.match?(/<li/)
         in_li = true
@@ -187,7 +219,9 @@ module Searches
   end
 
   def self.citations(entry)
-    entry.scan(CITE).map { |seg| seg.sub(/\A[^>]*>/, "").sub(/<\z/, "") }
+    entry.scan(CITE)
+         .map { |seg| seg.sub(/\A[^>]*>/, "").sub(/<\z/, "") }
+         .map { |cite| HYPHENS.reduce(cite) { |acc, h| acc.gsub(h, "-") } }
   end
 end
 
@@ -203,7 +237,9 @@ unless File.directory?(check.repo)
   check.finish
 end
 
-page = check.page
+# Comments are not markup and must not be read as either a search or an entry — see
+# Page#without_comments for the case that forced it.
+page = check.page.without_comments
 
 commands = Searches.text_nodes(page)
                    .select { |node| node.match?(Searches::TOOL_PREFIX) }

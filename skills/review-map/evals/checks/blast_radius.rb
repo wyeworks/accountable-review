@@ -24,6 +24,16 @@
 require_relative "lib/review_map/check"
 
 ANCHOR = /id="blast"/
+# The region ends at the next <section> — and ALSO at id="crosscutting" or id="approving",
+# which at --brief are <h3> sub-parts of this very section rather than sections of their own.
+# Without that second bound this check reads the whole merged tail as section 4, and the author
+# questions and validation steps under "Before approving" — <li> items that carry commands, not
+# citations, and correctly so — are counted as uncited section-4 entries. A real --brief page
+# failed exactly that way, on 11 list items that were never section 4's. Both anchors are absent
+# at --full, so this stays level-unaware: report-format.md § Section 4 at brief makes the merged
+# section keep the anchors precisely so a check can read it unchanged, and this is that reading.
+# before_approving.rb remains the only check that takes --level.
+SUBPART = /id="crosscutting"|id="approving"/
 
 # An entry belongs to a flow if it links to one OR sits under a group heading naming one.
 # The run that prompted this grouped by eyebrow text ("... · Flow C") and linked nothing, so
@@ -33,21 +43,56 @@ ANCHOR = /id="blast"/
 GROUP_HEADING = /class="eyebrow"|<h3/
 NAMES_A_FLOW  = /Flow [A-Z]/
 
-# A pointer has a SHAPE, because "and nothing more" is not self-enforcing: a run wrote a
-# 150-word paragraph carrying eight citations under a "— Flow C" heading and read it as a
-# pointer. One clause, ONE citation, a link. A second citation means the mechanism is being
-# explained again, here, after the flow already explained it.
-def restated_entries(region)
+# A citation is a.path today and span.cite in the retired markup; both count. Non-capturing
+# because it is scanned off a plain String, where a group makes scan return the group.
+CITATION = /class="(?:cite|path)"/
+
+Entry = Struct.new(:in_flow_group, :body) do
+  def flow_owned? = body.match?(/href="#flow/) || in_flow_group
+  def citations = body.scan(CITATION).size
+end
+
+# ONE extraction of the section's entries, shared by the two rules that need them.
+#
+# An entry is a <div class="item"> — what page-template.html emits today — or an <li> block, the
+# shape it emitted before the design system moved section 4 to dl.rows. Both are read, because
+# reading only the retired one is how both of these rules came to be dead: they went on passing
+# their goldens, which were never migrated, while matching nothing on any page a real run
+# produced.
+#
+# The .item is accumulated to its closing </div> rather than read as one line, even though every
+# real page writes it on one. The rule below that catches a pointer which has become a second
+# explanation is looking for a LONG entry with several citations, and a long entry is the one a
+# run is most likely to wrap — so a first-line-only reader would be blind in exactly the case
+# the rule exists for. It was: the migrated golden passed until this accumulated.
+#
+# Each entry carries the group heading in force when it opened, because the heading is context
+# the entry list would otherwise lose.
+def entries_in(lists)
   group = false
+  in_item = false
   in_li = false
   buffer = ""
-  restated = 0
+  found = []
 
-  region.lines.each do |raw|
+  lists.lines.each do |raw|
     line = raw.chomp
     # Either kind of heading resets the state — the two list titles are h3 now, and a group
     # that ended at one of them must not leak its Flow into the next block's entries.
     group = line.match?(NAMES_A_FLOW) if line.match?(GROUP_HEADING)
+
+    if line.match?(/class="item"/) && !in_li && !in_item
+      in_item = true
+      buffer = ""
+    end
+    if in_item
+      buffer = "#{buffer} #{line}"
+      if line.match?(%r{</div>})
+        found << Entry.new(group, buffer)
+        in_item = false
+      end
+      next
+    end
 
     if line.match?(/<li/)
       in_li = true
@@ -58,19 +103,34 @@ def restated_entries(region)
     buffer = "#{buffer} #{line}"
     next unless line.match?(%r{</li>})
 
+    found << Entry.new(group, buffer)
     in_li = false
-    next unless buffer.match?(/href="#flow/) || group
-
-    restated += 1 if buffer.scan(/class="cite"/).size > 1
   end
 
-  restated
+  found
 end
 
 check = ReviewMap::Check.new(ARGV, name: "blast-radius.sh")
 check.require_input
 
-region = check.page.has?(ANCHOR) ? check.page.section_from(ANCHOR) : check.page
+# A comment is not markup — see Page#without_comments for the fixture that proved it.
+source = check.page.without_comments
+region =
+  if source.has?(ANCHOR)
+    source.from(ANCHOR, stop: lambda { |line|
+      (line.match?(/<section /) && !line.match?(ANCHOR)) || line.match?(SUBPART)
+    })
+  else
+    source
+  end
+
+# Scoped to the LISTS first. Section 4 holds a good deal that is not an entry — the panel's .bx
+# boxes, the .searched blocks, the notes, and, when a page has regressed, an ol.begin reading
+# order — and counting any of it is how a correct page gets reported as uncited. dl.rows is the
+# current housing for both lists; a region without one is the retired markup, where the whole
+# region is the best available scope.
+lists = region.has?(/class="rows"/) ? region.narrow(open: /class="rows"/, close: %r{</dl>}) : region
+entries = entries_in(lists)
 
 # The panel. Almost every PR earns this one, and it is the only place the page shows
 # changed and affected in the same frame. An <svg> is accepted so a page built before the
@@ -121,7 +181,7 @@ end
 
 # FAIL rather than WARN, and the asymmetry with the presence check above is the point: there
 # is no reading of a linked entry with four citations that is still a pointer.
-restated = restated_entries(region)
+restated = entries.count { |e| e.flow_owned? && e.citations > 1 }
 if restated.zero?
   check.ok("entries that point at a flow carry at most one citation each")
 else
@@ -136,13 +196,16 @@ else
   check.maybe("no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission")
 end
 
-# Citations. Every entry in either list needs one; the hard rule is page-wide.
-li = region.count(/<li/)
-cites = region.count(/class="cite"/)
-if li.positive? && cites < 1
-  check.bad("section 4 has #{li} list item(s) and no citation at all")
+# Citations. Every entry in either list needs one; the hard rule is page-wide. Counted over
+# the extracted entries, not over the region: matching the region for class="cite" asked for a
+# class section 4's template never emits, so this rule could only ever pass vacuously (no <li>
+# at --full) or fire on list items borrowed from another part of a merged page (--brief). It now
+# asks the question it always meant to — do the entries carry citations — of the entries.
+cites = entries.count { |e| e.body.match?(CITATION) }
+if entries.any? && cites < 1
+  check.bad("section 4 has #{entries.size} entr(ies) and no citation at all")
 else
-  check.ok("citations present alongside the lists (#{cites})")
+  check.ok("citations present alongside the lists (#{cites} of #{entries.size} entr(ies))")
 end
 
 check.finish

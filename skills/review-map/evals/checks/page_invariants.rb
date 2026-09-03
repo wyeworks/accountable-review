@@ -16,6 +16,14 @@ require_relative "lib/review_map/check"
 VERDICT = /LGTM|looks good to me|recommend (approv|merg)|approve this|ready to merge|risk score|overall risk/i
 VERDICT_NAMED = /LGTM|looks good to me|recommend (?:approv|merg)[a-z]*|approve this|ready to merge|risk score|overall risk/i
 
+# Assurance language, which is a verdict about the PAGE rather than about the PR and therefore
+# easy to reintroduce while believing rule 2 still holds. A run at --effort high sends an
+# adversarial pass at its own flows; nothing about that is allowed to reach the page (SKILL.md
+# step 8, report-format.md § Detail levels). The patterns are high-precision on purpose: a bare
+# 'verified' is a real column name in real Rails apps, and 'audit' appears inside the sanctioned
+# "a pass, not an audit".
+ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (verified|checked|confirmed)|every claim (was|has been) (verified|checked)|class="(verified|checked)"|chip-verified/i
+
 check = ReviewMap::Check.new(ARGV, name: "page-invariants.sh")
 check.require_input
 page = check.page
@@ -37,6 +45,17 @@ else
 end
 if page.has?(/>[[:space:]]*(Blocking|Watch)[[:space:]]*</)
   check.maybe("a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name")
+end
+
+# 2b · The page must not advertise that it was checked.
+if page.has?(ASSURE)
+  found = page.scan(ASSURE).sort.uniq
+  check.bad("assurance language — the page is advertising that it was checked: #{found.join(" ")} ")
+else
+  check.ok("no assurance language — the effort level is invisible on the page")
+end
+if page.has?(/clean bill of health/i)
+  check.maybe("'clean bill of health' appears — legitimate only as a denial; read the sentence")
 end
 
 # 3 · Evidence tiers. Silence is the first tier, so a document with no label either had
@@ -98,6 +117,20 @@ else
     check.ok("all three theme states present")
   else
     check.bad("theme states missing: #{missing.join(" ")}")
+  end
+
+  # The blocks existing is not the same as a colour being in all three of them. --rails is
+  # checked by name because it is the newest colour and the easiest to half-declare: nothing
+  # on the page depends on it to be readable, so a set missing from the dark blocks is
+  # invisible until someone opens a primer with the OS in dark mode. Same idiom as the
+  # --syn-* sweep in excerpts.rb, and for the same reason.
+  rails = page.count("--rails:")
+  if rails.zero?
+    check.skip("--rails: this page has no primer colour to check")
+  elsif rails >= 3
+    check.ok("--rails defined in all three theme blocks")
+  else
+    check.bad("--rails is declared #{rails} time(s), needs 3 — bare :root plus both dark blocks")
   end
 end
 

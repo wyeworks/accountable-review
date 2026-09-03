@@ -538,8 +538,9 @@ both `--page` and `--fragment`; and every row of `self-test.sh`, replayed with t
 arguments. The second source is not redundancy — the sweep never passes `--repo`, `--base` or
 `--level`, so it would compare two SKIPs for `searches.sh`, whose entire rule is a relation
 between the page and a repository, and would miss the brief level altogether. It reports
-**968 cases, 0 differing, across 10 of 11 checks**, and it names what is still shell on every
-run, because a partial migration that printed only "0 differing" would read as a finished one.
+**1454 cases, 0 differing, across 10 of 12 checks**, and it names what is still shell on every
+run — today `rails-anchors` — because a partial migration that printed only "0 differing" would
+read as a finished one.
 
 It runs the cases concurrently (`-j`, default `nprocessors` capped at 8) for the same reason
 `run.sh` does: a thousand cases is two thousand processes, and serially that is over two
@@ -628,6 +629,42 @@ to make the diagram rules silently stop firing, and a published page is HTML wri
 skill. Only `diagram` is affected, because it is the only check that reads line numbers out of
 grep rather than asking a yes/no question.
 
+### What the first rebase proved
+
+`main` moved twelve commits while this branch sat open, and it changed six of the nine checks
+the port shadows plus `lib.sh` — a new `strip_comments` helper, a section-4 region that now
+also ends at the merged tail's sub-anchors, `git grep` accepted as a recorded search, a
+non-breaking hyphen decoded out of citations, `svg.pr-mark` excluded from the diagram census,
+and the primer callout dropped before the unit census. None of that was announced to the port.
+
+`equivalence.rb` named all of it, per check, in thirty seconds:
+
+```
+blast-radius       0 identical, 146 differing     page-invariants  0 identical, 147 differing
+diagram          129 identical,  21 differing     searches       141 identical,   4 differing
+behaviour-flows  150 identical,   3 differing
+build-state, completeness, start-here, before-approving, excerpts    0 differing
+```
+
+Two things in that are the whole argument for keeping the shell alongside the port. The five
+checks `main` did not touch came back **untouched and green**, which is what makes the other
+five a *finding* rather than a suspicion. And `rails-anchors.sh` — a check that did not exist
+when the port was written — appeared in the "still shell" line without anyone adding it,
+because pair discovery is by filename.
+
+Re-porting the drift also found two library defects the corpus could not have:
+
+- **`Page#scan` returned capture groups.** `grep -o` prints the whole match; `String#scan`
+  returns the groups as soon as a pattern has any, so the new assurance rule reported
+  `independently` where the shell reported `independently verified`. One wrong message, and one
+  per future pattern — so the fix went into `Page`, not into a rule that has to remember
+  `(?:...)`. Two call sites that scan a plain `String` still need the non-capturing form, and
+  say so where they are.
+- **`Page#without`'s closing line was unpinned.** Inverting it changed nothing anywhere in the
+  1454 cases, so the sweep stayed green; a mutation of the library caught it, and it now has a
+  test. That is the division of labour the two mechanisms are for — the corpus grades behaviour
+  the fixtures reach, and mutation grades the library itself.
+
 ### What is left
 
 `.github/workflows/validate.yml` runs both halves of that on every push, in a third job beside
@@ -637,6 +674,10 @@ so nothing else in the repository notices when an edit to one makes the pair dis
 pinned rather than taken from the runner image, because `minitest` is a bundled gem rather than a
 default one. That job is deleted along with the `.sh` files, at which point the library's tests
 become the whole story.
+
+`rails-anchors.sh` is not ported — 517 lines and 21 self-test rows, the largest check in the
+directory, and porting it while the oracle was red would have been new work on top of a broken
+signal. `equivalence.rb` names it on every run, so nothing about that is hidden.
 
 The nine ports coexist with their shell originals, deliberately: `equivalence.rb` needs both
 sides to compare, so deleting the `.sh` would remove the oracle at the moment the port is least

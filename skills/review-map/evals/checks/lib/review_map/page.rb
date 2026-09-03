@@ -59,10 +59,17 @@ module ReviewMap
       @lines.count { |l| matchable(l).match?(pattern) }
     end
 
-    # `grep -o`, flattened: every match in the region, in document order.
+    # `grep -o`, flattened: every match in the region, in document order — the WHOLE match,
+    # never a capture group, because that is what grep -o prints and these results go straight
+    # into FAIL messages.
+    #
+    # String#scan returns groups when the pattern has any, which silently truncates a message
+    # to its first alternation branch: page-invariants' assurance rule reported "independently"
+    # where the shell reported "independently verified". It cost one wrong message and would
+    # have cost one per future pattern, so the fix belongs here rather than in a rule that
+    # remembers to write (?:...).
     def scan(pattern)
-      @lines.flat_map { |l| matchable(l).scan(pattern) }
-            .map { |m| m.is_a?(Array) ? m.first : m }
+      @lines.flat_map { |l| matchable(l).to_enum(:scan, pattern).map { Regexp.last_match(0) } }
     end
 
     # `awk '/from/,/to/'`: inclusive line ranges, re-openable.
@@ -125,6 +132,59 @@ module ReviewMap
     # extractor writing to a single file produced.
     def narrow(**kwargs)
       Page.new(regions(**kwargs).flat_map(&:lines))
+    end
+
+    # Every HTML comment removed, line structure preserved.
+    #
+    # A comment is not markup, and no check may let one steer it. The case that forced it: a
+    # golden documents its own anchors in a header comment ("id=\"blast\" on the <section> ... is
+    # what before-approving.sh reads"), and the section-4 region ended on the sentence DESCRIBING
+    # the anchor, reporting the fixture as having no blast panel at all. Real pages are exposed
+    # the same way, because a published page carries page-template.html's header comments
+    # verbatim and those comments discuss the very class and id names the checks match on.
+    #
+    # The open state carries ACROSS lines, which is why this is a scan rather than a gsub: a
+    # `<!--` on one line and its `-->` three lines later must blank all three.
+    def without_comments
+      inside = false
+      kept = @lines.map do |raw|
+        rest = matchable(raw)
+        out = +""
+        loop do
+          if inside
+            close = rest.index("-->")
+            break if close.nil?
+
+            inside = false
+            rest = rest[(close + 3)..]
+            next
+          end
+          open = rest.index("<!--")
+          if open.nil?
+            out << rest
+            break
+          end
+          out << rest[0...open]
+          rest = rest[(open + 4)..]
+          inside = true
+        end
+        "#{out}\n"
+      end
+      Page.new(kept)
+    end
+
+    # The inverse of `narrow`: everything EXCEPT the regions between `open` and `close`.
+    # awk's `/open/{f=1} f&&/close/{f=0; next} !f`, which is how a callout is dropped before a
+    # census runs over what is left. The closing line goes with the region, not the remainder.
+    def without(open:, close:)
+      inside = false
+      Page.new(@lines.reject do |raw|
+        line = matchable(raw)
+        inside = true if line.match?(open)
+        was_inside = inside
+        inside = false if inside && line.match?(close)
+        was_inside
+      end)
     end
 
     # One region, from the first line matching `anchor` to just before `stop` — awk's
