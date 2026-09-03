@@ -156,6 +156,16 @@ behaviour-flows.sh  | flows-primer-uncited-unit.html | 1 | makes claims with no 
 diagram.sh          | anchors-primer-clean.html     | 0 | no diagrams in this input
 excerpts.sh         | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
 excerpts.sh         | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang
+# The state tag. A published page carried db/structure.sql:304-313 tagged Unchanged while its
+# own ledger listed that path as changed — the generator hard-coded the label, so the one part
+# of the block that was not read off the repository was the only part that was false. The first
+# row is that page in miniature; the second is the same shape tagged the way the generator tags
+# it now, and it is the row that matters, because a rule that fires on every excerpt sitting
+# near a ledger would be worse than the defect. The third needs neither ledger nor repository:
+# a tag outside the closed vocabulary was typed, whatever the diff says.
+excerpts.sh         | excerpt-unchanged-changed-file.html | 1 | the change touches the file
+excerpts.sh         | excerpt-at-head.html          | 0 | no excerpt labels a changed file Unchanged
+excerpts.sh         | excerpt-typed-tag.html        | 1 | outside the generator's vocabulary
 CASES
 
 # The judged half has one piece a script can test: reading a verdict file. A tally that reads a

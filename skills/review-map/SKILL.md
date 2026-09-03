@@ -479,7 +479,7 @@ Everything else about writing holds at every stage:
   believed until then. Quote both inline as collapsed excerpts, from the generator:
 
   ```sh
-  <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --why "..."
+  <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --base BASE --why "..."
   <skill base directory>/scripts/excerpt.sh --diff app/models/project.rb --base BASE --why "..."
   ```
 
@@ -499,6 +499,13 @@ Everything else about writing holds at every stage:
   **Generate all of them in one call.** The excerpts do not depend on each other, so one call with a
   line per excerpt costs one round trip where seven calls cost seven. A run that did it one at a time
   spent ten requests on work worth two.
+
+  **Both forms need `--base`, including `--at`**, because the state tag in the summary is a claim
+  about the diff and the script reads it off the diff rather than assuming it — a changed file quoted
+  at head is tagged `At head`, not `Unchanged`. It is the one part of an excerpt the bytes cannot
+  vouch for: before it was derived, a run published a changed `db/structure.sql` labelled Unchanged on
+  a page whose own ledger listed it as changed. Quoting a changed file that way is right where a hunk
+  cannot show what the committed code permits; the tag is what has to be true.
 
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a

@@ -210,7 +210,9 @@ to remove.
 So the lines come to the reader. Where a claim would otherwise be taken on faith, the page carries a
 collapsed excerpt of the real source, which you open when you are ready to check that particular
 claim — verbatim, quoted by a script rather than retyped, and reading as a diff for changed lines and
-as plain source for unchanged ones. The excerpts matter most on an unpushed branch, where nothing on
+as plain source for unchanged ones. Each block also says which state it is quoting, and the script
+works that out from the diff instead of asserting it: the bytes of a quotation vouch for themselves,
+and its label is the one part that cannot. The excerpts matter most on an unpushed branch, where nothing on
 the page is clickable at all.
 
 They also make the page shorter, which is the part that surprised us. A paragraph describing what a

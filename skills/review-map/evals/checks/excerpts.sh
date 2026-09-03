@@ -4,8 +4,8 @@
 # The half that matters is not here: does the prose still read completely with every
 # excerpt CLOSED, judged field by field. That needs a reader and lives in the cases.
 # What a script can settle is shape — collapsed by default, a summary that says what is
-# inside, tints that exist in all three theme blocks, no range quoted twice, and a
-# quotation nobody coloured by hand.
+# inside, tints that exist in all three theme blocks, no range quoted twice, a quotation
+# nobody coloured by hand, and a state tag that agrees with the diff it describes.
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd); CHECKS_DIR=$HERE; . "$HERE/lib.sh"
 parse_args "$@"
@@ -40,6 +40,83 @@ if grep -Eiq '<summary>[[:space:]]*(view|show|see) (diff|code|source)' "$IN"; th
   bad "a summary reads 'view diff'/'show code' — say the location and why to open it"
 else
   ok "no placeholder summaries"
+fi
+
+# --- The state tag is a claim about the diff, so it is checked against one ---
+#
+# excerpt.sh derives the tag (see its STATE comment): Unchanged means the path is outside
+# the diff, and Added / Removed / At head / Before the change mean it is inside. It used to
+# hard-code "Unchanged" on every --source block, and a run duly published
+# db/structure.sql:304-313 tagged Unchanged on a page whose own ledger listed that file as
+# changed — the page contradicting itself about the one thing a reader cannot check from the
+# page. That defect is invisible by construction: the block is real, the bytes are verbatim,
+# and only the label is false. Hence two rules, one relational and one lexical.
+TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
+strip_comments "$IN" "$TMP/src"
+TAB=$(printf '\t')
+
+# One row per excerpt: variant, state tag, quoted path, location. The tag is read only
+# between a <details> and its </details>, because .tag is shared with the decisions block's
+# Tradeoff chip and a page-wide grep would collect that as an excerpt's state.
+awk '
+  /class="excerpt excerpt--/ {
+    v = $0; sub(/.*excerpt--/, "", v); sub(/[" ].*/, "", v)
+    variant = v; inb = 1; tag = ""; src = ""; loc = ""; next
+  }
+  inb && /class="tag"/    { t = $0; sub(/.*class="tag">/, "", t);    sub(/<.*/, "", t); tag = t }
+  inb && /class="ex-loc"/ { l = $0; sub(/.*class="ex-loc">/, "", l); sub(/<.*/, "", l); loc = l }
+  inb && /data-src="/     { s = $0; sub(/.*data-src="/, "", s);      sub(/".*/, "", s); src = s }
+  inb && /<\/details>/    { printf "%s\t%s\t%s\t%s\n", variant, tag, src, loc; inb = 0 }
+' "$TMP/src" > "$TMP/blocks"
+
+# The vocabulary is closed, and it is closed because the generator computes it. A tag
+# outside it — "Modified", "New", a bare "Changed" on a listing with no +/- gutters — is a
+# tag somebody typed, which is the same defect one step earlier. A block with no tag at all
+# is left to the summary rule in report-format.md; this one only reads what is there.
+typed=$(awk -F"$TAB" '
+  $2 == "" || $2 ~ /{{/ { next }
+  $1 == "source" && $2 !~ /^(Unchanged|Added|Removed|At head|Before the change)$/ { print $2 " on " $4 }
+  $1 == "diff"   && $2 != "Changed" { print $2 " on " $4 }
+' "$TMP/blocks")
+if [ -z "$typed" ]; then
+  ok "every state tag is one excerpt.sh emits"
+else
+  bad "a state tag is outside the generator's vocabulary, so it was typed: $(echo "$typed" | tr '\n' ';')"
+fi
+
+# The relational half. Two ways to learn what the diff touched, and the page carries one of
+# them itself: the ledger accounts for every changed path by invariant, so a page can be
+# held against its own account of the change with no repository at hand.
+set_from=
+if [ -n "$REPO" ] && [ -n "$BASE" ]; then
+  mb=$(git -C "$REPO" merge-base "$BASE" "$HEAD_REF" 2>/dev/null) || mb=$BASE
+  if git -C "$REPO" diff --name-status -M "$mb" "$HEAD_REF" 2>/dev/null |
+       awk -F"$TAB" '{ print $2; if (NF > 2) print $3 }' | sort -u > "$TMP/changed"; then
+    set_from="the diff"
+  fi
+fi
+if [ -z "$set_from" ] && grep -q 'data-path=' "$TMP/src"; then
+  grep -o 'data-path="[^"]*"' "$TMP/src" | sed 's/^data-path="//; s/"$//' | sort -u > "$TMP/changed"
+  set_from="the page's own ledger"
+fi
+
+if [ -z "$set_from" ]; then
+  skip "state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger"
+else
+  mis=
+  while IFS="$TAB" read -r variant tag src loc; do
+    [ "$variant" = source ] || continue
+    [ "$tag" = Unchanged ] || continue
+    [ -n "$src" ] || continue
+    # Whole lines, never substrings: api/Gemfile sits inside api/Gemfile.lock.
+    grep -Fxq "$src" "$TMP/changed" || continue
+    mis="${mis:+$mis; }$loc"
+  done < "$TMP/blocks"
+  if [ -z "$mis" ]; then
+    ok "no excerpt labels a changed file Unchanged, against $set_from"
+  else
+    bad "labelled Unchanged, but the change touches the file: $mis — quote it and let excerpt.sh --base tag the state"
+  fi
 fi
 
 # The excerpt tints are the newest colours in the system, which makes them the most
