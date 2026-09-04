@@ -1,0 +1,28 @@
+<!-- Plants exactly one defect: the page narrating its own drafting — page-invariants.sh § 2c.
+     The flow below corrects a search by telling the reader what the first version of this
+     section said, instead of simply recording the search that reproduces.
+
+     This comment is written in that same register on purpose. It says "the first version of
+     this section" and it must not fire the rule: § 2c strips comments first, because
+     page-template.html's header comments discuss their own revision history and ship inside
+     every published page. If this fixture starts failing for its comment rather than for its
+     prose, strip_comments is what broke.
+
+     Everything else is clean: an evidence tier is present so § 3 has something to find, no
+     data-path appears outside a ledger cell, and the recorded search itself is legitimate —
+     the -P caveat is a fact the reader needs in order to re-run it. Only the attribution to
+     an earlier draft is the defect. -->
+<section id="flow-a">
+  <div class="mech">Archiving stamps <code>projects.archived_at</code> and leaves time entries alone.</div>
+  <dl class="rows">
+    <dt>Affected, unchanged</dt>
+    <dd><code>ActiveProjects</code> scopes the selectable list and does not filter on the new column
+      <a class="cite" href="#">app/queries/active_projects.rb:12</a>
+      <span class="tier">from unchanged code</span></dd>
+  </dl>
+  <p class="searches">The searches, and the mistake the first version of this section made.
+    <code>git grep</code> defaults to basic regex, so an alternation written <code>'a|b'</code>
+    matches a literal pipe and returns nothing. The first pass ran it that way and reported two
+    consumers; the search that actually reproduces these entries is
+    <code>git grep -nP '(@?project)\.archived_at\b' -- app lib</code>, which returns nine.</p>
+</section>

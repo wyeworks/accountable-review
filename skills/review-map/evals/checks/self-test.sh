@@ -105,7 +105,12 @@ page-invariants.sh  | approving-brief-clean.html      | 0 | data-path is only on
 page-invariants.sh  | invariants-clean.html         | 0 | no severity chips
 page-invariants.sh  | invariants-severity-chip.html | 1 | severity chips reintroduced
 page-invariants.sh  | invariants-verdict.html       | 1 | verdict language found
+page-invariants.sh  | invariants-risk-score.html    | 1 | graded noun asserted rather than refused
+page-invariants.sh  | invariants-risk-score-leading.html  | 1 | graded noun asserted rather than refused
+page-invariants.sh  | invariants-risk-score-trailing.html | 1 | graded noun asserted rather than refused
+page-invariants.sh  | invariants-clean.html        | 0 | no asserted risk or severity score
 page-invariants.sh  | invariants-assurance.html    | 1 | assurance language
+page-invariants.sh  | invariants-draft-narration.html | 1 | narrates its own drafting
 page-invariants.sh  | invariants-no-tier.html       | 1 | no evidence tier labels
 page-invariants.sh  | invariants-loose-data-path.html | 1 | outside a ledger cell
 excerpts.sh         | excerpt-clean.html            | 0 | collapsed by default

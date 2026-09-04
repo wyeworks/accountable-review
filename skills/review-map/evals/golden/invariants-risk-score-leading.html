@@ -1,0 +1,21 @@
+<!-- Plants exactly one defect: a graded noun asserted, where the word before it ENDS WITH a
+     negation — page-invariants.sh § 2. "cannot" ends in "not", so a negation test without a
+     LEADING word boundary reads "cannot show the overall risk" as a denial and waves the grade
+     through. The sentence still asserts one: it says an overall risk exists and is highest
+     somewhere, which is the ranking the format refuses.
+
+     It is its own fixture, and the sentence was chosen by mutation rather than by eye. The
+     obvious trap word — "another", which CONTAINS "not" — does not work here: the trailing
+     boundary catches it on its own, so a fixture built on it kept failing with the leading
+     boundary deleted and pinned nothing. A word ending in the negation is what separates the
+     two rules. invariants-risk-score-trailing.html pins the other end. -->
+<section id="start">
+  <div class="eyebrow"><span class="lbl lbl-a">Where to begin</span><i></i></div>
+  <h2>Start here</h2>
+  <ol class="readorder">
+    <li><div><code>Project#archive!</code> &mdash;
+      <span class="why">the ledger cannot show the overall risk, which is highest in the migration</span>
+      <a class="cite" href="#">app/models/project.rb:41</a>
+      <span class="tier">evidenced by unchanged code</span> <a href="#flow-a">Flow A</a></div></li>
+  </ol>
+</section>

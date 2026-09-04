@@ -248,9 +248,13 @@ Work outward from each changed thing to its consumers:
 `references/rails-nextjs.md` carries the concrete search patterns per artifact kind. Use them; do not
 improvise a grep and call the area clear.
 
-**Record what you searched, not just what you found.** An empty result is a real finding — "no other
-caller of `Project#archive`, searched `rg 'archive[!?]?\b' app lib`" — but only if the reader can see
-the search. Unrecorded, absence and omission look identical, and the reviewer has to redo the work.
+**Record what you searched, not just what you found — but the finding goes in the open prose and the
+search goes in the collapsed record.** "Nothing else calls `Project#archive`" is the finding, and it
+is a sentence a reader meets without opening anything; `rg 'archive[!?]?\b' app lib` is how you know,
+and it belongs in `details.searched`, shut. Unrecorded entirely, absence and omission look identical
+and the reviewer redoes the work; left *only* inside the toggle, the finding is hidden rather than
+disclosed. **One row per search: the command, then what it returned in a clause** — the form and the
+budget are `references/report-format.md` § *What was searched*, which owns them.
 
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the page's backbone: the behaviour flows in
@@ -337,6 +341,27 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
 - Where you could not confirm something, put it in the page as an open question. Do not round
   uncertainty up.
 - Drop any finding that does not survive the check, and do not backfill it with something weaker.
+- **A correction replaces the claim; it never annotates it.** Whatever made you revise something
+  already written — a second reading of the file, a falsifier challenge, a search you re-ran — the
+  page ends up carrying the corrected claim in the present tense, in its own voice, as though it had
+  always said that. The page never tells the reader what an earlier draft of it said.
+
+  **Keep the fact, drop the autobiography.** This is the half that gets over-applied: if a recorded
+  search needs `-P` to reproduce, the reader who re-runs it needs that caveat, and it belongs on the
+  search's own line as a caveat. What does not belong is the story of the pattern that returned
+  nothing. Correct the claim, keep what a reader would need, and say what changed to the user in
+  chat.
+
+  This one is written without noticing, because it reads as candour rather than as advertising —
+  which is exactly the disguise a page forbidden to claim assurance is vulnerable to. One real page
+  carried ten of them: *"the mistake the first version of this section made"*, *"the first pass ran
+  this over `app/views` alone and found six"*, *"seven controllers, not the four the first pass
+  reported"*. Every one of those sentences had a true and useful fact inside it and buried it in the
+  run's own history. Note that this repository's prose is deliberately written the *other* way — a
+  rule here states the observation that produced it — and that register is right for whoever edits
+  the skill next and wrong for the page. The reviewer is reading about a pull request; how this
+  document got drafted is not part of it. `evals/checks/page-invariants.sh` § 2c fails a page that
+  does it.
 
 ### At `--effort high`: falsify each flow before the page is finished
 
@@ -377,6 +402,12 @@ corrected. Two reasons, and both are hard rules already: a tally of corrected cl
 page's own draft, and a page advertising that it was checked reads as the clean bill of health the
 page must never be. Say what changed to the user, in chat, and leave the artifact silent.
 
+**The form this actually takes never mentions the pass at all.** It is *"the first version of this
+section got it wrong"* — a correction annotated with the history that produced it, which is this
+pass, narrated. A run reads that as honesty and writes ten of them. The rule against it is the
+correction rule above, and it applies to every claim you revise here: fix the sentence, keep the
+caveat a reader would need, and let the draft history go.
+
 A flow published at stage 3 and corrected here **was wrong while it was public**, and that is the
 cost of running this after the flows rather than before each one. It is the right trade — the gate
 above still runs at every flow's publish, and a claim retracted before the final publish beats one
@@ -390,6 +421,14 @@ URL never changes.** The reader can open it at minute two, watch it fill in, and
 moment the part they need lands.
 
 The mechanics are simply the `Artifact` tool's: republishing the same file path redeploys in place.
+
+**Non-interactively (`--output`, step 1) there is nothing to publish, and no reader waiting.** The
+stages stop being arrivals and become save points: write each one to `<dir>/index.html` as it
+completes, with `Edit` rather than a rewrite exactly as below, and skip every `Artifact` call. Keep
+writing them — a run that dies two thirds of the way through leaves a page worth having, which is the
+other reason staging exists — but do not spend a turn announcing a boundary nobody is watching. The
+banner and the markers still come off at the end: step 10 is unchanged, and the CI adapter refuses to
+deliver a page still carrying one.
 
 **Four milestones.** Each is a coherent thing to read, which is the point — a URL that changes under
 someone mid-paragraph is worse than one that arrives late.
@@ -592,7 +631,8 @@ Everything else about writing holds at every stage:
   `<dir>`.
 
 Tell the user the URL when stage 1 goes out, say it will fill in, and do not repeat it on every
-republish — one link, mentioned once, then a note when it is complete.
+republish — one link, mentioned once, then a note when it is complete. With `--output` there is no
+URL: say where the file is, once, and nothing more.
 
 ## 10. Complete the page and gate it
 
@@ -675,9 +715,10 @@ republish — one link, mentioned once, then a note when it is complete.
   unchanged excerpts: presentation only, and the page reads correctly with the whole block deleted, in
   one ink. Do not give § 6 checkboxes, tick state or an "n of m" counter — a count of cleared items
   reads as progress toward approval, which is the verdict this page does not carry.
-- Publish the final state to the same path. Report that it is complete, what the change does in two or
-  three lines, and anything you could not verify. Mention the project's own review command if it has
-  one.
+- Publish the final state to the same path — or, with `--output`, simply leave the finished file at
+  `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
+  what the change does in two or three lines, and anything you could not verify. Mention the project's
+  own review command if it has one.
 - On a re-run for the same PR, the path is the **same one step 1 derives** — that derivation is what
   makes the URL survive across pushes as well as across stages. One PR, one link, however many times
   this runs, without having to remember where the last run put it.
@@ -763,11 +804,13 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   a class this repository does not have: the block quotes the manual rather than reporting what this
   application did. Name an application class there and it is invented output again, with the rule
   switched off.
-- **The page must read completely with every source excerpt closed.** An excerpt confirms a claim the
-  prose already made; it never carries one. A claim that exists only inside a collapsed block is
-  hidden content wearing the clothes of progressive disclosure. Judge this **field by field**: a
-  citation that appears elsewhere on the page does not rescue a field whose only `file:line` is inside
-  the block a reader has not opened.
+- **The page must read completely with every collapsed block closed.** Two components collapse — a
+  source excerpt and `details.searched` — and the rule is the same for both: they confirm a claim the
+  prose already made, and never carry one. A claim that exists only inside a collapsed block is hidden
+  content wearing the clothes of progressive disclosure. Judge this **field by field**: a citation
+  that appears elsewhere on the page does not rescue a field whose only `file:line` is inside the
+  block a reader has not opened. For the search record specifically, the trap is the empty result: "no
+  other caller" is a finding and belongs in the open; the grep proving it is what collapses.
 - **Never imply the page found everything.** It did not, and measurably so: three independent
   analyses of the same 109-file diff produced eight distinct headline findings between them, with
   only *one* appearing in all three. Explanation is reproducible; defect discovery is sampling. Say
@@ -776,7 +819,9 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   review pass.
 - Never drop a file from the page to keep it tidy.
 - Never post to GitHub, Linear, or anywhere outside the artifact.
-- Never commit the page into the repo under review.
+- Never commit the page into the repo under review, and never write it there. `--output` does not
+  relax this: a directory inside the checkout would make the page part of the next diff, and on a PR
+  branch part of the change it describes.
 - **Do this work yourself; spawn no subagents — with exactly one exception, named below.** Steps 5
   and 6 span the whole diff by nature — step 5 traces consumers across both sides of the stack, step 6
   groups behaviour no single layer contains — and handing either to an agent with its own context
