@@ -407,9 +407,26 @@ awk '/<pre class="probe"/{p=1} p{print} /<\/pre>/{p=0}' "$IN" \
 # 5 · No fabricated output. The skill does not run these, so anything that looks like a
 #     result is invented. `=>` is the console's own prompt for a return value; a leading
 #     SQL keyword is the other common shape.
-if grep -Eq '^[[:space:]]*(=>|#[[:space:]]*=>|\[|\{)' "$TMP/probe-body" \
-   || grep -Eqi '^[[:space:]]*(SELECT|INSERT|UPDATE|DELETE)[[:space:]]' "$TMP/probe-body"; then
-  bad "a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: $(grep -Ei -m1 '^[[:space:]]*(=>|#[[:space:]]*=>|\[|\{|SELECT|INSERT|UPDATE|DELETE)' "$TMP/probe-body")"
+#
+#     A leading `[` or `{` is output only OUTSIDE a quoted script. `bin/rails runner '` opens
+#     one whose continuation lines are Ruby, and a real probe's second line began
+#     "[Profile, Community, Event].each { |m| ... }" — a literal being iterated, not a literal
+#     being printed. The two are indistinguishable by their first character, so the quote is
+#     what tells them apart: track it, and a printed array still fails while Ruby does not.
+#     `=>` and the SQL keywords need no such care — neither is legal at the head of a
+#     continuation line, so they are caught inside a script too.
+fabricated=$(awk '
+  {
+    line = $0
+    if (line ~ /^[[:space:]]*(=>|#[[:space:]]*=>)/ ||
+        tolower(line) ~ /^[[:space:]]*(select|insert|update|delete)[[:space:]]/ ||
+        (!inside && line ~ /^[[:space:]]*[[{]/)) { print line; exit }
+    # Parity of unescaped single quotes, counted only once a runner script has opened.
+    t = line; n = gsub(/\047/, "", t)
+    if (inside || line ~ /runner[[:space:]]*\047/) { if (n % 2 == 1) inside = !inside }
+  }' "$TMP/probe-body")
+if [ -n "$fabricated" ]; then
+  bad "a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: $fabricated"
 else
   ok "$nprobe probe(s), none showing output the run did not observe"
 fi
@@ -440,9 +457,16 @@ if [ -z "$REPO" ]; then
 elif [ ! -d "$REPO" ]; then
   bad "probe identifiers: --repo is not a directory: $REPO"
 else
+  # The framework's own constants and Ruby's. Declared once because two rules need it: this
+  # one skips them when asking whether a constant exists, and the scope rule below skips them
+  # as RECEIVERS. Keeping one list is the point — when only the constant rule had it,
+  # `Rails.application` sailed past rule 7 and then failed the scope rule for calling an
+  # "undefined method" named `application`.
+  FW='ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|I18n|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP'
+
   # Constants named in the probes, minus the framework's own and Ruby's.
   grep -oE '\b[A-Z][A-Za-z0-9]*(::[A-Z][A-Za-z0-9]*)*\b' "$TMP/probe-body" \
-    | grep -Ev '^(ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP)' \
+    | grep -Ev "^($FW)" \
     | grep -Ev '^(ActiveRecord|ActiveJob|ActiveSupport)::' \
     | sort -u > "$TMP/consts" || true
 
@@ -474,7 +498,13 @@ else
   # when it has not read far enough. The exclusion list is ActiveRecord's own surface: those
   # are real methods on every model and say nothing about this repository.
   ar_api='to_sql|all|new|first|last|count|where|order|limit|select|pluck|find|find_by|find_each|in_batches|explain|connection|columns_hash|column_names|attribute_names|defined_enums|validators_on|validators|reflect_on_association|reflect_on_all_associations|nested_attributes_options|queue_name|serialize|instance_methods|primary_key|table_name|create!|create|update!|update|destroy|delete_all|update_all|insert_all|upsert_all|save|save!|unscoped|default_scoped|reload|attributes|as_json|to_json'
+  #
+  #     The receiver is filtered before the method name is taken, using the same FW list rule 7
+  #     uses. The rule is about a scope on one of THIS app's models; a framework constant's
+  #     methods are not the app's to define, and reading them as such failed a correct probe —
+  #     `pp Rails.application.routes.routes` was reported as calling an undefined `application`.
   grep -oE '\b[A-Z][A-Za-z0-9]*\.[a-z_]+[a-z_0-9]*' "$TMP/probe-body" \
+    | grep -Ev "^($FW)\." \
     | sed 's/^[^.]*\.//' | sort -u \
     | grep -Ev "^($ar_api)$" > "$TMP/scopes" || true
 
@@ -484,7 +514,18 @@ else
     while IFS= read -r sc; do
       [ -n "$sc" ] || continue
       # A scope, a class method, or an instance method — a probe may reasonably call any.
-      grep -rEq "(scope[[:space:]]+:$sc\b|def[[:space:]]+(self\.)?$sc\b|enum[[:space:]]+:?$sc\b)" "$REPO" 2>/dev/null \
+      #
+      # Plus the enum's generated plural, which has no `def` anywhere: `enum :invite_area`
+      # generates `Event.invite_areas`, and reading that map is the version-proof way to ask
+      # what values an app actually admits — the probe rails-nextjs.md recommends. Without
+      # this the check failed a probe the reference tells the run to write.
+      #
+      # Both plural forms, because one is not enough and the fixture proved it: trimming a
+      # trailing "s" turns invite_areas back into invite_area but statuses into "statuse".
+      # Rails adds "es" after s, x, z, ch and sh, and `status` is the enum name a Rails app is
+      # likeliest to have.
+      sing=${sc%s}; sing_es=${sc%es}
+      grep -rEq "(scope[[:space:]]+:$sc\b|def[[:space:]]+(self\.)?$sc\b|enum[[:space:]]+:?$sc\b|enum[[:space:]]+:?$sing\b|enum[[:space:]]+:?$sing_es\b)" "$REPO" 2>/dev/null \
         || echo "$sc" >> "$TMP/missing-scopes"
     done < "$TMP/scopes"
     nmsc=$(grep -c . "$TMP/missing-scopes" 2>/dev/null || true)

@@ -123,6 +123,7 @@ rails-anchors.sh    | anchors-mixed-series.html     | 1 | different Rails series
 rails-anchors.sh    | anchors-link-alone.html       | 1 | with no file:line beside them     | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-link-in-excerpt.html  | 1 | inside a collapsed excerpt        | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-fabricated-output.html | 1 | looks like its own output        | --repo @GOLD@/searches-repo
+rails-anchors.sh    | anchors-probe-legit-forms.html | 0 | none showing output the run did not observe | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-runner-mutates.html   | 1 | no 'console --sandbox' is named   | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
 rails-anchors.sh    | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
