@@ -70,7 +70,7 @@ done
 
 if [ -z "$CASE" ]; then
   echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--level brief|full]" >&2
-  echo "                     [--skill-effort normal|high] [--visual] [--judge]" >&2
+  echo "                     [--skill-effort high|low] [--visual] [--judge]" >&2
   echo "                     [--fast] [--model M] [--effort L] [--judge-model M] [--judge-effort L]" >&2
   echo "cases:  $(ls "$HERE/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
   exit 2
@@ -94,10 +94,16 @@ esac
 # The skill effort a case is written for, defaulted for the same reason the level is: every case
 # written before the flag existed did what `normal` now names, and reinterpreting the corpus would
 # make old result lines incomparable with new ones. --skill-effort on the command line overrides.
-[ -n "$SKILL_EFFORT" ] || SKILL_EFFORT=$(jq -r '.skill_effort // "normal"' "$CASEFILE")
+# Mirrors the skill's own default. A case that does not declare one measures what a user gets;
+# results carry the value and report.sh groups by it, so older rows stay attributable.
+[ -n "$SKILL_EFFORT" ] || SKILL_EFFORT=$(jq -r '.skill_effort // "high"' "$CASEFILE")
 case $SKILL_EFFORT in
-  normal|high) ;;
-  *) echo "unknown skill effort: $SKILL_EFFORT (normal | high)" >&2; exit 2 ;;
+  # `normal` was this value's name while it was the default. Accepted and folded into `low`
+  # so an older case file or a shell-history invocation keeps working, and so report.sh groups
+  # the two spellings as one thing rather than as two arms of a comparison.
+  normal) SKILL_EFFORT=low ;;
+  low|high) ;;
+  *) echo "unknown skill effort: $SKILL_EFFORT (high | low)" >&2; exit 2 ;;
 esac
 [ -r "$DRIVER" ] || { echo "driver missing: $DRIVER" >&2; exit 2; }
 

@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Run it by hand against any branch, from the Actions tab. This is here because a push
+  # made by an agent's credentials does not create a workflow run, so a branch pushed that
+  # way has no CI at all until a person acts — and the only person-shaped action that used
+  # to work was opening the pull request, which fires once and never again as the branch
+  # moves. Re-running that first run is no substitute: it replays the commit it ran on.
+  workflow_dispatch:
 
 jobs:
   manifest:
@@ -26,3 +32,29 @@ jobs:
       # verdict. No model, no API key, about a second. A check script that always passes is
       # worse than none, so this runs on every push.
       - run: skills/review-map/evals/checks/self-test.sh
+
+  ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Pinned, and not the runner's system Ruby: minitest is a BUNDLED gem rather than a
+      # default one, so `require "minitest/autorun"` is not guaranteed on a bare image. The
+      # pin also keeps the job comparable run to run, for the same reason run.sh puts the
+      # model and effort on every result line.
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      # The region scanner, checked directly. This is the seam the shell version had nowhere
+      # to put: its three awk extractors could only ever be exercised end to end through a
+      # golden fragment. A second.
+      - run: ruby skills/review-map/evals/checks/lib/test/test_page.rb
+      # And every ported check against the .sh it shadows, byte for byte — every line, the
+      # exit code and stderr — over the whole of evals/golden, the real page-template.html,
+      # and every row of self-test.sh replayed with its own arguments. 968 cases, about a
+      # minute on four cores.
+      #
+      # This is the job that earns its place while both implementations exist: the .rb files
+      # are not yet dispatched by check.sh, so nothing else notices when an edit to a .sh
+      # makes them disagree. It is deleted along with the .sh files when the dispatchers are
+      # flipped over — at which point the .rb tests above become the whole story.
+      - run: skills/review-map/evals/checks/equivalence.rb

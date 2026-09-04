@@ -46,7 +46,12 @@ fi
 #     than handing to a reader as a WARN.
 VERDICT_HARD='LGTM|looks good to me|recommend (approv|merg)[a-z]*|approve this|ready to merge'
 if grep -Eiq "$VERDICT_HARD" "$IN"; then
-  bad "verdict language found: $(grep -Eio "$VERDICT_HARD" "$IN" | sort -u | tr '\n' ' ')"
+  # LC_ALL=C on every sort in this file: the message lists what matched, and plain `sort`
+  # collates by locale — "first version of this section" sorts before "The first pass ran"
+  # on a UTF-8 Mac and after it under C. page_invariants.rb uses Ruby's .sort, which is
+  # byte order, so without this the two implementations agree on CI and disagree on a
+  # maintainer's laptop, which is the worst place for equivalence.rb to first speak up.
+  bad "verdict language found: $(grep -Eio "$VERDICT_HARD" "$IN" | LC_ALL=C sort -u | tr '\n' ' ')"
 else
   ok "no verdict or approval language"
 fi
@@ -68,7 +73,7 @@ bare=$(awk '
       # overall risk" does too. Both were caught by testing the rule rather than reading it.
       if (pre !~ /(^|[^[:alpha:]])(not|nothing|never|no|rather than|instead of|without)([^[:alpha:]][^.!?;]{0,23})?$/) print substr(l, s, n)
       l = substr(l, s + n)
-    } }' "$TMP/nocom" | sort -u | tr '\n' ' ')
+    } }' "$TMP/nocom" | LC_ALL=C sort -u | tr '\n' ' ')
 if [ -n "$bare" ]; then
   bad "a graded noun asserted rather than refused: $bare"
 else
@@ -85,7 +90,7 @@ fi
 #      apps, and 'audit' appears inside the sanctioned "a pass, not an audit".
 ASSURE='(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (verified|checked|confirmed)|every claim (was|has been) (verified|checked)|class="(verified|checked)"|chip-verified'
 if grep -Eiq "$ASSURE" "$IN"; then
-  bad "assurance language — the page is advertising that it was checked: $(grep -Eio "$ASSURE" "$IN" | sort -u | tr '\n' ' ')"
+  bad "assurance language — the page is advertising that it was checked: $(grep -Eio "$ASSURE" "$IN" | LC_ALL=C sort -u | tr '\n' ' ')"
 else
   ok "no assurance language — the effort level is invisible on the page"
 fi
@@ -113,7 +118,7 @@ NARRATE=$NARRATE'|(a|the|this) (first|earlier|previous|initial) (pass|draft|vers
 NARRATE=$NARRATE'|on (a|the) (first|earlier|previous) (pass|draft)'
 NARRATE=$NARRATE'|(this|the) (section|page|paragraph|entry|claim|row) (originally|initially) (said|read|claimed|reported|had)'
 if grep -Eiq "$NARRATE" "$TMP/nocom"; then
-  bad "the page narrates its own drafting — a correction replaces a claim, it never annotates it: $(grep -Eio "$NARRATE" "$TMP/nocom" | sort -u | tr '\n' ' ')"
+  bad "the page narrates its own drafting — a correction replaces a claim, it never annotates it: $(grep -Eio "$NARRATE" "$TMP/nocom" | LC_ALL=C sort -u | tr '\n' ' ')"
 else
   ok "no draft narration — corrections are written as claims, not as revisions"
 fi
@@ -149,19 +154,24 @@ fi
 
 # 5 · Dead links. When the head commit is on no remote, every permalink to it 404s, and
 #     rung 4 of the ladder says plain text instead.
+# An empty answer and NO answer are different, and only one of them means unpushed. Written
+# with `|| true`, an unreadable repo or an unresolvable head produced empty output and this rule
+# read it as "on no remote" — a false PASS on a page with no permalinks, and a false FAIL on one
+# that has them. The verdict came from an answer git never gave, so the two are separated here
+# and the rule refuses rather than guesses. A flat chain rather than a nested one because there
+# are now three distinct states and nesting them hid that there were only two.
 if [ -z "$REPO" ]; then
   skip "link reachability: needs --repo to ask git what is pushed"
-else
-  unpushed=$(git -C "$REPO" branch -r --contains "$HEAD_REF" 2>/dev/null || true)
-  if [ -z "$unpushed" ]; then
-    if grep -Eq 'https://github\.com/[^"]*/(blob|pull|compare)/' "$IN"; then
-      bad "emits GitHub permalinks, but the head commit is on no remote — those 404"
-    else
-      ok "unpushed head: citations are plain text, no dead permalinks"
-    fi
+elif ! remotes=$(git -C "$REPO" branch -r --contains "$HEAD_REF" 2>/dev/null); then
+  skip "link reachability: git cannot say whether $HEAD_REF is pushed in $REPO — with no answer this rule has nothing to check the citation form against"
+elif [ -z "$remotes" ]; then
+  if grep -Eq 'https://github\.com/[^"]*/(blob|pull|compare)/' "$IN"; then
+    bad "emits GitHub permalinks, but the head commit is on no remote — those 404"
   else
-    ok "head is on a remote: permalinks are legitimate (link form not checked here)"
+    ok "unpushed head: citations are plain text, no dead permalinks"
   fi
+else
+  ok "head is on a remote: permalinks are legitimate (link form not checked here)"
 fi
 
 # 6 · The three theme states. A colour defined only inside a media query is the classic
