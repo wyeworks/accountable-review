@@ -88,16 +88,30 @@ fi
 # them itself: the ledger accounts for every changed path by invariant, so a page can be
 # held against its own account of the change with no repository at hand.
 set_from=
+git_unreadable=
 if [ -n "$REPO" ] && [ -n "$BASE" ]; then
   mb=$(git -C "$REPO" merge-base "$BASE" "$HEAD_REF" 2>/dev/null) || mb=$BASE
-  if git -C "$REPO" diff --name-status -M "$mb" "$HEAD_REF" 2>/dev/null |
-       awk -F"$TAB" '{ print $2; if (NF > 2) print $3 }' | sort -u > "$TMP/changed"; then
+  # git's OWN status, not the pipeline's. Written as `git … | awk | sort > file`, the `if`
+  # tested `sort`, which succeeds whatever git did — so an unresolvable --base produced an
+  # empty changed set, matched nothing, and reported a PASS. On this rule, of all of them:
+  # the defect it exists to catch is a label the diff contradicts, and a stale base SHA turned
+  # catching it into a clean bill of health. A check that invents a pass is worse than none.
+  if git -C "$REPO" diff --name-status -M "$mb" "$HEAD_REF" > "$TMP/raw" 2>/dev/null; then
+    awk -F"$TAB" '{ print $2; if (NF > 2) print $3 }' "$TMP/raw" | sort -u > "$TMP/changed"
     set_from="the diff"
+  else
+    git_unreadable=1
   fi
 fi
 if [ -z "$set_from" ] && grep -q 'data-path=' "$TMP/src"; then
   grep -o 'data-path="[^"]*"' "$TMP/src" | sed 's/^data-path="//; s/"$//' | sort -u > "$TMP/changed"
   set_from="the page's own ledger"
+fi
+
+# Said out loud, because run.sh passes --repo and --base on every page run: without this, a
+# wrong base silently downgrades every run to ledger-only and the operator never learns.
+if [ -n "$git_unreadable" ]; then
+  maybe "the changed set could not be read from $REPO: git cannot resolve $BASE..$HEAD_REF — a page carrying a ledger is still checked against that, and one without is not checked at all"
 fi
 
 if [ -z "$set_from" ]; then

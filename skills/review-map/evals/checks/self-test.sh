@@ -171,6 +171,23 @@ excerpts.sh         | excerpt-diff-lang.html        | 1 | --diff excerpt carries
 excerpts.sh         | excerpt-unchanged-changed-file.html | 1 | the change touches the file
 excerpts.sh         | excerpt-at-head.html          | 0 | no excerpt labels a changed file Unchanged
 excerpts.sh         | excerpt-typed-tag.html        | 1 | outside the generator's vocabulary
+# And the same three when git is asked and CANNOT ANSWER. Both of these rules learn what the
+# change touched from a repository, and each read a failure as an answer: the state-tag rule
+# tested the exit status of a pipeline ending in `sort`, which succeeds whatever git did, so an
+# unresolvable --base produced an EMPTY changed set and a PASS — turning the caught defect two
+# rows up into a clean bill of health. The first row below is that: exit 1, not 0, because a
+# page with a ledger is still checkable. The second is its clean counterpart under the same
+# conditions. The third has no ledger, so there is nothing to fall back on and the rule must
+# say so rather than pass vacuously.
+#
+# The last row is the same defect in page-invariants.sh, which took `git branch -r --contains`
+# failing for "no remote contains it" — a false PASS on a page with no permalinks, and a false
+# FAIL on one that has them. One row covers both, because the fix answers before either branch
+# is reached.
+excerpts.sh         | excerpt-unchanged-changed-file.html | 1 | the change touches the file   | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000
+excerpts.sh         | excerpt-at-head.html          | 0 | against the page's own ledger | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000
+excerpts.sh         | excerpt-typed-tag.html        | 1 | could not be read             | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000
+page-invariants.sh  | invariants-clean.html         | 0 | cannot say whether            | --repo @GOLD@/searches-repo --head 0000000000000000000000000000000000000000
 CASES
 
 # The judged half has one piece a script can test: reading a verdict file. A tally that reads a

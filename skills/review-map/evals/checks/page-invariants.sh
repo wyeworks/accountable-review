@@ -149,19 +149,24 @@ fi
 
 # 5 · Dead links. When the head commit is on no remote, every permalink to it 404s, and
 #     rung 4 of the ladder says plain text instead.
+# An empty answer and NO answer are different, and only one of them means unpushed. Written
+# with `|| true`, an unreadable repo or an unresolvable head produced empty output and this rule
+# read it as "on no remote" — a false PASS on a page with no permalinks, and a false FAIL on one
+# that has them. The verdict came from an answer git never gave, so the two are separated here
+# and the rule refuses rather than guesses. A flat chain rather than a nested one because there
+# are now three distinct states and nesting them hid that there were only two.
 if [ -z "$REPO" ]; then
   skip "link reachability: needs --repo to ask git what is pushed"
-else
-  unpushed=$(git -C "$REPO" branch -r --contains "$HEAD_REF" 2>/dev/null || true)
-  if [ -z "$unpushed" ]; then
-    if grep -Eq 'https://github\.com/[^"]*/(blob|pull|compare)/' "$IN"; then
-      bad "emits GitHub permalinks, but the head commit is on no remote — those 404"
-    else
-      ok "unpushed head: citations are plain text, no dead permalinks"
-    fi
+elif ! remotes=$(git -C "$REPO" branch -r --contains "$HEAD_REF" 2>/dev/null); then
+  skip "link reachability: git cannot say whether $HEAD_REF is pushed in $REPO — with no answer this rule has nothing to check the citation form against"
+elif [ -z "$remotes" ]; then
+  if grep -Eq 'https://github\.com/[^"]*/(blob|pull|compare)/' "$IN"; then
+    bad "emits GitHub permalinks, but the head commit is on no remote — those 404"
   else
-    ok "head is on a remote: permalinks are legitimate (link form not checked here)"
+    ok "unpushed head: citations are plain text, no dead permalinks"
   fi
+else
+  ok "head is on a remote: permalinks are legitimate (link form not checked here)"
 fi
 
 # 6 · The three theme states. A colour defined only inside a media query is the classic

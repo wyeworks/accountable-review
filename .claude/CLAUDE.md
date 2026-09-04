@@ -110,7 +110,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
-| `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire |
+| `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire. Most also exist as a `.rb` beside the `.sh` — `lib/review_map/` is their shared library, `lib/test/` its tests, and `equivalence.rb` grades each pair byte for byte and names what is still shell; `evals/README.md` § *The Ruby port* has what it cost |
 | `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in `references/rails-docs.md`, across every Rails series the floor admits, and reports dead pages, dead anchors, and the rows that differ by version. Maintenance, never a run — see § *The catalogue is the one thing a run cannot verify* |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs
@@ -427,6 +427,12 @@ Editing one of these means checking the others still agree.
   driven by whether the head SHA is reachable on a remote. Unpushed branches are the common case, and
   the correct behaviour there is plain text, not a permalink that 404s.
 
+  **A git that cannot answer is not the same as unpushed**, and `page-invariants.sh` § 5 used to
+  treat it as such: written with `|| true`, an unreadable `--repo` or an unresolvable head gave empty
+  output, which read as "on no remote" — a false PASS on a page with no permalinks and a false FAIL
+  on one that has them, both from an answer git never gave. Three states, not two, and the middle one
+  refuses.
+
   The rung decides whether anything is clickable. It does **not** decide the form, and the form is not
   a taste: a line inside the diff links to the diff page — `pull/{n}/files` at rung 1,
   `compare/{base}...{head}` at rung 2 — because that is the page the reviewer is working in and a blob
@@ -524,7 +530,10 @@ Editing one of these means checking the others still agree.
   belongs in the prose, where it can be stated. Four files agree — `scripts/excerpt.sh` computes it,
   `report-format.md` § *Source excerpts* owns the rule and the vocabulary, `page-template.html` says
   the tag in its example is computed rather than copied, and `evals/checks/excerpts.sh` plus the three
-  `golden/excerpt-*` rows check it, one of which is the clean counterpart: a rule that fired on every
+  `golden/excerpt-*` rows check it — plus three more for the case where git is asked and cannot
+  answer, since the relational half tested the exit status of a *pipeline* and so read a failing git
+  as an empty diff, passing the very page two rows above it — one of which is the clean counterpart:
+  a rule that fired on every
   excerpt sitting near a ledger would be worse than the defect.
 
   Two things the first live run changed, both worth keeping stated. The closed-page rule is judged
