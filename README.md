@@ -2,8 +2,9 @@
 
 A [Claude Code](https://claude.com/claude-code) plugin that turns a pull request into a published
 HTML **review map** — what the change is for, how its behaviours work, what the API and the client
-now agree on, where the decisions live, where to start reading, and what it can break. It ships one
-skill, `review-map`, targeting a Rails API with a Next.js client.
+now agree on, where the decisions live, where to start reading, and what it can break. It ships two
+skills: `review-map`, which produces the page, targeting a Rails API with a Next.js client, and
+`setup-ci`, which arranges for one to be produced automatically on every review-ready pull request.
 
 It does not grade the PR. The product principle is narrower and more useful than that:
 
@@ -129,6 +130,105 @@ single stalled turn.
 Verification is not a feature the page advertises: an evidence tier says how a claim is known, and a
 stamp saying how hard someone looked is the clean bill of health this page must never read as. What
 changed is reported to you in the terminal, not to whoever opens the link.
+
+## Team CI setup
+
+One command turns "someone runs the review map by hand, sometimes" into "every review-ready pull
+request has one, and the whole team can open it":
+
+```
+/accountable-review:setup-ci
+```
+
+It looks at the repository first — what CI you already have, whether Claude Code is already running in
+it, what conventions your workflows follow — and then writes one file,
+`.github/workflows/accountable-review.yml`. It touches nothing else, and running it twice is safe: the
+second run compares what it would write against what is there and says *unchanged*.
+
+```
+pull request marked ready for review
+        ↓
+Review Map generated for that exact revision
+        ↓
+uploaded as a GitHub Actions artifact
+        ↓
+available to everyone who can see the repository
+```
+
+Then a push to that pull request regenerates it, and cancels the run that is now describing a
+revision nobody is reviewing.
+
+### What you get
+
+| | |
+|---|---|
+| Triggers | `ready_for_review`, `synchronize`, `reopened` |
+| Draft pull requests | Ignored — pushing to a draft costs nothing |
+| Fork pull requests | Skipped: a `pull_request` run from a fork gets no secrets |
+| Detail level | `--brief` |
+| Delivery | GitHub Actions artifact, kept 30 days |
+| Concurrency | One run per pull request; superseded runs cancelled |
+| Permissions | `contents: read`, and nothing else |
+
+One thing is left for you: **the credential.** Add `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`)
+as a repository secret. Setup cannot see your secrets, so it says outright that this is outstanding
+rather than implying everything is ready.
+
+One thing to know about the triggers: `opened` is not among them, so a pull request opened *directly*
+as ready for review gets its first Review Map on its next push. If your team does not start work as
+drafts, add `opened` to the list — the draft guard still holds.
+
+The workflow is read-only and analysis-only. It never pushes, comments, approves, merges, or sets a
+check with a verdict in it, and it never boots your application: no migrations, no database service,
+no scripts from the pull request. That is the same principle the page itself follows — validation
+commands are shown to a reviewer, never run on their behalf.
+
+### Configuration, if you need any
+
+Usually none. Where you do, `.accountable-review.yml`:
+
+```yaml
+review_map:
+  mode: full
+  delivery:
+    provider: github-artifact
+    retention_days: 14
+```
+
+It is read when the workflow runs, so changing it does not mean regenerating the workflow. Setup will
+not write one that only restates the defaults — a file nobody chose is one more thing to keep in sync.
+
+### Artifacts are the default, not the contract
+
+**Review Maps are portable static HTML.** The default CI setup stores them as GitHub Actions
+artifacts because that needs no hosting, no extra credential, no external service and no manual step
+to share them. The cost is honest and worth naming: an artifact has to be downloaded and extracted
+before anyone can read it.
+
+Generation and delivery are separate on purpose:
+
+```
+Review Map generation  →  review-map/index.html  →  delivery provider
+```
+
+Generation writes a static directory and knows nothing about where it ends up. A provider is one
+script that says where it went:
+
+```json
+{ "provider": "github-artifact",
+  "location": "accountable-review-pr-412-a93bd21",
+  "browsable": false,
+  "stable_url": null }
+```
+
+A static host returns `browsable: true` and a URL people can click. Adding one — S3, R2, an internal
+static host, a Claude Artifact — changes nothing about how the page is produced, which is the whole
+point of the seam. A generic `command` provider is already there for teams that would rather write
+four lines of their own shell than wait for an adapter.
+
+Claude Artifacts are deliberately *not* the CI default. They are an excellent destination — it is
+where the interactive skill publishes — but automatic organisation-wide sharing is not a reliable
+zero-configuration path today, so nothing in the architecture depends on them.
 
 ## What it produces
 
@@ -347,6 +447,12 @@ degrades to plain text rather than emitting permalinks that would 404, and says 
 ```
 .claude-plugin/plugin.json         plugin manifest (name, version, metadata)
 agents/claim-falsifier.md          adversarial verifier, spawned per flow at --effort high
+ci/                                what runs in CI, not what a skill reads
+├── generate-review-map.sh         runs review-map non-interactively into a static directory
+└── delivery/
+    ├── deliver.sh                 the delivery seam: dispatch, and the DeliveryResult
+    ├── github-artifact.sh         the default provider
+    └── command.sh                 hand the directory to a command the team owns
 skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
@@ -359,6 +465,15 @@ skills/review-map/
 │   ├── ledger-rows.sh             generates the ledger rows from the diff
 │   └── coverage-gate.sh           asserts the ledger accounts for every changed path
 └── evals/                         fixtures, page and section cases, and the mechanical checks
+skills/setup-ci/
+├── SKILL.md                       inspect the repository, then configure CI
+├── references/
+│   ├── workflow.md                every part of the generated workflow, and why
+│   ├── config.md                  .accountable-review.yml — the whole schema and precedence
+│   └── delivery.md                the delivery contract, and how to add a provider
+├── templates/workflow.yml         the workflow itself
+├── scripts/                       inspect, render, install, read-config
+└── tests/                         the deterministic tests, and the proof they fire
 ```
 
 ## Contributing

@@ -921,7 +921,12 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
       <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">{{PARAGRAPH_FROM_THE_CODE_NOT_THE_PR_BODY}}</p>
 
       <div class="gt gt-meta" style="margin-top:44px">
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Branch</div><div class="path" style="font-size:12px">{{HEAD}} <span style="color:var(--fainter)">&rarr;</span> {{BASE}}</div></div>
+        <!-- Revision, not just branch. The two short SHAs are what let a reader
+             tell whether this page describes the version of the PR they are
+             looking at — a branch name says nothing after the next push, and a
+             page that silently describes an older revision is worse than a page
+             that arrives late. Both are recorded in step 1; neither is optional. -->
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">{{HEAD}} <span style="color:var(--fainter)">&rarr;</span> {{BASE}}</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">{{HEAD_SHORT_SHA}} <span>&rarr;</span> {{BASE_SHORT_SHA}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{FEATURE_REFACTOR_FIX}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
