@@ -94,7 +94,9 @@ esac
 # The skill effort a case is written for, defaulted for the same reason the level is: every case
 # written before the flag existed did what `normal` now names, and reinterpreting the corpus would
 # make old result lines incomparable with new ones. --skill-effort on the command line overrides.
-[ -n "$SKILL_EFFORT" ] || SKILL_EFFORT=$(jq -r '.skill_effort // "normal"' "$CASEFILE")
+# Mirrors the skill's own default. A case that does not declare one measures what a user gets;
+# results carry the value and report.sh groups by it, so older "normal" rows stay attributable.
+[ -n "$SKILL_EFFORT" ] || SKILL_EFFORT=$(jq -r '.skill_effort // "high"' "$CASEFILE")
 case $SKILL_EFFORT in
   normal|high) ;;
   *) echo "unknown skill effort: $SKILL_EFFORT (normal | high)" >&2; exit 2 ;;

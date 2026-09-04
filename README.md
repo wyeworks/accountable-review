@@ -98,14 +98,14 @@ says so rather than producing a page that quietly leaves it out.
 A separate axis, and orthogonal to the one above:
 
 ```
-/accountable-review:review-map 412                    # --effort normal, the default
-/accountable-review:review-map 412 --effort high
-/accountable-review:review-map 412 --full --effort high
+/accountable-review:review-map 412                    # --effort high, the default
+/accountable-review:review-map 412 --effort normal    # opt out of the falsification pass
+/accountable-review:review-map 412 --full
 ```
 
 Everything the skill writes rests on claims it checked itself — and the context that wrote a claim
-is the one least able to see what it assumed. **`--effort high`** adds a second reader that does not
-share that context. Once the behaviour flows are written, one read-only `claim-falsifier` subagent
+is the one least able to see what it assumed. **`--effort high`**, which is what you get unless you
+ask otherwise, adds a second reader that does not share that context. Once the behaviour flows are written, one read-only `claim-falsifier` subagent
 is sent at each of them, with a single mandate: assume this flow is wrong in ways that matter, and
 find evidence in the repository that contradicts it. It produces no competing explanation and
 rewrites nothing — it comes back with challenges, each anchored in a line it opened, plus the claims
@@ -115,10 +115,15 @@ The run then does to those challenges what it does to any other finding: opens t
 and corrects, downgrades or drops the claim. A challenge it cannot confirm is dropped, exactly as an
 unconfirmed finding is.
 
-It is off by default because it is not free. The agents go out together, so the run blocks once
-rather than once per flow, but it does block — an earlier version of this skill spawned a single
-helper agent and paid 997 seconds, 41% of its wall clock, in one stalled turn. That is why the skill
-otherwise spawns nothing at all, and why this is the one carved exception.
+It is on by default because it is very nearly free and it changes what the page finds. The agents
+read while the run keeps drafting rather than instead of it: on a 28-file pull request the whole
+pass cost 23 seconds of waiting, under 1% of the run, and the same change reviewed without it missed
+five things the falsified page carried. `--effort normal` turns it off, which is worth doing when
+the diff is small enough that a second reader has nothing to find.
+
+That is still the one carved exception — the skill otherwise spawns nothing at all, because an
+earlier version fanned work out to helper agents and paid 997 seconds, 41% of its wall clock, in a
+single stalled turn.
 
 **The page looks exactly the same either way.** No badge, no marker, no count of what was corrected.
 Verification is not a feature the page advertises: an evidence tier says how a claim is known, and a

@@ -59,9 +59,18 @@ instructions are its own, which is the point of putting them in a separate conte
   - Say which level you are producing when you first speak, in the same breath as the URL — a reader
     who wanted the full page should find that out at minute two, not at the end.
 - **Read the effort off the invocation too, and hold it the same way.** One of `--effort normal`,
-  `--effort high`, in any position; **no flag means `normal`**. It decides how hard the run works to
+  `--effort high`, in any position; **no flag means `high`**. It decides how hard the run works to
   be right, and at `--effort high` that buys exactly one thing today: the falsification pass in
-  step 8. Three rules, two of them the level's own:
+  step 8. `--effort normal` opts out of it, and is the flag to reach for when the diff is small
+  enough that a second reader has nothing to find.
+
+  **`high` is the default because it is nearly free and it changes what the page finds.** Measured
+  on one 28-file PR at `--brief`: the falsifiers cost **23 seconds of blocked parent, 0.9% of a
+  2607-second run**, because they run while stage 4 is drafted rather than instead of it. The same
+  target at `normal` missed five findings the falsified run carried, including the two the reviewer
+  most needed. Effort, not the detail level, is what decides whether the page is right — `--brief`
+  bought 4.6% of wall clock for 35% fewer words, because the time goes into tracing consumers and
+  not into writing sections. Three rules, two of them the level's own:
   - **It is a separate axis from the detail level, and they multiply rather than substitute.** Effort
     produces no section, changes no depth rule and moves no excerpt budget — the page is the same
     *shape* at either. `--brief --effort high` is the useful combination, not a contradiction: a short
@@ -341,11 +350,20 @@ blocked turn through the longest phase of the run. The trigger is the flows bein
 than the stage, so it still applies when the flows are not being published at all.
 
 **How.** One `accountable-review:claim-falsifier` per written flow, **all spawned in a single
-message.** This is the one exception to the rule against subagents in § *Hard rules*, and the single
-message is most of why it is affordable: several agents in one message block the run once, for the
-slowest, where the same agents one at a time block it once each. A blocking subagent's whole runtime
-lands in the parent's next before-first-token gap, and one run paid 997 seconds — 41% of its wall
-clock — for a single sequential spawn.
+message.** This is the one exception to the rule against subagents in § *Hard rules*.
+
+**Then keep working — do not wait on them.** They come back as notifications, not as a blocked
+turn, and the parent's job in the meantime is stage 4. Measured on a real run: five falsifiers
+launched over 23 seconds, each returning a launch receipt in about 2 seconds, with the first
+challenges arriving 365 seconds later while the parent drafted. Blocked time was **0.9% of the
+run**. A run that spawns them and then idles has converted the cheapest thing in this procedure
+into the most expensive.
+
+Spawn them in one message anyway. It costs nothing, it keeps the flows' challenges arriving
+together rather than trickling, and if a future harness does make them block, one message stalls the
+run once — for the slowest — where the same agents one at a time stall it once each. That is not
+hypothetical: a run that reached for a single blocking `Explore` agent paid 997 seconds, 41% of its
+wall clock, for one sequential spawn.
 
 Give each agent three things and no more: the repository path, `BASE` and `HEAD`, and **that one
 flow's written HTML**, sliced out of `$W/page.html` by its `<section id="flow-x">` anchor. Not the
@@ -783,10 +801,10 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   diff is too large to hold, say which region you skimmed — that is the honest failure and it is a
   signal worth having.
 
-  **The exception is the falsification pass in step 8, and only at `--effort high`.** It is the one
+  **The exception is the falsification pass in step 8, which now runs by default.** It is the one
   split that does not commit the mistake above: the seam is per *behaviour flow*, and a flow is
   already a whole behaviour rather than a layer of one, so nothing is fragmented that was not already
   separate. It is read-only, it returns challenges rather than page content — you still write every
-  word — and its agents go out in a single message, so the run blocks once. Nothing else spawns
-  anything, at any effort level, and a run that reaches for an `Explore` agent to help with step 5 has
-  broken this rule whatever flag it was given.
+  word — and its agents go out in a single message and are not waited on, so the run keeps drafting
+  while they read. Nothing else spawns anything, at any effort level, and a run that reaches for an
+  `Explore` agent to help with step 5 has broken this rule whatever flag it was given.

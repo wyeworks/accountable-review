@@ -42,9 +42,9 @@ level decides how many sections there are to scale.
 and the coverage gate still runs. § *The completeness invariant* says why, and what changes is only
 which component carries the paths.
 
-**Effort is not a level, and this file has nothing else to say about it.** `--effort normal` and
-`--effort high` decide how hard the run works to be right — at `high`, `SKILL.md` step 8 sends an
-adversarial pass at the behaviour flows before the page is finished. That produces no section, no
+**Effort is not a level, and this file has nothing else to say about it.** `--effort high` (the
+default) and `--effort normal` decide how hard the run works to be right — at `high`, `SKILL.md`
+step 8 sends an adversarial pass at the behaviour flows before the page is finished. That produces no section, no
 marker, no chip and no sentence: the page is the same *shape*, built to the same specs, at either
 effort, and a reader cannot tell which produced the page in front of them. Deliberately so. A page
 that announced having been checked would be asserting the assurance the format refuses to give —
