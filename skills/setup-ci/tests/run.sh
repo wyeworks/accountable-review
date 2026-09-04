@@ -216,7 +216,7 @@ assert_in "$TMP/inv-flag" "--brief"                    "an explicit flag beats t
 "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 --head-sha a93bd21deadbeef \
   --repo-dir "$TMP" > "$TMP/inv-def"
 assert_in "$TMP/inv-def" "--brief"                     "the default detail level is brief"
-assert_in "$TMP/inv-def" "--effort normal"             "the default effort is normal"
+assert_in "$TMP/inv-def" "--effort high"               "the default effort is high, as the skill's is"
 
 rc=0; printf 'review_map:\n  retention_day: 14\n' > "$C/bad.yml"
 "$READ_CONFIG" "$C/bad.yml" >/dev/null 2>&1 || rc=$?

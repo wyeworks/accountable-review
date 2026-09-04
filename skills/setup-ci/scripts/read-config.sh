@@ -14,7 +14,7 @@
 #
 #   review_map:
 #     mode: brief            # brief | full
-#     effort: normal         # normal | high
+#     effort: high           # high | low  (`normal` accepted, means `low`)
 #     delivery:
 #       provider: github-artifact
 #       retention_days: 30
@@ -98,7 +98,8 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "brief" && val != "full") fail("mode must be brief or full, got `" val "`")
       emit("mode", val)
     } else if (key == "effort") {
-      if (val != "normal" && val != "high") fail("effort must be normal or high, got `" val "`")
+      if (val == "normal") val = "low"
+      if (val != "high" && val != "low") fail("effort must be high or low, got `" val "`")
       emit("effort", val)
     } else fail("unknown key `" key "` under `review_map:`")
   }

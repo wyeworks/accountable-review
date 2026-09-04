@@ -1,0 +1,49 @@
+<!-- No defect. Three probe shapes that are correct and that rails-anchors.sh used to fail, kept
+     in ONE clean fixture on purpose: a fixture that must PASS catches a regression in any of
+     the three, where a fixture that must FAIL would keep failing while two of them broke.
+
+     1. A framework receiver. `Rails.application` is not this app's method to define, and the
+        scope rule read `application` as an undefined scope. Rule 7 had a framework-constant
+        list; the scope rule did not use it. They share one list now.
+
+     2. An enum's generated plural. `enum :status` generates `Project.statuses` with no `def`
+        anywhere, and reading that map is the version-proof way to ask what an app admits —
+        the probe rails-nextjs.md recommends. searches-repo's Project carries the enum so this
+        is checked against a real declaration rather than asserted.
+
+     3. A multi-line `bin/rails runner '…'` whose continuation line opens with `[`. That is a
+        literal being iterated, not a literal being printed, and the two cannot be told apart
+        by the first character — so the rule tracks the quote instead. A printed array still
+        fails: see anchors-fabricated-output.html, which stays failing.
+
+     Run with --repo @GOLD@/searches-repo, which is what makes 1 and 2 real rather than
+     rhetorical. -->
+<section id="flow-a">
+  <h3>Flow A &mdash; Archiving a project</h3>
+
+  <div class="mech">
+    <b>PATCH /api/projects/:id &rarr; Project#archive! &rarr; projects.archived_at</b>
+    <p>Archiving stamps a timestamp rather than deleting the row, so historical time entries survive.</p>
+  </div>
+
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><code>Project#archive!</code> stamps the column
+        <a class="cite" href="#">app/models/project.rb:4</a></div>
+    </dd>
+
+    <dt>Validate</dt>
+    <dd>
+      <div class="item">The routes this change adds, read back from the app itself.</div>
+      <pre class="probe">bin/rails runner 'pp Rails.application.routes.routes.map { |r| r.name }.grep(/project/)'</pre>
+
+      <div class="item">The values the column actually admits, which the enum generates.</div>
+      <pre class="probe">bin/rails runner 'pp Project.statuses'</pre>
+
+      <div class="item">Which methods each model defines itself, per model.</div>
+      <pre class="probe">bin/rails runner 'pp Project.instance_methods(false).sort
+[Project].each { |m| pp [m.name, m.instance_methods(false).sort] }'</pre>
+    </dd>
+  </dl>
+</section>

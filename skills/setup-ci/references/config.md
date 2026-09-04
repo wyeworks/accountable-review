@@ -5,7 +5,7 @@ The repository's configuration for Accountable Review. Optional, small, and mean
 ```yaml
 review_map:
   mode: brief            # brief | full
-  effort: normal         # normal | high
+  effort: high           # high | low
 
   delivery:
     provider: github-artifact
@@ -20,7 +20,7 @@ That is the whole schema. Every key is optional; a file may set one of them.
 | Key | Default | Meaning |
 |---|---|---|
 | `review_map.mode` | `brief` | The detail level `review-map` produces. `brief` merges the tail of the page into one section; `full` writes all seven. `review` is not implemented and is rejected here rather than silently downgraded |
-| `review_map.effort` | `normal` | How hard the run works to be right. `high` adds an adversarial pass over the behaviour flows. It costs more and changes nothing about the page's shape |
+| `review_map.effort` | `high` | How hard the run works to be right. `high` adds an adversarial pass over the behaviour flows, which costs under 1% of the run and changes nothing about the page's shape; `low` skips it. `normal` is accepted as the old name for `low` |
 | `review_map.delivery.provider` | `github-artifact` | Where the finished map goes. See `delivery.md` |
 | `review_map.delivery.retention_days` | `30` | How long the artifact is kept, 1–90. GitHub's own repository setting still caps it |
 | `review_map.delivery.command` | — | The command the `command` provider runs. Meaningless for any other provider |

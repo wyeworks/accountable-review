@@ -185,7 +185,7 @@ and a seventh would make the grader worse at the other six — which would be me
 rather than the flag. The A/B runs the *existing* expectations at both efforts and compares:
 
 ```sh
-./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort normal
+./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort low
 ./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort high
 ./report.sh behaviour-flows
 ```
@@ -429,6 +429,9 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `diagram.sh` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.sh` | renders each diagram in both themes to PNG | page and fragment |
 
+Every one of them except `diagram-shot.sh` now has a Ruby twin that shadows it byte for byte —
+see § *The Ruby port*.
+
 `SKIP` is load-bearing. A check that cannot run on this input says so out loud — a fragment has no
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
 thoroughly verified as a page.
@@ -516,6 +519,239 @@ than none**, because it turns an unchecked rule into one the reader believes is 
 Adding a check means adding a golden fragment that makes it fire. Adding a golden fragment means
 watching its keyword: two of the first eight passed for the wrong reason because their own `aria-label`
 contained the word the check greps for.
+
+## The Ruby port
+
+Every rule check in this directory now exists twice: as the `.sh` that `check.sh` and
+`self-test.sh` still dispatch, and as a `.rb` beside it. The only one not ported is
+`diagram-shot.sh`, which drives Playwright to render PNGs and is a driver rather than a rule.
+
+The contract is **byte-identical output** — every line, the exit code, and stderr. That is
+deliberate rather than fussy. The `PASS` / `FAIL` / `WARN` / `SKIP` strings *are* this
+directory's product: they are what a maintainer reads when a wording change in the skill moves
+a number, so a port that reworded them would be a rewrite of the thing under measurement,
+dressed as a refactor.
+
+`checks/equivalence.rb` is what holds that. It discovers pairs by name, then grades each over
+two case sources: a sweep of every fragment in `golden/` and the real `page-template.html`, in
+both `--page` and `--fragment`; and every row of `self-test.sh`, replayed with that row's own
+arguments. The second source is not redundancy — the sweep never passes `--repo`, `--base` or
+`--level`, so it would compare two SKIPs for `searches.sh`, whose entire rule is a relation
+between the page and a repository, and would miss the brief level altogether. It reports
+**1521 cases, 0 differing, across 10 of 12 checks**, and it names what is still shell on every
+run — today `rails-anchors` — because a partial migration that printed only "0 differing" would
+read as a finished one.
+
+It runs the cases concurrently (`-j`, default `nprocessors` capped at 8) for the same reason
+`run.sh` does: a thousand cases is two thousand processes, and serially that is over two
+minutes, which is long enough that the oracle stops being run. 34 seconds is short enough. The
+results are re-ordered before printing, because a diff report that arrives differently each run
+is not a diff report.
+
+### What it cost, per check
+
+| Check | `.sh` code | `.rb` code | |
+|---|---|---|---|
+| `build-state` | 54 | 53 | −1 |
+| `completeness` | 19 | 22 | +3 |
+| `start-here` | 53 | 48 | −5 |
+| `before-approving` | 60 | 57 | −3 |
+| `blast-radius` | 68 | 74 | +6 |
+| `excerpts` | 70 | 72 | +2 |
+| `page-invariants` | 57 | 62 | +5 |
+| `behaviour-flows` | 137 | 152 | +15 |
+| `searches` | 163 | 215 | **+52** |
+| `diagram` | 221 | 266 | **+45** |
+| **total** | **902** | **1021** | **+119** |
+
+Plus the library: `lib.sh`'s 55 code lines became 174 (`page.rb` 87, `check.rb` 87), and
+`test_page.rb`'s 188 lines have no counterpart at all — 17 tests, 56 assertions, and **11 of 11
+mutations of the library caught**. So the port is about 25% more code, and the honest summary is
+that **Ruby did not make this smaller; it made it checkable.**
+
+Where it grew is the interesting part. Seven checks came out within six lines of the shell,
+three of them shorter. The two that grew by fifty are `searches` and `diagram` — which were the
+densest and least readable shell in the directory, and the two most likely to be quietly wrong.
+`diagram`'s SVG geometry is now arithmetic over named structs instead of a 130-line `awk`
+program with a hand-rolled `attrnum` function; `searches`' dialect selection is a method with
+the reason above it rather than a nested `case` on glob patterns.
+
+The counterweight is the census: **193 external commands** across the shell checks became
+**one** method, `Check#shell`, used by exactly two of them. Everything else is now in-process.
+
+### What the port had to keep, and nearly did not
+
+- **`awk`'s rule order is the semantics.** Its print rule ran before its close rule, so a
+  region includes the line that ends it. `Page#from`'s `stop_after` is awk's `seen` guard, not
+  a knob: section 6's author-question region is anchored on an `<h3>` and terminated by `<h3>`,
+  so without it the region comes back empty and that whole part goes unchecked.
+- **Occurrence counts are not line counts.** `excerpts.sh` used `grep -o | wc -l` where other
+  checks use `grep -c`, and it compares `<details>` against `<summary>` — so a page with two on
+  one line must count two. Every call site now says which it means.
+- **A `String` pattern is a fixed string.** The shell used `grep -F` for the build-state banner
+  and `grep -E` elsewhere. `Page#has?` honours that, so a literal `.` or `?` in a future banner
+  sentence cannot start matching what it does not say.
+- **`length()` in mawk counts bytes.** `diagram`'s label-width arithmetic uses `bytesize` for
+  that reason: a label carrying an em dash would otherwise be measured differently here than
+  there, and the width check is what catches the commonest hand-authored SVG defect.
+- **`awk` numbers stringify through `CONVFMT`.** `120` prints as `120`, not `120.0`, so every
+  number reaching a `diagram` message goes through one `%.6g` helper.
+- **The matching stays in `grep`.** Ruby has no BRE, and `\|` is alternation in grep's default
+  dialect but a literal pipe in `rg`. Translating a page's own recorded search into a Ruby
+  regexp would silently change what that page claims to have searched for, so `searches.rb`
+  ports the parsing, the orchestration and the reporting, and hands every pattern to the tool
+  whose dialect it was written in.
+- **`completeness` still shells out to `scripts/coverage-gate.sh`.** That script is runtime
+  code, run by `SKILL.md` step 10 inside the user's project. Reimplementing the comparison
+  would give the completeness invariant two implementations that could disagree — which is the
+  failure the delegation exists to prevent.
+
+### Two intentional differences
+
+Both were found by constructing inputs the corpus does not contain, which is the only way to
+find them — `equivalence.rb` is silent on behaviour no fixture exercises, and saying so is more
+useful than a clean number.
+
+**Array iteration order.** The shell iterated two arrays with `for (key in array)`, whose order
+POSIX leaves unspecified — mawk walks `diagram.sh`'s coordinate names as `x1 cy y2 x2 y x y1 cx`.
+It is reachable: a `<text x="900" y="300">` in an 880×200 viewBox is off-canvas on both axes, and
+the shell reports `y` first where the Ruby reports `x`. Nothing in `golden/` or the template has
+that shape, and the same goes for the per-section diagram budget, which needs two sections both
+carrying diagrams. The Ruby uses declaration order and document order. That is a narrowing
+rather than a divergence: the shell's output in those cases was whatever the local `awk` did.
+
+**grep's binary-file heuristic.** `diagram.sh` finds its diagrams with `grep -n '<svg'`, and on
+a file containing NUL bytes grep prints `binary file matches` instead of line numbers — so the
+shell reports `SKIP  no diagrams in this input` on a page whose diagrams are all there, and
+warns on stderr while doing it. The Ruby reads the file and checks them. This is declined
+deliberately: reproducing the heuristic would mean writing a NUL-byte test into `Page` in order
+to make the diagram rules silently stop firing, and a published page is HTML written by the
+skill. Only `diagram` is affected, because it is the only check that reads line numbers out of
+grep rather than asking a yes/no question.
+
+### What the first rebase proved
+
+`main` moved twelve commits while this branch sat open, and it changed six of the nine checks
+the port shadows plus `lib.sh` — a new `strip_comments` helper, a section-4 region that now
+also ends at the merged tail's sub-anchors, `git grep` accepted as a recorded search, a
+non-breaking hyphen decoded out of citations, `svg.pr-mark` excluded from the diagram census,
+and the primer callout dropped before the unit census. None of that was announced to the port.
+
+`equivalence.rb` named all of it, per check, in thirty seconds:
+
+```
+blast-radius       0 identical, 146 differing     page-invariants  0 identical, 147 differing
+diagram          129 identical,  21 differing     searches       141 identical,   4 differing
+behaviour-flows  150 identical,   3 differing
+build-state, completeness, start-here, before-approving, excerpts    0 differing
+```
+
+Two things in that are the whole argument for keeping the shell alongside the port. The five
+checks `main` did not touch came back **untouched and green**, which is what makes the other
+five a *finding* rather than a suspicion. And `rails-anchors.sh` — a check that did not exist
+when the port was written — appeared in the "still shell" line without anyone adding it,
+because pair discovery is by filename.
+
+Re-porting the drift also found two library defects the corpus could not have:
+
+- **`Page#scan` returned capture groups.** `grep -o` prints the whole match; `String#scan`
+  returns the groups as soon as a pattern has any, so the new assurance rule reported
+  `independently` where the shell reported `independently verified`. One wrong message, and one
+  per future pattern — so the fix went into `Page`, not into a rule that has to remember
+  `(?:...)`. Two call sites that scan a plain `String` still need the non-capturing form, and
+  say so where they are.
+- **`Page#without`'s closing line was unpinned.** Inverting it changed nothing anywhere in the
+  1454 cases, so the sweep stayed green; a mutation of the library caught it, and it now has a
+  test. That is the division of labour the two mechanisms are for — the corpus grades behaviour
+  the fixtures reach, and mutation grades the library itself.
+
+### And again, the next day — this time caught in CI
+
+`main` moved twice more while the branch was open, and the second time the CI job added the day
+before was what found it. `equivalence.rb` failed the PR with **1471 identical, 46 differing**,
+all `excerpts`, every diff `sh only`. GitHub runs `pull_request` CI on the merge ref, so the job
+was grading the port against a `main` two commits newer than the branch, including three golden
+fixtures the branch had never seen.
+
+The drift was PR #12, and it is the most interesting one yet because it is a defect of exactly
+the kind this whole directory exists to catch: `scripts/excerpt.sh --at` hard-coded `Unchanged`
+on every `--source` block — a claim about the diff it had never looked at — and a run published
+`db/structure.sql:304-313` tagged `Unchanged` on a page whose own ledger listed that file as
+changed. Verbatim bytes under a false label, which is the one defect in an excerpt a reader
+cannot catch, because an excerpt reads as *more* trustworthy the closer they look at it. So
+`excerpts.sh` gained both halves of the fix and `excerpts.rb` had neither:
+
+- **lexical** — a `--source` tag must be one of `Unchanged`, `Added`, `Removed`, `At head`,
+  `Before the change`, and a `--diff` tag must be `Changed`. Anything else was typed.
+- **relational** — every `Unchanged` against the changed set, taken from `git diff --name-status
+  -M` when `--repo` and `--base` are given and otherwise from the page's own `data-path` ledger,
+  which the completeness invariant guarantees is the whole diff.
+
+Three details of that were reasoned about rather than observed, so each was tested on purpose
+after the corpus went green: a rename contributes **both** paths (`R100 old new`), verified in
+both directions against a scratch repository; several mislabelled blocks join with `"; "`; and
+the changed set is matched **whole-line, never substring**, because `api/Gemfile` sits inside
+`api/Gemfile.lock`.
+
+### Two latent defects the port surfaced, then fixed in both
+
+Reproducing the shell exactly meant copying two places where a **failing `git` was read as an
+answer**. The port copied them deliberately — a port may not quietly change a verdict — and they
+were then fixed in the shell and the Ruby together, with a `self-test.sh` row each, which is the
+only way a change like this is allowed to happen.
+
+**`excerpts.sh` — a false PASS.** The relational rule tested the exit status of a pipeline ending
+in `sort`, which succeeds whatever `git` did. So an unresolvable `--base` produced an *empty*
+changed set, matched nothing, and reported `no excerpt labels a changed file Unchanged, against
+the diff`. Measured on the fixture that plants the real defect:
+
+| `excerpt-unchanged-changed-file.html` | exit | verdict |
+|---|---|---|
+| no `--repo`, ledger path | 1 | FAIL — defect caught |
+| `--repo` + unresolvable `--base`, **before** | 0 | **PASS — defect masked** |
+| `--repo` + unresolvable `--base`, **after** | 1 | FAIL, against the ledger, with a WARN naming the git failure |
+
+A stale or unfetched base SHA turned a caught defect into a clean bill of health, on the one rule
+whose purpose is catching a label the diff contradicts. Now `git`'s own status is tested, the rule
+falls back to the ledger, and it says out loud that it did — which matters because `run.sh` passes
+`--repo` and `--base` on every page run, so without the WARN a wrong base silently downgrades
+every run to ledger-only.
+
+**`page-invariants.sh` — a false PASS *and* a false FAIL.** `git branch -r --contains` written with
+`|| true` collapsed "no remote contains it" and "git said nothing" into one answer, so an
+unreadable repo read as **unpushed**: a page with no permalinks got
+`unpushed head: citations are plain text` and a page with them got
+`emits GitHub permalinks, but the head commit is on no remote`. Both verdicts came from an answer
+git never gave. The three states are separated now and the rule refuses rather than guesses.
+
+The four rows are conditions rather than markup, so they use `self-test.sh`'s fifth column with an
+unresolvable ref, and **each was confirmed red against the unfixed shell first** — a row that
+passes before the fix pins nothing. 88 ok → 92 ok.
+
+### What is left
+
+`.github/workflows/validate.yml` runs both halves of that on every push, in a third job beside
+`manifest` and `checks`: the library's tests, and `equivalence.rb` over all 968 cases. It is the
+job that earns its place *because* the port coexists — `check.sh` still dispatches only the `.sh`,
+so nothing else in the repository notices when an edit to one makes the pair disagree. Ruby is
+pinned rather than taken from the runner image, because `minitest` is a bundled gem rather than a
+default one. That job is deleted along with the `.sh` files, at which point the library's tests
+become the whole story.
+
+`rails-anchors.sh` is not ported — 517 lines and 21 self-test rows, the largest check in the
+directory, and porting it while the oracle was red would have been new work on top of a broken
+signal. `equivalence.rb` names it on every run, so nothing about that is hidden.
+
+The nine ports coexist with their shell originals, deliberately: `equivalence.rb` needs both
+sides to compare, so deleting the `.sh` would remove the oracle at the moment the port is least
+proven. Flipping `check.sh` and `self-test.sh` over and deleting the shell is a separate change,
+and the reason it is separate is that it is mostly a **documentation** edit — these scripts are
+cited by filename in `SKILL.md`, `references/report-format.md`, this file, `golden/README.md`,
+`drivers/*.md` and `frozen/monolith-guard-chain/target.md`. The code is the cheap half.
+
+The drivers — `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh`, `profile.sh` and the two
+`.jq` programs — are not ported and are the weakest case for it: they are process orchestration
+and JSON handling, which is where the shell is least bad.
 
 ## The fixtures plant their answers
 

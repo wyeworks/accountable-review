@@ -4,7 +4,7 @@
 #
 #   Usage: generate-review-map.sh --output DIR --repository owner/repo
 #                                 --pr N --base-sha SHA --head-sha SHA
-#                                 [--mode brief|full] [--effort normal|high]
+#                                 [--mode brief|full] [--effort high|low]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 [--plugin-dir DIR] [--claude-bin claude]
 #                                 [--strict-gate] [--print-invocation]
@@ -75,17 +75,26 @@ if [ -n "$CONFIG" ] && [ -f "$CONFIG" ]; then
   eval "$("$PLUGIN_ROOT/skills/setup-ci/scripts/read-config.sh" "$CONFIG" --prefix CFG_)"
 fi
 [ -n "$MODE" ]   || MODE=${CFG_mode:-brief}
-[ -n "$EFFORT" ] || EFFORT=${CFG_effort:-normal}
+[ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 
 case $MODE in brief|full) ;; *) die "--mode must be brief or full, got '$MODE'" ;; esac
-case $EFFORT in normal|high) ;; *) die "--effort must be normal or high, got '$EFFORT'" ;; esac
+# `normal` was this value's name while it was the default; the skill still takes it and
+# means `low`, so a config file written before the rename keeps working here too.
+case $EFFORT in normal) EFFORT=low ;; esac
+case $EFFORT in high|low) ;; *) die "--effort must be high or low, got '$EFFORT'" ;; esac
 
 # The page must never land inside the repository it describes — it would become
 # part of the next diff, and on a PR branch it would be a file the change itself
 # introduced. The skill has this as a hard rule; here it is a check, because a
 # workflow makes it very easy to write "review-map/" and mean the workspace.
 mkdir -p "$OUTPUT"
-OUTPUT_ABS=$(cd "$OUTPUT" && pwd)
+# -P, because the comparison below is against `git rev-parse --show-toplevel`, which is
+# always physical. Plain `pwd` reports the logical path, so on a machine where the
+# workspace sits under a symlink — /tmp on macOS is /private/tmp — the prefix test
+# silently fails to match and the guard waves through exactly what it exists to stop.
+# It is not only a test artefact: an --output symlinked into the checkout bypasses it
+# the same way, and then the page lands in the diff it describes.
+OUTPUT_ABS=$(cd "$OUTPUT" && pwd -P)
 if REPO_TOP=$(cd "$REPO_DIR" && git rev-parse --show-toplevel 2>/dev/null); then
   case "$OUTPUT_ABS/" in
     "$REPO_TOP"/*) die "--output ($OUTPUT_ABS) is inside the repository under review ($REPO_TOP).

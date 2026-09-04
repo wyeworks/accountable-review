@@ -25,8 +25,8 @@ substituted rather than hard-coded for the usual reason: a driver naming its lev
 would be a second copy of what the case file already says, and the run's result line records
 the one the harness actually used.
 
-`SKILL_EFFORT` is the same arrangement one axis over: `normal` or `high`, declared by the case
-and overridden by `--skill-effort`. Note that it is **not** the `--effort` `run.sh` also takes —
+`SKILL_EFFORT` is the same arrangement one axis over: `high` (the skill's default, and the
+harness's) or `normal`, declared by the case and overridden by `--skill-effort`. Note that it is **not** the `--effort` `run.sh` also takes —
 that one is the CLI reasoning effort the producing model runs at, and a driver never sees it.
 Only a driver whose section carries claims worth attacking needs this placeholder; a driver that
 does not name it simply runs at whatever the harness recorded, which is honest and comparable.
