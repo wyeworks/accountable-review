@@ -213,7 +213,7 @@ explained in `references/workflow.md`.
 | Draft pull requests | Skipped |
 | Fork pull requests | Skipped — no secrets are available to them |
 | Detail level | `brief` |
-| Effort | `normal` |
+| Effort | `high` |
 | Delivery | `github-artifact` |
 | Retention | 30 days |
 | Concurrency | One run per pull request; superseded runs cancelled |
