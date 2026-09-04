@@ -16,7 +16,9 @@
         "The dashed nodes in the diagram are exactly the unchanged-and-affected ones, and the solid ones exactly the changed ones",
         "Routing is right: an entry a flow already explains is a named pointer to that flow — a clause and a link, not the finding again with its citation and tier repeated. Anything explained in full here is genuinely owned by no single flow",
         "It reads as a second pass rather than a first screen: it assumes the flows have been read, and does not re-teach the archival mechanism in order to make its own entries intelligible",
-        "The slug uniqueness validation appears as secondary work in a neutral register: independently reviewable, no criticism of the author for bundling it"
+        "The slug uniqueness validation appears as secondary work in a neutral register: independently reviewable, no criticism of the author for bundling it",
+        "The recorded searches sit in a collapsed details.searched and the section reads complete with it shut: every finding that rests on an empty result — 'nothing else reads this' — is stated in the open prose, never left for the reader to infer from a row inside the toggle",
+        "Each search is one row of a command and a result clause, not a paragraph. A row that re-explains why an entry matters, when the entry sits two inches above it, is the restatement this format forbids arriving as provenance"
       ]
     },
     {
@@ -30,7 +32,9 @@
         "The diagram crosses the boundary rather than stopping at the serializer, and marks the unchanged client consumers as unchanged",
         "Routing is right: the contract findings the flows own — the archivedAt key mismatch, the unhandled 422 — appear here as pointers into their flow, not as second explanations carrying the citation and tier again",
         "Rung 3 is stated once and correctly — a remote exists but the head is unpushed, so citations are plain text — without repeating the explanation at each citation",
-        "Nothing in the section grades the change, scores it, or recommends a decision"
+        "Nothing in the section grades the change, scores it, or recommends a decision",
+        "The recorded searches sit in a collapsed details.searched and the section reads complete with it shut: every finding that rests on an empty result — 'nothing else reads this' — is stated in the open prose, never left for the reader to infer from a row inside the toggle",
+        "Each search is one row of a command and a result clause, not a paragraph. A row that re-explains why an entry matters, when the entry sits two inches above it, is the restatement this format forbids arriving as provenance"
       ]
     },
     {
@@ -44,7 +48,9 @@
         "Entries in the SAME FILE as a changed hunk are not skipped because the file already appears in the ledger. application_controller.rb is both changed and affected, and a section that treats the path as accounted for has missed the fixture's central finding",
         "Routing is right, and a pointer has a shape: a consequence a flow already explains gets one clause, one citation and a link to the flow — not the mechanism again at flow length. What no flow owns is explained here, and in this fixture that is the two remaining writers of account_type: :steward (institute_role.rb:13, admin/institute_roles_controller.rb:10) and steward_accessible_controller? at application_controller.rb:59-62, which does not list chapters and which no flow table in flows.md covers. Note the near-miss that is NOT an example: profile_setup_not_required? at :94-97 is verbatim in Flow C's table, so routing that one to Flow C as a pointer is correct, not a failure",
         "Rung 3 is stated once and correctly — a remote exists, acme/commons does not resolve and nothing is pushed, so citations are plain text — and no permalink is emitted anywhere",
-        "Nothing grades the change, scores it, or recommends a decision, including where the fixture's own behaviour is unresolved"
+        "Nothing grades the change, scores it, or recommends a decision, including where the fixture's own behaviour is unresolved",
+        "The recorded searches sit in a collapsed details.searched and the section reads complete with it shut: every finding that rests on an empty result — 'nothing else reads this' — is stated in the open prose, never left for the reader to infer from a row inside the toggle",
+        "Each search is one row of a command and a result clause, not a paragraph. A row that re-explains why an entry matters, when the entry sits two inches above it, is the restatement this format forbids arriving as provenance"
       ]
     }
   ]

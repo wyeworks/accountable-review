@@ -258,9 +258,13 @@ The lens file the stack selected in step 2 — `references/rails-nextjs.md` or
 `references/phoenix-liveview.md` — carries the concrete search patterns per artifact kind. Use them;
 do not improvise a grep and call the area clear.
 
-**Record what you searched, not just what you found.** An empty result is a real finding — "no other
-caller of `Project#archive`, searched `rg 'archive[!?]?\b' app lib`" — but only if the reader can see
-the search. Unrecorded, absence and omission look identical, and the reviewer has to redo the work.
+**Record what you searched, not just what you found — but the finding goes in the open prose and the
+search goes in the collapsed record.** "Nothing else calls `Project#archive`" is the finding, and it
+is a sentence a reader meets without opening anything; `rg 'archive[!?]?\b' app lib` is how you know,
+and it belongs in `details.searched`, shut. Unrecorded entirely, absence and omission look identical
+and the reviewer redoes the work; left *only* inside the toggle, the finding is hidden rather than
+disclosed. **One row per search: the command, then what it returned in a clause** — the form and the
+budget are `references/report-format.md` § *What was searched*, which owns them.
 
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the page's backbone: the behaviour flows in
@@ -357,6 +361,27 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
 - Where you could not confirm something, put it in the page as an open question. Do not round
   uncertainty up.
 - Drop any finding that does not survive the check, and do not backfill it with something weaker.
+- **A correction replaces the claim; it never annotates it.** Whatever made you revise something
+  already written — a second reading of the file, a falsifier challenge, a search you re-ran — the
+  page ends up carrying the corrected claim in the present tense, in its own voice, as though it had
+  always said that. The page never tells the reader what an earlier draft of it said.
+
+  **Keep the fact, drop the autobiography.** This is the half that gets over-applied: if a recorded
+  search needs `-P` to reproduce, the reader who re-runs it needs that caveat, and it belongs on the
+  search's own line as a caveat. What does not belong is the story of the pattern that returned
+  nothing. Correct the claim, keep what a reader would need, and say what changed to the user in
+  chat.
+
+  This one is written without noticing, because it reads as candour rather than as advertising —
+  which is exactly the disguise a page forbidden to claim assurance is vulnerable to. One real page
+  carried ten of them: *"the mistake the first version of this section made"*, *"the first pass ran
+  this over `app/views` alone and found six"*, *"seven controllers, not the four the first pass
+  reported"*. Every one of those sentences had a true and useful fact inside it and buried it in the
+  run's own history. Note that this repository's prose is deliberately written the *other* way — a
+  rule here states the observation that produced it — and that register is right for whoever edits
+  the skill next and wrong for the page. The reviewer is reading about a pull request; how this
+  document got drafted is not part of it. `evals/checks/page-invariants.sh` § 2c fails a page that
+  does it.
 
 ### At `--effort high`: falsify each flow before the page is finished
 
@@ -396,6 +421,12 @@ Corrections land as `Edit`s on the flow already in the page, never as a rewrite 
 corrected. Two reasons, and both are hard rules already: a tally of corrected claims grades this
 page's own draft, and a page advertising that it was checked reads as the clean bill of health the
 page must never be. Say what changed to the user, in chat, and leave the artifact silent.
+
+**The form this actually takes never mentions the pass at all.** It is *"the first version of this
+section got it wrong"* — a correction annotated with the history that produced it, which is this
+pass, narrated. A run reads that as honesty and writes ten of them. The rule against it is the
+correction rule above, and it applies to every claim you revise here: fix the sentence, keep the
+caveat a reader would need, and let the draft history go.
 
 A flow published at stage 3 and corrected here **was wrong while it was public**, and that is the
 cost of running this after the flows rather than before each one. It is the right trade — the gate
@@ -797,11 +828,13 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   inside a primer's `pre.demo`, and only because its receiver is a class this repository does not have:
   the block quotes the manual rather than reporting what this application did. Name an application
   class there and it is invented output again, with the rule switched off.
-- **The page must read completely with every source excerpt closed.** An excerpt confirms a claim the
-  prose already made; it never carries one. A claim that exists only inside a collapsed block is
-  hidden content wearing the clothes of progressive disclosure. Judge this **field by field**: a
-  citation that appears elsewhere on the page does not rescue a field whose only `file:line` is inside
-  the block a reader has not opened.
+- **The page must read completely with every collapsed block closed.** Two components collapse — a
+  source excerpt and `details.searched` — and the rule is the same for both: they confirm a claim the
+  prose already made, and never carry one. A claim that exists only inside a collapsed block is hidden
+  content wearing the clothes of progressive disclosure. Judge this **field by field**: a citation
+  that appears elsewhere on the page does not rescue a field whose only `file:line` is inside the
+  block a reader has not opened. For the search record specifically, the trap is the empty result: "no
+  other caller" is a finding and belongs in the open; the grep proving it is what collapses.
 - **Never imply the page found everything.** It did not, and measurably so: three independent
   analyses of the same 109-file diff produced eight distinct headline findings between them, with
   only *one* appearing in all three. Explanation is reproducible; defect discovery is sampling. Say

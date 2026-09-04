@@ -37,8 +37,16 @@
     <dd>
       <div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; scopes the selectable list, and archival does not narrow it <a href="#flow-b">Flow B</a></div>
       <div class="item"><a class="path" href="#">spec/factories/projects.rb</a> &mdash; an unchanged trait stamps archived_at <a class="cite" href="#">spec/factories/projects.rb:14</a> <span class="tier">from unchanged code</span></div>
-      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong> <code>rg -n 'archived' app lib</code> found the scope; <code>rg -n 'archive[!?]?\b' app lib</code> found no other caller.</div>
-      <div class="searched"><strong>What these searches could not have found:</strong> a reader reaching the column through an enum predicate rather than by name.</div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>rg -n 'archived' app lib</code> <span class="sr-r">the scope</span></li>
+            <li><code>rg -n 'archive[!?]?\b' app lib</code> <span class="sr-r">no other caller</span></li>
+          </ul>
+          <p class="sr-limit"><strong>Out of reach.</strong> a reader reaching the column through an enum predicate rather than by name.</p>
+        </div>
+      </details>
     </dd>
   </dl>
 
