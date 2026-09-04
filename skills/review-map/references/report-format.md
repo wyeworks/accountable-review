@@ -832,6 +832,12 @@ The masthead and the goal, merged: a reviewer orienting themselves reads one scr
 overlap.
 
 - PR title and number, branch → base, author, linked ticket if the project uses one.
+- **The exact revision, as two short SHAs**: head → base, in the masthead's `Revision` cell beside the
+  branch names. Branch names go stale the moment someone pushes, and a page that describes an earlier
+  revision while looking current is the one failure a reader cannot detect from the inside. Both SHAs
+  are already recorded in step 1 — the head, and the left side of the diff — so this costs nothing and
+  is not conditional on there being a PR. It matters most where the page is regenerated automatically:
+  a run per push means several pages exist, and the SHA is what tells them apart.
 - **Change shape** chip: feature / refactor / bugfix / migration / dependency bump / mixed. Reading
   strategy differs per shape.
 - Metric strip, restricted to metrics that change a reviewer's behaviour: commits, files, and a line

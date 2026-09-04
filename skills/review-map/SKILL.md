@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort normal is the default, --effort high additionally tries to falsify the page's own claims before it is finished. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort normal is the default, --effort high additionally tries to falsify the page's own claims before it is finished. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -53,9 +53,10 @@ instructions are its own, which is the point of putting them in a separate conte
   than inferring the shape from the section list. Three rules about the flag itself:
   - `--review` **stops the run.** It is not implemented; see § *The review level is not implemented
     yet* below for what to say. Do not fall back to another level and do not write a page.
-  - An argument starting with `--` that is none of the three, and is not `--effort` with its value, is
-    **reported, not guessed at**. A misread flag silently produces the wrong shape of page, and the
-    reader has no way to tell.
+  - An argument starting with `--` that is none of the three, and is not one of `--effort`,
+    `--output`, `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not
+    guessed at**. A misread flag silently produces the wrong shape of page, and the reader has no way
+    to tell.
   - Say which level you are producing when you first speak, in the same breath as the URL — a reader
     who wanted the full page should find that out at minute two, not at the end.
 - **Read the effort off the invocation too, and hold it the same way.** One of `--effort normal`,
@@ -72,6 +73,39 @@ instructions are its own, which is the point of putting them in a separate conte
 
   Unlike the level, **do not announce the effort** — nothing about the pass reaches the page, and
   § *At `--effort high`* in step 8 says why.
+- **`--output <dir>` makes the run non-interactive.** It is the only flag that changes where the page
+  goes rather than what is on it: the page is written to `<dir>/index.html` and **nothing is
+  published** — no `Artifact` call, at any stage. Everything else is identical, and has to be. Same
+  sections, same depth rules, same excerpt budget, same gate. A CI run and a person's run produce the
+  same page from the same procedure; the moment this flag starts meaning a cheaper page, there are two
+  products and only one of them is developed against.
+
+  Three flags travel with it, carrying what `gh` would otherwise be asked for:
+
+  ```
+  --repository <owner/repo>   --base-sha <sha>   --head-sha <sha>
+  ```
+
+  **Prefer them over anything you derive.** `--base-sha` is `BASE` and `--head-sha` is `HEAD` for
+  every diff in this run; do not compute a merge-base over them and do not call `gh` for what they
+  already say. The caller knows which revision it asked about, and a run that recomputed a base from a
+  branch that has since moved would describe a revision nobody requested. With `--repository` and a PR
+  number the run also has what link rung 1 needs without `gh` at all — check reachability as always,
+  but do not re-derive the identity of the change. The flags are legal on their own; they simply have
+  no other reason to appear.
+
+  `<dir>` must be **outside the repository under review**, for the reason the hard rules give: the
+  page must never become part of the diff it describes.
+
+  **`$W` is unchanged by this, and that matters.** `--output` moves the finished page, not the run's
+  scratch: `$W` stays the derived work directory and excerpt fragments keep landing there. Write the
+  page itself straight to `<dir>/index.html` — a crash then leaves a useful page where the caller is
+  going to look for one — and leave `<dir>` holding nothing else, because whatever is in it is what
+  gets delivered.
+
+  `ci/generate-review-map.sh`, at the plugin root, is the only caller today. It supplies all four
+  flags, checks afterwards that the page names its revision and no longer says it is being written,
+  and refuses to deliver one that does.
 - Find the base *ref*: the PR's base if there is one, else the default branch
   (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
   you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
@@ -553,7 +587,9 @@ Everything else about writing holds at every stage:
   and the rung table, are in `references/report-format.md` § *Deep links*.
 - Write the page to `$W/page.html` — the work directory derived in step 1 — and never into the repo.
   The page must never become part of the diff it describes. Excerpt fragments go in the same
-  directory, so splicing them in is a path away rather than a move.
+  directory, so splicing them in is a path away rather than a move. With `--output` the page is
+  `<dir>/index.html` instead; the fragments still go in `$W`, and nothing but the page belongs in
+  `<dir>`.
 
 Tell the user the URL when stage 1 goes out, say it will fill in, and do not repeat it on every
 republish — one link, mentioned once, then a note when it is complete.

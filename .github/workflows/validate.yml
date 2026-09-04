@@ -26,3 +26,14 @@ jobs:
       # verdict. No model, no API key, about a second. A check script that always passes is
       # worse than none, so this runs on every push.
       - run: skills/review-map/evals/checks/self-test.sh
+
+  ci-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The deterministic half of the CI setup: what the generated workflow contains, that
+      # setup leaves other people's workflows alone, that running it twice is safe, that the
+      # config file is respected, and that the delivery seam returns its contract. Then the
+      # same trick as above — ten deliberate breaks, each of which must make the suite fail.
+      - run: skills/setup-ci/tests/run.sh
+      - run: skills/setup-ci/tests/self-test.sh
