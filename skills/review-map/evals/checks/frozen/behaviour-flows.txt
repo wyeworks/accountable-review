@@ -1,0 +1,1416 @@
+## --fragment anchors-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-demo-outside-primer.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-demo-outside-primer.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-fabricated-output.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-fabricated-output.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-invented-attribute.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-invented-attribute.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-invented-scope.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-invented-scope.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-link-alone.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-link-alone.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-link-in-excerpt.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-link-in-excerpt.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-mixed-series.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-mixed-series.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-app-symbol.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-app-symbol.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-lib.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-lib.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-no-citation.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-no-citation.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-no-link.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-no-link.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-no-trademark.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-no-trademark.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-primer-two-in-flow.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-runner-mutates.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-runner-mutates.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-uncatalogued-url.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-uncatalogued-url.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-unpinned-link.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-unpinned-link.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment approving-brief-checkpoint.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page approving-brief-checkpoint.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment approving-brief-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page approving-brief-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment approving-brief-no-anchor.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page approving-brief-no-anchor.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment approving-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page approving-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment approving-six-questions.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page approving-six-questions.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment blast-brief-uncited.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page blast-brief-uncited.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment blast-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page blast-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment blast-no-pointer.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page blast-no-pointer.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment blast-pointer-restated.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page blast-pointer-restated.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment blast-readorder.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page blast-readorder.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-edge-label-collision.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-edge-label-collision.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-invented-class.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-invented-class.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-label-overflow.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-label-overflow.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-literal-colour.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-literal-colour.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-no-legend.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-no-legend.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-offcanvas.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-offcanvas.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-placeholder.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-placeholder.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment diagram-unwrapped.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page diagram-unwrapped.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment excerpt-at-head.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-at-head.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment excerpt-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment excerpt-diff-lang.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  the flows quote changed lines, not only unchanged ones
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-diff-lang.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  the flows quote changed lines, not only unchanged ones
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment excerpt-duplicate.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-duplicate.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment excerpt-open.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-open.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment excerpt-typed-highlight.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-typed-highlight.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment excerpt-typed-tag.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-typed-tag.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment excerpt-unchanged-changed-file.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page excerpt-unchanged-changed-file.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment flows-blast-rows.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  1 review unit(s) inspected
+## --page flows-blast-rows.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  1 review unit(s) inspected
+## --fragment flows-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-decisions-interleaved.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+FAIL  a .decisions block sits inside a dl.rows — it belongs after the closing </dl>, where the card has the grid's edge to read against
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-decisions-interleaved.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+FAIL  a .decisions block sits inside a dl.rows — it belongs after the closing </dl>, where the card has the grid's edge to read against
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-layer-grouped.html
+exit=1
+FAIL  a flow heading is a layer name: Models — that is the repository's structure, not the change's
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-layer-grouped.html
+exit=1
+FAIL  a flow heading is a layer name: Models — that is the repository's structure, not the change's
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-partial-page.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-partial-page.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-pending-page.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page flows-pending-page.html
+exit=0
+SKIP  no flow sections yet — section 2 is still pending, so its shape cannot be checked
+## --fragment flows-primer-uncited-unit.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+FAIL  unit "PATCH /api/projects/:id &rarr; Project#archive! " makes claims with no file:line
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-primer-uncited-unit.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+FAIL  unit "PATCH /api/projects/:id &rarr; Project#archive! " makes claims with no file:line
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-source-only.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-source-only.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-stubs-only-page.html
+exit=0
+SKIP  every flow is still a stub — section 2's shape cannot be checked until one is written
+## --page flows-stubs-only-page.html
+exit=0
+SKIP  every flow is still a stub — section 2's shape cannot be checked until one is written
+## --fragment flows-unit-flattened.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+FAIL  3 of 3 field rows are outside a dl.rows — loose field blocks lose the row hairlines, the label gutter and every .rows-scoped rule
+SKIP  cannot check where the decisions block sits — there is no unit for it to sit after
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page flows-unit-flattened.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+FAIL  3 of 3 field rows are outside a dl.rows — loose field blocks lose the row hairlines, the label gutter and every .rows-scoped rule
+SKIP  cannot check where the decisions block sits — there is no unit for it to sit after
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment flows-unit-no-understand.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+FAIL  unit "Project#archive!" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-unit-no-understand.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+FAIL  unit "Project#archive!" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-unit-uncited.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+FAIL  unit "Project#archive!" makes claims with no file:line
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page flows-unit-uncited.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+FAIL  unit "Project#archive!" makes claims with no file:line
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment invariants-assurance.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --page invariants-assurance.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --fragment invariants-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment invariants-draft-narration.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --page invariants-draft-narration.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --fragment invariants-loose-data-path.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-loose-data-path.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment invariants-no-tier.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-no-tier.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment invariants-risk-score-leading.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-risk-score-leading.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment invariants-risk-score-trailing.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-risk-score-trailing.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment invariants-risk-score.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-risk-score.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment invariants-severity-chip.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-severity-chip.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment invariants-verdict.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page invariants-verdict.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment searches-bre-dialect.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page searches-bre-dialect.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment searches-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page searches-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment searches-git-grep.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page searches-git-grep.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment searches-unreachable.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page searches-unreachable.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment start-here-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page start-here-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment start-here-no-why.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page start-here-no-why.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment start-here-two-lists.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --page start-here-two-lists.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment page-template.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "{{WHAT_THIS_CHANGE_IS}}" fills things-to-understand
+PASS  unit "{{WHAT_THIS_CHANGE_IS}}" carries citations
+PASS  unit "{{WHAT_THIS_CHANGE_IS}}" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page page-template.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "{{WHAT_THIS_CHANGE_IS}}" fills things-to-understand
+PASS  unit "{{WHAT_THIS_CHANGE_IS}}" carries citations
+PASS  unit "{{WHAT_THIS_CHANGE_IS}}" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-layer-grouped.html
+exit=1
+FAIL  a flow heading is a layer name: Models — that is the repository's structure, not the change's
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-unit-no-understand.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+FAIL  unit "Project#archive!" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-unit-uncited.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+FAIL  unit "Project#archive!" makes claims with no file:line
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-source-only.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-unit-flattened.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+FAIL  3 of 3 field rows are outside a dl.rows — loose field blocks lose the row hairlines, the label gutter and every .rows-scoped rule
+SKIP  cannot check where the decisions block sits — there is no unit for it to sit after
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
+## --fragment flows-decisions-interleaved.html
+exit=1
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+FAIL  a .decisions block sits inside a dl.rows — it belongs after the closing </dl>, where the card has the grid's edge to read against
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-blast-rows.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  1 review unit(s) inspected
+## --fragment flows-pending-page.html --page flows-pending-page.html
+exit=0
+SKIP  no flow sections yet — section 2 is still pending, so its shape cannot be checked
+## --fragment flows-stubs-only-page.html --page flows-stubs-only-page.html
+exit=0
+SKIP  every flow is still a stub — section 2's shape cannot be checked until one is written
+## --fragment flows-partial-page.html --page flows-partial-page.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  unit "Project#archive!" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment flows-primer-uncited-unit.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
+FAIL  unit "PATCH /api/projects/:id &rarr; Project#archive! " makes claims with no file:line
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected

@@ -92,7 +92,7 @@ module ReviewMap
     # command is a false answer to the check's question, not a crash in the harness.
     def shell(*command, chdir: nil)
       opts = chdir ? { chdir: chdir } : {}
-      out, _err, status = Open3.capture3(*command, **opts)
+      out, _err, status = ReviewMap.capture(*command, **opts)
       [out, status.success?]
     rescue SystemCallError
       ["", false]

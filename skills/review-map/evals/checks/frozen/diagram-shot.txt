@@ -1,0 +1,462 @@
+## --fragment anchors-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-demo-outside-primer.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-demo-outside-primer.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-fabricated-output.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-fabricated-output.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-invented-attribute.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-invented-attribute.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-invented-scope.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-invented-scope.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-link-alone.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-link-alone.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-link-in-excerpt.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-link-in-excerpt.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-mixed-series.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-mixed-series.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-app-symbol.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-app-symbol.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-lib.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-lib.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-no-citation.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-no-citation.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-no-link.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-no-link.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-no-trademark.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-no-trademark.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-runner-mutates.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-runner-mutates.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-uncatalogued-url.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-uncatalogued-url.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-unpinned-link.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-unpinned-link.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment approving-brief-checkpoint.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page approving-brief-checkpoint.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment approving-brief-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page approving-brief-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment approving-brief-no-anchor.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page approving-brief-no-anchor.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment approving-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page approving-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment approving-six-questions.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page approving-six-questions.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment blast-brief-uncited.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page blast-brief-uncited.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment blast-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page blast-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment blast-no-pointer.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page blast-no-pointer.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment blast-pointer-restated.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page blast-pointer-restated.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment blast-readorder.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page blast-readorder.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-edge-label-collision.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-edge-label-collision.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-invented-class.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-invented-class.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-label-overflow.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-label-overflow.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-literal-colour.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-literal-colour.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-no-legend.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-no-legend.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-offcanvas.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-offcanvas.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-placeholder.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-placeholder.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment diagram-unwrapped.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page diagram-unwrapped.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-at-head.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-at-head.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-diff-lang.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-diff-lang.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-duplicate.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-duplicate.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-open.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-open.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-typed-highlight.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-typed-highlight.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-typed-tag.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-typed-tag.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment excerpt-unchanged-changed-file.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page excerpt-unchanged-changed-file.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-blast-rows.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-blast-rows.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-decisions-interleaved.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-decisions-interleaved.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-layer-grouped.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-layer-grouped.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-partial-page.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-partial-page.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-pending-page.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-pending-page.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-primer-uncited-unit.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-primer-uncited-unit.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-source-only.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-source-only.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-stubs-only-page.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-stubs-only-page.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-unit-flattened.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-unit-flattened.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-unit-no-understand.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-unit-no-understand.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment flows-unit-uncited.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page flows-unit-uncited.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-assurance.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-assurance.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-draft-narration.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-draft-narration.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-loose-data-path.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-loose-data-path.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-no-tier.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-no-tier.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-risk-score-leading.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-risk-score-leading.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-risk-score-trailing.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-risk-score-trailing.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-risk-score.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-risk-score.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-severity-chip.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-severity-chip.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment invariants-verdict.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page invariants-verdict.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment searches-bre-dialect.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page searches-bre-dialect.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment searches-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page searches-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment searches-git-grep.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page searches-git-grep.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment searches-unreachable.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page searches-unreachable.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment start-here-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page start-here-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment start-here-no-why.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page start-here-no-why.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment start-here-two-lists.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page start-here-two-lists.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment page-template.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page page-template.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams

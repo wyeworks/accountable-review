@@ -17,7 +17,30 @@
 # its results; and a region includes the line that closes it, because awk's
 # print rule fired before its close rule did.
 
+require "open3"
+
 module ReviewMap
+  # The entity decode two checks need before matching. Applied in order, like the sed it
+  # replaces, which means &amp;lt; decodes twice — a quirk kept because the shell had it and a
+  # recorded search or a doc link is compared against what the shell produced.
+  ENTITIES = [["&amp;", "&"], ["&lt;", "<"], ["&gt;", ">"], ["&quot;", '"'], ["&#39;", "'"]].freeze
+
+  # Every subprocess this directory runs, with its output forced to UTF-8.
+  #
+  # Open3 tags what it captures with the LOCALE's default external encoding, and these
+  # containers run without a UTF-8 one — so a check's own em dashes come back as invalid
+  # US-ASCII and the first `split` or `include?` against them raises. That is the same trap
+  # Page.read declares its encoding for, one layer out: the bytes are fine, the label is wrong.
+  # One place, because four callers capture subprocesses and each would have to remember.
+  def self.capture(*command, **opts)
+    out, err, status = Open3.capture3(*command, **opts)
+    [out.force_encoding("UTF-8"), err.force_encoding("UTF-8"), status]
+  end
+
+  def self.unescape(text)
+    ENTITIES.reduce(text) { |acc, (entity, char)| acc.gsub(entity, char) }
+  end
+
   # A page, a fragment, or one region of either. Every query is a whole-region
   # question, so a region is just a smaller Page and the checks never have to
   # care which they were handed.

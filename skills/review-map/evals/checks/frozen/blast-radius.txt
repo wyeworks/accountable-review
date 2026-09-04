@@ -1,0 +1,1468 @@
+## --fragment anchors-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-demo-outside-primer.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-demo-outside-primer.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-fabricated-output.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-fabricated-output.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-invented-attribute.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-invented-attribute.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-invented-scope.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-invented-scope.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-link-alone.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 6 entr(ies))
+## --page anchors-link-alone.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 6 entr(ies))
+## --fragment anchors-link-in-excerpt.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (3 of 5 entr(ies))
+## --page anchors-link-in-excerpt.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (3 of 5 entr(ies))
+## --fragment anchors-mixed-series.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-mixed-series.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-app-symbol.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-app-symbol.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-lib.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-lib.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-no-citation.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-no-citation.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-no-link.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-no-link.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-no-trademark.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-no-trademark.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-primer-two-in-flow.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-runner-mutates.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-runner-mutates.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-uncatalogued-url.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-uncatalogued-url.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment anchors-unpinned-link.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --page anchors-unpinned-link.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (3 of 6 entr(ies))
+## --fragment approving-brief-checkpoint.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --page approving-brief-checkpoint.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --fragment approving-brief-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --page approving-brief-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --fragment approving-brief-no-anchor.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --page approving-brief-no-anchor.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --fragment approving-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 5 entr(ies))
+## --page approving-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 5 entr(ies))
+## --fragment approving-six-questions.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+FAIL  section 4 has 8 entr(ies) and no citation at all
+## --page approving-six-questions.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+FAIL  section 4 has 8 entr(ies) and no citation at all
+## --fragment blast-brief-uncited.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --page blast-brief-uncited.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --fragment blast-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page blast-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment blast-no-pointer.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page blast-no-pointer.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment blast-pointer-restated.html
+exit=1
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+FAIL  1 entr(ies) belong to a flow (linked, or under its group heading) and carry more than one citation — a pointer is one clause, one citation and the link; more than that is the flow's explanation written twice
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page blast-pointer-restated.html
+exit=1
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+FAIL  1 entr(ies) belong to a flow (linked, or under its group heading) and carry more than one citation — a pointer is one clause, one citation and the link; more than that is the flow's explanation written twice
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment blast-readorder.html
+exit=1
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page blast-readorder.html
+exit=1
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment diagram-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-edge-label-collision.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-edge-label-collision.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-invented-class.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-invented-class.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-label-overflow.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-label-overflow.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-literal-colour.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-literal-colour.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-no-legend.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-no-legend.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-offcanvas.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-offcanvas.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-placeholder.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-placeholder.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment diagram-unwrapped.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page diagram-unwrapped.html
+exit=1
+PASS  blast-radius panel present
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-at-head.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-at-head.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-diff-lang.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-diff-lang.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-duplicate.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-duplicate.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-open.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-open.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-typed-highlight.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-typed-highlight.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-typed-tag.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-typed-tag.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment excerpt-unchanged-changed-file.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page excerpt-unchanged-changed-file.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment flows-blast-rows.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (2 of 2 entr(ies))
+## --page flows-blast-rows.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (2 of 2 entr(ies))
+## --fragment flows-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --page flows-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --fragment flows-decisions-interleaved.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --page flows-decisions-interleaved.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --fragment flows-layer-grouped.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --page flows-layer-grouped.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --fragment flows-partial-page.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --page flows-partial-page.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --fragment flows-pending-page.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (2 of 2 entr(ies))
+## --page flows-pending-page.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (2 of 2 entr(ies))
+## --fragment flows-primer-uncited-unit.html
+exit=1
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+FAIL  section 4 has 6 entr(ies) and no citation at all
+## --page flows-primer-uncited-unit.html
+exit=1
+PASS  blast-radius panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+FAIL  section 4 has 6 entr(ies) and no citation at all
+## --fragment flows-source-only.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --page flows-source-only.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 3 entr(ies))
+## --fragment flows-stubs-only-page.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page flows-stubs-only-page.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment flows-unit-flattened.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 5 entr(ies))
+## --page flows-unit-flattened.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 5 entr(ies))
+## --fragment flows-unit-no-understand.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page flows-unit-no-understand.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment flows-unit-uncited.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+FAIL  section 4 has 3 entr(ies) and no citation at all
+## --page flows-unit-uncited.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+FAIL  section 4 has 3 entr(ies) and no citation at all
+## --fragment invariants-assurance.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page invariants-assurance.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment invariants-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page invariants-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment invariants-draft-narration.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page invariants-draft-narration.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment invariants-loose-data-path.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --page invariants-loose-data-path.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (0 of 0 entr(ies))
+## --fragment invariants-no-tier.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page invariants-no-tier.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment invariants-risk-score-leading.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page invariants-risk-score-leading.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment invariants-risk-score-trailing.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page invariants-risk-score-trailing.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment invariants-risk-score.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page invariants-risk-score.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment invariants-severity-chip.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page invariants-severity-chip.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment invariants-verdict.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page invariants-verdict.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment searches-bre-dialect.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page searches-bre-dialect.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment searches-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page searches-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment searches-git-grep.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page searches-git-grep.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment searches-unreachable.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 3 entr(ies))
+## --page searches-unreachable.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 3 entr(ies))
+## --fragment start-here-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (3 of 3 entr(ies))
+## --page start-here-clean.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (3 of 3 entr(ies))
+## --fragment start-here-no-why.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (3 of 3 entr(ies))
+## --page start-here-no-why.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (3 of 3 entr(ies))
+## --fragment start-here-two-lists.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (4 of 4 entr(ies))
+## --page start-here-two-lists.html
+exit=1
+FAIL  no blast panel in section 4 — the changed/affected split is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (4 of 4 entr(ies))
+## --fragment page-template.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --page page-template.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --fragment blast-clean.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment blast-readorder.html
+exit=1
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+FAIL  an ol.begin inside section 4 — the reading order lives in section 3 now, after the flows
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment blast-no-pointer.html
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment blast-pointer-restated.html
+exit=1
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+FAIL  1 entr(ies) belong to a flow (linked, or under its group heading) and carry more than one citation — a pointer is one clause, one citation and the link; more than that is the flow's explanation written twice
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment blast-brief-uncited.html --level brief
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))
+## --fragment approving-brief-clean.html --level brief
+exit=0
+PASS  blast-radius panel present
+PASS  the blast panel carries a legend
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (2 of 4 entr(ies))

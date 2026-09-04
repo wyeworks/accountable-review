@@ -1,0 +1,481 @@
+## --fragment anchors-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-demo-outside-primer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-demo-outside-primer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-fabricated-output.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-fabricated-output.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-invented-attribute.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-invented-attribute.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-invented-scope.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-invented-scope.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-link-alone.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-link-alone.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-link-in-excerpt.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-link-in-excerpt.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-mixed-series.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-mixed-series.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-app-symbol.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-app-symbol.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-lib.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-lib.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-no-citation.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-no-citation.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-no-link.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-no-link.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-no-trademark.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-no-trademark.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-runner-mutates.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-runner-mutates.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-uncatalogued-url.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-uncatalogued-url.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-unpinned-link.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-unpinned-link.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment approving-brief-checkpoint.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page approving-brief-checkpoint.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment approving-brief-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page approving-brief-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment approving-brief-no-anchor.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page approving-brief-no-anchor.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment approving-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page approving-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment approving-six-questions.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page approving-six-questions.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment blast-brief-uncited.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page blast-brief-uncited.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment blast-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page blast-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment blast-no-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page blast-no-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment blast-pointer-restated.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page blast-pointer-restated.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment blast-readorder.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page blast-readorder.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-edge-label-collision.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-edge-label-collision.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-invented-class.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-invented-class.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-label-overflow.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-label-overflow.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-literal-colour.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-literal-colour.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-no-legend.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-no-legend.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-offcanvas.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-offcanvas.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-placeholder.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-placeholder.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-unwrapped.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-unwrapped.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-at-head.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-at-head.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-diff-lang.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-diff-lang.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-duplicate.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-duplicate.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-open.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-open.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-typed-highlight.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-typed-highlight.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-typed-tag.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-typed-tag.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-unchanged-changed-file.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-unchanged-changed-file.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-blast-rows.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-blast-rows.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-decisions-interleaved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-decisions-interleaved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-layer-grouped.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-layer-grouped.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-partial-page.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-partial-page.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-pending-page.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-pending-page.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-primer-uncited-unit.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-primer-uncited-unit.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-source-only.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-source-only.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-stubs-only-page.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-stubs-only-page.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-unit-flattened.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-unit-flattened.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-unit-no-understand.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-unit-no-understand.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-unit-uncited.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-unit-uncited.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-assurance.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-assurance.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-draft-narration.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-draft-narration.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-loose-data-path.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-loose-data-path.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-no-tier.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-no-tier.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-risk-score-leading.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-risk-score-leading.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-risk-score-trailing.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-risk-score-trailing.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-risk-score.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-risk-score.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-severity-chip.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-severity-chip.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-verdict.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-verdict.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-bre-dialect.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page searches-bre-dialect.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page searches-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-git-grep.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page searches-git-grep.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-unreachable.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page searches-unreachable.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment start-here-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page start-here-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment start-here-no-why.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page start-here-no-why.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment start-here-two-lists.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page start-here-two-lists.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment page-template.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page page-template.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-clean.html --repo searches-repo
+exit=0
+PASS  1 recorded search(es) re-run inside the repository
+PASS  every one of 1 cited entr(ies) is reachable from a recorded search
+## --fragment searches-unreachable.html --repo searches-repo
+exit=1
+PASS  1 recorded search(es) re-run inside the repository
+FAIL  1 of 2 cited entr(ies) are reachable from no recorded search: app/controllers/projects_controller.rb:5
+## --fragment searches-bre-dialect.html --repo searches-repo
+exit=0
+PASS  1 recorded search(es) re-run inside the repository
+PASS  every one of 1 cited entr(ies) is reachable from a recorded search
+## --fragment searches-git-grep.html --repo searches-repo
+exit=0
+PASS  1 recorded search(es) re-run inside the repository
+PASS  every one of 1 cited entr(ies) is reachable from a recorded search
+## --fragment searches-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded

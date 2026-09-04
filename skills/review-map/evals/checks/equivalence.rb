@@ -32,7 +32,8 @@
 # rows of self-test.sh are replayed as well, with their own arguments.
 
 require "etc"
-require "open3"
+
+require_relative "lib/review_map/page"
 
 HERE  = __dir__
 EVALS = File.dirname(HERE)
@@ -52,7 +53,7 @@ def pairs
     next if NOT_CHECKS.include?(base)
 
     name = base.delete_suffix(".sh")
-    ruby = File.join(HERE, "#{name.tr("-", "_")}.rb")
+    ruby = File.join(HERE, "#{name}.rb")
     Pair.new(name, shell, File.exist?(ruby) ? ruby : nil)
   end
 end
@@ -84,7 +85,7 @@ end
 
 def run(script, args)
   interpreter = script.end_with?(".rb") ? ["ruby"] : []
-  out, err, status = Open3.capture3({ "CHECK_TALLY" => "0" }, *interpreter, script, *args)
+  out, err, status = ReviewMap.capture({ "CHECK_TALLY" => "0" }, *interpreter, script, *args)
   [out + err, status.exitstatus]
 end
 

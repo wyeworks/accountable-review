@@ -1,0 +1,939 @@
+## --fragment anchors-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-demo-outside-primer.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-demo-outside-primer.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-fabricated-output.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-fabricated-output.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-invented-attribute.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-invented-attribute.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-invented-scope.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-invented-scope.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-link-alone.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-link-alone.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-link-in-excerpt.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page anchors-link-in-excerpt.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment anchors-mixed-series.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-mixed-series.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-app-symbol.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-app-symbol.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-lib.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-lib.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-no-citation.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-no-citation.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-no-link.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-no-link.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-no-trademark.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-no-trademark.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-runner-mutates.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-runner-mutates.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-uncatalogued-url.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-uncatalogued-url.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-unpinned-link.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-unpinned-link.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment approving-brief-checkpoint.html
+exit=0
+SKIP  no excerpts in this input
+## --page approving-brief-checkpoint.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment approving-brief-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page approving-brief-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment approving-brief-no-anchor.html
+exit=0
+SKIP  no excerpts in this input
+## --page approving-brief-no-anchor.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment approving-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page approving-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment approving-six-questions.html
+exit=0
+SKIP  no excerpts in this input
+## --page approving-six-questions.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment blast-brief-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --page blast-brief-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment blast-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page blast-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment blast-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page blast-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment blast-pointer-restated.html
+exit=0
+SKIP  no excerpts in this input
+## --page blast-pointer-restated.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment blast-readorder.html
+exit=0
+SKIP  no excerpts in this input
+## --page blast-readorder.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-edge-label-collision.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-edge-label-collision.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-invented-class.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-invented-class.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-label-overflow.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-label-overflow.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-literal-colour.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-literal-colour.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-no-legend.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-no-legend.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-offcanvas.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-offcanvas.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-placeholder.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-placeholder.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-unwrapped.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-unwrapped.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment excerpt-at-head.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-at-head.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-clean.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-clean.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-diff-lang.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+FAIL  a --diff excerpt carries data-lang — only unchanged code is tinted, a hunk is two realities interleaved
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-diff-lang.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+FAIL  a --diff excerpt carries data-lang — only unchanged code is tinted, a hunk is two realities interleaved
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-duplicate.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+## --page excerpt-duplicate.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+## --fragment excerpt-open.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+FAIL  an excerpt is open by default — excerpts are revealed by the reader, not shipped expanded
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-open.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+FAIL  an excerpt is open by default — excerpts are revealed by the reader, not shipped expanded
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-typed-highlight.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+FAIL  hljs- classes are written into the markup — the tint is the page script's job, and a hand-coloured quotation is an edited one
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-typed-highlight.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+FAIL  hljs- classes are written into the markup — the tint is the page script's job, and a hand-coloured quotation is an edited one
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-typed-tag.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+FAIL  a state tag is outside the generator's vocabulary, so it was typed: Modified on lib/admin_dashboard/reports/layout_updater.rb:18-24;
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-typed-tag.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+FAIL  a state tag is outside the generator's vocabulary, so it was typed: Modified on lib/admin_dashboard/reports/layout_updater.rb:18-24;
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-unchanged-changed-file.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:304-313 — quote it and let excerpt.sh --base tag the state
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-unchanged-changed-file.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:304-313 — quote it and let excerpt.sh --base tag the state
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-blast-rows.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-blast-rows.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment flows-clean.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-clean.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-decisions-interleaved.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-decisions-interleaved.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-layer-grouped.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-layer-grouped.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-partial-page.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-partial-page.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-pending-page.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-pending-page.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment flows-primer-uncited-unit.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-primer-uncited-unit.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment flows-source-only.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-source-only.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-stubs-only-page.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-stubs-only-page.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment flows-unit-flattened.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-unit-flattened.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-unit-no-understand.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-unit-no-understand.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment flows-unit-uncited.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page flows-unit-uncited.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment invariants-assurance.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-assurance.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-draft-narration.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-draft-narration.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-loose-data-path.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page invariants-loose-data-path.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment invariants-no-tier.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-no-tier.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-risk-score-leading.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-risk-score-leading.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-risk-score-trailing.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-risk-score-trailing.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-risk-score.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-risk-score.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-severity-chip.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-severity-chip.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-verdict.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-verdict.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment searches-bre-dialect.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-bre-dialect.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment searches-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment searches-git-grep.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-git-grep.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment searches-unreachable.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-unreachable.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment start-here-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page start-here-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment start-here-no-why.html
+exit=0
+SKIP  no excerpts in this input
+## --page start-here-no-why.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment start-here-two-lists.html
+exit=0
+SKIP  no excerpts in this input
+## --page start-here-two-lists.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment page-template.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page page-template.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+PASS  excerpt tints defined in all three theme blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+PASS  syntax tints defined in all three theme blocks
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-clean.html
+exit=0
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-open.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+FAIL  an excerpt is open by default — excerpts are revealed by the reader, not shipped expanded
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-duplicate.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+## --fragment excerpt-typed-highlight.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+FAIL  hljs- classes are written into the markup — the tint is the page script's job, and a hand-coloured quotation is an edited one
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-diff-lang.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+FAIL  a --diff excerpt carries data-lang — only unchanged code is tinted, a hunk is two realities interleaved
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-unchanged-changed-file.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:304-313 — quote it and let excerpt.sh --base tag the state
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-at-head.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-typed-tag.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+FAIL  a state tag is outside the generator's vocabulary, so it was typed: Modified on lib/admin_dashboard/reports/layout_updater.rb:18-24;
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-unchanged-changed-file.html --repo searches-repo --base 0000000000000000000000000000000000000000
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+WARN  the changed set could not be read from golden/searches-repo: git cannot resolve 0000000000000000000000000000000000000000..HEAD — a page carrying a ledger is still checked against that, and one without is not checked at all
+FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:304-313 — quote it and let excerpt.sh --base tag the state
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-at-head.html --repo searches-repo --base 0000000000000000000000000000000000000000
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+WARN  the changed set could not be read from golden/searches-repo: git cannot resolve 0000000000000000000000000000000000000000..HEAD — a page carrying a ledger is still checked against that, and one without is not checked at all
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-typed-tag.html --repo searches-repo --base 0000000000000000000000000000000000000000
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+FAIL  a state tag is outside the generator's vocabulary, so it was typed: Modified on lib/admin_dashboard/reports/layout_updater.rb:18-24;
+WARN  the changed set could not be read from golden/searches-repo: git cannot resolve 0000000000000000000000000000000000000000..HEAD — a page carrying a ledger is still checked against that, and one without is not checked at all
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
