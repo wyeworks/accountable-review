@@ -29,8 +29,14 @@
       <div class="item"><a class="path" href="#">app/models/project.rb:2</a> &mdash; the selectable
         scope reads the new column, so archival changes what it returns
         <span class="tier">evidenced by unchanged code</span></div>
-      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong>
-        <code>git grep -nE "archived_at|selectable" -- app</code> &mdash; the column and the scope.</div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>git grep -nE "archived_at|selectable" -- app</code> <span class="sr-r">the column and the scope</span></li>
+          </ul>
+        </div>
+      </details>
     </dd>
   </dl>
 </section>

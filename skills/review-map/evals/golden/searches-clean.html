@@ -2,10 +2,15 @@
      archived_at, so a grep for the column finds it.
 
      Written in the markup page-template.html emits TODAY — dl.rows / dt / dd / div.item /
-     a.path — and that is the point of this file as much as the search is. The version it
-     replaced used div.two-col > div.card > ul > li > span.cite, retired when the design system
-     changed, and because it was never migrated searches.sh went on passing this row while
-     matching nothing on any real page. -->
+     a.path, and details.searched > .sr-body > ul.sr-list — and that is the point of this file
+     as much as the search is. Two earlier versions were not migrated when the markup moved:
+     div.two-col > div.card > ul > li > span.cite, retired with the old design system, and then
+     div.searched, retired when the block was collapsed behind a toggle. Each time, searches.sh
+     went on passing this row while matching nothing on any real page.
+
+     What makes the check survive both moves is that it extracts by TEXT NODE that begins with
+     a search tool, not by class or element — so the migration is about this fixture telling the
+     truth about the page, not about the extractor. -->
 <section id="blast">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>Blast radius</h2>
@@ -23,8 +28,14 @@
       <div class="item"><a class="path" href="#">app/models/project.rb:2</a> &mdash; the selectable
         scope reads the new column, so archival changes what it returns
         <span class="tier">evidenced by unchanged code</span></div>
-      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong>
-        <code>rg -n 'archived_at' app</code> &mdash; every reader of the column by name.</div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>rg -n 'archived_at' app</code> <span class="sr-r">every reader of the column by name</span></li>
+          </ul>
+        </div>
+      </details>
     </dd>
   </dl>
 </section>

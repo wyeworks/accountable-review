@@ -51,7 +51,7 @@ REGION=$TMP/region
 # One extraction of the section's ENTRIES, shared by the two rules below.
 #
 # Scoped to the LISTS first. Section 4 holds a good deal that is not an entry — the panel's .bx
-# boxes, the .searched blocks, the notes, and, when a page has regressed, an ol.begin reading
+# boxes, the collapsed details.searched, the notes, and, when a page has regressed, an ol.begin reading
 # order — and counting any of it is how a correct page gets reported as uncited. dl.rows is the
 # current housing for both lists; a region without one is the retired markup, where the whole
 # region is the best available scope.
