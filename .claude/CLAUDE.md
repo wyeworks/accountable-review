@@ -5,12 +5,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repository is
 
 There is no application code here. The repository is the `accountable-review` Claude Code plugin. It
-ships a single skill — `skills/review-map/` — plus the one subagent that skill spawns
-(`agents/claim-falsifier.md`, and only at `--effort high`). The skill turns a pull request into a
-published HTML review map: what the change is for, what it can break, what the API and its client now agree on, and where
-the decisions live. Two stacks are supported: a Rails API with a Next.js client, which came first, and
-Elixir/Phoenix — a LiveView app or a JSON API. Step 2 detects which, and the run reads that stack's
-lens file and its doc catalogue, never both.
+ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
+them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
+a skill nor read by one. `review-map` turns a pull request into a published HTML review map: what the
+change is for, what it can break, what the API and its client now agree on, and where the decisions
+live. Two stacks are supported: a Rails API with a Next.js client, which came first, and
+Elixir/Phoenix — a LiveView app or a JSON API. Step 2 detects which, and the run reads that
+stack's lens file and its doc catalogue, never both. `setup-ci` writes the GitHub
+Actions workflow that produces one automatically on every review-ready pull request, and `ci/` is
+what that workflow runs.
+
+**`review-map` is the product; `setup-ci` is plumbing for it.** The second exists so a team gets the
+first without anyone remembering to ask, and nothing about it may change what the page is. The page
+produced in CI and the page produced by a person are the same page from the same procedure — the
+only difference is `--output`, which decides where the bytes land.
 
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
@@ -22,9 +30,18 @@ frontmatter allowlist and `claude plugin validate --strict` rejects an unknown k
 prose that another Claude instance executes, so the unit of quality is instruction clarity, not
 compilation.
 
-There is no build, no test suite, and no linter. Changes are verified by running the skill against a
-real PR and reading the page it produces. `claude plugin validate . --strict` checks the manifest,
-not the prose, which is the part that matters here.
+There is no build and no linter, and for `review-map` there is no test suite either: changes are
+verified by running the skill against a real PR and reading the page it produces.
+`claude plugin validate . --strict` checks the manifest, not the prose, which is the part that
+matters there.
+
+**`setup-ci` is the exception, and the reason is that it is not prose.** What it produces is a YAML
+file and four shell scripts, which is ordinary software with right answers, so it has ordinary tests:
+`skills/setup-ci/tests/run.sh` (no model, no network, about a second) and `tests/self-test.sh`, which
+breaks ten things `run.sh` claims to check and asserts the suite notices each one. Both run in CI on
+every push, for the reason `evals/checks/self-test.sh` does: a check that passes because it never
+looked is worse than no check. When you edit the workflow template or any script under
+`skills/setup-ci/scripts/` or `ci/`, run both.
 
 ## Working on the skill
 
@@ -115,6 +132,15 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire. Most also exist as a `.rb` beside the `.sh` — `lib/review_map/` is their shared library, `lib/test/` its tests, and `equivalence.rb` grades each pair byte for byte and names what is still shell; `evals/README.md` § *The Ruby port* has what it cost |
+| `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
+| `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
+| `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
+| `skills/setup-ci/references/delivery.md` | The delivery contract, the providers that exist and the ones only designed for, and why `command` is opt-in in CI |
+| `skills/setup-ci/templates/workflow.yml` | The workflow itself. Four substitutions, and nothing else is configurable by design |
+| `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically, `install-workflow.sh` writes idempotently and refuses to clobber, `read-config.sh` is the only thing that knows the config file's shape |
+| `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
+| `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page |
+| `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
 | `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in a catalogue — `rails-docs.md` across every Rails series the floor admits, `elixir-docs.md` at each package's newest release — and reports dead pages, dead anchors, and the rows that differ by version. Maintenance for the first, the **release gate** for the second, never part of a run — see § *The catalogue is the one thing a run cannot verify* |
 
 `SKILL.md` is the only file loaded up front; the references are read on demand at the step that needs
@@ -662,6 +688,86 @@ Editing one of these means checking the others still agree.
   against tokens rather than literals precisely so they keep inverting *relative to the page* rather
   than flipping to an unreadable combination in one theme.
 
+## Invariants the CI setup adds
+
+Same rule as above: editing one of these means checking the others still agree.
+
+- **Generation does not know where the page goes.** `review-map` writes a portable static directory;
+  `ci/delivery/deliver.sh` is the only thing that knows what happens to it afterwards. That seam is
+  the reason GitHub artifacts can be the default without being a commitment — a team that later puts
+  Review Maps on a static host adds one file under `ci/delivery/` and changes one line of
+  configuration, and nothing about how the page is produced moves.
+
+  Five files agree: `deliver.sh` dispatches and prints the DeliveryResult, a provider is one
+  `<name>.sh` reading `AR_*` and printing `key=value`, `references/delivery.md` owns the contract
+  **alone**, the workflow template guards its upload step with
+  `if: steps.delivery.outputs.provider == 'github-artifact'` so a different provider makes it stand
+  aside, and `tests/run.sh` asserts the four canonical fields.
+
+  **The failure mode is a destination threaded back into generation** — an `--artifact-name` on
+  `generate-review-map.sh`, an "upload the map" step inside the skill — and it will arrive as a
+  convenience. If a new provider seems to need a change in `review-map` or in
+  `generate-review-map.sh`, the seam is in the wrong place; move the seam.
+
+  A subtlety worth keeping: `github-artifact` does **not** move bytes. Uploading from a step script
+  means reimplementing the Actions artifact protocol, so it names the destination and the workflow's
+  standard upload step does the transfer. That split is fine — generation still cannot tell which
+  happened — but it is why the provider emits `artifact_name` and `retention_days` as extra keys, and
+  why extras are carried through to `$GITHUB_OUTPUT` at all.
+- **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
+  land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
+  gate. `SKILL.md` step 1 owns the flag, step 9 says the stages become save points rather than
+  publishes, step 10 says there is nothing to publish at the end.
+
+  **A cheaper CI page is the regression to watch**, and it will look like thrift — skip the excerpts
+  nobody will open, skip the flows on a big diff, skip the gate because there is no reader. Take any
+  of those and there are two products, only one of which is developed against, and the one the team
+  actually reads in CI is the one nobody looks at while editing the prose. `--brief` is the answer to
+  "how much page", at both levels of watching; `--output` is not a second one.
+- **A Review Map names its revision, on the page.** Two short SHAs in the masthead's `Revision` cell,
+  head → base, beside the branch names. Three files agree: `report-format.md` § 1 states the rule,
+  `page-template.html` carries the cell, and `ci/generate-review-map.sh` refuses to deliver a page
+  that does not contain the head's short SHA.
+
+  It is not CI-specific and must not become so. A branch name goes stale the moment someone pushes,
+  and a page that describes an earlier revision while looking current is the one failure a reader
+  cannot detect from the inside — which is exactly what regenerating per push creates, several pages
+  that differ only by revision.
+- **The workflow is a design, not a settings file.** The triggers, the draft guard, the fork guard,
+  the concurrency group and `contents: read` have no knobs, because a knob on each is a way to end up
+  generating Review Maps for draft pull requests, which is the thing the setup exists to prevent.
+  `render-workflow.sh` substitutes four values — which plugin, which ref, which Claude Code, which
+  Node — and everything a team legitimately configures is read from `.accountable-review.yml` at
+  **run** time by the scripts the workflow calls, so changing it never means regenerating the file.
+
+  That split is what makes "the workflow respects `retention_days: 14`" true without a second setup
+  run, and it is why `tests/run.sh` checks retention through `deliver.sh` rather than by grepping
+  YAML.
+- **Idempotency is decided by comparing bytes, so nothing rendered may vary.** No timestamp, no run
+  id, no randomness, no "generated on" comment — `install-workflow.sh` tells "already set up" from
+  "edited by hand" by `cmp`, and a date would make every second run report drift. `tests/run.sh`
+  asserts the rendered file contains today's date nowhere.
+
+  **That assertion has to run against the whole file, comments included.** It did not, briefly: the
+  negative assertions run against a comment-stripped copy so the workflow may explain in a comment why
+  it does not use `pull_request_target`, and a timestamp added as a comment sailed straight through
+  a test whose entire purpose was to catch it. `tests/self-test.sh` case 6 is that regression.
+- **Drift is reported, never resolved.** A hand-edited Accountable Review workflow is a file a team
+  owns, and setup reverting their pinned action or tightened timeout is the worst thing this command
+  can do. `install-workflow.sh` prints the diff and exits 3; `--update` is the only way past it, and
+  `SKILL.md` step 3 says to show the user and ask.
+- **CI must not become the place that runs the application.** The page proposes validation commands
+  and never runs them — the reason no probe output ever appears — and a workflow that booted the app
+  "so the map could be better" would be that decision made by the back door, with its own safety
+  design skipped. The template starts no service, runs no migration, and executes no script from the
+  pull request; `tests/run.sh` asserts all three against the comment-stripped file.
+- **The product principle reaches the artifact, not just the page.** `manifest.json` is provenance —
+  which revision, which plugin version, whether the coverage gate passed — and carries no severity, no
+  score and no approval, for the same reason the page carries none. The job summary says what the
+  Review Map is *for* and says outright that it does not review the change. A "Review Map: PASS" check
+  on a pull request would undo the whole format, and it is exactly the shape the next feature request
+  will take.
+
 ## The catalogue is the one thing a run cannot verify
 
 Both `references/rails-docs.md` and `references/elixir-docs.md` are allowlists, and the run takes URLs
@@ -977,9 +1083,13 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   never executes what it proposes: the skill does not boot the application under review, which is why
   no probe output ever appears. Changing that is a new decision with its own safety design, not an
   extension of this one.
-- It never posts to GitHub or anywhere outside the artifact.
+- It never posts to GitHub or anywhere outside the artifact. **This is unchanged by running in CI**,
+  which is the obvious next thing to want: no pull request comment, no check run, no status with a
+  verdict in it. The workflow run is where the artifact is discoverable, and `setup-ci`'s hard rules
+  say the same thing from the other side.
 - It never writes the page into the repository under review — a work directory under `$TMPDIR` only,
-  **derived** in step 1 from the repo and the target rather than chosen per run.
+  **derived** in step 1 from the repo and the target rather than chosen per run, or the directory
+  `--output` names, which `ci/generate-review-map.sh` refuses to let sit inside the checkout.
 - It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes. That is
   the reason the path is derived and not picked: a session-scoped scratch directory is a different
   directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
