@@ -11,6 +11,15 @@ HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd); CHECKS_DIR=$HERE; . "$HERE/li
 parse_args "$@"
 require_input
 
+# A comment is not markup, and the prose rules below must not read one. Two of them would
+# otherwise fail a correct page for its own documentation: page-template.html's header comments
+# discuss verdicts and revision history in the exact words those rules grep for, and a published
+# page carries them verbatim. Found the hard way — a fixture planted a defect and ALSO described
+# it in its own comment, so deleting the rule it tested left the fixture failing on the
+# description and the mutation test reported a bypass as caught.
+TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
+strip_comments "$IN" "$TMP/nocom"
+
 # 1 · The severity vocabulary is gone from the design system. If these class names are
 #     back, the page is grading again, whatever its prose says.
 if grep -Eq 'chip-(block|watch|good)' "$IN"; then
@@ -19,13 +28,51 @@ else
   ok "no severity chips"
 fi
 
-# 2 · Verdict language. Deliberately high-precision patterns: 'blocking' alone is a
-#     false positive ('blocks the request', 'locks the table'), so it is a WARN below
-#     rather than a failure here.
-if grep -Eiq 'LGTM|looks good to me|recommend (approv|merg)|approve this|ready to merge|risk score|overall risk' "$IN"; then
-  bad "verdict language found: $(grep -Eio 'LGTM|looks good to me|recommend (approv|merg)[a-z]*|approve this|ready to merge|risk score|overall risk' "$IN" | sort -u | tr '\n' ' ')"
+# 2 · Verdict language, in two families, because one of them is legitimate as a DENIAL.
+#
+#     Deliberately high-precision patterns: 'blocking' alone is a false positive ('blocks the
+#     request', 'locks the table'), so it is a WARN below rather than a failure here.
+#
+#     The split was forced by a correct page failing. § 7's ledger wrote "Attention is a reading
+#     estimate, not a risk score" — the page telling the reader that read/skim/mechanical is not
+#     severity, which is the no-grading invariant defending itself in the one place a reader is
+#     most likely to misread a column as a grade. The check failed it for containing the words.
+#     A rule that punishes a page for refusing a verdict teaches the run to stop refusing it out
+#     loud, which is the opposite of what rule 2 is for.
+#
+#     So: HARD is never right in any form. A GRADED NOUN fails only where nothing refuses it —
+#     the same shape as 2b's 'clean bill of health', which is legitimate only as a denial, except
+#     that this one is common enough in a correct page to be worth deciding mechanically rather
+#     than handing to a reader as a WARN.
+VERDICT_HARD='LGTM|looks good to me|recommend (approv|merg)[a-z]*|approve this|ready to merge'
+if grep -Eiq "$VERDICT_HARD" "$IN"; then
+  bad "verdict language found: $(grep -Eio "$VERDICT_HARD" "$IN" | sort -u | tr '\n' ' ')"
 else
   ok "no verdict or approval language"
+fi
+#     Per occurrence, not per document: one refused mention does not license an asserted one
+#     elsewhere on the page. The window is the 48 characters before the noun, and a negation
+#     counts only if nothing but short filler ("not a ", "rather than an ") stands between it
+#     and the noun — so "not X, this is an overall risk of 4" is still caught. Sentence-ending
+#     punctuation bounds the window, because the previous sentence's "not" is not this one's.
+bare=$(awk '
+  { l = tolower($0)
+    while (match(l, /risk score|overall risk|severity score|severity rating/)) {
+      s = RSTART; n = RLENGTH
+      lo = s - 48; if (lo < 1) lo = 1
+      pre = substr(l, lo, s - lo)
+      # The negation must be a WHOLE WORD, bounded on both sides. POSIX awk has no \b, and
+      # each missing boundary loses a real defect: without the leading one "no" matches inside
+      # "another" and "denote", so "another way to read the overall risk" excuses itself;
+      # without the trailing one "not" matches inside "notice" and "notify", so "notice the
+      # overall risk" does too. Both were caught by testing the rule rather than reading it.
+      if (pre !~ /(^|[^[:alpha:]])(not|nothing|never|no|rather than|instead of|without)([^[:alpha:]][^.!?;]{0,23})?$/) print substr(l, s, n)
+      l = substr(l, s + n)
+    } }' "$TMP/nocom" | sort -u | tr '\n' ' ')
+if [ -n "$bare" ]; then
+  bad "a graded noun asserted rather than refused: $bare"
+else
+  ok "no asserted risk or severity score"
 fi
 if grep -Eq '>[[:space:]]*(Blocking|Watch)[[:space:]]*<' "$IN"; then
   maybe "a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name"
@@ -61,8 +108,6 @@ fi
 #      exactly this register — "A previous version of this template showed the composition as
 #      three detached siblings" — and ship verbatim inside every published page, so a check
 #      reading them would fail every page for its template's documentation.
-TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
-strip_comments "$IN" "$TMP/nocom"
 NARRATE='(first|earlier|previous|initial|original) (version|draft) of (this|the) (section|page|flow|paragraph|entry|list|row|claim|map|file)'
 NARRATE=$NARRATE'|(a|the|this) (first|earlier|previous|initial) (pass|draft|version) (got|had|reported|missed|claimed|said|read|ran|rested|came)'
 NARRATE=$NARRATE'|on (a|the) (first|earlier|previous) (pass|draft)'

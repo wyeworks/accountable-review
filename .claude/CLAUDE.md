@@ -150,6 +150,28 @@ Editing one of these means checking the others still agree.
   rules, and enforced structurally: the template has no chip that expresses a verdict, and
   `page-template.html` says so in its header comment. Reintroducing a severity vocabulary is the
   single easiest way to undo this iteration.
+
+  **A page is allowed to *refuse* a grade out loud, and the check has to know the difference.**
+  `page-invariants.sh` § 2 splits its patterns in two for this. Approval language is never right in
+  any form; a graded *noun* — risk score, overall risk, severity score — fails only where nothing
+  negates it, because § 7's ledger legitimately writes *"attention is a reading estimate, not a risk
+  score"*. That sentence is the invariant defending itself in the one place a reader is most likely
+  to read a column as severity, and the check used to fail it for containing the words. A rule that
+  punishes a page for refusing a verdict teaches the run to stop refusing it out loud.
+
+  The negation test is per occurrence, inside a 48-character window bounded by sentence punctuation,
+  and the negation must be a **whole word bounded on both sides** — POSIX `awk` has no `\b`, and each
+  missing boundary silently excuses a real grade: without the leading one, `no` matches inside
+  *another* and *cannot*; without the trailing one, `not` matches inside *notice*. Both were found by
+  running the rule against sentences, not by reading it, and `golden/invariants-risk-score-leading`
+  and `-trailing` pin one boundary each — deliberately one per fixture, because a fixture planting
+  two bypasses keeps failing while either regresses and therefore pins neither.
+
+  That pair also forced § 2's graded-noun test and § 2c onto the **comment-stripped** copy. The first
+  version of the leading fixture described its own defect in its header comment, so the phrase
+  appeared twice and deleting the rule left the fixture still failing — a mutation test reporting a
+  bypass as caught. Real pages carry `page-template.html`'s comments verbatim, so this was a live bug
+  and not only a fixture artefact.
 - **Evidence tiers.** Five of them, listed in `report-format.md` § *Evidence tiers*, rendered as
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
