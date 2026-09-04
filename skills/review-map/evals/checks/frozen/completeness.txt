@@ -1,462 +1,462 @@
 ## --fragment anchors-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-demo-outside-primer.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-demo-outside-primer.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-fabricated-output.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-fabricated-output.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-invented-attribute.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-invented-attribute.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-invented-scope.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-invented-scope.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-link-alone.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-link-alone.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-link-in-excerpt.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-link-in-excerpt.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-mixed-series.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-mixed-series.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-app-symbol.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-app-symbol.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-lib-rails-mark.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-lib-rails-mark.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-lib.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-lib.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-no-citation.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-no-citation.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-no-link.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-no-link.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-no-trademark.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-no-trademark.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-scaffold-receiver.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-scaffold-receiver.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-two-in-flow.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-two-in-flow.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-runner-mutates.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-runner-mutates.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-uncatalogued-url.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-uncatalogued-url.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-unpinned-link.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-unpinned-link.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment approving-brief-checkpoint.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page approving-brief-checkpoint.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment approving-brief-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page approving-brief-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment approving-brief-no-anchor.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page approving-brief-no-anchor.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment approving-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page approving-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment approving-six-questions.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page approving-six-questions.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment blast-brief-uncited.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page blast-brief-uncited.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment blast-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page blast-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment blast-no-pointer.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page blast-no-pointer.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment blast-pointer-restated.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page blast-pointer-restated.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment blast-readorder.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page blast-readorder.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-edge-label-collision.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-edge-label-collision.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-invented-class.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-invented-class.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-label-overflow.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-label-overflow.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-literal-colour.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-literal-colour.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-no-legend.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-no-legend.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-offcanvas.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-offcanvas.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-placeholder.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-placeholder.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-unwrapped.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page diagram-unwrapped.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-at-head.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-at-head.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-diff-lang.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-diff-lang.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-duplicate.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-duplicate.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-open.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-open.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-typed-highlight.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-typed-highlight.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-typed-tag.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-typed-tag.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-unchanged-changed-file.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-unchanged-changed-file.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-blast-rows.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-blast-rows.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-decisions-interleaved.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-decisions-interleaved.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-layer-grouped.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-layer-grouped.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-partial-page.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-partial-page.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-pending-page.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-pending-page.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-primer-uncited-unit.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-primer-uncited-unit.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-source-only.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-source-only.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-stubs-only-page.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-stubs-only-page.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-unit-flattened.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-unit-flattened.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-unit-no-understand.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-unit-no-understand.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-unit-uncited.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-unit-uncited.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-assurance.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-assurance.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-draft-narration.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-draft-narration.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-loose-data-path.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-loose-data-path.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-no-tier.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-no-tier.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-risk-score-leading.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-risk-score-leading.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-risk-score-trailing.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-risk-score-trailing.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-risk-score.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-risk-score.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-severity-chip.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-severity-chip.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-verdict.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-verdict.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment searches-bre-dialect.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page searches-bre-dialect.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment searches-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page searches-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment searches-git-grep.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page searches-git-grep.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment searches-unreachable.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page searches-unreachable.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment start-here-clean.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page start-here-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment start-here-no-why.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page start-here-no-why.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment start-here-two-lists.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page start-here-two-lists.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment page-template.html
 exit=3
-SKIP  completeness.sh needs a whole page, got a fragment
+SKIP  completeness.rb needs a whole page, got a fragment
 ## --page page-template.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff

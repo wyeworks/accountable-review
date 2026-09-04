@@ -55,7 +55,7 @@ re-deriving and re-verifying in a second dialect, and rubydoc's coverage varies 
 the anchors this file already carries, and it shows the tag on the page, which is what lets a reader
 confirm the version themselves.
 
-**Never `blob/`, `pull/` or `compare/`, even for a gem's docs.** `evals/checks/page-invariants.sh` § 5
+**Never `blob/`, `pull/` or `compare/`, even for a gem's docs.** `evals/checks/page-invariants.rb` § 5
 greps the page for `github.com/.../(blob|pull|compare)/` and fails a page that emits one when the head
 commit is unpushed, because those are the shapes a dead permalink takes. `tree/<tag>` does not match
 it — deliberately, and it is the only `github.com` shape a doc link may take.

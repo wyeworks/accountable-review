@@ -172,7 +172,7 @@ module Searches
   # not reset it; the Changed column, the end of the field, and <h3> do.
   # AN ENTRY IS WHATEVER THE TEMPLATE EMITS, and it stopped being <li>. When the design system
   # moved § 4 from div.two-col > div.card > ul > li > span.cite to dl.rows > dt/dd > div.item >
-  # a.path, this extractor was not moved with it — and neither were the goldens self-test.sh
+  # a.path, this extractor was not moved with it — and neither were the goldens self-test.rb
   # measures it against, so the check went on passing its own suite while matching nothing on
   # any real page. Two published runs, one at each detail level, both came back SKIP with
   # checked=0: the header above says a search that finds nothing it claims is the failure this
@@ -225,7 +225,7 @@ module Searches
   end
 end
 
-check = ReviewMap::Check.new(ARGV, name: "searches.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 
 if check.repo.to_s.empty?

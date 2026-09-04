@@ -49,7 +49,7 @@ SCOPES = {
 
 CHECKS_DIR = File.join(__dir__, "checks")
 
-check = ReviewMap::Check.new(ARGV, name: "check.rb")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 
 scope = check.scope

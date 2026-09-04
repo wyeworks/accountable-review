@@ -203,7 +203,7 @@ module RailsAnchors
   end
 end
 
-check = ReviewMap::Check.new(ARGV, name: "rails-anchors.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 page = check.page
 catalogue_path = File.join(ReviewMap::Check::SKILL_DIR, "references", "rails-docs.md")

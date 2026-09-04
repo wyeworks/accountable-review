@@ -110,7 +110,7 @@ def entries_in(lists)
   found
 end
 
-check = ReviewMap::Check.new(ARGV, name: "blast-radius.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 
 # A comment is not markup — see Page#without_comments for the fixture that proved it.

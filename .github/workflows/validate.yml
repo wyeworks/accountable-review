@@ -28,10 +28,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # The checks, checked: every fragment in evals/golden plants one defect and asserts the
-      # verdict. No model, no API key, about a second. A check script that always passes is
-      # worse than none, so this runs on every push.
-      - run: skills/review-map/evals/checks/self-test.sh
+      # Pinned, and not the runner's system Ruby: minitest is a BUNDLED gem rather than a
+      # default one, so `require "minitest/autorun"` is not guaranteed on a bare image. The
+      # pin also keeps the job comparable run to run, for the same reason run.sh puts the
+      # model and effort on every result line.
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      # The checks, checked: every fragment in evals/golden plants one defect and a row in
+      # self-test-cases.txt asserts the verdict. No model, no API key, a couple of seconds. A
+      # check script that always passes is worse than none, so this runs on every push.
+      - run: ruby skills/review-map/evals/checks/self-test.rb
+      # The region scanner, checked directly — the seam the shell version had nowhere to put.
+      - run: ruby skills/review-map/evals/checks/lib/test/test_page.rb
+      # And the frozen corpus: every case's exact output, recorded from the implementation
+      # that equivalence.rb had just proved identical to the shell, over ~1900 cases. This is
+      # what replaced that oracle when the shell was deleted, and it is the only thing left
+      # that would notice a rule quietly changing what it says.
+      - run: skills/review-map/evals/checks/frozen.rb
 
   ci-setup:
     runs-on: ubuntu-latest
@@ -43,29 +57,3 @@ jobs:
       # same trick as above — ten deliberate breaks, each of which must make the suite fail.
       - run: skills/setup-ci/tests/run.sh
       - run: skills/setup-ci/tests/self-test.sh
-
-  ruby:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # Pinned, and not the runner's system Ruby: minitest is a BUNDLED gem rather than a
-      # default one, so `require "minitest/autorun"` is not guaranteed on a bare image. The
-      # pin also keeps the job comparable run to run, for the same reason run.sh puts the
-      # model and effort on every result line.
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
-      # The region scanner, checked directly. This is the seam the shell version had nowhere
-      # to put: its three awk extractors could only ever be exercised end to end through a
-      # golden fragment. A second.
-      - run: ruby skills/review-map/evals/checks/lib/test/test_page.rb
-      # And every ported check against the .sh it shadows, byte for byte — every line, the
-      # exit code and stderr — over the whole of evals/golden, the real page-template.html,
-      # and every row of self-test.sh replayed with its own arguments. 968 cases, about a
-      # minute on four cores.
-      #
-      # This is the job that earns its place while both implementations exist: the .rb files
-      # are not yet dispatched by check.sh, so nothing else notices when an edit to a .sh
-      # makes them disagree. It is deleted along with the .sh files when the dispatchers are
-      # flipped over — at which point the .rb tests above become the whole story.
-      - run: skills/review-map/evals/checks/equivalence.rb

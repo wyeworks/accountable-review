@@ -76,11 +76,7 @@ module BehaviourFlows
   end
 end
 
-# The name is pinned to the shell script's while the two run side by side: it is the only
-# thing the tally line carries that a port could change silently, and checks/equivalence.rb
-# compares output byte for byte. When the .sh goes, so does this argument — the default is
-# this file's own basename.
-check = ReviewMap::Check.new(ARGV, name: "behaviour-flows.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 
 # On a page, narrow to the flow sections. The template gives them id="flow-a" and so on, and the

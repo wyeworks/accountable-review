@@ -132,7 +132,7 @@ def theme_states(check, token, label, absent: nil)
   end
 end
 
-check = ReviewMap::Check.new(ARGV, name: "excerpts.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 page = check.page
 

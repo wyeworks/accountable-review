@@ -27,7 +27,7 @@ reachable without a network. The first live run against the fixture ran `gh` any
 `Could not resolve to a Repository`, and emitted plain text — correctly, because a permalink
 to a repository that does not exist 404s no matter what `refs/remotes` says. **Rung 2 is not
 reachable with a fictional remote**, and the trick also punched a hole in
-`checks/page-invariants.sh` § 5, which greenlights dead permalinks whenever `refs/remotes` is
+`checks/page-invariants.rb` § 5, which greenlights dead permalinks whenever `refs/remotes` is
 populated. The push is gone; do not reintroduce it.
 
 ## Project shape, as step 2 discovers it

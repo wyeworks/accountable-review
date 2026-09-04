@@ -20,7 +20,7 @@ require_relative "lib/review_map/check"
 
 ANCHOR = /id="start"/
 
-check = ReviewMap::Check.new(ARGV, name: "start-here.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 
 region = check.page.has?(ANCHOR) ? check.page.section_from(ANCHOR) : check.page

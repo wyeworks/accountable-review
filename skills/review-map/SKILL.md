@@ -428,7 +428,7 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
   run's own history. Note that this repository's prose is deliberately written the *other* way — a
   rule here states the observation that produced it — and that register is right for whoever edits
   the skill next and wrong for the page. The reviewer is reading about a pull request; how this
-  document got drafted is not part of it. `evals/checks/page-invariants.sh` § 2c fails a page that
+  document got drafted is not part of it. `evals/checks/page-invariants.rb` § 2c fails a page that
   does it.
 
 ### At `--effort high`: falsify each flow before the page is finished
@@ -832,7 +832,7 @@ Convert it instead into a stated limit — the same components, different words:
 - The ledger note says the gate did not run, and warns against reading the written sections as a full
   account of the diff.
 
-`evals/check.sh --stopped` checks all four. This is the third legitimate state of the page, alongside
+`evals/check.rb --stopped` checks all four. This is the third legitimate state of the page, alongside
 in-progress and complete, and the only one that requires a deliberate edit rather than a deletion.
 
 ## The review level is not implemented yet

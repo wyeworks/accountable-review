@@ -23,7 +23,7 @@ the mechanism in prose, cite the repo line, and propose a probe from
 
 **That also costs the primer callout, which is easy to miss.** An `aside.primer` is what a doc link
 escalates into, so it cannot exist without one — `report-format.md` § *The primer callout* and
-`evals/checks/rails-anchors.sh` both say so. While this file is closed, a Phoenix page therefore
+`evals/checks/rails-anchors.rb` both say so. While this file is closed, a Phoenix page therefore
 carries **no primer at all**, not merely no inline links. When it opens, an Elixir primer is a
 `.primer--lib`: the branded variant's mark names whoever wrote the API, and that is not the Rails
 Foundation.
@@ -91,7 +91,7 @@ certain of** to a deeper link it is not, and why several rows below are page-lev
 `elixir`. `Phoenix.Component` and `Phoenix.LiveViewTest` are in `phoenix_live_view`, not in `phoenix`.
 A path that is right about the module and wrong about the package is a 404 that reads as correct.
 
-**Never a `github.com/.../blob|pull|compare/` URL**, here as anywhere: `evals/checks/page-invariants.sh`
+**Never a `github.com/.../blob|pull|compare/` URL**, here as anywhere: `evals/checks/page-invariants.rb`
 § 5 fails a page that emits one when the head commit is unpushed, because those are the shapes a dead
 permalink takes. This catalogue offers only hexdocs, so the question does not arise from these rows —
 it arises when a run reaches past them.
@@ -115,7 +115,7 @@ over from Rails.** Rails has a single `major.minor` for the whole framework, so 
 and `/v8.0/` has pinned from something other than the lock file. An Elixir app pins `ecto`, `phoenix`,
 `phoenix_live_view`, `oban` and `elixir` itself independently, so **a correct Elixir page carries
 several different version segments** — one per package — and that is not a defect.
-`evals/checks/rails-anchors.sh` encodes the distinction: it requires every hexdocs link to carry a
+`evals/checks/rails-anchors.rb` encodes the distinction: it requires every hexdocs link to carry a
 version segment, and it does not require them to agree.
 
 **hexdocs serves exact versions, not a series prefix.** There is no `major.minor` shortcut that

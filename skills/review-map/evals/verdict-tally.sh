@@ -3,7 +3,7 @@
 #
 #   ./verdict-tally.sh <file> [--expected N] [--counts]
 #
-# Both judge.sh and run.sh need this, so it lives in one place and self-test.sh can reach it. The
+# Both judge.sh and run.sh need this, so it lives in one place and self-test.rb can reach it. The
 # parsing is the part worth testing without a model: a tally that silently reads a truncated verdict
 # file as "no fails" is the same failure as a check script that always passes.
 #

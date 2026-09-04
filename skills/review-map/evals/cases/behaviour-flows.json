@@ -8,7 +8,7 @@
     {
       "id": "behaviour-flows/rails-only-small",
       "fixture": "rails-only-small",
-      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "check": "check.rb --fragment <out> --scope behaviour-flows",
       "expected_output": "Two flows: archiving a project, and listing projects to choose from. The second is built entirely from unchanged code, and saying why that is a flow at all is the insight. Citations are plain text throughout.",
       "expectations": [
         "Flow B exists, contains no changed LINE, and the fragment says why an unchanged-only flow is a flow — that archival changed what the selectable list means. Note the granularity: Flow B runs through ProjectsController#index, which lives in a file the diff modifies elsewhere, so a fragment saying 'no changed file' is the imprecise one",
@@ -22,7 +22,7 @@
     {
       "id": "behaviour-flows/monorepo-contract",
       "fixture": "monorepo-contract",
-      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "check": "check.rb --fragment <out> --scope behaviour-flows",
       "expected_output": "Two flows. Flow A follows archived_at across the boundary as one chain and carries the endpoint contract including the 422. Flow B is selectableProjects, unchanged and outside the diff.",
       "expectations": [
         "archived_at is followed as a chain — serializer, JSON, type, hook, component — inside the flow that owns it, not reviewed as two file lists or split into a backend part and a frontend part",
@@ -36,7 +36,7 @@
     {
       "id": "behaviour-flows/monolith-guard-chain",
       "fixture": "monolith-guard-chain",
-      "check": "check.sh --fragment <out> --scope behaviour-flows --expect 'application_controller.rb' --expect 'test_helper.rb'",
+      "check": "check.rb --fragment <out> --scope behaviour-flows --expect 'application_controller.rb' --expect 'test_helper.rb'",
       "expected_output": "Three flows split by who is affected, not by directory. The surface each has to describe is the global before_action chain and the set of redirect destinations — there is no JSON contract to fall back on. Most of the weight is unchanged code, which is what this fixture exists to press on.",
       "expectations": [
         "The grouping is by who is affected, not by directory or by file, and the fragment says so before the flows. application_controller.rb appearing in two flows is the evidence the split is behavioural — a fragment that gives that file its own flow has grouped by file",

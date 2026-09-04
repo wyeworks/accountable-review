@@ -17,7 +17,7 @@ require_relative "lib/review_map/check"
 BANNER  = /class="buildstate"/
 PENDING = /class="pending"/
 
-check = ReviewMap::Check.new(ARGV, name: "build-state.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_kind(:page)
 page = check.page
 

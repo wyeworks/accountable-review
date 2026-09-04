@@ -40,7 +40,7 @@ def find_chrome
   nil
 end
 
-check = ReviewMap::Check.new(ARGV, name: "diagram-shot.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 
 chrome = find_chrome
