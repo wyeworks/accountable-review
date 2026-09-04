@@ -11,10 +11,64 @@
 
 require_relative "lib/review_map/check"
 
+# Verdict language, in two families, because one of them is legitimate as a DENIAL.
+#
 # Deliberately high-precision patterns: 'blocking' alone is a false positive ('blocks the
 # request', 'locks the table'), so it is a WARN below rather than a failure here.
-VERDICT = /LGTM|looks good to me|recommend (approv|merg)|approve this|ready to merge|risk score|overall risk/i
-VERDICT_NAMED = /LGTM|looks good to me|recommend (?:approv|merg)[a-z]*|approve this|ready to merge|risk score|overall risk/i
+#
+# The split was forced by a correct page failing. § 7's ledger wrote "Attention is a reading
+# estimate, not a risk score" — the page telling the reader that read/skim/mechanical is not
+# severity, which is the no-grading invariant defending itself in the one place a reader is most
+# likely to misread a column as a grade. The check failed it for containing the words. A rule
+# that punishes a page for refusing a verdict teaches the run to stop refusing it out loud,
+# which is the opposite of what rule 2 is for.
+#
+# So: HARD is never right in any form. A GRADED NOUN fails only where nothing refuses it.
+VERDICT_HARD = /LGTM|looks good to me|recommend (?:approv|merg)[a-z]*|approve this|ready to merge/i
+GRADED_NOUN = /risk score|overall risk|severity score|severity rating/
+
+# The negation must be a WHOLE WORD, bounded on both sides. POSIX awk has no \b and each missing
+# boundary loses a real defect: without the leading one "no" matches inside "another" and
+# "denote", so "another way to read the overall risk" excuses itself; without the trailing one
+# "not" matches inside "notice" and "notify", so "notice the overall risk" does too. Both were
+# caught by testing the rule rather than reading it.
+REFUSAL = /(?:\A|[^[:alpha:]])(?:not|nothing|never|no|rather than|instead of|without)(?:[^[:alpha:]][^.!?;]{0,23})?\z/
+
+# The page narrating its own drafting. A separate rule from the assurance one because it is a
+# separate failure with a separate fix: that is the page claiming it was checked, this is the
+# page telling the reader what an earlier draft of it said. Both leak the run's process, and this
+# one leaks it while reading as candour, which is why a run writes it without noticing — one
+# --effort high page carried ten. A falsification pass does not have to be named to be on the
+# page. The fix is never to delete the fact, only the autobiography.
+NARRATE = Regexp.union(
+  /(first|earlier|previous|initial|original) (version|draft) of (this|the) (section|page|flow|paragraph|entry|list|row|claim|map|file)/i,
+  /(a|the|this) (first|earlier|previous|initial) (pass|draft|version) (got|had|reported|missed|claimed|said|read|ran|rested|came)/i,
+  /on (a|the) (first|earlier|previous) (pass|draft)/i,
+  /(this|the) (section|page|paragraph|entry|claim|row) (originally|initially) (said|read|claimed|reported|had)/i
+)
+
+# Per occurrence, not per document: one refused mention does not license an asserted one
+# elsewhere on the page. The window is the 48 characters before the noun, and a negation counts
+# only if nothing but short filler ("not a ", "rather than an ") stands between it and the noun —
+# so "not X, this is an overall risk of 4" is still caught. Sentence-ending punctuation bounds the
+# window, because the previous sentence's "not" is not this one's.
+def asserted_grades(page)
+  found = []
+  page.lines.each do |raw|
+    # The remainder is CONSUMED, not merely scanned past, which is what makes the rule per
+    # occurrence rather than per line: a later noun's window cannot see back over an earlier
+    # one, so "not a risk score, but the overall risk is 4" refuses the first and catches the
+    # second. Scanning with an offset instead leaves the whole line visible to the window and
+    # the earlier "not" excuses the later noun — a false PASS on a sentence that grades.
+    rest = raw.chomp.downcase
+    while (m = rest.match(GRADED_NOUN))
+      window = rest[[m.begin(0) - 48, 0].max...m.begin(0)]
+      found << m[0] unless window.match?(REFUSAL)
+      rest = rest[m.end(0)..]
+    end
+  end
+  found.sort.uniq
+end
 
 # Assurance language, which is a verdict about the PAGE rather than about the PR and therefore
 # easy to reintroduce while believing rule 2 still holds. A run at --effort high sends an
@@ -36,12 +90,22 @@ else
   check.ok("no severity chips")
 end
 
-# 2 · Verdict language.
-if page.has?(VERDICT)
-  found = page.scan(VERDICT_NAMED).sort.uniq
-  check.bad("verdict language found: #{found.join(" ")} ")
+# 2 · Verdict language. A comment is not markup, and the prose rules must not read one:
+#     page-template.html's header comments discuss verdicts and revision history in the exact
+#     words these rules match, and a published page carries them verbatim.
+prose = page.without_comments
+
+if page.has?(VERDICT_HARD)
+  check.bad("verdict language found: #{page.scan(VERDICT_HARD).sort.uniq.join(" ")} ")
 else
   check.ok("no verdict or approval language")
+end
+
+graded = asserted_grades(prose)
+if graded.any?
+  check.bad("a graded noun asserted rather than refused: #{graded.join(" ")} ")
+else
+  check.ok("no asserted risk or severity score")
 end
 if page.has?(/>[[:space:]]*(Blocking|Watch)[[:space:]]*</)
   check.maybe("a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name")
@@ -56,6 +120,17 @@ else
 end
 if page.has?(/clean bill of health/i)
   check.maybe("'clean bill of health' appears — legitimate only as a denial; read the sentence")
+end
+
+# 2c · Draft narration.
+if prose.has?(NARRATE)
+  narrated = prose.scan(NARRATE).sort.uniq
+  check.bad("the page narrates its own drafting — a correction replaces a claim, it never annotates it: #{narrated.join(" ")} ")
+else
+  check.ok("no draft narration — corrections are written as claims, not as revisions")
+end
+if prose.has?(/got it wrong|came to rest on|invalidated (several|some) of these/i)
+  check.maybe("a phrase that usually introduces draft history — read the sentence, and check it is about the code rather than about this page")
 end
 
 # 3 · Evidence tiers. Silence is the first tier, so a document with no label either had
