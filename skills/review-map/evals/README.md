@@ -538,7 +538,7 @@ both `--page` and `--fragment`; and every row of `self-test.sh`, replayed with t
 arguments. The second source is not redundancy — the sweep never passes `--repo`, `--base` or
 `--level`, so it would compare two SKIPs for `searches.sh`, whose entire rule is a relation
 between the page and a repository, and would miss the brief level altogether. It reports
-**1517 cases, 0 differing, across 10 of 12 checks**, and it names what is still shell on every
+**1521 cases, 0 differing, across 10 of 12 checks**, and it names what is still shell on every
 run — today `rails-anchors` — because a partial migration that printed only "0 differing" would
 read as a finished one.
 
@@ -693,12 +693,40 @@ both directions against a scratch repository; several mislabelled blocks join wi
 the changed set is matched **whole-line, never substring**, because `api/Gemfile` sits inside
 `api/Gemfile.lock`.
 
-**One latent shell defect was reproduced rather than fixed.** The relational rule tests the exit
-status of a pipeline ending in `sort`, so a `git` that fails — an unresolvable `--base`, a
-`--repo` that does not exist — leaves an empty changed set and still reports
-`no excerpt labels a changed file Unchanged, against the diff`. That is a false PASS on the rule
-whose entire purpose is catching a false label. The port copies it, because a port may not
-quietly change a verdict; fixing it means a golden fixture and a change to `excerpts.sh` as well.
+### Two latent defects the port surfaced, then fixed in both
+
+Reproducing the shell exactly meant copying two places where a **failing `git` was read as an
+answer**. The port copied them deliberately — a port may not quietly change a verdict — and they
+were then fixed in the shell and the Ruby together, with a `self-test.sh` row each, which is the
+only way a change like this is allowed to happen.
+
+**`excerpts.sh` — a false PASS.** The relational rule tested the exit status of a pipeline ending
+in `sort`, which succeeds whatever `git` did. So an unresolvable `--base` produced an *empty*
+changed set, matched nothing, and reported `no excerpt labels a changed file Unchanged, against
+the diff`. Measured on the fixture that plants the real defect:
+
+| `excerpt-unchanged-changed-file.html` | exit | verdict |
+|---|---|---|
+| no `--repo`, ledger path | 1 | FAIL — defect caught |
+| `--repo` + unresolvable `--base`, **before** | 0 | **PASS — defect masked** |
+| `--repo` + unresolvable `--base`, **after** | 1 | FAIL, against the ledger, with a WARN naming the git failure |
+
+A stale or unfetched base SHA turned a caught defect into a clean bill of health, on the one rule
+whose purpose is catching a label the diff contradicts. Now `git`'s own status is tested, the rule
+falls back to the ledger, and it says out loud that it did — which matters because `run.sh` passes
+`--repo` and `--base` on every page run, so without the WARN a wrong base silently downgrades
+every run to ledger-only.
+
+**`page-invariants.sh` — a false PASS *and* a false FAIL.** `git branch -r --contains` written with
+`|| true` collapsed "no remote contains it" and "git said nothing" into one answer, so an
+unreadable repo read as **unpushed**: a page with no permalinks got
+`unpushed head: citations are plain text` and a page with them got
+`emits GitHub permalinks, but the head commit is on no remote`. Both verdicts came from an answer
+git never gave. The three states are separated now and the rule refuses rather than guesses.
+
+The four rows are conditions rather than markup, so they use `self-test.sh`'s fifth column with an
+unresolvable ref, and **each was confirmed red against the unfixed shell first** — a row that
+passes before the fix pins nothing. 88 ok → 92 ok.
 
 ### What is left
 

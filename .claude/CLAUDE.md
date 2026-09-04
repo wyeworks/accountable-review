@@ -427,6 +427,12 @@ Editing one of these means checking the others still agree.
   driven by whether the head SHA is reachable on a remote. Unpushed branches are the common case, and
   the correct behaviour there is plain text, not a permalink that 404s.
 
+  **A git that cannot answer is not the same as unpushed**, and `page-invariants.sh` § 5 used to
+  treat it as such: written with `|| true`, an unreadable `--repo` or an unresolvable head gave empty
+  output, which read as "on no remote" — a false PASS on a page with no permalinks and a false FAIL
+  on one that has them, both from an answer git never gave. Three states, not two, and the middle one
+  refuses.
+
   The rung decides whether anything is clickable. It does **not** decide the form, and the form is not
   a taste: a line inside the diff links to the diff page — `pull/{n}/files` at rung 1,
   `compare/{base}...{head}` at rung 2 — because that is the page the reviewer is working in and a blob
@@ -524,7 +530,10 @@ Editing one of these means checking the others still agree.
   belongs in the prose, where it can be stated. Four files agree — `scripts/excerpt.sh` computes it,
   `report-format.md` § *Source excerpts* owns the rule and the vocabulary, `page-template.html` says
   the tag in its example is computed rather than copied, and `evals/checks/excerpts.sh` plus the three
-  `golden/excerpt-*` rows check it, one of which is the clean counterpart: a rule that fired on every
+  `golden/excerpt-*` rows check it — plus three more for the case where git is asked and cannot
+  answer, since the relational half tested the exit status of a *pipeline* and so read a failing git
+  as an empty diff, passing the very page two rows above it — one of which is the clean counterpart:
+  a rule that fired on every
   excerpt sitting near a ledger would be worse than the defect.
 
   Two things the first live run changed, both worth keeping stated. The closed-page rule is judged
