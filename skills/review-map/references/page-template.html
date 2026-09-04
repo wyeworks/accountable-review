@@ -63,8 +63,11 @@
                             The --source variant is syntax-tinted at runtime from
                             its data-lang; --diff is not, its colour means +/-
     framework anchors ..... a.doc (a link from references/rails-docs.md, never a
-                            constructed URL) and pre.probe (a command the reviewer
-                            runs; the page never shows its output)
+                            constructed URL), pre.probe (a command the reviewer
+                            runs; the page never shows its output), and
+                            aside.primer -- what a link escalates into, at most one
+                            per flow. Its pre.demo quotes the manual rather than
+                            this app, which is the only reason it may show "# =>"
     start here ............ ol.begin — one list: the route through the code, and what on
                             it needs judgment. Entries link into the flow that explains them
     blast radius .......... .blast box grid + .legend. This replaces the old
@@ -129,6 +132,13 @@
   --accent-line: #c3cade;
   --select:      #dfe6f5;
 
+  /* Rails red, spent on the primer callout's rule and wordmark and on nothing
+     else. Deliberately not the accent: the accent means navigation on this page,
+     and a framework's own colour borrowed for a link would say the page itself is
+     Rails documentation. The one new colour the framework anchors introduced,
+     which is why it is declared here and in BOTH dark blocks below. */
+  --rails:       oklch(0.50 0.13 25);
+
   --warn-bg:     oklch(0.98 0.015 85);
   --warn-bg-2:   oklch(0.96 0.03 80);
   --warn-rule:   oklch(0.88 0.04 80);
@@ -187,6 +197,10 @@
     --accent-line: #4d5a7a;
     --select:      #2a3450;
 
+    /* Lightened, not the light value: oklch(0.50 …) on the dark ground is the
+       unreadable half of a two-theme colour. */
+    --rails:       oklch(0.78 0.11 25);
+
     --warn-bg:     oklch(0.24 0.03 80);
     --warn-bg-2:   oklch(0.28 0.05 80);
     --warn-rule:   oklch(0.42 0.06 80);
@@ -234,6 +248,8 @@
   --accent-hi:   oklch(0.85 0.08 252);
   --accent-line: #4d5a7a;
   --select:      #2a3450;
+
+  --rails:       oklch(0.78 0.11 25);
 
   --warn-bg:     oklch(0.24 0.03 80);
   --warn-bg-2:   oklch(0.28 0.05 80);
@@ -436,12 +452,15 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 .searched { font-size: 15px; line-height: 1.64; color: var(--ink-3); padding: 14px 16px; background: var(--surface-3); border: 1px solid var(--rule-soft); }
 
 /* ============================================================
-   Framework anchors — a documentation link and a runtime probe.
-   NEITHER IS EVIDENCE. The claim still rests on a file:line;
-   see report-format.md § Framework anchors, which owns the rules
-   and the budget. Both are built out of tokens that already
-   exist, deliberately: a new colour is a new thing to declare in
-   all three theme blocks and forget in one of them.
+   Framework anchors — a documentation link, a runtime probe, and
+   the primer callout a link escalates into. NONE OF THE THREE IS
+   EVIDENCE. The claim still rests on a file:line; see
+   report-format.md § Framework anchors, which owns the rules and
+   the budget. The link and the probe are built out of tokens that
+   already exist, deliberately. The primer spends exactly one new
+   colour, --rails, and pays that price knowingly: a new colour is
+   a new thing to declare in all three theme blocks and forget in
+   one of them, which is why page-invariants.sh § 6 counts it.
    ============================================================ */
 a.doc { font-family: var(--mono); font-size: 12px; white-space: nowrap; text-decoration-color: var(--rule-strong); }
 a.doc::after { content: "\2197"; margin-left: 2px; font-size: .9em; color: var(--faint); }
@@ -455,6 +474,103 @@ pre.probe {
   font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
   white-space: pre; color: var(--ink-2);
   background: var(--surface-3); border-left: 2px solid var(--rule-strong);
+}
+
+/* ============================================================
+   Rails primer — what a doc link escalates into, and not a
+   second kind of link. It is for the case where the reviewer
+   cannot make the decision in front of them without knowing a
+   framework behaviour they may not know. At most one per
+   behaviour flow; report-format.md § Framework anchors owns that
+   budget and what earns one.
+
+   Three things it must not become, all of which look like
+   diligence on the way:
+     · a probe. pre.demo below quotes documented framework
+       behaviour on a GENERIC receiver, so it may carry a "# =>"
+       line. pre.probe asks THIS application and may never show
+       output, because the run did not boot it. Never merge them,
+       and never put a pre.demo outside a primer — that would make
+       it a general-purpose hole for output nobody observed.
+     · a tutorial. A behaviour every Rails developer already knows
+       earns nothing here. A page that explains each one has become
+       a Rails manual with a diff attached, which reads as more
+       thorough while getting less navigable.
+     · an unevidenced claim. The primer cites the line in THIS
+       repository that earned it, exactly like every other doc
+       link. Two paragraphs of framework prose read as
+       self-justifying, which is why the citation is checked.
+
+   It carries no .mech, no dl.rows and no <dt>, deliberately: that
+   is what keeps it out of both censuses in
+   checks/behaviour-flows.sh, so a flow that has one cannot read
+   as a flattened flow.
+   ============================================================ */
+.primer {
+  --pr-rule: var(--rails);
+  margin-top: 18px; background: var(--surface-hi);
+  border: 1px solid var(--rule); border-top: 2px solid var(--pr-rule);
+}
+/* The variant for anything that is not Rails — a gem, a client library. It
+   drops the mark and the trademark line with it, and takes the rule back to a
+   neutral hairline, because a Pundit explanation in Rails red is a claim about
+   who wrote Pundit. Nothing else changes: same head, same two columns, same
+   demo rules. */
+.primer--lib { --pr-rule: var(--rule-strong); }
+.pr-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 13px 20px; border-bottom: 1px solid var(--rule-soft);
+}
+/* The official logotype, sized by height so its own aspect ratio decides the
+   width. It carries the word "RAILS" itself, which is why the Rails variant has
+   no .pr-brand beside it — two wordmarks in one header is a duplicate, not a
+   lockup. currentColor rather than the brand hex: the mark has to stay legible
+   on the dark ground, and --rails is the one colour on this page that is
+   already defined for both. */
+.pr-mark { height: 26px; width: auto; flex: 0 0 auto; color: var(--rails); }
+/* The name in the .primer--lib variant, where there is no mark to carry it. */
+.pr-brand {
+  font-family: var(--display); font-weight: 400; font-size: 19px;
+  line-height: 1; letter-spacing: -.01em; color: var(--ink);
+}
+.pr-sep { width: 1px; height: 16px; background: var(--rule); }
+.pr-api { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--faint); overflow-wrap: anywhere; }
+
+.pr-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+.pr-main { min-width: 0; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 11px; }
+.pr-main > b { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.pr-main > p { max-width: 56ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); text-wrap: pretty; }
+.pr-main > .item { font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.pr-main > a.doc { align-self: flex-start; margin-top: 3px; white-space: normal; }
+
+.pr-side {
+  min-width: 0; padding: 18px 20px 20px;
+  background: var(--surface-3); border-left: 1px solid var(--rule-soft);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pr-side > .lbl { font-size: 9.5px; }
+.pr-side > .note { font-size: 13px; line-height: 1.58; }
+
+/* The manual, quoted. It SCROLLS rather than wrapping, which is
+   the opposite of what this started as: a wrapped result line puts
+   "# => true" on a line of its own, where it reads as another
+   statement instead of as the answer to the one above it. Code
+   that wraps says something different from the code that was
+   written, and a quotation may not do that. Keep the lines short —
+   under about 38 characters and nothing scrolls at all. */
+pre.demo {
+  margin: 0; overflow-x: auto;
+  font-family: var(--mono); font-size: 12px; line-height: 1.75;
+  color: var(--ink-2); white-space: pre;
+}
+
+.pr-tm {
+  padding: 9px 20px 10px; border-top: 1px solid var(--rule-soft);
+  font-family: var(--mono); font-size: 9.5px; line-height: 1.5; color: var(--fainter);
+}
+@media (max-width: 700px) {
+  .pr-body { grid-template-columns: minmax(0, 1fr); }
+  .pr-side { border-left: 0; border-top: 1px solid var(--rule-soft); }
 }
 
 /* ============================================================
@@ -905,6 +1021,155 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
         <p>{{WHY_THIS_EXISTS}}</p>
       </div>
 
+      <!-- ASSEMBLED IN PLACE, and this is the placement: after the .mech, before
+           the grid. The reader meets the unfamiliar API immediately after the
+           mechanism that uses it and before the fields that cite it.
+
+           OMIT THIS BLOCK unless a decision the reviewer has to make turns on a
+           framework behaviour they may not know. At most one per flow, and most
+           flows earn none — an inline a.doc is what a citation normally looks
+           like. report-format.md § Framework anchors owns both rules.
+
+           OMIT IT ENTIRELY when the stack's catalogue is closed. A primer is what
+           a doc link escalates INTO, so it cannot exist without one, and
+           elixir-docs.md § Version currently withholds every link — so a Phoenix
+           page carries no primer at all and explains the mechanism in the flow's
+           own prose instead. The variant below is the one Elixir gets when that
+           catalogue opens: Ecto and Phoenix are libraries, so they take the
+           unbranded .primer--lib and never the Rails mark.
+
+           Note what it does NOT contain: no .mech, no dl.rows, no <dt>. That is
+           deliberate, and it is what keeps a flow with a primer from reading as a
+           flattened flow to checks/behaviour-flows.sh. -->
+      <aside class="primer">
+        <div class="pr-head">
+          <!-- The official logotype, inlined: an external <img> is blocked by the
+               artifact's CSP and the run has no fetch step, so the artwork lives
+               here or nowhere. It carries the wordmark itself, so there is no
+               .pr-brand beside it — that span is for the .primer--lib variant.
+               The mark is why .pr-tm at the foot exists: show it, say whose it
+               is. rails-anchors.sh enforces both halves of that. -->
+          <svg class="pr-mark" role="img" aria-label="Ruby on Rails" fill="currentColor" viewBox="0 0 411 155">
+          <g>
+          <path d="M242.3 76.8h-19.5c-13.9 0-18.6 12.6-18.6 18.6v52.2h19.5v-12.5H242v12.5h18.9V95.4c0-15.2-13.8-18.6-18.6-18.6Zm-.4 38.1h-18.3V97.6s0-3.9 6.1-3.9h6.7c5.4 0 5.5 3.9 5.5 3.9v17.3Z"/>
+          <path d="M194.9 101c0-22.6-21.2-24.7-21.2-24.7h-38.2v71.3h19.2v-17.2l16.6 17.2h28.4l-22.3-22.5s17.5-1.5 17.5-24.1Zm-24.9 9.5h-15.3V94.2h15.4s4.3 1.6 4.3 8.1-4.4 8.2-4.4 8.2Z"/>
+          <path d="M379.374 120.643c.333.002.446.002 0 0Z"/>
+          <path d="M385.3 103.4H369V95h32.3V76.8h-31c-8 0-18.7 6.6-18.7 18.9v6.3c0 12.3 10.6 18.6 18.7 18.6 5.868.026 8.304.039 9.074.043-1.298-.008-5.906-.043 6.326-.043v8.8l-33.1.1v18.1h32.7c6.7 0 18.2-4.9 18.6-18.6v-7c0-11.7-9.6-18.6-18.6-18.6Z"/>
+          <path d="M269.8 76.8h20.3v70.8h-20.3z"/>
+          <path d="M318.6 76.8h-20.2v70.8h47.5v-18.3h-27.3V76.8z"/>
+          </g>
+          <g>
+          <path d="M180 17.8c-.9-.5-3.4-1.7-9.7-3.5l-.4 6.6c3.3 1.1 6.5 2.3 9.7 3.6l.4-6.7Z"/>
+          <path d="M124.9 18.9c-29.2 2.6-65 29.1-86 64.1S15 147.6 15 147.6h79s-15.1-68.9 34.9-96.8c10.9-5.3 45.6-25.1 102.4 16.9 1.8-1.5 3.5-2.7 3.5-2.7s-52-51.9-109.9-46.1Z"/>
+          <path d="m54.7 54.7-7.1-6.2c-2.6 2.5-5.1 5-7.4 7.5l7.7 6.6c2.1-2.7 4.4-5.4 6.8-7.9Z"/>
+          <path d="M92.5 25 88 18.1c-2.5 1.3-5.1 2.7-7.8 4.3l4.6 7c2.6-1.6 5.1-3.1 7.7-4.4Z"/>
+          <path d="M24.5 99.4 13 95.2c-1.9 4.3-4 9.3-5 12l11.5 4.2c1.3-3.4 3.4-8.3 5-12Z"/>
+          <path d="M133.1 14.5h1l-2-6.1c-3.1 0-6.3.2-9.6.6l1.9 5.9c2.9-.3 5.8-.4 8.7-.4Z"/>
+          <path d="M97 127.6c.2 5.3.7 9.6 1.2 12.6l12 4.3c-.9-3.9-1.8-8.3-2.4-13L97 127.6Z"/>
+          <path d="m137.9 51.3 2.3 6.9c2.9-1.4 5.8-2.6 8.7-3.5l-2.2-6.6c-3.4 1-6.3 2.1-8.8 3.2Z"/>
+          <path d="M169.7 52c3.3.1 6.6.5 9.9 1.2l.4-6.2c-3.4-.7-6.7-1.1-9.9-1.3l-.4 6.3Z"/>
+          <path d="M101.5 91.2c-1.3 3.7-2.2 7.4-3 11l8.1 6.4c.4-3.9 1.1-7.8 2.1-11.7l-7.2-5.7Z"/>
+          <path d="m113 70 4.8 7.2c1.7-2.5 3.7-4.8 5.9-7.1l-4.5-6.8c-2.3 2.1-4.4 4.4-6.2 6.7Z"/>
+          </g>
+          </svg>
+          <i class="pr-sep"></i>
+          <span class="lbl">Primer</span>
+          <span class="pr-api">ActiveModel::Dirty</span>
+        </div>
+
+        <div class="pr-body">
+          <div class="pr-main">
+            <b>archived_at_changed? vs saved_change_to_archived_at?</b>
+            <p>Every ActiveRecord attribute carries two questions, and they are true at
+              different moments. <code>archived_at_changed?</code> asks whether the value in
+              memory differs from the one loaded from the row &mdash; true <em>before</em> the save
+              and false after it. <code>saved_change_to_archived_at?</code> asks what the save just
+              wrote, and is only true <em>after</em> it.</p>
+            <p>Which one a callback wants therefore depends on when it runs. A
+              <code>before_save</code> that asks the second question never fires; an
+              <code>after_commit</code> that asks the first one never fires either, and both
+              failures are silent.</p>
+            <!-- The primer cites the line that earned it, like every other doc link.
+                 Without this the aside is a Rails lesson with no stake in the repo. -->
+            <div class="item">The callback at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+              runs after the write, so it is the second form it has to ask.</div>
+            <!-- THE /v8.0/ IS SUBSTITUTED PER RUN from this app's Rails series, exactly
+                 as in the Understand field below. URL from references/rails-docs.md. -->
+            <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
+          </div>
+
+          <div class="pr-side">
+            <span class="lbl">In practice</span>
+            <!-- pre.demo, NOT pre.probe. The receiver is deliberately a class this
+                 repository does not have: that is the whole reason a "# =>" line here
+                 is a quotation of the manual rather than output nobody observed. Name
+                 an application class here and it becomes exactly the fiction the probe
+                 rule exists to prevent. -->
+<pre class="demo">post = Post.find(1)
+post.title = "new"
+post.title_changed?          # =&gt; true
+post.save
+post.title_changed?          # =&gt; false
+post.saved_change_to_title?  # =&gt; true</pre>
+            <p class="note">Both predicates are generated per attribute, so they exist for
+              every column without being written anywhere.</p>
+          </div>
+        </div>
+
+        <div class="pr-tm">Ruby on Rails name and logo are trademarks of the Rails Foundation, shown here for reference only.</div>
+      </aside>
+
+      <!-- THE SAME COMPONENT FOR ANYTHING THAT IS NOT RAILS — a gem, a client
+           library. SHOWN HERE AS THE ALTERNATIVE, NOT AS A SECOND CALLOUT: the
+           budget is one primer per flow, so delete whichever of the two this
+           flow does not need. Three differences and no others: .primer--lib
+           takes the rule back to a neutral hairline, the name goes in
+           .pr-brand because there is no artwork to carry it, and there is NO
+           .pr-tm — the trademark line exists to say whose mark is on display,
+           so a callout with no mark has nothing to disclaim. Everything else
+           is identical, the demo rules included. -->
+      <aside class="primer primer--lib">
+        <div class="pr-head">
+          <span class="pr-brand">Pundit</span>
+          <i class="pr-sep"></i>
+          <span class="lbl">Primer</span>
+          <span class="pr-api">Pundit::Authorization</span>
+        </div>
+
+        <div class="pr-body">
+          <div class="pr-main">
+            <b>authorize raises; it does not return false</b>
+            <p><code>authorize</code> looks up a policy class by the record's class name, calls the
+              question method, and <em>raises</em> <code>Pundit::NotAuthorizedError</code> when the
+              answer is false. It is a guard clause, not a predicate — so a controller that treats
+              its return value as a boolean has written a branch that never runs.</p>
+            <p>The rescue that turns it into a response is app-level and opt-in, which is why the
+              status a denied request gets is a decision this repository makes rather than one the
+              gem makes.</p>
+            <div class="item">The action at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+              relies on that raise reaching the handler rather than on a returned value.</div>
+            <!-- A gem's URL is pinned to the LOCKED GEM VERSION, not to the Rails series,
+                 and the tag's `v` prefix is data from the catalogue rather than a form you
+                 may derive. rails-docs.md § Gems. -->
+            <a class="doc" href="https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies">github.com/varvet/pundit</a>
+          </div>
+
+          <div class="pr-side">
+            <span class="lbl">In practice</span>
+<pre class="demo">class PostPolicy
+  def update?
+    user.admin?
+  end
+end
+
+authorize @post, :update?
+# =&gt; raises Pundit::NotAuthorizedError</pre>
+            <p class="note">The lookup is by class name, so a subclass with no policy of its own
+              falls back to nothing and raises on lookup instead.</p>
+          </div>
+        </div>
+      </aside>
+
       <!-- The seven fields, in this order, labels VERBATIM from report-format.md.
            Omit a field rather than fake it; a unit with nothing non-obvious to put
            in Understand is a ledger row, not a unit. -->
@@ -946,7 +1211,14 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
                data-lang is the generator's guess from the path, and the only
                reason this variant is tinted and the diff variant is not. Never
                type an hljs- class into the code: the tint is applied at runtime
-               so the quotation stays the bytes git gave the script. -->
+               so the quotation stays the bytes git gave the script.
+
+               THE TAG IS COMPUTED, NOT COPIED. It reads Unchanged here because
+               this path is outside the diff. The generator derives it from
+               --base -- Unchanged, Added, Removed, At head, Before the change --
+               so a changed file quoted at head comes back tagged `At head`, and a
+               page that says Unchanged about a path in its own ledger fails
+               evals/checks/excerpts.sh. report-format.md § Source excerpts. -->
           <details class="excerpt excerpt--source">
             <summary>
               <span class="chev">&#9656;</span>

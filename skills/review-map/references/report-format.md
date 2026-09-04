@@ -67,7 +67,8 @@ belongs in the sentences that cite this repository, which say it by naming real 
 - *Detail levels* — brief, full and review, and what the level does and does not change
 - *The review unit* — the seven fields every meaningful change gets
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
-- *Framework anchors* — the doc link and the runtime probe, and why neither is evidence
+- *Framework anchors* — the doc link, the runtime probe, the primer callout a link escalates
+  into, and why none of the three is evidence
 - *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
   what code does, and the syntax tint that unchanged code gets and a hunk does not
 - *One canonical home* — every fact explained once, referenced from everywhere else
@@ -183,13 +184,14 @@ The PR description is never evidence. Where the page reports intent from it, att
 
 ## Framework anchors
 
-Two ways to anchor a claim that rests on the framework behaving as the framework rather than on
-anything this diff contains. Neither is an evidence tier, and neither changes one.
+Three ways to anchor a claim that rests on the framework behaving as the framework rather than on
+anything this diff contains. None is an evidence tier, and none changes one.
 
 | Anchor | Is | Renders as |
 |---|---|---|
 | **Documentation link** | Provenance: where the framework's rule is written down | `<a class="doc" href="…">` around the concept, from the catalogue |
 | **Runtime probe** | A question to the reviewer's own application, which they run | `<pre class="probe">`, one command |
+| **Primer callout** | What a link escalates into when the reviewer has to *understand* the rule to decide | `<aside class="primer">`, inside the flow it explains |
 
 **A doc link is provenance, not evidence.** "`update_all` skips callbacks" is a property of Rails,
 and "`insert_all` never builds a struct, so nothing it writes is cast" is a property of Ecto; the
@@ -265,7 +267,67 @@ step 2 selected has the probes and the rule for running them safely — in Rails
 context and module a probe names must exist in this repository — the same rule as *validation steps
 must exist in this repo*, and it fails the same way when broken.
 
-**Routing.** One anchor per claim, not both:
+### The primer callout
+
+A doc link says *where the rule is written down*. A primer is for the narrower case where the
+reviewer cannot make the decision in front of them **without** the rule — where the framework
+behaviour is not an aside to the finding, it is the finding's mechanism. It renders as an
+`aside.primer`, assembled in `page-template.html`: a header naming the API, one or two paragraphs,
+the citation that earned it, the pinned link, and a short `pre.demo` beside them.
+
+**It sits between the flow's `.mech` and its `dl.rows`.** The reader meets the unfamiliar API
+immediately after the mechanism that uses it and before the fields that cite it. It is not a field, it
+carries no `<dt>`, and it never appears outside a behaviour flow: a primer in § 4 or § 6 is a lesson
+with no behaviour attached to it.
+
+**At most one per behaviour flow, and most flows earn none.** An inline `a.doc` is what a citation
+normally looks like; the primer is the exception, taken when a decision turns on the mechanism. A flow
+that wants two is a flow explaining Rails rather than explaining its own change — and the page that
+results reads as more thorough while getting less navigable, which is the failure mode this budget
+exists for. The escalation test is the same one the excerpt budget uses: not *is this interesting*, but
+*would the reviewer decide differently not knowing it*.
+
+**A primer is gated on its doc link, so a closed catalogue means no primers for that stack.** It is
+what a link escalates *into*, and `evals/checks/rails-anchors.sh` fails one that carries none — so the
+two rules meeting leave no room: while `elixir-docs.md` § *Version* withholds every link, a Phoenix
+page carries no primer at all. Explain the mechanism in the flow's own prose against its `file:line`
+and propose a probe, which is the anchor that stack has. Narrower, not wrong — the same trade the
+withhold already makes, arriving at the heaviest component rather than the lightest.
+
+When that catalogue opens, **Elixir takes `.primer--lib`**, never the branded variant. Ecto, Phoenix
+and LiveView are libraries in exactly the sense the variant was built for: the mark on a primer says
+who wrote the thing it explains, and the Rails Foundation did not write Ecto.
+
+**It carries a `file:line` from this repository, like every other doc link.** Two paragraphs of
+framework prose read as self-justifying, which is exactly why the rule is easiest to lose here. The
+citation names the line the callout was earned by, and `evals/checks/rails-anchors.sh` judges the
+whole aside as one block so it can neither omit its own citation nor borrow the one above it.
+
+**`pre.demo` is not `pre.probe`, and the difference is the receiver.** A demo quotes documented
+framework behaviour on a class **this repository does not have**, so it may show a `# =>` line: it is
+a quotation of the manual, and the manual states results. A probe asks *this* application and may
+never show one, because the run did not boot it. Name an application class in a demo and the block
+becomes precisely the fiction the probe rule exists to prevent, with the rule switched off — so a
+demo lives only inside a primer, and nowhere else on the page.
+
+**A `‡ probe` row may not be a primer's subject.** Those behaviours changed inside the supported
+Rails range, so no paragraph about them is true of every app, and a primer's whole form is
+explanatory prose. Route those to a probe and name the setting that decides it, per
+`rails-docs.md` § *What the marks mean*.
+
+**It is not Rails-only.** The catalogue carries gems and client libraries too, and the same callout
+serves them as `aside.primer.primer--lib`: no mark, no trademark line, and a neutral rule instead of
+the red one. Three things differ and nothing else does — the demo rule, the citation rule and the
+budget all apply unchanged. Reach for the variant whenever the link is not a `rubyonrails.org` one,
+because the artwork is an **attribution**: the Rails logotype on a Pundit explanation says the Rails
+Foundation wrote Pundit, and it looks entirely correct on the page. The mark also never appears
+without `.pr-tm` beneath it, which is the notice saying whose mark it is;
+`evals/checks/rails-anchors.sh` enforces both halves.
+
+**Nothing about the primer changes with the detail level.** It lives inside a behaviour flow, and
+§§ 1–3 are the same spec at `--brief` and `--full`.
+
+**Routing.** One anchor per claim, never two:
 
 | The claim needs | Goes in | Because |
 |---|---|---|
@@ -282,11 +344,13 @@ same reason: a behaviour every developer in that stack already knows earns nothi
 links each one has become a tutorial with a diff attached. **At most one doc link per field**, and a
 section where most fields carry one has stopped selecting. Probes are scarcer still: a flow earns one
 where its change is framework-shaped — ActiveRecord in Rails, a changeset, a query, an association or
-an `on_mount` chain in Elixir — and a second wants a reason.
+an `on_mount` chain in Elixir — and a second wants a reason. Primers are the scarcest of the three —
+one per flow is the ceiling and none is the common case.
 
-**The deep-link ladder does not govern either.** The four rungs are about `file:line` citations into a
-git remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is plain
-text — exactly as an in-page `href="#flow-b"` does. A probe has no href at all.
+**The deep-link ladder governs none of the three.** The four rungs are about `file:line` citations
+into a git remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is
+plain text — exactly as an in-page `href="#flow-b"` does. A probe has no href at all, and a primer's
+own citation follows the rung like any other.
 
 ## Source excerpts
 
@@ -311,7 +375,7 @@ Two variants:
 
 | Variant | Shows | Used for |
 |---|---|---|
-| `.excerpt--source` | Lines at the head SHA, no signs | Unchanged code, which has no diff to show. The variant that carries the product |
+| `.excerpt--source` | Lines as they stand at one rev, no signs | Unchanged code, which has no diff to show. The variant that carries the product — and committed code a hunk cannot show whole. Its state tag says which |
 | `.excerpt--diff` | A hunk with `+`/`−` gutters | Changed code, where *what moved* is the reviewer's question. The variant that lets a flow be read with no diff open |
 
 **Where they may appear.** Not in the coverage ledger — a ledger row is a checklist entry, not a
@@ -347,7 +411,7 @@ was never about quoting one committed line that a claim turns on.
   implementation is one import or one rename, it was a ledger row and not a flow. This is a floor;
   the budget below rations what sits on top of it, never the hunk itself.
 - **The closed summary says what the reader will see and why to open it** — `path:lines`, a state
-  tag (`Changed` / `Unchanged` / `Added`), then the clause, all inside the `<summary>`. `View diff`
+  tag, then the clause, all inside the `<summary>`. `View diff`
   and `Show code` are not summaries: a closed excerpt has to be informative, because most of them
   stay closed. The clause lives in the summary rather than at the top of the body **because of the
   closed-page rule above** — a why the reader has to open the block to see is exactly the hidden
@@ -355,6 +419,28 @@ was never about quoting one committed line that a claim turns on.
 - **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped ledger row fails the
   coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
   catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
+- **The state tag is read off the diff, never chosen.** `excerpt.sh --at` needs `--base` and
+  computes it: `Unchanged` when the path is outside the diff, and `Added`, `Removed`, `At head` or
+  `Before the change` when it is inside. A `--diff` hunk is `Changed`. That is the whole vocabulary,
+  and it is closed because it is computed. The script used to hard-code `Unchanged` on every
+  `--source` block, and a run published `db/structure.sql:304-313` tagged Unchanged on a page whose
+  own ledger listed that file as changed: verbatim bytes under a false label, which is the one defect
+  in this component a reader has no way to catch — the excerpt looks *more* trustworthy the closer
+  they read it. Two things follow.
+
+  **Quoting a changed file at one rev is legitimate**, and sometimes the only way to show what the
+  committed code now permits: a hunk of an 18,000-line `structure.sql` cannot show that a table has
+  **no** `CHECK` constraint, and § 5's invariants block is built on exactly that reading. It was the
+  label that was wrong, never the excerpt — so the fix is the tag, not a rule against the quotation.
+
+  **And a path the diff touches is never tagged `Unchanged`, even where the quoted lines are
+  untouched**, because §§ 4 and 7 split changed from affected-not-changed **by file**. Two senses of
+  one word on one page, and nothing tells the reader which is meant. Where the range is the point,
+  the prose says it — *"the pre-existing unique index at `:18682`, which this change does not
+  touch"* — which is where it can be said precisely anyway. `evals/checks/excerpts.sh` holds both
+  halves: every `Unchanged` tag against the changed set (from a repo when it has one, otherwise from
+  the page's own ledger, which the completeness invariant guarantees is the whole diff), and every
+  tag against the vocabulary, for the inputs where there is nothing to compare against.
 - **An excerpt is evidence for one claim, not coverage of a file.** Never a whole file, never every
   hunk. Completeness belongs to the ledger.
 - **The field carries its own citation, not one from elsewhere on the page.** The closed-page rule is
@@ -876,6 +962,10 @@ put the fields loose in the section and a decisions block in the middle of them.
   the route and the `live_session` it sits in, the events the template can fire, the assigns the
   template reads, and the same side-effects row — which is the reviewer's actual question in any
   shape.
+- **A framework primer**, where the decision turns on a framework behaviour the reviewer may not know.
+  It goes between the `.mech` and the grid rather than out here with the rest of this list, because
+  it explains the mechanism the `.mech` has just stated. One per flow at most, and most flows earn
+  none; § *Framework anchors* owns that and everything else about it.
 - **A diagram**, where one shows a mechanism a list cannot. Layout from the catalogue in
   `page-template.html`; which kind and how many, per § *Depth rules*.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The

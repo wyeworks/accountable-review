@@ -21,6 +21,13 @@ Until a dated verification line appears in this section, **emit no link from thi
 the mechanism in prose, cite the repo line, and propose a probe from
 `references/phoenix-liveview.md` § *Runtime probes*.
 
+**That also costs the primer callout, which is easy to miss.** An `aside.primer` is what a doc link
+escalates into, so it cannot exist without one — `report-format.md` § *The primer callout* and
+`evals/checks/rails-anchors.sh` both say so. While this file is closed, a Phoenix page therefore
+carries **no primer at all**, not merely no inline links. When it opens, an Elixir primer is a
+`.primer--lib`: the branded variant's mark names whoever wrote the API, and that is not the Rails
+Foundation.
+
 This is the fail-closed rule of `rails-docs.md` § *Pinning* applied to a whole file rather than to a
 single row, and for the same reason. An unlinked explanation is never misleading; a link nobody opened
 is. The Rails catalogue's first sweep found that its worst defect was not rot but

@@ -211,7 +211,9 @@ to remove.
 So the lines come to the reader. Where a claim would otherwise be taken on faith, the page carries a
 collapsed excerpt of the real source, which you open when you are ready to check that particular
 claim — verbatim, quoted by a script rather than retyped, and reading as a diff for changed lines and
-as plain source for unchanged ones. The excerpts matter most on an unpushed branch, where nothing on
+as plain source for unchanged ones. Each block also says which state it is quoting, and the script
+works that out from the diff instead of asserting it: the bytes of a quotation vouch for themselves,
+and its label is the one part that cannot. The excerpts matter most on an unpushed branch, where nothing on
 the page is clickable at all.
 
 They also make the page shorter, which is the part that surprised us. A paragraph describing what a
@@ -229,8 +231,8 @@ the diff never opened skips the validation this PR adds; a uniqueness validation
 `--sandbox` rolls back, so `after_commit` never fires there. On the Phoenix side, `Repo.update_all`
 builds no changeset at all, a `unique_constraint` does nothing without the index behind it, and a
 `phx-click` renamed in a template without its `handle_event` clause crashes the LiveView the first time
-someone clicks it. So the page carries two anchors for a claim that rests on the framework behaving as
-the framework.
+someone clicks it. So the page carries three anchors for a claim that rests on the framework behaving
+as the framework.
 
 **A link to where the rule is written down** — the Rails guides, the Rails API, hexdocs, or the
 library's own docs. It sits beside the claim's `file:line`, never instead of it: a link to the guides
@@ -283,6 +285,24 @@ only part of it that was fiction. Read-only reflection is written for `bin/rails
 no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` in
 Phoenix. The page says which, because a reviewer should not be able to change a database by pasting
 what it told them to.
+
+**And occasionally a primer** — a short callout inside the flow it belongs to, naming the API, saying
+what the behaviour actually is in two paragraphs, and pointing at the pinned documentation. It is for
+the narrower case where you cannot make the decision in front of you *without* the framework rule:
+which of `archived_at_changed?` and `saved_change_to_archived_at?` a callback wants, say, when the
+answer decides whether the callback fires at all. It cites the line in your code that earned it, like
+any other link, and the four-line snippet beside it runs on a class your app does not have — so its
+`# =>` lines quote the manual rather than claiming something about your application that nothing ran.
+
+It works for the rest of the stack too, minus the branding: a primer about a gem — Pundit's
+`authorize` raising rather than returning false, a Sidekiq job re-running `perform` from the top —
+is the same callout with the mark and the trademark line dropped and a neutral rule in place of the
+red one. The logotype is an attribution, not decoration, so it appears only where the link does.
+
+There is at most one per flow, and most flows get none. That ceiling is the point: the failure mode
+here is not a wrong link, it is a page that explains every mechanism it touches, becomes a Rails
+tutorial with a diff attached, and reads as more thorough while getting harder to navigate. An anchor
+of any kind has to be earned by a decision you have to make.
 
 ### It separates evidence from inference
 

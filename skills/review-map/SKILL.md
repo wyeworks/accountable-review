@@ -308,18 +308,28 @@ The unit is **borderless by design**, which makes this easier to get wrong than 
 spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
 example.
 
-**Two anchors are available for a claim that rests on the framework rather than on this diff**: a
-documentation link, and a console probe the reviewer runs. Both land inside fields the unit already
-has — *things to understand* to make a mechanism legible, *how to validate* to settle something —
-and `references/report-format.md` § *Framework anchors* owns the routing, the budget and the two
-rules that matter most: a doc link never appears without a `file:line` beside it, and a probe never
-appears with output beneath it. Where a flow's change is **framework-shaped, reach for a probe before
-reaching for a paragraph** — the § *Runtime probes* section of whichever lens file step 2 selected has
-them. The reason is the same in both stacks: the behaviour is assembled from places the diff cannot
-show together. In Rails a validation, a scope or a `dependent:` comes together at boot, from the class,
-its concerns, its superclass and the schema. In Phoenix a changeset, an association's `on_replace:`,
-or the `on_mount` hook a `live` route inherits comes together at compile time, from macros and from a
-`live_session` block the hunk does not include.
+**Three anchors are available for a claim that rests on the framework rather than on this diff**: a
+documentation link, a console probe the reviewer runs, and the primer callout a link escalates into.
+The first two land inside fields the unit already has — *things to understand* to make a mechanism
+legible, *how to validate* to settle something. The third sits between the flow's `.mech` and its
+grid, and is for the narrower case where the reviewer cannot make the decision **without** the
+framework rule: at most one per flow, and most flows earn none.
+`references/report-format.md` § *Framework anchors* owns the routing, the budget and the three
+rules that matter most: a doc link never appears without a `file:line` beside it, a probe never
+appears with output beneath it, and a primer's demo never names a class from this repository.
+
+**A primer is gated on its documentation link**, which it escalates from, so a stack whose catalogue
+is closed gets none at all — today that is Elixir, per `references/elixir-docs.md` § *Version*. Explain
+the mechanism in the flow's own prose against its `file:line` and propose a probe instead. The page is
+narrower, not wrong, which is the same trade the withhold already makes.
+
+Where a flow's change is **framework-shaped, reach for a probe before reaching for a paragraph** — the
+§ *Runtime probes* section of whichever lens file step 2 selected has them. The reason is the same in
+both stacks: the behaviour is assembled from places the diff cannot show together. In Rails a
+validation, a scope or a `dependent:` comes together at boot, from the class, its concerns, its
+superclass and the schema. In Phoenix a changeset, an association's `on_replace:`, or the `on_mount`
+hook a `live` route inherits comes together at compile time, from macros and from a `live_session`
+block the hunk does not include.
 
 Two rules keep it from becoming ceremony:
 
@@ -523,7 +533,7 @@ Everything else about writing holds at every stage:
   believed until then. Quote both inline as collapsed excerpts, from the generator:
 
   ```sh
-  <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --why "..."
+  <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --base BASE --why "..."
   <skill base directory>/scripts/excerpt.sh --diff app/models/project.rb --base BASE --why "..."
   ```
 
@@ -543,6 +553,13 @@ Everything else about writing holds at every stage:
   **Generate all of them in one call.** The excerpts do not depend on each other, so one call with a
   line per excerpt costs one round trip where seven calls cost seven. A run that did it one at a time
   spent ten requests on work worth two.
+
+  **Both forms need `--base`, including `--at`**, because the state tag in the summary is a claim
+  about the diff and the script reads it off the diff rather than assuming it — a changed file quoted
+  at head is tagged `At head`, not `Unchanged`. It is the one part of an excerpt the bytes cannot
+  vouch for: before it was derived, a run published a changed `db/structure.sql` labelled Unchanged on
+  a page whose own ledger listed it as changed. Quoting a changed file that way is right where a hunk
+  cannot show what the committed code permits; the tag is what has to be true.
 
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
   is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
@@ -588,6 +605,14 @@ Everything else about writing holds at every stage:
   `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it changes the reviewer's database.
   Use the project's real constants and module names: a probe naming a scope or a context this repo does
   not have is an invented command.
+- **A primer's demo names nothing from this repository.** `pre.demo` may carry a `# =>` line — or an
+  `iex>` one — for one reason only: its receiver is a class or module the app under review does not
+  have, so the block quotes the manual rather than reporting what this application does. Write it on a
+  generic receiver, and never put a `pre.demo` anywhere but inside a primer — loose on the page it is
+  the fabricated-output defect with the rule switched off. Same budget discipline as the rest: one
+  primer per flow at most, a flow whose decision does not turn on the framework behaviour earns none,
+  and a stack whose catalogue is closed earns none at all, because a primer needs the link it
+  escalated from.
 - Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
   the diff contains gets the PR diff anchor, so the reviewer lands in the review they are already
   working in rather than in the file at head, where nothing marks what the line replaced. A line the
@@ -768,7 +793,10 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
 - **Never invent a URL, and never invent output.** Documentation links come from the catalogue the
   stack detected in step 2 — `references/rails-docs.md` or `references/elixir-docs.md` — and from
   nowhere else, including when that catalogue is closed and the answer is no link at all. Console
-  probes are proposed unrun, with no transcript beneath them.
+  probes are proposed unrun, with no transcript beneath them. The one result line the page may carry is
+  inside a primer's `pre.demo`, and only because its receiver is a class this repository does not have:
+  the block quotes the manual rather than reporting what this application did. Name an application
+  class there and it is invented output again, with the rule switched off.
 - **The page must read completely with every source excerpt closed.** An excerpt confirms a claim the
   prose already made; it never carries one. A claim that exists only inside a collapsed block is
   hidden content wearing the clothes of progressive disclosure. Judge this **field by field**: a

@@ -1,14 +1,19 @@
 #!/bin/sh
-# rails-anchors.sh — the two framework anchors: documentation links and runtime probes.
+# rails-anchors.sh — the three framework anchors: documentation links, runtime probes,
+# and the primer callout a link escalates into.
 #
-# Both exist to make a claim about Rails followable. Both fail in ways that look like
-# diligence, which is why they are checked mechanically rather than trusted:
+# All three exist to make a claim about Rails followable. All three fail in ways that look
+# like diligence, which is why they are checked mechanically rather than trusted:
 #
 #   a URL nobody opened            reads as a citation, resolves to a 404
 #   a doc link with no file:line   reads as evidence, says nothing about this repo
 #   a probe with output beneath it reads as the most concrete thing on the page,
 #                                 and is the one part of it that is fiction
 #   a probe naming a missing scope reads as pasteable, fails on first paste
+#   a demo naming an app class     reads as a quotation of the manual and is a claim
+#                                 about this application that nobody ran
+#   a primer on every mechanism    reads as thoroughness and is a Rails manual with a
+#                                 diff attached
 #
 # The catalogue is the allowlist, and this script derives it from the files rather than
 # hard-coding hosts: references/rails-docs.md and references/elixir-docs.md are the single
@@ -254,11 +259,23 @@ else
   # Blocked, not line-by-line: HTML wraps, and the rule is about the FIELD carrying the
   # link, not about one physical line. A line-based test failed the template's own
   # example, where the citation and the link sit on consecutive lines.
+  #
+  # A primer is judged as ONE block, so it is flattened to a single line first. Its link
+  # and the citation that earned it sit in different children of the aside, and the rule is
+  # about the callout having a stake in this repository — not about which child holds the
+  # path. Flattening plus the two extra break tokens below also stop it working in the other
+  # direction: a primer with no citation of its own cannot borrow the one in the .item that
+  # happens to precede it.
   awk '
-    /<div class="item"|<dd>|<dt>|<\/dd>/ { if (buf != "") { print buf; buf = "" } }
+    /<aside class="primer/ { p = 1; buf2 = "" }
+    p { buf2 = buf2 " " $0; if ($0 ~ /<\/aside>/) { print buf2; p = 0 }; next }
+    { print }
+  ' "$IN" > "$TMP/flat"
+  awk '
+    /<div class="item"|<dd>|<dt>|<\/dd>|<aside class="primer|<\/aside>/ { if (buf != "") { print buf; buf = "" } }
     { buf = buf " " $0 }
     END { if (buf != "") print buf }
-  ' "$IN" | grep 'class="doc"' | unesc > "$TMP/doc-lines"
+  ' "$TMP/flat" | grep 'class="doc"' | unesc > "$TMP/doc-lines"
   alone=0
   while IFS= read -r ln; do
     [ -n "$ln" ] || continue
@@ -290,6 +307,141 @@ else
   fields=$(grep -c '<dt>' "$IN" 2>/dev/null || true)
   if [ "${fields:-0}" -gt 0 ] && [ "$next" -gt "$fields" ]; then
     maybe "$next doc link(s) across $fields field(s) — at most one per field, and a page near that ratio has stopped selecting"
+  fi
+fi
+
+# ---------------------------------------------------------------- primer callouts
+#
+# The primer is the heaviest thing on the page that carries no evidence of its own, which
+# makes it the one most able to turn the report into a Rails manual with a diff attached.
+# The rules below are the mechanical half of the budget; whether a particular primer was
+# earned needs a reader and lives in the case.
+#
+# LEVEL-INDEPENDENT, deliberately. A primer lives inside a behaviour flow, and §§ 1-3 are
+# the same spec at both detail levels, so nothing here reads LEVEL — before-approving.sh
+# stays the only check that knows it.
+nprimer=$(grep -c '<aside class="primer' "$IN" 2>/dev/null || true)
+ndemo=$(grep -c '<pre class="demo"' "$IN" 2>/dev/null || true)
+if [ "${nprimer:-0}" -eq 0 ] && [ "${ndemo:-0}" -eq 0 ]; then
+  skip "primer callouts: none on this input"
+else
+  # The budget, and where a primer may live. At most one per behaviour flow, and none
+  #     outside one: a primer explains a mechanism some flow is about, and one adrift in
+  #     section 4 or 6 is a lesson with no behaviour attached to it. Counted per flow rather
+  #     than per page, because the cap scales with the flow count and a page-wide number
+  #     would mean nothing.
+  set -- $(awk '
+    /<section [^>]*id="flow-/            { inflow = 1; here = 0 }
+    /<aside class="primer/              { if (inflow) { here++; if (here > 1) over++ } else loose++ }
+    /<\/section>/                        { inflow = 0 }
+    END { print over + 0, loose + 0 }
+  ' "$IN")
+  over=$1; loose=$2
+  if [ "$over" -gt 0 ]; then
+    bad "$over flow(s) carry more than one primer — at most one per flow, and a flow needing two is a flow explaining Rails rather than its own change"
+  elif [ "$loose" -gt 0 ]; then
+    bad "$loose primer(s) sit outside a <section id=\"flow-...\"> — a primer explains a mechanism a flow is about, and one on its own is a lesson with no behaviour attached"
+  elif [ "${nprimer:-0}" -gt 0 ]; then
+    ok "$nprimer primer(s), at most one per flow and each inside the flow it explains"
+  fi
+
+  # A primer carries a doc link. It is what a link escalates INTO, so one without a link
+  #     has kept the teaching and dropped the provenance — the shape that reads most like a
+  #     tutorial. Its own citation is checked by the citation rule above, which now sees the whole aside.
+  nolink=$(awk '
+    /<aside class="primer/ { p = 1; has = 0 }
+    p && /class="doc"/      { has = 1 }
+    /<\/aside>/             { if (p && !has) miss++; p = 0 }
+    END { print miss + 0 }
+  ' "$IN")
+  if [ "$nolink" -gt 0 ]; then
+    bad "$nolink primer(s) carry no documentation link — a primer is what a link escalates into, so one without a link is teaching with no provenance"
+  elif [ "${nprimer:-0}" -gt 0 ]; then
+    ok "every primer carries the documentation link it escalated from"
+  fi
+
+  # pre.demo only ever inside a primer. THE LOAD-BEARING ONE: a demo may show a "# =>"
+  #     line because it quotes the manual, so a demo loose on the page is a general-purpose
+  #     hole for output nobody observed, straight past rule 5. The two blocks are separate
+  #     classes for exactly this reason and must never be merged.
+  loosedemo=$(awk '
+    /<aside class="primer/ { p = 1 }
+    /<pre class="demo"/     { if (!p) n++ }
+    /<\/aside>/             { p = 0 }
+    END { print n + 0 }
+  ' "$IN")
+  if [ "$loosedemo" -gt 0 ]; then
+    bad "$loosedemo pre.demo block(s) outside a primer — a demo may show a result only because it quotes the manual, so one loose on the page is fabricated output with the rule turned off"
+  elif [ "${ndemo:-0}" -gt 0 ]; then
+    ok "$ndemo demo block(s), all inside the primer that licenses them"
+  fi
+
+  # The Rails mark is only worn by a Rails primer, and never without the notice. The
+  # component takes anything the catalogue carries — a gem, a client library — and
+  # .primer--lib is that variant: no mark, a neutral rule, no trademark line. The two
+  # failures worth catching are both attributions rather than layout. A gem primer wearing
+  # the Rails logotype says the Rails Foundation wrote that gem; the logotype with no
+  # .pr-tm shows someone's mark without saying whose it is. Neither looks wrong on the
+  # page, which is why neither is left to the eye.
+  set -- $(awk '
+    /<aside class="primer/ { p = 1; mark = 0; tm = 0; rails = 0 }
+    p && /class="pr-mark"/                             { mark = 1 }
+    p && /class="pr-tm"/                               { tm = 1 }
+    p && /rubyonrails\.org/                            { rails = 1 }
+    /<\/aside>/ { if (p && mark && !rails) badhost++; if (p && mark && !tm) notm++; p = 0 }
+    END { print badhost + 0, notm + 0 }
+  ' "$IN")
+  badhost=$1; notm=$2
+  if [ "$badhost" -gt 0 ]; then
+    bad "$badhost primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead"
+  elif [ "$notm" -gt 0 ]; then
+    bad "$notm primer(s) show the Rails mark with no trademark line — the .pr-tm row exists to say whose mark is on display, and dropping it is the one part of this component that is not ours to drop"
+  else
+    ok "the Rails mark appears only on Rails primers, each carrying its trademark line"
+  fi
+
+  # The demo's receiver is NOT from this repository — the inverse of rule 7, and the
+  #     whole reason a "# =>" is allowed here. A demo on an application class is a claim
+  #     about the app under review that the run never made, which is the fiction rule 5
+  #     exists to prevent, wearing a different class name.
+  if [ "${ndemo:-0}" -eq 0 ]; then
+    :
+  elif [ -z "$REPO" ]; then
+    skip "demo receivers: needs --repo to ask whether the constants are this app's"
+  elif [ ! -d "$REPO" ]; then
+    bad "demo receivers: --repo is not a directory: $REPO"
+  else
+    awk '/<pre class="demo"/{d=1} d{print} /<\/pre>/{d=0}' "$IN" \
+      | sed -e 's/<[^>]*>//g' | unesc | grep -v '^[[:space:]]*$' > "$TMP/demo-body" || true
+    # `Application*` is exempt, and a real run is what found this: a demo reading
+    # `class Post < ApplicationRecord` was reported as naming an application class,
+    # because every Rails app really does define one. The scaffold base classes —
+    # ApplicationRecord, ApplicationController, ApplicationJob, ApplicationPolicy and
+    # their kin — exist in every app of their kind and say nothing about THIS one, so
+    # naming one is not the defect this rule is looking for. Flagging them made the
+    # idiomatic generic receiver the hardest one to write, which is the shape of a rule
+    # that punishes correct work.
+    grep -oE '\b[A-Z][A-Za-z0-9]*(::[A-Z][A-Za-z0-9]*)*\b' "$TMP/demo-body" \
+      | grep -Ev '^(ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP)' \
+      | grep -Ev '^(ActiveRecord|ActiveJob|ActiveSupport)::' \
+      | grep -Ev '^Application[A-Z]' \
+      | sort -u > "$TMP/demo-consts" || true
+
+    : > "$TMP/demo-real"
+    while IFS= read -r const; do
+      [ -n "$const" ] || continue
+      leaf=${const##*::}
+      if grep -rEq "^[[:space:]]*(class|module)[[:space:]]+([A-Za-z0-9_:]*::)?$leaf\b" "$REPO" 2>/dev/null; then
+        echo "$const" >> "$TMP/demo-real"
+      fi
+    done < "$TMP/demo-consts"
+
+    nreal=$(grep -c . "$TMP/demo-real" 2>/dev/null || true)
+    if [ "${nreal:-0}" -eq 0 ]; then
+      ok "every demo receiver is a generic class, so its result lines quote the manual"
+    else
+      bad "${nreal} demo receiver(s) are classes from this repository — a result line on an application class is output nobody observed: $(tr '\n' ' ' < "$TMP/demo-real")"
+    fi
   fi
 fi
 

@@ -19,9 +19,20 @@
 #
 #   --at    quotes the file as it stands at REV (default HEAD). This is the form
 #           for *affected but unchanged* code, which has no diff to show and is the
-#           reason the component exists.
+#           reason the component exists. It needs --base as well, for the state tag.
 #   --diff  emits one <details> per hunk, so you delete the ones you do not want.
 #           --hunk N emits only the Nth.
+#
+# STATE. The tag in the summary is derived from the diff, never assumed. --at used to
+# hard-code "Unchanged", which is a claim about the diff the script had not looked at:
+# a run published db/structure.sql:304-313 labelled Unchanged on a page whose own
+# ledger listed that file as changed. Quoting a changed file at head is legitimate, and
+# sometimes the only way to show what the committed code now permits -- a hunk of an
+# 18k-line structure.sql cannot show that a table has no CHECK constraint -- but saying
+# it never moved is not. So --at needs --base, and the tag it computes is one of
+# Unchanged (the path is outside the diff), Added, Removed, At head, or Before the
+# change. Only two revs may be quoted, which is the deep-link ladder's rule as well:
+# the head side for code as it stands, the base side for code as it was.
 #
 # Why this is a script and not markup you type: an excerpt is a *quotation*. A
 # mistyped ledger row fails coverage-gate.sh loudly; a paraphrased quotation is a
@@ -68,7 +79,7 @@ SYNLANG=
 SOFT_MAX=24
 
 usage() {
-  echo "usage: excerpt.sh --at PATH:START-END [--rev REV] [--why TEXT] [--lang L] [--blob URL|--link URL]" >&2
+  echo "usage: excerpt.sh --at PATH:START-END --base BASE [--rev REV] [--head REF] [--why TEXT] [--lang L] [--blob URL|--link URL]" >&2
   echo "       excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT] [--blob URL|--link URL]" >&2
   exit 2
 }
@@ -187,6 +198,12 @@ at)
   [ "$range" = "$start" ] && end=$start
   case $start$end in *[!0-9]*|'') echo "excerpt.sh: bad line range '$range'" >&2; exit 2 ;; esac
   [ "$end" -ge "$start" ] || { echo "excerpt.sh: range ends before it starts" >&2; exit 2; }
+  [ -n "$BASE" ] || {
+    echo "excerpt.sh: --at needs --base BASE." >&2
+    echo "  The state tag is read off the diff between the base and the head, and a" >&2
+    echo "  quotation that labels its own state without looking is how a changed file" >&2
+    echo "  gets published as Unchanged." >&2
+    exit 2; }
 
   # Guard first: the pipeline below reports sed's status, not git's, so a missing
   # path would otherwise leak git's fatal message and then report it as empty.
@@ -214,10 +231,53 @@ at)
     *)    lang=$SYNLANG ;;
   esac
 
+  # THE STATE TAG. See STATE at the top: this is a fact about the diff, so it is read
+  # off the diff. The page's own Changed / Affected-not-changed split is by file, so a
+  # path the diff touches is never tagged Unchanged here either -- not even where the
+  # quoted lines happen to be untouched, because the two labels would then contradict
+  # each other on one page and the reader has no way to tell which sense was meant.
+  # Say the range is untouched in the prose instead, where it can be said precisely.
+  b=$(git rev-parse --verify --quiet "$BASE^{commit}") || {
+    echo "excerpt.sh: cannot resolve --base $BASE" >&2; exit 1; }
+  h=$(git rev-parse --verify --quiet "$HEAD_REF^{commit}") || {
+    echo "excerpt.sh: cannot resolve --head $HEAD_REF" >&2; exit 1; }
+  r=$(git rev-parse --verify --quiet "$REV^{commit}") || {
+    echo "excerpt.sh: cannot resolve --rev $REV" >&2; exit 1; }
+  mb=$(git merge-base "$b" "$h" 2>/dev/null) || mb=$b
+
+  # Which side is being quoted. Two are sanctioned, and they are the two the deep-link
+  # ladder names; a third rev is a state neither this comparison nor the page can name.
+  case $r in
+    "$h")       side=head ;;
+    "$b"|"$mb") side=base ;;
+    *)
+      echo "excerpt.sh: --rev $REV is neither the base nor the head of $BASE...$HEAD_REF." >&2
+      echo "  The state tag comes from that comparison, so quote one side or the other." >&2
+      exit 2 ;;
+  esac
+
+  # A rename carries two paths on one row: $2 is the pre-image, $3 the name at head.
+  status=$(git diff --name-status -M "$mb" "$h" | awk -F'\t' -v p="$path" '
+    { s = substr($1, 1, 1)
+      if (s == "R") { if ($2 == p) { print "R-old"; exit } else if ($3 == p) { print "M"; exit } }
+      else if ($2 == p) { print s; exit } }')
+
+  case $status in
+    '')    tag="Unchanged";         kind="Unchanged at" ;;
+    A)     tag="Added";             kind="Added at" ;;
+    D)     tag="Removed";           kind="Removed at" ;;
+    R-old) tag="Before the change"; kind="Before the change," ;;
+    *)     if [ "$side" = head ]; then
+             tag="At head";           kind="At head,"
+           else
+             tag="Before the change"; kind="Before the change,"
+           fi ;;
+  esac
+
   loc="$path:$start-$end"
-  open_block source "$path" "$loc" "$((start - 1))" "Unchanged" "$lang"
+  open_block source "$path" "$loc" "$((start - 1))" "$tag" "$lang"
   printf '%s\n' "$body" | esc | awk '{ printf "<span class=\"l\">%s</span>\n", $0 }'
-  close_block "Unchanged at" "$loc"
+  close_block "$kind" "$loc"
   ;;
 
 diff)

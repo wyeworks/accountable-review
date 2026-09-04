@@ -8,8 +8,9 @@ cannot be inferred from a diff — it is what makes the page a review map rather
 Where a lens turns on a Phoenix, LiveView or Ecto behaviour the reader might reasonably not know, the
 canonical URL for it is in `references/elixir-docs.md`, and `report-format.md` § *Framework anchors*
 says when a claim has earned a link. Do not construct one from memory. **Read that file's § *Version*
-first**: while the catalogue is unverified it yields no links at all, and the anchor an Elixir run
-actually gets is the probe.
+first**: while the catalogue is unverified it yields no links at all — and so no primer callouts
+either, since a primer is what a link escalates into — and the anchor an Elixir run actually gets is
+the probe.
 
 Two app shapes are covered, and a repo is often both. A **LiveView app** has its sharpest seam between
 a `.heex` template and the `handle_event/3` clause it names — no compiler crosses it, and § *LiveView*
