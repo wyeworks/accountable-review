@@ -274,6 +274,28 @@ Editing one of these means checking the others still agree.
   at that flow in a clause rather than restating it. Code no single flow owns is explained in § 4
   instead — that is what makes it a section rather than an index. The rule that makes the whole thing
   honest: **record what was searched**, so an empty result reads as evidence rather than as omission.
+
+  **The record is collapsed, and splitting it is what keeps that rule from eating the page.**
+  `details.searched` is shut by default — the second component on the page a reader has to open — and
+  it holds `ul.sr-list`, one row per search, each a command and a result *clause*. The finding stays
+  in the open prose: "nothing else reads this column" is a sentence a reviewer meets without clicking,
+  and the grep behind it is provenance. Get that split wrong in the other direction and the rule
+  inverts — a finding left to be inferred from an empty row inside a shut toggle is hidden, not
+  disclosed, which is the excerpt hard rule (`SKILL.md`, now written for *every* collapsed block
+  rather than for excerpts alone).
+
+  It was collapsed because open it was the longest thing in § 4 and the first thing a reviewer met,
+  and because real pages filled it with paragraph-long re-explanations of entries sitting two inches
+  above — § *One canonical home*'s restatement regression arriving disguised as provenance. Hence the
+  row format: a `<code>` and a clause makes a verbose one *look* wrong, which prose never did.
+
+  Four files agree: `page-template.html` holds the component and its CSS, `report-format.md` § *What
+  was searched* owns the form, the budget and the open/collapsed split **alone**, `SKILL.md` step 5
+  points at it, and `evals/checks/searches.sh` re-runs the recorded searches against the repository.
+  That check keys on **text nodes beginning with a search tool**, not on the class or the element, so
+  it survived this move untouched — but its four `golden/searches-*.html` fixtures did not, and
+  migrating them is the actual work. They had already gone stale once when the design system changed,
+  and `searches.sh` passed them for as long as they matched nothing on any real page.
 - **Completeness, and the one mechanical check. It has no detail level.** Every path in the diff
   appears in the page, at every level, and the gate runs at every level. What the level changes is the
   *carrier*: § 7's classified ledger at `--full`, the merged section's `Changed` list at `--brief`,
@@ -341,8 +363,9 @@ Editing one of these means checking the others still agree.
   Six files have to agree: `SKILL.md` step 1 parses it beside the level and step 8 owns what `high`
   does, `report-format.md` § *Detail levels* states that this file has nothing else to say about it,
   `page-template.html`'s header comment refuses the badge in the same breath as the severity chip,
-  `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.sh` § 2b fails a page
-  that advertises having been checked, and `README.md` § *How hard it works* is the public wording.
+  `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.sh` §§ 2b and 2c fail
+  a page that advertises having been checked or narrates its own drafting, and `README.md` § *How hard
+  it works* is the public wording.
 
   **A verification badge is the same regression as a severity chip, and it will look more innocent.**
   Grading the PR is obviously forbidden; grading *the page* — "every claim verified", a count of what
@@ -350,6 +373,27 @@ Editing one of these means checking the others still agree.
   the format exists to withhold. That is why the refusal lives beside the severity refusal in the
   template rather than in a section of its own, and why § 2b's patterns are high-precision: a bare
   `verified` is a real Rails column name, and the sanctioned "a pass, not an audit" contains *audit*.
+
+  **The badge is not how the leak actually arrives. This is:** *"the mistake the first version of this
+  section made"*. A correction annotated with the history that produced it — which is the falsification
+  pass, narrated, without ever naming it. It slipped every rule above because it reads as candour
+  rather than as advertising, and a real `--effort high` page against a 28-file PR carried **ten** of
+  them while the three pages beside it carried none. Every one had a true and useful fact inside it:
+  the `git grep` basic-regex caveat is exactly what a reader re-running a recorded search needs. So the
+  rule is *keep the fact, drop the autobiography* — `SKILL.md` step 8's **correction replaces, never
+  annotates**, which is a general-effort bullet rather than a `high`-only one, because a normal run
+  revising its own draft writes the same sentence. `report-format.md` § *Blast radius* carries it for
+  recorded searches, where it concentrates.
+
+  Two things to know before editing § 2c. It **strips comments first** — `page-template.html`'s own
+  header comments are written in precisely this register ("A previous version of this template showed
+  the composition as three detached siblings") and ship verbatim inside every published page, so a
+  check reading them would fail every page for its template's documentation;
+  `golden/invariants-draft-narration.html` puts the trigger phrases in its own header comment so that
+  stays true. And the register is right *here* and wrong on the page: this file's rules deliberately
+  carry the observation that produced them, which is the habit the page must not inherit. The audience
+  is the difference — a maintainer needs to know why a rule exists, a reviewer does not need this
+  document's drafting history.
 
   The eval axis is `--skill-effort`, not `--effort`: `evals/run.sh` already had an `--effort` meaning
   the CLI reasoning effort the reader runs at, and two knobs under one name in one script is a bug

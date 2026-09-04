@@ -45,6 +45,36 @@ fi
 if grep -Eiq 'clean bill of health' "$IN"; then
   maybe "'clean bill of health' appears — legitimate only as a denial; read the sentence"
 fi
+# 2c · The page narrating its own drafting. A separate rule from 2b because it is a separate
+#      failure with a separate fix: 2b is the page claiming it was checked, this is the page
+#      telling the reader what an earlier draft of it said. Both leak the run's process, and
+#      this one leaks it while reading as candour, which is why a run writes it without
+#      noticing — one --effort high page carried ten, among them "the mistake the first
+#      version of this section made" and "the first pass ran this over app/views alone and
+#      found six". A falsification pass does not have to be named to be on the page.
+#
+#      The fix is never to delete the fact. A recorded search that needs -P to reproduce still
+#      owes the reader that caveat; what it does not owe them is the autobiography. SKILL.md
+#      step 8 owns the rule.
+#
+#      Comments are stripped first. page-template.html's own header comments are written in
+#      exactly this register — "A previous version of this template showed the composition as
+#      three detached siblings" — and ship verbatim inside every published page, so a check
+#      reading them would fail every page for its template's documentation.
+TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
+strip_comments "$IN" "$TMP/nocom"
+NARRATE='(first|earlier|previous|initial|original) (version|draft) of (this|the) (section|page|flow|paragraph|entry|list|row|claim|map|file)'
+NARRATE=$NARRATE'|(a|the|this) (first|earlier|previous|initial) (pass|draft|version) (got|had|reported|missed|claimed|said|read|ran|rested|came)'
+NARRATE=$NARRATE'|on (a|the) (first|earlier|previous) (pass|draft)'
+NARRATE=$NARRATE'|(this|the) (section|page|paragraph|entry|claim|row) (originally|initially) (said|read|claimed|reported|had)'
+if grep -Eiq "$NARRATE" "$TMP/nocom"; then
+  bad "the page narrates its own drafting — a correction replaces a claim, it never annotates it: $(grep -Eio "$NARRATE" "$TMP/nocom" | sort -u | tr '\n' ' ')"
+else
+  ok "no draft narration — corrections are written as claims, not as revisions"
+fi
+if grep -Eiq 'got it wrong|came to rest on|invalidated (several|some) of these' "$TMP/nocom"; then
+  maybe "a phrase that usually introduces draft history — read the sentence, and check it is about the code rather than about this page"
+fi
 
 # 3 · Evidence tiers. Silence is the first tier, so a document with no label either had
 #     nothing to infer, which is rare, or presented inference as fact, which is the

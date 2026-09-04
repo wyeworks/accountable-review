@@ -40,8 +40,14 @@
         inside it and every selectable-project list keeps offering it. The picker reads the same
         scope at <a class="path" href="#">app/views/entries/_form.html.erb:12</a>.
         <a href="#flow-a">Flow A</a></div>
-      <div class="searched"><strong>Searches run, including the ones that came up empty.</strong>
-        <code>rg 'ActiveProjects' app lib</code> &mdash; two callers.</div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>rg 'ActiveProjects' app lib</code> <span class="sr-r">two callers</span></li>
+          </ul>
+        </div>
+      </details>
     </dd>
   </dl>
 </section>
