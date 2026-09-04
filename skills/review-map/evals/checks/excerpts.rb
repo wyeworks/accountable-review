@@ -6,8 +6,8 @@
 # The half that matters is not here: does the prose still read completely with every
 # excerpt CLOSED, judged field by field. That needs a reader and lives in the cases.
 # What a script can settle is shape — collapsed by default, a summary that says what is
-# inside, tints that exist in all three theme blocks, no range quoted twice, and a
-# quotation nobody coloured by hand.
+# inside, tints that exist in all three theme blocks, no range quoted twice, a quotation
+# nobody coloured by hand, and a state tag that agrees with the diff it describes.
 #
 # Note which counts are OCCURRENCES and not lines. The shell used `grep -o | wc -l` here
 # rather than `grep -c`, and the difference is load-bearing twice over: <details> and
@@ -32,6 +32,76 @@ def diff_excerpt_carries_lang?(page)
     return true if in_diff && line.match?(/data-lang=/)
   end
   false
+end
+
+# excerpt.sh derives the state tag (see its STATE comment): Unchanged means the path is
+# outside the diff, and Added / Removed / At head / Before the change mean it is inside.
+# A --diff hunk is always Changed.
+SOURCE_TAGS = /\A(Unchanged|Added|Removed|At head|Before the change)\z/
+DIFF_TAG = "Changed"
+
+Block = Struct.new(:variant, :tag, :src, :loc)
+
+# One row per excerpt: variant, state tag, quoted path, location.
+#
+# The tag is read only BETWEEN a <details> and its </details>, because .tag is shared with
+# the decisions block's Tradeoff chip and a page-wide match would collect that as an
+# excerpt's state. Two details of the scan carry over from the awk: the opening line is
+# consumed by the variant, so no tag, path or location is read off it; and a later line
+# overwrites an earlier one, so the LAST match inside a block wins.
+def blocks_in(page)
+  found = []
+  current = nil
+
+  page.lines.each do |raw|
+    line = raw.chomp
+    if line.match?(/class="excerpt excerpt--/)
+      variant = line.sub(/.*excerpt--/, "").sub(/["[:space:]].*/, "")
+      current = Block.new(variant, "", "", "")
+      next
+    end
+    next unless current
+
+    current.tag = line.sub(/.*class="tag">/, "").sub(/<.*/, "") if line.match?(/class="tag"/)
+    current.loc = line.sub(/.*class="ex-loc">/, "").sub(/<.*/, "") if line.match?(/class="ex-loc"/)
+    current.src = line.sub(/.*data-src="/, "").sub(/".*/, "") if line.match?(/data-src="/)
+    next unless line.match?(%r{</details>})
+
+    found << current
+    current = nil
+  end
+
+  found
+end
+
+# Two ways to learn what the diff touched, and the page carries one of them itself: the
+# ledger accounts for every changed path by invariant, so a page can be held against its own
+# account of the change with no repository at hand.
+def changed_set(check, source)
+  if !check.repo.to_s.empty? && !check.base.to_s.empty?
+    merge_base, = check.shell("git", "-C", check.repo, "merge-base", check.base, check.head_ref)
+    merge_base = merge_base.strip
+    merge_base = check.base if merge_base.empty?
+    status, = check.shell("git", "-C", check.repo, "diff", "--name-status", "-M",
+                          merge_base, check.head_ref)
+    # A rename contributes BOTH paths: `R100<tab>old<tab>new`.
+    paths = status.lines.flat_map do |line|
+      fields = line.chomp.split("\t")
+      fields.size > 2 ? [fields[1], fields[2]] : [fields[1]]
+    end
+    # "the diff" even when git failed, because the shell tested the exit status of a pipeline
+    # ending in `sort` — so a failing git left an empty set and still took this branch.
+    return [paths.compact.sort.uniq, "the diff"]
+  end
+
+  if source.has?("data-path=")
+    ledger = source.scan(/data-path="[^"]*"/)
+                   .map { |attr| attr.sub(/\Adata-path="/, "").sub(/"\z/, "") }
+                   .sort.uniq
+    return [ledger, "the page's own ledger"]
+  end
+
+  [nil, nil]
 end
 
 # Three theme states or none: bare :root plus both dark blocks. A colour declared only
@@ -84,6 +154,54 @@ if page.has?(/<summary>[[:space:]]*(view|show|see) (diff|code|source)/i)
   check.bad("a summary reads 'view diff'/'show code' — say the location and why to open it")
 else
   check.ok("no placeholder summaries")
+end
+
+# --- The state tag is a claim about the diff, so it is checked against one ---
+#
+# excerpt.sh used to hard-code "Unchanged" on every --source block, and a run duly published
+# db/structure.sql:304-313 tagged Unchanged on a page whose own ledger listed that file as
+# changed — the page contradicting itself about the one thing a reader cannot check from the
+# page. That defect is invisible by construction: the block is real, the bytes are verbatim,
+# and only the label is false. Hence two rules, one lexical and one relational.
+#
+# Comments are stripped for these two only. Everything else here reads the input as published,
+# because every other rule is about markup the page actually carries.
+source = page.without_comments
+blocks = blocks_in(source)
+
+# The vocabulary is closed, and it is closed because the generator computes it. A tag outside
+# it — "Modified", "New", a bare "Changed" on a listing with no +/- gutters — is a tag somebody
+# typed, which is the same defect one step earlier. A block with no tag at all is left to the
+# summary rule in report-format.md; this one only reads what is there.
+typed = blocks.filter_map do |block|
+  next if block.tag.empty? || block.tag.include?("{{")
+
+  case block.variant
+  when "source" then "#{block.tag} on #{block.loc}" unless block.tag.match?(SOURCE_TAGS)
+  when "diff" then "#{block.tag} on #{block.loc}" unless block.tag == DIFF_TAG
+  end
+end
+if typed.empty?
+  check.ok("every state tag is one excerpt.sh emits")
+else
+  check.bad("a state tag is outside the generator's vocabulary, so it was typed: #{typed.join(";")};")
+end
+
+# The relational half.
+changed, set_from = changed_set(check, source)
+if set_from.nil?
+  check.skip("state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger")
+else
+  mislabelled = blocks.select do |block|
+    # Whole lines, never substrings: api/Gemfile sits inside api/Gemfile.lock.
+    block.variant == "source" && block.tag == "Unchanged" &&
+      !block.src.empty? && changed.include?(block.src)
+  end
+  if mislabelled.empty?
+    check.ok("no excerpt labels a changed file Unchanged, against #{set_from}")
+  else
+    check.bad("labelled Unchanged, but the change touches the file: #{mislabelled.map(&:loc).join("; ")} — quote it and let excerpt.sh --base tag the state")
+  end
 end
 
 # The excerpt tints are the newest colours in the system, which makes them the most

@@ -538,7 +538,7 @@ both `--page` and `--fragment`; and every row of `self-test.sh`, replayed with t
 arguments. The second source is not redundancy — the sweep never passes `--repo`, `--base` or
 `--level`, so it would compare two SKIPs for `searches.sh`, whose entire rule is a relation
 between the page and a repository, and would miss the brief level altogether. It reports
-**1454 cases, 0 differing, across 10 of 12 checks**, and it names what is still shell on every
+**1517 cases, 0 differing, across 10 of 12 checks**, and it names what is still shell on every
 run — today `rails-anchors` — because a partial migration that printed only "0 differing" would
 read as a finished one.
 
@@ -664,6 +664,41 @@ Re-porting the drift also found two library defects the corpus could not have:
   1454 cases, so the sweep stayed green; a mutation of the library caught it, and it now has a
   test. That is the division of labour the two mechanisms are for — the corpus grades behaviour
   the fixtures reach, and mutation grades the library itself.
+
+### And again, the next day — this time caught in CI
+
+`main` moved twice more while the branch was open, and the second time the CI job added the day
+before was what found it. `equivalence.rb` failed the PR with **1471 identical, 46 differing**,
+all `excerpts`, every diff `sh only`. GitHub runs `pull_request` CI on the merge ref, so the job
+was grading the port against a `main` two commits newer than the branch, including three golden
+fixtures the branch had never seen.
+
+The drift was PR #12, and it is the most interesting one yet because it is a defect of exactly
+the kind this whole directory exists to catch: `scripts/excerpt.sh --at` hard-coded `Unchanged`
+on every `--source` block — a claim about the diff it had never looked at — and a run published
+`db/structure.sql:304-313` tagged `Unchanged` on a page whose own ledger listed that file as
+changed. Verbatim bytes under a false label, which is the one defect in an excerpt a reader
+cannot catch, because an excerpt reads as *more* trustworthy the closer they look at it. So
+`excerpts.sh` gained both halves of the fix and `excerpts.rb` had neither:
+
+- **lexical** — a `--source` tag must be one of `Unchanged`, `Added`, `Removed`, `At head`,
+  `Before the change`, and a `--diff` tag must be `Changed`. Anything else was typed.
+- **relational** — every `Unchanged` against the changed set, taken from `git diff --name-status
+  -M` when `--repo` and `--base` are given and otherwise from the page's own `data-path` ledger,
+  which the completeness invariant guarantees is the whole diff.
+
+Three details of that were reasoned about rather than observed, so each was tested on purpose
+after the corpus went green: a rename contributes **both** paths (`R100 old new`), verified in
+both directions against a scratch repository; several mislabelled blocks join with `"; "`; and
+the changed set is matched **whole-line, never substring**, because `api/Gemfile` sits inside
+`api/Gemfile.lock`.
+
+**One latent shell defect was reproduced rather than fixed.** The relational rule tests the exit
+status of a pipeline ending in `sort`, so a `git` that fails — an unresolvable `--base`, a
+`--repo` that does not exist — leaves an empty changed set and still reports
+`no excerpt labels a changed file Unchanged, against the diff`. That is a false PASS on the rule
+whose entire purpose is catching a false label. The port copies it, because a port may not
+quietly change a verdict; fixing it means a golden fixture and a change to `excerpts.sh` as well.
 
 ### What is left
 
