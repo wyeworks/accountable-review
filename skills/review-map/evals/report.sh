@@ -57,8 +57,8 @@ for f in $files; do
       model = "-"; effort = "-"; jmodel = "-"; jeffort = "-"
       # Lines written before detail levels existed were all produced at what is now `full`.
       level = "full"
-      # And before the effort flag existed, every run did what `normal` now names.
-      seffort = "normal"
+      # And before the effort flag existed, every run did what `low` now names — no falsifier.
+      seffort = "low"
       if (match($0, /"fixture":"[^"]*"/))     fixture = substr($0, RSTART + 11, RLENGTH - 12)
       if (match($0, /"skill_sha":"[^"]*"/))   sha     = substr($0, RSTART + 13, RLENGTH - 14)
       if (match($0, /"dirty":[a-z]*/))        dirty   = substr($0, RSTART + 8, RLENGTH - 8)

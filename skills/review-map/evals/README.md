@@ -185,7 +185,7 @@ and a seventh would make the grader worse at the other six — which would be me
 rather than the flag. The A/B runs the *existing* expectations at both efforts and compares:
 
 ```sh
-./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort normal
+./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort low
 ./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort high
 ./report.sh behaviour-flows
 ```

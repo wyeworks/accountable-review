@@ -13,8 +13,8 @@ the decisions live. The first target stack is a Rails API with a Next.js client.
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
 command. It takes a target, a **detail level** — `--brief` (the default), `--full`, `--review` — and an
-orthogonal **effort** — `--effort normal` (the default) or `--effort high`, which adds an adversarial
-pass over the flows —
+orthogonal **effort** — `--effort high` (the default, adding an adversarial pass over the flows) or
+`--effort low`, which opts out —
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
 frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. The "source" is
 prose that another Claude instance executes, so the unit of quality is instruction clarity, not
@@ -375,10 +375,19 @@ Editing one of these means checking the others still agree.
   narrow `skip` for the moment stage 3 opens and no flow is written yet. That skip takes a pending
   marker as its precondition deliberately: a SKIP reads as verified, so it has to be unreachable on
   a finished page.
-- **Effort is orthogonal to the detail level, and invisible on the page.** `--effort normal` (the
-  default) and `--effort high` decide how hard a run works to be right; the level decides how many
+- **Effort is orthogonal to the detail level, and invisible on the page.** `--effort high` (the
+  default) and `--effort low` decide how hard a run works to be right; the level decides how many
   sections there are. They multiply rather than substitute, and `--brief --effort high` — a short
-  page whose claims were attacked — is the combination worth having. Effort produces **no section, no
+  page whose claims were attacked — is the combination worth having, which is why it is the one you
+  get by default.
+
+  **The default moved to `high` in 0.16.0, on two measurements against fayron#529.** The pass costs
+  0.9% of wall clock because the falsifiers do not block (§ *Deliberately single-context*), and the
+  same PR at `normal` missed five findings the falsified run carried — including an admin who never
+  reaches the gate written to admit them, and sixteen consumers of a column the change made nullable,
+  two of which send email. The level is not where the budget goes: `--brief` bought 4.6% of wall clock
+  for 35% fewer words, because the time is in step 5's consumer tracing rather than in writing
+  sections. **Effort decides whether the page is right; the level decides how long it is.** Effort produces **no section, no
   marker, no chip and no sentence**: two pages of the same target at the two efforts differ in their
   claims, never in their shape, and a reader cannot tell which produced the one in front of them.
 
@@ -709,29 +718,44 @@ the common path.
 
 ## Deliberately single-context, with one named exception
 
-The skill runs in one context. It spawns nothing at its default effort, and that is a choice, not an
-omission — an earlier iteration fanned out to `Explore` agents per layer, and it came out.
+The skill runs in one context and spawns exactly one kind of agent, the per-flow falsifier. That is a
+choice, not an omission — an earlier iteration fanned out to `Explore` agents per layer, and it came
+out.
 
 `SKILL.md`'s hard rules now say so outright, which they did not before: a real run reached for one
 `Explore` agent and stalled the parent for 997 seconds — 41% of its wall clock — in a single blocked
 turn. A boundary stated only here is a boundary the skill has never been told about.
 
-**The one exception is the falsification pass at `--effort high`** (`SKILL.md` step 8, and
-`agents/claim-falsifier.md`). It is worth understanding why it does not reopen what the paragraphs
+**The one exception is the falsification pass** (`SKILL.md` step 8, and
+`agents/claim-falsifier.md`), which since 0.16.0 runs by default. It is worth understanding why it does not reopen what the paragraphs
 below closed, because the next thing that wants an exception will look similar and probably is not.
 
 The seam is per **behaviour flow**, which is the seam those paragraphs already name as the right one:
 a flow is a whole behaviour, so nothing is fragmented that the page had not already separated, and
 there is no synthesis step afterwards to reassemble what a split threw away. The agent is read-only
 and returns *challenges*, not page content — the parent still writes every word, and still opens
-every cited file before acting on one, so no comprehension moves anywhere. And every agent for a run
-goes out in a single message, which is what bounds the cost: several blocking agents in one message
-stall the parent once, for the slowest, where the same agents one at a time stall it once each. The
-997 seconds were one sequential spawn.
+every cited file before acting on one, so no comprehension moves anywhere.
+
+**And it does not block, which is the fact that changed the default.** The agents launch async and
+return a receipt in about two seconds; the challenges arrive as notifications while the parent drafts
+stage 4. Measured on a 28-file PR at `--brief`: five falsifiers, **23 seconds of blocked parent, 0.9%
+of a 2607-second run**, first challenges landing 365 seconds after the last spawn. The cost objection
+the flag was gated behind turned out to be an artefact of how the pass was assumed to work rather than
+how it does.
+
+They still go out in a single message. It costs nothing, the challenges then arrive together rather
+than trickling, and if a harness ever does make them block, one message stalls the run once — for the
+slowest — where the same agents one at a time stall it once each. The 997 seconds were one sequential
+blocking spawn, and that number is about `Explore`, not about the falsifier.
 
 Two things it is not. It is not a licence for step 5 or step 6 to fan out — those still span the
-whole diff by nature, and splitting them is still the mistake. And it is not on by default: `normal`
-is what almost every run will be, so the single-context reading of a profile stays the common case.
+whole diff by nature, and splitting them is still the mistake. And it is not a second context doing
+the work: the falsifiers read, the parent writes, and a profile of a run still reads as one context
+plus a handful of receipts.
+
+**A run that waits on them has lost the whole argument.** The 0.9% holds only because the parent
+drafts while they read; spawn-then-idle turns the cheapest step in the procedure into the most
+expensive, and it is the likeliest way this default gets reverted by someone measuring it.
 
 The reason is that the decomposition is the *next* thing to get right, not something to inherit
 half-specified. Two of this version's steps span the whole diff by nature: step 5 traces consumers
