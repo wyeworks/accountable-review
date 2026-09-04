@@ -99,7 +99,7 @@ A separate axis, and orthogonal to the one above:
 
 ```
 /accountable-review:review-map 412                    # --effort high, the default
-/accountable-review:review-map 412 --effort normal    # opt out of the falsification pass
+/accountable-review:review-map 412 --effort low       # opt out of the falsification pass
 /accountable-review:review-map 412 --full
 ```
 
@@ -118,7 +118,7 @@ unconfirmed finding is.
 It is on by default because it is very nearly free and it changes what the page finds. The agents
 read while the run keeps drafting rather than instead of it: on a 28-file pull request the whole
 pass cost 23 seconds of waiting, under 1% of the run, and the same change reviewed without it missed
-five things the falsified page carried. `--effort normal` turns it off, which is worth doing when
+five things the falsified page carried. `--effort low` turns it off, which is worth doing when
 the diff is small enough that a second reader has nothing to find.
 
 That is still the one carved exception — the skill otherwise spawns nothing at all, because an

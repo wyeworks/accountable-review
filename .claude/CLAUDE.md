@@ -14,7 +14,7 @@ Installed, it is invoked as `/accountable-review:review-map`: plugin skills are 
 the plugin name, so the manifest name and the skill directory name together decide the public
 command. It takes a target, a **detail level** — `--brief` (the default), `--full`, `--review` — and an
 orthogonal **effort** — `--effort high` (the default, adding an adversarial pass over the flows) or
-`--effort normal`, which opts out —
+`--effort low`, which opts out —
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
 frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. The "source" is
 prose that another Claude instance executes, so the unit of quality is instruction clarity, not
@@ -376,7 +376,7 @@ Editing one of these means checking the others still agree.
   marker as its precondition deliberately: a SKIP reads as verified, so it has to be unreachable on
   a finished page.
 - **Effort is orthogonal to the detail level, and invisible on the page.** `--effort high` (the
-  default) and `--effort normal` decide how hard a run works to be right; the level decides how many
+  default) and `--effort low` decide how hard a run works to be right; the level decides how many
   sections there are. They multiply rather than substitute, and `--brief --effort high` — a short
   page whose claims were attacked — is the combination worth having, which is why it is the one you
   get by default.
