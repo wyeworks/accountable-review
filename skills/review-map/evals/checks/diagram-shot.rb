@@ -10,8 +10,14 @@
 # only exists in one theme shows up here as it would for a reader.
 #
 # Chrome is the renderer because it is the engine the artifact is read in. No Chrome, no
-# images: it skips rather than failing, since CI has no browser and this is a check for a
-# person, not a gate.
+# images: it skips rather than failing, because this is a check for a person and not a gate.
+#
+# That is also why it is the one check checks/frozen.rb excludes. Its verdict is a function of
+# the machine rather than of the input — "no Chrome found" here, "no diagrams to render" where a
+# browser exists, a PASS per PNG where one exists and works — so a frozen record of it would
+# pin an environment. Do not assume the absent browser either: a GitHub runner ships one, and
+# reading this comment as "CI has no browser" is what put 162 machine-dependent records into
+# the corpus.
 #
 #   diagram_shot.rb --page page.html [--out dir]
 

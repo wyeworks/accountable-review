@@ -544,12 +544,28 @@ The `PASS` / `FAIL` / `WARN` / `SKIP` strings *are* this directory's product: th
 maintainer reads when a wording change in the skill moves a number, so a port that reworded them
 would have rewritten the thing under measurement while claiming to preserve it.
 
-**The corpus is frozen rather than lost.** `checks/frozen/` holds all 1935 cases' exact output,
+**The corpus is frozen rather than lost.** `checks/frozen/` holds every case's exact output,
 recorded from the Ruby at the moment equivalence reported zero differences — which makes those
 files a record of what the *shell* did, transcribed by a port proven equal to it.
 `checks/frozen.rb` verifies against them and `--freeze` re-records. Whole output rather than a
 digest, deliberately: the diff of those files in a pull request says which cases moved and how,
 so re-freezing is a reviewable act rather than a hash nobody can read.
+
+**Eleven checks, not twelve**, and the twelfth is the rule this corpus has: *a record must be a
+function of the input.* `diagram-shot` is a function of the machine — it says `no Chrome found`
+on a container without a browser, `no diagrams to render` on one with a browser and a fragment
+carrying no `<svg>`, a `PASS` per rendered PNG where Chrome works, and a `FAIL` per image where
+Chrome starts and cannot write. This repository has produced three of those four for the same
+input. It also renders as a **side effect**, six PNGs per case into `references/shots/`, which a
+read-only sweep must not do.
+
+Its first freeze recorded the "no Chrome" line 162 times, from a container that has none, and
+CI — whose runner ships Chrome — went red on all 162 at once. The comment that caused it was in
+`diagram-shot.rb` and read *"CI has no browser"*: a claim about the world, written down years
+after it stopped being true, believed by the next reader. So the exclusion is stated in both
+files, and the cost with it — nothing pins `diagram-shot` now that the shell is deleted. That is
+the right trade for the one check whose product is images for a person to look at, and it is
+still a cost.
 
 ### What it cost
 
@@ -559,7 +575,7 @@ so re-freezing is a reviewable act rather than a hash nobody can read.
 | External commands | ~230 | one method, `Check#shell`, used by four |
 | Tempfiles | ~20 | 0 |
 | Unit tests | none possible | 24 tests, 67 assertions, every mutation of the library caught |
-| Frozen regression corpus | none | 1935 cases |
+| Frozen regression corpus | none | 1873 cases, over 11 of the 12 checks |
 
 Seven checks came out within six lines of their shell. `searches` and `diagram` grew by about
 fifty each — and those were the densest, least readable shell in the directory and the two most
@@ -651,8 +667,8 @@ git worktree add --detach /tmp/oracle origin/main
 # then run each checks/*.sh from the worktree against this checkout's golden/, and diff
 ```
 
-Every case in `checks/frozen/`, graded that way after the port: 2035 identical, 0 differing across
-all twelve checks. That is the same guarantee the corpus was recorded under, re-established rather
+Every case the corpus holds, graded that way after the port, plus `diagram-shot`'s 162 which it
+does not: **2035 identical, 0 differing across all twelve checks.** That is the same guarantee the corpus was recorded under, re-established rather
 than assumed — and it settles the `LC_ALL=C` question by measurement, which is the only way it
 could be settled: the sort it pins is Ruby's byte order already, so the change is a no-op here and
 `page-invariants` agrees on all 175 of its cases.

@@ -43,7 +43,21 @@ def checks
     # equivalence and frozen grade the checks; self_test runs the whole suite. None of the
     # three is a check, and a corpus that ran self_test over every fixture would run the suite
     # once per case.
-    next if %w[equivalence frozen self-test].include?(name)
+    #
+    # diagram-shot is excluded for a different reason, and it is the one worth reading before
+    # adding a check here: a frozen record has to be a function of the INPUT, and its verdict is
+    # a function of the machine. It says "no Chrome found" on a container without a browser,
+    # "no diagrams to render" on one with a browser and a fragment carrying no <svg>, a PASS per
+    # rendered PNG on a runner where Chrome works, and a FAIL per image on one where Chrome
+    # starts and cannot write — four different records for one input, and this repository has
+    # produced three of the four. Recording any of them freezes an environment while reading as
+    # a rule. It also renders as a side effect: a sweep would write six PNGs into
+    # references/shots/ per case, into the checkout, which a read-only corpus must not do.
+    #
+    # The cost is real and stated rather than hidden: nothing pins diagram-shot now that the
+    # shell it was graded against is deleted. That is the correct trade — it is the one check
+    # whose product is images for a person to look at, and its own header says so.
+    next if %w[equivalence frozen self-test diagram-shot].include?(name)
 
     name
   end
