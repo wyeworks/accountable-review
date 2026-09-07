@@ -1,0 +1,2011 @@
+## --fragment anchors-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-demo-outside-primer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-demo-outside-primer.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-fabricated-output.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-fabricated-output.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-hexdocs-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-hexdocs-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-hexdocs-unpinned.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-hexdocs-wrong-package.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-invented-attribute.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-invented-attribute.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-invented-scope.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-invented-scope.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-link-alone.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-link-alone.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-link-in-excerpt.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-link-in-excerpt.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-mixed-series.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-mixed-series.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-app-symbol.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-app-symbol.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-lib-rails-mark.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-lib.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-lib.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-no-citation.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-no-citation.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-no-link.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-no-link.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-no-trademark.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-no-trademark.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-scaffold-receiver.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-primer-two-in-flow.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-probe-legit-forms.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-probe-legit-forms.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-runner-mutates.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-runner-mutates.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-uncatalogued-url.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-uncatalogued-url.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment anchors-unpinned-link.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page anchors-unpinned-link.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment approving-brief-checkpoint.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page approving-brief-checkpoint.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment approving-brief-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page approving-brief-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment approving-brief-no-anchor.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page approving-brief-no-anchor.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment approving-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page approving-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment approving-six-questions.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page approving-six-questions.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment blast-brief-uncited.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page blast-brief-uncited.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment blast-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page blast-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment blast-no-pointer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page blast-no-pointer.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment blast-pointer-restated.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page blast-pointer-restated.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment blast-readorder.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page blast-readorder.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-edge-label-collision.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-edge-label-collision.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-invented-class.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-invented-class.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-label-overflow.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-label-overflow.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-literal-colour.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-literal-colour.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-no-legend.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-no-legend.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-offcanvas.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-offcanvas.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-placeholder.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-placeholder.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment diagram-unwrapped.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page diagram-unwrapped.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-at-head.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-at-head.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-diff-lang.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-diff-lang.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-duplicate.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-duplicate.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-open.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-open.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-typed-highlight.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-typed-highlight.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-typed-tag.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-typed-tag.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment excerpt-unchanged-changed-file.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page excerpt-unchanged-changed-file.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-blast-rows.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-blast-rows.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-decisions-interleaved.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-decisions-interleaved.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-layer-grouped.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-layer-grouped.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-partial-page.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-partial-page.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-pending-page.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-pending-page.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-primer-uncited-unit.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-primer-uncited-unit.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-source-only.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-source-only.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-stubs-only-page.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-stubs-only-page.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-unit-flattened.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-unit-flattened.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-unit-no-understand.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-unit-no-understand.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment flows-unit-uncited.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page flows-unit-uncited.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-assurance.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+FAIL  assurance language — the page is advertising that it was checked: independently verified 
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-assurance.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+FAIL  assurance language — the page is advertising that it was checked: independently verified 
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-draft-narration.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: The first pass ran first version of this section 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-draft-narration.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: The first pass ran first version of this section 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-loose-data-path.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+FAIL  1 data-path attribute(s) outside a ledger cell — the coverage gate reads them as ledger paths; excerpts must use data-src
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-loose-data-path.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+FAIL  1 data-path attribute(s) outside a ledger cell — the coverage gate reads them as ledger paths; excerpts must use data-src
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-no-tier.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-no-tier.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-risk-score-leading.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-risk-score-leading.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-risk-score-trailing.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-risk-score-trailing.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-risk-score.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-risk-score.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-severity-chip.html
+exit=1
+FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+WARN  a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-severity-chip.html
+exit=1
+FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+WARN  a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment invariants-verdict.html
+exit=1
+PASS  no severity chips
+FAIL  verdict language found: recommend approving 
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-verdict.html
+exit=1
+PASS  no severity chips
+FAIL  verdict language found: recommend approving 
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment searches-bre-dialect.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page searches-bre-dialect.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment searches-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page searches-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment searches-git-grep.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page searches-git-grep.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment searches-unreachable.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page searches-unreachable.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (1)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment start-here-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page start-here-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment start-here-no-why.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page start-here-no-why.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment start-here-two-lists.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page start-here-two-lists.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+SKIP  --rails: this page has no primer colour to check
+## --fragment page-template.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (5 label(s))
+PASS  data-path is only on ledger rows (3)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page page-template.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (5 label(s))
+PASS  data-path is only on ledger rows (3)
+SKIP  link reachability: needs --repo to ask git what is pushed
+PASS  all three theme states present
+PASS  --rails defined in all three theme blocks
+## --fragment approving-brief-clean.html --level brief
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-severity-chip.html
+exit=1
+FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+WARN  a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-verdict.html
+exit=1
+PASS  no severity chips
+FAIL  verdict language found: recommend approving 
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-risk-score.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-risk-score-leading.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-risk-score-trailing.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+FAIL  a graded noun asserted rather than refused: overall risk 
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-assurance.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+FAIL  assurance language — the page is advertising that it was checked: independently verified 
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-draft-narration.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: The first pass ran first version of this section 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-no-tier.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-loose-data-path.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+FAIL  1 data-path attribute(s) outside a ledger cell — the coverage gate reads them as ledger paths; excerpts must use data-src
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-clean.html --repo searches-repo --head 0000000000000000000000000000000000000000
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: git cannot say whether 0000000000000000000000000000000000000000 is pushed in golden/searches-repo — with no answer this rule has nothing to check the citation form against
+SKIP  theme states: a fragment carries no token block

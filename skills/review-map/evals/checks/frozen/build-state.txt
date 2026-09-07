@@ -1,0 +1,486 @@
+## --fragment anchors-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-demo-outside-primer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-demo-outside-primer.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-fabricated-output.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-fabricated-output.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-hexdocs-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-hexdocs-unpinned.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-unpinned.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-hexdocs-wrong-package.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-invented-attribute.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-invented-attribute.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-invented-scope.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-invented-scope.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-link-alone.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-link-alone.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-link-in-excerpt.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-link-in-excerpt.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-mixed-series.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-mixed-series.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-app-symbol.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-app-symbol.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-lib-rails-mark.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-lib.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-lib.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-no-citation.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-no-citation.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-no-link.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-no-link.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-no-trademark.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-no-trademark.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-scaffold-receiver.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-two-in-flow.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-two-in-flow.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-probe-legit-forms.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-probe-legit-forms.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-runner-mutates.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-runner-mutates.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-uncatalogued-url.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-uncatalogued-url.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-unpinned-link.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-unpinned-link.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment approving-brief-checkpoint.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page approving-brief-checkpoint.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment approving-brief-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page approving-brief-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment approving-brief-no-anchor.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page approving-brief-no-anchor.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment approving-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page approving-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment approving-six-questions.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page approving-six-questions.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment blast-brief-uncited.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page blast-brief-uncited.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment blast-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page blast-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment blast-no-pointer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page blast-no-pointer.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment blast-pointer-restated.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page blast-pointer-restated.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment blast-readorder.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page blast-readorder.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-edge-label-collision.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-edge-label-collision.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-invented-class.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-invented-class.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-label-overflow.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-label-overflow.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-literal-colour.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-literal-colour.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-no-legend.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-no-legend.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-offcanvas.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-offcanvas.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-placeholder.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-placeholder.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment diagram-unwrapped.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page diagram-unwrapped.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-at-head.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-at-head.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-diff-lang.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-diff-lang.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-duplicate.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-duplicate.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-open.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-open.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-typed-highlight.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-typed-highlight.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-typed-tag.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-typed-tag.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-unchanged-changed-file.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-unchanged-changed-file.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-blast-rows.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-blast-rows.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-decisions-interleaved.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-decisions-interleaved.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-layer-grouped.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-layer-grouped.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-partial-page.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-partial-page.html
+exit=1
+FAIL  finished page still carries 3 build-state element(s) — they were not removed
+## --fragment flows-pending-page.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-pending-page.html
+exit=1
+FAIL  finished page still carries 3 build-state element(s) — they were not removed
+## --fragment flows-primer-uncited-unit.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-primer-uncited-unit.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-source-only.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-source-only.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-stubs-only-page.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-stubs-only-page.html
+exit=1
+FAIL  finished page still carries 4 build-state element(s) — they were not removed
+## --fragment flows-unit-flattened.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-unit-flattened.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-unit-no-understand.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-unit-no-understand.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment flows-unit-uncited.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page flows-unit-uncited.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-assurance.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-assurance.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-draft-narration.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-draft-narration.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-loose-data-path.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-loose-data-path.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-no-tier.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-no-tier.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-risk-score-leading.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-risk-score-leading.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-risk-score-trailing.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-risk-score-trailing.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-risk-score.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-risk-score.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-severity-chip.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-severity-chip.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-verdict.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-verdict.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment searches-bre-dialect.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page searches-bre-dialect.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment searches-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page searches-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment searches-git-grep.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page searches-git-grep.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment searches-unreachable.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page searches-unreachable.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment start-here-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page start-here-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment start-here-no-why.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page start-here-no-why.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment start-here-two-lists.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page start-here-two-lists.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment page-template.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page page-template.html
+exit=1
+FAIL  finished page still carries 6 build-state element(s) — they were not removed

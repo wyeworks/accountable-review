@@ -1,0 +1,20 @@
+<!-- One defect: the hexdocs link carries no version segment, so it silently means the
+     package's newest release. Same failure as an unpinned Rails guide, arriving from the
+     package axis: an app on ecto 3.10 handed whatever ecto ships today, with nothing on
+     the page to notice it with. The path itself is catalogued, so only the pinning rule
+     may fire here. -->
+<section id="flow-a">
+  <div class="mech">
+    <b>archive &rarr; Projects.archive_project/1</b>
+    <p>Archiving stamps a timestamp rather than deleting the row.</p>
+  </div>
+  <dl class="rows">
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The bulk write at <span class="path">lib/my_app/projects.ex:58</span> builds no
+        changeset &mdash;
+        <a class="doc" href="https://hexdocs.pm/ecto/Ecto.Repo.html#c:update_all/3">update_all</a>
+        casts nothing. <span class="tier">from unchanged code</span></div>
+    </dd>
+  </dl>
+</section>

@@ -4,7 +4,7 @@ require "open3"
 
 require_relative "page"
 
-# check.rb — shared plumbing for the check scripts, the port of checks/lib.sh.
+# check.rb — shared plumbing for the check scripts. Was checks/lib.sh.
 #
 # Every check prints one line per expectation and nothing else:
 #
@@ -13,7 +13,7 @@ require_relative "page"
 #   WARN  what needs a human to look
 #   SKIP  what could not run on this input, and why
 #
-# check.sh dispatches several of them and tallies those lines, which is why the
+# check.rb dispatches several of them and tallies those lines, which is why the
 # prefixes are fixed and why a dispatched script prints no summary of its own.
 #
 # SKIP is not decoration. A check that cannot run here has to say so out loud: a
@@ -92,7 +92,7 @@ module ReviewMap
     # command is a false answer to the check's question, not a crash in the harness.
     def shell(*command, chdir: nil)
       opts = chdir ? { chdir: chdir } : {}
-      out, _err, status = Open3.capture3(*command, **opts)
+      out, _err, status = ReviewMap.capture(*command, **opts)
       [out, status.success?]
     rescue SystemCallError
       ["", false]

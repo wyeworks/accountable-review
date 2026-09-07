@@ -6,6 +6,10 @@
 reviewer through what changed, how the new behaviour works, what existing code is affected, and what
 to understand before merge.
 
+It ships two skills: **`review-map`**, which produces the page for a Rails or an Elixir/Phoenix
+codebase, with or without a separate client such as Next.js; and **`setup-ci`**, which arranges for
+one to be produced automatically on every review-ready pull request.
+
 Built by **WyeWorks**.
 Rails-first. Open source. A [Claude Code](https://claude.com/claude-code) plugin.
 
@@ -87,7 +91,7 @@ A **Review Map** adds that layer.
 
 A diff is organized by files.
 
-A Rails feature is not.
+A Rails or Phoenix feature is not.
 
 One behaviour may cross:
 
@@ -106,6 +110,9 @@ serializer
   ↓
 frontend contract
 ```
+
+On Phoenix the hops are different — router, controller or LiveView, context, changeset, `Repo`,
+worker, template — and the point is the same: no directory contains the behaviour.
 
 `accountable-review` reorganizes the PR around the **behaviour being implemented**, not just the
 order of files in the diff. Persistence, the endpoint contract and the frontend boundary get no
@@ -212,9 +219,8 @@ The goal is to help the reviewer investigate the change.
 
 ## Rails-first ❤️‍🔥
 
-The first versions are optimized and tested for Rails applications.
-
-That matters because Rails behaviour often emerges from several pieces working together:
+The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
+behaviour often emerges from several pieces working together:
 
 - routes
 - controllers
@@ -227,11 +233,27 @@ That matters because Rails behaviour often emerges from several pieces working t
 - tests
 - frontend clients
 
-The plugin is designed to help reviewers understand those relationships as a system. It also anchors
-framework behaviour where a reviewer needs the rule itself: a documentation link **pinned to the Rails
-and gem versions in your `Gemfile.lock`**, and a read-only console probe to run against your own
-application. Probes are proposed, never run — the skill does not boot your app, so no output on the
-page is ever invented.
+The plugin is designed to help reviewers understand those relationships as a system, and it knows
+where the framework's own rules bite: `update_all` at a call site the diff never opened skips the
+validation this PR adds, a uniqueness validation is not a unique index, `--sandbox` rolls back so
+`after_commit` never fires there.
+
+**Elixir/Phoenix is the second stack** — a LiveView app or a JSON API — with its own lens for the same
+job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing without the index
+behind it, and a `phx-click` renamed in a template without its `handle_event` clause crashes the
+LiveView the first time someone clicks it. Which of the two you get is detected from the repository, a
+`Gemfile` against a `mix.exs`, not configured; a repo holding both asks which to cover.
+
+Where a reviewer needs the framework rule itself, the page anchors it two ways: a documentation link
+**pinned to the versions in your own lock file** — the Rails series and gem versions from
+`Gemfile.lock`, each package's exact version from `mix.lock` — and a read-only console probe to run
+against your own application. Probes are proposed, never run: the skill does not boot your app, so no
+output on the page is ever invented.
+
+One asymmetry worth knowing rather than discovering: the Elixir documentation catalogue ships
+complete but **unverified**, and until its verification run happens it withholds every link. An
+Elixir page anchors with probes and prose and emits no documentation URL — a narrower page, not a
+broken one, and the same fail-closed rule the Rails catalogue applies per row.
 
 ---
 
@@ -306,6 +328,9 @@ It publishes early and fills in as parts complete: open it at minute two, watch 
 reading the moment the part you need lands. While it is unfinished it says so in a banner, and every
 part still coming is marked pending, so a half-written page can never be mistaken for a finished one.
 
+To have one generated for every pull request instead of by hand, see
+[CI integration](#ci-integration-) below.
+
 ### How much page
 
 ```text
@@ -373,26 +398,60 @@ What a good example shows:
 
 ## CI integration 🔁
 
-Not shipped yet, and not recommended as a hand-rolled workflow.
-
-The goal is worth stating, because it is what the page is designed around:
+One command turns "someone runs the review map by hand, sometimes" into "every review-ready pull
+request has one, and the whole team can open it":
 
 ```text
-PR ready for review
-        ↓
-Generate shared Review Map
-        ↓
-Publish once
-        ↓
-Every reviewer uses the same artifact
+/accountable-review:setup-ci
 ```
 
-Half of that already works today without CI: the page republishes to the same URL for the same PR, so
-whoever generates it first produces the artifact everyone else reads, and re-running after a push
-updates it in place rather than scattering links. What is missing is the unattended half — a runner
-identity, a durable place to publish that is not one person's private artifact, and a comment or
-check linking the PR to it. Until that is designed, running the skill locally and sharing the URL is
-the supported path.
+```text
+pull request marked ready for review
+        ↓
+Review Map generated for that exact revision
+        ↓
+uploaded as a GitHub Actions artifact
+        ↓
+available to everyone who can see the repository
+```
+
+Every reviewer opens the same artifact instead of independently reconstructing the same context. A
+push to that pull request regenerates it, and cancels the run that is now describing a revision
+nobody is reviewing.
+
+Setup looks at the repository first — what CI you already have, whether Claude Code already runs in
+it, what conventions your workflows follow — and then writes one file,
+`.github/workflows/accountable-review.yml`. It touches nothing else, and running it twice is safe:
+the second run compares what it would write against what is there and says *unchanged*.
+
+### What you get
+
+| | |
+| --- | --- |
+| Triggers | `ready_for_review`, `synchronize`, `reopened` |
+| Draft pull requests | Ignored — pushing to a draft costs nothing |
+| Fork pull requests | Skipped: a `pull_request` run from a fork gets no secrets |
+| Detail level | `--brief` |
+| Delivery | GitHub Actions artifact, kept 30 days |
+| Concurrency | One run per pull request; superseded runs cancelled |
+| Permissions | `contents: read`, and nothing else |
+
+One thing is left for you: **the credential.** Add `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`)
+as a repository secret. Setup cannot see your secrets, so it says outright that this is outstanding
+rather than implying everything is ready.
+
+One thing to know about the triggers: `opened` is not among them, so a pull request opened *directly*
+as ready for review gets its first Review Map on its next push. If your team does not start work as
+drafts, add `opened` to the list — the draft guard still holds.
+
+The workflow is read-only and analysis-only. It never pushes, comments, approves, merges, or sets a
+check with a verdict in it, and it never boots your application: no migrations, no database service,
+no scripts from the pull request. That is the same principle the page itself follows — validation
+commands are shown to a reviewer, never run on their behalf.
+
+🚚 Artifacts are the default, not the contract: a Review Map is portable static HTML, and generation
+is separated from delivery so a team can send it somewhere browsable instead. See
+[`docs/ci.md`](docs/ci.md) for the delivery seam and how to add a provider.
 
 ---
 
@@ -400,23 +459,25 @@ the supported path.
 
 | | |
 | --- | --- |
-| **Supported agents** | Claude Code. One skill, `review-map`, plus one subagent, `claim-falsifier`, spawned per behaviour flow at `--effort high`. Deliberately single-context otherwise — an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Supported agents** | Claude Code. Two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, spawned per behaviour flow at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
-| **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails and gem versions from `Gemfile.lock`, which are what documentation links are pinned to. |
-| **Frontend discovery** | Whether a client exists at all, and where its API client and types live. The frontend sections need both sides in the diff; with no client, or a PR that does not touch one, they are omitted rather than filled in. |
-| **Test frameworks** | RSpec and Minitest, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
-| **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. Behaviour flows are found by grouping the diff by behaviour; affected-but-unchanged code is found by search recipes per artifact kind; every claim is anchored to a `file:line`. |
+| **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
+| **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
+| **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
+| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Those sections need both sides in the diff; with no client, or a PR that does not touch one, they are omitted rather than filled in. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
+| **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
+| **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. Behaviour flows come from grouping the diff by behaviour; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, inline SVG diagrams from a fixed catalogue, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
-| **Publishing** | Published as a Claude Artifact, private until you share it, republished to the same path per PR. The page is never written into the repository under review — scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
+| **Publishing** | Interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's coverage ledger and `git diff --name-only`. A file cannot be silently dropped. |
-| **CI execution** | Not supported yet — see [CI integration](#ci-integration-). |
+| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, `contents: read`, drafts and forks skipped, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact. |
 
 ---
 
 ## Configuration 🛠️
 
-There is nothing to configure, and that is deliberate: every setting is a thing that can go stale
-against the repository it describes.
+Nothing is required, and that is deliberate: every setting is a thing that can go stale against the
+repository it describes.
 
 What you choose per run:
 
@@ -425,12 +486,32 @@ What you choose per run:
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Detail level** | `--brief` (default) or `--full`. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
+| **Output** | A published artifact by default; `--output <dir>` writes static HTML instead. |
 
-What is discovered instead of configured: the Rails root, the test framework, whether the app is
-API-only, the authorization library, the frontend location, the Rails and gem versions, and the
-project's own conventions. Where a project documents conventions — `CLAUDE.md`, `.cursorrules`, a
-style guide — the skill reads them; where it does not, house style is inferred from adjacent
-unchanged code, which is usually more accurate than a stale document anyway.
+In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
+optional:
+
+```yaml
+review_map:
+  mode: full             # brief | full
+  effort: high           # high | low
+  delivery:
+    provider: github-artifact
+    retention_days: 14
+```
+
+Precedence is `explicit flags > .accountable-review.yml > defaults`, and it is implemented rather
+than aspirational: the config reader emits a line only for a key the file actually contains, so
+"configured to the default" is distinguishable from "not configured". `setup-ci` will not write a
+file that only restates the defaults — a file nobody chose is one more thing to keep in sync, and a
+later reader treats `retention_days: 30` as load-bearing when nobody picked it.
+
+Everything else is discovered instead of configured: which stack this is, the Rails root or the Mix
+project, the test framework, whether the app is API-only or LiveView, how authorization is attached,
+the frontend location, the framework and package versions, and the project's own conventions. Where
+a project documents conventions — `CLAUDE.md`, a style guide — the skill reads them; where it does
+not, house style is inferred from adjacent unchanged code, which is usually more accurate than a
+stale document anyway.
 
 Repository-specific guidance is therefore expressed the way the rest of your tooling already
 expresses it: in the repo's own convention docs, not in a config file belonging to this plugin.

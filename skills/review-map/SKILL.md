@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort high is the default and tries to falsify the page's own claims before it is finished, --effort low skips that pass. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort high is the default and tries to falsify the page's own claims before it is finished, --effort low skips that pass. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -26,11 +26,15 @@ comments on the PR. If the project has a review command, say so at the end and l
 The procedure below relies on seven bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
+Two of the seven come in a pair, and **step 2's stack detection picks one of each pair, never both.**
+A Rails run reads the Rails lens file and the Rails catalogue; a Phoenix run reads the Phoenix pair.
+Reading the other stack's file costs context and teaches the wrong searches.
+
 | File | Read at | For |
 |---|---|---|
 | `references/report-format.md` | steps 1, 7, 8, 9 | The detail levels, the sections each one produces, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
-| `references/rails-nextjs.md` | step 5, then while reading any layer | What a senior reviewer of this stack looks for, the runtime probes, and the search recipes for code the diff did not touch |
-| `references/rails-docs.md` | steps 7 and 9 | The Rails documentation URLs the page may cite. It is an allowlist, not a starting point |
+| `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch |
+| `references/rails-docs.md` *or* `references/elixir-docs.md` | steps 7 and 9 | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point |
 | `references/page-template.html` | step 9 | The design system: tokens (light and dark), component classes, the two SVG diagram layouts, and the page's one small script |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
@@ -53,9 +57,10 @@ instructions are its own, which is the point of putting them in a separate conte
   than inferring the shape from the section list. Three rules about the flag itself:
   - `--review` **stops the run.** It is not implemented; see § *The review level is not implemented
     yet* below for what to say. Do not fall back to another level and do not write a page.
-  - An argument starting with `--` that is none of the three, and is not `--effort` with its value, is
-    **reported, not guessed at**. A misread flag silently produces the wrong shape of page, and the
-    reader has no way to tell.
+  - An argument starting with `--` that is none of the three, and is not one of `--effort`,
+    `--output`, `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not
+    guessed at**. A misread flag silently produces the wrong shape of page, and the reader has no way
+    to tell.
   - Say which level you are producing when you first speak, in the same breath as the URL — a reader
     who wanted the full page should find that out at minute two, not at the end.
 - **Read the effort off the invocation too, and hold it the same way.** One of `--effort high`,
@@ -86,6 +91,39 @@ instructions are its own, which is the point of putting them in a separate conte
 
   Unlike the level, **do not announce the effort** — nothing about the pass reaches the page, and
   § *At `--effort high`* in step 8 says why.
+- **`--output <dir>` makes the run non-interactive.** It is the only flag that changes where the page
+  goes rather than what is on it: the page is written to `<dir>/index.html` and **nothing is
+  published** — no `Artifact` call, at any stage. Everything else is identical, and has to be. Same
+  sections, same depth rules, same excerpt budget, same gate. A CI run and a person's run produce the
+  same page from the same procedure; the moment this flag starts meaning a cheaper page, there are two
+  products and only one of them is developed against.
+
+  Three flags travel with it, carrying what `gh` would otherwise be asked for:
+
+  ```
+  --repository <owner/repo>   --base-sha <sha>   --head-sha <sha>
+  ```
+
+  **Prefer them over anything you derive.** `--base-sha` is `BASE` and `--head-sha` is `HEAD` for
+  every diff in this run; do not compute a merge-base over them and do not call `gh` for what they
+  already say. The caller knows which revision it asked about, and a run that recomputed a base from a
+  branch that has since moved would describe a revision nobody requested. With `--repository` and a PR
+  number the run also has what link rung 1 needs without `gh` at all — check reachability as always,
+  but do not re-derive the identity of the change. The flags are legal on their own; they simply have
+  no other reason to appear.
+
+  `<dir>` must be **outside the repository under review**, for the reason the hard rules give: the
+  page must never become part of the diff it describes.
+
+  **`$W` is unchanged by this, and that matters.** `--output` moves the finished page, not the run's
+  scratch: `$W` stays the derived work directory and excerpt fragments keep landing there. Write the
+  page itself straight to `<dir>/index.html` — a crash then leaves a useful page where the caller is
+  going to look for one — and leave `<dir>` holding nothing else, because whatever is in it is what
+  gets delivered.
+
+  `ci/generate-review-map.sh`, at the plugin root, is the only caller today. It supplies all four
+  flags, checks afterwards that the page names its revision and no longer says it is being written,
+  and refuses to deliver one that does.
 - Find the base *ref*: the PR's base if there is one, else the default branch
   (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
   you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
@@ -133,21 +171,59 @@ instructions are its own, which is the point of putting them in a separate conte
 
 Assume nothing about layout or conventions — this skill travels between repos.
 
-**Backend.** Locate the Rails root by finding `config/application.rb`. It may be at the repo root,
-under a subdirectory such as `api/`, or there may be several (engines, monorepo). If more than one is
-touched by the diff, ask which to cover. Detect, don't assume: RSpec vs Minitest; API-only
-(`config.api_only`) vs server-rendered; the authorization library, if any; the serializer library;
-the background job adapter; whether `strong_migrations` is present.
+**Detect the stack first**, because it decides which two of the bundled files the rest of the run
+reads:
 
-**Record the Rails version and its series**, from the `rails (x.y.z)` line in `Gemfile.lock`, along
-with the exact locked versions of the gems above. The series is `major.minor` — `rails (8.0.2)` gives
-`8.0` — and it is not bookkeeping: **every documentation link on the page is pinned with it**, so a
-run that skipped this step cannot emit a doc link at all. Gem links pin to the exact locked version,
-which is why those are recorded too. `references/rails-docs.md` § *Pinning* owns the forms; the same
-version also decides what the page may claim, because two marks in that catalogue turn a
-version-sensitive behaviour into a probe rather than a sentence.
+- `config/application.rb`, or a `Gemfile`, → **Rails**: read `references/rails-nextjs.md` and
+  `references/rails-docs.md`.
+- `mix.exs` → **Elixir/Phoenix**: read `references/phoenix-liveview.md` and
+  `references/elixir-docs.md`.
+- **More than one root, or one of each** — a monorepo with an `api/` and a `services/`, engines, an
+  umbrella — **ask which to cover** rather than picking. Same rule as several Rails roots, and for the
+  same reason: covering the wrong half produces a page that is confidently about code the reviewer is
+  not reading.
+- **Neither** — say so plainly, cover the diff with the stack-independent material (the sections, the
+  review unit, the tiers, the blast radius, the ledger), and **emit no documentation link and no
+  probe.** Do not default to Rails: a Rails lens applied to a Go service invents findings, and a
+  catalogue that does not describe this application is the failure both catalogues fail closed to
+  avoid.
 
-**Frontend.** Locate it the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
+**Backend, Rails.** Locate the Rails root by finding `config/application.rb`. It may be at the repo
+root, under a subdirectory such as `api/`, or there may be several (engines, monorepo). Detect, don't
+assume: RSpec vs Minitest; API-only (`config.api_only`) vs server-rendered; the authorization library,
+if any; the serializer library; the background job adapter; whether `strong_migrations` is present.
+
+**Backend, Phoenix.** Locate the Mix project by finding `mix.exs`, and read the OTP app name from it —
+that is what `lib/<app>` (the domain) and `lib/<app>_web` (the web layer) are named after, and the
+split is where the context boundary lives. Detect, don't assume: the `Repo` module and its adapter;
+**whether this is a LiveView app, a JSON API, or both** (`live "…"` in the router versus `json`
+responses, `@derive {Jason.Encoder, …}` or a `…JSON` render module); how authentication is attached
+(`on_mount` inside a `live_session`, or a plug in a `pipe_through` pipeline) — the two are different
+mechanisms and a route can miss either; whether Oban, Broadway or bare `Task` does background work;
+whether `assets/` holds JS hooks; and whether a separate frontend application exists at all.
+
+**Record the versions the documentation links are pinned to.** This is not bookkeeping: **every
+documentation link on the page is pinned with them**, so a run that skipped this step cannot emit a
+doc link at all. What to record differs by stack, and so does its shape:
+
+- **Rails** — the Rails version and its *series* from the `rails (x.y.z)` line in `Gemfile.lock`
+  (`rails (8.0.2)` gives `8.0`), plus the exact locked versions of the gems above, which pin to a tag.
+  One series covers the whole framework.
+- **Elixir** — the **exact locked version of each package** from `mix.lock` (`phoenix`,
+  `phoenix_live_view`, `ecto`, `ecto_sql`, `plug`, `oban`, and any other the catalogue carries), plus
+  the Elixir version from `.tool-versions` or `mix.exs`. There is **no series**: hexdocs serves exact
+  versions, each package pins independently, and a page carrying several different version segments is
+  correct rather than broken.
+
+Each catalogue's § *Pinning* owns the emitted forms. The same versions also decide what the page may
+**claim**, because two marks in each catalogue turn a version-sensitive behaviour into a probe rather
+than a sentence.
+
+**Frontend.** If the stack is Phoenix LiveView with no separate client application, the frontend is the
+`.heex` templates and whatever sits in `assets/` — there is no second application and no generated
+type to reconcile, so skip to *Conventions* and let § *LiveView* in the lens file carry the seam. A
+LiveView app's boundary is the `phx-*` attribute and the callback that answers it, not a JSON contract.
+Otherwise locate the client the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
 find the seam between the two sides, because that is what the boundary material inside each
 behaviour flow is built from:
 
@@ -217,16 +293,18 @@ Work outward from each changed thing to its consumers:
 
 | Changed thing | Who you have to go find |
 |---|---|
-| A method or class | Its callers, and anything that subclasses or includes it |
-| A column | Serializers exposing it, scopes and queries filtering on it, factories setting it, forms writing it |
-| A validation or callback | Every write path that now behaves differently — `update_all` and `insert_all` bypass it |
-| An enum or status value | Every branch on that value, on both sides of the boundary |
+| A method, class or context function | Its callers, and anything that subclasses, includes or imports it |
+| A column or schema field | Whatever exposes it (a serializer, a `Jason.Encoder` derive list, a JSON render module), scopes and queries filtering on it, factories and fixtures setting it, forms writing it |
+| A validation, callback or changeset | Every write path that now behaves differently — `update_all` and `insert_all` bypass it in both stacks, and a second changeset function on the same schema is a second write path |
+| An enum or status value | Every branch on that value, on both sides of the boundary, including every exhaustive `case` |
 | A JSON key or response shape | The API client, the TS type, and every component reading it |
-| A route | Anything constructing that URL, including the client and any external caller |
+| A LiveView event name | Its `handle_event/3` clause, **and** every `.heex` template and JS hook that fires it. Either half can be the stale one, and no diff shows the two together |
+| A route | Anything constructing that URL, including the client and any external caller — and, for a `live` route, which `live_session` block it landed in |
 | A job or its arguments | Every enqueue site, plus in-flight jobs already queued with the old shape |
 
-`references/rails-nextjs.md` carries the concrete search patterns per artifact kind. Use them; do not
-improvise a grep and call the area clear.
+The lens file the stack selected in step 2 — `references/rails-nextjs.md` or
+`references/phoenix-liveview.md` — carries the concrete search patterns per artifact kind. Use them;
+do not improvise a grep and call the area clear.
 
 **Record what you searched, not just what you found — but the finding goes in the open prose and the
 search goes in the collapsed record.** "Nothing else calls `Project#archive`" is the finding, and it
@@ -282,7 +360,7 @@ The unit is **borderless by design**, which makes this easier to get wrong than 
 spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
 example.
 
-**Three anchors are available for a claim that rests on Rails rather than on this diff**: a
+**Three anchors are available for a claim that rests on the framework rather than on this diff**: a
 documentation link, a console probe the reviewer runs, and the primer callout a link escalates into.
 The first two land inside fields the unit already has — *things to understand* to make a mechanism
 legible, *how to validate* to settle something. The third sits between the flow's `.mech` and its
@@ -290,10 +368,20 @@ grid, and is for the narrower case where the reviewer cannot make the decision *
 framework rule: at most one per flow, and most flows earn none.
 `references/report-format.md` § *Framework anchors* owns the routing, the budget and the three
 rules that matter most: a doc link never appears without a `file:line` beside it, a probe never
-appears with output beneath it, and a primer's demo never names a class from this repository. Where a flow's change is ActiveRecord-shaped, reach for a probe before
-reaching for a paragraph: `references/rails-nextjs.md` § *Runtime probes* has them, and the reason is
-that a validation, a scope or a `dependent:` is assembled at boot from places the diff cannot show
-together.
+appears with output beneath it, and a primer's demo never names a class from this repository.
+
+**A primer is gated on its documentation link**, which it escalates from, so a stack whose catalogue
+is closed gets none at all — today that is Elixir, per `references/elixir-docs.md` § *Version*. Explain
+the mechanism in the flow's own prose against its `file:line` and propose a probe instead. The page is
+narrower, not wrong, which is the same trade the withhold already makes.
+
+Where a flow's change is **framework-shaped, reach for a probe before reaching for a paragraph** — the
+§ *Runtime probes* section of whichever lens file step 2 selected has them. The reason is the same in
+both stacks: the behaviour is assembled from places the diff cannot show together. In Rails a
+validation, a scope or a `dependent:` comes together at boot, from the class, its concerns, its
+superclass and the schema. In Phoenix a changeset, an association's `on_replace:`, or the `on_mount`
+hook a `live` route inherits comes together at compile time, from macros and from a `live_session`
+block the hunk does not include.
 
 Two rules keep it from becoming ceremony:
 
@@ -340,7 +428,7 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
   run's own history. Note that this repository's prose is deliberately written the *other* way — a
   rule here states the observation that produced it — and that register is right for whoever edits
   the skill next and wrong for the page. The reviewer is reading about a pull request; how this
-  document got drafted is not part of it. `evals/checks/page-invariants.sh` § 2c fails a page that
+  document got drafted is not part of it. `evals/checks/page-invariants.rb` § 2c fails a page that
   does it.
 
 ### At `--effort high`: falsify each flow before the page is finished
@@ -410,6 +498,14 @@ URL never changes.** The reader can open it at minute two, watch it fill in, and
 moment the part they need lands.
 
 The mechanics are simply the `Artifact` tool's: republishing the same file path redeploys in place.
+
+**Non-interactively (`--output`, step 1) there is nothing to publish, and no reader waiting.** The
+stages stop being arrivals and become save points: write each one to `<dir>/index.html` as it
+completes, with `Edit` rather than a rewrite exactly as below, and skip every `Artifact` call. Keep
+writing them — a run that dies two thirds of the way through leaves a page worth having, which is the
+other reason staging exists — but do not spend a turn announcing a boundary nobody is watching. The
+banner and the markers still come off at the end: step 10 is unchanged, and the CI adapter refuses to
+deliver a page still carrying one.
 
 **Four milestones.** Each is a coherent thing to read, which is the point — a URL that changes under
 someone mid-paragraph is worse than one that arrives late.
@@ -540,7 +636,7 @@ Everything else about writing holds at every stage:
   An excerpt is a *quotation*, and that is why it is generated. A mistyped ledger row fails the gate
   loudly; a paraphrased quotation is a false quotation, and nothing in the page or in the reader's
   experience catches it. The script reads the real bytes and does the HTML escaping, which matters
-  more than it sounds — ERB and TSX are full of `<`, `>` and `&`. It also tags the `--source` block
+  more than it sounds — ERB, TSX and HEEx are full of `<`, `>` and `&`. It also tags the `--source` block
   with the language, which is what the page tints from at read time — pass `--lang` only when the
   extension lies, and never write a colour class into the code yourself: a hand-coloured quotation is
   a quotation someone edited.
@@ -572,33 +668,47 @@ Everything else about writing holds at every stage:
   and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and
   they live there only — an earlier version of this bullet restated the cap in slightly different
   words and the two drifted apart within one run.
-- **Pin every documentation URL to the version this app runs**, using the series and gem versions
-  recorded in step 2. The catalogue stores paths with no version segment; a link that reaches the page
-  without one silently means *current stable*, which is how a 7.1 app gets handed 8.1 documentation.
-  Where the catalogue has no verified path for this app's version, **emit no link** — explain it in
-  prose and cite the repo line. `references/rails-docs.md` § *Pinning* owns the forms and the
-  overrides.
+- **Pin every documentation URL to the version this app runs**, using the versions recorded in step 2.
+  Both catalogues store paths with no version segment; a link that reaches the page without one
+  silently means *current stable*, which is how a 7.1 app gets handed 8.1 documentation. What gets
+  substituted differs: Rails pins **one series** for the framework and an exact tag per gem, while
+  Elixir pins **each package's exact locked version independently**, so a correct Elixir page carries
+  several different version segments and that is not a defect. Where the catalogue has no verified path
+  for this app's version, **emit no link** — explain it in prose and cite the repo line. Each
+  catalogue's § *Pinning* owns the forms and the overrides.
 - **A `‡ probe` row may not be asserted.** Those are behaviours that changed inside the supported
-  Rails range, so no sentence about them is true of every app. Name the setting that decides it and
-  propose a probe; the page asks rather than tells. A `‡ since X` row is stated as the default, naming
-  X. `references/rails-docs.md` § *What the marks mean*.
-- **Take every documentation URL from `references/rails-docs.md`, and never construct one.** You
+  range, so no sentence about them is true of every app. Name the setting or the version that decides
+  it and propose a probe; the page asks rather than tells. A `‡ since X` row is stated as the default,
+  naming X. Each catalogue's § *What the marks mean*.
+- **Take every documentation URL from the catalogue step 2 selected, and never construct one.** You
   cannot check a URL from here — there is no fetch step, and the sandboxes this runs in commonly block
   those hosts — so a plausible-looking API path is a 404 the reader finds on your behalf, which costs
   the same trust as an invented rake task. A concept the catalogue does not carry is explained in prose
   with the repo citation it applies to; that is the ordinary outcome, not a failure. The rules and the
   budget are in `references/report-format.md` § *Framework anchors*, and they live there only.
+
+  **A catalogue can also be closed as a whole**, and one currently is: `references/elixir-docs.md`
+  § *Version* withholds every link until a verification run dates it. Read that section before
+  emitting an Elixir doc link — while it is closed, the answer for every concept is *no link*, and an
+  Elixir run anchors with probes and prose instead. This is the fail-closed rule at file scope, not a
+  bug to work around.
 - **A probe is proposed, never run.** Do not boot the application under review. The page shows the
-  command; it never shows output, because there is none to show — and a fabricated `=>` line is the
-  most concrete-looking thing on the page and the one part of it that is fiction. Name whether the
-  snippet wants `bin/rails runner` or `bin/rails console --sandbox`, and use the project's real
-  constants: a probe naming a scope this repo does not have is an invented command.
-- **A primer's demo names nothing from this repository.** `pre.demo` may carry a `# =>` line for one
-  reason only: its receiver is a class the app under review does not have, so the block quotes the
-  manual rather than reporting what this application does. Write it on a generic receiver, and never
-  put a `pre.demo` anywhere but inside a primer — loose on the page it is the fabricated-output
-  defect with the rule switched off. Same budget discipline as the rest: one primer per flow at most,
-  and a flow whose decision does not turn on the framework behaviour earns none.
+  command; it never shows output, because there is none to show — and a fabricated `=>` or
+  `{:ok, %Project{}}` line is the most concrete-looking thing on the page and the one part of it that
+  is fiction. Name which runner the snippet wants — `bin/rails runner` or `bin/rails console --sandbox`
+  in Rails, `mix run -e` or `iex -S mix` in Elixir — and say when a write needs wrapping, because
+  **Elixir has no sandbox console**: anything that writes goes inside
+  `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it changes the reviewer's database.
+  Use the project's real constants and module names: a probe naming a scope or a context this repo does
+  not have is an invented command.
+- **A primer's demo names nothing from this repository.** `pre.demo` may carry a `# =>` line — or an
+  `iex>` one — for one reason only: its receiver is a class or module the app under review does not
+  have, so the block quotes the manual rather than reporting what this application does. Write it on a
+  generic receiver, and never put a `pre.demo` anywhere but inside a primer — loose on the page it is
+  the fabricated-output defect with the rule switched off. Same budget discipline as the rest: one
+  primer per flow at most, a flow whose decision does not turn on the framework behaviour earns none,
+  and a stack whose catalogue is closed earns none at all, because a primer needs the link it
+  escalated from.
 - Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
   the diff contains gets the PR diff anchor, so the reviewer lands in the review they are already
   working in rather than in the file at head, where nothing marks what the line replaced. A line the
@@ -607,10 +717,13 @@ Everything else about writing holds at every stage:
   and the rung table, are in `references/report-format.md` § *Deep links*.
 - Write the page to `$W/page.html` — the work directory derived in step 1 — and never into the repo.
   The page must never become part of the diff it describes. Excerpt fragments go in the same
-  directory, so splicing them in is a path away rather than a move.
+  directory, so splicing them in is a path away rather than a move. With `--output` the page is
+  `<dir>/index.html` instead; the fragments still go in `$W`, and nothing but the page belongs in
+  `<dir>`.
 
 Tell the user the URL when stage 1 goes out, say it will fill in, and do not repeat it on every
-republish — one link, mentioned once, then a note when it is complete.
+republish — one link, mentioned once, then a note when it is complete. With `--output` there is no
+URL: say where the file is, once, and nothing more.
 
 ## 10. Complete the page and gate it
 
@@ -688,14 +801,16 @@ republish — one link, mentioned once, then a note when it is complete.
   `data-theme="light"`, and the unstamped `prefers-color-scheme` default most viewers get). The design
   is warm-paper light; the dark half is ours, so a colour declared in only one place is a bug the
   reader sees and you will not.
-- Carry the template's `<script>` block across **verbatim, and add nothing to it** — including the two
-  `<script src>` lines above it. It is a scroll-progress bar, a rail scroll-spy and the syntax tint on
+- Carry the template's `<script>` block across **verbatim, and add nothing to it** — including the
+  three `<script src>` lines above it (the core bundle plus the `erb` and `elixir` grammars, neither of
+  which is in the common bundle). It is a scroll-progress bar, a rail scroll-spy and the syntax tint on
   unchanged excerpts: presentation only, and the page reads correctly with the whole block deleted, in
   one ink. Do not give § 6 checkboxes, tick state or an "n of m" counter — a count of cleared items
   reads as progress toward approval, which is the verdict this page does not carry.
-- Publish the final state to the same path. Report that it is complete, what the change does in two or
-  three lines, and anything you could not verify. Mention the project's own review command if it has
-  one.
+- Publish the final state to the same path — or, with `--output`, simply leave the finished file at
+  `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
+  what the change does in two or three lines, and anything you could not verify. Mention the project's
+  own review command if it has one.
 - On a re-run for the same PR, the path is the **same one step 1 derives** — that derivation is what
   makes the URL survive across pushes as well as across stages. One PR, one link, however many times
   this runs, without having to remember where the last run put it.
@@ -717,7 +832,7 @@ Convert it instead into a stated limit — the same components, different words:
 - The ledger note says the gate did not run, and warns against reading the written sections as a full
   account of the diff.
 
-`evals/check.sh --stopped` checks all four. This is the third legitimate state of the page, alongside
+`evals/check.rb --stopped` checks all four. This is the third legitimate state of the page, alongside
 in-progress and complete, and the only one that requires a deliberate edit rather than a deletion.
 
 ## The review level is not implemented yet
@@ -775,12 +890,13 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   "looks good". The reviewer decides; the page equips them. Evidence, relationships, invariants,
   uncertainty, and validation steps are the output — verdicts are not.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
-- **Never invent a URL, and never invent output.** Documentation links come from
-  `references/rails-docs.md`; console probes are proposed unrun, with no transcript beneath them. The
-  one result line the page may carry is inside a primer's `pre.demo`, and only because its receiver is
-  a class this repository does not have: the block quotes the manual rather than reporting what this
-  application did. Name an application class there and it is invented output again, with the rule
-  switched off.
+- **Never invent a URL, and never invent output.** Documentation links come from the catalogue the
+  stack detected in step 2 — `references/rails-docs.md` or `references/elixir-docs.md` — and from
+  nowhere else, including when that catalogue is closed and the answer is no link at all. Console
+  probes are proposed unrun, with no transcript beneath them. The one result line the page may carry is
+  inside a primer's `pre.demo`, and only because its receiver is a class this repository does not have:
+  the block quotes the manual rather than reporting what this application did. Name an application
+  class there and it is invented output again, with the rule switched off.
 - **The page must read completely with every collapsed block closed.** Two components collapse — a
   source excerpt and `details.searched` — and the rule is the same for both: they confirm a claim the
   prose already made, and never carry one. A claim that exists only inside a collapsed block is hidden
@@ -796,7 +912,9 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   review pass.
 - Never drop a file from the page to keep it tidy.
 - Never post to GitHub, Linear, or anywhere outside the artifact.
-- Never commit the page into the repo under review.
+- Never commit the page into the repo under review, and never write it there. `--output` does not
+  relax this: a directory inside the checkout would make the page part of the next diff, and on a PR
+  branch part of the change it describes.
 - **Do this work yourself; spawn no subagents — with exactly one exception, named below.** Steps 5
   and 6 span the whole diff by nature — step 5 traces consumers across both sides of the stack, step 6
   groups behaviour no single layer contains — and handing either to an agent with its own context

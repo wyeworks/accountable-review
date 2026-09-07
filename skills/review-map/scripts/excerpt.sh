@@ -143,10 +143,17 @@ close_block() {  # $1 kind word, $2 loc label
 }
 
 # Extension → highlight.js language. Only names in the library's common bundle,
-# plus erb, which the page loads separately because Rails views are exactly the
-# kind of unchanged code this component quotes. Anything unlisted emits no
+# plus erb and elixir, which the page loads separately: Rails views and Elixir
+# modules are exactly the kind of unchanged code this component quotes, and
+# neither grammar is in the common bundle. Anything unlisted emits no
 # data-lang at all: no tint is correct, and a wrong tint is a small lie about
 # code the reader is being asked to trust.
+#
+# .heex and .eex are an INTENTIONAL omission, not an oversight. highlight.js
+# ships no HEEx grammar, and the two near-misses are both wrong in ways a reader
+# cannot see: `elixir` mis-reads the markup around the interpolations, and `erb`
+# tints Elixir as Ruby because <%= %> happens to be the same delimiter. A HEEx
+# template is quoted untinted, in one ink, on purpose — do not "fix" this.
 guess_lang() {
   case $(basename "$1") in
     Gemfile|Rakefile|Brewfile|Podfile|Fastfile|*.rb|*.rake|*.gemspec|*.ru) echo ruby; return ;;
@@ -155,6 +162,8 @@ guess_lang() {
   esac
   case $1 in
     *.erb) echo erb ;;
+    *.ex|*.exs) echo elixir ;;
+    *.heex|*.eex) : ;;
     *.ts|*.tsx|*.mts|*.cts) echo typescript ;;
     *.js|*.jsx|*.mjs|*.cjs) echo javascript ;;
     *.json) echo json ;;

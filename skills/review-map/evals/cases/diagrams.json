@@ -3,12 +3,12 @@
   "of": "page-template.html § the diagram catalogue, report-format.md § Depth rules",
   "produced_by": "drivers/diagrams.md",
   "scope": "diagram",
-  "notes": "Not a section — a primitive that appears in several. Two of the four kinds are now CSS components, not drawings: the blast radius is a .blast box grid and the boundary chain is a .pipe spine. So the first thing this case tests is that a run reaches for the COMPONENT and does not draw an SVG out of habit — checks/diagram.sh will report `legend` and `box-json` as invented classes, but a run that hand-rolls a blast radius from .box and .edge passes every mechanical check while throwing away reflow and comparability. That needs a reader. The two surviving SVG kinds are the ER fragment and the lifecycle, and NO FIXTURE HERE EARNS EITHER: rails-only-small adds one nullable column, monorepo-contract has no state machine. Covering them needs a new fixture with a migration and a status enum; until then diagram.sh checks those two layouts against the template itself and nothing else does. What no script settles either way: whether the figure is TRUE, and whether it is legible. Run with --visual and look at the PNGs.",
+  "notes": "Not a section — a primitive that appears in several. Two of the four kinds are now CSS components, not drawings: the blast radius is a .blast box grid and the boundary chain is a .pipe spine. So the first thing this case tests is that a run reaches for the COMPONENT and does not draw an SVG out of habit — checks/diagram.rb will report `legend` and `box-json` as invented classes, but a run that hand-rolls a blast radius from .box and .edge passes every mechanical check while throwing away reflow and comparability. That needs a reader. The two surviving SVG kinds are the ER fragment and the lifecycle, and NO FIXTURE HERE EARNS EITHER: rails-only-small adds one nullable column, monorepo-contract has no state machine. Covering them needs a new fixture with a migration and a status enum; until then diagram.rb checks those two layouts against the template itself and nothing else does. What no script settles either way: whether the figure is TRUE, and whether it is legible. Run with --visual and look at the PNGs.",
   "cases": [
     {
       "id": "diagrams/rails-only-small",
       "fixture": "rails-only-small",
-      "check": "check.sh --fragment <out> --scope blast-radius; then --scope diagram",
+      "check": "check.rb --fragment <out> --scope blast-radius; then --scope diagram",
       "expected_output": "A .blast box grid in section 4, reaching from the new column through the model to the unchanged query that scopes the selectable list, with a .legend. NO SVG at all: no lifecycle, because archived_at is a timestamp and not a state machine, and no ER fragment for a single-column add.",
       "expectations": [
         "The blast radius is a .blast box grid with a .legend, not an SVG — a run that draws it with .box and .edge has thrown away reflow and comparability while passing every mechanical check",
@@ -22,7 +22,7 @@
     {
       "id": "diagrams/monorepo-contract",
       "fixture": "monorepo-contract",
-      "check": "check.sh --fragment <out> --scope behaviour-flows; then --scope diagram",
+      "check": "check.rb --fragment <out> --scope behaviour-flows; then --scope diagram",
       "expected_output": "A .pipe chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch named at the hop it happens, plus the .blast grid for section 4. Still no SVG: no state machine, and one column does not earn an ER fragment.",
       "expectations": [
         "A .pipe chain exists for archived_at and names the mismatch at the hop it occurs, rather than leaving the reader to compare two boxes",

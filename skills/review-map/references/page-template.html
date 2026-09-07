@@ -32,6 +32,12 @@
   tier says how a claim is known; a badge saying how hard someone looked is the
   clean bill of health this page must never read as.
 
+  AND NO STACK BADGE, in the same place for the same reason. This template serves
+  both Rails and Phoenix pages. What differs between them is the content of the
+  sentences, the nodes in a .pipe chain and the command inside a pre.probe — never
+  a chip, a marker or a section. A reader should not be able to tell which lens
+  file produced the page except by reading what it says about their repository.
+
   Section 6 is a read-only list — it carries no tick state and no "n of m"
   counter, because a count of cleared items reads as progress toward approval.
   See report-format.md.
@@ -921,7 +927,12 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
       <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">{{PARAGRAPH_FROM_THE_CODE_NOT_THE_PR_BODY}}</p>
 
       <div class="gt gt-meta" style="margin-top:44px">
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Branch</div><div class="path" style="font-size:12px">{{HEAD}} <span style="color:var(--fainter)">&rarr;</span> {{BASE}}</div></div>
+        <!-- Revision, not just branch. The two short SHAs are what let a reader
+             tell whether this page describes the version of the PR they are
+             looking at — a branch name says nothing after the next push, and a
+             page that silently describes an older revision is worse than a page
+             that arrives late. Both are recorded in step 1; neither is optional. -->
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">{{HEAD}} <span style="color:var(--fainter)">&rarr;</span> {{BASE}}</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">{{HEAD_SHORT_SHA}} <span>&rarr;</span> {{BASE_SHORT_SHA}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{FEATURE_REFACTOR_FIX}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
@@ -1044,6 +1055,14 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
            framework behaviour they may not know. At most one per flow, and most
            flows earn none — an inline a.doc is what a citation normally looks
            like. report-format.md § Framework anchors owns both rules.
+
+           OMIT IT ENTIRELY when the stack's catalogue is closed. A primer is what
+           a doc link escalates INTO, so it cannot exist without one, and
+           elixir-docs.md § Version currently withholds every link — so a Phoenix
+           page carries no primer at all and explains the mechanism in the flow's
+           own prose instead. The variant below is the one Elixir gets when that
+           catalogue opens: Ecto and Phoenix are libraries, so they take the
+           unbranded .primer--lib and never the Rails mark.
 
            Note what it does NOT contain: no .mech, no dl.rows, no <dt>. That is
            deliberate, and it is what keeps a flow with a primer from reading as a
@@ -1259,17 +1278,38 @@ authorize @post, :update?
           <div class="item">{{NON_OBVIOUS_INVARIANT_OR_DECISION}}</div>
           <!-- The doc link sits inside the sentence it explains, and the sentence
                still carries its own file:line. A link with no citation beside it is
-               an unevidenced claim wearing one. URL from references/rails-docs.md.
+               an unevidenced claim wearing one. URL from the catalogue the stack
+               selected in step 2 — references/rails-docs.md or references/elixir-docs.md
+               — and from nowhere else.
 
-               THE /v8.0/ IS NOT PART OF THE URL — it is substituted from this app's
-               own Rails series, read from Gemfile.lock in step 1. The catalogue stores
-               the path without it. `v8.0` here is one example app, not a constant to
-               copy: an unpinned link silently means current stable, and
-               evals/checks/rails-anchors.sh fails a page carrying one, or carrying two
-               different series. rails-docs.md § Pinning. -->
+               THE VERSION IS NOT PART OF THE URL — it is substituted per run from this
+               app's own lock file. The catalogue stores the path without it. The value
+               below is one example app, not a constant to copy: an unpinned link
+               silently means current stable, and evals/checks/rails-anchors.sh fails a
+               page carrying one. § Pinning in whichever catalogue applies. -->
           <div class="item">Bulk writes at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a> never
             run this validation &mdash; <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
             skips validations and callbacks. <span class="tier">from unchanged code</span></div>
+          <!-- ELIXIR VARIANT of the two lines above. Same components, same rules;
+               only the host, the pin and the runner differ. Copy these instead on a
+               Phoenix page — do not emit both stacks.
+
+               The pin is PER PACKAGE, from mix.lock, not one series for the whole
+               framework: hexdocs serves exact versions, so a correct Elixir page
+               carries several different version segments and that is not a defect.
+               `3.12.5` below is one example app's ecto.
+
+               AND READ elixir-docs.md § Version FIRST. That catalogue is closed
+               until a verification run opens it, so today the doc link is omitted
+               entirely and the sentence keeps only its file:line and its tier. The
+               probe below is unaffected, and is what an Elixir page anchors with.
+
+          <div class="item">Bulk writes at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a> never
+            build a changeset &mdash; <a class="doc" href="https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3">update_all</a>
+            casts nothing and runs no validation. <span class="tier">from unchanged code</span></div>
+          <span class="lbl">mix run &middot; read-only</span>
+<pre class="probe">mix run -e 'cs = MyApp.Project.changeset(%MyApp.Project{}, %{}); IO.inspect({cs.errors, cs.required})'</pre>
+          -->
           <!-- A probe makes the mechanism legible in THIS app. No output line
                follows it: the skill did not run it. -->
           <span class="lbl">rails runner &middot; read-only</span>
@@ -1285,6 +1325,20 @@ authorize @post, :update?
           <span class="lbl">rails console --sandbox &middot; rolled back on exit</span>
 <pre class="probe">bin/rails console --sandbox
 p = Project.create!(name: "probe"); p.archive!; p.reload.attributes.slice("archived_at")</pre>
+          <!-- ELIXIR VARIANT. There is NO sandbox console — that is the one probe rule
+               that does not carry over — so a write wraps itself in an explicit
+               rollback, and the label says which. Nothing that depends on the commit
+               happens inside it: a broadcast or an Oban job inserted in the same Multi
+               is rolled back too, so when the behaviour under review IS the
+               post-commit effect, say the probe cannot see it and name what would.
+
+          <span class="lbl">iex -S mix &middot; explicit rollback, nothing commits</span>
+<pre class="probe">MyApp.Repo.transaction(fn ->
+  {:ok, p} = MyApp.Projects.archive_project(project)
+  IO.inspect(Map.take(p, [:archived_at]))
+  MyApp.Repo.rollback(:probe)
+end)</pre>
+          -->
         </dd>
 
         <dt>Questions</dt>
@@ -1698,11 +1752,16 @@ p = Project.create!(name: "probe"); p.archive!; p.reload.attributes.slice("archi
 
      highlight.js comes from cdnjs because that is the one script host a published
      artifact may load; its stylesheets are NOT loadable, which is why the theme
-     for it lives in our token block above. Loaded plainly, before the inline
+     for it lives in our token block above. Two grammars are loaded beside the
+     core bundle because neither is in it and both are code this page quotes:
+     erb for Rails views, elixir for Elixir modules. Carry all three lines.
+     There is deliberately no heex grammar — highlight.js ships none, and
+     excerpt.sh emits no data-lang for .heex for that reason. Loaded plainly, before the inline
      script, so it is defined by the time that runs. If it 404s or is blocked,
      window.hljs is undefined and the tint is skipped. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/erb.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/elixir.min.js"></script>
 <script>
 (function () {
   'use strict';

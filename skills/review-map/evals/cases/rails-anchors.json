@@ -3,12 +3,12 @@
   "of": "report-format.md § Framework anchors, plus rails-nextjs.md § Runtime probes",
   "produced_by": "drivers/rails-anchors.md",
   "scope": "behaviour-flows",
-  "notes": "Reuses the behaviour-flows scope rather than adding one: the anchors live inside the review unit's fields, so the fragment under grading is a § 2 fragment and check.sh needs nothing new. rails-anchors.sh settles whether an anchor is REAL — catalogued URL, no fabricated output, identifiers that exist. What only a reader can settle is whether it was worth making: a link on a behaviour every Rails developer knows, or a probe whose output would not change anything the reviewer does, passes every mechanical rule and still makes the page longer and less navigable. That is what these expectations are for, which is why most of them are about restraint rather than presence. The primer callout raises the same question with more at stake, because it is the heaviest thing on the page carrying no evidence of its own: rails-anchors.sh settles whether one is placed and cited legally and whether its demo runs on a generic receiver, and a reader settles whether the flow needed a callout at all rather than the inline link it escalated from. No fixture has network access and neither does a real run, so the catalogue is the only source of URLs in both.",
+  "notes": "Reuses the behaviour-flows scope rather than adding one: the anchors live inside the review unit's fields, so the fragment under grading is a § 2 fragment and check.rb needs nothing new. rails-anchors.rb settles whether an anchor is REAL — catalogued URL, no fabricated output, identifiers that exist. What only a reader can settle is whether it was worth making: a link on a behaviour every Rails developer knows, or a probe whose output would not change anything the reviewer does, passes every mechanical rule and still makes the page longer and less navigable. That is what these expectations are for, which is why most of them are about restraint rather than presence. The primer callout raises the same question with more at stake, because it is the heaviest thing on the page carrying no evidence of its own: rails-anchors.rb settles whether one is placed and cited legally and whether its demo runs on a generic receiver, and a reader settles whether the flow needed a callout at all rather than the inline link it escalated from. No fixture has network access and neither does a real run, so the catalogue is the only source of URLs in both.",
   "cases": [
     {
       "id": "rails-anchors/rails-only-small",
       "fixture": "rails-only-small",
-      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "check": "check.rb --fragment <out> --scope behaviour-flows",
       "expected_output": "Two flows. The planted finding this case turns on is that the new slug uniqueness validation has no unique index behind it, which is exactly a claim that rests on Rails behaving as Rails: the validation cannot see a concurrent insert. Citations are plain text throughout — rung 4 — so the anchors are the only clickable things on the page, which raises rather than lowers the bar for them.",
       "expectations": [
         "The uniqueness-without-an-index finding is stated as a consequence of this repository's code, with its own file:line, and the documentation link sits beside that citation rather than in place of it. A finding whose only anchor is a URL has cited the Rails guides about someone else's application",
@@ -27,7 +27,7 @@
     {
       "id": "rails-anchors/monolith-guard-chain",
       "fixture": "monolith-guard-chain",
-      "check": "check.sh --fragment <out> --scope behaviour-flows",
+      "check": "check.rb --fragment <out> --scope behaviour-flows",
       "expected_output": "Three flows through a server-rendered monolith on Rails 8.1. The material that earns anchors here is different: enum predicates read through steward?, two scopes that disagree about eligibility, and a before_action chain whose order decides the outcome. Most of the weight is unchanged code.",
       "expectations": [
         "Where the fragment explains a predicate or scope, the anchor chosen is the one this application's own configuration decides — a probe showing what the scope compiles to, or the enum values the app admits — rather than a documentation link about enums in general. The routing rule prefers the probe exactly here",

@@ -1,6 +1,15 @@
 #!/bin/sh
-# verify-catalogue.sh — opens every URL in references/rails-docs.md, in the pinned form a run
-# actually emits, for every Rails series the catalogue claims to serve.
+# verify-catalogue.sh — opens every URL in a catalogue, in the pinned form a run actually
+# emits: references/rails-docs.md for every Rails series it claims to serve, and
+# references/elixir-docs.md at each package's newest release.
+#
+# THE ELIXIR CATALOGUE IS CLOSED UNTIL THIS SCRIPT OPENS IT. elixir-docs.md § Version
+# withholds every link in the file — a run emits none, and anchors with probes instead —
+# because no row in it has been opened. That is the fail-closed rule at file scope rather
+# than row scope, and this script is the whole of what lifts it: a clean run prints a dated
+# line, and that line replaces the withhold in § Version in the same commit. So this is not
+# optional maintenance for that file the way it is for the Rails one; it is the file's
+# release gate.
 #
 # WHY THIS EXISTS, AND WHY IT IS NOT A CHECK UNDER checks/
 #
@@ -19,11 +28,11 @@
 #   #readme            an anchor GitHub stopped emitting, on three gem rows.
 #
 # Only the third is caught by reading carefully. So this runs on a schedule or by hand, never
-# inside a skill run, and it lives beside evals/ rather than under checks/ because check.sh
+# inside a skill run, and it lives beside evals/ rather than under checks/ because check.rb
 # dispatches offline rules over a page and this needs the network.
 #
 # THE ALLOWLIST IS THE TABLE ROWS, not the file. The prose quotes URLs it is warning about,
-# and a whole-file sweep would verify the warnings. Same rule as checks/rails-anchors.sh.
+# and a whole-file sweep would verify the warnings. Same rule as checks/rails-anchors.rb.
 #
 # WHAT IT CHECKS, AND WHY THE UNPINNED FORM IS NOT IT
 #
@@ -38,11 +47,26 @@
 # are checked once, at the gem's newest release. A per-gem floor (Pundit's verify_authorized
 # section starts at 2.0) is prose in the catalogue, not something this can enumerate.
 #
+# HEXDOCS ROWS WORK THE SAME WAY, and for the same reason. An Elixir app pins each package
+# independently from mix.lock and hexdocs serves exact versions rather than a series prefix,
+# so there is no series axis to expand along — each row is checked once, at its package's
+# newest stable release from hex.pm. The per-package floor in elixir-docs.md § Version is
+# prose there for the same reason the per-gem floor is: this script cannot enumerate it, and
+# checking every package across its own floor would multiply the work list without telling
+# you anything the newest release does not.
+#
+# The package is the FIRST SEGMENT of a stored hexdocs path, which is why the paths carry it:
+# `ecto/Ecto.Changeset.html#cast/4`. Ecto.Migration under `ecto` rather than `ecto_sql` is a
+# 404 that reads as correct, and keeping the package in the path is what makes it checkable
+# here and in checks/rails-anchors.rb.
+#
 # Usage:
 #   ./verify-catalogue.sh                          # the whole floor
 #   ./verify-catalogue.sh --series "8.1 8.0"       # just these
 #   ./verify-catalogue.sh -j 16 --cache /tmp/cat   # reuse a warm cache between runs
-#   ./verify-catalogue.sh --catalogue <path>       # for testing this script
+#   ./verify-catalogue.sh --catalogue <path>       # another catalogue, or for testing this
+#   ./verify-catalogue.sh --catalogue ../references/elixir-docs.md   # the Elixir one
+#   ./verify-catalogue.sh --catalogue ... --elixir-version 1.18.3    # when the GitHub API is blocked
 #
 # Exit status: 1 if anything fails to resolve.
 set -eu
@@ -57,6 +81,16 @@ ALL_SERIES="8.1 8.0 7.2 7.1"
 
 CATALOGUE=$SKILL_DIR/references/rails-docs.md
 SERIES=$ALL_SERIES
+
+# The Elixir standard library ships WITH Elixir, so hex.pm has no package for it and the
+# per-package resolution below returns nothing for elixir, eex, ex_unit, iex, logger and mix.
+# hexdocs hosts them all the same, at the Elixir release version. That version comes from
+# elixir-lang's own releases, with --elixir-version as the override for a network that cannot
+# reach the GitHub API — an explicit flag rather than a hard-coded default, because a default
+# goes stale silently and stale-and-silent is the failure this whole script exists to catch.
+STDLIB_PKGS=" elixir eex ex_unit iex logger mix "
+ELIXIR_VERSION=""
+
 JOBS=12
 CACHE=""
 QUIET=0
@@ -64,6 +98,7 @@ QUIET=0
 while [ $# -gt 0 ]; do
   case $1 in
     --series) SERIES=$2; shift 2 ;;
+    --elixir-version) ELIXIR_VERSION=$2; shift 2 ;;
     --catalogue) CATALOGUE=$2; shift 2 ;;
     -j|--jobs) JOBS=$2; shift 2 ;;
     --cache) CACHE=$2; shift 2 ;;
@@ -98,7 +133,7 @@ CAT_NAME=$(basename "$CATALOGUE")
 # check an override against the wrong series and call the row clean.
 awk -F'|' '
   function trim(s) { gsub(/^[[:space:]]+|[[:space:]]+$/, "", s); return s }
-  /^\|/ && !/^\|[[:space:]]*-/ && !/^\|[[:space:]]*(Concept|Gem|Concept the reviewer meets)[[:space:]]*\|/ {
+  /^\|/ && !/^\|[[:space:]]*-/ && !/^\|[[:space:]]*(Concept|Gem|Anchor|Mark|Row|Concept the reviewer meets)[[:space:]]*\|/ {
     concept = trim($2); gsub(/`/, "", concept); gsub(/ ‡.*$/, "", concept)
     for (i = 3; i <= NF; i++) {
       n = split($i, seg, "·")
@@ -114,6 +149,10 @@ awk -F'|' '
         if (tok ~ /^https:\/\//)                                           kind = "gem"
         else if (tok ~ /^[a-z_]+\.html(#.*)?$/)                            kind = "guide"
         else if (tok ~ /^[A-Z][A-Za-z0-9]*(\/[A-Za-z0-9]+)*\.html(#.*)?$/) kind = "api"
+        # A hexdocs path leads with its PACKAGE, lowercase, then a slash: the one shape that
+        # starts lowercase and still contains a separator, so it is unambiguous against the
+        # two Rails kinds above (a guide has no slash, an api starts uppercase).
+        else if (tok ~ /^[a-z][a-z0-9_]*\/[A-Za-z0-9_.]+\.html(#.*)?$/)    kind = "hex"
         if (kind != "") print NR "|" concept "|" kind "|" applies "|" tok
       }
     }
@@ -124,7 +163,21 @@ nrows=$(awk -F'|' '{print $1}' "$TMP/rows" | sort -u | wc -l | tr -d ' ')
 npaths=$(wc -l < "$TMP/rows" | tr -d ' ')
 novr=$(awk -F'|' '$4 != "*"' "$TMP/rows" | wc -l | tr -d ' ')
 say "$CAT_NAME: $npaths path(s) across $nrows row(s), $novr per-series override(s)"
-say "series: $SERIES"
+
+# A catalogue with no Rails rows has no series axis, and expanding one would print a floor
+# that means nothing about it while checking every hexdocs row four times over — the hex arm
+# emits under the first series only, so the extra passes are pure noise in the log. Collapse
+# it and say why, rather than leaving the reader to reconcile "series: 8.1 8.0 7.2 7.1" with
+# a file that pins per package.
+nrails=$(awk -F'|' '$3=="guide" || $3=="api"' "$TMP/rows" | wc -l | tr -d ' ')
+nhex=$(awk -F'|' '$3=="hex"' "$TMP/rows" | wc -l | tr -d ' ')
+if [ "$nrails" -eq 0 ] && [ "$nhex" -gt 0 ]; then
+  SERIES=${SERIES%% *}
+  say "no Rails rows: the series axis does not apply, and each hexdocs row is checked once at"
+  say "its package's newest stable release. Per-package floors are prose in the catalogue."
+else
+  say "series: $SERIES"
+fi
 
 # ---------------------------------------------------------------- 2 · gem versions
 #
@@ -144,6 +197,35 @@ while IFS= read -r repo; do
   else say "  ! rubygems knows no gem named '$gem' (from $repo) — its rows cannot be checked"; fi
 done < "$TMP/repos"
 [ -s "$TMP/gemver" ] && say "gems: $(awk '{printf "%s@%s ", $1, $2}' "$TMP/gemver")"
+
+# ------------------------------------------------------- 2b · hex package versions
+#
+# One request per package, not per row: a catalogue with fifteen Ecto rows asks hex.pm once.
+# latest_stable_version is what a lock file would realistically hold; a package with only
+# pre-releases yields nothing and its rows are skipped with a warning rather than checked at
+# a version that does not exist.
+: > "$TMP/hexver"
+awk -F'|' '$3=="hex" {print $5}' "$TMP/rows" | sed 's|/.*||' | sort -u > "$TMP/pkgs"
+while IFS= read -r pkg; do
+  [ -n "$pkg" ] || continue
+  case $STDLIB_PKGS in
+    *" $pkg "*)
+      # Standard library: one version for all six, and it is Elixir's own.
+      if [ -z "$ELIXIR_VERSION" ]; then
+        ELIXIR_VERSION=$(curl -sS -m 25 "https://api.github.com/repos/elixir-lang/elixir/releases/latest" 2>/dev/null \
+          | grep -o '"tag_name":"[^"]*"' | head -1 | sed 's/.*:"v\{0,1\}//; s/"$//')
+      fi
+      if [ -n "$ELIXIR_VERSION" ]; then echo "$pkg $ELIXIR_VERSION" >> "$TMP/hexver"
+      else say "  ! '$pkg' ships with Elixir and hex.pm has no package for it; could not reach the"
+           say "    GitHub API for the Elixir release either — pass --elixir-version X to check its rows"; fi
+      continue ;;
+  esac
+  v=$(curl -sS -m 25 "https://hex.pm/api/packages/$pkg" 2>/dev/null \
+      | grep -o '"latest_stable_version":"[^"]*"' | head -1 | sed 's/.*:"//; s/"$//')
+  if [ -n "$v" ]; then echo "$pkg $v" >> "$TMP/hexver"
+  else say "  ! hex.pm knows no stable release of '$pkg' — its rows cannot be checked"; fi
+done < "$TMP/pkgs"
+[ -s "$TMP/hexver" ] && say "packages: $(awk '{printf "%s@%s ", $1, $2}' "$TMP/hexver")"
 
 # ---------------------------------------------------------------- 3 · the work list
 #
@@ -175,6 +257,21 @@ for s in $SERIES; do
         if [ "$applies" = "*" ] && awk -F'|' -v l="$line" -v k="$kind" -v s="$s" \
              '$1==l && $3==k && $4==s {found=1} END{exit !found}' "$TMP/rows"; then continue; fi
         url="https://api.rubyonrails.org/v$s/classes/$path"
+        ;;
+      hex)
+        # Rails-series-independent, like a gem row: emitted once, under the first series, so
+        # one broken path is one defect rather than one per series. The version goes in after
+        # the package, which is the first path segment.
+        [ "$s" = "${SERIES%% *}" ] || continue
+        pkg=${path%%/*}; rest=${path#*/}
+        hv=$(awk -v pp="$pkg" '$1==pp{print $2}' "$TMP/hexver")
+        [ -n "$hv" ] || continue                              # unresolvable, already warned
+        url="https://hexdocs.pm/$pkg/$hv/$rest"
+        # The report's first column labels a row with what varies about it. For a Rails row
+        # that is the series; for a hexdocs row the series is meaningless and the package
+        # version is the thing a reader needs in order to go and look.
+        echo "$pkg@$hv|$line|$concept|$kind|$url" >> "$TMP/work"
+        continue
         ;;
     esac
     echo "$s|$line|$concept|$kind|$url" >> "$TMP/work"
@@ -242,10 +339,19 @@ done
 
 nok=$(awk -F'|' '$2=="OK"' "$TMP/results" | wc -l | tr -d ' ')
 if [ "$fail" -eq 0 ]; then
-  say "$nok/$nwork resolve, fragments included — every row is good for every series in the floor"
-  say ""
-  say "verify-catalogue.sh: clean ($(date +%Y-%m-%d)) · series: $SERIES"
-  say "  Record the date and this series list in $CAT_NAME § Version."
+  if [ "$nrails" -eq 0 ] && [ "$nhex" -gt 0 ]; then
+    say "$nok/$nwork resolve, fragments included — every row is good at its package's newest release"
+    say ""
+    say "verify-catalogue.sh: clean ($(date +%Y-%m-%d)) · packages: $(awk '{printf "%s@%s ", $1, $2}' "$TMP/hexver")"
+    say "  Record the date and these versions in $CAT_NAME § Version."
+    say "  For elixir-docs.md that record REPLACES the withhold: until it is there, a run emits"
+    say "  no link from the file at all. Opening it is the point of this run."
+  else
+    say "$nok/$nwork resolve, fragments included — every row is good for every series in the floor"
+    say ""
+    say "verify-catalogue.sh: clean ($(date +%Y-%m-%d)) · series: $SERIES"
+    say "  Record the date and this series list in $CAT_NAME § Version."
+  fi
   exit 0
 fi
 say "verify-catalogue.sh: $fail defect(s) · $nok/$nwork resolve"
