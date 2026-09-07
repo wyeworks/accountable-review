@@ -78,7 +78,7 @@ end
 # "a pass, not an audit".
 ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (verified|checked|confirmed)|every claim (was|has been) (verified|checked)|class="(verified|checked)"|chip-verified/i
 
-check = ReviewMap::Check.new(ARGV, name: "page-invariants.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 page = check.page
 

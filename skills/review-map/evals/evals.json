@@ -9,14 +9,14 @@
       "prompt": "I need to review the add-project-archival branch before standup tomorrow and I've never touched this part of the app. Can you give me something that explains what it actually changes? Give me the full version, not the short one — I'd rather read too much than miss something.",
       "expected_output": "A published review map for the five-file diff. Citations are plain text because nothing is pushed to a remote. No boundary material anywhere, because there is no client — and no section for it to be missing from. The page names app/queries/active_projects.rb — which is not in the diff — as affected by archival, and names the new slug uniqueness validation as enforced in Rails with no unique index behind it.",
       "files": [],
-      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
+      "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
       "section_cases": [
         "cases/behaviour-flows.json — the flow split, the unit fields, whether active_projects.rb is found and why, the excerpt that rung 4 earns",
         "cases/blast-radius.json — whether the pairing is complete, and whether entries a flow owns are routed to it rather than restated",
         "cases/diagrams.json — the blast-radius diagram, and the lifecycle diagram this diff does not earn"
       ],
       "expectations": [
-        "check.sh passes: coverage gate, no severity chips, no verdict language, evidence tiers used, no dead permalinks, three theme states, and active_projects.rb is named",
+        "check.rb passes: coverage gate, no severity chips, no verdict language, evidence tiers used, no dead permalinks, three theme states, and active_projects.rb is named",
         "The page notes that the new slug uniqueness validation has no unique index behind it, distinguishing the application invariant from the database invariant",
         "No section, subsection or paragraph discusses a client that does not exist; the absence is stated once, in section 1, not left as a gap",
         "The page says once, near the top, why citations are not clickable",
@@ -35,14 +35,14 @@
       "prompt": "The project-archival branch touches both api and web. Before I review it I want to see how the two sides line up — is the frontend actually handling everything the API can now return? Go deep on it, all seven sections.",
       "expected_output": "A review map that follows archived_at from ProjectSerializer through the JSON to the TypeScript type inside the flow that owns it, and names the things the diff does not state: the wire key is archived_at while the client type declares archivedAt with no transform between them, and the serializer emits null against that non-null declaration; the archive endpoint can return 422 and nothing in web/ handles it; and web/src/queries/selectableProjects.ts, which is not in the diff, filters the project list without knowing about archival.",
       "files": [],
-      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'selectableProjects' --expect 'archivedAt'",
+      "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --expect 'selectableProjects' --expect 'archivedAt'",
       "section_cases": [
         "cases/behaviour-flows.json — the boundary chain, the nullable/non-null mismatch, the unhandled 422, selectableProjects",
         "cases/blast-radius.json — whether affected code is found on both sides of the boundary, and whether the flows own its explanation",
         "cases/diagrams.json — the boundary-chain diagram and the budget across two sections"
       ],
       "expectations": [
-        "check.sh passes, including that selectableProjects and archivedAt are both named",
+        "check.rb passes, including that selectableProjects and archivedAt are both named",
         "Every claim about intent that is not visible in the diff carries an evidence tier",
         "No excerpt quotes a whole file or every hunk of one, and none quotes a generated file, a lockfile or a pure rename",
         "No two excerpts are near-duplicates of each other — structurally identical code quoted twice teaches once and costs twice",
@@ -74,11 +74,11 @@
       "prompt": "I've got a review slot on project-archival in about twenty minutes and I don't know the branch at all. Can you get me oriented?",
       "expected_output": "Staged delivery, which is the default and is not requested here. A URL arrives early, carrying the masthead and the goal, a build banner, and pending markers for the parts this diff earns. It fills in at that same URL, and section 2 fills in one behaviour flow at a time rather than arriving whole. The final state carries no banner, no pending markers and no flow stubs, and the coverage gate passes.",
       "files": [],
-      "check": "snapshot the page file right after the first publish, then run both: evals/check.sh --draft --page <stage-1 snapshot> --repo <fixture> --base HEAD~1 ; evals/check.sh --final --page <final page> --repo <fixture> --base HEAD~1",
+      "check": "snapshot the page file right after the first publish, then run both: evals/check.rb --draft --page <stage-1 snapshot> --repo <fixture> --base HEAD~1 ; evals/check.rb --final --page <final page> --repo <fixture> --base HEAD~1",
       "expectations": [
-        "check.sh --draft passes on the first published state: banner present, the sentence about a pending part not being a finding intact, pending markers for the parts not yet written",
+        "check.rb --draft passes on the first published state: banner present, the sentence about a pending part not being a finding intact, pending markers for the parts not yet written",
         "This run is at the default brief level, so the tail is one section written in parts: a half-written section 4 marks its h3 sub-parts pending in place, and the rail's single 04 entry carries a marker until they are all written. The failure to catch is the section reading as finished because its first part is.",
-        "check.sh --final passes on the last state: no banner, no pending markers, coverage gate green",
+        "check.rb --final passes on the last state: no banner, no pending markers, coverage gate green",
         "The URL reported at the end is the same one reported at the start — one artifact, not two",
         "The page title and favicon are identical across every stage",
         "The first publish lands before the behaviour flows are written, not after",
@@ -96,15 +96,15 @@
       "prompt": "Someone reported they can't log in — the browser just bounces until it gives up. The fix is on fix/steward-redirect-loop and it's four lines, but I don't trust that it's only four lines. Can you map what this actually changes? Don't skimp — I want every section.",
       "expected_output": "A review map for a server-rendered monolith, where the surface a flow has to describe is the global before_action chain and the set of redirect destinations, not a JSON contract. Citations are plain text with the reason stated once — rung 3, because nothing is pushed and acme/commons does not resolve. The page's centre of gravity is code the diff does not touch: the two sibling guards in application_controller.rb that still key on `steward?` forty lines below the changed ones, the two `steward?` rejections in matching/eligibility_filter.rb plus User.recommendable, switch_to_free!'s comment naming a controller guard the new caller is not behind, chapters_controller.rb skipping the plan guard but not the profile-setup guard, and test/test_helper.rb completing every test user's profile so a green suite cannot see any of it.",
       "files": [],
-      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --expect 'test/test_helper.rb' --expect 'require_profile_setup' --expect 'eligibility_filter.rb' --expect 'switch_to_free!' --forbid 'N/A'",
+      "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --expect 'test/test_helper.rb' --expect 'require_profile_setup' --expect 'eligibility_filter.rb' --expect 'switch_to_free!' --forbid 'N/A'",
       "section_cases": [
         "cases/blast-radius.json — whether the unchanged readers of account_type are found, and with which search recorded",
         "cases/behaviour-flows.json — the who-is-affected split, the guard chain as the surface, the excerpt on an unchanged sibling guard",
         "cases/diagrams.json — writers/fact/readers as a blast radius, and the before/after lifecycle of the loop"
       ],
       "expectations": [
-        "check.sh passes: coverage gate over seven paths, no severity chips, no verdict language, evidence tiers used, three theme states, and all four planted findings named",
-        "No GitHub permalink is emitted anywhere, and the reason is stated once in the masthead rather than left as a puzzle. This is not covered mechanically — page-invariants.sh only fails dead links when refs/remotes is empty, so a run that emits them against a non-existent repo has to be caught by reading",
+        "check.rb passes: coverage gate over seven paths, no severity chips, no verdict language, evidence tiers used, three theme states, and all four planted findings named",
+        "No GitHub permalink is emitted anywhere, and the reason is stated once in the masthead rather than left as a puzzle. This is not covered mechanically — page-invariants.rb only fails dead links when refs/remotes is empty, so a run that emits them against a non-existent repo has to be caught by reading",
         "Affected-but-unchanged entries in the *same file as a changed hunk* are found and cited by line, not skipped because the file already appears in the ledger — application_controller.rb's other two guards are the test of this",
         "The page states that no test in the suite can observe the profile-setup interception, and attributes it to test/test_helper.rb rather than to a missing test",
         "The switch_to_free! guard is explained as holding by conjunction — has_paid_subscription? requires plan_active? — and not merely asserted to be safe or unsafe",
@@ -121,14 +121,14 @@
       "prompt": "quick review map for add-project-archival please",
       "expected_output": "The same five-file diff as case 1, at the default level. Four sections: what changed, the behaviour flows at their usual depth, where to begin, and one merged tail section built around the blast radius. Every changed path is under that section's Changed list, generated, unclassified. No section 5, 6 or 7 exists, and nothing is marked pending or N/A in their place. The coverage gate still passes.",
       "files": [],
-      "check": "evals/check.sh --page <page> --repo <fixture> --base HEAD~1 --level brief --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
+      "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --level brief --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
       "section_cases": [
         "cases/brief-tail.json — the merged section: whether the panel stays the spine, whether the diff is still accounted for once the classification is gone, and what must not leak in from full",
         "cases/behaviour-flows.json — the flows, which this level does not change",
         "cases/blast-radius.json — the panel and the affected list, whose rules the merged section keeps verbatim"
       ],
       "expectations": [
-        "check.sh passes at --level brief, including the coverage gate: the merged section's Changed list carries all five paths with data-path, so a shorter page is still an accounted-for one",
+        "check.rb passes at --level brief, including the coverage gate: the merged section's Changed list carries all five paths with data-path, so a shorter page is still an accounted-for one",
         "Four sections and four rail entries. No section 5, 6 or 7, and their absence is silent — not an N/A row, not an empty shell, not a pending marker for something this level never produces",
         "The behaviour flows are at their full depth: same review unit, same seven fields, same diff excerpt on the hunk each behaviour turns on. Nothing about section 2 is thinner than it would be at --full",
         "No comprehension checkpoint anywhere, and no ER or lifecycle figure. The migration's safety, if it has anything worth saying, is a row rather than a diagram",

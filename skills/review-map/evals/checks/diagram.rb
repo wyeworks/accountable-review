@@ -287,7 +287,7 @@ module Diagram
   end
 end
 
-check = ReviewMap::Check.new(ARGV, name: "diagram.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 page = check.page
 lines = page.lines

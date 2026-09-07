@@ -110,7 +110,7 @@ if [ ! -r "$VERDICT" ]; then
 fi
 
 # Parsing and tallying live in verdict-tally.sh, so run.sh reads the same file the same way and
-# self-test.sh can exercise it without a model.
+# self-test.rb can exercise it without a model.
 echo "verdicts: $VERDICT  (judge ${MODEL:--}/${EFFORT:--})"
 echo
 # The tally goes last, and stays last: run.sh reports each run with tail -1, so anything printed

@@ -1,8 +1,8 @@
-A stub repository for `checks/searches.sh`, which re-runs a page's recorded searches and asks
+A stub repository for `checks/searches.rb`, which re-runs a page's recorded searches and asks
 whether they reach the entries the page cites.
 
 Deliberately **not** a git repo and deliberately tiny: the check reads lines and runs greps, and
-never asks git anything, so `self-test.sh` can point at this directory with `--repo` and stay at
+never asks git anything, so `self-test.rb` can point at this directory with `--repo` and stay at
 about a second with no fixture build.
 
 The two files are shaped to plant the exact defect the check exists for. `project.rb:2` names the

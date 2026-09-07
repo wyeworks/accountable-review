@@ -28,11 +28,11 @@
 #   #readme            an anchor GitHub stopped emitting, on three gem rows.
 #
 # Only the third is caught by reading carefully. So this runs on a schedule or by hand, never
-# inside a skill run, and it lives beside evals/ rather than under checks/ because check.sh
+# inside a skill run, and it lives beside evals/ rather than under checks/ because check.rb
 # dispatches offline rules over a page and this needs the network.
 #
 # THE ALLOWLIST IS THE TABLE ROWS, not the file. The prose quotes URLs it is warning about,
-# and a whole-file sweep would verify the warnings. Same rule as checks/rails-anchors.sh.
+# and a whole-file sweep would verify the warnings. Same rule as checks/rails-anchors.rb.
 #
 # WHAT IT CHECKS, AND WHY THE UNPINNED FORM IS NOT IT
 #
@@ -58,7 +58,7 @@
 # The package is the FIRST SEGMENT of a stored hexdocs path, which is why the paths carry it:
 # `ecto/Ecto.Changeset.html#cast/4`. Ecto.Migration under `ecto` rather than `ecto_sql` is a
 # 404 that reads as correct, and keeping the package in the path is what makes it checkable
-# here and in checks/rails-anchors.sh.
+# here and in checks/rails-anchors.rb.
 #
 # Usage:
 #   ./verify-catalogue.sh                          # the whole floor

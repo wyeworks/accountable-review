@@ -36,7 +36,7 @@ def checkpoint_questions(region)
   region.range(from: /<ol class="firstlook"/, to: %r{</ol>}).count(/<li/)
 end
 
-check = ReviewMap::Check.new(ARGV, name: "before-approving.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_input
 
 # On a page, section 6 is the region from its anchor onward — which is also true at brief,

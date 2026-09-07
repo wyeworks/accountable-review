@@ -152,7 +152,7 @@ Rules that keep units from becoming ceremony:
   **This shape is more fragile than the card it replaced, not less.** The unit used to be a bordered
   `article.unit`, so a flattened flow visibly lost its box. A `.mech` plus a hairline grid is
   borderless by design, so a flow that spills its rows straight into the `<section>` looks very
-  nearly correct. `evals/checks/behaviour-flows.sh` therefore checks the *pairing* — one `.mech` per
+  nearly correct. `evals/checks/behaviour-flows.rb` therefore checks the *pairing* — one `.mech` per
   `dl.rows` — and counts field labels inside grids rather than inside units, because a flattened flow
   keeps its `.mech` and a census taken over units counts loose fields as housed.
 - Three of the fields may carry a collapsed source excerpt: *implementation*, *affected but unchanged*
@@ -235,7 +235,7 @@ series for the whole framework, so a page mixing `/v7.1/` and `/v8.0/` has pinne
 than this repo's lock file — one app, one series. An Elixir app pins **each package independently**
 from `mix.lock`, and hexdocs serves exact versions rather than a series prefix, so **a correct Elixir
 page carries several different version segments** and that is not a defect.
-`evals/checks/rails-anchors.sh` encodes both: every doc link must carry a version segment in either
+`evals/checks/rails-anchors.rb` encodes both: every doc link must carry a version segment in either
 stack, and only the Rails links must agree on one series.
 
 **A row with no verified path for this app's version yields no link.** Not a nearest-neighbour link,
@@ -289,7 +289,7 @@ exists for. The escalation test is the same one the excerpt budget uses: not *is
 *would the reviewer decide differently not knowing it*.
 
 **A primer is gated on its doc link, so a closed catalogue means no primers for that stack.** It is
-what a link escalates *into*, and `evals/checks/rails-anchors.sh` fails one that carries none — so the
+what a link escalates *into*, and `evals/checks/rails-anchors.rb` fails one that carries none — so the
 two rules meeting leave no room: while `elixir-docs.md` § *Version* withholds every link, a Phoenix
 page carries no primer at all. Explain the mechanism in the flow's own prose against its `file:line`
 and propose a probe, which is the anchor that stack has. Narrower, not wrong — the same trade the
@@ -301,7 +301,7 @@ who wrote the thing it explains, and the Rails Foundation did not write Ecto.
 
 **It carries a `file:line` from this repository, like every other doc link.** Two paragraphs of
 framework prose read as self-justifying, which is exactly why the rule is easiest to lose here. The
-citation names the line the callout was earned by, and `evals/checks/rails-anchors.sh` judges the
+citation names the line the callout was earned by, and `evals/checks/rails-anchors.rb` judges the
 whole aside as one block so it can neither omit its own citation nor borrow the one above it.
 
 **`pre.demo` is not `pre.probe`, and the difference is the receiver.** A demo quotes documented
@@ -323,7 +323,7 @@ budget all apply unchanged. Reach for the variant whenever the link is not a `ru
 because the artwork is an **attribution**: the Rails logotype on a Pundit explanation says the Rails
 Foundation wrote Pundit, and it looks entirely correct on the page. The mark also never appears
 without `.pr-tm` beneath it, which is the notice saying whose mark it is;
-`evals/checks/rails-anchors.sh` enforces both halves.
+`evals/checks/rails-anchors.rb` enforces both halves.
 
 **Nothing about the primer changes with the detail level.** It lives inside a behaviour flow, and
 §§ 1–3 are the same spec at `--brief` and `--full`.
@@ -438,7 +438,7 @@ was never about quoting one committed line that a claim turns on.
   untouched**, because §§ 4 and 7 split changed from affected-not-changed **by file**. Two senses of
   one word on one page, and nothing tells the reader which is meant. Where the range is the point,
   the prose says it — *"the pre-existing unique index at `:18682`, which this change does not
-  touch"* — which is where it can be said precisely anyway. `evals/checks/excerpts.sh` holds both
+  touch"* — which is where it can be said precisely anyway. `evals/checks/excerpts.rb` holds both
   halves: every `Unchanged` tag against the changed set (from a repo when it has one, otherwise from
   the page's own ledger, which the completeness invariant guarantees is the whole diff), and every
   tag against the vocabulary, for the inputs where there is nothing to compare against.
@@ -449,7 +449,7 @@ was never about quoting one committed line that a claim turns on.
   `spec/factories/projects.rb` stamps `archived_at`"* with the path as bare prose, the only `file:line`
   for it being the excerpt's own footer. The same citation did appear linked in § 4 and in § 3's
   reading order, so the page as a whole was fine — but a reader working through that field with the
-  block shut had nothing to click. Judge the rule field by field, not page-wide. `check.sh` cannot
+  block shut had nothing to click. Judge the rule field by field, not page-wide. `check.rb` cannot
   catch this: it checks summaries and collapse state, never whether a citation survives the block
   closing.
 - **The excerpt does not replace the link.** It deliberately omits the surrounding context, so the
@@ -1251,13 +1251,13 @@ material sits after them and must not dilute them.
 why the merge costs the eval harness almost nothing:
 
 - `id="blast"` on the `<section>`, and `id="approving"` on the **last** `<h3>`.
-  `evals/checks/blast-radius.sh` takes its region from the first anchor to the next `<section`, and
-  `before-approving.sh` from the second anchor onward. Lose them and `before-approving.sh` prints a
+  `evals/checks/blast-radius.rb` takes its region from the first anchor to the next `<section`, and
+  `before-approving.rb` from the second anchor onward. Lose them and `before-approving.rb` prints a
   SKIP, which reads as verified.
 - The approving part is `<ul class="actions">`, **never** `<ol class="begin">`. An `ol.begin` inside
-  the region is how `blast-radius.sh` recognises the format's old ordering, where the reading list
+  the region is how `blast-radius.rb` recognises the format's old ordering, where the reading list
   came before the flows it depends on, and it fails on one.
-- The two `<dt>` labels stay `Changed` and `Affected, not changed`, verbatim. `evals/checks/searches.sh`
+- The two `<dt>` labels stay `Changed` and `Affected, not changed`, verbatim. `evals/checks/searches.rb`
   scopes by those markers rather than by any section id.
 
 **Build state inside one section.** With one tail section rather than four, *pending* attaches to the

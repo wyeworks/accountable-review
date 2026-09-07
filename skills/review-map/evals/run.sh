@@ -17,7 +17,7 @@
 # file: a number that silently mixes the two is worse than two numbers.
 #
 # A run costs minutes and every second of it is the model: the fixtures rebuild in under a
-# second, check.sh in under two tenths, the tally is awk. So there are exactly two ways to
+# second, check.rb in under two tenths, the tally is awk. So there are exactly two ways to
 # make the loop faster and this script offers both. --model / --effort (--fast for the pair)
 # buy a cheaper reader per run; -j runs the repetitions at once and buys nothing but wall
 # clock. The first has a consequence and it is recorded rather than argued about: model and
@@ -217,7 +217,7 @@ one_run() {
     # --repo is what lets the checks that need the repository actually run on a fragment:
     # searches.sh re-runs the recorded searches inside it, and page-invariants.sh asks git
     # whether the head is pushed. Without it both skip, and a skip reads as verified.
-    "$HERE/check.sh" --fragment "$OUT" --scope "$SCOPE" --repo "$FIXTURE_DIR" --level "$LEVEL" $VISUAL > "$RUNDIR/check.txt" 2>&1
+    ruby "$HERE/check.rb" --fragment "$OUT" --scope "$SCOPE" --repo "$FIXTURE_DIR" --level "$LEVEL" $VISUAL > "$RUNDIR/check.txt" 2>&1
     check_exit=$?
     set -e
   else

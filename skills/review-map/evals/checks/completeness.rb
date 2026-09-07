@@ -15,7 +15,7 @@
 
 require_relative "lib/review_map/check"
 
-check = ReviewMap::Check.new(ARGV, name: "completeness.sh")
+check = ReviewMap::Check.new(ARGV)
 check.require_kind(:page)
 
 case check.mode

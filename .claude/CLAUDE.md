@@ -39,7 +39,7 @@ matters there.
 file and four shell scripts, which is ordinary software with right answers, so it has ordinary tests:
 `skills/setup-ci/tests/run.sh` (no model, no network, about a second) and `tests/self-test.sh`, which
 breaks ten things `run.sh` claims to check and asserts the suite notices each one. Both run in CI on
-every push, for the reason `evals/checks/self-test.sh` does: a check that passes because it never
+every push, for the reason `evals/checks/self-test.rb` does: a check that passes because it never
 looked is worse than no check. When you edit the workflow template or any script under
 `skills/setup-ci/scripts/` or `ci/`, run both.
 
@@ -85,7 +85,7 @@ sha, so a pass rate is attributable to a version of the prose. `--judge` adds th
 model pass per fragment over the written expectations, anchored by running inside the fixture with
 the frozen upstream, its counts under their own keys and never summed with the mechanical ones.
 
-Every second of that loop is the model — the fixtures build in under a second and `check.sh` in under
+Every second of that loop is the model — the fixtures build in under a second and `check.rb` in under
 two tenths — so `run.sh` takes `-j N` to run the repetitions at once and `--fast` (`--model sonnet
 --effort low`) to read each one more cheaply. The first is free; the second is not, and the price is
 comparability, which is why the model and effort land on every result line and `report.sh` makes them
@@ -130,8 +130,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
-| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
-| `evals/checks/` | One script per rule family, dispatched by `check.sh`; `self-test.sh` proves they still fire. Most also exist as a `.rb` beside the `.sh` — `lib/review_map/` is their shared library, `lib/test/` its tests, and `equivalence.rb` grades each pair byte for byte and names what is still shell; `evals/README.md` § *The Ruby port* has what it cost |
+| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
+| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for eleven of the twelve checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
@@ -166,13 +166,13 @@ Editing one of these means checking the others still agree.
   section keeps the anchors**: `id="blast"` on the `<section>`, `id="approving"` on its last `<h3>`,
   the `Changed` / `Affected, not changed` `<dt>` labels verbatim, and `<ul>` rather than
   `<ol class="begin">` in the approving part. That is why exactly one check knows the level —
-  `evals/checks/before-approving.sh`, for the checkpoint — while `blast-radius.sh`, `searches.sh` and
-  `page-invariants.sh` read the merged shape unchanged.
+  `evals/checks/before-approving.rb`, for the checkpoint — while `blast-radius.rb`, `searches.rb` and
+  `page-invariants.rb` read the merged shape unchanged.
 
   That second rule is markup, so it is breakable by accident and invisible when broken: with the
-  anchor gone, `before-approving.sh` prints a **SKIP**, which reads as verified.
-  `golden/approving-brief-clean.html` plus the `self-test.sh` rows running `blast-radius.sh` and
-  `page-invariants.sh` over it exist for the day someone moves one.
+  anchor gone, `before-approving.rb` prints a **SKIP**, which reads as verified.
+  `golden/approving-brief-clean.html` plus the `self-test.rb` rows running `blast-radius.rb` and
+  `page-invariants.rb` over it exist for the day someone moves one.
 
   `--brief` is the default, so it is what almost every real page will be. Judge it first.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
@@ -210,7 +210,7 @@ Editing one of these means checking the others still agree.
   single easiest way to undo this iteration.
 
   **A page is allowed to *refuse* a grade out loud, and the check has to know the difference.**
-  `page-invariants.sh` § 2 splits its patterns in two for this. Approval language is never right in
+  `page-invariants.rb` § 2 splits its patterns in two for this. Approval language is never right in
   any form; a graded *noun* — risk score, overall risk, severity score — fails only where nothing
   negates it, because § 7's ledger legitimately writes *"attention is a reading estimate, not a risk
   score"*. That sentence is the invariant defending itself in the one place a reader is most likely
@@ -254,7 +254,7 @@ Editing one of these means checking the others still agree.
   steps 7 and 9 point at it, the § *Runtime probes* of whichever lens file the stack selected holds the
   probes and the rule for running them safely — `runner`-versus-`console --sandbox` in Rails, and in
   Elixir `mix run -e` plus the fact that there is **no sandbox console at all**, so a write wraps itself
-  in `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` — and `evals/checks/rails-anchors.sh`
+  in `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` — and `evals/checks/rails-anchors.rb`
   derives its allowlist from **both** catalogue files rather than hard-coding hosts. Its name is
   Rails-shaped and its scope is not, deliberately: renaming it would churn six files for no
   behavioural gain.
@@ -294,7 +294,7 @@ Editing one of these means checking the others still agree.
   difference is the receiver.** A demo may show a `# =>` line *because* it runs on a class the app
   under review does not have: it quotes the manual, and the manual states results. Name an application
   class there and it is the fabricated-output defect with the rule switched off — which is why
-  `rails-anchors.sh` asks the *inverse* of the probe-identifier question (a constant that **does**
+  `rails-anchors.rb` asks the *inverse* of the probe-identifier question (a constant that **does**
   exist in the repo is the failure), and why a `pre.demo` anywhere outside a primer is refused
   outright. Merging the two classes would open a hole through the one rule protecting the most
   concrete-looking fiction the page could carry. **And a primer cites a `file:line` like every other
@@ -304,18 +304,18 @@ Editing one of these means checking the others still agree.
 
   Two things worth knowing before editing. The anchors are **level-independent** — they live in fields
   `--brief` leaves alone, and a primer lives in a flow, which §§ 1–3 render identically at both levels
-  — so `rails-anchors.sh` must not read `LEVEL`, and `before-approving.sh` stays the only check that
+  — so `rails-anchors.rb` must not read `LEVEL`, and `before-approving.rb` stays the only check that
   knows the level. And the link and the probe are built from **existing** tokens on purpose: `a.doc`
   and `pre.probe` introduce no colour. The primer breaks that, knowingly, for exactly one token:
-  `--rails`, declared on bare `:root` and in **both** dark blocks, with `page-invariants.sh` § 6
+  `--rails`, declared on bare `:root` and in **both** dark blocks, with `page-invariants.rb` § 6
   counting it by name — because nothing on the page depends on that colour to be readable, so a half
   declaration is invisible until someone opens a primer with the OS in dark mode.
 
   Two other checks had to be taught about it, and both for the same reason: the primer looks like
-  something they already know about. `behaviour-flows.sh` takes its unit census over a **copy with the
+  something they already know about. `behaviour-flows.rb` takes its unit census over a **copy with the
   primer removed**, because the callout lands inside a unit region and carries a `class="path"` — kept,
   it would absolve a unit whose grid cites nothing, and `golden/flows-primer-uncited-unit.html` is that
-  regression. `diagram.sh` excludes `svg.pr-mark`, because every rule it has is about a figure and the
+  regression. `diagram.rb` excludes `svg.pr-mark`, because every rule it has is about a figure and the
   first one a 34px brand badge fails is *not inside `.scroller`*. The mark itself is geometric rather
   than the official logo: the run cannot fetch artwork and an external `<img>` is blocked by the
   artifact's CSP, so the trademark line at the foot of the callout is what keeps the stand-in honest.
@@ -338,7 +338,7 @@ Editing one of these means checking the others still agree.
   Four files have to agree: `page-template.html` holds one behaviour flow **assembled whole** and
   the `<dt>` labels, `report-format.md` § *The review unit* holds those labels in a column of their
   own plus § 2's split between what the unit carries and what sits beside it,
-  `evals/checks/behaviour-flows.sh` checks the `.mech`-per-`dl.rows` pairing and counts field labels
+  `evals/checks/behaviour-flows.rb` checks the `.mech`-per-`dl.rows` pairing and counts field labels
   outside a grid, and `evals/golden/flows-clean.html` is the reference markup.
 
   Two subtleties the check has to keep. It takes **two extractions, not one**: unit regions anchored
@@ -386,17 +386,17 @@ Editing one of these means checking the others still agree.
 
   Four files agree: `page-template.html` holds the component and its CSS, `report-format.md` § *What
   was searched* owns the form, the budget and the open/collapsed split **alone**, `SKILL.md` step 5
-  points at it, and `evals/checks/searches.sh` re-runs the recorded searches against the repository.
+  points at it, and `evals/checks/searches.rb` re-runs the recorded searches against the repository.
   That check keys on **text nodes beginning with a search tool**, not on the class or the element, so
   it survived this move untouched — but its four `golden/searches-*.html` fixtures did not, and
   migrating them is the actual work. They had already gone stale once when the design system changed,
-  and `searches.sh` passed them for as long as they matched nothing on any real page.
+  and `searches.rb` passed them for as long as they matched nothing on any real page.
 - **Completeness, and the one mechanical check. It has no detail level.** Every path in the diff
   appears in the page, at every level, and the gate runs at every level. What the level changes is the
   *carrier*: § 7's classified ledger at `--full`, the merged section's `Changed` list at `--brief`,
   generated by `ledger-rows.sh --paths-only` as `.gt-paths` cells that still carry `data-path`. That is
   the whole reason the brief carrier is a grid cell rather than a list item — `coverage-gate.sh` greps
-  `data-path` page-wide and `page-invariants.sh` § 4 requires it on a `div class="c"`, so a `.filelist`
+  `data-path` page-wide and `page-invariants.rb` § 4 requires it on a `div class="c"`, so a `.filelist`
   would have cost the gate. `--brief` declines to *classify* the diff; it never declines to account for
   it, and a run that skipped the gate for want of a § 7 has turned a shorter page into one that may
   have dropped a file. Stated
@@ -419,7 +419,7 @@ Editing one of these means checking the others still agree.
   because the run stopped, and omitted because the diff did not earn it — since the whole risk is a
   reader taking any of the last three for "nothing to say here". A stopped run is the one that needs a
   deliberate edit: pending is a promise, and leaving one behind is worse than publishing late. The form lives in `report-format.md` § *Build state*, the components are
-  `.buildstate` and `.pending`, and `evals/check.sh --draft` / `--final` check both ends of it.
+  `.buildstate` and `.pending`, and `evals/check.rb --draft` / `--final` check both ends of it.
 
   The pending marker earns a second keep, found by profiling rather than by reading: it is the
   **anchor a later stage edits**, which is what keeps staging from costing the whole document per
@@ -438,12 +438,12 @@ Editing one of these means checking the others still agree.
   (*"if that stretches over many turns"*), which is why every real run delivered the tail in one
   chunk. Consequence for the banner: it counts **parts still pending** rather than *stage N of M*,
   because the total now depends on the flow count and a run would have to commit to it before
-  knowing one. Nothing greps the count; `checks/build-state.sh` greps "absence is not a finding",
+  knowing one. Nothing greps the count; `checks/build-state.rb` greps "absence is not a finding",
   which is why that sentence is the one that must survive editing.
 
   The flow stub is assembled in `page-template.html` beside the pending section, for the reason
   every composition there is: it carries no `.mech` and no `dl.rows`, which is what keeps it out of
-  both censuses in `checks/behaviour-flows.sh` — a half-written § 2 must not read as a flattened one.
+  both censuses in `checks/behaviour-flows.rb` — a half-written § 2 must not read as a flattened one.
   `golden/flows-partial-page.html` pins that, and `golden/flows-stubs-only-page.html` pins the one
   narrow `skip` for the moment stage 3 opens and no flow is written yet. That skip takes a pending
   marker as its precondition deliberately: a SKIP reads as verified, so it has to be unreachable on
@@ -467,7 +467,7 @@ Editing one of these means checking the others still agree.
   Six files have to agree: `SKILL.md` step 1 parses it beside the level and step 8 owns what `high`
   does, `report-format.md` § *Detail levels* states that this file has nothing else to say about it,
   `page-template.html`'s header comment refuses the badge in the same breath as the severity chip,
-  `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.sh` §§ 2b and 2c fail
+  `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.rb` §§ 2b and 2c fail
   a page that advertises having been checked or narrates its own drafting, and `README.md` § *How hard
   it works* is the public wording.
 
@@ -509,7 +509,7 @@ Editing one of these means checking the others still agree.
   driven by whether the head SHA is reachable on a remote. Unpushed branches are the common case, and
   the correct behaviour there is plain text, not a permalink that 404s.
 
-  **A git that cannot answer is not the same as unpushed**, and `page-invariants.sh` § 5 used to
+  **A git that cannot answer is not the same as unpushed**, and `page-invariants.rb` § 5 used to
   treat it as such: written with `|| true`, an unreadable `--repo` or an unresolvable head gave empty
   output, which read as "on no remote" — a false PASS on a page with no permalinks and a false FAIL
   on one that has them, both from an answer git never gave. Three states, not two, and the middle one
@@ -570,7 +570,7 @@ Editing one of these means checking the others still agree.
   reader cannot catch. And **`data-path` is reserved to ledger rows**: `coverage-gate.sh` greps it
   page-wide, so an excerpt using it would register as a surplus path, most reliably when quoting
   unchanged code — the gate would fail on the page's best content. Excerpts carry `data-src`.
-  `evals/check.sh` holds the mechanical half of all three; whether the prose survives with the blocks
+  `evals/check.rb` holds the mechanical half of all three; whether the prose survives with the blocks
   shut is a judged expectation, because no script can tell.
   **The tint is applied, never authored.** `--source` excerpts are syntax-coloured at read time and
   `--diff` excerpts are not, and the asymmetry is the same one that produced the two variants: a hunk
@@ -578,7 +578,7 @@ Editing one of these means checking the others still agree.
   fed both mis-reads everything after the first unbalanced quote), and its rows already spend colour
   on *added* and *removed*. Four files agree: `excerpt.sh` puts a `data-lang` on the `--at` block and
   nothing else, `page-template.html` holds the `--syn-*` tokens, the `.hljs-*` rules and the script
-  that does it, `report-format.md` § *Syntax tint* owns the rule, and `evals/checks/excerpts.sh`
+  that does it, `report-format.md` § *Syntax tint* owns the rule, and `evals/checks/excerpts.rb`
   fails a page that ships `hljs-` classes in its markup — a hand-coloured quotation is a quotation
   someone edited.
 
@@ -598,7 +598,7 @@ Editing one of these means checking the others still agree.
   read before the reviewer opens the diff in § 3; the load-bearing test rations everything on top of
   that. The old framing ("a changed line is cheap to follow, the reviewer has the diff open anyway")
   plus a section-wide cap of two is what suppressed it, so the cap now counts per flow inside § 2.
-  `evals/checks/behaviour-flows.sh` warns when every excerpt in the flows is `--source`.
+  `evals/checks/behaviour-flows.rb` warns when every excerpt in the flows is `--source`.
 
   **The state tag is the fourth, and it is the only part of an excerpt the bytes cannot vouch for.**
   `--at` used to hard-code `Unchanged`, which is a claim about the diff the script had never looked
@@ -606,7 +606,7 @@ Editing one of these means checking the others still agree.
   listed that file as changed. The quotation was verbatim; the label was false; the block read as
   *more* trustworthy the closer you looked. So `--at` now requires `--base` and computes the tag —
   `Unchanged`, `Added`, `Removed`, `At head`, `Before the change`, and `Changed` for a hunk — which
-  makes the vocabulary closed, and `evals/checks/excerpts.sh` checks it both ways: an `Unchanged` tag
+  makes the vocabulary closed, and `evals/checks/excerpts.rb` checks it both ways: an `Unchanged` tag
   against the changed set (a repo when it has one, otherwise the page's own ledger, which the
   completeness invariant guarantees is the whole diff), and every tag against the vocabulary, for the
   inputs where there is nothing to compare against.
@@ -619,7 +619,7 @@ Editing one of these means checking the others still agree.
   word in two senses on one page, with nothing to tell the reader which was meant. That precision
   belongs in the prose, where it can be stated. Four files agree — `scripts/excerpt.sh` computes it,
   `report-format.md` § *Source excerpts* owns the rule and the vocabulary, `page-template.html` says
-  the tag in its example is computed rather than copied, and `evals/checks/excerpts.sh` plus the three
+  the tag in its example is computed rather than copied, and `evals/checks/excerpts.rb` plus the three
   `golden/excerpt-*` rows check it — plus three more for the case where git is asked and cannot
   answer, since the relational half tested the exit status of a *pipeline* and so read a failing git
   as an empty diff, passing the very page two rows above it — one of which is the clean counterpart:
@@ -628,7 +628,7 @@ Editing one of these means checking the others still agree.
 
   Two things the first live run changed, both worth keeping stated. The closed-page rule is judged
   **field by field**: a citation elsewhere on the page does not rescue a field whose only `file:line`
-  sits inside the collapsed block, and `check.sh` cannot see that. And the budget's test is that the
+  sits inside the collapsed block, and `check.rb` cannot see that. And the budget's test is that the
   citation is **load-bearing for a decision the reviewer must make** — the obvious phrasing, "one per
   field that earns one", is circular, because *affected but unchanged* is by definition nothing but
   claims a reader would take on faith, so every such field earns one automatically and the cap bounds
@@ -644,21 +644,21 @@ Editing one of these means checking the others still agree.
   Four files have to agree: the template holds the geometry and the SVG class vocabulary,
   `report-format.md` § *Depth rules* holds which kind belongs to which section and the budget (and
   holds them **only** — the template does not restate the budget), `SKILL.md` step 9 points at the
-  catalogue and says which two are components, and `evals/checks/diagram.sh` carries the class
+  catalogue and says which two are components, and `evals/checks/diagram.rb` carries the class
   vocabulary the template defines. A class added to one and not the other is either unstyled or
   reported as invented. `legend` and `box-json` were removed from that vocabulary deliberately, not
   renamed: a run drawing a blast radius as SVG should be told to use the component instead.
 
   `--brief` draws no § 5 figures at all — no ER fragment, no lifecycle; migration safety is a row
   there — so its merged section holds the `.blast` panel and nothing that could compete for the
-  budget, and `diagram.sh`'s per-`<section>` count needs no level awareness. What it must not become is
+  budget, and `diagram.rb`'s per-`<section>` count needs no level awareness. What it must not become is
   a reason to skip the one figure a *flow* earns.
 
   The reason this is an invariant rather than a nicety: a diagram is the one component with no
   generator behind it, so a layout derived per run spends the run's attention on geometry instead of
   on whether the edges are true — and makes two pages from this skill incomparable. What a script
   can check is conformance; crowding, overlap and an arrowhead landing beside its box need eyes,
-  which is what `checks/diagram-shot.sh --visual` and a judged expectation are for. Both defects in
+  which is what `checks/diagram-shot.rb --visual` and a judged expectation are for. Both defects in
   that sentence were found in diagrams the script had just called clean.
 
   Two rules no check can enforce, so they live in `report-format.md` § *Depth rules*: a box grid
@@ -670,17 +670,17 @@ Editing one of these means checking the others still agree.
   `monorepo-contract` has no state machine, so `evals/cases/diagrams.json` now tests that a run
   reaches for the *components* rather than SVG. Covering ER and lifecycle properly needs a new
   fixture with a migration and a status enum; until then those two catalogue layouts are checked by
-  `diagram.sh` against the template itself and by nothing else.
+  `diagram.rb` against the template itself and by nothing else.
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
-  the classic unreadable-artifact bug. `evals/checks/page-invariants.sh` § 6 enforces the three
-  states and `excerpts.sh` enforces it for the excerpt tints specifically, which are the newest
+  the classic unreadable-artifact bug. `evals/checks/page-invariants.rb` § 6 enforces the three
+  states and `excerpts.rb` enforces it for the excerpt tints specifically, which are the newest
   colours and so the likeliest to be forgotten in two of the three.
 
   `--rails` is the newest of these and `--syn-*` the next newest, and both are easy to half-declare for
   the same reason: nothing on the page depends on either to be readable, so a value missing from the
   dark blocks is invisible until someone opens a primer or an excerpt with the OS in dark mode. Each is
-  therefore counted by name — `--rails` in `page-invariants.sh` § 6, `--syn-key` in `excerpts.sh` —
+  therefore counted by name — `--rails` in `page-invariants.rb` § 6, `--syn-key` in `excerpts.rb` —
   because the three blocks *existing* is not the same as a colour being in all three.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
@@ -816,12 +816,12 @@ The two catalogues pin differently, and exactly one page-level rule differs with
 
 Rails has a single `major.minor` for the whole framework, so **one app, one series**: a page mixing
 `/v7.1/` with `/v8.0/` pinned from something other than this repo's `Gemfile.lock`, and
-`checks/rails-anchors.sh` fails it. An Elixir app pins `ecto`, `phoenix`, `phoenix_live_view`, `oban`
+`checks/rails-anchors.rb` fails it. An Elixir app pins `ecto`, `phoenix`, `phoenix_live_view`, `oban`
 and `elixir` independently from `mix.lock`, and hexdocs serves *exact* versions rather than resolving a
 series prefix to the newest patch — so **a correct Elixir page carries several different version
 segments**, and generalizing the one-series rule to hexdocs would fail every correct Phoenix page while
 passing every existing test. `evals/golden/anchors-hexdocs-clean.html` exists for exactly that edit: it
-is a *clean* fragment carrying two package versions on purpose, so the mistake goes red in `self-test.sh`
+is a *clean* fragment carrying two package versions on purpose, so the mistake goes red in `self-test.rb`
 instead of in the field.
 
 Two consequences follow for the machinery. The stored path **keeps its package** —
@@ -873,11 +873,11 @@ than it used to: every row resolves for every app the catalogue admits (currentl
 things about it are load-bearing:
 
 - **It reads table rows only** (`grep '^|'`), because the prose quotes the dead URLs it is warning
-  about, and a whole-file sweep would verify the warnings. `checks/rails-anchors.sh` now narrows the
+  about, and a whole-file sweep would verify the warnings. `checks/rails-anchors.rb` now narrows the
   same way, for the same reason — it derives its allowlist from this file, so a URL named in a caveat
   would otherwise allowlist itself.
-- **It is not under `checks/`.** `check.sh` dispatches offline rules over a page; this needs the
-  network, so it is neither dispatched nor part of `self-test.sh`.
+- **It is not under `checks/`.** `check.rb` dispatches offline rules over a page; this needs the
+  network, so it is neither dispatched nor part of `self-test.rb`.
 - **It cannot replace reading the page.** It proves a URL resolves and an anchor exists, never that
   the page documents the concept the row claims. § *Adding a row* still comes first.
 
@@ -890,7 +890,7 @@ table it has to remember to consult. Below the floor: no link.
 Six files have to agree. Each catalogue's § *Pinning* and § *What the marks mean* own the forms and
 the marks **alone**; `report-format.md` § *Framework anchors* states why the page cares and points;
 `SKILL.md` step 2 records the versions (a run that skips it cannot emit a doc link) and step 7 carries
-the two rules; `verify-catalogue.sh` verifies the pinned form; and `checks/rails-anchors.sh` enforces
+the two rules; `verify-catalogue.sh` verifies the pinned form; and `checks/rails-anchors.rb` enforces
 offline what it could not before — **every doc link carries a version segment, in either stack**, and
 **the Rails ones all agree on one series**, because one app has one Rails version and a page mixing
 `/v7.1/` with `/v8.0/` pinned from something other than this repo. That second rule is Rails-only and
@@ -1052,7 +1052,7 @@ Four things to settle before writing it:
 
 - **It probably needs a sixth evidence tier**, something like *reported by the review pass, verified
   against the file*. Five tiers are an invariant four files agree on (`report-format.md`, the
-  template's `span.tier`, `page-invariants.sh` § 3, and the cases), and the asymmetry that only four
+  template's `span.tier`, `page-invariants.rb` § 3, and the cases), and the asymmetry that only four
   of them carry a label is deliberate. Adding one is a real change, not a footnote — and the
   alternative is defensible: a verified finding is just *evidenced by unchanged code* or *explicitly
   changed* like any other, and where the claim came from is provenance rather than evidence.
