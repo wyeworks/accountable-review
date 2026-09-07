@@ -20,3 +20,10 @@ turn an intended failure into a pass; check `self-test.sh` still goes red when y
 The `anchors-*` set is where the one-defect rule earns itself most visibly: a fragment that both cites
 an uncatalogued URL and names a missing scope would fail twice, and the row asserting one substring
 would pass for the wrong reason.
+
+The three `anchors-hexdocs-*` fragments are the Elixir arms of the same rules, and one of them is a
+*clean* fragment pinning something a defect fragment cannot: `anchors-hexdocs-clean.html` carries two
+different package versions deliberately, because hexdocs pins per package and Rails' one-app-one-series
+rule must **not** fire on it. Generalizing that rule is the likeliest future edit, and it would pass
+every other row here while failing every correct Phoenix page — so the guard has to be a page that
+would only break if someone did.

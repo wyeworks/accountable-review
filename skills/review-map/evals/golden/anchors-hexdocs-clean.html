@@ -1,0 +1,39 @@
+<!-- Clean, Elixir: two catalogued hexdocs links, each beside its own citation, pinned to
+     TWO DIFFERENT package versions. That last part is the point of this fragment — Rails'
+     "one app, one series" rule must not fire here, because ecto and phoenix_live_view pin
+     independently from mix.lock and hexdocs serves exact versions. Several version segments
+     on one Elixir page is the correct output, not a defect. -->
+<section id="flow-a">
+  <h3>Flow A &mdash; Archiving a project</h3>
+
+  <div class="mech">
+    <b>archive &rarr; Projects.archive_project/1 &rarr; projects.archived_at</b>
+    <p>Archiving stamps a timestamp rather than deleting the row, so historical entries survive.</p>
+  </div>
+
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><span class="path">lib/my_app/projects.ex:41</span> &mdash; the stamp itself</div>
+    </dd>
+
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The bulk write at <span class="path">lib/my_app/projects.ex:58</span> builds no
+        changeset, so it runs none of this &mdash;
+        <a class="doc" href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:update_all/3">update_all</a>
+        casts nothing and validates nothing. <span class="tier">from unchanged code</span></div>
+      <div class="item">The event fired at
+        <span class="path">lib/my_app_web/live/project_live/show.html.heex:12</span> is answered at
+        <span class="path">lib/my_app_web/live/project_live/show.ex:30</span> &mdash;
+        <a class="doc" href="https://hexdocs.pm/phoenix_live_view/1.0.17/Phoenix.LiveView.html#c:handle_event/3">handle_event/3</a>
+        with no matching clause crashes the LiveView process rather than rendering wrong.
+        <span class="tier">from unchanged code</span></div>
+    </dd>
+
+    <dt>Validate</dt>
+    <dd>
+      <div class="item"><code>mix test test/my_app/projects_test.exs</code> &mdash; pins the stamp</div>
+    </dd>
+  </dl>
+</section>

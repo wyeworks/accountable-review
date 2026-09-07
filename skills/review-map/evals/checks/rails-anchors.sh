@@ -15,9 +15,15 @@
 #   a primer on every mechanism    reads as thoroughness and is a Rails manual with a
 #                                 diff attached
 #
-# The catalogue is the allowlist, and this script derives it from the file rather than
-# hard-coding hosts: references/rails-docs.md is the single home for what may be cited,
-# so a row added there is immediately legal here and a URL invented in a run is not.
+# The catalogue is the allowlist, and this script derives it from the files rather than
+# hard-coding hosts: references/rails-docs.md and references/elixir-docs.md are the single
+# home for what may be cited, so a row added to either is immediately legal here and a URL
+# invented in a run is not. Both are read on every page, not the one the page's stack
+# suggests: a page cites from one catalogue, but nothing in the markup says which, and
+# guessing the stack here would be a rule that fails on a monorepo touching both.
+#
+# The name is Rails-shaped and the scope is not, deliberately: renaming it would churn
+# check.sh, self-test.sh, evals.json, a case and a driver for no behavioural gain.
 #
 # What needs a reader, and lives in the case: whether the link is the RIGHT concept for
 # the claim, and whether the probe is the one worth proposing. This settles only whether
@@ -33,6 +39,7 @@ require_input
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 
 CATALOGUE=$SKILL_DIR/references/rails-docs.md
+CATALOGUE_EX=$SKILL_DIR/references/elixir-docs.md
 
 unesc() { sed -e 's/&amp;/\&/g; s/&lt;/</g; s/&gt;/>/g; s/&quot;/"/g; s/&#39;/'"'"'/g'; }
 
@@ -61,8 +68,11 @@ next=$(grep -c . "$TMP/external" 2>/dev/null || true)
 if [ "${next:-0}" -eq 0 ]; then
   skip "doc links: none on this input"
 else
-  if [ ! -r "$CATALOGUE" ]; then
-    bad "doc links: the catalogue is missing at references/rails-docs.md — nothing can be checked against it"
+  CATS=""
+  [ -r "$CATALOGUE" ] && CATS="$CATALOGUE"
+  [ -r "$CATALOGUE_EX" ] && CATS="$CATS $CATALOGUE_EX"
+  if [ -z "$CATS" ]; then
+    bad "doc links: no catalogue readable at references/rails-docs.md or references/elixir-docs.md — nothing can be checked against it"
   else
     # The allowlist is the TABLE ROWS, not the file. The file's prose quotes URLs it is
     # warning about — the dead Persistence/ClassMethods anchor is named there precisely so
@@ -73,6 +83,12 @@ else
     # on `·` first, each segment tested for a leading `<series>:`. That is what makes the
     # series rule below possible — an override is legal for ITS series and no other, and the
     # only way to know which is to keep the two attached while parsing.
+    #
+    # Both catalogues are parsed into one allowlist. A path is legal because SOME row offers
+    # it; which file the row lives in is the run's business, not this check's, and a monorepo
+    # page can legitimately cite from both. The per-series override syntax is Rails-only in
+    # practice — elixir-docs.md ships none, because hexdocs pins per package rather than per
+    # series — so every Elixir row parses as `*` and the series rule below never fires on one.
     awk -F'|' '
       function trim(s) { gsub(/^[[:space:]]+|[[:space:]]+$/, "", s); return s }
       /^\|/ && !/^\|[[:space:]]*-/ {
@@ -88,7 +104,7 @@ else
           }
         }
       }
-    ' "$CATALOGUE" | sort -u > "$TMP/cat-paths"
+    ' $CATS | sort -u > "$TMP/cat-paths"
 
     # Rails doc links only, partitioned by whether they carry a version segment. The test is
     # /v<digit>, NOT /v — a guide page whose name merely begins with the letter v
@@ -120,11 +136,41 @@ else
       # Pinning, rule 2: one app, one series. A page mixing /v7.1/ and /v8.0/ has pinned from
       # something other than this repo's Gemfile.lock, and the reader cannot tell which link
       # describes their app.
+      #
+      # THIS RULE IS RAILS-ONLY, and generalizing it is how a correct Elixir page starts
+      # failing. Rails has one major.minor for the whole framework; an Elixir app pins ecto,
+      # phoenix, phoenix_live_view, oban and elixir independently from mix.lock, and hexdocs
+      # serves exact versions rather than a series prefix. Several different version segments
+      # on one Elixir page is the CORRECT output. Hence the rule below checks that hexdocs
+      # links are pinned at all, and says nothing about whether they agree.
       nsee=$(grep -c . "$TMP/seen-series" 2>/dev/null || true)
       if [ "${nsee:-0}" -gt 1 ]; then
         bad "doc links pinned to $nsee different Rails series — one app has one version: $(tr '\n' ' ' < "$TMP/seen-series")"
       elif [ "${nsee:-0}" -eq 1 ]; then
         ok "all doc links pinned to one series (v$(cat "$TMP/seen-series"))"
+      fi
+    fi
+
+    # Pinning, rule 1b: the hexdocs arm of rule 1. A hexdocs URL with no version segment
+    # resolves to the package's newest release, which is the same silent defect an unpinned
+    # Rails guide is — an app on phoenix_live_view 0.20 handed 1.x documentation, with nothing
+    # on the page to notice it with. The test is a version segment immediately after the
+    # package: hexdocs.pm/<pkg>/<version>/..., where <version> starts with a digit.
+    #
+    # Skipped rather than passed when the page carries no hexdocs link, for the same reason
+    # rule 1 skips: "all pinned" over an empty set reads as verification of something nobody
+    # checked.
+    grep -E '^https://hexdocs\.pm/' "$TMP/external" > "$TMP/hex-links" || true
+    nhex=$(grep -c . "$TMP/hex-links" 2>/dev/null || true)
+    if [ "${nhex:-0}" -eq 0 ]; then
+      skip "pinning: no hexdocs links on this input"
+    else
+      grep -Ev '^https://hexdocs\.pm/[^/]+/[0-9][^/]*/' "$TMP/hex-links" > "$TMP/hex-unpinned" || true
+      nhu=$(grep -c . "$TMP/hex-unpinned" 2>/dev/null || true)
+      if [ "${nhu:-0}" -eq 0 ]; then
+        ok "all $nhex hexdocs link(s) carry a version segment"
+      else
+        bad "$nhu unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: $(tr '\n' ' ' < "$TMP/hex-unpinned")"
       fi
     fi
 
@@ -147,11 +193,18 @@ else
       # The page emits PINNED URLs; the catalogue stores unpinned paths, so the version
       # segment comes off before matching. A gem tag is reduced to the {version} placeholder
       # the row actually carries.
+      # hexdocs keeps its PACKAGE in the needle and loses only the version segment, because
+      # the package is part of the stored path — `ecto/Ecto.Changeset.html#cast/4`. That is
+      # what makes a right-module-wrong-package URL fail here instead of passing: the two
+      # differ in the needle. The unpinned form is reduced too, so it is still tested against
+      # the allowlist; rule 1b above is what fails it for being unpinned.
       needle=$(printf '%s' "$url" \
         | sed -e 's|^https://guides\.rubyonrails\.org/v[0-9][0-9.]*/||' \
               -e 's|^https://guides\.rubyonrails\.org/||' \
               -e 's|^https://api\.rubyonrails\.org/v[0-9][0-9.]*/classes/||' \
               -e 's|^https://api\.rubyonrails\.org/classes/||' \
+              -e 's|^https://hexdocs\.pm/\([^/][^/]*\)/[0-9][^/]*/|\1/|' \
+              -e 's|^https://hexdocs\.pm/||' \
               -e 's|/tree/v[0-9][0-9A-Za-z.-]*|/tree/v{version}|')
       # Matched as a WHOLE backticked token, never as a substring. A bare `grep -F` on the
       # path passed `guides.rubyonrails.org/v8.0/validations.html` — an HTTP 404 — because
@@ -187,7 +240,7 @@ else
     if [ "${nbad:-0}" -eq 0 ]; then
       ok "$next documentation link(s), all from the catalogue"
     else
-      bad "$nbad documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: $(tr '\n' ' ' < "$TMP/bad-urls")"
+      bad "$nbad documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: $(tr '\n' ' ' < "$TMP/bad-urls")"
     fi
 
     nws=$(grep -c . "$TMP/wrong-series" 2>/dev/null || true)
