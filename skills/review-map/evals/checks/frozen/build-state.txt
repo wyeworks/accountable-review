@@ -16,6 +16,24 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-fabricated-output.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-hexdocs-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-hexdocs-unpinned.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-unpinned.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-hexdocs-wrong-package.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-invented-attribute.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -98,6 +116,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-primer-two-in-flow.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-probe-legit-forms.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-probe-legit-forms.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-runner-mutates.html

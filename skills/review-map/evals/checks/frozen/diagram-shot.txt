@@ -16,6 +16,24 @@ SKIP  no Chrome found — set $CHROME to render the diagrams
 ## --page anchors-fabricated-output.html
 exit=0
 SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-hexdocs-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-hexdocs-clean.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
 ## --fragment anchors-invented-attribute.html
 exit=0
 SKIP  no Chrome found — set $CHROME to render the diagrams
@@ -98,6 +116,12 @@ SKIP  no Chrome found — set $CHROME to render the diagrams
 exit=0
 SKIP  no Chrome found — set $CHROME to render the diagrams
 ## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --fragment anchors-probe-legit-forms.html
+exit=0
+SKIP  no Chrome found — set $CHROME to render the diagrams
+## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  no Chrome found — set $CHROME to render the diagrams
 ## --fragment anchors-runner-mutates.html

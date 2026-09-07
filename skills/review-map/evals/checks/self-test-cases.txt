@@ -83,15 +83,24 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
  excerpts           | excerpt-open.html             | 1 | open by default
  excerpts           | excerpt-duplicate.html        | 1 | same range is excerpted more than once
  rails-anchors      | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-uncatalogued-url.html | 1 | not in references/rails-docs.md   | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-uncatalogued-url.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-unpinned-link.html    | 1 | unpinned Rails doc link           | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-mixed-series.html     | 1 | different Rails series            | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-link-alone.html       | 1 | with no file:line beside them     | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-link-in-excerpt.html  | 1 | inside a collapsed excerpt        | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-fabricated-output.html | 1 | looks like its own output        | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-probe-legit-forms.html | 0 | none showing output the run did not observe | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-runner-mutates.html   | 1 | no 'console --sandbox' is named   | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
+# The Elixir arms of the same two rules. anchors-hexdocs-clean.html is the row nothing else
+# would have pinned: it carries TWO different package versions on purpose, so a future reader
+# who "generalizes" Rails' one-app-one-series rule to hexdocs turns this row red here instead
+# of turning a correct Phoenix page red in the field. The wrong-package row pins that the needle
+# keeps the package, which is the only reason a right-module-wrong-package 404 fails at all.
+ rails-anchors      | anchors-hexdocs-clean.html    | 0 | hexdocs link(s) carry a version segment | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-hexdocs-unpinned.html | 1 | unpinned hexdocs link(s)          | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-hexdocs-wrong-package.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-clean.html            | 0 | needs --repo to ask whether
 # The primer callout. The first row is the clean one; the five after it are the rules that
 # would otherwise be checked by nothing. The demo rows are the pair worth reading together:

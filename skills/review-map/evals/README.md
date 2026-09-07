@@ -635,6 +635,32 @@ failed check rather than as a surprise.
 That is the argument for the coexistence window and equally the argument for closing it: the
 window is what made the port safe, and every day it stayed open cost a re-port.
 
+### The oracle after the flip, which is still one command away
+
+It drifted a fourth time, after the shell was deleted: `main` moved seventeen commits while this
+branch waited, and three of them landed on `.sh` files that no longer exist — a second catalogue
+and a hexdocs pinning rule in `rails-anchors`, a quote-aware fabricated-output rule beside it,
+and `LC_ALL=C` on four sorts in `page-invariants`. A delete/modify conflict is where a port gets
+quietly re-forked: the shell's change is right there in the conflict, and applying it to the Ruby
+by reading is how the two stop being the same program.
+
+They do not have to be re-read, because **the shell is still in the history and still runs**:
+
+```sh
+git worktree add --detach /tmp/oracle origin/main
+# then run each checks/*.sh from the worktree against this checkout's golden/, and diff
+```
+
+Every case in `checks/frozen/`, graded that way after the port: 2035 identical, 0 differing across
+all twelve checks. That is the same guarantee the corpus was recorded under, re-established rather
+than assumed — and it settles the `LC_ALL=C` question by measurement, which is the only way it
+could be settled: the sort it pins is Ruby's byte order already, so the change is a no-op here and
+`page-invariants` agrees on all 175 of its cases.
+
+The lesson is narrow and worth keeping: **a shell script deleted from the tree is not a deleted
+oracle.** For as long as the last commit carrying it is reachable, a port that must absorb a
+change to it can be graded against it instead of reviewed against it.
+
 ## The fixtures plant their answers
 
 Each fixture contains findings that are true but **not in the diff**, which is the skill's whole claim.

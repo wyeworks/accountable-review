@@ -2,6 +2,7 @@
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -16,6 +17,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -30,6 +32,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -46,6 +49,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -62,6 +66,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -76,6 +81,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -86,10 +92,77 @@ FAIL  a probe carries what looks like its own output — the skill never ran it,
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-hexdocs-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+PASS  all 2 hexdocs link(s) carry a version segment
+PASS  no unsubstituted {version} placeholder
+PASS  2 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page anchors-hexdocs-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+PASS  all 2 hexdocs link(s) carry a version segment
+PASS  no unsubstituted {version} placeholder
+PASS  2 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment anchors-hexdocs-unpinned.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/Ecto.Repo.html#c:update_all/3 
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page anchors-hexdocs-unpinned.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/Ecto.Repo.html#c:update_all/3 
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment anchors-hexdocs-wrong-package.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+PASS  all 1 hexdocs link(s) carry a version segment
+PASS  no unsubstituted {version} placeholder
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page anchors-hexdocs-wrong-package.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+PASS  all 1 hexdocs link(s) carry a version segment
+PASS  no unsubstituted {version} placeholder
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment anchors-invented-attribute.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -104,6 +177,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -118,6 +192,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -132,6 +207,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -146,6 +222,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -160,6 +237,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -174,6 +252,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -188,6 +267,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -202,6 +282,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 FAIL  doc links pinned to 2 different Rails series — one app has one version: 7.1 8.0 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -216,6 +297,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 FAIL  doc links pinned to 2 different Rails series — one app has one version: 7.1 8.0 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -230,6 +312,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -248,6 +331,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -266,6 +350,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -284,6 +369,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -302,6 +388,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -320,6 +407,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -338,6 +426,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -356,6 +445,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -374,6 +464,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -392,6 +483,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -410,6 +502,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -428,6 +521,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -446,6 +540,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -464,6 +559,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -482,6 +578,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -500,6 +597,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -518,6 +616,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 3 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  3 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -536,6 +635,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 3 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  3 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -550,10 +650,27 @@ PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-legit-forms.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+PASS  3 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page anchors-probe-legit-forms.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+PASS  3 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-runner-mutates.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -568,6 +685,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -582,8 +700,9 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -596,8 +715,9 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -609,6 +729,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-unpinned-link.html
 exit=1
 FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -622,6 +743,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page anchors-unpinned-link.html
 exit=1
 FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -966,6 +1088,7 @@ SKIP  runtime probes: none on this input
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -984,6 +1107,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1221,8 +1345,9 @@ SKIP  runtime probes: none on this input
 ## --fragment page-template.html
 exit=1
 FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
 PASS  no unsubstituted {version} placeholder
-FAIL  3 documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies 
+FAIL  4 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -1231,15 +1356,16 @@ PASS  every primer carries the documentation link it escalated from
 PASS  2 demo block(s), all inside the primer that licenses them
 PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
 SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  2 probe(s), none showing output the run did not observe
+FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction:   {:ok, p} = MyApp.Projects.archive_project(project)
 PASS  no probe targets production
 PASS  a write-shaped probe is present and a sandboxed console is what runs it
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page page-template.html
 exit=1
 FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
 PASS  no unsubstituted {version} placeholder
-FAIL  3 documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies 
+FAIL  4 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -1248,7 +1374,7 @@ PASS  every primer carries the documentation link it escalated from
 PASS  2 demo block(s), all inside the primer that licenses them
 PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
 SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  2 probe(s), none showing output the run did not observe
+FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction:   {:ok, p} = MyApp.Projects.archive_project(project)
 PASS  no probe targets production
 PASS  a write-shaped probe is present and a sandboxed console is what runs it
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
@@ -1256,6 +1382,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1271,8 +1398,9 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -1285,6 +1413,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 ## --fragment anchors-unpinned-link.html --repo searches-repo
 exit=1
 FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1300,6 +1429,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 FAIL  doc links pinned to 2 different Rails series — one app has one version: 7.1 8.0 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1315,6 +1445,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1330,6 +1461,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1345,6 +1477,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1356,10 +1489,20 @@ PASS  no probe targets production
 PASS  every probe is read-only
 PASS  all 1 constant(s) named by a probe exist in the repository
 PASS  1 attribute/association name(s) in probes appear in the repository
+## --fragment anchors-probe-legit-forms.html --repo searches-repo
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+PASS  3 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+PASS  all 1 constant(s) named by a probe exist in the repository
+PASS  1 scope(s) or method(s) called by a probe are defined in the repository
 ## --fragment anchors-runner-mutates.html --repo searches-repo
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1374,6 +1517,7 @@ PASS  all 1 constant(s) named by a probe exist in the repository
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1389,6 +1533,7 @@ FAIL  1 name(s) a probe reflects on are absent from the repository: slug
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1400,10 +1545,44 @@ PASS  no probe targets production
 PASS  every probe is read-only
 PASS  all 1 constant(s) named by a probe exist in the repository
 FAIL  1 scope(s) or method(s) a probe calls are not defined in this repository — a plausible scope name is the likeliest thing an invented probe gets wrong: published 
+## --fragment anchors-hexdocs-clean.html --repo searches-repo
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+PASS  all 2 hexdocs link(s) carry a version segment
+PASS  no unsubstituted {version} placeholder
+PASS  2 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment anchors-hexdocs-unpinned.html --repo searches-repo
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/Ecto.Repo.html#c:update_all/3 
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment anchors-hexdocs-wrong-package.html --repo searches-repo
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+PASS  all 1 hexdocs link(s) carry a version segment
+PASS  no unsubstituted {version} placeholder
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment anchors-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1418,6 +1597,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1437,6 +1617,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1456,6 +1637,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1473,6 +1655,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1492,6 +1675,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1511,6 +1695,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 3 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  3 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1530,6 +1715,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1549,6 +1735,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1568,6 +1755,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1587,6 +1775,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=0
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path

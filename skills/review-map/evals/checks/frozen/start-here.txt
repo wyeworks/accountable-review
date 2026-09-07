@@ -34,6 +34,42 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 3 is a single list
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment anchors-hexdocs-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page anchors-hexdocs-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment anchors-hexdocs-unpinned.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page anchors-hexdocs-unpinned.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment anchors-hexdocs-wrong-package.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page anchors-hexdocs-wrong-package.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
 ## --fragment anchors-invented-attribute.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -197,6 +233,18 @@ PASS  section 3 is a single list
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
 ## --page anchors-primer-two-in-flow.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment anchors-probe-legit-forms.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page anchors-probe-legit-forms.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 3 is a single list

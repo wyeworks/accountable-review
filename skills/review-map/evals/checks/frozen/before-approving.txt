@@ -22,6 +22,30 @@ PASS  validation steps carry command markup
 ## --page anchors-fabricated-output.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
+## --fragment anchors-hexdocs-clean.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page anchors-hexdocs-clean.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment anchors-hexdocs-unpinned.html
+exit=1
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+FAIL  no <code> anywhere in section 6 — validations must be pasteable commands, not prose
+## --page anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment anchors-invented-attribute.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'
@@ -132,6 +156,14 @@ WARN  no comprehension checkpoint found inside 'Before approving'
 WARN  no 'ask the author' part — legitimate only if nothing needs the author
 PASS  validation steps carry command markup
 ## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment anchors-probe-legit-forms.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment anchors-runner-mutates.html

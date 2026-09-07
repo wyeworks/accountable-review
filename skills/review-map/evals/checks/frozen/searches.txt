@@ -16,6 +16,24 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-fabricated-output.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-hexdocs-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-hexdocs-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-hexdocs-unpinned.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-invented-attribute.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -98,6 +116,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-probe-legit-forms.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-runner-mutates.html

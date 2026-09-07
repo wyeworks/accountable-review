@@ -17,9 +17,15 @@
 #   a primer on every mechanism    reads as thoroughness and is a Rails manual with a
 #                                  diff attached
 #
-# The catalogue is the allowlist, and this script derives it from the file rather than
-# hard-coding hosts: references/rails-docs.md is the single home for what may be cited,
-# so a row added there is immediately legal here and a URL invented in a run is not.
+# The catalogue is the allowlist, and this script derives it from the files rather than
+# hard-coding hosts: references/rails-docs.md and references/elixir-docs.md are the single
+# home for what may be cited, so a row added to either is immediately legal here and a URL
+# invented in a run is not. Both are read on every page, not the one the page's stack
+# suggests: a page cites from one catalogue, but nothing in the markup says which, and
+# guessing the stack here would be a rule that fails on a monorepo touching both.
+#
+# The name is Rails-shaped and the scope is not, deliberately: renaming it would churn
+# check.rb, self-test-cases.txt, evals.json, a case and a driver for no behavioural gain.
 #
 # What needs a reader, and lives in the case: whether the link is the RIGHT concept for
 # the claim, and whether the probe is the one worth proposing. This settles only whether
@@ -52,9 +58,20 @@ module RailsAnchors
   # was recorded in neither list and checked by neither rule.
   PINNED = %r{\Ahttps://(?:guides|api)\.rubyonrails\.org/v[0-9]}
   SERIES = %r{\Ahttps://[a-z.]*rubyonrails\.org/v([0-9][0-9.]*)/}
+  HEXDOCS = %r{\Ahttps://hexdocs\.pm/}
+  # hexdocs.pm/<pkg>/<version>/…, where <version> starts with a digit. The package sits between
+  # the host and the version, so a pinned link and an unpinned one differ in their SECOND
+  # segment and nowhere else.
+  HEXDOCS_PINNED = %r{\Ahttps://hexdocs\.pm/[^/]+/[0-9][^/]*/}
 
   # Constants that are the framework's own or Ruby's, so they say nothing about this repository.
-  FRAMEWORK = /\A(ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP)/
+  # ONE list, because two rules need it: rule 7 skips these when asking whether a constant
+  # exists, and the scope rule skips them as RECEIVERS. When only the constant rule had it,
+  # `Rails.application` sailed past rule 7 and then failed the scope rule for calling an
+  # "undefined method" named `application`.
+  FW = "ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|I18n|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP"
+  FRAMEWORK = /\A(#{FW})/
+  FRAMEWORK_RECEIVER = /\A(#{FW})\./
   FRAMEWORK_NS = /\A(ActiveRecord|ActiveJob|ActiveSupport)::/
   CONSTANT = /\b[A-Z][A-Za-z0-9]*(?:::[A-Z][A-Za-z0-9]*)*\b/
 
@@ -68,8 +85,11 @@ module RailsAnchors
               reload attributes as_json to_json].freeze
 
   MUTATING = /create!?\(|update!?\(|update_all|update_column|destroy|delete_all|save!?\b|insert_all|upsert_all|touch\(|archive!/
-  FABRICATED = /\A[[:space:]]*(?:=>|#[[:space:]]*=>|\[|\{)/
+  FABRICATED = /\A[[:space:]]*(?:=>|#[[:space:]]*=>)/
   FABRICATED_SQL = /\A[[:space:]]*(?:SELECT|INSERT|UPDATE|DELETE)[[:space:]]/i
+  # A leading `[` or `{` is output only OUTSIDE a quoted script — see fabricated_line below.
+  FABRICATED_LITERAL = /\A[[:space:]]*[\[{]/
+  RUNNER_OPEN = /runner[[:space:]]*'/
 
   Row = Struct.new(:applies, :path)
 
@@ -120,11 +140,19 @@ module RailsAnchors
   # The page emits PINNED URLs; the catalogue stores unpinned paths, so the version segment
   # comes off before matching. A gem tag is reduced to the {version} placeholder the row
   # actually carries.
+  #
+  # hexdocs keeps its PACKAGE in the needle and loses only the version segment, because the
+  # package is part of the stored path — `ecto/Ecto.Changeset.html#cast/4`. That is what makes a
+  # right-module-wrong-package URL fail here instead of passing: the two differ in the needle.
+  # The unpinned form is reduced too, so it is still tested against the allowlist; the hexdocs
+  # pinning rule is what fails it for being unpinned.
   def self.needle(url)
     url.sub(%r{\Ahttps://guides\.rubyonrails\.org/v[0-9][0-9.]*/}, "")
        .sub(%r{\Ahttps://guides\.rubyonrails\.org/}, "")
        .sub(%r{\Ahttps://api\.rubyonrails\.org/v[0-9][0-9.]*/classes/}, "")
        .sub(%r{\Ahttps://api\.rubyonrails\.org/classes/}, "")
+       .sub(%r{\Ahttps://hexdocs\.pm/([^/]+)/[0-9][^/]*/}, "\\1/")
+       .sub(%r{\Ahttps://hexdocs\.pm/}, "")
        .sub(%r{/tree/v[0-9][0-9A-Za-z.-]*}, "/tree/v{version}")
   end
 
@@ -187,6 +215,27 @@ module RailsAnchors
          .sort.uniq
   end
 
+  # The first line of a probe body that looks like the probe's own output, or nil.
+  #
+  # A leading `[` or `{` is output only OUTSIDE a quoted script. `bin/rails runner '` opens one
+  # whose continuation lines are Ruby, and a real probe's second line began
+  # "[Profile, Community, Event].each { |m| ... }" — a literal being iterated, not a literal
+  # being printed. The two are indistinguishable by their first character, so the quote is what
+  # tells them apart: track it, and a printed array still fails while Ruby does not. `=>` and
+  # the SQL keywords need no such care — neither is legal at the head of a continuation line,
+  # so they are caught inside a script too.
+  def self.fabricated_line(lines)
+    inside = false
+    lines.each do |line|
+      return line if line.match?(FABRICATED) || line.match?(FABRICATED_SQL)
+      return line if !inside && line.match?(FABRICATED_LITERAL)
+
+      # Parity of single quotes, counted only once a runner script has opened.
+      inside = !inside if (inside || line.match?(RUNNER_OPEN)) && line.count("'").odd?
+    end
+    nil
+  end
+
   # Strip tags, decode, drop blank lines — the body of a <pre> as the reviewer would paste it.
   def self.body_of(page, open_tag)
     inside = false
@@ -206,16 +255,26 @@ end
 check = ReviewMap::Check.new(ARGV)
 check.require_input
 page = check.page
-catalogue_path = File.join(ReviewMap::Check::SKILL_DIR, "references", "rails-docs.md")
+# Both catalogues, always — see the header. A page cites from one, and nothing in the markup
+# says which.
+catalogue_paths = %w[rails-docs.md elixir-docs.md]
+                  .map { |name| File.join(ReviewMap::Check::SKILL_DIR, "references", name) }
+                  .select { |path| File.readable?(path) }
 
 # ---------------------------------------------------------------- doc links
 external = RailsAnchors.external_links(page)
 if external.empty?
   check.skip("doc links: none on this input")
-elsif !File.readable?(catalogue_path)
-  check.bad("doc links: the catalogue is missing at references/rails-docs.md — nothing can be checked against it")
+elsif catalogue_paths.empty?
+  check.bad("doc links: no catalogue readable at references/rails-docs.md or references/elixir-docs.md — nothing can be checked against it")
 else
-  rows = RailsAnchors.catalogue(catalogue_path)
+  # Both catalogues parsed into ONE allowlist. A path is legal because some row offers it;
+  # which file the row lives in is the run's business, not this check's, and a monorepo page can
+  # legitimately cite from both. The per-series override syntax is Rails-only in practice —
+  # elixir-docs.md ships none, because hexdocs pins per package rather than per series — so
+  # every Elixir row parses as `*` and the series rule below never fires on one.
+  rows = catalogue_paths.flat_map { |path| RailsAnchors.catalogue(path) }
+                        .uniq { |r| [r.applies, r.path] }
   rails_links = external.select { |u| u.match?(RailsAnchors::RAILS_HOST) }
   pinned, unpinned = rails_links.partition { |u| u.match?(RailsAnchors::PINNED) }
   seen_series = pinned.filter_map { |u| u[RailsAnchors::SERIES, 1] }.sort.uniq
@@ -239,10 +298,36 @@ else
     # Pinning, rule 2: one app, one series. A page mixing /v7.1/ and /v8.0/ has pinned from
     # something other than this repo's Gemfile.lock, and the reader cannot tell which link
     # describes their app.
+    #
+    # THIS RULE IS RAILS-ONLY, and generalizing it is how a correct Elixir page starts failing.
+    # Rails has one major.minor for the whole framework; an Elixir app pins ecto, phoenix,
+    # phoenix_live_view, oban and elixir independently from mix.lock, and hexdocs serves exact
+    # versions rather than a series prefix. Several different version segments on one Elixir
+    # page is the CORRECT output. Hence rule 1b checks that hexdocs links are pinned at all, and
+    # says nothing about whether they agree.
     if seen_series.size > 1
       check.bad("doc links pinned to #{seen_series.size} different Rails series — one app has one version: #{seen_series.join(" ")} ")
     elsif seen_series.size == 1
       check.ok("all doc links pinned to one series (v#{seen_series.first})")
+    end
+  end
+
+  # Pinning, rule 1b: the hexdocs arm of rule 1. A hexdocs URL with no version segment resolves
+  # to the package's newest release, which is the same silent defect an unpinned Rails guide is —
+  # an app on phoenix_live_view 0.20 handed 1.x documentation, with nothing on the page to
+  # notice it with.
+  #
+  # Skipped rather than passed when the page carries no hexdocs link, for the same reason rule 1
+  # skips: "all pinned" over an empty set reads as verification of something nobody checked.
+  hex_links = external.select { |u| u.match?(RailsAnchors::HEXDOCS) }
+  if hex_links.empty?
+    check.skip("pinning: no hexdocs links on this input")
+  else
+    hex_unpinned = hex_links.reject { |u| u.match?(RailsAnchors::HEXDOCS_PINNED) }
+    if hex_unpinned.empty?
+      check.ok("all #{hex_links.size} hexdocs link(s) carry a version segment")
+    else
+      check.bad("#{hex_unpinned.size} unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: #{hex_unpinned.join(" ")} ")
     end
   end
 
@@ -286,7 +371,7 @@ else
   if bad_urls.empty?
     check.ok("#{external.size} documentation link(s), all from the catalogue")
   else
-    check.bad("#{bad_urls.size} documentation link(s) not in references/rails-docs.md — a URL nobody opened is a 404 the reader finds: #{bad_urls.join(" ")} ")
+    check.bad("#{bad_urls.size} documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: #{bad_urls.join(" ")} ")
   end
 
   if wrong_series.empty?
@@ -492,8 +577,9 @@ probe_body = RailsAnchors.body_of(page, /<pre class="probe"/)
 
 # 5 · No fabricated output. The skill does not run these, so anything that looks like a result
 #     is invented. `=>` is the console's own prompt for a return value; a leading SQL keyword is
-#     the other common shape.
-fabricated = probe_body.find { |l| l.match?(RailsAnchors::FABRICATED) || l.match?(RailsAnchors::FABRICATED_SQL) }
+#     the other common shape; a leading `[` or `{` is one only outside a quoted runner script,
+#     which is what fabricated_line tracks.
+fabricated = RailsAnchors.fabricated_line(probe_body)
 if fabricated
   check.bad("a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: #{fabricated}")
 else
@@ -540,15 +626,35 @@ else
   # names THIS app's scope, so an invented one is the defect this rule exists for — and it is
   # the likeliest fabrication, because a plausible scope name is exactly what a model writes
   # when it has not read far enough.
+  #
+  # The receiver is filtered before the method name is taken, through the same FW list rule 7
+  # uses. The rule is about a scope on one of THIS app's models; a framework constant's methods
+  # are not the app's to define, and reading them as such failed a correct probe —
+  # `pp Rails.application.routes.routes` was reported as calling an undefined `application`.
   scopes = probe_body.flat_map { |l| l.scan(/\b[A-Z][A-Za-z0-9]*\.[a-z_]+[a-z_0-9]*/) }
+                     .reject { |call| call.match?(RailsAnchors::FRAMEWORK_RECEIVER) }
                      .map { |call| call.sub(/\A[^.]*\./, "") }
                      .sort.uniq
                      .reject { |m| RailsAnchors::AR_API.include?(m) }
   if scopes.any?
     # A scope, a class method, or an instance method — a probe may reasonably call any.
+    #
+    # Plus the enum's generated plural, which has no `def` anywhere: `enum :invite_area`
+    # generates `Event.invite_areas`, and reading that map is the version-proof way to ask what
+    # values an app actually admits — the probe rails-nextjs.md recommends. Without this the
+    # check failed a probe the reference tells the run to write.
+    #
+    # Both plural forms, because one is not enough and the fixture proved it: trimming a
+    # trailing "s" turns invite_areas back into invite_area but statuses into "statuse". Rails
+    # adds "es" after s, x, z, ch and sh, and `status` is the enum name a Rails app is
+    # likeliest to have.
     missing_scopes = scopes.reject do |sc|
+      sing = sc.sub(/s\z/, "")
+      sing_es = sc.sub(/es\z/, "")
       _out, found = check.shell("grep", "-rEq",
-                                "(scope[[:space:]]+:#{sc}\\b|def[[:space:]]+(self\\.)?#{sc}\\b|enum[[:space:]]+:?#{sc}\\b)",
+                                "(scope[[:space:]]+:#{sc}\\b|def[[:space:]]+(self\\.)?#{sc}\\b|" \
+                                "enum[[:space:]]+:?#{sc}\\b|enum[[:space:]]+:?#{sing}\\b|" \
+                                "enum[[:space:]]+:?#{sing_es}\\b)",
                                 check.repo)
       found
     end

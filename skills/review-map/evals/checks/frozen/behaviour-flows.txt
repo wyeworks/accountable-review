@@ -70,6 +70,74 @@ PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-un
 PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
 PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
 PASS  1 review unit(s) inspected
+## --fragment anchors-hexdocs-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "archive &rarr; Projects.archive_project/1 &rarr;" fills things-to-understand
+PASS  unit "archive &rarr; Projects.archive_project/1 &rarr;" carries citations
+PASS  unit "archive &rarr; Projects.archive_project/1 &rarr;" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page anchors-hexdocs-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "archive &rarr; Projects.archive_project/1 &rarr;" fills things-to-understand
+PASS  unit "archive &rarr; Projects.archive_project/1 &rarr;" carries citations
+PASS  unit "archive &rarr; Projects.archive_project/1 &rarr;" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "archive &rarr; Projects.archive_project/1" fills things-to-understand
+PASS  unit "archive &rarr; Projects.archive_project/1" carries citations
+PASS  1 review unit(s) inspected
+## --page anchors-hexdocs-unpinned.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "archive &rarr; Projects.archive_project/1" fills things-to-understand
+PASS  unit "archive &rarr; Projects.archive_project/1" carries citations
+PASS  1 review unit(s) inspected
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "migration &rarr; projects.archived_at" fills things-to-understand
+PASS  unit "migration &rarr; projects.archived_at" carries citations
+PASS  1 review unit(s) inspected
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "migration &rarr; projects.archived_at" fills things-to-understand
+PASS  unit "migration &rarr; projects.archived_at" carries citations
+PASS  1 review unit(s) inspected
 ## --fragment anchors-invented-attribute.html
 exit=0
 PASS  no flow is grouped by directory or layer
@@ -407,6 +475,30 @@ PASS  field labels match the canonical set
 PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-understand
 PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
 PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment anchors-probe-legit-forms.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "PATCH /api/projects/:id &rarr; Project#archive! " has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+WARN  unit "PATCH /api/projects/:id &rarr; Project#archive! " has a validation field with no <code> — a step that is not pasteable is not a step
+PASS  1 review unit(s) inspected
+## --page anchors-probe-legit-forms.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "PATCH /api/projects/:id &rarr; Project#archive! " has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " carries citations
+WARN  unit "PATCH /api/projects/:id &rarr; Project#archive! " has a validation field with no <code> — a step that is not pasteable is not a step
 PASS  1 review unit(s) inspected
 ## --fragment anchors-runner-mutates.html
 exit=0

@@ -16,6 +16,24 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-fabricated-output.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-hexdocs-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-hexdocs-unpinned.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-unpinned.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-hexdocs-wrong-package.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-hexdocs-wrong-package.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-invented-attribute.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -98,6 +116,12 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-two-in-flow.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-probe-legit-forms.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-probe-legit-forms.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-runner-mutates.html

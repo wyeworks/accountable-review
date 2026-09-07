@@ -16,6 +16,24 @@ SKIP  no excerpts in this input
 ## --page anchors-fabricated-output.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-hexdocs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-hexdocs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-invented-attribute.html
 exit=0
 SKIP  no excerpts in this input
@@ -116,6 +134,12 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-probe-legit-forms.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment anchors-runner-mutates.html
