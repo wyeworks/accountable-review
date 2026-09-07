@@ -1,37 +1,285 @@
-# Accountable Review
+# accountable-review 🧭
 
-A [Claude Code](https://claude.com/claude-code) plugin that turns a pull request into a published
-HTML **review map** — what the change is for, how its behaviours work, what the API and the client
-now agree on, where the decisions live, where to start reading, and what it can break. It ships two
-skills: `review-map`, which produces the page, targeting two stacks — Rails, and Elixir/Phoenix, a
-LiveView app or a JSON API, with or without a separate client such as Next.js — and `setup-ci`,
-which arranges for one to be produced automatically on every review-ready pull request.
+> **AI-assisted code review for teams that want to move faster with coding agents without losing control of their codebase.**
 
-It does not grade the PR. The product principle is narrower and more useful than that:
+`accountable-review` turns a pull request into a **Review Map**: a published HTML page that guides a
+reviewer through what changed, how the new behaviour works, what existing code is affected, and what
+to understand before merge.
 
-> **Do not determine whether the PR is correct. Help a competent reviewer determine whether it is.**
+It ships two skills: **`review-map`**, which produces the page for a Rails or an Elixir/Phoenix
+codebase, with or without a separate client such as Next.js; and **`setup-ci`**, which arranges for
+one to be produced automatically on every review-ready pull request.
 
+Built by **WyeWorks**.
+Rails-first. Open source. A [Claude Code](https://claude.com/claude-code) plugin.
 
-## Why
+---
 
-A `git diff` shows you what changed. It cannot tell you what the change *is* — which files carry the
-design and which are churn, what order to read them in, which constant is load-bearing, or why the
-author put a transaction there.
+## Why? ⚡
 
-That gap is [comprehension debt](https://addyosmani.com/blog/comprehension-debt/): the widening
-distance between code that gets produced and code anyone actually understands. Generating nine
-thousand lines is now cheap; understanding them is not. A PR approved without being understood was
-waved through, and the debt comes due the first time someone has to change it.
+AI coding tools can produce large changes much faster than teams can absorb them.
 
-This plugin exists to close that gap, by knowing what a senior reviewer of your stack looks for and
-rendering it as something you can read. The test it has to pass: after following the page, can the
-reviewer explain what changed, why it works, and where the important decisions live?
+Tests can pass.
+AI reviewers can find issues.
+Coding agents can fix those issues.
 
-## Install
+And still:
+
+> **Do you understand how the system works now?**
+
+That is the problem `accountable-review` focuses on.
+
+When code enters the codebase faster than the team understands it, short-term speed can become
+long-term loss of control. That gap has a name —
+[comprehension debt](https://addyosmani.com/blog/comprehension-debt/) — and it comes due the first
+time someone has to change the code nobody read.
+
+---
+
+## AI code review ≠ AI-assisted code review 🤖 + 👩‍💻
+
+**AI code review** is great at asking:
+
+- Is there a bug here?
+- Is this implementation suspicious?
+- What should be fixed?
+
+`accountable-review` helps the human reviewer ask:
+
+- What behaviour now exists?
+- Why was it introduced?
+- How do the pieces work together?
+- What existing assumptions now matter?
+- What should I remember when maintaining this later?
+
+The plugin does **not** approve the PR for you.
+
+> **It helps a competent reviewer understand the change well enough to decide.**
+
+No approval verdict.
+No severity score.
+No fake confidence badge.
+
+Human judgment stays final. A page good enough to approve from without reading the code would be a
+failure — the reviewer would be holding a verdict instead of a mental model.
+
+---
+
+## Diffs are necessary. They are no longer sufficient. 🔍
+
+Diffs are excellent for reviewing code line by line.
+
+```text
+Is this condition correct?
+Is this query efficient?
+Did this line introduce a regression?
+```
+
+But modern AI-assisted development also pushes review to a higher level:
+
+```text
+What behaviour changed?
+How does this work across the system?
+What must the team understand to maintain it?
+```
+
+A **Review Map** adds that layer.
+
+---
+
+## Review behaviours, not file lists 🗺️
+
+A diff is organized by files.
+
+A Rails or Phoenix feature is not.
+
+One behaviour may cross:
+
+```text
+routes
+  ↓
+controller
+  ↓
+model / service
+  ↓
+policy
+  ↓
+job
+  ↓
+serializer
+  ↓
+frontend contract
+```
+
+On Phoenix the hops are different — router, controller or LiveView, context, changeset, `Repo`,
+worker, template — and the point is the same: no directory contains the behaviour.
+
+`accountable-review` reorganizes the PR around the **behaviour being implemented**, not just the
+order of files in the diff. Persistence, the endpoint contract and the frontend boundary get no
+sections of their own, on purpose: one behaviour crosses all three, and giving each its own section
+means describing that behaviour three times.
+
+---
+
+## The most important code may not have changed 👀
+
+A PR can change the meaning of code without changing its lines.
+
+Examples:
+
+- an existing policy now controls a new flow,
+- an existing model invariant becomes load-bearing,
+- an unchanged serializer gains new meaning,
+- an existing query gets a new caller,
+- a TypeScript type now participates in a changed backend contract.
+
+A normal diff cannot show those relationships.
+
+A Review Map can.
+
+> **The lines stayed the same. The system around them did not.**
+
+Finding that code is the expensive half of the work, so the page also **records what was searched**.
+An empty result reads as evidence rather than as omission, and every recorded search is a command you
+can re-run.
+
+---
+
+## What is a Review Map? 🧭
+
+A Review Map is a guided path through the PR.
+
+It helps the reviewer understand:
+
+1. **What is this change for?**
+2. **What behaviours were added or modified?**
+3. **How does each behaviour work?**
+4. **What existing code is affected?**
+5. **What should I pay attention to?**
+6. **How can I validate important assumptions?**
+7. **What questions still need human judgment?**
+
+For each meaningful behaviour, the map can include:
+
+```text
+why this exists
+implementation
+relevant tests
+affected but unchanged code
+things to understand
+how to validate
+reviewer questions
+```
+
+Claims about unchanged code come with the code attached: a collapsed excerpt of the real source,
+quoted by a script rather than retyped, that you open when you are ready to check that particular
+claim. The page reads completely with every excerpt closed — the sentence carries the consequence,
+the excerpt carries the proof.
+
+The Review Map does **not** replace the diff.
+
+It helps the diff make sense.
+
+📖 Full anatomy of the page — every section, the staging behaviour, the excerpt and Rails-anchor
+rules — is in [`docs/review-map.md`](docs/review-map.md).
+
+---
+
+## Evidence over confidence 🔬
+
+The tool separates what is known from what is inferred.
+
+A statement may come from:
+
+- changed code,
+- unchanged repository code,
+- tests,
+- inference,
+- or uncertain intent.
+
+A claim the diff shows directly carries no label. Everything else is marked — *from unchanged code*,
+*inferred from tests*, *inferred*, *uncertain* — so an inference can never pass as a fact. Where the
+tool cannot establish intent, it says so:
+
+> It is unclear whether existing time entries stay editable after archival. No test covers it.
+
+Every claim also carries a `file:line` into your repository, and by default a second reader attacks
+those claims before the page is finished (see [Usage](#usage-) → *effort*).
+
+Nor does the page claim to have found everything. Three independent passes over the same 109-file
+diff produced eight distinct headline findings between them, with only one appearing in all three.
+Explanation is reproducible; defect discovery is sampling. The page says so, and never reads as a
+clean bill of health.
+
+The goal is not to sound confident.
+
+The goal is to help the reviewer investigate the change.
+
+---
+
+## Rails-first ❤️‍🔥
+
+The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
+behaviour often emerges from several pieces working together:
+
+- routes
+- controllers
+- Active Record models
+- validations and callbacks
+- policies
+- jobs
+- serializers
+- service objects
+- tests
+- frontend clients
+
+The plugin is designed to help reviewers understand those relationships as a system, and it knows
+where the framework's own rules bite: `update_all` at a call site the diff never opened skips the
+validation this PR adds, a uniqueness validation is not a unique index, `--sandbox` rolls back so
+`after_commit` never fires there.
+
+**Elixir/Phoenix is the second stack** — a LiveView app or a JSON API — with its own lens for the same
+job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing without the index
+behind it, and a `phx-click` renamed in a template without its `handle_event` clause crashes the
+LiveView the first time someone clicks it. Which of the two you get is detected from the repository, a
+`Gemfile` against a `mix.exs`, not configured; a repo holding both asks which to cover.
+
+Where a reviewer needs the framework rule itself, the page anchors it two ways: a documentation link
+**pinned to the versions in your own lock file** — the Rails series and gem versions from
+`Gemfile.lock`, each package's exact version from `mix.lock` — and a read-only console probe to run
+against your own application. Probes are proposed, never run: the skill does not boot your app, so no
+output on the page is ever invented.
+
+One asymmetry worth knowing rather than discovering: the Elixir documentation catalogue ships
+complete but **unverified**, and until its verification run happens it withholds every link. An
+Elixir page anchors with probes and prose and emits no documentation URL — a narrower page, not a
+broken one, and the same fail-closed rule the Rails catalogue applies per row.
+
+---
+
+## Philosophy ✨
+
+```text
+More AI productivity
+        +
+More reviewer understanding
+        =
+More speed without losing control
+```
+
+Our goal is simple:
+
+> **Move faster with AI. Stay in control.**
+
+---
+
+## Installation ⚙️
+
+### Claude Code
 
 Inside Claude Code — register the marketplace, then install the plugin:
 
-```
+```text
 /plugin marketplace add wyeworks/claude-plugins
 /plugin install accountable-review@wyeworks
 ```
@@ -54,99 +302,110 @@ claude plugin install accountable-review@wyeworks --scope project
 Scopes are `user` (default, every project), `project` (checked in, shared with collaborators), and
 `local` (this machine, this project, uncommitted).
 
-## Generate a Review Map
+### Codex
 
-```
+Not supported yet. The skill is packaged as a Claude Code plugin and depends on that harness — the
+subagent it spawns, and the artifact it publishes to.
+
+---
+
+## Usage 🚀
+
+Run it from inside the repository you are reviewing:
+
+```text
 /accountable-review:review-map              # current branch against its base
 /accountable-review:review-map 412          # a PR number
 /accountable-review:review-map https://github.com/org/repo/pull/412
 /accountable-review:review-map feature/some-branch
 ```
 
-You get back a URL. The page is a private Claude Artifact until you share it.
+You get back a URL. The page is a private Claude Artifact until you share it, and re-running for the
+same PR republishes to the same URL — so the Review Map tracks the PR across pushes instead of
+scattering links.
 
-Re-running for the same PR republishes to the same URL, so the review map tracks the PR across
-pushes instead of scattering links.
+It publishes early and fills in as parts complete: open it at minute two, watch it arrive, start
+reading the moment the part you need lands. While it is unfinished it says so in a banner, and every
+part still coming is marked pending, so a half-written page can never be mistaken for a finished one.
+
+To have one generated for every pull request instead of by hand, see
+[CI integration](#ci-integration-) below.
 
 ### How much page
 
-```
+```text
 /accountable-review:review-map 412              # --brief, the default
 /accountable-review:review-map 412 --full
 ```
 
 **`--brief`** merges the tail of the page — blast radius, cross-cutting consequences, before
-approving, coverage — into **one** section built around the blast radius, with the questions and
-commands a reviewer acts on attached. Four sections instead of seven.
+approving, coverage — into one section built around the blast radius. Four sections instead of seven.
 
-**`--full`** writes all seven, and is the shape described in *What it produces* below.
+**`--full`** writes all seven. Reach for it on a diff you are going to live inside for an hour — a
+migration, a change spanning both sides of the API, someone else's hundred-file feature.
 
-What `--brief` does **not** do is thin out the first three sections. The behaviour flows are the
-product, and a level that summarised them would be selling the thing the page exists for — so §§ 1–3
-are identical at both levels, same depth, same excerpts, same rules. What it declines to spend is
-four section shells on material that is often one screen: it merges, it drops the coverage ledger's
-attention and grouping columns, and it drops the comprehension checkpoint. Every changed file still
-appears, and the completeness check still runs, at both levels.
+The level changes how many sections there are, never how deeply the behaviour flows are explained:
+the first three sections are identical at both levels, and every changed file appears either way.
 
-Reach for `--full` on a diff you are going to live inside for an hour — a migration, a change
-spanning both sides of the API, someone else's hundred-file feature.
-
-**`--review`** is planned: a code-review pass on top of the map, with its findings verified and
-threaded into the flow that owns each one. It is not implemented, and passing it stops the run and
-says so rather than producing a page that quietly leaves it out.
+**`--review`** — a code-review pass threaded into the map — is declared but not implemented. Passing
+it stops the run and says so, rather than producing a page that quietly leaves it out.
 
 ### How hard it works
 
-A separate axis, and orthogonal to the one above:
+A separate axis, orthogonal to the one above:
 
+```text
+/accountable-review:review-map 412                 # --effort high, the default
+/accountable-review:review-map 412 --effort low    # opt out of the falsification pass
 ```
-/accountable-review:review-map 412                    # --effort high, the default
-/accountable-review:review-map 412 --effort low       # opt out of the falsification pass
-/accountable-review:review-map 412 --full
-```
 
-Everything the skill writes rests on claims it checked itself — and the context that wrote a claim
-is the one least able to see what it assumed. **`--effort high`**, which is what you get unless you
-ask otherwise, adds a second reader that does not share that context. Once the behaviour flows are written, one read-only `claim-falsifier` subagent
-is sent at each of them, with a single mandate: assume this flow is wrong in ways that matter, and
-find evidence in the repository that contradicts it. It produces no competing explanation and
-rewrites nothing — it comes back with challenges, each anchored in a line it opened, plus the claims
-it attacked and could not break.
+Everything the skill writes rests on claims it checked itself — and the context that wrote a claim is
+the one least able to see what it assumed. **`--effort high`**, the default, adds a second reader that
+does not share that context: once the behaviour flows are written, one read-only `claim-falsifier`
+subagent is sent at each of them, with a single mandate — assume this flow is wrong in ways that
+matter, and find evidence in the repository that contradicts it. It rewrites nothing; it returns
+challenges, each anchored in a line it opened. The run then opens the cited file itself and corrects,
+downgrades or drops the claim. A challenge it cannot confirm is dropped, exactly as an unconfirmed
+finding is.
 
-The run then does to those challenges what it does to any other finding: opens the cited file itself,
-and corrects, downgrades or drops the claim. A challenge it cannot confirm is dropped, exactly as an
-unconfirmed finding is.
+It is on by default because it is very nearly free and it changes what the page finds: on a 28-file
+pull request the whole pass cost 23 seconds of waiting, under 1% of the run, and the same change
+reviewed without it missed five things the falsified page carried. `--effort low` turns it off, which
+is worth doing when the diff is small enough that a second reader has nothing to find.
 
-It is on by default because it is very nearly free and it changes what the page finds. The agents
-read while the run keeps drafting rather than instead of it: on a 28-file pull request the whole
-pass cost 23 seconds of waiting, under 1% of the run, and the same change reviewed without it missed
-five things the falsified page carried. `--effort low` turns it off, which is worth doing when
-the diff is small enough that a second reader has nothing to find.
-
-That is still the one carved exception — the skill otherwise spawns nothing at all, because an
-earlier version fanned work out to helper agents and paid 997 seconds, 41% of its wall clock, in a
-single stalled turn.
-
-**The page looks exactly the same either way.** No badge, no marker, no count of what was corrected.
-Verification is not a feature the page advertises: an evidence tier says how a claim is known, and a
-stamp saying how hard someone looked is the clean bill of health this page must never read as. What
+**The page looks exactly the same either way.** No badge, no marker, no count of what was corrected —
+a stamp saying how hard someone looked is the clean bill of health this page must never read as. What
 changed is reported to you in the terminal, not to whoever opens the link.
 
-## Team CI setup
+---
+
+## Example Review Map 🖼️
+
+No public example is linked yet — the pages produced so far are private artifacts of real client
+pull requests. The fastest way to see one is to run the skill against a branch of your own; a
+four-file bugfix produces a one-screen page in a couple of minutes.
+
+What a good example shows:
+
+- behaviour-oriented navigation, with a contents rail that fills in as the page is written
+- affected-but-unchanged code, with the searches that found it recorded and re-runnable
+- evidence vs. inference, labelled per claim
+- collapsed source excerpts, quoted verbatim from your repository
+- validation steps as real commands against your app
+- reviewer questions only the author can answer
+
+---
+
+## CI integration 🔁
 
 One command turns "someone runs the review map by hand, sometimes" into "every review-ready pull
 request has one, and the whole team can open it":
 
-```
+```text
 /accountable-review:setup-ci
 ```
 
-It looks at the repository first — what CI you already have, whether Claude Code is already running in
-it, what conventions your workflows follow — and then writes one file,
-`.github/workflows/accountable-review.yml`. It touches nothing else, and running it twice is safe: the
-second run compares what it would write against what is there and says *unchanged*.
-
-```
+```text
 pull request marked ready for review
         ↓
 Review Map generated for that exact revision
@@ -156,13 +415,19 @@ uploaded as a GitHub Actions artifact
 available to everyone who can see the repository
 ```
 
-Then a push to that pull request regenerates it, and cancels the run that is now describing a
-revision nobody is reviewing.
+Every reviewer opens the same artifact instead of independently reconstructing the same context. A
+push to that pull request regenerates it, and cancels the run that is now describing a revision
+nobody is reviewing.
+
+Setup looks at the repository first — what CI you already have, whether Claude Code already runs in
+it, what conventions your workflows follow — and then writes one file,
+`.github/workflows/accountable-review.yml`. It touches nothing else, and running it twice is safe:
+the second run compares what it would write against what is there and says *unchanged*.
 
 ### What you get
 
 | | |
-|---|---|
+| --- | --- |
 | Triggers | `ready_for_review`, `synchronize`, `reopened` |
 | Draft pull requests | Ignored — pushing to a draft costs nothing |
 | Fork pull requests | Skipped: a `pull_request` run from a fork gets no secrets |
@@ -184,344 +449,106 @@ check with a verdict in it, and it never boots your application: no migrations, 
 no scripts from the pull request. That is the same principle the page itself follows — validation
 commands are shown to a reviewer, never run on their behalf.
 
-### Configuration, if you need any
+🚚 Artifacts are the default, not the contract: a Review Map is portable static HTML, and generation
+is separated from delivery so a team can send it somewhere browsable instead. See
+[`docs/ci.md`](docs/ci.md) for the delivery seam and how to add a provider.
 
-Usually none. Where you do, `.accountable-review.yml`:
+---
+
+## Technical overview 🧩
+
+| | |
+| --- | --- |
+| **Supported agents** | Claude Code. Two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, spawned per behaviour flow at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
+| **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
+| **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
+| **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
+| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Those sections need both sides in the diff; with no client, or a PR that does not touch one, they are omitted rather than filled in. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
+| **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
+| **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. Behaviour flows come from grouping the diff by behaviour; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
+| **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, inline SVG diagrams from a fixed catalogue, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
+| **Publishing** | Interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
+| **Completeness** | One mechanical check at the final publish: set equality between the page's coverage ledger and `git diff --name-only`. A file cannot be silently dropped. |
+| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, `contents: read`, drafts and forks skipped, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact. |
+
+---
+
+## Configuration 🛠️
+
+Nothing is required, and that is deliberate: every setting is a thing that can go stale against the
+repository it describes.
+
+What you choose per run:
+
+| | |
+| --- | --- |
+| **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
+| **Detail level** | `--brief` (default) or `--full`. |
+| **Effort** | `--effort high` (default) or `--effort low`. |
+| **Output** | A published artifact by default; `--output <dir>` writes static HTML instead. |
+
+In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
+optional:
 
 ```yaml
 review_map:
-  mode: full
+  mode: full             # brief | full
+  effort: high           # high | low
   delivery:
     provider: github-artifact
     retention_days: 14
 ```
 
-It is read when the workflow runs, so changing it does not mean regenerating the workflow. Setup will
-not write one that only restates the defaults — a file nobody chose is one more thing to keep in sync.
+Precedence is `explicit flags > .accountable-review.yml > defaults`, and it is implemented rather
+than aspirational: the config reader emits a line only for a key the file actually contains, so
+"configured to the default" is distinguishable from "not configured". `setup-ci` will not write a
+file that only restates the defaults — a file nobody chose is one more thing to keep in sync, and a
+later reader treats `retention_days: 30` as load-bearing when nobody picked it.
 
-### Artifacts are the default, not the contract
+Everything else is discovered instead of configured: which stack this is, the Rails root or the Mix
+project, the test framework, whether the app is API-only or LiveView, how authorization is attached,
+the frontend location, the framework and package versions, and the project's own conventions. Where
+a project documents conventions — `CLAUDE.md`, a style guide — the skill reads them; where it does
+not, house style is inferred from adjacent unchanged code, which is usually more accurate than a
+stale document anyway.
 
-**Review Maps are portable static HTML.** The default CI setup stores them as GitHub Actions
-artifacts because that needs no hosting, no extra credential, no external service and no manual step
-to share them. The cost is honest and worth naming: an artifact has to be downloaded and extracted
-before anyone can read it.
+Repository-specific guidance is therefore expressed the way the rest of your tooling already
+expresses it: in the repo's own convention docs, not in a config file belonging to this plugin.
+Adding an assumption about project layout would be a regression, so if the skill guesses your layout
+wrong, that is a bug worth reporting.
 
-Generation and delivery are separate on purpose:
+---
 
-```
-Review Map generation  →  review-map/index.html  →  delivery provider
-```
+## Contributing 🤝
 
-Generation writes a static directory and knows nothing about where it ends up. A provider is one
-script that says where it went:
-
-```json
-{ "provider": "github-artifact",
-  "location": "accountable-review-pr-412-a93bd21",
-  "browsable": false,
-  "stable_url": null }
-```
-
-A static host returns `browsable: true` and a URL people can click. Adding one — S3, R2, an internal
-static host, a Claude Artifact — changes nothing about how the page is produced, which is the whole
-point of the seam. A generic `command` provider is already there for teams that would rather write
-four lines of their own shell than wait for an adapter.
-
-Claude Artifacts are deliberately *not* the CI default. They are an excellent destination — it is
-where the interactive skill publishes — but automatic organisation-wide sharing is not a reliable
-zero-configuration path today, so nothing in the architecture depends on them.
-
-## What it produces
-
-At `--full`, seven sections in the order a reviewer actually works, each owning one kind of thing,
-with any the diff does not earn omitted outright. At the default `--brief`, the first three are these
-unchanged and the last four are one section — see *How much page* above:
-
-- **What changed** — intent, scope and the central behavioural change, with the use cases named as
-  actor plus behaviour. Derived from tests, code and commits rather than copied from a possibly-stale
-  PR description.
-- **Behaviour flows** — the bulk, grouped by behaviour rather than by directory, and the one place
-  each finding is explained. Each flow carries only what is specific to it: before and after, the
-  path through the stack, the column it writes, the endpoint it goes through, the field crossing the
-  backend/frontend boundary, the unchanged code it gives new meaning to, its tests and its test gap,
-  and the decisions worth pausing on. It comes second because everything after it is easier to read
-  once the mechanisms are known.
-- **Start here** — the moment you open the code: one list, in the order to read it, of where to go
-  and why. What most needs judgment and what to read first are the same question, so it is answered
-  once. Each entry links into the flow that explains it.
-- **Blast radius** — the same change seen whole, after the flows: the primary path end to end, plus
-  the code that is *affected but unchanged* — the callers, serializers, queries, factories, policies
-  and TypeScript types whose meaning this diff just changed. Where a flow already explained one,
-  this is a pointer back to it; what no single flow owns is explained here. This is the part no diff
-  can produce, and the reason the page exists.
-- **Cross-cutting consequences** — only what genuinely spans flows: schema structure and migration
-  safety, application invariants set beside database invariants, the authorization model, background
-  jobs, deploy ordering, test infrastructure that changes how other specs behave, and changes to
-  `CLAUDE.md`, hooks and skills, which alter how every human and agent works in the repo.
-- **Before approving** — questions only the author can answer, validations worth running, the test
-  gaps gathered in one place, and a comprehension checkpoint of at most five questions.
-- **Coverage** — every changed file, where it is covered, and whether it is primary, supporting or
-  secondary work.
-
-### Each fact has one home
-
-Persistence, endpoint contracts and the frontend boundary have no sections of their own, on purpose.
-One behaviour crosses all three, so giving each its own section meant describing that behaviour three
-times — and an earlier version did, along with a findings section that got re-explained later and a
-checkpoint that quizzed you on the paragraph above it.
-
-Now every fact, finding, risk and reviewer action is explained in exactly one place and referenced
-from anywhere else in a sentence. On a real PR that took a 21-page page to 9 with nothing of value
-removed. The reader who thinks *"I already read this"* stops reading, and everything after that is
-wasted no matter how good it is.
-
-The section order is what makes that affordable. The flows come before the starting list and before
-the blast radius, so those two can point at a flow — *"`ActiveProjects` is explained in Flow B"* —
-instead of carrying enough of the mechanism to be readable on their own.
-
-### It arrives in stages
-
-A large diff takes a while to explain, and a reviewer holding a ticket should not wait for all of it.
-The page is published early and republished as parts complete, always to the same URL: open it at
-minute two, watch it fill in, start reading the moment the part you need lands.
-
-The behaviour flows are the bulk of the page, so they arrive **one flow at a time** rather than all
-together — the split and what each flow will cover land first, then each flow as it is written.
-
-While it is still being written it says so, in a banner, and every part that is coming but not yet
-written is marked pending in the contents and in place. That is the difference between a useful
-early page and a dangerous one — a reader who sees no contract section should be able to tell whether
-there was nothing to say or whether it simply has not been written yet. At the final publish the
-banner and the markers are removed, and the coverage gate runs.
-
-A run that dies halfway therefore leaves a page that is honest about being half a page, rather than
-leaving nothing at all.
-
-### The review unit
-
-Every meaningful change gets the same seven fields: why this exists · implementation · relevant
-tests · **affected but unchanged** · things to understand · how to validate · reviewer questions.
-
-Validation steps are real commands against your repository, not invented ceremony. Tests appear
-twice on purpose: beside the behaviour they pin, and again as their own section when the change
-touches the test machinery itself.
-
-### The code comes to you
-
-Claims about *changed* code are cheap to check — you have the diff open anyway. Claims about
-*unchanged* code are not: following one means opening an unfamiliar file with no context, so the
-readers who do not follow it end up taking the finding on trust. Trust is the thing this page exists
-to remove.
-
-So the lines come to the reader. Where a claim would otherwise be taken on faith, the page carries a
-collapsed excerpt of the real source, which you open when you are ready to check that particular
-claim — verbatim, quoted by a script rather than retyped, and reading as a diff for changed lines and
-as plain source for unchanged ones. Each block also says which state it is quoting, and the script
-works that out from the diff instead of asserting it: the bytes of a quotation vouch for themselves,
-and its label is the one part that cannot. The excerpts matter most on an unpushed branch, where nothing on
-the page is clickable at all.
-
-They also make the page shorter, which is the part that surprised us. A paragraph describing what a
-guard does is longer than the guard, less precise, and unverifiable — so where the page would have
-narrated the mechanism, it shows the lines and states the implication in one sentence instead.
-
-One rule keeps this from turning into a diff viewer: **the page reads completely with every excerpt
-closed.** The sentence carries the consequence, which is the thing the code does not say; the excerpt
-carries the proof. What gets dropped is narration, never the finding.
-
-### It anchors framework behaviour, and proposes ways to see it
-
-A lot of what a reviewer needs to know about a change is not in the change. `update_all` at a call site
-the diff never opened skips the validation this PR adds; a uniqueness validation is not a unique index;
-`--sandbox` rolls back, so `after_commit` never fires there. On the Phoenix side, `Repo.update_all`
-builds no changeset at all, a `unique_constraint` does nothing without the index behind it, and a
-`phx-click` renamed in a template without its `handle_event` clause crashes the LiveView the first time
-someone clicks it. So the page carries three anchors for a claim that rests on the framework behaving
-as the framework.
-
-**A link to where the rule is written down** — the Rails guides, the Rails API, hexdocs, or the
-library's own docs. It sits beside the claim's `file:line`, never instead of it: a link to the guides
-says nothing about *your* application, and the finding is always about your application. URLs come from
-a catalogue that ships with the skill, because a run cannot open a URL to check it and a
-plausible-looking API path is a 404 you discover on the reader's behalf.
-
-**Every link is pinned to the version you are running.** The series from your `Gemfile.lock` for the
-Rails hosts, the exact locked version for a gem's tag, each package's exact version from your
-`mix.lock` for hexdocs — so a 7.1 app gets 7.1 documentation, and the page you land on prints "Ruby on
-Rails 7.1.6" in its header for you to check against your own lock file. An unpinned link silently
-means *current stable*, which is how a tool ends up explaining 8.1 behaviour to a 7.1 app with total
-confidence. Where the catalogue has no verified page for your version, you get no link at all — the
-mechanism is explained in prose against a line of your code instead, because an unlinked explanation
-cannot mislead and a link to the wrong version can.
-
-**On Elixir, that "no link at all" is currently the whole answer, and it is worth being plain about.**
-The Elixir catalogue ships complete — every path, pinned per package, with the same rules — but not one
-of its rows has been opened yet, and its own release gate is a verification run that opens all of them.
-Until that run happens the file withholds every link: an Elixir page anchors with probes and prose, and
-emits no documentation URL. That is a narrower page, not a broken one, and it is the same fail-closed
-rule as above applied to a whole file rather than one row. Shipping an allowlist nobody had opened
-would have been the more impressive-looking choice and the wrong one — a URL constructed from a naming
-pattern is the one defect class no script catches.
-
-Pinning fixes the link, not the sentence, so a handful of concepts get no sentence either. `enum`,
-`perform_later`'s enqueue timing and strong parameters all changed inside the supported range — 8.0
-introduced `params.expect`, 8.0 removed `enum`'s keyword syntax — and no single claim about them is
-true of every app. For those the page names the setting that decides it and proposes a probe rather
-than telling you what Rails does. The Rails marks came out of reading four CHANGELOGs across three
-series; the Elixir ones are a first pass that no equivalent audit has confirmed yet, and the file says
-so of itself rather than letting a reader assume otherwise.
-
-**A console probe** — `bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'`,
-`puts Project.archived.to_sql`, `connection.indexes(:projects)`; or, on Phoenix,
-`mix run -e 'IO.inspect MyApp.Project.changeset(%MyApp.Project{}, %{}).errors'`,
-`Ecto.Adapters.SQL.to_sql(:all, MyApp.Repo, query)`, `mix phx.routes`. For a framework-shaped change
-this is usually better than a paragraph, because the behaviour is assembled from things a diff cannot
-show you together: in Rails at boot, from the class, its concerns, its parents and the schema; in
-Phoenix at compile time, from macros and from the `live_session` block your new route may or may not
-have landed inside.
-
-**And a probe cannot be out of date**, which is why it is the anchor the Elixir half leans on while its
-catalogue is closed. It interrogates the installed code instead of describing it.
-
-Probes are **proposed, not run**. The skill never boots your app, so the page shows the command and
-never its output — an invented `=> true` would be the most concrete-looking thing on the page and the
-only part of it that was fiction. Read-only reflection is written for `bin/rails runner` or
-`mix run -e`; a write is written for `bin/rails console --sandbox` in Rails, and — because Elixir has
-no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` in
-Phoenix. The page says which, because a reviewer should not be able to change a database by pasting
-what it told them to.
-
-**And occasionally a primer** — a short callout inside the flow it belongs to, naming the API, saying
-what the behaviour actually is in two paragraphs, and pointing at the pinned documentation. It is for
-the narrower case where you cannot make the decision in front of you *without* the framework rule:
-which of `archived_at_changed?` and `saved_change_to_archived_at?` a callback wants, say, when the
-answer decides whether the callback fires at all. It cites the line in your code that earned it, like
-any other link, and the four-line snippet beside it runs on a class your app does not have — so its
-`# =>` lines quote the manual rather than claiming something about your application that nothing ran.
-
-It works for the rest of the stack too, minus the branding: a primer about a gem — Pundit's
-`authorize` raising rather than returning false, a Sidekiq job re-running `perform` from the top —
-is the same callout with the mark and the trademark line dropped and a neutral rule in place of the
-red one. The logotype is an attribution, not decoration, so it appears only where the link does.
-
-There is at most one per flow, and most flows get none. That ceiling is the point: the failure mode
-here is not a wrong link, it is a page that explains every mechanism it touches, becomes a Rails
-tutorial with a diff attached, and reads as more thorough while getting harder to navigate. An anchor
-of any kind has to be earned by a decision you have to make.
-
-### It separates evidence from inference
-
-A claim the diff shows directly carries no label. Anything else is marked — *from unchanged code*,
-*inferred from tests*, *inferred*, *uncertain* — so an inference can never pass as a fact. Where the
-intent cannot be established, the page says so instead of guessing:
-
-> It is unclear whether existing time entries stay editable after archival. No test covers it.
-
-### It adapts to the PR
-
-The detail level decides how many sections there are; this decides how heavily each one is weighed,
-and the two are separate axes. Parts appear only when the diff earns them, and depth scales with
-weight. A four-file bugfix produces
-a one-screen page, not an empty template. If a PR genuinely does not need one, the skill says so
-instead of generating ceremony.
-
-### It covers the whole diff
-
-Ranking attention is not the same as skipping things. Every file in the diff appears somewhere, even
-if only as a ledger row reading "regenerated by the migration". A reviewer who wants to read all of
-it can, and never has to wonder whether something was quietly dropped.
-
-### It is not a code reviewer, and it does not grade
-
-Claude Code ships `/code-review`, and many teams add their own. This skill answers a different
-question — *what is this, and where do I look?* — and produces a document that outlives the review
-rather than comments that vanish into it. There is no severity scale, no risk score, no approval
-recommendation — and no verification badge either: the reviewer decides, the page equips them. It
-never posts to GitHub.
-
-Nor does it claim to have found everything. Three independent passes over the same 109-file diff
-produced eight distinct headline findings between them, with only one appearing in all three.
-Explanation is reproducible; defect discovery is sampling. The page says so, and never reads as a
-clean bill of health.
-
-## What it assumes
-
-Only that it is running in Claude Code, against a git repository containing a Rails or a Phoenix
-application.
-
-**Which of the two is detected, not configured** — a `Gemfile` or `config/application.rb` for Rails, a
-`mix.exs` for Elixir — and it decides which lens file and which doc catalogue the run reads. A repo
-holding both asks you which to cover rather than guessing. A repo holding neither says so and covers
-the diff with the parts of the page that do not depend on a stack, rather than applying a Rails lens
-to something that is not Rails and inventing findings.
-
-Everything else is discovered too: where the Rails root is (repo root, a subdirectory, an engine) or
-where `lib/<app>` and `lib/<app>_web` are, RSpec or Minitest or ExUnit, API-only or server-rendered or
-LiveView, how authorization is attached, whether there is a separate frontend at all and where its API
-client and types live, and whether the project documents its own conventions. Where a project has no
-convention docs, the skill infers house style from adjacent unchanged code — usually more accurate than
-a stale document anyway.
-
-The separate-frontend sections need both sides in the diff. In a repository with no client, or a PR
-that does not touch one, they are omitted rather than filled in. A LiveView app has no separate client
-by design, and there the same material goes to the seam it actually has: the `phx-*` attribute and the
-callback that answers it, the form field and the changeset's `cast` list.
-
-`gh` is used when present, for PR metadata and deep links. A citation to a changed line lands on the
-PR's diff page, on that line — the page the reviewer is already working in, where what the line
-replaced is still visible. A citation to code the change did not touch cannot: no diff view can
-address a line outside a hunk, so those land in the file at a pinned commit, which is also how the
-page cites code as it was before the change. Without `gh`, or without a PR, the skill falls back to
-the local branch and still links citations as long as the commit is pushed. On an unpushed branch it
-degrades to plain text rather than emitting permalinks that would 404, and says so in the page.
-
-## Layout
-
-```
-.claude-plugin/plugin.json         plugin manifest (name, version, metadata)
-agents/claim-falsifier.md          adversarial verifier, spawned per flow at --effort high
-ci/                                what runs in CI, not what a skill reads
-├── generate-review-map.sh         runs review-map non-interactively into a static directory
-└── delivery/
-    ├── deliver.sh                 the delivery seam: dispatch, and the DeliveryResult
-    ├── github-artifact.sh         the default provider
-    └── command.sh                 hand the directory to a command the team owns
-skills/review-map/
-├── SKILL.md                       the procedure Claude follows
-├── references/
-│   ├── report-format.md           parts, review-unit format, evidence tiers, deep links
-│   ├── rails-nextjs.md            Rails: what to look for per layer, runtime probes, search recipes
-│   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the other stack
-│   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
-│   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
-│   └── page-template.html         design system, components, and the diagram catalogue
-├── scripts/
-│   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
-│   ├── ledger-rows.sh             generates the ledger rows from the diff
-│   └── coverage-gate.sh           asserts the ledger accounts for every changed path
-└── evals/                         fixtures, page and section cases, and the mechanical checks
-skills/setup-ci/
-├── SKILL.md                       inspect the repository, then configure CI
-├── references/
-│   ├── workflow.md                every part of the generated workflow, and why
-│   ├── config.md                  .accountable-review.yml — the whole schema and precedence
-│   └── delivery.md                the delivery contract, and how to add a provider
-├── templates/workflow.yml         the workflow itself
-├── scripts/                       inspect, render, install, read-config
-└── tests/                         the deterministic tests, and the proof they fire
-```
-
-## Contributing
-
-To run the plugin from a checkout without installing it:
+Issues and pull requests are welcome. To run the plugin from a checkout without installing it:
 
 ```bash
+cd /path/to/your/rails-app
 claude --plugin-dir /path/to/accountable-review
 ```
 
-`/reload-plugins` picks up edits without restarting. See `.claude/CLAUDE.md` for how the four
-documents divide the work and which invariants span them.
+`/reload-plugins` picks up edits without restarting. There is no build and no test suite in the usual
+sense — the "source" is prose that another Claude instance executes, so changes are verified by
+running the skill against a real PR and reading the page it produces, plus an eval harness for
+judging a wording change against planted findings.
 
-## License
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the layout, the eval loop and the release process.
 
-MIT
+---
+
+## License 📄
+
+[MIT](LICENSE).
+
+---
+
+## About WyeWorks
+
+`accountable-review` is an open-source project by **WyeWorks**.
+
+We build software and help teams adopt AI-assisted development practices without giving up the
+engineering understanding required to operate and evolve what they build.
+
+**AI can help us produce more code. The challenge is making sure our teams continue to understand it.**
