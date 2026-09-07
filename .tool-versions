@@ -1,0 +1,4 @@
+# minitest is a BUNDLED gem rather than a default one, so `require "minitest/autorun"` is
+# not guaranteed on whatever ruby happens to be on PATH. .github/workflows/validate.yml
+# pins its own for the same reason; keep the two in step.
+ruby 3.4.2

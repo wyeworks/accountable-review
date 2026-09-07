@@ -41,7 +41,8 @@ file and four shell scripts, which is ordinary software with right answers, so i
 breaks ten things `run.sh` claims to check and asserts the suite notices each one. Both run in CI on
 every push, for the reason `evals/checks/self-test.rb` does: a check that passes because it never
 looked is worse than no check. When you edit the workflow template or any script under
-`skills/setup-ci/scripts/` or `ci/`, run both.
+`skills/setup-ci/scripts/` or `ci/`, run both — `bin/evals offline` runs them beside the review-map
+suites, which is what CI does too.
 
 ## Working on the skill
 
@@ -80,8 +81,9 @@ hand-authored upstream in `frozen/` and grades that — which is what makes "run
 affordable, and three runs is the smallest sample that separates a wording change from noise. A
 **component** check runs on a script's output or on one `<svg>`.
 
-`./run.sh behaviour-flows -n 3 --judge` then `./report.sh` is the loop; results carry the skill's git
-sha, so a pass rate is attributable to a version of the prose. `--judge` adds the other half: one
+`bin/evals section behaviour-flows` is the loop — `./run.sh behaviour-flows -n 3 -j 3 --judge` then
+`./report.sh`, which is what that dispatcher supplies and all it supplies; results carry the skill's
+git sha, so a pass rate is attributable to a version of the prose. `--judge` adds the other half: one
 model pass per fragment over the written expectations, anchored by running inside the fixture with
 the frozen upstream, its counts under their own keys and never summed with the mechanical ones.
 
@@ -130,6 +132,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
+| `bin/evals` | One command per eval scenario — `offline`, `section`, `page`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for eleven of the twelve checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
