@@ -39,13 +39,15 @@ require_relative "checks/lib/review_map/check"
 SCOPES = {
   "all"              => %w[completeness build-state page-invariants excerpts behaviour-flows
                            start-here reach impact-paths before-approving searches rails-anchors
-                           diagram],
-  "core"             => %w[completeness build-state page-invariants excerpts before-approving rails-anchors],
-  "behaviour-flows"  => %w[page-invariants excerpts behaviour-flows searches rails-anchors diagram],
-  "start-here"       => %w[page-invariants start-here],
+                           link-form diagram],
+  "core"             => %w[completeness build-state page-invariants excerpts before-approving
+                           rails-anchors link-form],
+  "behaviour-flows"  => %w[page-invariants excerpts behaviour-flows searches rails-anchors
+                           link-form diagram],
+  "start-here"       => %w[page-invariants start-here link-form],
   "reach"            => %w[page-invariants excerpts reach impact-paths searches rails-anchors
-                           diagram],
-  "before-approving" => %w[page-invariants before-approving rails-anchors],
+                           link-form diagram],
+  "before-approving" => %w[page-invariants before-approving rails-anchors link-form],
   "diagram"          => %w[diagram],
 }.freeze
 

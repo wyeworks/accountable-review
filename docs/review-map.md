@@ -285,3 +285,10 @@ address a line outside a hunk, so those land in the file at a pinned commit, whi
 page cites code as it was before the change. Without `gh`, or without a PR, the skill falls back to
 the local branch and still links citations as long as the commit is pushed. On an unpushed branch it
 degrades to plain text rather than emitting permalinks that would 404, and says so in the page.
+
+One file at a time, GitHub decides not to render a diff — a schema dump marked generated, a
+lockfile, a binary, anything past 400 changed lines — and an anchor into one of those arrives at a
+*Load diff* stub with the cited line nowhere on the screen. Citations into those files are sent to
+the pinned file instead, so the link still lands on the line, and the excerpt beside the claim is
+the one that shows the change. Nothing on the page announces which files these were; the only thing
+that differs is where the link goes.

@@ -506,6 +506,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `searches.rb` | whether a recorded search **reproduces** the entry it is offered for — re-run inside `--repo` | page and fragment |
 | `before-approving.rb` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
 | `rails-anchors.rb` | doc links against the catalogue and never standing alone; probes with no fabricated output, no unsandboxed write, and identifiers that exist in `--repo` | page and fragment |
+| `link-form.rb` | the href against the citation it sits on: the span its text names, a `#diff-` fragment that hashes back to a path in the diff, and no anchor into a diff GitHub withholds | page and fragment |
 | `diagram.rb` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.rb` | renders each diagram in both themes to PNG | page and fragment |
 
@@ -516,14 +517,24 @@ got that way, and for the four defects that the byte-for-byte corpus alone could
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
 thoroughly verified as a page.
 
-**`run.sh` passes `--repo`**, so the three checks that need the repository run on a section fragment
-rather than skipping: `searches.rb` re-runs the recorded searches inside it, `rails-anchors.rb` asks
-whether the constants a probe names exist there, and `page-invariants.rb` asks git whether the head is
-pushed — which is how the link rung finally became mechanical for section runs instead of a thing only
-a reader could catch.
+**`run.sh` passes `--repo`**, so the checks that need the repository run on a section fragment rather
+than skipping: `searches.rb` re-runs the recorded searches inside it, `rails-anchors.rb` asks whether
+the constants a probe names exist there, `page-invariants.rb` asks git whether the head is pushed —
+which is how the link rung finally became mechanical for section runs instead of a thing only a reader
+could catch. `link-form.rb` is in every section scope too, but only its first rule grades there:
+run.sh passes `--repo` and not `--base`, so the span a citation's text names is checked on a fragment
+while the two rules that need to know what the diff holds — which files GitHub withholds, and whether
+a `#diff-` fragment hashes to a real path — SKIP until a page case supplies both. Passing `--base`
+here would light them up and would also change what `excerpts.rb` reads for its state tag, so it is
+left alone: an old result line has to keep meaning what it meant.
 
-`searches.rb` is the one check whose rule is a relation between the page and a repository, so it is
-also the one whose *coverage* has to be reported: it prints how many entries it skipped as pointers,
+`searches.rb` and `link-form.rb` are the two checks whose rule is a relation between the page and a
+repository. `link-form.rb` is also the reason `golden/links-repo.sh` exists: the third of its rules
+cannot be graded against files alone, so that fixture is a real two-commit repository, built under
+`TMPDIR` with every commit field fixed so its base SHA is stable for `frozen.rb`, and expanded into
+the cases file as `@REPO@` by `lib/review_map/fixture.rb`. A rule that could only ever SKIP in
+`self-test-cases.txt` is what that file exists to prevent. `searches.rb` is the one whose *coverage*
+has to be reported as well: it prints how many entries it skipped as pointers,
 how many it could not resolve to a file, and — when nothing was recorded at all — that provenance was
 unverifiable rather than false. A handful of FAILs over an unstated denominator would read as a clean
 sweep of everything else.

@@ -1292,6 +1292,118 @@ FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered with
 ## --page invariants-verdict.html
 exit=1
 FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment links-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "unit 1" fills things-to-understand
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --page links-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "unit 1" fills things-to-understand
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --fragment links-collapsed-anchor.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --page links-collapsed-anchor.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --fragment links-collapsed-no-excerpt.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "unit 1" fills things-to-understand
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --page links-collapsed-no-excerpt.html
+exit=0
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "unit 1" fills things-to-understand
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --fragment links-range-truncated.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --page links-range-truncated.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --fragment links-unknown-anchor.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
+## --page links-unknown-anchor.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  the first flow opens with no prose before it — say why the split is what it is
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+FAIL  unit "unit 1" has no things-to-understand — without one it is a ledger row, not a unit
+PASS  unit "unit 1" carries citations
+PASS  1 review unit(s) inspected
 ## --fragment reach-brief-uncited.html
 exit=1
 PASS  no flow is grouped by directory or layer

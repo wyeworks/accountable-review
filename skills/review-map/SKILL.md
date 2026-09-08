@@ -23,10 +23,10 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## What is bundled
 
-The procedure below relies on eight bundled files. Read each at the step that needs it rather than up
+The procedure below relies on nine bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
-Two of the seven come in a pair, and **step 2's stack detection picks one of each pair, never both.**
+Two of the nine come in a pair, and **step 2's stack detection picks one of each pair, never both.**
 A Rails run reads the Rails lens file and the Rails catalogue; a Phoenix run reads the Phoenix pair.
 Reading the other stack's file costs context and teaches the wrong searches.
 
@@ -37,6 +37,7 @@ Reading the other stack's file costs context and teaches the wrong searches.
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
 | `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, the assembled flow, the two SVG diagram layouts — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
 | `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
+| `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
@@ -173,8 +174,9 @@ instructions are its own, which is the point of putting them in a separate conte
   targets for this skill, so expect this. Pick one rung from the ladder in
   `references/report-format.md` and hold it for every citation. The rung decides whether anything is
   clickable; it does not decide the form — inside a rung, a line in the diff links to the diff page
-  and a line outside it links to a blob. At rung 2 there is no PR page, so check the base SHA for
-  reachability too: without it there is no `compare` view to anchor into.
+  and a line outside it links to a blob, with one exception that is settled per file in step 3 and
+  not per citation. At rung 2 there is no PR page, so check the base SHA for reachability too:
+  without it there is no `compare` view to anchor into.
 
 ## 2. Discover the project
 
@@ -266,6 +268,22 @@ unchanged code of the same kind — often more accurate than a stale document.
   API client, frontend tests, agent and developer tooling, generated files.
 - **Keep the full file list.** Every path must appear in the finished page. This is a hard invariant,
   checked in step 10.
+- **Ask which of those files GitHub will actually render**, at link rungs 1 and 2, and hold the
+  answer for the whole run:
+
+  ```sh
+  <skill base directory>/scripts/diff-render.sh BASE HEAD --collapsed-only
+  ```
+
+  Every path it prints is one whose diff sits behind *Load diff* — a generated file, a lockfile, a
+  binary, a diff past 400 lines or 20 KB — so **a citation into one of those takes the blob form even
+  though the line is inside the diff**, because a diff anchor there lands on a stub with the cited
+  line nowhere in the page. Nothing about the page says which files these were; the only thing that
+  changes is the href, and `references/report-format.md` § *When the diff will not render* owns the
+  rule, the asymmetry and what the excerpt beside such a claim has to be. Read its trailing summary
+  too: past 300 files or 1 MB of diff, GitHub withholds files that are individually small, and that
+  is a limit to state in prose rather than to guess at per link. At rungs 3 and 4 there are no
+  hrefs, so skip this.
 - If the whole diff is trivial (a few files, no migration, no new behaviour), say so and offer to
   stop rather than generate ceremony. A page nobody needs is worse than no page.
 
@@ -777,6 +795,12 @@ Everything else about writing holds at every stage:
   diff does not contain gets a blob permalink at the SHA that line actually exists at — head for
   unchanged code, base for code the change removed or for behaviour described as it was. Both forms,
   and the rung table, are in `references/report-format.md` § *Deep links*.
+
+  Two things decide the rest of the href, and both are mechanical. A line in a file step 3 listed as
+  **collapsed** takes the blob form despite being in the diff — § *When the diff will not render*.
+  And **a citation that names a range links the range**: `:51-72` under an href ending at `R51`
+  promises a span and delivers a line, with nothing on the page to say the two disagree. `R51-R72`
+  in a diff anchor, `#L51-L72` in a blob, both ends on the same side.
 - The page lives at `$W/page.html` — the work directory derived in step 1 — and never in the repo.
   `page-skeleton.sh --out` creates it; every stage after that edits it in place.
   The page must never become part of the diff it describes. Excerpt fragments go in the same

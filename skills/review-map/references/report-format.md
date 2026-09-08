@@ -552,6 +552,11 @@ excerpt is the only followable evidence there is: lean towards more. At rungs 1 
 applies as written — clickable citations are not a reason to cut it, because the reason a reader does
 not click is the cost of arriving in an unfamiliar file, and a working link does not lower that cost.
 
+One file at a time, rungs 1 and 2 have the same condition: where GitHub will not render a file's
+diff, its citations link the file instead and lose the before-and-after, so those earn the `--diff`
+excerpt the same way a rung-3 citation earns any excerpt. § *When the diff will not render* is where
+that lives; this is the paragraph it adjusts.
+
 ### Excerpts are also the shortest way to say what code does
 
 The budget above rations excerpts against prose, which is right when the excerpt is *additional*. It is
@@ -1445,10 +1450,24 @@ line the diff contains links into the diff. A line the diff does not contain lin
 ```
 https://github.com/{owner}/{repo}/pull/{n}/files#diff-{sha256(path)}R{line}
 https://github.com/{owner}/{repo}/pull/{n}/files#diff-{sha256(path)}L{line}
+https://github.com/{owner}/{repo}/pull/{n}/files#diff-{sha256(path)}R{start}-R{end}
 ```
 
 The fragment is the SHA-256 of the path *as the diff spells it* — for a rename, the new path. `R`
 selects the right side of the hunk (the line after the change), `L` the left (the line before).
+
+**A citation that names a range links a range**, which is the third form and not an optional
+flourish. `redirect_by_attempt_state_test.exs:51-72` under an href ending at `R51` selects one line
+of twenty-two, and the disagreement is invisible: the text promises a span, the link delivers a
+line, and nothing on the page says which to believe. Repeat the side letter on both ends —
+`R51-R72`, `L51-L72` — and keep both ends on the same side, because a range that starts left and
+ends right is not addressable; cite the side the sentence is about. A renderer that does not honour
+the range lands the reader at its start, which is exactly what the one-line anchor does today, so
+the form costs nothing where it is not supported.
+
+Keep writing `/pull/{n}/files`. GitHub redirects it to `/pull/{n}/changes` where the newer review
+experience is enabled and carries the `#diff-` fragment across, so the path needs no updating and
+the redirect is not a defect to chase.
 
 Land the reviewer where the reviewing happens. A blob link takes them out of the diff and into the
 file at head, where the change is invisible: the new code is there, but nothing marks what it
@@ -1457,10 +1476,10 @@ working through. A diff anchor puts the cited line in front of them with its bef
 side, on the page they were going to type their comments into anyway. So every citation that *can* be
 a diff anchor is one.
 
-**One limitation, and it degrades gently.** GitHub loads a large Files tab incrementally and keeps
-very large or generated files behind *Load diff*, so an anchor into one of those lands on the right
-diff but not on the line. That is a worse landing, not a dead link, and it is no reason to go back to
-blob links — it is a reason the collapsed excerpt beside the claim keeps earning its place.
+**One limitation, and it is a rule rather than a caveat** — see § *When the diff will not render*
+below. GitHub keeps some files behind *Load diff*, and an anchor into one of those lands on the file
+with the cited line nowhere in the page. That is the one case where a line inside the diff does not
+get a diff anchor.
 
 **Second form — the blob permalink, for the lines a diff cannot address:**
 
@@ -1484,6 +1503,49 @@ two kinds of line this page cites constantly, and both of them are the product:
   some other commit is one the reader mis-reads without ever noticing.
 
 Pin a SHA rather than a branch in either form, so links stay correct after later pushes.
+
+### When the diff will not render
+
+GitHub does not render every diff, and an anchor into one it withholds lands on a *Load diff* stub
+with the cited line nowhere in the page. **A line inside the diff, in a file GitHub will not render,
+takes the blob form** — head for a line that still exists, the diff's left side for one the change
+removed. It is the only form that can address the line at all, and it is chosen per file, from a
+verdict, not per citation from an impression: by eye every path looks renderable.
+
+`scripts/diff-render.sh BASE HEAD` prints that verdict per path, and `--path <p>` answers about one.
+It reads four signals — the repo's `.gitattributes` (`linguist-generated`, `-diff`), whether git
+calls the file binary, a short list of lockfile names, and the size of the file's own diff against
+GitHub's documented thresholds of **400 lines or 20 KB** to be loaded automatically and **20,000
+lines or 500 KB** to be shown at all. Its header carries the source and what it cannot know. Two
+of those are worth understanding here rather than in the script:
+
+- **The size rule is not the whole rule.** A one-line change to a generated file is small by every
+  measurement and GitHub collapses it regardless — a `db/structure.sql` under
+  `linguist-generated=true`, a lockfile bumping one version. Those are ordinary Rails citations, and
+  they are the ones a size threshold alone waves through.
+- **Being wrong is asymmetric, so lean towards the diff anchor.** A blob link where the diff would
+  have rendered still lands on the line and only loses the red and the green; an anchor into a
+  collapsed file loses the line and tells the reader nothing. But the anchor is what the reviewer
+  wants when it works — the comment box and the *viewed* checkbox are on that page — so the verdict
+  decides, and prose does not hedge it.
+
+**The excerpt is what carries the loss, and for these files it is the `--diff` variant.** A blob link
+shows the new line with nothing marking what it replaced, which is precisely what the reader needed;
+`excerpt.sh --diff` beside the claim shows the hunk instead. So a collapsed file behaves like a local
+rung 3: its citations earn more excerpt than the budget would otherwise allow, for the reason
+§ *Choosing a mode* gives at rungs 3 and 4 — when the link gives less, the page carries more. The
+budget itself stays where it is owned; see § *Source excerpts*.
+
+Three things not to do. **Do not emit both links** for one citation: one citation, one href, and a
+second link beside it is ornament the format keeps refusing. **Do not put it on the page as a
+notice** — no badge, no "GitHub cannot render this" caption; the reader is not being told about
+GitHub, they are being taken to the code. And **do not move the page's rung**: the rung is a property
+of the run, this is a property of a file, and the two do not interact.
+
+Two limits belong to the whole diff rather than to any path — **300 files** in a diff and **1 MB** of
+diff data — and past either, GitHub withholds files that are individually small. `diff-render.sh`
+reports both in its trailing summary. Say it once in prose where the page accounts for the diff, the
+way any other stated limit is said; do not guess per citation which paths fell off the end.
 
 ### Choosing a mode — check reachability first
 

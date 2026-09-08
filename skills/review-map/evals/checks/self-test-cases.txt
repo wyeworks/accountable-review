@@ -7,17 +7,18 @@
 # is pinned by its substring instead.
 #
 # The fifth column is optional and exists for a check that needs more than a fragment. @GOLD@
-# expands to the golden directory, so searches can be handed a repository to search: it is the
-# one check whose rule is a relation between the page and a repo, and a check that can only SKIP
-# here is exactly what this file exists to prevent. It also carries --level for a fragment
-# produced at the skill's brief detail level, --page for a rule that only holds on a whole page,
-# and an unresolvable ref for the rules that ask git a question and must not read a failure as
-# an answer.
+# expands to the golden directory, so searches can be handed a repository to search, and @REPO@
+# plus @REPO_BASE@ to the two-commit git repository golden/links-repo.sh builds, which is what
+# link-form needs to ask git which files GitHub renders. Those two are the checks whose rule is a
+# relation between the page and a repository, and a check that can only SKIP here is exactly what
+# this file exists to prevent. The column also carries --level for a fragment produced at the
+# skill's brief detail level, --page for a rule that only holds on a whole page, and an
+# unresolvable ref for the rules that ask git a question and must not read a failure as an answer.
 #
 # A DATA FILE, not a heredoc, because two readers need it: self_test.rb asserts these verdicts,
-# and frozen.rb replays the same rows so the frozen corpus covers --repo, --base and --level,
-# which its fixture sweep never passes. It was a heredoc parsed with `while IFS='|' read`, which
-# needed a sed trim per column and a deliberately unquoted fifth field.
+# and frozen.rb replays the same rows so the frozen corpus covers --repo, --base, --level and the
+# fixture repository, none of which its fixture sweep ever passes. It was a heredoc parsed with
+# `while IFS='|' read`, which needed a sed trim per column and a deliberately unquoted fifth field.
 
 diagram            | diagram-clean.html            | 0 | labels fit their boxes
  diagram            | diagram-literal-colour.html   | 1 | is a literal colour
@@ -197,3 +198,22 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
  excerpts           | excerpt-at-head.html          | 0 | against the page's own ledger | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000
  excerpts           | excerpt-typed-tag.html        | 1 | could not be read             | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000
  page-invariants    | invariants-clean.html         | 0 | cannot say whether            | --repo @GOLD@/searches-repo --head 0000000000000000000000000000000000000000
+# The href, checked against the citation it sits on. Three of these are defects a reader cannot
+# catch by looking: the text promises a span the link does not deliver, a 64-hex fragment that
+# hashes to nothing, and an anchor into a diff GitHub withholds — well-formed, live, and landing
+# on a "Load diff" stub with the cited line nowhere in the page. The last is why @REPO@ exists:
+# only a verdict from scripts/diff-render.sh tells links-collapsed-anchor.html apart from the
+# clean fixture's first citation, and a rule that could only SKIP here is what this file exists
+# to prevent.
+ link-form          | links-clean.html                | 0 | addresses the lines its text names | --repo @REPO@ --base @REPO_BASE@
+ link-form          | links-clean.html                | 0 | no citation anchors into one       | --repo @REPO@ --base @REPO_BASE@
+ link-form          | links-range-truncated.html      | 1 | names a range and links only       | --repo @REPO@ --base @REPO_BASE@
+ link-form          | links-collapsed-anchor.html     | 1 | will not render                    | --repo @REPO@ --base @REPO_BASE@
+ link-form          | links-unknown-anchor.html       | 1 | hash to no path in                 | --repo @REPO@ --base @REPO_BASE@
+ link-form          | links-collapsed-no-excerpt.html | 0 | with no excerpt to make up for it  | --repo @REPO@ --base @REPO_BASE@
+# And the two answers that are not verdicts. The first is an ordinary fragment at rungs 3 and 4,
+# where there is nothing to route; the second is git asked and unable to answer, which read as
+# "no file is withheld" until diff-render.sh grew a ref guard — the reassuring output, on no
+# evidence, which is the shape excerpts.rb's state-tag rule shipped with once.
+ link-form          | links-clean.html                | 0 | needs --repo and --base to ask which files GitHub renders
+ link-form          | links-clean.html                | 0 | could not read                     | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000

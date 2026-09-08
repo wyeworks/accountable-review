@@ -1366,6 +1366,96 @@ PASS  entries point into the flows that explain them
 PASS  entries that point at a flow carry at most one citation each
 WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
 PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment links-clean.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (2 of 2 entr(ies))
+## --page links-clean.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (2 of 2 entr(ies))
+## --fragment links-collapsed-anchor.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page links-collapsed-anchor.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment links-collapsed-no-excerpt.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page links-collapsed-no-excerpt.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment links-range-truncated.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page links-range-truncated.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --fragment links-unknown-anchor.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
+## --page links-unknown-anchor.html
+exit=1
+FAIL  no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show
+FAIL  no affected-but-unchanged list — section 4 without it is a restatement of the diff
+PASS  no reading order here: it belongs to section 3
+WARN  no href="#flow" anywhere — a consequence a flow owns is named here and linked there, and an in-page anchor works at every link rung
+PASS  entries that point at a flow carry at most one citation each
+WARN  no search recorded anywhere in section 4 — an unrecorded absence cannot be told from an omission
+PASS  citations present alongside the lists (1 of 1 entr(ies))
 ## --fragment reach-brief-uncited.html
 exit=0
 PASS  impact-paths panel present

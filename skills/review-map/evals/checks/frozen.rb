@@ -29,6 +29,7 @@
 
 require "etc"
 
+require_relative "lib/review_map/fixture"
 require_relative "lib/review_map/page"
 
 HERE = __dir__
@@ -77,7 +78,8 @@ def cases_for(check)
     script, fragment, _exit, _text, extra = line.split("|").map { |c| c.to_s.strip }
     next unless script == check
 
-    ["--fragment", File.join(GOLD, fragment)] + extra.to_s.gsub("@GOLD@", GOLD).split
+    ["--fragment", File.join(GOLD, fragment)] +
+      ReviewMap.expand_fixtures(extra.to_s.gsub("@GOLD@", GOLD), GOLD).split
   end
 
   sweep + rows

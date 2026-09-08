@@ -45,9 +45,12 @@ skills/review-map/
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
 │   └── page-template.html         design system, components, and the diagram catalogue
 ├── scripts/
+│   ├── page-skeleton.sh           emits the head, the token block and the tint script into the page
+│   ├── diff-render.sh             says which files GitHub will not render, which decides the link form
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
 │   ├── ledger-rows.sh             generates the ledger rows from the diff
 │   └── coverage-gate.sh           asserts the ledger accounts for every changed path
+├── tests/                         the deterministic tests for those scripts, and the proof they fire
 └── evals/                         fixtures, page and section cases, and the mechanical checks
 skills/setup-ci/
 ├── SKILL.md                       inspect the repository, then configure CI
@@ -108,7 +111,9 @@ regression suites, which run in CI and take a few seconds:
 ```bash
 ruby skills/review-map/evals/checks/self-test.rb        # every golden fragment's asserted verdict
 ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner, directly
-skills/review-map/evals/checks/frozen.rb                # ~1900 cases against their recorded output
+skills/review-map/evals/checks/frozen.rb                # ~2500 cases against their recorded output
+skills/review-map/tests/run.sh                          # page-skeleton.sh and diff-render.sh
+skills/review-map/tests/self-test.sh                    # eleven deliberate breaks, each must fail it
 skills/setup-ci/tests/run.sh                            # what the generated workflow contains
 skills/setup-ci/tests/self-test.sh                      # ten deliberate breaks, each must fail it
 ```

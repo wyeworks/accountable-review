@@ -922,6 +922,36 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --page invariants-verdict.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment links-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page links-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment links-collapsed-anchor.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page links-collapsed-anchor.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment links-collapsed-no-excerpt.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment links-range-truncated.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page links-range-truncated.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment links-unknown-anchor.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page links-unknown-anchor.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
 ## --fragment reach-brief-uncited.html
 exit=0
 PASS  one impact panel

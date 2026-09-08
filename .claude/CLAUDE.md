@@ -150,13 +150,14 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script. Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
 | `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
+| `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the unclassified carrier the brief level's page foot holds |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
-| `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire |
+| `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git rather than of a fixture |
 | `bin/evals` | One command per eval scenario — `offline`, `section`, `page`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
-| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `reach.rb` grades § 4's composition and `impact-paths.rb` the figure inside it, and neither repeats the other. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for twelve of the thirteen checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
+| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `reach.rb` grades § 4's composition and `impact-paths.rb` the figure inside it, and neither repeats the other. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the second check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for thirteen of the fourteen checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
@@ -605,6 +606,51 @@ Editing one of these means checking the others still agree.
   `report-format.md` § *Deep links* owns both forms and the ladder, `SKILL.md` steps 1, 9 and 10 point
   at them and record both SHAs, and `ledger-rows.sh` takes `--pr`, `--compare` or `--blob` so a run
   never types an href into the `<td>` the coverage gate reads.
+
+  **There is one exception to *inside the diff means a diff anchor*, and it is a verdict rather than
+  a judgement.** GitHub does not render every diff — a file marked `linguist-generated`, a lockfile,
+  a binary, or a diff past **400 lines or 20 KB** sits behind *Load diff* — and an anchor into one of
+  those lands on the stub with the cited line nowhere in the page. So those citations take the blob
+  form. The numbers are GitHub's own
+  ([repository limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits):
+  400 lines / 20 KB to auto-load, 20,000 lines / 500 KB to be shown at all, 1 MB and 300 files for
+  the whole diff), which is why they are constants in `scripts/diff-render.sh` rather than flags —
+  and why the one heuristic in that script, its lockfile-name list, carries a date and the same
+  warning the doc catalogue does: it mirrors Linguist's built-in detection, which lives in GitHub's
+  repository and not in this one. `.gitattributes` is asked through `git check-attr`, so the repo's
+  own marks need no list at all.
+
+  Two things make that cheap. **The size rule is not the whole rule** — one changed line in a
+  generated `db/structure.sql` is small by every measurement and GitHub withholds it anyway, which
+  is the case a threshold alone waves through and the one a Rails page actually cites. And **being
+  wrong is asymmetric**: a blob link where the diff would have rendered still lands on the line and
+  only loses the red and the green, so the verdict leans towards the anchor and the excerpt beside
+  such a claim becomes the `--diff` variant, which is § *Deep links*' rung-3 rule arriving per file
+  instead of per run.
+
+  **A citation that names a range links a range**, in either form — `R51-R72`, `#L51-L72`, both ends
+  on the same side. A real run published `…_test.exs:51-72` under an href ending at `R51`: the text
+  promises twenty-two lines, the link selects one, and nothing on the page says which to believe.
+  The diff-anchor range form was missing from `report-format.md` entirely, so the run had nowhere to
+  put the `72` — the defect was in the spec, not in the writing.
+
+  Five files have to agree on those two: `report-format.md` § *When the diff will not render* owns
+  the rule **alone** and § *Deep links* carries the three URL forms, `SKILL.md` step 3 runs the
+  classifier once and step 9 points at both, `scripts/diff-render.sh` holds the verdict,
+  `tests/run.sh` covers every signal it reads, and `evals/checks/link-form.rb` re-asks that same
+  script rather than keeping a second copy of the thresholds. That last one is why
+  `golden/links-repo.sh` exists: it is the only golden fixture that has to be a real git repository,
+  built under `TMPDIR` with fixed commit fields so its base SHA is stable for `frozen.rb`, and
+  `lib/review_map/fixture.rb` is what expands `@REPO@` in the cases file for the two graders that
+  read it. A rule that could only ever SKIP in `self-test-cases.txt` is what that file exists to
+  prevent.
+
+  `diff-render.sh` also carries the guard this repository has now paid for twice: **asked and unable
+  to answer is not an empty diff.** Every `git diff` in it feeds a pipeline, so an unresolvable ref
+  leaves the exit status at 0 and prints no rows — which reads as *no file is withheld*, the most
+  reassuring thing it can say and the one with the least behind it. The refs are resolved up front
+  and an unresolvable one exits 4. `excerpts.rb`'s state-tag rule shipped with exactly that bug, and
+  `page-invariants.rb` § 5 with its sibling.
 - **Seven sections at `--full`, four at `--brief`, and each fact has one home either way.** The format
   is deliberately *not* one section per
   architectural layer. It was, and that guaranteed restatement: one behaviour crosses persistence, the
