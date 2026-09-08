@@ -9,21 +9,29 @@
 
   <figure class="impact">
     <span class="lbl">Impact paths</span>
-    <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-    <div class="ip-body">
+    <div class="ip-card">
       <span class="ip-hd">A &middot; Archiving a project</span>
-      <ol class="ip-path">
-        <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">sets archived_at</span></span></li>
-        <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, no CHECK</span></span></li>
-        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on status only</span></span></li>
-        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
-      </ol>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+        <ol class="ip-path">
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">sets archived_at</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, no CHECK</span></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on status only</span></span></li>
+          <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="ip-card">
       <span class="ip-hd">B &middot; Building a project in a spec</span>
-      <ol class="ip-path">
-        <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the model treats it as required</span></span></li>
-        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span></span></li>
-        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Specs build a forbidden state</b><span class="ip-d">observable behaviour</span></span></li>
-      </ol>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+        <ol class="ip-path">
+          <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the model treats it as required</span></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span></span></li>
+          <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Specs build a forbidden state</b><span class="ip-d">observable behaviour</span></span></li>
+        </ol>
+      </div>
     </div>
     <div class="legend">
       <span><i class="key-chg"></i>Changed by this PR</span>

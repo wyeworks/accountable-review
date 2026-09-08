@@ -502,7 +502,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `behaviour-flows.rb` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
 | `start-here.rb` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
 | `reach.rb` | § 4: the panel is present, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
-| `impact-paths.rb` | § 4's figure: 2-5 paths, each starting in the diff, passing through unchanged code and ending at one observable behaviour, every edge labelled with a causal verb, labels rather than prose, no citations and no SVG inside the panel | page and fragment |
+| `impact-paths.rb` | § 4's figure: 2-3 paths, one per `.ip-card` and each with its own lane labels, each starting in the diff, passing through unchanged code and ending at one observable behaviour, every edge labelled with a causal verb, labels rather than prose, no citations and no SVG inside the panel | page and fragment |
 | `searches.rb` | whether a recorded search **reproduces** the entry it is offered for — re-run inside `--repo` | page and fragment |
 | `before-approving.rb` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
 | `rails-anchors.rb` | doc links against the catalogue and never standing alone; probes with no fabricated output, no unsandboxed write, and identifiers that exist in `--repo` | page and fragment |

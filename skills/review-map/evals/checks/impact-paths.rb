@@ -23,7 +23,7 @@
 # reason: "too long" is a judgement, and the judged expectations in cases/diagrams.json are
 # where it is actually settled.
 #
-# What needs a reader, and no script can supply: whether these are the RIGHT 2-5 paths, and
+# What needs a reader, and no script can supply: whether these are the RIGHT 2-3 paths, and
 # whether each edge is true. A panel can satisfy every rule here and still describe a
 # consequence that does not happen.
 
@@ -39,6 +39,8 @@ PANEL_OPEN  = /<figure class="impact/
 PANEL_CLOSE = %r{</figure>}
 PATH_OPEN   = /<ol class="ip-path/
 PATH_CLOSE  = %r{</ol>}
+CARD_OPEN   = /<div class="ip-card/
+CARD_LANES  = /<div class="ip-lanes/
 NODE_OPEN   = /<li[^>]*class="ip-n/
 NODE_CLOSE  = %r{</li>}
 
@@ -123,16 +125,51 @@ end
 panel = panels.first
 paths = panel.regions(open: PATH_OPEN, close: PATH_CLOSE)
 
-# 2-5 paths. A single path is a chain, not a synthesis view, and the section's whole claim is
-# that separately-explained flows reach the same unchanged code.
+# 2-3 paths. A single path is a chain, not a synthesis view, and the section's whole claim is
+# that separately-explained flows reach the same unchanged code. The ceiling was 5, and a real
+# page took all five: at that length the panel is a section to scroll rather than a figure to
+# hold, and the consequences that do not fit are not lost — the affected list below carries
+# their entries and the flow that owns each one carries its explanation.
 if paths.empty?
   check.bad("an .impact panel with no ol.ip-path — a panel with no paths is the box grid this component replaced")
   check.finish
   exit
-elsif paths.size.between?(2, 5)
-  check.ok("#{paths.size} impact paths, within the 2-5 budget")
+elsif paths.size.between?(2, 3)
+  check.ok("#{paths.size} impact paths, within the 2-3 budget")
 else
-  check.bad("#{paths.size} impact path(s) — the budget is 2 to 5 (report-format.md § Impact paths). Wanting more is the signal that the ones you have are not doing their job")
+  check.bad("#{paths.size} impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job")
+end
+
+# --- One path per card, which is what makes them separate diagrams rather than one panel with
+# headings in it. This is checked as a PAIRING and not as "a card exists", because the defect it
+# guards against looks very nearly right: two paths inside one .ip-card still draw, still align to
+# that card's lane rule, and still carry their own .ip-hd — they are the stacked panel back again,
+# in a component that has since been sized on the assumption that a card is one figure.
+#
+# Interleaving rather than two counts. Equal counts are satisfied by a card holding two paths
+# beside a card holding none, and the second of those is an empty box a reader stops at.
+sequence = panel.scan(/#{CARD_OPEN}|#{PATH_OPEN}/).map { |m| m.match?(CARD_OPEN) ? :card : :path }
+cards = sequence.count(:card)
+if sequence == ([:card, :path] * paths.size)
+  check.ok("each of the #{paths.size} paths sits alone in its own .ip-card")
+else
+  check.bad("#{cards} .ip-card(s) do not pair one-to-one with #{paths.size} ol.ip-path — one path per card. Paths stacked inside one card are the panel this replaced, where the reader on the third chain has the first one's geometry behind them")
+end
+
+# Each card carries its OWN lane labels. This is the one requirement the split introduced that a
+# run is likely to get wrong from the outside: one .ip-lanes above one panel was correct for as
+# long as there was one panel, and the mental model survives the change while the markup does not.
+# A card without them draws a rule down its middle with nothing naming either side.
+#
+# Clamped at zero rather than a signed difference, so this rule ABSTAINS when the pairing above
+# has already failed. A card holding two paths carries a spare .ip-hd and a spare set of labels,
+# and reporting that as surplus furniture would be one defect reported as two — with the second
+# message counting backwards.
+bare = [cards - panel.scan(CARD_LANES).size, 0].max
+if cards.positive? && bare.zero?
+  check.ok("every card carries its own lane labels")
+else
+  check.bad("#{bare} .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system")
 end
 
 all = paths.map { |p| nodes_in(p) }

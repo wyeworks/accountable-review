@@ -718,8 +718,8 @@ Editing one of these means checking the others still agree.
 - **Impact paths are § 4's figure, and the edge is the point of them.** A path runs from changed
   code, through the affected-but-unchanged code that gives the change its consequence, to an
   observable behaviour, with every hop past the first carrying its incoming relation as a causal
-  verb. 2–5 paths, 3–5 nodes each, one `.ip-out` last, at least one `.ip-aff`, labels never
-  sentences, no citations inside the panel.
+  verb. 2–3 paths, 3–5 nodes each, **one path per `.ip-card`**, one `.ip-out` last, at least one
+  `.ip-aff`, labels never sentences, no citations inside the panel.
 
   **What it replaced is the reason every one of those rules exists.** `.blast` was a four-column box
   grid whose only encoding was border style, so it carried membership of two sets and nothing else —
@@ -728,6 +728,26 @@ Editing one of these means checking the others still agree.
   draw. Real pages then supplied the missing relation by writing a clause into every box, and the
   panel became a grid of sentences with no edges: the layout arguing with its own content. That
   workaround rule is **deleted**, not inherited.
+
+  **The cap is 3 and the frame is the card, and both came from reading a published page.** It shipped
+  as 2–5 paths stacked inside one bordered panel under a run of `.ip-hd` headers, and a real page
+  took all five. At that length they stop being read as diagrams: the reader on the third chain has
+  the first one's geometry behind them, a gap is the only thing saying where one path ends, and a
+  shared frame invites a sixth. So `.impact` is a group now — the label, one `.legend`, the note —
+  and each path is an `.ip-card` with its own `.ip-hd` and its own `.ip-lanes`.
+
+  **Nothing is lost by the two paths that no longer fit, and that is what makes the cap affordable.**
+  A consequence left out of the panel keeps its entry in *affected, not changed* and its explanation
+  in the flow that owns it, which is § *One canonical home* doing exactly its job. Loosening the cap
+  back out is how the figure becomes a section to scroll, and it will arrive as thoroughness.
+
+  **The lane labels repeat in every card, deliberately**, which is the one requirement the split
+  introduced that a run is likely to get wrong from the outside: one set of labels above one panel
+  was correct for as long as there was one panel, and the mental model outlives the markup. A card is
+  a whole figure, so a reader arriving at the third one must not scroll back for what its two columns
+  mean. `impact-paths.rb` counts them per card, clamped at zero so the rule **abstains** when the
+  card-to-path pairing has already failed — a card holding two paths carries a spare set of labels,
+  and reporting that as surplus furniture is one defect reported as two.
 
   Two design choices carry most of the weight, and both remove a way a run can be wrong rather than
   adding a rule about it. **The lane is derived from the node kind** — `.ip-chg` left, `.ip-aff`
@@ -756,20 +776,29 @@ Editing one of these means checking the others still agree.
   emitted and a run never types geometry) and the panel assembled whole in **both** section blocks,
   `report-format.md` § *Impact paths* owns the component, the vocabulary, the shape rules and the
   budget **alone**, `SKILL.md` step 9 points at it, `evals/checks/impact-paths.rb` carries the rules
-  and its `CAUSAL` list, and the five `golden/impact-*.html` fixtures plus their `self-test.rb` rows
+  and its `CAUSAL` list, and the seven `golden/impact-*.html` fixtures plus their `self-test.rb` rows
   prove each one fires. Extend the vocabulary in the reference and in `CAUSAL` together — the rule
   `diagram.rb` already states for its class vocabulary.
+
+  Two of those fixtures are the card split, and both plant markup that draws.
+  `impact-shared-card.html` puts two paths in one card **and pairs it with a card holding none**,
+  because that is precisely what comparing two counts would wave through — so the rule reads the
+  interleaving of card and path openings rather than the arithmetic. And `impact-four-paths.html` is
+  one over the cap rather than three: the fixture it replaced planted six against a ceiling of five,
+  which means it would have kept failing all the way down and pinned no particular cap.
 
   Verdicts split on purpose. Shape is a FAIL; an unlisted verb and an over-long label are WARNs,
   because a hard failure on vocabulary teaches a run to mislabel an edge to satisfy the check, which
   is worse than an unlisted verb that is true. And the thing no script settles: whether these are the
-  right 2–5 paths and whether each edge is **true**. `evals/cases/diagrams.json` is where that is
+  right 2–3 paths and whether each edge is **true** — a question the tighter cap makes sharper, not
+  softer, because choosing three out of six consequences is now part of the work.
+  `evals/cases/diagrams.json` is where that is
   asked, and the panel needs eyes — `diagram-shot.rb --visual` renders `<svg>` only, so it does not
   cover a component.
 
 - **Diagram layouts come from the catalogue, not from the run — and only two kinds are drawings.**
   § 4's figure is the `.impact` impact-paths panel and the boundary chain is a `.pipe` spine: both are
-  components because their **size is a function of the diff** — 2–5 paths of 3–5 nodes, a chain as
+  components because their **size is a function of the diff** — 2–3 paths of 3–5 nodes, a chain as
   long as the boundary it crosses — so a drawing would mean geometry derived per run. A component
   reflows on a phone and cannot be drawn wrong. ER fragment and lifecycle stay as inline SVG, worked
   out complete and to scale in `page-template.html`, with the grid stated in a comment above each.

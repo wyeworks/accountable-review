@@ -346,6 +346,18 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page flows-unit-uncited.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-card-no-lanes.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-card-no-lanes.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-four-paths.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-four-paths.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-no-affected.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -364,10 +376,10 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-prose-nodes.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
-## --fragment impact-six-paths.html
+## --fragment impact-shared-card.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
-## --page impact-six-paths.html
+## --page impact-shared-card.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-unlabelled-edge.html

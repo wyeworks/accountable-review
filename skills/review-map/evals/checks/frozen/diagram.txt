@@ -462,6 +462,18 @@ SKIP  no diagrams in this input
 ## --page flows-unit-uncited.html
 exit=0
 SKIP  no diagrams in this input
+## --fragment impact-card-no-lanes.html
+exit=0
+SKIP  no diagrams in this input
+## --page impact-card-no-lanes.html
+exit=0
+SKIP  no diagrams in this input
+## --fragment impact-four-paths.html
+exit=0
+SKIP  no diagrams in this input
+## --page impact-four-paths.html
+exit=0
+SKIP  no diagrams in this input
 ## --fragment impact-no-affected.html
 exit=0
 SKIP  no diagrams in this input
@@ -480,10 +492,10 @@ SKIP  no diagrams in this input
 ## --page impact-prose-nodes.html
 exit=0
 SKIP  no diagrams in this input
-## --fragment impact-six-paths.html
+## --fragment impact-shared-card.html
 exit=0
 SKIP  no diagrams in this input
-## --page impact-six-paths.html
+## --page impact-shared-card.html
 exit=0
 SKIP  no diagrams in this input
 ## --fragment impact-unlabelled-edge.html

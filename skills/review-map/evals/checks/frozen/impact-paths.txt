@@ -145,7 +145,9 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --fragment approving-brief-checkpoint.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -164,7 +166,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page approving-brief-checkpoint.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -183,7 +187,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment approving-brief-clean.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -202,7 +208,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page approving-brief-clean.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -221,7 +229,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment approving-brief-no-anchor.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -240,7 +250,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page approving-brief-no-anchor.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -397,7 +409,9 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --fragment flows-pending-page.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -416,7 +430,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page flows-pending-page.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -441,7 +457,9 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --fragment flows-reach-rows.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -460,7 +478,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page flows-reach-rows.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -506,10 +526,96 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --page flows-unit-uncited.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment impact-card-no-lanes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+FAIL  1 .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-card-no-lanes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+FAIL  1 .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-four-paths.html
+exit=1
+PASS  one impact panel
+FAIL  4 impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job
+PASS  each of the 4 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-four-paths.html
+exit=1
+PASS  one impact panel
+FAIL  4 impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job
+PASS  each of the 4 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-no-affected.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -528,7 +634,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page impact-no-affected.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -547,7 +655,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-no-outcome.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -566,7 +676,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page impact-no-outcome.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -585,7 +697,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-prose-nodes.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -604,7 +718,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page impact-prose-nodes.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -620,10 +736,12 @@ PASS  the panel is a component, not a drawing
 FAIL  a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
-## --fragment impact-six-paths.html
+## --fragment impact-shared-card.html
 exit=1
 PASS  one impact panel
-FAIL  6 impact path(s) — the budget is 2 to 5 (report-format.md § Impact paths). Wanting more is the signal that the ones you have are not doing their job
+PASS  2 impact paths, within the 2-3 budget
+FAIL  2 .ip-card(s) do not pair one-to-one with 2 ol.ip-path — one path per card. Paths stacked inside one card are the panel this replaced, where the reader on the third chain has the first one's geometry behind them
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -639,10 +757,12 @@ PASS  the panel is a component, not a drawing
 PASS  no citations inside the panel
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
-## --page impact-six-paths.html
+## --page impact-shared-card.html
 exit=1
 PASS  one impact panel
-FAIL  6 impact path(s) — the budget is 2 to 5 (report-format.md § Impact paths). Wanting more is the signal that the ones you have are not doing their job
+PASS  2 impact paths, within the 2-3 budget
+FAIL  2 .ip-card(s) do not pair one-to-one with 2 ol.ip-path — one path per card. Paths stacked inside one card are the panel this replaced, where the reader on the third chain has the first one's geometry behind them
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -661,7 +781,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-unlabelled-edge.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -680,7 +802,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page impact-unlabelled-edge.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -759,7 +883,9 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --fragment reach-brief-uncited.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -778,7 +904,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page reach-brief-uncited.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -797,7 +925,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment reach-clean.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -816,7 +946,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page reach-clean.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -835,7 +967,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment reach-no-pointer.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -854,7 +988,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page reach-no-pointer.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -873,7 +1009,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment reach-pointer-restated.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -892,7 +1030,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page reach-pointer-restated.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -911,7 +1051,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment reach-readorder.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -930,7 +1072,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page reach-readorder.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -991,7 +1135,9 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --fragment page-template.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1010,7 +1156,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --page page-template.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1029,7 +1177,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment reach-clean.html
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1048,7 +1198,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-no-outcome.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1067,7 +1219,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-no-affected.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1086,7 +1240,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-unlabelled-edge.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1105,7 +1261,9 @@ PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-prose-nodes.html
 exit=1
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1121,10 +1279,54 @@ PASS  the panel is a component, not a drawing
 FAIL  a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
-## --fragment impact-six-paths.html
+## --fragment impact-four-paths.html
 exit=1
 PASS  one impact panel
-FAIL  6 impact path(s) — the budget is 2 to 5 (report-format.md § Impact paths). Wanting more is the signal that the ones you have are not doing their job
+FAIL  4 impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job
+PASS  each of the 4 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-shared-card.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+FAIL  2 .ip-card(s) do not pair one-to-one with 2 ol.ip-path — one path per card. Paths stacked inside one card are the panel this replaced, where the reader on the third chain has the first one's geometry behind them
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-card-no-lanes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+FAIL  1 .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code
@@ -1146,7 +1348,9 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --fragment reach-brief-uncited.html --level brief
 exit=0
 PASS  one impact panel
-PASS  2 impact paths, within the 2-5 budget
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
 PASS  every path is 3-5 nodes
 PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
 PASS  every path starts at changed code

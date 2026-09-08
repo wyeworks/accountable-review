@@ -470,6 +470,22 @@ PASS  validation steps carry command markup
 ## --page flows-unit-uncited.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-card-no-lanes.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-card-no-lanes.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-four-paths.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-four-paths.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment impact-no-affected.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'
@@ -494,12 +510,12 @@ PASS  validation steps carry command markup
 ## --page impact-prose-nodes.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
-## --fragment impact-six-paths.html
+## --fragment impact-shared-card.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'
 WARN  no 'ask the author' part — legitimate only if nothing needs the author
 PASS  validation steps carry command markup
-## --page impact-six-paths.html
+## --page impact-shared-card.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment impact-unlabelled-edge.html

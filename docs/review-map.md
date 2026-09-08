@@ -27,13 +27,13 @@ unchanged and the last four are merged into one — see *Detail levels* below:
   and why. What most needs judgment and what to read first are the same question, so it is answered
   once. Each entry links into the flow that explains it.
 - **What this change reaches** — the same change seen whole, after the flows. Its figure is
-  **impact paths**: two to five directed chains, each running from code the PR changed, through the
-  code that is *affected but unchanged* — the callers, serializers, queries, factories, policies and
-  TypeScript types whose meaning this diff just changed — to what someone would then observe. Every
-  hop carries the relation that makes it causal: *reads*, *falls back to*, *ignored by*. Beneath the
-  figure, each affected entry gets a citation and a clause; where a flow already explained one, this
-  is a pointer back to it, and what no single flow owns is explained here. This is the part no diff
-  can produce, and the reason the page exists.
+  **impact paths**: two or three directed chains, each in a card of its own, each running from code
+  the PR changed, through the code that is *affected but unchanged* — the callers, serializers,
+  queries, factories, policies and TypeScript types whose meaning this diff just changed — to what
+  someone would then observe. Every hop carries the relation that makes it causal: *reads*, *falls
+  back to*, *ignored by*. Beneath the figure, each affected entry gets a citation and a clause;
+  where a flow already explained one, this is a pointer back to it, and what no single flow owns is
+  explained here. This is the part no diff can produce, and the reason the page exists.
 - **Cross-cutting consequences** — only what genuinely spans flows: schema structure and migration
   safety, application invariants set beside database invariants, the authorization model, background
   jobs, deploy ordering, test infrastructure that changes how other specs behave, and changes to

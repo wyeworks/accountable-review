@@ -1,8 +1,14 @@
-<!-- The planted defect: the entry names a consequence a flow explains, but nothing links there.
-     An in-page anchor works at every link rung; rung 3 is not a reason to drop it. WARN, not
-     FAIL — a section 4 whose affected code is genuinely owned by no flow is a legitimate page.
+<!-- PLANTED: two paths inside one .ip-card. The count is legal, every path is legal, every
+     edge is labelled and the legend is there — this is the stacked panel the card split was
+     made to end, and it is invisible in the markup and very nearly invisible on the page.
+     Both chains draw, both align to the same lane rule, and the second one's .ip-hd looks
+     exactly like a card head. What is lost is that a card is one figure: the sizing, the
+     repeated lane labels and the cap are all written against that.
 
-     Current markup: div.item / a.path. See reach-clean.html for why that matters. -->
+     Deliberately paired with a SECOND card that holds no path at all, because that is what
+     comparing two counts would let through — one card holding two paths beside one holding
+     none balances the books. The check reads the interleaving of card and path openings, so
+     it fails on the order rather than on the arithmetic. -->
 <section id="reach">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>What this change reaches</h2>
@@ -15,17 +21,10 @@
       <div class="ip-body">
         <ol class="ip-path">
           <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">sets archived_at</span></span></li>
-          <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, no CHECK</span></span></li>
           <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on status only</span></span></li>
           <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
         </ol>
-      </div>
-    </div>
-
-    <div class="ip-card">
-      <span class="ip-hd">B &middot; Building a project in a spec</span>
-      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-      <div class="ip-body">
+        <span class="ip-hd">B &middot; Building a project in a spec</span>
         <ol class="ip-path">
           <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the model treats it as required</span></span></li>
           <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span></span></li>
@@ -33,27 +32,28 @@
         </ol>
       </div>
     </div>
+
+    <div class="ip-card">
+      <span class="ip-hd">C &middot; Nothing here</span>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body"></div>
+    </div>
     <div class="legend">
       <span><i class="key-chg"></i>Changed by this PR</span>
       <span><i class="key-aff"></i>Affected, not changed</span>
       <span><i class="key-out"></i>Behaviour</span>
     </div>
-    <p class="note">Out of reach of a name-based pass: a reader that reaches the column through an enum predicate.</p>
   </figure>
 
   <dl class="rows">
     <dt>Affected, not changed</dt>
     <dd>
-      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes
-        the selectable list, which archival changes the meaning of
-        <span class="tier">evidenced by unchanged code</span></div>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes the selectable list, and archival does not narrow it <a href="#flow-a">Flow A</a></div>
       <details class="searched">
         <summary><span class="chev">&#9656;</span> Searches run</summary>
-        <div class="sr-body">
-          <ul class="sr-list">
-            <li><code>rg 'Project\.(where|all)' app lib</code> <span class="sr-r">one other caller</span></li>
-          </ul>
-        </div>
+        <div class="sr-body"><ul class="sr-list">
+          <li><code>rg -n 'archived' app lib</code> <span class="sr-r">the scope</span></li>
+        </ul></div>
       </details>
     </dd>
   </dl>

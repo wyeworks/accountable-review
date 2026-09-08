@@ -48,12 +48,20 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
 # was built to end: an edge with no label (adjacency again) and a node with a clause in it (the
 # word cloud). impact-prose-nodes.html expects exit 1 for its citation and is pinned on the
 # WARN substring instead, so it holds both verdicts at once.
+#
+# The last two are the card split: one path per .ip-card, with its own lane labels. Both defects
+# are legal markup that draws, which is why they are checked at all — impact-shared-card.html
+# pairs a card holding two paths with a card holding none, so a rule comparing two counts would
+# pass it, and it must report exactly one failure rather than also reporting the spare labels
+# inside the shared card as surplus furniture.
  impact-paths       | reach-clean.html              | 0 | every edge carries a label
  impact-paths       | impact-no-outcome.html        | 1 | does not end at exactly one
  impact-paths       | impact-no-affected.html       | 1 | contains no .ip-aff node
  impact-paths       | impact-unlabelled-edge.html   | 1 | with no .ip-rel
  impact-paths       | impact-prose-nodes.html       | 1 | a citation inside the .impact panel
- impact-paths       | impact-six-paths.html         | 1 | the budget is 2 to 5
+ impact-paths       | impact-four-paths.html        | 1 | the budget is 2 to 3
+ impact-paths       | impact-shared-card.html       | 1 | do not pair one-to-one
+ impact-paths       | impact-card-no-lanes.html     | 1 | with no .ip-lanes of their own
 # And the one that has to SKIP rather than pass: a fragment with no panel is reach.rb's
 # failure to report, not this check's. A PASS here would read as a verified figure that was
 # never looked at.

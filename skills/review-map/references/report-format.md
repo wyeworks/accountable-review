@@ -618,6 +618,20 @@ never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, sinc
 behaviour belongs to neither half. So the boundary the reader sees is structurally true, and there is
 no lane class for a run to put on the wrong node.
 
+**One path per `.ip-card`, and the card is the frame.** `.impact` is a group, not a box: it carries
+the label, the one `.legend` for every card, and the note. Each card holds its own `.ip-hd` naming
+the behaviour, its own `.ip-lanes`, and one `ol.ip-path`.
+
+The first version stacked every path inside one bordered panel under a run of `.ip-hd` headers, and
+on a real page that meant five chains in one frame. At that length they stop being read as diagrams:
+the reader on the third chain has the first one's geometry behind them, a gap is the only thing
+saying where one path ends, and a shared frame invites a sixth. Separating them is also what makes
+the cap below enforceable as a *count of figures* rather than a count of headings inside one.
+
+**The lane labels repeat in every card**, which is both the price of separating them and the reason
+to. A card is a whole figure; a reader arriving at the third one must not scroll back to learn what
+its two columns mean.
+
 **The lane crossing draws itself too**, so there is nothing to add when a path changes side: a change
 of lane *is* a change of kind, and the stylesheet draws the elbow from it. Mark the kinds and leave
 the connectors alone — no extra element, no inline style, no `<svg>`.
@@ -656,6 +670,10 @@ list here and `CAUSAL` in `evals/checks/impact-paths.rb` together — the rule
 **Shape rules. Each one is the difference between an impact path and something that merely looks
 like one.**
 
+- **Every path sits alone in its own `.ip-card`, with that card's `.ip-hd` and `.ip-lanes`.** Two
+  paths in one card is the stacked panel this replaced, and it looks very nearly right — which is
+  why `evals/checks/impact-paths.rb` checks the card-to-path pairing rather than the presence of a
+  card.
 - **A path starts at `.ip-chg` and ends at exactly one `.ip-out`, which is last.** A chain that stops
   at a function has not reached a consequence, and the consequence is the reason the figure exists.
 - **Every path holds at least one `.ip-aff`.** A path with no unchanged node is a call stack inside
@@ -667,14 +685,21 @@ like one.**
   `.ip-d` is a few words at most. The `file:line` belongs to *affected, not changed* below, which
   keeps one canonical home and is what stops the panel becoming the grid of sentences it replaced.
 
-**Budget: 2–5 paths, 3–5 nodes each.** Wanting a sixth path is the signal that the first five are not
-doing their job — the same question § *Depth rules* asks about a second diagram. And a change with no
-nameable edge earns **no panel at all**: the affected list carries the entries either way, and a
-figure that cannot say what reaches what is the thing this component exists to stop.
+**Budget: 2–3 paths, 3–5 nodes each.** These are the paths a reviewer has to *hold*, and three is
+already the outer edge of that — wanting a fourth is the signal that the three you have are not
+doing their job, which is the same question § *Depth rules* asks about a second diagram. The fourth
+consequence is not lost by being left out: *affected, not changed* below carries its entry, and the
+flow that owns it carries its explanation. It was five, and five is where a real page put them; on
+that page the panel had become a section to scroll rather than a figure to read.
 
-The panel **is** § 4's one figure, so § 4 earns no second, at either level.
+And a change with no nameable edge earns **no panel at all**: the affected list carries the entries
+either way, and a figure that cannot say what reaches what is the thing this component exists to
+stop.
 
-Two things the panel is not. It is not a dependency graph: it is 2–5 curated paths chosen because a
+The panel **is** § 4's one figure — one `.impact` group, whatever its card count — so § 4 earns no
+second, at either level.
+
+Two things the panel is not. It is not a dependency graph: it is 2–3 curated paths chosen because a
 reviewer has to hold them, and completeness here would destroy the thing that makes it readable. And
 it is not SVG — its size is a function of the diff, so a drawing would mean coordinates derived per
 run, which § *Depth rules* rules out for making two pages from this skill incomparable.
@@ -770,14 +795,14 @@ two in one section.
 
 **Four kinds, and which section each belongs to — but only two are SVG.** Two of these are
 components rather than drawings, because their size is a function of the diff: an impact path is
-3–5 nodes and a PR earns 2–5 of them, a chain is as long as the boundary it crosses, so a drawing
+3–5 nodes and a PR earns 2–3 of them, a chain is as long as the boundary it crosses, so a drawing
 would mean geometry derived per run. A component reflows on a phone and cannot be drawn wrong. The
 two that stayed SVG are the ones where the information genuinely *is* geometry, and where the
 layout can therefore be worked out once, in the catalogue, and filled in.
 
 | Kind | Rendered as | Home |
 |---|---|---|
-| Impact paths | `.impact` lanes + `.legend`, see § *Impact paths* | § 4, on almost every PR |
+| Impact paths | `.impact` — one `.ip-card` per path + one `.legend`, see § *Impact paths* | § 4, on almost every PR |
 | Boundary chain | `.pipe` numbered spine | § 2, inside the flow that owns the field, never a section of its own |
 | ER fragment | **SVG**, from the catalogue | § 5, if the schema moved |
 | Lifecycle | **SVG**, from the catalogue | § 5, and only if a status column, enum or state machine changed |
@@ -1162,8 +1187,9 @@ consequences extend beyond the diff. This is the section a diff cannot produce a
 this point in the page it is a **second pass**: the reader has been through the flows one at a time,
 and now sees the same change as one system, with the edges that leave it.
 
-- **The impact-paths panel** — 2–5 directed chains, each from changed code through the unchanged
-  code that gives the change its consequence to an observable behaviour. § *Impact paths* owns the
+- **The impact-paths panel** — 2–3 directed chains, one per `.ip-card`, each running from changed
+  code through the unchanged code that gives the change its consequence to an observable behaviour.
+  § *Impact paths* owns the
   component, the causal vocabulary, the shape rules and the budget, **and owns them alone**. The one
   figure that earns its place on almost every PR. Arriving after § 2, it is a synthesis view: it
   shows the flows the page explained separately reaching the same unchanged code, and says what each

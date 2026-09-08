@@ -672,13 +672,18 @@ Everything else about writing holds at every stage:
   layout spends the run's attention on the part that does not matter: what matters is whether the
   edges are true, and a followable edge that is wrong costs the reviewer more than no diagram.
 - **An impact path ends at a behaviour, and passes through unchanged code on the way.** The panel is
-  2–5 chains, each starting in the diff and ending at something a user or an operator would see, with
-  every hop carrying its causal verb — *reads*, *falls back to*, *filtered out by*. A chain that stops
-  at a function has not reached a consequence; a chain with no unchanged node is a call stack inside
-  the diff, which the diff already shows. And it carries **labels, not sentences**: the `file:line`
-  and the clause belong to *affected, not changed* below it. The panel this replaced was a grid of
-  boxes, and every real page filled the boxes with prose to supply the relation the layout could not
-  express — which is the failure to watch for coming back.
+  2–3 chains, **each in its own `.ip-card`**, each starting in the diff and ending at something a
+  user or an operator would see, with every hop carrying its causal verb — *reads*, *falls back to*,
+  *filtered out by*. A chain that stops at a function has not reached a consequence; a chain with no
+  unchanged node is a call stack inside the diff, which the diff already shows. And it carries
+  **labels, not sentences**: the `file:line` and the clause belong to *affected, not changed* below
+  it. The panel this replaced was a grid of boxes, and every real page filled the boxes with prose to
+  supply the relation the layout could not express — which is the failure to watch for coming back.
+- **Three paths, not five, and one per card.** Choosing the third-best consequence over the fifth is
+  the work here: the two that do not make the panel are not dropped, their entries are in *affected,
+  not changed* and their explanations in the flows that own them. A run that stacks four or five
+  chains inside one card has rebuilt the panel this replaced, where the reader on the third chain has
+  the first one's geometry behind them.
 - **Generate source excerpts, do not type them.** Two things get quoted, not one. The lines a claim
   would otherwise ask the reader to take on faith — above all *affected but unchanged*, which no diff
   view can address — and **the changed hunk each behaviour flow turns on**, because § 2 is read before
