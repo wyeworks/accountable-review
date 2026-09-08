@@ -1,0 +1,1452 @@
+## --fragment anchors-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-demo-outside-primer.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-demo-outside-primer.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-fabricated-output.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-fabricated-output.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-hexdocs-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-hexdocs-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-invented-attribute.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-invented-attribute.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-invented-scope.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-invented-scope.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-link-alone.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-link-alone.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-link-in-excerpt.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-link-in-excerpt.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-mixed-series.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-mixed-series.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-app-symbol.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-app-symbol.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-lib.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-lib.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-no-citation.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-no-citation.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-no-link.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-no-link.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-no-trademark.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-no-trademark.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-probe-legit-forms.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-probe-legit-forms.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-runner-mutates.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-runner-mutates.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-uncatalogued-url.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-uncatalogued-url.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment anchors-unpinned-link.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page anchors-unpinned-link.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment approving-brief-checkpoint.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page approving-brief-checkpoint.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment approving-brief-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page approving-brief-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment approving-brief-no-anchor.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page approving-brief-no-anchor.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment approving-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page approving-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment approving-six-questions.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page approving-six-questions.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-edge-label-collision.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-edge-label-collision.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-invented-class.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-invented-class.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-label-overflow.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-label-overflow.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-literal-colour.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-literal-colour.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-no-legend.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-no-legend.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-offcanvas.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-offcanvas.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-placeholder.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-placeholder.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-unwrapped.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-unwrapped.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-at-head.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-at-head.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-diff-lang.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-diff-lang.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-duplicate.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-duplicate.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-open.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-open.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-typed-highlight.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-typed-highlight.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-typed-tag.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-typed-tag.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment excerpt-unchanged-changed-file.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page excerpt-unchanged-changed-file.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-decisions-interleaved.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-decisions-interleaved.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-layer-grouped.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-layer-grouped.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-partial-page.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-partial-page.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-pending-page.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page flows-pending-page.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment flows-primer-uncited-unit.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-primer-uncited-unit.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-reach-rows.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page flows-reach-rows.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment flows-source-only.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-source-only.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-stubs-only-page.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-stubs-only-page.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-unit-flattened.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-unit-flattened.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-unit-no-understand.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-unit-no-understand.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-unit-uncited.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-unit-uncited.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment impact-card-no-lanes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+FAIL  1 .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-card-no-lanes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+FAIL  1 .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-entities-vocab-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-entities-vocab-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-four-paths.html
+exit=1
+PASS  one impact panel
+FAIL  4 impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job
+PASS  each of the 4 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-four-paths.html
+exit=1
+PASS  one impact panel
+FAIL  4 impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job
+PASS  each of the 4 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-no-affected.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+FAIL  path 1 contains no .ip-aff node — a path with no unchanged node is a call stack inside the diff, which the diff already shows. Unchanged-but-affected code is what this page is for
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-no-affected.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+FAIL  path 1 contains no .ip-aff node — a path with no unchanged node is a call stack inside the diff, which the diff already shows. Unchanged-but-affected code is what this page is for
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-no-outcome.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+FAIL  path 1 does not end at exactly one .ip-out — a chain that stops at a function has not reached a consequence, and the consequence is why the figure exists
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-no-outcome.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+FAIL  path 1 does not end at exactly one .ip-out — a chain that stops at a function has not reached a consequence, and the consequence is why the figure exists
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-prose-nodes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+WARN  1 node label(s) over 40 chars and 3 detail line(s) over 10 words — a node names a thing, and the panel this replaced became unreadable by holding a clause in every box
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+FAIL  a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-prose-nodes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+WARN  1 node label(s) over 40 chars and 3 detail line(s) over 10 words — a node names a thing, and the panel this replaced became unreadable by holding a clause in every box
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+FAIL  a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-shared-card.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+FAIL  2 .ip-card(s) do not pair one-to-one with 2 ol.ip-path — one path per card. Paths stacked inside one card are the panel this replaced, where the reader on the third chain has the first one's geometry behind them
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-shared-card.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+FAIL  2 .ip-card(s) do not pair one-to-one with 2 ol.ip-path — one path per card. Paths stacked inside one card are the panel this replaced, where the reader on the third chain has the first one's geometry behind them
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-unlabelled-edge.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+FAIL  path 1 has a node past the first with no .ip-rel — an unlabelled edge is adjacency again, which is the thing the box grid could not get past
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-unlabelled-edge.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+FAIL  path 1 has a node past the first with no .ip-rel — an unlabelled edge is adjacency again, which is the thing the box grid could not get past
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment invariants-assurance.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-assurance.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-draft-narration.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-draft-narration.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-loose-data-path.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-loose-data-path.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-no-tier.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-no-tier.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-risk-score-leading.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-risk-score-leading.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-risk-score-trailing.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-risk-score-trailing.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-risk-score.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-risk-score.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-severity-chip.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-severity-chip.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment invariants-verdict.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page invariants-verdict.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment reach-brief-uncited.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page reach-brief-uncited.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment reach-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page reach-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment reach-no-pointer.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page reach-no-pointer.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment reach-pointer-restated.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page reach-pointer-restated.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment reach-readorder.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page reach-readorder.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment searches-bre-dialect.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page searches-bre-dialect.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment searches-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page searches-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment searches-git-grep.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page searches-git-grep.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment searches-unreachable.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page searches-unreachable.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment start-here-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page start-here-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment start-here-no-why.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page start-here-no-why.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment start-here-two-lists.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page start-here-two-lists.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment page-template.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+WARN  1 edge label(s) lead with a verb outside the vocabulary: "{{CAUSAL_VERB}}" — legitimate for a stack the list does not cover, but extend report-format.md § Impact paths and CAUSAL here together if so
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+FAIL  18 unsubstituted placeholder(s) in the panel: {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}, {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{CHANGED_THING_IT_READS}}, {{WHAT_IT_CARRIES}}, {{WHAT_IT_RECEIVES}}, {{UNCHANGED_PRODUCER}}, {{WHAT_IT_RETURNS}}, {{THE_UNCHANGED_DEFAULT}}, {{WHAT_THE_USER_SEES}}, {{A_DIFFERENT_BEHAVIOUR}}, {{A_DIFFERENT_CHANGED_THING}}, {{WHAT_THAT_ONE_DOES}}, {{CAUSAL_VERB}}, {{UNCHANGED_CONSUMER}}, {{WHAT_IT_STILL_ASSUMES}}, {{WHAT_THE_OTHER_ONE_SHOWS}}, {{WHAT_A_NAME_BASED_PASS_COULD_NOT_REACH}} — the template was copied and not filled in
+PASS  the panel carries a legend naming all three node kinds
+## --page page-template.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+WARN  1 edge label(s) lead with a verb outside the vocabulary: "{{CAUSAL_VERB}}" — legitimate for a stack the list does not cover, but extend report-format.md § Impact paths and CAUSAL here together if so
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+FAIL  18 unsubstituted placeholder(s) in the panel: {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}, {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{CHANGED_THING_IT_READS}}, {{WHAT_IT_CARRIES}}, {{WHAT_IT_RECEIVES}}, {{UNCHANGED_PRODUCER}}, {{WHAT_IT_RETURNS}}, {{THE_UNCHANGED_DEFAULT}}, {{WHAT_THE_USER_SEES}}, {{A_DIFFERENT_BEHAVIOUR}}, {{A_DIFFERENT_CHANGED_THING}}, {{WHAT_THAT_ONE_DOES}}, {{CAUSAL_VERB}}, {{UNCHANGED_CONSUMER}}, {{WHAT_IT_STILL_ASSUMES}}, {{WHAT_THE_OTHER_ONE_SHOWS}}, {{WHAT_A_NAME_BASED_PASS_COULD_NOT_REACH}} — the template was copied and not filled in
+PASS  the panel carries a legend naming all three node kinds
+## --fragment reach-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-no-outcome.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+FAIL  path 1 does not end at exactly one .ip-out — a chain that stops at a function has not reached a consequence, and the consequence is why the figure exists
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-no-affected.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+FAIL  path 1 contains no .ip-aff node — a path with no unchanged node is a call stack inside the diff, which the diff already shows. Unchanged-but-affected code is what this page is for
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-unlabelled-edge.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+FAIL  path 1 has a node past the first with no .ip-rel — an unlabelled edge is adjacency again, which is the thing the box grid could not get past
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-prose-nodes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+WARN  1 node label(s) over 40 chars and 3 detail line(s) over 10 words — a node names a thing, and the panel this replaced became unreadable by holding a clause in every box
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+FAIL  a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-four-paths.html
+exit=1
+PASS  one impact panel
+FAIL  4 impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job
+PASS  each of the 4 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-shared-card.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+FAIL  2 .ip-card(s) do not pair one-to-one with 2 ol.ip-path — one path per card. Paths stacked inside one card are the panel this replaced, where the reader on the third chain has the first one's geometry behind them
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-card-no-lanes.html
+exit=1
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+FAIL  1 .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-entities-vocab-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-entities-vocab-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment searches-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment reach-brief-uncited.html --level brief
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds

@@ -13,38 +13,56 @@
        1. NO class="cite" anywhere. The affected entries cite with a.path, as the template does.
        2. The "Before approving" lists carry several <li> with NO citation — author questions and
           validation steps correctly carry commands, not file:line.
-       3. id="crosscutting" and id="approving" are <h3> sub-parts INSIDE <section id="blast">.
+       3. id="crosscutting" and id="approving" are <h3> sub-parts INSIDE <section id="reach">.
           That is what makes the region bound load-bearing: at --full they would be sections of
           their own and the next-<section> bound would already have stopped the region.
 
-     Only three checks may read this file — blast-radius.sh, page-invariants.sh and
-     before-approving.sh — and none of them takes the detail level to do it. -->
-<section id="blast">
-  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
-  <h2>Blast radius and what to check</h2>
+     Only four checks may read this file — reach.rb, impact-paths.rb, page-invariants.rb and
+     before-approving.rb — and only the last of them takes the detail level to do it.
 
-  <div class="blast">
-    <div class="blast-row">
-      <div class="bx bx-on"><b>Projects::Archive</b><span>writes projects.archived_at</span></div>
-      <div class="bx bx-off"><b>ActiveProjects</b><span>still offers the project</span></div>
+     The coverage foot below the section is where the diff inventory lives at --brief. It is
+     outside the <section> deliberately: it is not part of section 4, and page-invariants.rb § 4
+     still has real data-path cells to look at, which it would not if the inventory had simply
+     been deleted. A rule that passes on zero rows has not looked. -->
+<section id="reach">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>Reach &amp; checks</h2>
+
+  <figure class="impact">
+    <span class="lbl">Impact paths</span>
+    <div class="ip-card">
+      <span class="ip-hd">A &middot; Archiving a project</span>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+        <ol class="ip-path">
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, no CHECK</span></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on status only</span></span></li>
+          <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="ip-card">
+      <span class="ip-hd">B &middot; Building a project in a spec</span>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+        <ol class="ip-path">
+          <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the model treats it as required</span></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span></span></li>
+          <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Specs build a forbidden state</b><span class="ip-d">observable behaviour</span></span></li>
+        </ol>
+      </div>
     </div>
     <div class="legend">
-      <span><i class="key-on"></i>Changed by this PR</span>
-      <span><i class="key-off"></i>Unchanged, and affected</span>
+      <span><i class="key-chg"></i>Changed by this PR</span>
+      <span><i class="key-aff"></i>Affected, not changed</span>
+      <span><i class="key-out"></i>Behaviour</span>
     </div>
-    <p class="note">Adjacency cannot show direction: the scope is read by the selector, never written by this diff.</p>
-  </div>
+    <p class="note">Out of reach of a name-based pass: a reader that reaches the column through an enum predicate.</p>
+  </figure>
 
   <dl class="rows">
-    <dt class="lbl-ink">Changed</dt>
-    <dd>
-      <div class="gt gt-paths">
-        <div class="c" data-path="app/models/project.rb"><a class="path" href="#">app/models/project.rb</a></div>
-        <div class="c" data-path="db/schema.rb"><a class="path" href="#">db/schema.rb</a></div>
-      </div>
-      <p class="note">All 2 changed paths. The model is the one worth opening; the schema is regenerated.</p>
-    </dd>
-
     <dt>Affected, not changed</dt>
     <dd>
       <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes
@@ -86,3 +104,14 @@
     <li><code>bin/rails db:migrate</code> then <code>git diff db/schema.rb</code> &mdash; confirms the column</li>
   </ul>
 </section>
+
+<!-- The diff inventory, at --brief: below the last section, shut, and not part of it.
+     data-path is reserved to these cells; coverage-gate.sh greps them page-wide, which
+     is why moving the carrier out of section 4 cost no script change. -->
+<details class="coverage-foot">
+  <summary><span class="chev">&#9656;</span> Coverage &middot; all 2 changed paths</summary>
+  <div class="gt gt-paths">
+    <div class="c" data-path="app/models/project.rb"><a class="path" href="#">app/models/project.rb</a></div>
+    <div class="c" data-path="db/schema.rb"><a class="path" href="#">db/schema.rb</a></div>
+  </div>
+</details>

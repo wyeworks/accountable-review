@@ -38,11 +38,13 @@ require_relative "checks/lib/review_map/check"
 # decides which ones apply and adds up what they printed. Exit code follows the FAILs.
 SCOPES = {
   "all"              => %w[completeness build-state page-invariants excerpts behaviour-flows
-                           start-here blast-radius before-approving searches rails-anchors diagram],
+                           start-here reach impact-paths before-approving searches rails-anchors
+                           diagram],
   "core"             => %w[completeness build-state page-invariants excerpts before-approving rails-anchors],
   "behaviour-flows"  => %w[page-invariants excerpts behaviour-flows searches rails-anchors diagram],
   "start-here"       => %w[page-invariants start-here],
-  "blast-radius"     => %w[page-invariants excerpts blast-radius searches rails-anchors diagram],
+  "reach"            => %w[page-invariants excerpts reach impact-paths searches rails-anchors
+                           diagram],
   "before-approving" => %w[page-invariants before-approving rails-anchors],
   "diagram"          => %w[diagram],
 }.freeze
@@ -57,7 +59,7 @@ if scope.to_s.empty?
   if check.kind == "page"
     scope = "all"
   else
-    warn "a fragment needs --scope: behaviour-flows | start-here | blast-radius | before-approving | diagram"
+    warn "a fragment needs --scope: behaviour-flows | start-here | reach | before-approving | diagram"
     exit 2
   end
 end

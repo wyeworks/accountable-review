@@ -620,56 +620,6 @@ FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered with
 ## --page approving-six-questions.html
 exit=1
 FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
-## --fragment blast-brief-uncited.html
-exit=1
-PASS  no flow is grouped by directory or layer
-WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
-WARN  no .pipe — the end-to-end path is what makes a flow a flow
-FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
-PASS  1 review unit(s) inspected
-## --page blast-brief-uncited.html
-exit=1
-FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
-## --fragment blast-clean.html
-exit=1
-PASS  no flow is grouped by directory or layer
-WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
-WARN  no .pipe — the end-to-end path is what makes a flow a flow
-FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
-PASS  1 review unit(s) inspected
-## --page blast-clean.html
-exit=1
-FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
-## --fragment blast-no-pointer.html
-exit=1
-PASS  no flow is grouped by directory or layer
-WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
-WARN  no .pipe — the end-to-end path is what makes a flow a flow
-FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
-PASS  1 review unit(s) inspected
-## --page blast-no-pointer.html
-exit=1
-FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
-## --fragment blast-pointer-restated.html
-exit=1
-PASS  no flow is grouped by directory or layer
-WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
-WARN  no .pipe — the end-to-end path is what makes a flow a flow
-FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
-PASS  1 review unit(s) inspected
-## --page blast-pointer-restated.html
-exit=1
-FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
-## --fragment blast-readorder.html
-exit=1
-PASS  no flow is grouped by directory or layer
-WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
-WARN  no .pipe — the end-to-end path is what makes a flow a flow
-FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
-PASS  1 review unit(s) inspected
-## --page blast-readorder.html
-exit=1
-FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
 ## --fragment diagram-clean.html
 exit=1
 PASS  no flow is grouped by directory or layer
@@ -863,28 +813,6 @@ WARN  no .mech block found — a flow's body opens with one, so there is nothing
 WARN  no .pipe — the end-to-end path is what makes a flow a flow
 WARN  every excerpt here is --source — no flow shows the hunk its behaviour turns on
 FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
-## --fragment flows-blast-rows.html
-exit=0
-PASS  no flow is grouped by directory or layer
-PASS  prose precedes the first flow, where the grouping principle belongs
-PASS  at least one flow renders its path as a pipeline
-PASS  every dl.rows is introduced by a .mech block
-PASS  every field row is inside a dl.rows
-PASS  field labels match the canonical set
-PASS  unit "Project#archive!" fills things-to-understand
-PASS  unit "Project#archive!" carries citations
-PASS  1 review unit(s) inspected
-## --page flows-blast-rows.html
-exit=0
-PASS  no flow is grouped by directory or layer
-PASS  prose precedes the first flow, where the grouping principle belongs
-PASS  at least one flow renders its path as a pipeline
-PASS  every dl.rows is introduced by a .mech block
-PASS  every field row is inside a dl.rows
-PASS  field labels match the canonical set
-PASS  unit "Project#archive!" fills things-to-understand
-PASS  unit "Project#archive!" carries citations
-PASS  1 review unit(s) inspected
 ## --fragment flows-clean.html
 exit=0
 PASS  no flow is grouped by directory or layer
@@ -1029,6 +957,28 @@ PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " fills things-to-un
 FAIL  unit "PATCH /api/projects/:id &rarr; Project#archive! " makes claims with no file:line
 PASS  unit "PATCH /api/projects/:id &rarr; Project#archive! " validation steps are commands
 PASS  1 review unit(s) inspected
+## --fragment flows-reach-rows.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  1 review unit(s) inspected
+## --page flows-reach-rows.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  at least one flow renders its path as a pipeline
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  field labels match the canonical set
+PASS  unit "Project#archive!" fills things-to-understand
+PASS  unit "Project#archive!" carries citations
+PASS  1 review unit(s) inspected
 ## --fragment flows-source-only.html
 exit=0
 PASS  no flow is grouped by directory or layer
@@ -1141,6 +1091,86 @@ PASS  unit "Project#archive!" fills things-to-understand
 FAIL  unit "Project#archive!" makes claims with no file:line
 PASS  unit "Project#archive!" validation steps are commands
 PASS  1 review unit(s) inspected
+## --fragment impact-card-no-lanes.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-card-no-lanes.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-entities-vocab-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-entities-vocab-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-four-paths.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-four-paths.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-no-affected.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-no-affected.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-no-outcome.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-no-outcome.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-prose-nodes.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-prose-nodes.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-shared-card.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-shared-card.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-unlabelled-edge.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-unlabelled-edge.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
 ## --fragment invariants-assurance.html
 exit=1
 PASS  no flow is grouped by directory or layer
@@ -1260,6 +1290,56 @@ WARN  no .mech block found — a flow's body opens with one, so there is nothing
 WARN  no .pipe — the end-to-end path is what makes a flow a flow
 FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered without one lose the grid that aligns them
 ## --page invariants-verdict.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment reach-brief-uncited.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page reach-brief-uncited.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment reach-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page reach-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment reach-no-pointer.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page reach-no-pointer.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment reach-pointer-restated.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page reach-pointer-restated.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment reach-readorder.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page reach-readorder.html
 exit=1
 FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
 ## --fragment searches-bre-dialect.html
@@ -1452,7 +1532,7 @@ PASS  unit "Project#archive!" fills things-to-understand
 PASS  unit "Project#archive!" carries citations
 PASS  unit "Project#archive!" validation steps are commands
 PASS  1 review unit(s) inspected
-## --fragment flows-blast-rows.html
+## --fragment flows-reach-rows.html
 exit=0
 PASS  no flow is grouped by directory or layer
 PASS  prose precedes the first flow, where the grouping principle belongs

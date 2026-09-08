@@ -1,17 +1,31 @@
-<!-- No planted defect. A staged PAGE, section 4 written and section 2 still pending. The trap it
-     pins: section 4 renders Changed / Affected-not-changed with dl.rows and legitimately has NO
-     .mech, so a behaviour-flows census that falls back to the whole page when it finds no
-     id="flow-" section reads that grid as a flattened flow. A real run hit exactly this at stage 2.
+<!-- No planted defect: this is the shape a too-narrow shape check would call broken. dl.rows is
+     SHARED — section 4 renders Changed / Affected-not-changed with the same grid — so a fragment
+     carrying both a flow and a section 4 holds field-shaped rows in two places, and only the
+     ones inside a flow are units. behaviour-flows.rb narrows to id="flow-" BEFORE counting, which
+     is what keeps section 4's rows out of the census.
 
-     Same shape as the older bug where article.cohort satisfied the unit check: section 1 always
-     supplies one, so the substitute was always present no matter what section 2 did. -->
-<div class="buildstate">
-  <strong>Still being written</strong> — 3 parts still pending. Parts marked <span class="pending">pending</span> below are not yet written. Their absence is not a finding.
-</div>
-<section id="flows">
-  <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
-  <h2>Behaviour flows</h2>
-  <p class="note"><span class="pending">pending</span> Two flows across five files; being written now.</p>
+     This case replaces flows-endpoint-rows.html. That one guarded the same class of false
+     positive for .ep-row, which article.endpoint shared with article.unit; this design has no
+     endpoint card, so the old sharing cannot arise and the new sharing can. -->
+<section id="flow-a">
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Archiving a project</h3></div>
+  <p class="lede">Split by behaviour: archiving, and reading a list archival changes the meaning of.</p>
+  <div class="pipe">
+    <span class="lbl">Path of a write</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span class="t">PATCH /api/projects/:id</span></li>
+    </ol>
+  </div>
+  <div class="mech">
+    <b>Project#archive!</b>
+    <p>Archival had to preserve historical entries.</p>
+  </div>
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd><div class="item"><a class="path" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</div></dd>
+    <dt>Understand</dt>
+    <dd><div class="item">The uniqueness validation is enforced in Rails only <span class="tier">evidenced by unchanged code</span></div></dd>
+  </dl>
 </section>
 <section id="reach">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
@@ -50,6 +64,6 @@
   </figure>
   <dl class="rows">
     <dt>Affected, not changed</dt>
-    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; unchanged, and it decides what the picker still offers <span class="tier">evidenced by unchanged code</span></div></dd>
+    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; unchanged, and it decides what the picker still offers <a href="#flow-a">Flow A</a></div></dd>
   </dl>
 </section>

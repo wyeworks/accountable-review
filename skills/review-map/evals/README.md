@@ -105,7 +105,7 @@ the Actions UI, but they may not drift.
 ```sh
 bin/evals section behaviour-flows               # the loop: three judged repetitions, then the report
 bin/evals section behaviour-flows --fast        # the same on a cheaper reader; see below
-bin/evals section blast-radius --level brief    # the same case, other level: override the case file
+bin/evals section reach --level brief          # the same case, other level: override the case file
 bin/evals section diagrams --fixture monorepo-contract --visual
 bin/evals section behaviour-flows -n 1 --no-judge   # one unjudged repetition, when you want it
 ```
@@ -120,7 +120,7 @@ and dropping the default is the whole of what it means. Underneath:
 ./run.sh behaviour-flows -n 3 --judge --fast -j 3   # the iteration loop; see below
 ./run.sh diagrams --fixture monorepo-contract --visual
 ./run.sh brief-tail -n 3 --judge                # the default level's merged tail section
-./run.sh blast-radius -n 3 --level brief        # the same case, other level: override the case file
+./run.sh reach -n 3 --level brief              # the same case, other level: override the case file
 ./report.sh behaviour-flows
 ```
 
@@ -192,10 +192,10 @@ disk. `check.rb` takes `--level` too, and defaults it the same way.
 
 Only one check reads it: `before-approving.rb`, because a missing comprehension checkpoint is correct
 at brief and worth a WARN at full. Everything else survives the merge without a flag, because the
-merged section keeps the `id="blast"` and `id="approving"` anchors the region extractors read — which
+merged section keeps the `id="reach"` and `id="approving"` anchors the region extractors read — which
 is a property of the markup, and therefore a thing to break by accident. `golden/approving-brief-*.html`
 and the `self-test.rb` rows over them are what notice: three rows for the level's own rule, and two more
-running `blast-radius.rb` and `page-invariants.rb` over the merged shape, whose whole job is to fail the
+running `reach.rb` and `page-invariants.rb` over the merged shape, whose whole job is to fail the
 day the anchors move.
 
 ### The skill effort is the fourth, and it is not the `--effort` beside it
@@ -501,7 +501,8 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `excerpts.rb` | collapsed, summarised, tinted in all three themes, no range quoted twice, no syntax colouring written into the quotation, `data-lang` on unchanged blocks only, and a state tag that agrees with the diff — `Unchanged` never on a path the change touched, and no tag outside the generator's vocabulary | page and fragment |
 | `behaviour-flows.rb` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
 | `start-here.rb` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
-| `blast-radius.rb` | § 4: a diagram, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
+| `reach.rb` | § 4: the panel is present, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
+| `impact-paths.rb` | § 4's figure: 2-3 paths, one per `.ip-card` and each with its own lane labels, each starting in the diff, passing through unchanged code and ending at one observable behaviour, every edge labelled with a causal verb, labels rather than prose, no citations and no SVG inside the panel | page and fragment |
 | `searches.rb` | whether a recorded search **reproduces** the entry it is offered for — re-run inside `--repo` | page and fragment |
 | `before-approving.rb` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
 | `rails-anchors.rb` | doc links against the catalogue and never standing alone; probes with no fabricated output, no unsandboxed write, and identifiers that exist in `--repo` | page and fragment |
@@ -820,16 +821,16 @@ Four files, and the fifth is optional:
 3. `cases/<slug>.json` — at most six judged expectations, plus `level` if the section belongs to one
    detail level rather than both. Leave it out and the case runs at `full`.
 4. `check.rb` — add the slug to the `RUN` table. A case reusing an existing scope at another level, as
-   `brief-tail` reuses `blast-radius`, needs nothing here: the level rides on `--level`, not the scope.
+   `brief-tail` reuses `reach`, needs nothing here: the level rides on `--level`, not the scope.
 5. `checks/<slug>.sh` plus a golden fragment, if the section has anything mechanically checkable.
 
 Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a filename that repeats
 it only makes the reader look the number up. That rule earned itself when §§ 2 and 4 swapped places:
-`blast-radius` and `behaviour-flows` kept their names, their files and their history, and only their
+`reach` and `behaviour-flows` kept their files and their history, and only their
 prose had to move.
 
 `rails-anchors` reuses the `behaviour-flows` scope rather than adding one, the way `brief-tail` reuses
-`blast-radius`: the anchors live inside the review unit's fields, so what it grades is a § 2 fragment.
+`reach`: the anchors live inside the review unit's fields, so what it grades is a § 2 fragment.
 It is a case about restraint more than presence — the mechanical half already settles whether an anchor
 is real, and what a reader has to settle is whether it was worth making.
 
@@ -860,9 +861,9 @@ In rough order of value:
    nothing here can show it working. The shape wanted is a file that reads as a consumer of the
    changed thing and is not one: a serializer whose field is overridden downstream, a scope shadowed
    by a default, a caller behind a guard the change cannot reach.
-6. **A `diagrams` case for `monolith-guard-chain`.** `behaviour-flows` and `blast-radius` now have
+6. **A `diagrams` case for `monolith-guard-chain`.** `behaviour-flows` and `reach` now have
    one each and have been run; `diagrams` has not. This is the fixture where *affected but unchanged*
-   carries the most weight, which makes it the one whose blast-radius figure has the most to get
+   carries the most weight, which makes it the one whose impact paths have the most to get
    wrong — writers, the fact, and readers, with the readers outnumbering everything else.
 
 `monolith-guard-chain` closed what used to be item 4 here — a Rails-only monolith with

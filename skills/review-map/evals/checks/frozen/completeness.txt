@@ -172,36 +172,6 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page approving-six-questions.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
-## --fragment blast-brief-uncited.html
-exit=3
-SKIP  completeness.rb needs a whole page, got a fragment
-## --page blast-brief-uncited.html
-exit=1
-FAIL  completeness: needs --repo and --base to compare the ledger against the diff
-## --fragment blast-clean.html
-exit=3
-SKIP  completeness.rb needs a whole page, got a fragment
-## --page blast-clean.html
-exit=1
-FAIL  completeness: needs --repo and --base to compare the ledger against the diff
-## --fragment blast-no-pointer.html
-exit=3
-SKIP  completeness.rb needs a whole page, got a fragment
-## --page blast-no-pointer.html
-exit=1
-FAIL  completeness: needs --repo and --base to compare the ledger against the diff
-## --fragment blast-pointer-restated.html
-exit=3
-SKIP  completeness.rb needs a whole page, got a fragment
-## --page blast-pointer-restated.html
-exit=1
-FAIL  completeness: needs --repo and --base to compare the ledger against the diff
-## --fragment blast-readorder.html
-exit=3
-SKIP  completeness.rb needs a whole page, got a fragment
-## --page blast-readorder.html
-exit=1
-FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment diagram-clean.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -304,12 +274,6 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-unchanged-changed-file.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
-## --fragment flows-blast-rows.html
-exit=3
-SKIP  completeness.rb needs a whole page, got a fragment
-## --page flows-blast-rows.html
-exit=1
-FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-clean.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -346,6 +310,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-primer-uncited-unit.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment flows-reach-rows.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page flows-reach-rows.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment flows-source-only.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -374,6 +344,54 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page flows-unit-uncited.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-card-no-lanes.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-card-no-lanes.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-entities-vocab-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-entities-vocab-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-four-paths.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-four-paths.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-no-affected.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-no-affected.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-no-outcome.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-no-outcome.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-prose-nodes.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-prose-nodes.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-shared-card.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-shared-card.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-unlabelled-edge.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-unlabelled-edge.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-assurance.html
@@ -434,6 +452,36 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-verdict.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment reach-brief-uncited.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page reach-brief-uncited.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment reach-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page reach-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment reach-no-pointer.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page reach-no-pointer.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment reach-pointer-restated.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page reach-pointer-restated.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment reach-readorder.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page reach-readorder.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment searches-bre-dialect.html

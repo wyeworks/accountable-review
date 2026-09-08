@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, blast radius including the unchanged code the change gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort high is the default and tries to falsify the page's own claims before it is finished, --effort low skips that pass. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, what the change reaches including the unchanged code it gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort high is the default and tries to falsify the page's own claims before it is finished, --effort low skips that pass. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -192,7 +192,7 @@ reads:
   same reason: covering the wrong half produces a page that is confidently about code the reviewer is
   not reading.
 - **Neither** — say so plainly, cover the diff with the stack-independent material (the sections, the
-  review unit, the tiers, the blast radius, the ledger), and **emit no documentation link and no
+  review unit, the tiers, the impact paths, the ledger), and **emit no documentation link and no
   probe.** Do not default to Rails: a Rails lens applied to a Go service invents findings, and a
   catalogue that does not describe this application is the failure both catalogues fail closed to
   avoid.
@@ -546,7 +546,7 @@ someone mid-paragraph is worse than one that arrives late.
 | Stage | After step | The page holds |
 |---|---|---|
 | 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then section 1 (what changed) and the outline of the sections this diff earns, each marked pending |
-| 2 · Blast radius | 5 | Adds section 4: the blast-radius diagram, changed vs potentially affected, and what was searched |
+| 2 · Reach | 5 | Adds section 4: the impact-paths panel, affected but not changed, and what was searched |
 | 3 · Flows | 6, then per flow | Section 2's intro and the split — plus one pending stub per flow, named. Then each flow replaces its own stub as it is written |
 | 4 · Complete | 10 | Sections 3, 5, 6 and 7, gate passed, build banner and every marker gone |
 
@@ -585,7 +585,7 @@ that section from the block assembled whole in `references/page-template.html` �
 components that each came from a different section, and a composition that is only described is the
 one that gets flattened. Stage 3 is unchanged by the level: section 2 is identical at both.
 
-**The page fills in out of document order, and that is fine.** Step 5 produces the blast radius; step
+**The page fills in out of document order, and that is fine.** Step 5 produces section 4; step
 6 produces the flows. So section 4 lands while section 2 is still a pending stub, and a reader
 arriving at stage 2 sees a gap above written material — and once stage 3 is under way, a written flow
 sits above a pending sibling flow. The pending marker is what makes both readable — the risk the
@@ -661,16 +661,29 @@ Everything else about writing holds at every stage:
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
   yields nothing. Load it only if you have a deliberate reason to depart from the template, and
   `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
-- **Two of the four diagram kinds are components, not drawings.** The blast radius is a `.blast` box
-  grid and the boundary chain is a `.pipe` spine — build those from the template's markup, not as SVG.
-  The ER fragment and the lifecycle are still hand-authored inline SVG using the template's classes,
-  so they work in a local file as well as when published. **Take those two layouts from the catalogue
-  in `page-template.html` — worked out to scale — and fill in the text rather than deriving geometry.**
-  Which kind belongs to which section is in `report-format.md` § *Depth rules*, beside the budget and
-  beside the two rules a check cannot enforce: a box grid cannot show a directed edge, and a diagram
-  carries labels rather than sentences. Deriving a layout spends the run's attention on the part that
-  does not matter: what matters is whether the edges are true, and a followable edge that is wrong
-  costs the reviewer more than no diagram.
+- **Two of the four diagram kinds are components, not drawings.** Section 4's figure is the
+  `.impact` impact-paths panel and the boundary chain is a `.pipe` spine — build those from the
+  template's markup, not as SVG. The ER fragment and the lifecycle are still hand-authored inline
+  SVG using the template's classes, so they work in a local file as well as when published. **Take
+  those two layouts from the catalogue in `page-template.html` — worked out to scale — and fill in
+  the text rather than deriving geometry.** Which kind belongs to which section is in
+  `report-format.md` § *Depth rules*, beside the budget; the impact panel's own rules, its causal
+  verb vocabulary and its caps are in § *Impact paths*, and that section owns them alone. Deriving a
+  layout spends the run's attention on the part that does not matter: what matters is whether the
+  edges are true, and a followable edge that is wrong costs the reviewer more than no diagram.
+- **An impact path ends at a behaviour, and passes through unchanged code on the way.** The panel is
+  2–3 chains, **each in its own `.ip-card`**, each starting in the diff and ending at something a
+  user or an operator would see, with every hop carrying its causal verb — *reads*, *falls back to*,
+  *filtered out by*. A chain that stops at a function has not reached a consequence; a chain with no
+  unchanged node is a call stack inside the diff, which the diff already shows. And it carries
+  **labels, not sentences**: the `file:line` and the clause belong to *affected, not changed* below
+  it. The panel this replaced was a grid of boxes, and every real page filled the boxes with prose to
+  supply the relation the layout could not express — which is the failure to watch for coming back.
+- **Three paths, not five, and one per card.** Choosing the third-best consequence over the fifth is
+  the work here: the two that do not make the panel are not dropped, their entries are in *affected,
+  not changed* and their explanations in the flows that own them. A run that stacks four or five
+  chains inside one card has rebuilt the panel this replaced, where the reader on the third chain has
+  the first one's geometry behind them.
 - **Generate source excerpts, do not type them.** Two things get quoted, not one. The lines a claim
   would otherwise ask the reader to take on faith — above all *affected but unchanged*, which no diff
   view can address — and **the changed hunk each behaviour flow turns on**, because § 2 is read before
@@ -795,7 +808,8 @@ URL: say where the file is, once, and nothing more.
   covers the file, its attention level, and its group. A row still reading `{{SECTION}}` is a row
   nobody classified, which is the point.
 
-  **At `--brief`, add `--paths-only`** and paste the result into the merged section's `Changed` list:
+  **At `--brief`, add `--paths-only`** and paste the result into `details.coverage-foot`, the shut
+  disclosure below the last section:
 
   ```sh
   <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only
@@ -805,6 +819,11 @@ URL: say where the file is, once, and nothing more.
   judgements are the ledger's ranking and `--brief` declines to do it. The path and its `data-path`
   are unchanged, which is what keeps the gate below running at both levels. Combine it with the link
   flag your rung earned exactly as at `--full`.
+
+  **It does not go in section 4, at either level.** Section 4 is about consequences, not paths, and a
+  list of every changed file in the middle of it is the second ledger that section is told not to
+  become. At `--full` the paths live in section 7 and there is no foot disclosure; at `--brief` there
+  is no section 7 and the foot disclosure is where they live. One or the other, never both.
 
   **Pass the link option your rung earned**, so the rows come out linked and you never type inside the
   cell the gate reads:
