@@ -30,19 +30,25 @@ frontmatter allowlist and `claude plugin validate --strict` rejects an unknown k
 prose that another Claude instance executes, so the unit of quality is instruction clarity, not
 compilation.
 
-There is no build and no linter, and for `review-map` there is no test suite either: changes are
-verified by running the skill against a real PR and reading the page it produces.
+There is no build and no linter, and the **prose** has no test suite: changes to it are verified by
+running the skill against a real PR and reading the page it produces.
 `claude plugin validate . --strict` checks the manifest, not the prose, which is the part that
 matters there.
 
-**`setup-ci` is the exception, and the reason is that it is not prose.** What it produces is a YAML
-file and four shell scripts, which is ordinary software with right answers, so it has ordinary tests:
-`skills/setup-ci/tests/run.sh` (no model, no network, about a second) and `tests/self-test.sh`, which
-breaks ten things `run.sh` claims to check and asserts the suite notices each one. Both run in CI on
-every push, for the reason `evals/checks/self-test.rb` does: a check that passes because it never
-looked is worse than no check. When you edit the workflow template or any script under
-`skills/setup-ci/scripts/` or `ci/`, run both — `bin/evals offline` runs them beside the review-map
-suites, which is what CI does too.
+**The scripts are the exception, in both skills, and the boundary is prose versus software rather
+than one skill versus the other.** `setup-ci` produces a YAML file and four shell scripts; `review-map`
+has `page-skeleton.sh`, `excerpt.sh`, `ledger-rows.sh` and `coverage-gate.sh`. All of it is ordinary
+software with right answers, so it has ordinary tests: `skills/setup-ci/tests/` and
+`skills/review-map/tests/`, each a `run.sh` (no model, no network, about a second) beside a
+`self-test.sh` that breaks the things `run.sh` claims to check and asserts the suite notices each one.
+They all run in CI on every push, for the reason `evals/checks/self-test.rb` does: a check that passes
+because it never looked is worse than no check. When you edit either template, or any script under
+`skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them — `bin/evals offline` runs
+every suite together, which is what CI does too.
+
+That boundary moved once already, and the older wording said `review-map` had no tests at all. It was
+true when the only thing under `scripts/` was a quotation generator nobody had broken yet; it stopped
+being true the moment a script started deciding what a published page contains.
 
 ## Working on the skill
 
@@ -101,9 +107,23 @@ wall clock into tool execution, streaming, and the wait before each request prod
 On the run it was built against, that last part was 58% of the total and tool execution was 6%. Split
 that 58% before concluding anything from it: most of it is thinking, and only about **2.5s per request
 is fixed** — 95 requests paid roughly 240s of that for nothing, while tripling the context cost 0.8s.
-So the one lever is **fewer requests**, which is why § *Fewer turns, same work* and its pointers in
-steps 2, 5 and 9 exist, and why context reduction is not worth prose. Two `Write`s of the page
-accounted for 329 of the 457 seconds of streaming. It infers nothing the transcript does not carry:
+So the one lever **for wall clock** is fewer requests, and context reduction is not worth prose for
+that purpose. Two `Write`s of the page accounted for 329 of the 457 seconds of streaming.
+
+**For cost the ranking inverts, and the same script now prints both.** Context is billed once per
+request, so a 141-request run carrying 265k pays that 265k 141 times: on three real runs, cache
+reads were 37-39M against 160-190k of output, about **70% of the bill**, and *when* a file is loaded
+therefore matters as much as whether. The sentence above is not retired — it is true of the clock
+and false of the invoice, which are different questions about the same requests. `profile.sh` prints
+a *where the money goes* table beside the time one, and the two rank differently: read them side by
+side and never one instead of the other.
+
+It also reads the **subagent** transcripts under `<session>/subagents/`, which nothing used to. The
+falsification pass costs 0.9% of blocked wall clock and **17-23% of every cache-read token** — the
+first number is why spawning them does not slow the run, the second is what they add to the bill,
+and a profile that reported only the first is why the pass read as free.
+
+It infers nothing the transcript does not carry:
 publish stages are mechanical, the ten steps are **not** —
 `ledger-rows.sh` fires at minute four and again at minute thirteen — and steps 4, 6 and 8 leave no
 trace at all, so they get no row. Read `evals/README.md` § *Where the time goes* and § *Profiling one
@@ -127,11 +147,13 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
-| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script |
+| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script. Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
+| `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
+| `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire |
 | `bin/evals` | One command per eval scenario — `offline`, `section`, `page`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
 | `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for eleven of the twelve checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
@@ -183,10 +205,18 @@ Editing one of these means checking the others still agree.
 
   `--brief` is the default, so it is what almost every real page will be. Judge it first.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
-  Rails (`Gemfile`, `config/application.rb`) or Elixir (`mix.exs`) and reads **one** lens file and
-  **one** catalogue. Both roots, or neither, are handled explicitly — ask in the first case, degrade
+  Rails (`Gemfile`, `config/application.rb`) or Elixir (`mix.exs`) and **names** one lens file and
+  one catalogue. Both roots, or neither, are handled explicitly — ask in the first case, degrade
   to the stack-independent page and emit no anchor in the second. Defaulting to Rails is the
   regression: a Rails lens over a Go service invents findings, confidently.
+
+  **Naming them is not reading them, and the difference is worth about 43 KB of resident context.**
+  The lens is read at step 5, where its search recipes are the work; the catalogue at step 7, when a
+  claim first asks for a URL. Step 2 used to read both, against its own bundle table, which carried
+  them through steps 3 to 6 — the consumer tracing, where the context is already largest and every
+  token is re-billed per request. For Elixir it is starker still: that catalogue is closed at file
+  scope, so the whole file bought one fact. It is still read at step 7 rather than hoisted, because
+  the fact's home is `elixir-docs.md` § *Version* and six files already have to agree about it.
 
   The stack multiplies with the detail level and the effort exactly as those two multiply with each
   other, and like effort it **produces no section, no field, no tier, no component and no marker.**
@@ -465,7 +495,17 @@ Editing one of these means checking the others still agree.
   0.9% of wall clock because the falsifiers do not block (§ *Deliberately single-context*), and the
   same PR at `normal` missed five findings the falsified run carried — including an admin who never
   reaches the gate written to admit them, and sixteen consumers of a column the change made nullable,
-  two of which send email. The level is not where the budget goes: `--brief` bought 4.6% of wall clock
+  two of which send email.
+
+  **That 0.9% is wall clock, and the pass is not cheap in tokens.** Profiling the subagent
+  transcripts put it at **17-23% of every cache-read token** across three real runs — the second
+  most expensive thing in the procedure. Both numbers are load-bearing and neither replaces the
+  other: the first is why `high` can be the default at all, the second is why
+  `agents/claim-falsifier.md` carries its own `model:` rather than inheriting the parent's. Quoting
+  the 0.9% as though it settled the cost question is the mistake this paragraph exists to prevent,
+  and it is the one the first version of it made.
+
+  The level is not where the budget goes: `--brief` bought 4.6% of wall clock
   for 35% fewer words, because the time is in step 5's consumer tracing rather than in writing
   sections. **Effort decides whether the page is right; the level decides how long it is.** Effort produces **no section, no
   marker, no chip and no sentence**: two pages of the same target at the two efforts differ in their
@@ -477,6 +517,16 @@ Editing one of these means checking the others still agree.
   `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.rb` §§ 2b and 2c fail
   a page that advertises having been checked or narrates its own drafting, and `README.md` § *How hard
   it works* is the public wording.
+
+  **The falsifier's `model:` is a fourth thing that has to agree, and it agrees across the harness
+  rather than across the page.** `agents/claim-falsifier.md` names it; `evals/run.sh` reads it out of
+  that file into the `--agents` JSON, so an eval arm cannot silently measure a different model from
+  the one that ships; the value lands on the result line as `falsifier_model` and in `report.sh`'s
+  group key, so an opus-falsifier row can never be averaged into a sonnet one; and `profile.sh`
+  prints the model the subagent transcripts actually recorded. That last one is the only real check:
+  `--agents` accepts keys it does not understand without complaining, so sending the field is not
+  proof it was honoured, and the transcript is. Like effort itself, none of this reaches the page —
+  no section, no marker, no sentence.
 
   **A verification badge is the same regression as a severity chip, and it will look more innocent.**
   Grading the PR is obviously forbidden; grading *the page* — "every claim verified", a count of what
@@ -678,6 +728,35 @@ Editing one of these means checking the others still agree.
   reaches for the *components* rather than SVG. Covering ER and lifecycle properly needs a new
   fixture with a migration and a status enum; until then those two catalogue layouts are checked by
   `diagram.rb` against the template itself and by nothing else.
+- **The skeleton is emitted, never typed.** `references/page-template.html` carries four
+  `SKELETON:` markers. Everything in the head and tail ranges — the `<head>`, the entire token
+  block, the three highlight.js tags and the tint script, 54.5 KB of it — is written straight into
+  the page by `scripts/page-skeleton.sh`, once, at the top of stage 1. A run never reads those bytes
+  and never types them; what it reads is the markup between the markers, via `--markup`.
+
+  It began as a cost change and that is the least of it. 54.5 KB was resident twice from stage 1
+  onward — once as the template read, once as the write's own input — which is 6-8% of a run's cache
+  reads, plus ~15k output tokens and about 110s of streaming. **The real payoff is that every colour
+  on a published page now comes from a script.** Measured on the template: `--rails` ×3, `--syn-key`
+  ×3, the media dark block, both `[data-theme]` blocks — all of them in the head range, none in the
+  markup half. The half-declared-token defect that § *Theme tokens* below and `excerpts.rb` exist to
+  catch is not merely checked now, it is unreachable.
+
+  Four files agree: the template holds the markers and the bytes, `page-skeleton.sh` extracts them,
+  `SKILL.md` step 9 calls it once and forbids writing a `<style>`, a `:root`, a colour or a
+  `<script>` into the page, and `skills/review-map/tests/run.sh` proves the script holds no bytes of
+  its own. That last one is the load-bearing part, and it is a **partition** test rather than a
+  comparison: strip the markers and the maintainer preamble, and head + markup + tail must be the
+  template byte for byte. Extracting with awk and comparing against the script's own awk would test
+  the script against itself and pass for any consistent pair of bugs — which is why two of
+  `self-test.sh`'s cases mutate the *script* and not the template.
+
+  Marker text is load-bearing too. `diagram-shot.rb` reads the template with
+  `range(from: /<style/, …)` and `Page#range` re-opens, so a marker containing an opening `style`,
+  `script` or `svg` tag would corrupt a check that has nothing to do with this. Each marker is also
+  **one line**: extraction is a line range over the marker line, so a marker spilling onto a second
+  line would emit half a comment into every page.
+
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
   the classic unreadable-artifact bug. `evals/checks/page-invariants.rb` § 6 enforces the three
@@ -957,9 +1036,16 @@ every cited file before acting on one, so no comprehension moves anywhere.
 **And it does not block, which is the fact that changed the default.** The agents launch async and
 return a receipt in about two seconds; the challenges arrive as notifications while the parent drafts
 stage 4. Measured on a 28-file PR at `--brief`: five falsifiers, **23 seconds of blocked parent, 0.9%
-of a 2607-second run**, first challenges landing 365 seconds after the last spawn. The cost objection
-the flag was gated behind turned out to be an artefact of how the pass was assumed to work rather than
-how it does.
+of a 2607-second run**, first challenges landing 365 seconds after the last spawn.
+
+**The cost objection the flag was gated behind was half right, and the half that was right is the
+tokens.** It does not cost *wall clock* — that part was an artefact of how the pass was assumed to
+work. It does cost tokens: each falsifier reads in its own context, and profiling those transcripts
+put the pass at **17-23% of every cache-read token** a run spends, over 145-216 requests. Two numbers,
+two questions, and the flag is defensible on the first while remaining the second most expensive
+thing in the procedure. What follows is not that the default is wrong but that the *model* is a knob:
+`agents/claim-falsifier.md` pins its own, because a reader whose output the parent re-verifies before
+using is the safest place in this design to spend less.
 
 They still go out in a single message. It costs nothing, the challenges then arrive together rather
 than trickling, and if a harness ever does make them block, one message stalls the run once — for the
@@ -968,8 +1054,10 @@ blocking spawn, and that number is about `Explore`, not about the falsifier.
 
 Two things it is not. It is not a licence for step 5 or step 6 to fan out — those still span the
 whole diff by nature, and splitting them is still the mistake. And it is not a second context doing
-the work: the falsifiers read, the parent writes, and a profile of a run still reads as one context
-plus a handful of receipts.
+the work: the falsifiers read, the parent writes, and the parent transcript still reads as one
+context plus a handful of receipts. That last fact is a trap as well as a reassurance: it is why
+`profile.sh` reads `<session>/subagents/` too, and why a run cost quoted from the parent alone is a
+fifth to a quarter short.
 
 **A run that waits on them has lost the whole argument.** The 0.9% holds only because the parent
 drafts while they read; spawn-then-idle turns the cheapest step in the procedure into the most

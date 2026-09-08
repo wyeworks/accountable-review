@@ -284,8 +284,29 @@ over 2000 thinking tokens averaged **56.9s** to their first block, requests unde
 | ~2.5s per request | fixed — queue and first-token latency. 95 requests ≈ **240s, 19% of the run, buying nothing** |
 | the remainder | thinking, which is the product and not overhead |
 
-Which leaves exactly one lever, and it is neither context nor scripts: **fewer requests.** An earlier
-version of this section named context size as a second lever; the numbers above are what retired it.
+Which leaves exactly one lever **on the clock**, and it is neither context nor scripts: **fewer
+requests.** An earlier version of this section named context size as a second lever; the numbers
+above are what retired it — *for wall clock*, which is the only thing they measured.
+
+### The money is a different ranking of the same requests
+
+Context is billed once per request, so a run does not pay its context once — it pays it per request.
+On three real `review-map` runs (fayron #529 and #21819999, oli-torus), the parent spent **30-39M
+cache-read tokens against 160-190k of output**, carrying **250-305k of context across 121-141
+requests**. Cache reads are roughly **70% of the bill**. So *when* a file is loaded matters as much
+as whether, and the paragraph above is true of the clock and false of the invoice.
+
+Both tables print, and they rank differently. On fayron #529 the `search` bucket was 66% of cache
+reads and 75% of model seconds — agreeing — while `publish` was 4% of the money and 1% of the time.
+A change that helps one can be neutral for the other, so read them side by side and quote whichever
+question you are actually answering.
+
+**`profile.sh` also reads the subagent transcripts now**, under `<session>/subagents/`, which nothing
+used to. The falsification pass is the case that matters: **0.9% of blocked wall clock and 17-23% of
+every cache-read token**, over 145-216 requests. Reporting only the first is why the pass read as
+free, and a run cost taken from the parent transcript alone is a fifth to a quarter short. The report
+prints the model those transcripts recorded, because `--agents` accepts a `model` key it may not
+honour — the transcript is the check, not the flag.
 
 The other reading from the same run: the slowest *tool call* was 4.5s (`git fetch`), while the slowest
 *request* was 264.5s — 35k output tokens streamed into one `Write` of the page. **The request is the

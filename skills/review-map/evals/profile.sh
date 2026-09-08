@@ -1,5 +1,5 @@
 #!/bin/sh
-# profile.sh — where one run's wall clock went.
+# profile.sh — where one run's wall clock went, and what it cost.
 #
 #   ./profile.sh                                  # newest run in this directory's transcript
 #   ./profile.sh --session <uuid>                 # the session run.sh pinned
@@ -25,6 +25,18 @@
 # block, requests under 200 averaged 2.8s. Context barely enters it: at near-zero thinking, 77k of
 # context cost 2.3s and 274k cost 3.1s. So ~2.5s per request is FIXED, thinking is the product, and
 # the only lever is fewer requests — 95 of them paid ~240s of that fixed cost for nothing.
+#
+# AND WHERE THE MONEY WENT, which is a different ranking of the same requests. Context is billed
+# once per request, so a 141-request run carrying 265k pays that 265k 141 times: cache reads were
+# 37.3M against 191k of output on the run above. That is why the sentence directly above — "the
+# only lever is fewer requests" — is true of WALL CLOCK and false of cost, where context size is
+# the lever precisely because it is re-read. Both tables print; read them side by side, because a
+# change can help one and be neutral for the other.
+#
+# The falsifiers of step 8 are the case in point. They cost 23s of blocked parent (0.9% of a run)
+# and 17-23% of all cache reads, measured on three real runs — the first number is why the pass
+# looks free and the second is what it actually spends. They live in their own transcripts under
+# <session>/subagents/, which nothing here used to read, so the report now charges them to the run.
 #
 # What it will NOT do is reconstruct the ten steps, because the transcript does not carry a
 # position in a procedure. See `bucket()` below and evals/README.md § "Where the time goes".
@@ -137,6 +149,28 @@ DATA=$(jq -s \
   --arg skill "$FILTER_SKILL" --arg gap "$GAP_MIN" --arg run "${RUN:-}" \
   --argjson top "$TOP" -f "$HERE/profile.jq" "$TRANSCRIPT") || {
   echo "FAIL  profile.jq failed on $TRANSCRIPT" >&2; exit 1; }
+
+# ---- subagent cost, which the parent transcript does not carry ----
+# The falsifiers of step 8 read in their own transcripts under <session>/subagents/, and their
+# tokens are the run's tokens. A pass measured only by the parent's blocked time reads as free and
+# is not: on three real runs the falsifiers were 17-23% of all cache reads. They belong to the
+# SESSION rather than to a run, so a multi-run session is told the number covers the session.
+SUBDIR="${TRANSCRIPT%.jsonl}/subagents"
+SUB=null
+if [ -d "$SUBDIR" ] && ls "$SUBDIR"/*.jsonl >/dev/null 2>&1; then
+  nag=$(ls "$SUBDIR"/*.jsonl | wc -l | tr -d ' ')
+  SUB=$(cat "$SUBDIR"/*.jsonl | jq -s --argjson n "$nag" '
+    [ .[] | select(.type == "assistant" and .timestamp and .message.usage) ]
+    | group_by(.requestId // .uuid) | map(.[0])
+    | ([ .[].message.model ] | map(select(. != null)) | unique | join(",")) as $models
+    | map(.message.usage)
+    | { agents: $n, requests: length, models: $models,
+        cache_read:   ([ .[].cache_read_input_tokens ] | add // 0),
+        cache_write:  ([ .[].cache_creation_input_tokens ] | add // 0),
+        out_tokens:   ([ .[].output_tokens ] | add // 0),
+        think_tokens: ([ .[].output_tokens_details.thinking_tokens // 0 ] | add // 0) }') || SUB=null
+fi
+DATA=$(printf '%s' "$DATA" | jq --argjson s "$SUB" '. + {subagents: $s}')
 
 fatal=$(printf '%s' "$DATA" | jq -r '[.diagnostics[]|select(.v=="FAIL")]|length')
 if [ "$fatal" -gt 0 ]; then

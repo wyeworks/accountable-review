@@ -65,3 +65,16 @@ jobs:
       # same trick as above — ten deliberate breaks, each of which must make the suite fail.
       - run: skills/setup-ci/tests/run.sh
       - run: skills/setup-ci/tests/self-test.sh
+
+  review-map-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # review-map's prose is judged by running it; its SCRIPTS are ordinary software with right
+      # answers, and this is that half. page-skeleton.sh emits the page's head, token block and
+      # tint script straight into the page, so no model reads or types a colour — and the test
+      # asserts that by partition: head + markup + tail must be the template's own bytes. Then
+      # the same trick as the two jobs above, including two mutations of the script itself,
+      # because a template mutation alone cannot exercise a comparison against that template.
+      - run: skills/review-map/tests/run.sh
+      - run: skills/review-map/tests/self-test.sh

@@ -88,11 +88,18 @@ for f in $files; do
       if (match($0, /"judge_model":"[^"]*"/)) jmodel  = substr($0, RSTART + 15, RLENGTH - 16)
       if (match($0, /"judge_effort":"[^"]*"/)) jeffort = substr($0, RSTART + 16, RLENGTH - 17)
 
+
+      if (match($0, /"falsifier_model":"[^"]*"/)) fmodel = substr($0, RSTART + 20, RLENGTH - 21)
+      if (fmodel == "") fmodel = "-"
+
       # The detail level is part of the group key for the same reason model and effort are: a
       # brief run and a full run of the same case are two different pages, and a pass rate
       # averaged over both belongs to neither. Skill effort joins it on the same argument:
       # comparing normal against high is the whole point of the flag, so they must not average.
-      k = sha (dirty == "true" ? "+dirty" : "") "\t" fixture "\t" level "\t" "effort=" seffort "\t" model "/" effort
+      # The falsifier model joins them for the same reason: it is 17-23% of what a run costs, and it
+      # decides how good the challenges were. An opus-falsifier row and a sonnet-falsifier row are two
+      # different experiments, and averaging them hides exactly the trade the flag exists to make.
+      k = sha (dirty == "true" ? "+dirty" : "") "\t" fixture "\t" level "\t" "effort=" seffort "\t" model "/" effort "\t" "fals=" fmodel
       keys[k] = 1
 
       # A run whose agent died produced nothing to grade, and averaging it in reads as a quality
@@ -114,7 +121,7 @@ for f in $files; do
     END {
       for (k in keys) {
         n = split(k, part, "\t")
-        printf "  %-18s %-20s %-6s %-14s %s\n", part[1], part[2], part[3], part[4], part[5]
+        printf "  %-18s %-20s %-6s %-14s %-14s %s\n", part[1], part[2], part[3], part[4], part[5], part[6]
         if (runs[k] > 0)
           printf "    checks   %d run(s)  %d clean  %.1f fail/run  %.1f warn/run  %ds avg%s\n",
             runs[k], green[k], fails[k] / runs[k], warns[k] / runs[k],
@@ -136,10 +143,10 @@ for f in $files; do
           m = split(jorder[k], jks, SUBSEP)
           for (x = 1; x <= m; x++) {
             jk = jks[x]; if (jk == "") continue
-            split(jk, jpart, "\t")   # sha, fixture, level, skill effort, model/effort, judge …
+          split(jk, jpart, "\t")   # sha, fixture, level, skill effort, model/effort, falsifier, judge …
             printf "    judged   %d run(s)  %d clean  %.1f pass  %.1f fail  %.1f unclear  per run  · judge %s\n",
               jruns[jk], jclean[jk], jpass[jk] / jruns[jk], jfail[jk] / jruns[jk], junc[jk] / jruns[jk],
-              jpart[6]
+              jpart[7]
           }
         } else
           printf "    judged   none — ./run.sh %s --judge\n", FILENAME

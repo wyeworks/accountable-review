@@ -132,7 +132,13 @@ DRIVER_SHA=$(git -C "$PLUGIN_ROOT" hash-object "$DRIVER" 2>/dev/null | cut -c1-8
 # alternative — one arm of the A/B carrying an extra CLI flag — would make the two arms differ by
 # something other than the thing under test. Description and tools are read out of the agent file
 # so there is one copy of them; a second copy here would drift, which is the failure this
-# repository keeps writing down.
+# repository keeps writing down. The MODEL is read the same way and for the same reason: the
+# falsifiers are 17-23% of a run's cache reads, so which model they run on is a fact about what a
+# result line cost, and an arm that measured Opus while the shipped agent says sonnet would be a
+# measurement that never looked. `inherit` is omitted rather than sent, because inheriting IS the
+# absence of the key. Note that --agents ignores keys it does not know without complaining, so
+# sending it is not proof it was honoured -- `profile.sh` prints the model the subagent transcripts
+# actually recorded, and that is the check.
 AGENT_FILE=$PLUGIN_ROOT/agents/claim-falsifier.md
 AGENTS_JSON=
 if [ -r "$AGENT_FILE" ]; then
@@ -140,10 +146,13 @@ if [ -r "$AGENT_FILE" ]; then
                   while ((getline line) > 0 && line ~ /^[[:space:]]/) { sub(/^[[:space:]]+/,"",line); d=d " " line }
                   print d; exit}' "$AGENT_FILE")
   a_tools=$(sed -n 's/^tools:[[:space:]]*//p' "$AGENT_FILE" | head -1)
+  a_model=$(sed -n 's/^model:[[:space:]]*//p' "$AGENT_FILE" | head -1)
+  case "$a_model" in inherit|"") a_model= ;; esac
   a_body=$(awk 'n==2{print} /^---$/{n++}' "$AGENT_FILE")
-  AGENTS_JSON=$(jq -n --arg d "$a_desc" --arg p "$a_body" --arg t "$a_tools" \
+  AGENTS_JSON=$(jq -n --arg d "$a_desc" --arg p "$a_body" --arg t "$a_tools" --arg m "$a_model" \
     '{"accountable-review:claim-falsifier":
-        {description:$d, prompt:$p, tools:($t|split(",")|map(gsub("^ +| +$";"")))}}')
+        ({description:$d, prompt:$p, tools:($t|split(",")|map(gsub("^ +| +$";"")))}
+         + (if $m == "" then {} else {model:$m} end))}')
 else
   echo "warn: $AGENT_FILE not found — --skill-effort high has no falsifier to spawn" >&2
 fi
@@ -162,6 +171,10 @@ command -v uuidgen >/dev/null 2>&1 || CAN_PIN=
 # is also why such a row is not comparable to one from another machine or another week.
 MODEL_TAG=${MODEL:--}; EFFORT_TAG=${EFFORT:--}
 JUDGE_MODEL_TAG=${JUDGE_MODEL:--}; JUDGE_EFFORT_TAG=${JUDGE_EFFORT:--}
+# The falsifier's model is a property of the RUN, not of the invocation: it is read out of the
+# agent file, so a result line records what that file said on the day. 17-23% of a run's cache
+# reads are its, so two rows that differ here are not comparable however alike they look.
+FALSIFIER_MODEL_TAG=${a_model:--}
 
 # One repetition, start to appended line. A function because -j runs several of these at once,
 # and because everything it prints has to name its own run: with jobs in flight, an unlabelled
@@ -267,12 +280,12 @@ one_run() {
 
   # judged=false is why the judged counts are a separate flag rather than three zeroes: a run
   # nobody judged and a run that scored zero must not aggregate the same way.
-  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"session":"%s","requests":%d,"model_seconds":%s,"tool_seconds":%s,"ttft_seconds":%s,"stream_seconds":%s,"output_tokens":%d,"thinking_tokens":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"level":"%s","skill_effort":"%s","model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}
+  printf '{"case":"%s","fixture":"%s","run":%d,"ts":"%s","pass":%d,"fail":%d,"warn":%d,"skip":%d,"check_exit":%d,"agent_exit":%d,"seconds":%d,"session":"%s","requests":%d,"model_seconds":%s,"tool_seconds":%s,"ttft_seconds":%s,"stream_seconds":%s,"output_tokens":%d,"thinking_tokens":%d,"fragment_written":%s,"judged":%s,"judge_pass":%d,"judge_fail":%d,"judge_unclear":%d,"level":"%s","skill_effort":"%s","model":"%s","effort":"%s","judge_model":"%s","judge_effort":"%s","falsifier_model":"%s","skill_sha":"%s","dirty":%s,"driver_sha":"%s","fragment":"%s"}
 ' \
     "$CASE" "$rfixture" "$rnum" "$stamp" "$p" "$f" "$w" "$s" "$check_exit" "$agent_exit" "$seconds" \
     "$rsession" "$preq" "$pmodel" "$ptool" "$pttft" "$pstream" "$pout" "$pthink" \
     "$written" "$judged" "$jp" "$jf" "$ju" \
-    "$LEVEL" "$SKILL_EFFORT" "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" \
+    "$LEVEL" "$SKILL_EFFORT" "$MODEL_TAG" "$EFFORT_TAG" "$JUDGE_MODEL_TAG" "$JUDGE_EFFORT_TAG" "$FALSIFIER_MODEL_TAG" \
     "$SKILL_SHA" "$DIRTY" "$DRIVER_SHA" "$OUT" >> "$HERE/results/$CASE.jsonl"
 
   # One printf, so a parallel run's result arrives as one piece instead of interleaved with
