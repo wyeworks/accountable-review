@@ -765,6 +765,24 @@ Editing one of these means checking the others still agree.
   the component exists to prevent. `.ip-aff + .ip-out` needs the same rule for the last hop,
   because the spanning outcome's rail sits in lane 1.
 
+  **And it descends `--ip-drop` before it turns**, which was the third attempt: turning flush
+  against the source box made the horizontal read as a line leaving the box *sideways*, where every
+  other hop leaves a node downward. **Four rules have to agree on that one length, and the fourth
+  is the one that breaks silently** — the destination rail has to start at the corner rather than
+  at the row's top edge, or a hairline the length of the drop dangles above it in the other lane.
+  The other three are the stub, the horizontal, and the reset to `0` under 780px, where the lanes
+  collapse and there is no crossing to draw. It is a custom property on `.impact` for exactly that
+  reason: agreement by scope beats agreement by comment.
+
+  **Solid hairlines flow, dashes bound**, and the lane divider is the second thing that came out of
+  looking at a rendered card. It was a 1px solid `--rule-strong` — byte-for-byte a connector — so
+  the one line on the figure that carries no direction was drawn like the ones that do, and a path
+  crossing it read as joining it. It is dotted `--rule-dash` now, at 2 on and 9 off: dashes are
+  already how `.ip-aff` says *the existing system*, and the sparse pattern is what keeps a divider
+  running the full height of a card from carrying more ink than the chain it sits behind. The
+  colour deliberately did **not** go a step lighter — that loses the dots rather than quieting
+  them, and the density is the right knob.
+
   **The vocabulary includes passive forms deliberately, and `ignored by` is the one to know.** A
   label reads from the node above to the node below, and half the edges here run producer to
   consumer, where the honest verb is *read by*. Without a passive a run inverts the pair to find an

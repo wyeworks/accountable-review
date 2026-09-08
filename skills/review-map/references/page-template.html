@@ -768,10 +768,14 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    ONLY there — the way an excerpt's do in § Source excerpts.
    § Depth rules holds the catalogue row and points at it.
    ============================================================ */
-/* The figure itself gets no box, no padding and no background — deliberately, and this is the
-   whole of it: it is a GROUP, and every visible edge belongs to a card. Its children are laid
-   out by adjacent-sibling margins the way .decision + .decision is, rather than by a grid gap,
-   so the label above and the legend below can set their own distances. */
+/* The figure itself gets no box, no padding and no background — deliberately: it is a GROUP,
+   and every visible edge belongs to a card. Its children are laid out by adjacent-sibling
+   margins the way .decision + .decision is, rather than by a grid gap, so the label above and
+   the legend below can set their own distances.
+
+   --ip-drop is how far a lane crossing descends before it turns, and it lives here because
+   FOUR rules have to agree on it — see THE LANE CROSSING below. */
+.impact { --ip-drop: 11px; }
 .impact > .lbl { display: block; margin-bottom: 14px; }
 .ip-card { padding: 20px 24px 24px; background: var(--surface-hi); border: 1px solid var(--rule); }
 .ip-card + .ip-card { margin-top: 14px; }
@@ -781,8 +785,26 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 /* The lane rule, one per card, so the path inside it aligns to the lane labels above. Painted
    as a BACKGROUND, not an absolutely positioned overlay: a background sits behind child
    content for free, and the overlay version drew the line straight across the filled .ip-out
-   node, splitting the one box that spans both lanes into two. */
-.ip-body { background: linear-gradient(to right, transparent calc(50% - 0.5px), var(--rule-strong) calc(50% - 0.5px), var(--rule-strong) calc(50% + 0.5px), transparent calc(50% + 0.5px)); }
+   node, splitting the one box that spans both lanes into two.
+
+   IT IS DASHED, AND IT IS NOT --rule-strong. It began as a 1px solid --rule-strong hairline,
+   which is byte-for-byte what a connector and an elbow are drawn in — so the one line on the
+   figure that carries no direction looked exactly like the lines that do, and a path crossing
+   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "the
+   existing system", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
+   FLOW, DASHES BOUND. Anything drawn in --rule-strong is part of a chain.
+
+   DOTTED RATHER THAN DASHED, and that is the second half of it. At 3-on-5-off in the same ink
+   as an .ip-aff border, a divider running the whole height of the card carried more ink than
+   the chain did, and the boundary outweighed the thing the figure is about. 2 on, 9 off keeps
+   every dot legible — which is why the colour stays --rule-dash rather than going a step
+   lighter — while dropping the total ink far enough that it reads as ground, not as figure. */
+.ip-body {
+  background-image: repeating-linear-gradient(to bottom, var(--rule-dash) 0 2px, transparent 2px 9px);
+  background-size: 1px 100%;
+  background-position: calc(50% - 0.5px) 0;
+  background-repeat: no-repeat;
+}
 
 /* The card's head. It carries the gap down to the body itself rather than leaving it to a top
    margin on .ip-lanes, because the lanes are display:none under 780px and the head would then
@@ -820,15 +842,46 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    The elbow runs the whole way between the two rails — from the centre of the previous node's
    22px rail, across the 40px gutter, to the centre of this connector's own — so it reads as
    starting underneath the node it descends from. Stopping it at the lane boundary was the first
-   attempt, and it left the chain looking like it reappeared in the other column from nowhere. */
-.ip-chg + .ip-aff > .ip-rel, .ip-aff + .ip-chg > .ip-rel { position: relative; }
-.ip-chg + .ip-aff > .ip-rel::before { content: ""; position: absolute; top: 0; left: calc(-100% - 29px); width: calc(100% + 40px); height: 1px; background: var(--rule-strong); }
-.ip-aff + .ip-chg > .ip-rel::before { content: ""; position: absolute; top: 0; left: 11px; width: calc(100% + 40px); height: 1px; background: var(--rule-strong); }
-/* And the same for the last hop, where an .ip-aff node is followed by the .ip-out that spans
-   both lanes: the outcome's rail sits in lane 1, so without this the chain drops out of the
-   right lane and the arrow into the behaviour appears on the left with nothing joining them. */
-.ip-aff + .ip-out > .ip-rel { position: relative; }
-.ip-aff + .ip-out > .ip-rel::before { content: ""; position: absolute; top: 0; left: 11px; width: calc(50% + 20px); height: 1px; background: var(--rule-strong); }
+   attempt, and it left the chain looking like it reappeared in the other column from nowhere.
+
+   AND IT DESCENDS --ip-drop BEFORE IT TURNS. Turning flush against the source box was the
+   second attempt, and a horizontal leaving a box's bottom edge reads as a line going sideways
+   OUT of it; the short vertical says the chain drops out of the node the way every other hop
+   does and then changes lane, which is the same thing the arrowhead says at the far end.
+
+   Four rules have to agree on --ip-drop, and the fourth is the one that breaks silently: the
+   DESTINATION rail has to start at the corner rather than at the row's top edge, or a hairline
+   the length of the drop dangles above it in the other lane. The other three are the stub
+   (::after), the horizontal (::before), and the reset under 780px, where the lanes collapse
+   and there is no crossing left to draw.
+
+   The x arithmetic, once, because all three cases are the same two numbers: a lane is 100% of
+   a single-lane .ip-rel and the gutter is 40px, so the far rail is one lane plus the gutter
+   away, ±11px for the 22px rail's own centre. The .ip-out case spans both lanes, which makes
+   its own 50% the lane boundary rather than 100% the lane. */
+.ip-chg + .ip-aff > .ip-rel, .ip-aff + .ip-chg > .ip-rel, .ip-aff + .ip-out > .ip-rel { position: relative; }
+.ip-chg + .ip-aff > .ip-rel::before, .ip-aff + .ip-chg > .ip-rel::before,
+.ip-aff + .ip-out > .ip-rel::before {
+  content: ""; position: absolute; top: var(--ip-drop); height: 1px; background: var(--rule-strong);
+}
+.ip-chg + .ip-aff > .ip-rel::after, .ip-aff + .ip-chg > .ip-rel::after,
+.ip-aff + .ip-out > .ip-rel::after {
+  content: ""; position: absolute; top: 0; height: var(--ip-drop); width: 1px; background: var(--rule-strong);
+}
+/* Left to right: the origin rail is a lane and a gutter back from this connector's own. */
+.ip-chg + .ip-aff > .ip-rel::before { left: calc(-100% - 29px); width: calc(100% + 40px); }
+.ip-chg + .ip-aff > .ip-rel::after  { left: calc(-100% - 29px); }
+/* Right to left: the same distance the other way, so the stub is out past this element's edge. */
+.ip-aff + .ip-chg > .ip-rel::before { left: 11px; width: calc(100% + 40px); }
+.ip-aff + .ip-chg > .ip-rel::after  { left: calc(100% + 51px); }
+/* And the last hop, where an .ip-aff node is followed by the .ip-out that spans both lanes: the
+   outcome's rail sits in lane 1, so without this the chain drops out of the right lane and the
+   arrow into the behaviour appears on the left with nothing joining them. */
+.ip-aff + .ip-out > .ip-rel::before { left: 11px; width: calc(50% + 20px); }
+.ip-aff + .ip-out > .ip-rel::after  { left: calc(50% + 31px); }
+/* The fourth rule: the destination rail starts at the corner. */
+.ip-chg + .ip-aff > .ip-rel > i::before, .ip-aff + .ip-chg > .ip-rel > i::before,
+.ip-aff + .ip-out > .ip-rel > i::before { top: var(--ip-drop); }
 
 /* The group's foot: one legend for every card, because the three node kinds mean the same thing
    in all of them. It sits on the page ground rather than inside a card now, so the rule above it
@@ -841,9 +894,14 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 @media (max-width: 780px) {
   .ip-card { padding: 18px 16px 20px; }
   .ip-lanes { display: none; }
-  .ip-body { background: none; }
+  .ip-body { background-image: none; }
+  /* One lane, so no crossing: the elbow and its stub go, and --ip-drop going with them is what
+     puts every rail back on the row's top edge without a rule per selector. */
+  .impact { --ip-drop: 0px; }
   .ip-chg + .ip-aff > .ip-rel::before, .ip-aff + .ip-chg > .ip-rel::before,
-  .ip-aff + .ip-out > .ip-rel::before { display: none; }
+  .ip-aff + .ip-out > .ip-rel::before,
+  .ip-chg + .ip-aff > .ip-rel::after, .ip-aff + .ip-chg > .ip-rel::after,
+  .ip-aff + .ip-out > .ip-rel::after { display: none; }
   .ip-n { grid-template-columns: minmax(0, 1fr); }
   .ip-n > *, .ip-aff > *, .ip-out > * { grid-column: 1; }
 }

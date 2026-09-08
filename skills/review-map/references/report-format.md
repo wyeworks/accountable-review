@@ -613,10 +613,16 @@ first-class part, and adjacency is not asked to imply anything.
 | Behaviour / outcome | `.ip-out` | filled, ink ground — the terminal treatment `.pipe`'s last node uses |
 
 `.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
-left, *the existing system* on the right, with a rule between them — is **derived from the kind and
-never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an observable
-behaviour belongs to neither half. So the boundary the reader sees is structurally true, and there is
-no lane class for a run to put on the wrong node.
+left, *the existing system* on the right, with a **dotted** rule between them — is **derived from
+the kind and never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an
+observable behaviour belongs to neither half. So the boundary the reader sees is structurally true,
+and there is no lane class for a run to put on the wrong node.
+
+**Solid hairlines flow, dashes bound.** The lane divider is dotted and the connectors are solid,
+and that split is load-bearing rather than decorative: the divider began as a 1px solid hairline in
+the connectors' own ink, so the one line on the figure carrying no direction looked exactly like
+the lines that do, and a path crossing it read as joining it. Dashes are already how `.ip-aff` says
+*the existing system*, so anything drawn solid is now part of a chain and nothing else is.
 
 **One path per `.ip-card`, and the card is the frame.** `.impact` is a group, not a box: it carries
 the label, the one `.legend` for every card, and the note. Each card holds its own `.ip-hd` naming
