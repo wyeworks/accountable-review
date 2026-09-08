@@ -24,6 +24,12 @@
 #
 # One line per expectation, PASS or FAIL, in the same idiom as evals/checks — a test that prints
 # nothing when it passes is a test nobody can tell apart from one that never ran.
+#
+# RUN IT UNDER dash BEFORE PUSHING: `dash tests/run.sh`. CI's /bin/sh is dash, macOS's is bash in
+# POSIX mode, and they disagree about `$((cd dir && cmd) | filter)` — dash reads `$((` as
+# arithmetic expansion and dies with "Missing '))'", which is a syntax error the whole file dies
+# on rather than one row going red. This file shipped that once. The space in `$( (cd` is load
+# bearing.
 
 set -eu
 
@@ -218,20 +224,20 @@ assert_eq "$(verdict package-lock.json)" "collapse/lockfile"       "a lockfile c
   git commit -qm hardcap
   git checkout -q "$was"
 ) >/dev/null 2>&1
-assert_eq "$((cd "$REPO" && "$DIFF_RENDER" "$BASE" hardcap) | awk '$3 == "db/big.txt" { print $2 }')" \
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" hardcap) | awk '$3 == "db/big.txt" { print $2 }')" \
   "over-hard-cap" "a diff past 20,000 lines is reported as over the hard cap, not merely un-auto-loaded"
 
 # --path is what a run asks while writing one citation, and a path outside the diff has to come
 # back renderable rather than collapse: an *affected but unchanged* citation is a blob link
 # already, and the commonest citation on the page must not be answered with a guess.
-assert_eq "$((cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/order.rb) | awk '{ print $1 "/" $2 }')" \
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/order.rb) | awk '{ print $1 "/" $2 }')" \
   "render/-" "--path answers about one file"
-assert_eq "$((cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/untouched.rb) | awk '{ print $1 "/" $2 }')" \
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/untouched.rb) | awk '{ print $1 "/" $2 }')" \
   "render/not-in-diff" "a path the diff never touched is not reported as collapsed"
 
-collapsed=$((cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^collapse' || true)
+collapsed=$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^collapse' || true)
 assert_eq "$collapsed" "5" "--collapsed-only lists every collapsed path and no renderable one"
-assert_eq "$((cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^render' || true)" \
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^render' || true)" \
   "0" "--collapsed-only emits no render rows"
 
 # The whole-diff caps are the two facts no per-path verdict can carry, so they are stated once.
