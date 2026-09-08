@@ -794,9 +794,21 @@ Editing one of these means checking the others still agree.
   emitted and a run never types geometry) and the panel assembled whole in **both** section blocks,
   `report-format.md` § *Impact paths* owns the component, the vocabulary, the shape rules and the
   budget **alone**, `SKILL.md` step 9 points at it, `evals/checks/impact-paths.rb` carries the rules
-  and its `CAUSAL` list, and the seven `golden/impact-*.html` fixtures plus their `self-test.rb` rows
+  and its `CAUSAL` list, and the eight `golden/impact-*.html` fixtures plus their `self-test.rb` rows
   prove each one fires. Extend the vocabulary in the reference and in `CAUSAL` together — the rule
   `diagram.rb` already states for its class vocabulary.
+
+  **One of those eight is clean, and it is the one that matters most for the caps.** Running the
+  check over a real published page produced two WARNs, and the rules were wrong rather than the
+  page: the label cap counted `&ldquo;` as seven characters, so a 32-character label was reported
+  as 44; and `subscribed by` — the honest label for a topic reaching the process that is *not*
+  listening — was outside `CAUSAL`. So the cap measures glyphs now, through a `display_length`
+  local to that check rather than through `ReviewMap.unescape`, which decodes the five entities
+  the shell version did and must keep doing exactly that because `searches.rb` and
+  `rails-anchors.rb` compare against what it produced. `golden/impact-entities-vocab-clean.html`
+  carries both, with a `self-test.rb` row per rule pinned on its own PASS line — the
+  `anchors-hexdocs-clean.html` pattern, and the reason to reach for it is the same: a cap that
+  fires on correct content teaches a run to shorten a true label.
 
   Two of those fixtures are the card split, and both plant markup that draws.
   `impact-shared-card.html` puts two paths in one card **and pairs it with a card holding none**,

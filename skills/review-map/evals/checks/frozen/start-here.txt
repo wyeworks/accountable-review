@@ -706,6 +706,18 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 3 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment impact-entities-vocab-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 3 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page impact-entities-vocab-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 3 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
 ## --fragment impact-four-paths.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none

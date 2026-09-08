@@ -1101,6 +1101,16 @@ PASS  1 review unit(s) inspected
 ## --page impact-card-no-lanes.html
 exit=1
 FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment impact-entities-vocab-clean.html
+exit=1
+PASS  no flow is grouped by directory or layer
+WARN  no .mech block found — a flow's body opens with one, so there is nothing for the grouping principle to precede
+WARN  no .pipe — the end-to-end path is what makes a flow a flow
+FAIL  1 of 1 dl.rows grid(s) have no .mech before them — a flow body is a mechanism statement plus its fields, and rows alone read as a flow whose point was never stated
+PASS  1 review unit(s) inspected
+## --page impact-entities-vocab-clean.html
+exit=1
+FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
 ## --fragment impact-four-paths.html
 exit=1
 PASS  no flow is grouped by directory or layer

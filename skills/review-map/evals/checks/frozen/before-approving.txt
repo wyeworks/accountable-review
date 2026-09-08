@@ -478,6 +478,14 @@ PASS  validation steps carry command markup
 ## --page impact-card-no-lanes.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-entities-vocab-clean.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-entities-vocab-clean.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment impact-four-paths.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'

@@ -654,13 +654,21 @@ The relation is the causal verb, and this is the vocabulary:
 
 > calls · reads · writes · passes · returns · defaults to · falls back to · falls through to ·
 > filters · filtered out by · scopes · renders · builds · produces · serializes as · receives ·
-> enqueues · broadcasts · causes · read by · called by · rendered by · **ignored by**
+> enqueues · broadcasts · causes · read by · called by · rendered by · subscribed by ·
+> **ignored by**
 
 **The passive forms are in it deliberately**, and they are what keeps the direction rule above
 affordable. Half the edges on this page run producer to consumer — a changed column and the
 unchanged query underneath it — where the honest verb is *read by*, not *reads*. Without a passive
 a run has to invert the pair to find an active verb, which puts the consumer above the thing it
 consumes and reverses the figure to satisfy the vocabulary.
+
+**`subscribed by` earned its place from a real Phoenix page**, where a changed gate decides whether
+anything subscribes to a trigger topic — so the consequence travels from the topic to the process
+that is *not* listening, and the honest label is passive. It is in the list for the reason the other
+passives are: the active form would have put the subscriber above the topic and reversed the figure.
+The active direction, *subscribes to*, is **not** in the list, because nothing has needed it yet and
+a vocabulary grown ahead of its edges is a list nobody checks against.
 
 **`ignored by` is the one to know**, because it labels the commonest finding this page carries: a
 consumer that does *not* account for what changed. Nothing happens, and that is the causal step —

@@ -1060,6 +1060,24 @@ PASS  entries point into the flows that explain them
 PASS  entries that point at a flow carry at most one citation each
 PASS  searches are recorded, so an empty result reads as evidence
 PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --fragment impact-entities-vocab-clean.html
+exit=0
+PASS  impact-paths panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
+## --page impact-entities-vocab-clean.html
+exit=0
+PASS  impact-paths panel present
+PASS  an affected-but-unchanged list is present
+PASS  no reading order here: it belongs to section 3
+PASS  entries point into the flows that explain them
+PASS  entries that point at a flow carry at most one citation each
+PASS  searches are recorded, so an empty result reads as evidence
+PASS  citations present alongside the lists (1 of 2 entr(ies))
 ## --fragment impact-four-paths.html
 exit=0
 PASS  impact-paths panel present

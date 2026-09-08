@@ -62,6 +62,14 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
  impact-paths       | impact-four-paths.html        | 1 | the budget is 2 to 3
  impact-paths       | impact-shared-card.html       | 1 | do not pair one-to-one
  impact-paths       | impact-card-no-lanes.html     | 1 | with no .ip-lanes of their own
+# And one CLEAN fragment, which is the anchors-hexdocs-clean.html job: both of the things it
+# carries were WARNs on a real page and both rules were wrong rather than the page — a label cap
+# that counted entity references as characters, and a passive PubSub verb missing from CAUSAL.
+# Two rows on the one fixture, pinned on a different PASS line each, so a regression turns
+# exactly one of them red and names itself. Exit stays 0 either way: a WARN is not a failure, so
+# the substring is the whole of the assertion here.
+ impact-paths       | impact-entities-vocab-clean.html | 0 | nodes carry labels rather than prose
+ impact-paths       | impact-entities-vocab-clean.html | 0 | leads with a causal verb from the vocabulary
 # And the one that has to SKIP rather than pass: a fragment with no panel is reach.rb's
 # failure to report, not this check's. A PASS here would read as a verified figure that was
 # never looked at.

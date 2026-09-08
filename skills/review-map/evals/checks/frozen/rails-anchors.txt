@@ -1132,6 +1132,16 @@ exit=0
 SKIP  doc links: none on this input
 SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
+## --fragment impact-entities-vocab-clean.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-entities-vocab-clean.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment impact-four-paths.html
 exit=0
 SKIP  doc links: none on this input

@@ -1,0 +1,69 @@
+<!-- NO DEFECT, and that is the whole point of it — the same job
+     golden/anchors-hexdocs-clean.html does for the one-series rule. Both of the things this
+     fragment carries were WARNs on a real published page, and both rules were wrong rather
+     than the page:
+
+       · "&ldquo;submitted&rdquo;, and nothing appears" is 32 characters to a reader and was
+         counted as 44, because the label cap measured the markup and two curly quotes arrive
+         as entity references. impact-paths.rb has its own display_length for that now, rather
+         than ReviewMap.unescape growing entities that searches.rb and rails-anchors.rb
+         compare against.
+       · "subscribed by" is the honest label for a topic reaching the process that is NOT
+         listening, and it was outside CAUSAL.
+
+     So this fixture goes red in self-test.rb the day either is reverted, and it has TWO rows
+     there rather than one, pinned on a different PASS line each — one fixture, but a row per
+     rule, so a regression turns exactly one of them red and names itself.
+
+     Content is the oli-torus LO-delivery page, paths A and B, unedited. Path A also crosses
+     the lane boundary out and back, which no other fixture here does. -->
+<section id="reach">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>What this change reaches</h2>
+
+  <figure class="impact">
+    <span class="lbl">Impact paths</span>
+    <div class="ip-card">
+      <span class="ip-hd">A &middot; An instructor previews a Summary</span>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+              <ol class="ip-path">
+                <li class="ip-n ip-chg"><span class="ip-box"><b>preview_page_context.ex</b><span class="ip-d">precomputes the objectives payload</span></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>passes a nil user to</span><span class="ip-box"><b>maybe_proficiency/6</b><span class="ip-d">nil-user clause returns %{}</span></span></li>
+                <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>render_summary/4</b><span class="ip-d">known_proficiency? rejects the default label</span></span></li>
+                <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Preview Summary: explainer only</b><span class="ip-d">observable behaviour</span></span></li>
+              </ol>
+      </div>
+    </div>
+    <div class="ip-card">
+      <span class="ip-hd">B &middot; A student&rsquo;s Explain reaches nobody</span>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+              <ol class="ip-path">
+                <li class="ip-n ip-chg"><span class="ip-box"><b>assistant_available?</b><span class="ip-d">reads Revision.ai_enabled</span></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>window_live check_page_ai/3</b><span class="ip-d">reads SectionResource.ai_enabled</span></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>subscribed by</span><span class="ip-box"><b>trigger PubSub topic</b><span class="ip-d">no subscriber when that gate fails</span></span></li>
+                <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>&ldquo;submitted&rdquo;, and nothing appears</b><span class="ip-d">observable behaviour</span></span></li>
+              </ol>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="key-chg"></i>Changed by this PR</span>
+      <span><i class="key-aff"></i>Affected, not changed</span>
+      <span><i class="key-out"></i>Behaviour</span>
+    </div>
+  </figure>
+
+  <dl class="rows">
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">lib/oli/rendering/context.ex:49</a> &mdash; every rendering module pattern-matches on this struct <a href="#flow-a">Flow A</a></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run</summary>
+        <div class="sr-body"><ul class="sr-list">
+          <li><code>grep -rn 'learning_objectives' lib/oli/rendering</code> <span class="sr-r">the four render contexts</span></li>
+        </ul></div>
+      </details>
+    </dd>
+  </dl>
+</section>

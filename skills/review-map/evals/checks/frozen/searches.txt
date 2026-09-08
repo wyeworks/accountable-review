@@ -352,6 +352,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-card-no-lanes.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-entities-vocab-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-entities-vocab-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-four-paths.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

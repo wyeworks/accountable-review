@@ -62,11 +62,28 @@ KINDS = { "ip-chg" => :changed, "ip-aff" => :affected, "ip-out" => :outcome }.fr
 # undocumented, and one there but not here is reported as unlisted.
 CAUSAL = %w[calls reads writes passes returns defaults falls filters filtered scopes
             renders builds produces serializes receives enqueues broadcasts causes
-            read called rendered ignored].freeze
+            read called rendered ignored subscribed].freeze
 
 MAX_REL_WORDS = 5
 MAX_LABEL_CHARS = 40
 MAX_DETAIL_WORDS = 10
+
+# An entity reference is ONE character to a reader, and the label cap is about what a reader
+# sees. Found by running this check over a real page: a node labelled "submitted", and nothing
+# appears is 32 characters and was reported as 44, because its two curly quotes arrive as
+# &ldquo; and &rdquo; and survive text_of below.
+#
+# The widening belongs HERE and not to ReviewMap.unescape, which decodes the five entities the
+# shell version decoded and deliberately no more: searches.rb re-runs a recorded search and
+# rails-anchors.rb matches a URL, and both compare against exactly what that produced. A cap
+# is the one rule that cares about length rather than about content, so it is the one rule that
+# has to count glyphs.
+#
+# Only the character cap needs this. The word counts are unaffected — an entity carries no
+# space, so it is one word either way, whatever its byte count.
+ENTITY_REF = /&(?:[A-Za-z][A-Za-z0-9]*|\#\d+|\#x[0-9A-Fa-f]+);/
+
+def display_length(text) = text.to_s.gsub(ENTITY_REF, "·").length
 
 def text_of(node, pattern)
   m = node.lines.join(" ").match(pattern)
@@ -253,7 +270,7 @@ end
 # --- Labels, not sentences. This is image-one's defect: the box grid's boxes each carried a
 # clause, which is how a figure became a word cloud.
 
-long_labels = all.flatten.select { |n| n.label.to_s.length > MAX_LABEL_CHARS }
+long_labels = all.flatten.select { |n| display_length(n.label) > MAX_LABEL_CHARS }
 long_details = all.flatten.select { |n| n.detail.to_s.split.size > MAX_DETAIL_WORDS }
 if long_labels.empty? && long_details.empty?
   check.ok("nodes carry labels rather than prose")
