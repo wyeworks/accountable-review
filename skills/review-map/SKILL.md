@@ -23,7 +23,7 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## What is bundled
 
-The procedure below relies on seven bundled files. Read each at the step that needs it rather than up
+The procedure below relies on eight bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
 Two of the seven come in a pair, and **step 2's stack detection picks one of each pair, never both.**
@@ -33,9 +33,10 @@ Reading the other stack's file costs context and teaches the wrong searches.
 | File | Read at | For |
 |---|---|---|
 | `references/report-format.md` | steps 1, 7, 8, 9 | The detail levels, the sections each one produces, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
-| `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch |
-| `references/rails-docs.md` *or* `references/elixir-docs.md` | steps 7 and 9 | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point |
-| `references/page-template.html` | step 9 | The design system: tokens (light and dark), component classes, the two SVG diagram layouts, and the page's one small script |
+| `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
+| `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
+| `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, the assembled flow, the two SVG diagram layouts — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
+| `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
@@ -74,13 +75,21 @@ instructions are its own, which is the point of putting them in a separate conte
   Take it silently rather than reporting it: an invocation someone had in a script is not a typo,
   and this is the one `--effort` value that is not guessing.
 
-  **`high` is the default because it is nearly free and it changes what the page finds.** Measured
-  on one 28-file PR at `--brief`: the falsifiers cost **23 seconds of blocked parent, 0.9% of a
-  2607-second run**, because they run while stage 4 is drafted rather than instead of it. The same
-  target at `low` missed five findings the falsified run carried, including the two the reviewer
-  most needed. Effort, not the detail level, is what decides whether the page is right — `--brief`
-  bought 4.6% of wall clock for 35% fewer words, because the time goes into tracing consumers and
-  not into writing sections. Three rules, two of them the level's own:
+  **`high` is the default because it changes what the page finds, and it costs time it does not cost
+  tokens.** Measured on one 28-file PR at `--brief`: the falsifiers cost **23 seconds of blocked
+  parent, 0.9% of a 2607-second run**, because they run while stage 4 is drafted rather than instead
+  of it. The same target at `low` missed five findings the falsified run carried, including the two
+  the reviewer most needed.
+
+  **That 0.9% is blocked wall clock and is not what the pass costs.** Each falsifier reads in its own
+  context, and those tokens are the run's tokens: measured across three real runs, the pass was
+  **17-23% of every cache-read token the run spent**, on 145-216 requests. Both numbers are true and
+  they answer different questions — the first is why spawning them does not slow the run down, the
+  second is what they add to the bill. `evals/profile.sh` prints them side by side, and the falsifier
+  runs on its own model (`agents/claim-falsifier.md`) so the second number can be bought down without
+  touching the first. Effort, not the detail level, is what decides whether the page is right —
+  `--brief` bought 4.6% of wall clock for 35% fewer words, because the time goes into tracing
+  consumers and not into writing sections. Three rules, two of them the level's own:
   - **It is a separate axis from the detail level, and they multiply rather than substitute.** Effort
     produces no section, changes no depth rule and moves no excerpt budget — the page is the same
     *shape* at either. `--brief --effort high` is the useful combination, not a contradiction: a short
@@ -174,9 +183,9 @@ Assume nothing about layout or conventions — this skill travels between repos.
 **Detect the stack first**, because it decides which two of the bundled files the rest of the run
 reads:
 
-- `config/application.rb`, or a `Gemfile`, → **Rails**: read `references/rails-nextjs.md` and
-  `references/rails-docs.md`.
-- `mix.exs` → **Elixir/Phoenix**: read `references/phoenix-liveview.md` and
+- `config/application.rb`, or a `Gemfile`, → **Rails**: the lens file is `references/rails-nextjs.md`,
+  the catalogue `references/rails-docs.md`.
+- `mix.exs` → **Elixir/Phoenix**: the lens file is `references/phoenix-liveview.md`, the catalogue
   `references/elixir-docs.md`.
 - **More than one root, or one of each** — a monorepo with an `api/` and a `services/`, engines, an
   umbrella — **ask which to cover** rather than picking. Same rule as several Rails roots, and for the
@@ -187,6 +196,13 @@ reads:
   probe.** Do not default to Rails: a Rails lens applied to a Go service invents findings, and a
   catalogue that does not describe this application is the failure both catalogues fail closed to
   avoid.
+
+**Detecting the stack is not reading its files.** This step decides *which* pair the rest of the run
+uses. The lens is read at step 5, where its search recipes are the work; the catalogue at step 7,
+when a claim first asks for a URL. Nothing between here and there needs either, and both are large —
+a run that opens them now carries them through the whole of steps 3 to 6, which is where the
+consumer tracing happens and where the context is already largest. The versions this step records
+come out of `Gemfile.lock` or `mix.lock`, not out of the catalogue.
 
 **Backend, Rails.** Locate the Rails root by finding `config/application.rb`. It may be at the repo
 root, under a subdirectory such as `api/`, or there may be several (engines, monorepo). Detect, don't
@@ -204,16 +220,19 @@ whether `assets/` holds JS hooks; and whether a separate frontend application ex
 
 **Record the versions the documentation links are pinned to.** This is not bookkeeping: **every
 documentation link on the page is pinned with them**, so a run that skipped this step cannot emit a
-doc link at all. What to record differs by stack, and so does its shape:
+doc link at all — recording the version is this step's job, and knowing which URL to pin is
+step 7's. What to record differs by stack, and so does its shape:
 
 - **Rails** — the Rails version and its *series* from the `rails (x.y.z)` line in `Gemfile.lock`
   (`rails (8.0.2)` gives `8.0`), plus the exact locked versions of the gems above, which pin to a tag.
   One series covers the whole framework.
 - **Elixir** — the **exact locked version of each package** from `mix.lock` (`phoenix`,
-  `phoenix_live_view`, `ecto`, `ecto_sql`, `plug`, `oban`, and any other the catalogue carries), plus
+  `phoenix_live_view`, `ecto`, `ecto_sql`, `plug`, `oban`), plus
   the Elixir version from `.tool-versions` or `mix.exs`. There is **no series**: hexdocs serves exact
   versions, each package pins independently, and a page carrying several different version segments is
-  correct rather than broken.
+  correct rather than broken. The catalogue carries a few packages beyond that list; if step 7 asks
+  for one of them, `grep` its line out of `mix.lock` then — opening the catalogue here to find out
+  which names to look for is the read this step is trying not to do.
 
 Each catalogue's § *Pinning* owns the emitted forms. The same versions also decide what the page may
 **claim**, because two marks in each catalogue turn a version-sensitive behaviour into a probe rather
@@ -353,12 +372,19 @@ how to validate · reviewer questions.
 A behaviour flow's **body is a unit** — a `.mech` block stating the mechanism, then the seven fields
 as `<dt>`/`<dd>` pairs in one `dl.rows`, never loose in the section — and the flow's path, diagram and
 decisions sit beside it, with decisions after the closing `</dl>`. Build it from the assembled flow in
-`references/page-template.html` rather than from a description of it; the labels and the boundary are
+`references/page-template.html` rather than from a description of it — `scripts/page-skeleton.sh --markup`
+prints the half that has it; the labels and the boundary are
 in `report-format.md` § *The review unit* and § *Section 2*.
 
 The unit is **borderless by design**, which makes this easier to get wrong than it looks: a flow that
 spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
 example.
+
+**This is where the catalogue opens** — `references/rails-docs.md` or `references/elixir-docs.md`,
+whichever step 2 named, and not before now. It is a lookup table, not a reading: you go to it with a
+concept a claim already needs, never to it to find concepts. **Read its § *Version* first.** A
+catalogue can be closed as a whole, and then the answer it returns for every concept is *no link* and
+there is nothing else in the file you need.
 
 **Three anchors are available for a claim that rests on the framework rather than on this diff**: a
 documentation link, a console probe the reviewer runs, and the primer callout a link escalates into.
@@ -452,6 +478,13 @@ challenges arriving 365 seconds later while the parent drafted. Blocked time was
 run**. A run that spawns them and then idles has converted the cheapest thing in this procedure
 into the most expensive.
 
+**Cheap in wall clock is not cheap in tokens, and the cap is what holds the second one down.** Each
+falsifier reads in its own context, and across three real runs the pass came to **17-23% of every
+cache-read token the run spent** over 145-216 requests — the most expensive thing in the procedure
+after step 5, and invisible in the parent's transcript. That is the cap's real job: six agents is
+the point past which a second reader stops paying for itself. Spawn the six that carry the most
+unverifiable claims, not the first six written.
+
 Spawn them in one message anyway. It costs nothing, it keeps the flows' challenges arriving
 together rather than trickling, and if a future harness does make them block, one message stalls the
 run once — for the slowest — where the same agents one at a time stall it once each. That is not
@@ -512,7 +545,7 @@ someone mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
-| 1 · Orientation | 4 | Section 1 (what changed), and the outline of the sections this diff earns, each marked pending |
+| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then section 1 (what changed) and the outline of the sections this diff earns, each marked pending |
 | 2 · Blast radius | 5 | Adds section 4: the blast-radius diagram, changed vs potentially affected, and what was searched |
 | 3 · Flows | 6, then per flow | Section 2's intro and the split — plus one pending stub per flow, named. Then each flow replaces its own stub as it is written |
 | 4 · Complete | 10 | Sections 3, 5, 6 and 7, gate passed, build banner and every marker gone |
@@ -586,13 +619,29 @@ has the form.
 
 **Pin the title and favicon at the first publish** and do not change them, even if your understanding
 of the PR improves. Readers find a tab by its name and icon; a page that renames itself mid-run reads
-as a different page.
-
+as a different page. The title is pinned earlier than that and by the script — `--title` substitutes it
+into the head and HTML-escapes it, which a PR title containing an `&` needs — so do not write it again.
 Everything else about writing holds at every stage:
 
 - Follow `references/report-format.md` for the seven sections, when each appears, how deep it goes,
   and the rule that each fact has one home. Follow `references/page-template.html` for the design
-  system, layout, and diagram styles.
+  system, layout, and diagram styles — read with `scripts/page-skeleton.sh --markup`, which prints
+  the component half and leaves out the 54 KB you are about to be given for free.
+- **Write the skeleton once, before anything else in stage 1:**
+
+  ```sh
+  <skill base directory>/scripts/page-skeleton.sh --out "$W/page.html" --title "<PR title or branch>"
+  ```
+
+  That puts the head, the entire token block and the page's one script into the file already. Then
+  the first `Edit` replaces its one-line body placeholder with the rail, `<main>`, the build banner,
+  the masthead and section 1. It refuses with exit 3 if the page already has content, which is the
+  guard against re-running it over a page a reader is already looking at.
+
+  **Never write a `<style>` block, a `:root`, a colour, or a `<script>` into the page.** They are
+  already there and **you have not read them** — so a token you name is a token you guessed, and a
+  second declaration of a colour is a second canonical home for it. This is the same rule as the one
+  below about excerpts, for the same reason: bytes a script generated are bytes you must not retype.
 - **One fact, one home.** Before writing a section, ask what it *owns* that no other section owns. If
   the answer is "it re-explains something from earlier", write the reference instead: one sentence
   pointing at where the explanation lives. `report-format.md` § *One canonical home* has the routing
@@ -715,7 +764,8 @@ Everything else about writing holds at every stage:
   diff does not contain gets a blob permalink at the SHA that line actually exists at — head for
   unchanged code, base for code the change removed or for behaviour described as it was. Both forms,
   and the rung table, are in `references/report-format.md` § *Deep links*.
-- Write the page to `$W/page.html` — the work directory derived in step 1 — and never into the repo.
+- The page lives at `$W/page.html` — the work directory derived in step 1 — and never in the repo.
+  `page-skeleton.sh --out` creates it; every stage after that edits it in place.
   The page must never become part of the diff it describes. Excerpt fragments go in the same
   directory, so splicing them in is a path away rather than a move. With `--output` the page is
   `<dir>/index.html` instead; the fragments still go in `$W`, and nothing but the page belongs in

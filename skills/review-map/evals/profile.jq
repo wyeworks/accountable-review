@@ -165,7 +165,8 @@ def step($b):
               | map({ b: .[0].b, step: step(.[0].b), n: length,
                       model_s: ((map(.model_ms) | add / 1000) | s1),
                       tool_s:  ((map(.tool_ms)  | add / 1000) | s1),
-                      out: (map(.out) | add), think: (map(.think) | add) })
+                      out: (map(.out) | add), think: (map(.think) | add),
+                      cread: (map(.cread) | add), cwrite: (map(.cwrite) | add) })
               | sort_by(-.model_s)),
 
     publishes: ($pubs | map(select(.tool == "Artifact")) | length),

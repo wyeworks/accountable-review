@@ -3,7 +3,7 @@ name: claim-falsifier
 description: Adversarial verifier for one behaviour flow of a review map. Assumes the flow contains wrong assumptions, missed consumers and false simplifications, and hunts the repository for evidence that contradicts it. Produces no competing explanation and rewrites nothing. Driven by /accountable-review:review-map at --effort high, one instance per flow.
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit
-model: inherit
+model: sonnet
 ---
 
 # Claim falsifier

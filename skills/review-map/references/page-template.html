@@ -1,3 +1,17 @@
+<!-- MAINTAINER NOTE, and the only part of this file that is not the design system.
+     Four SKELETON markers below divide it in two. Everything inside the HEAD and TAIL
+     ranges is emitted verbatim into the page by scripts/page-skeleton.sh, so a run never
+     reads it and never types it: every colour on a published page lives in there, which is
+     why no model declares one. Everything between HEAD:END and TAIL:START is the markup a
+     run does read, with page-skeleton.sh --markup.
+
+     Each marker is ONE line and its own comment, because extraction is a line range over
+     the marker line -- a marker spilling onto a second line would emit half a comment into
+     every page. Keep marker text free of the opening tags for style, script and svg, of the
+     unit and ledger class and attribute names, and of the syntax-tint class prefix: each
+     opens a range that some check scans for, and Page#range re-opens.  This note sits ABOVE
+     HEAD:START on purpose, so it stays out of every published page. -->
+<!-- SKELETON:HEAD:START -->
 <!--
   accountable-review · review-map page template
 
@@ -869,6 +883,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 <div class="progress"><i id="bar"></i></div>
 
 <div class="wrap">
+<!-- SKELETON:HEAD:END -->
 
   <!-- ===== The rail. Numbered, because the order IS the reviewer's path:
        section 2 teaches the mechanisms, 3 is the moment they open the code,
@@ -1741,6 +1756,7 @@ end)</pre>
       </ul>
     </section>
 
+<!-- SKELETON:TAIL:START -->
   </main>
 </div>
 
@@ -1875,3 +1891,4 @@ end)</pre>
     document.querySelectorAll('.excerpt--source .ex-body > pre[data-lang]'), tint);
 })();
 </script>
+<!-- SKELETON:TAIL:END -->

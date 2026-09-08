@@ -33,6 +33,33 @@ def tok: if . == null then "-" elif . >= 1000000 then ((. / 100000 | round) / 10
     "  Steps 4, 6 and 8 leave no mechanical trace and interleave with everything else; their cost is",
     "  spread across the rows above and there is no row for them.",
     "",
+    "where the money goes   cache reads are context RE-READ: every resident token is billed again,",
+    "                       once per request. This is the cost axis; it is not the wall-clock axis.",
+    "  " + ("activity"|pad(14)) + ("≈ step"|pad(10)) + ("cache read"|lpad(11)) + ("share"|lpad(7)) + ("ctx/rq"|lpad(9)) + ("out tok"|lpad(9)),
+    ( $d.buckets | sort_by(-.cread)[]
+      | "  " + (.b|pad(14)) + (.step|pad(10)) + (.cread|tok|lpad(11)) + (.cread|pct($d.cache_read)|lpad(7))
+        + ((if .n == 0 then 0 else ((.cread / .n)|round) end)|tok|lpad(9)) + (.out|tok|lpad(9)) ),
+    "  " + ("parent total"|pad(24)) + ($d.cache_read|tok|lpad(11)),
+    ( if $d.subagents == null then
+        "  no subagent transcripts beside this one — nothing spawned, or an older CLI"
+      else
+        ( "  " + ("subagents (\($d.subagents.agents) agents)"|pad(24)) + ($d.subagents.cache_read|tok|lpad(11))
+          + ($d.subagents.cache_read|pct(($d.cache_read + $d.subagents.cache_read))|lpad(7))
+          + ((if $d.subagents.requests == 0 then 0 else (($d.subagents.cache_read / $d.subagents.requests)|round) end)|tok|lpad(9))
+          + ($d.subagents.out_tokens|tok|lpad(9))
+          + "   \($d.subagents.requests) rq  ·  \($d.subagents.models)" )
+      end ),
+    ( if $d.subagents == null then empty
+      else "  " + ("RUN TOTAL"|pad(24)) + (($d.cache_read + $d.subagents.cache_read)|tok|lpad(11)) end ),
+    ( if $d.subagents != null and $d.runs_in_session > 1 then
+        "  NOTE  subagent tokens are session-wide; this session holds \($d.runs_in_session) runs, so that row is not this run's alone"
+      else empty end ),
+    "",
+    "  Cache reads dominate because context is paid per request, so WHEN a file is loaded matters as",
+    "  much as whether. Read this beside the time table, never instead of it: they rank differently",
+    "  and a change that helps one can be neutral for the other. See evals/README.md § \"Where the",
+    "  time goes\" for why fewer requests is the wall-clock lever, and why that is not this one.",
+    "",
     "publish stages   the one boundary that cannot arrive out of order",
     ( $d.stages[] | "  \(.i|lpad(2))  " + (.kind|pad(12)) + (.tool|pad(10)) + "at +\(.at_s)s   \(.out|tok) out tok" ),
     (if ($d.stages|length) == 0 then "  none — nothing was published in this run" else empty end),
