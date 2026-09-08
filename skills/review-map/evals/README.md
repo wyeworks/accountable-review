@@ -71,7 +71,48 @@ reading rather than a contradiction.
 A **section pass-rate is not page quality.** Nothing in `results/` claims otherwise, and neither
 should a summary built from it.
 
+## One command per scenario
+
+`bin/evals` at the repo root is a dispatcher over everything in here. It owns the paths and the
+defaults this file argues for — three repetitions, judged, run at once — and **nothing else**: every
+flag, every rule and every output idiom stays in the script it calls, and no script changed to make
+it work. So a result line written before it existed is still comparable with one written after.
+
+```sh
+bin/evals offline                        # every no-model suite. What CI checks.
+bin/evals offline frozen                 # or just one of them
+bin/evals section behaviour-flows        # -n 3 -j 3 --judge, then the report
+bin/evals page 1                         # the recipe for one whole-page case
+bin/evals catalogue elixir               # the maintenance pass. Needs network.
+bin/evals help                           # the rest
+```
+
+`offline` is about a minute on this machine, and it is not evenly spread: `setup-ci` is 48s of it
+because its self-test re-runs the whole suite once per deliberate break, `frozen` is 11s over 1,873
+cases, and the three Ruby suites together are 3s. Naming one suite is how you skip the rest.
+
+It is a convenience, not a layer: everything below still works exactly as written, and the sections
+below give the underlying command beside the short one. Two details are worth knowing before relying
+on it. `offline` runs every suite even after one fails and exits non-zero if any suite **did not
+run** — a suite whose interpreter is missing is named in the tally rather than silently absent, for
+the reason § *checks/self-test.rb* gives. And it carries a `parity` line that fails when
+`.github/workflows/validate.yml` names a suite the dispatcher's table does not cover; the two lists
+stay duplicated on purpose, because CI's explicit steps are what attribute a failure to a suite in
+the Actions UI, but they may not drift.
+
 ## Running a section
+
+```sh
+bin/evals section behaviour-flows               # the loop: three judged repetitions, then the report
+bin/evals section behaviour-flows --fast        # the same on a cheaper reader; see below
+bin/evals section blast-radius --level brief    # the same case, other level: override the case file
+bin/evals section diagrams --fixture monorepo-contract --visual
+bin/evals section behaviour-flows -n 1 --no-judge   # one unjudged repetition, when you want it
+```
+
+The defaults go in front of what you pass, and `run.sh` takes the last value it sees, so any flag you
+name wins. `--no-judge` is the one flag the dispatcher handles itself — `run.sh` has no such option,
+and dropping the default is the whole of what it means. Underneath:
 
 ```sh
 ./run.sh behaviour-flows -n 3
@@ -377,7 +418,24 @@ harness cannot see" is an argument, not a measurement.
 
 ## Running a page
 
-Unchanged from before:
+`bin/evals page` prints the recipe — the fixture path, the `claude --plugin-dir` line, the case's
+prompt verbatim, and the check that follows:
+
+```sh
+bin/evals page                                  # the six cases: id, fixture, level
+bin/evals page 1                                # the recipe for one of them
+bin/evals page-check 1 /path/to/page.html       # its check, --expect and --forbid filled in
+```
+
+It is addressed by **case id, not fixture**, because six cases share four fixtures and two fixtures
+carry two cases each at different levels. It builds the fixtures only when the one it needs is
+missing (`--rebuild` forces it): `make-fixtures.sh` opens with an unconditional `rm -rf` of the whole
+destination, and a second `evals page` in another terminal would otherwise delete the repository your
+live session is sitting in. `page-check` refuses to parse prose — case 3 has no mechanical check and
+case 4's is two commands behind a snapshot instruction, so those print the field and stop rather than
+inventing a command.
+
+Underneath, unchanged from before:
 
 ```sh
 ./fixtures/make-fixtures.sh

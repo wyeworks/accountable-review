@@ -11,6 +11,12 @@ on:
   # moves. Re-running that first run is no substitute: it replays the commit it ran on.
   workflow_dispatch:
 
+# `bin/evals offline` runs everything below locally, in one command. The steps here stay
+# explicit rather than calling it: a job step is what attributes a failure to a suite in the
+# Actions UI, and a dispatcher that quietly stopped running one would be this repository's own
+# recurring defect — a check that reads as verified because it never looked. The two lists are
+# therefore duplicated on purpose, and `bin/evals offline` carries a `parity` line that fails if
+# a `run:` here names a script under skills/ that its suite table does not cover.
 jobs:
   manifest:
     runs-on: ubuntu-latest
@@ -32,9 +38,11 @@ jobs:
       # default one, so `require "minitest/autorun"` is not guaranteed on a bare image. The
       # pin also keeps the job comparable run to run, for the same reason run.sh puts the
       # model and effort on every result line.
+      # Keep this in step with the repo-root .tool-versions, which pins the same thing for the
+      # same reason so `bin/evals offline` needs no prefix locally.
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3"
+          ruby-version: "3.4"
       # The checks, checked: every fragment in evals/golden plants one defect and a row in
       # self-test-cases.txt asserts the verdict. No model, no API key, a couple of seconds. A
       # check script that always passes is worse than none, so this runs on every push.

@@ -1,0 +1,292 @@
+#!/bin/sh
+# evals — one command per thing you actually do to the evals.
+#
+#   bin/evals offline                        every no-model suite. What CI checks. About a minute.
+#   bin/evals offline frozen                 just one: self-test | unit | frozen | setup-ci | manifest
+#   bin/evals section behaviour-flows        3 repetitions, judged, at once — then the report
+#   bin/evals section behaviour-flows --fast the same on a cheaper reader (costs comparability)
+#   bin/evals report [case]                  aggregate what is already in results/
+#   bin/evals page [id]                      the recipe for one whole-page case
+#   bin/evals page-check <id> <page.html>    that case's mechanical check, flags filled in
+#   bin/evals fragment <file> --scope <slug> check.rb on a fragment you wrote by hand
+#   bin/evals catalogue [rails|elixir]       the maintenance pass. Needs network.
+#   bin/evals profile [--rundir D]           where one run's wall clock went
+#   bin/evals fixtures [dest]                rebuild the fixture repositories
+#   bin/evals freeze [check...]              re-record checks/frozen after an intended change
+#
+# This dispatcher DELEGATES AND OWNS NOTHING ELSE. Every flag, every rule and every output
+# idiom stays in the script it calls, and none of those scripts changed to make this work —
+# so a result line written before this exists is still comparable with one written after.
+# What it owns is the defaults the README argues for (three repetitions, judged, in
+# parallel) and the paths, which is all that was actually missing.
+#
+# Two things it does not do, on purpose. It does not replace the explicit steps in
+# .github/workflows/validate.yml: those give per-step attribution in the Actions UI, and a
+# dispatcher that quietly stopped running a suite would be this repository's own recurring
+# defect — a check that reads as verified because it never looked. Instead `offline` carries
+# a parity line that fails if the workflow names a suite this table does not cover. And it
+# adds no defaults to run.sh itself, because a bare `./run.sh <case>` in someone's shell
+# history has to keep meaning what it meant.
+#
+# Exit codes follow the rest of the repository: 0 clean, 1 something failed, 2 called wrongly.
+set -eu
+
+HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+ROOT=$(dirname "$HERE")
+SKILL=$ROOT/skills/review-map
+EVALS=$SKILL/evals
+SETUP=$ROOT/skills/setup-ci
+
+usage() {
+  # The header block is the help text, so it stops at the first line that is not a comment
+  # rather than at a line number that drifts every time the header is edited.
+  awk 'NR > 1 { if ($0 !~ /^#/) exit; sub(/^# ?/, ""); print }' "$0"
+  exit ${1:-0}
+}
+
+die() { echo "evals: $1" >&2; exit 2; }
+need() { command -v "$1" >/dev/null 2>&1 || die "needs $1 on PATH"; }
+
+# ---------------------------------------------------------------- offline
+
+# The suite table. Each row is a name, the command it needs on PATH, and what it runs.
+# Keep it in step with .github/workflows/validate.yml — `parity` below is what notices.
+SUITES="self-test unit frozen setup-ci manifest"
+
+# The scripts under skills/ that this table covers, for the parity check.
+COVERED="skills/review-map/evals/checks/self-test.rb
+skills/review-map/evals/checks/lib/test/test_page.rb
+skills/review-map/evals/checks/frozen.rb
+skills/setup-ci/tests/run.sh
+skills/setup-ci/tests/self-test.sh"
+
+TALLY=
+npass=0; nfail=0; nskip=0
+tally() { TALLY="$TALLY$1
+"; }
+ok()   { npass=$((npass + 1)); tally "PASS  $1"; }
+bad()  { nfail=$((nfail + 1)); tally "FAIL  $1"; }
+gone() { nskip=$((nskip + 1)); tally "SKIP  $1 — $2"; }
+
+# suite <name> <required-command> <command...>
+suite() {
+  name=$1; want=$2; shift 2
+  if ! command -v "$want" >/dev/null 2>&1; then
+    # Not a pass. A suite that did not run is the thing this repository keeps writing down
+    # as worse than a failure, so it is named in the tally and it makes the run unclean.
+    gone "$name" "no $want on PATH"
+    return
+  fi
+  printf '\n== %s ==\n' "$name"
+  if ( cd "$ROOT" && "$@" ); then ok "$name"; else bad "$name"; fi
+}
+
+run_suite() {
+  case $1 in
+    self-test) suite self-test ruby ruby "$EVALS/checks/self-test.rb" ;;
+    unit)      suite unit      ruby ruby "$EVALS/checks/lib/test/test_page.rb" ;;
+    frozen)    suite frozen    ruby ruby "$EVALS/checks/frozen.rb" ;;
+    setup-ci)  suite setup-ci  sh   sh "$SETUP/tests/run.sh"
+               suite setup-ci-self sh sh "$SETUP/tests/self-test.sh" ;;
+    manifest)  suite manifest  claude claude plugin validate . --strict ;;
+    *) die "unknown suite: $1 ($(echo $SUITES | tr '\n' ' '))" ;;
+  esac
+}
+
+# Fails if the workflow runs a script under skills/ that the table above does not cover.
+# The two lists are duplicated deliberately — different readers — but not silently divergent.
+parity() {
+  wf=$ROOT/.github/workflows/validate.yml
+  if [ ! -r "$wf" ]; then gone parity "no $wf"; return; fi
+  # Step lines only. A comment in that file is allowed to say the words `run:` and skills/ —
+  # this one's own does — and reading comments would report the documentation as a gap.
+  missing=
+  for s in $(grep -E '^[[:space:]]*- run:' "$wf" | grep -o 'skills/[^ ]*' | sort -u); do
+    case "
+$COVERED" in
+      *"
+$s"*) ;;
+      *) missing="$missing $s" ;;
+    esac
+  done
+  if [ -n "$missing" ]; then
+    printf '\n== parity ==\nvalidate.yml runs these and `evals offline` does not:%s\n' "$missing"
+    bad "parity"
+  else
+    ok "parity"
+  fi
+}
+
+cmd_offline() {
+  if [ $# -gt 0 ]; then
+    for s in "$@"; do run_suite "$s"; done
+  else
+    for s in $SUITES; do run_suite "$s"; done
+    parity
+  fi
+  printf '\n%s' "$TALLY"
+  printf 'offline: %d passed, %d failed' "$npass" "$nfail"
+  [ "$nskip" -eq 0 ] && printf '\n' || printf ', %d did not run\n' "$nskip"
+  [ "$nfail" -eq 0 ] && [ "$nskip" -eq 0 ]
+}
+
+# ---------------------------------------------------------------- section
+
+list_cases() {
+  echo "cases: $(ls "$EVALS/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
+}
+
+cmd_section() {
+  [ $# -ge 1 ] || { echo "usage: evals section <case> [run.sh flags...]" >&2; list_cases; exit 2; }
+  case=$1; shift
+
+  # The defaults go in FRONT of the caller's flags, because run.sh's parser takes the last
+  # value it sees — so `evals section x -n 1` is one repetition, not three. --no-judge is the
+  # one flag handled here rather than passed on: run.sh has no such option, and dropping the
+  # default is the whole of what it means. The rotate-and-rebuild loop is how a POSIX shell
+  # filters one argument without re-quoting the others.
+  judge=--judge
+  n=$#; i=0
+  while [ "$i" -lt "$n" ]; do
+    a=$1; shift
+    if [ "$a" = "--no-judge" ]; then judge=; else set -- "$@" "$a"; fi
+    i=$((i + 1))
+  done
+
+  rc=0
+  "$EVALS/run.sh" "$case" -n 3 -j 3 $judge "$@" || rc=$?
+  printf '\n'
+  "$EVALS/report.sh" "$case" || true
+  return $rc
+}
+
+# ---------------------------------------------------------------- page
+
+FIXTURES=${REVIEW_MAP_FIXTURES:-${TMPDIR:-/tmp}/review-map-fixtures}
+
+case_field() { jq -r --argjson id "$1" '.evals[] | select(.id == $id) | .'"$2"' // ""' "$EVALS/evals.json"; }
+
+list_pages() {
+  echo "page cases in evals.json:"
+  jq -r '.evals[] | "  \(.id)  \(.fixture)  --\(.level // "full")"' "$EVALS/evals.json"
+  echo
+  echo "run one with: evals page <id>"
+}
+
+# Rebuilds only when it has to: make-fixtures.sh opens with an unconditional rm -rf of the
+# whole destination, and a second `evals page` in another terminal would otherwise delete
+# the repository your live session is sitting in.
+ensure_fixture() {
+  if [ -n "${REBUILD:-}" ] || [ ! -d "$FIXTURES/$1" ]; then
+    echo "building fixtures in $FIXTURES (this replaces all four)" >&2
+    "$EVALS/fixtures/make-fixtures.sh" "$FIXTURES" >/dev/null
+  fi
+}
+
+cmd_page() {
+  need jq
+  REBUILD=
+  for a in "$@"; do [ "$a" = "--rebuild" ] && REBUILD=1 || true; done
+  id=
+  for a in "$@"; do case $a in --rebuild) ;; *) id=$a ;; esac; done
+  [ -n "$id" ] || { list_pages; return 0; }
+
+  fixture=$(case_field "$id" fixture)
+  [ -n "$fixture" ] || die "no page case with id $id (try: evals page)"
+  ensure_fixture "$fixture"
+
+  level=$(case_field "$id" level); [ -n "$level" ] || level=full
+  prompt=$(case_field "$id" prompt)
+  check=$(case_field "$id" check)
+
+  cat <<EOF
+page case $id · fixture $fixture · level $level
+
+1. cd $FIXTURES/$fixture
+2. claude --plugin-dir $ROOT
+3. paste this prompt:
+
+$prompt
+
+4. when it publishes, check the page:
+EOF
+  if [ -z "$check" ]; then
+    echo
+    echo "   this case has no mechanical check — its expectations are all judged."
+    echo "   read cases from evals.json: jq '.evals[] | select(.id == $id)' $EVALS/evals.json"
+  elif [ "${check#evals/check.rb }" = "$check" ]; then
+    # Cases 3 and 4 hold prose, or two commands with a snapshot instruction in front of
+    # them. Printing the field is honest; parsing it would be inventing a command.
+    echo
+    echo "   $check"
+    echo
+    echo "   (with <fixture> = $FIXTURES/$fixture)"
+  else
+    echo
+    echo "   bin/evals page-check $id <page.html>"
+  fi
+}
+
+cmd_page_check() {
+  need jq
+  [ $# -ge 2 ] || die "usage: evals page-check <id> <page.html> [check.rb flags...]"
+  id=$1; page=$2; shift 2
+  fixture=$(case_field "$id" fixture)
+  [ -n "$fixture" ] || die "no page case with id $id (try: evals page)"
+  check=$(case_field "$id" check)
+  [ -n "$check" ] || die "page case $id has no mechanical check — its expectations are all judged"
+  if [ "${check#evals/check.rb }" = "$check" ]; then
+    echo "page case $id's check is not a single command. Run it by hand:" >&2
+    echo "  $check" >&2
+    echo "  (with <fixture> = $FIXTURES/$fixture)" >&2
+    exit 2
+  fi
+
+  # The field is a template with <page> and <fixture> in it and single-quoted --expect
+  # values, so it is substituted and eval'd rather than word-split. It is a file in this
+  # repository, not input.
+  cmd=$(printf '%s' "$check" \
+    | sed -e "s#^evals/check.rb#'$EVALS/check.rb'#" \
+          -e "s#<page>#'$page'#g" \
+          -e "s#<fixture>#'$FIXTURES/$fixture'#g")
+  echo "+ $cmd $*" >&2
+  eval "$cmd" "$@"
+}
+
+# ---------------------------------------------------------------- the rest
+
+cmd_catalogue() {
+  which=${1:-rails}; [ $# -gt 0 ] && shift || true
+  case $which in
+    rails)  exec "$EVALS/verify-catalogue.sh" "$@" ;;
+    elixir) exec "$EVALS/verify-catalogue.sh" --catalogue "$SKILL/references/elixir-docs.md" "$@" ;;
+    -*)     exec "$EVALS/verify-catalogue.sh" "$which" "$@" ;;
+    *)      die "unknown catalogue: $which (rails | elixir)" ;;
+  esac
+}
+
+cmd_freeze() {
+  "$EVALS/checks/frozen.rb" --freeze "$@"
+  echo
+  echo "== what moved =="
+  git -C "$ROOT" diff --stat -- skills/review-map/evals/checks/frozen || true
+  echo "read that diff before committing it: it is the record of what the rules say."
+}
+
+[ $# -gt 0 ] || usage 2
+sub=$1; shift
+case $sub in
+  offline)            cmd_offline "$@" ;;
+  section)            cmd_section "$@" ;;
+  report)             exec "$EVALS/report.sh" "$@" ;;
+  page)               cmd_page "$@" ;;
+  page-check)         cmd_page_check "$@" ;;
+  fragment)           [ $# -ge 1 ] || die "usage: evals fragment <file> [--scope <slug>]"
+                      f=$1; shift; exec "$EVALS/check.rb" --fragment "$f" "$@" ;;
+  catalogue)          cmd_catalogue "$@" ;;
+  profile)            exec "$EVALS/profile.sh" "$@" ;;
+  fixtures)           exec "$EVALS/fixtures/make-fixtures.sh" "$@" ;;
+  freeze)             cmd_freeze "$@" ;;
+  help|-h|--help)     usage 0 ;;
+  *)                  echo "evals: unknown command: $sub" >&2; usage 2 ;;
+esac
