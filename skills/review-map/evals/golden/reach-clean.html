@@ -1,21 +1,21 @@
-<!-- No planted defect. A staged PAGE, section 4 written and section 2 still pending. The trap it
-     pins: section 4 renders Changed / Affected-not-changed with dl.rows and legitimately has NO
-     .mech, so a behaviour-flows census that falls back to the whole page when it finds no
-     id="flow-" section reads that grid as a flattened flow. A real run hit exactly this at stage 2.
+<!-- No defect. The reference shape for section 4 in the markup page-template.html emits today:
+     an .impact panel of two impact paths with its legend, then dl.rows / dt / dd / div.item /
+     a.path. Two checks read it: reach.rb for the section's composition, impact-paths.rb for the
+     figure.
 
-     Same shape as the older bug where article.cohort satisfied the unit check: section 1 always
-     supplies one, so the substitute was always present no matter what section 2 did. -->
-<div class="buildstate">
-  <strong>Still being written</strong> — 3 parts still pending. Parts marked <span class="pending">pending</span> below are not yet written. Their absence is not a finding.
-</div>
-<section id="flows">
-  <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
-  <h2>Behaviour flows</h2>
-  <p class="note"><span class="pending">pending</span> Two flows across five files; being written now.</p>
-</section>
+     Note what is NOT here: a Changed list. Section 4 carried one, and it was the whole diff, so
+     the section restated the ledger a few sections early. The paths live in section 7 at --full
+     and in details.coverage-foot at --brief; see reach-brief-uncited.html for that shape.
+
+     This file has been the wrong shape twice, and both times it went on passing. It used
+     div.two-col > div.card > ul > li > span.cite until the design system changed, which left two
+     of the section check's rules matching nothing any real page produced; then it used a .blast
+     box grid until the figure gained edges. A golden that is never migrated is a rule that has
+     quietly stopped looking. -->
 <section id="reach">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>What this change reaches</h2>
+
   <figure class="impact">
     <span class="lbl">Impact paths</span>
     <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
@@ -39,9 +39,23 @@
       <span><i class="key-aff"></i>Affected, not changed</span>
       <span><i class="key-out"></i>Behaviour</span>
     </div>
+    <p class="note">Out of reach of a name-based pass: a reader that reaches the column through an enum predicate.</p>
   </figure>
+
   <dl class="rows">
     <dt>Affected, not changed</dt>
-    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; unchanged, and it decides what the picker still offers <span class="tier">evidenced by unchanged code</span></div></dd>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes
+        the selectable list, which archival changes the meaning of
+        <span class="tier">evidenced by unchanged code</span> <a href="#flow-a">Flow A</a></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>rg 'Project\.(where|all)' app lib</code> <span class="sr-r">one other caller</span></li>
+          </ul>
+        </div>
+      </details>
+    </dd>
   </dl>
 </section>

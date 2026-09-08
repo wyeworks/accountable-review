@@ -190,36 +190,6 @@ SKIP  no excerpts in this input
 ## --page approving-six-questions.html
 exit=0
 SKIP  no excerpts in this input
-## --fragment blast-brief-uncited.html
-exit=0
-SKIP  no excerpts in this input
-## --page blast-brief-uncited.html
-exit=0
-SKIP  no excerpts in this input
-## --fragment blast-clean.html
-exit=0
-SKIP  no excerpts in this input
-## --page blast-clean.html
-exit=0
-SKIP  no excerpts in this input
-## --fragment blast-no-pointer.html
-exit=0
-SKIP  no excerpts in this input
-## --page blast-no-pointer.html
-exit=0
-SKIP  no excerpts in this input
-## --fragment blast-pointer-restated.html
-exit=0
-SKIP  no excerpts in this input
-## --page blast-pointer-restated.html
-exit=0
-SKIP  no excerpts in this input
-## --fragment blast-readorder.html
-exit=0
-SKIP  no excerpts in this input
-## --page blast-readorder.html
-exit=0
-SKIP  no excerpts in this input
 ## --fragment diagram-clean.html
 exit=0
 SKIP  no excerpts in this input
@@ -466,12 +436,6 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
-## --fragment flows-blast-rows.html
-exit=0
-SKIP  no excerpts in this input
-## --page flows-blast-rows.html
-exit=0
-SKIP  no excerpts in this input
 ## --fragment flows-clean.html
 exit=0
 PASS  1 source excerpt(s), each with a summary
@@ -580,6 +544,12 @@ SKIP  no excerpts in this input
 ## --page flows-primer-uncited-unit.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment flows-reach-rows.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-reach-rows.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment flows-source-only.html
 exit=0
 PASS  1 source excerpt(s), each with a summary
@@ -682,6 +652,36 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+## --fragment impact-no-affected.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-no-affected.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment impact-no-outcome.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-no-outcome.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment impact-prose-nodes.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-prose-nodes.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment impact-six-paths.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-six-paths.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment impact-unlabelled-edge.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-unlabelled-edge.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  no excerpts in this input
@@ -758,6 +758,36 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page invariants-verdict.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment reach-brief-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --page reach-brief-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment reach-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page reach-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment reach-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page reach-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment reach-pointer-restated.html
+exit=0
+SKIP  no excerpts in this input
+## --page reach-pointer-restated.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment reach-readorder.html
+exit=0
+SKIP  no excerpts in this input
+## --page reach-readorder.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment searches-bre-dialect.html

@@ -141,7 +141,7 @@ its own. What to look for:
   response shape.
 - **Runtime validation at the boundary.** If Zod or similar guards responses, a backend change can
   turn into a *client-side throw* rather than a wrong render — a different failure mode and a
-  different blast radius. Check whether the schema was updated alongside the serializer, and whether
+  different reach. Check whether the schema was updated alongside the serializer, and whether
   validation is applied to every response or only some.
 
 ## Next.js

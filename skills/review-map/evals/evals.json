@@ -12,8 +12,8 @@
       "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
       "section_cases": [
         "cases/behaviour-flows.json — the flow split, the unit fields, whether active_projects.rb is found and why, the excerpt that rung 4 earns",
-        "cases/blast-radius.json — whether the pairing is complete, and whether entries a flow owns are routed to it rather than restated",
-        "cases/diagrams.json — the blast-radius diagram, and the lifecycle diagram this diff does not earn"
+        "cases/reach.json — whether the pairing is complete, and whether entries a flow owns are routed to it rather than restated",
+        "cases/diagrams.json — the impact-paths panel, and the lifecycle diagram this diff does not earn"
       ],
       "expectations": [
         "check.rb passes: coverage gate, no severity chips, no verdict language, evidence tiers used, no dead permalinks, three theme states, and active_projects.rb is named",
@@ -24,7 +24,7 @@
         "Judged field by field, not page-wide: every field carrying an excerpt still holds its own file:line outside the collapsed block. A citation that appears elsewhere on the page does not rescue a field whose only one is inside the excerpt",
         "Excerpts are earned by citations that are load-bearing for a decision, not by every affected-but-unchanged entry — a five-file diff should not produce one per cohort automatically",
         "Seven sections, not twelve, because this prompt asked for the full level: persistence and any endpoint contract appear inside the behaviour flow they serve, not as sections of their own",
-        "No fact is explained twice. A finding is explained inside the flow that owns it; Start here names it and links to that flow, and the blast radius points at it in a clause — neither re-explains it, repeats its citation or repeats its tier",
+        "No fact is explained twice. A finding is explained inside the flow that owns it; Start here names it and links to that flow, and section 4 points at it in a clause — neither re-explains it, repeats its citation or repeats its tier",
         "The comprehension checkpoint holds at most five questions, and none is answerable by copying a single sentence from earlier in the page"
       ]
     },
@@ -38,7 +38,7 @@
       "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --expect 'selectableProjects' --expect 'archivedAt'",
       "section_cases": [
         "cases/behaviour-flows.json — the boundary chain, the nullable/non-null mismatch, the unhandled 422, selectableProjects",
-        "cases/blast-radius.json — whether affected code is found on both sides of the boundary, and whether the flows own its explanation",
+        "cases/reach.json — whether affected code is found on both sides of the boundary, and whether the flows own its explanation",
         "cases/diagrams.json — the boundary-chain diagram and the budget across two sections"
       ],
       "expectations": [
@@ -98,9 +98,9 @@
       "files": [],
       "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --expect 'test/test_helper.rb' --expect 'require_profile_setup' --expect 'eligibility_filter.rb' --expect 'switch_to_free!' --forbid 'N/A'",
       "section_cases": [
-        "cases/blast-radius.json — whether the unchanged readers of account_type are found, and with which search recorded",
+        "cases/reach.json — whether the unchanged readers of account_type are found, and with which search recorded",
         "cases/behaviour-flows.json — the who-is-affected split, the guard chain as the surface, the excerpt on an unchanged sibling guard",
-        "cases/diagrams.json — writers/fact/readers as a blast radius, and the before/after lifecycle of the loop"
+        "cases/diagrams.json — writers, fact and readers as directed impact paths ending at a behaviour, and the before/after lifecycle of the loop"
       ],
       "expectations": [
         "check.rb passes: coverage gate over seven paths, no severity chips, no verdict language, evidence tiers used, three theme states, and all four planted findings named",
@@ -119,13 +119,13 @@
       "fixture": "rails-only-small",
       "level": "brief",
       "prompt": "quick review map for add-project-archival please",
-      "expected_output": "The same five-file diff as case 1, at the default level. Four sections: what changed, the behaviour flows at their usual depth, where to begin, and one merged tail section built around the blast radius. Every changed path is under that section's Changed list, generated, unclassified. No section 5, 6 or 7 exists, and nothing is marked pending or N/A in their place. The coverage gate still passes.",
+      "expected_output": "The same five-file diff as case 1, at the default level. Four sections: what changed, the behaviour flows at their usual depth, where to begin, and one merged tail section built around the impact paths. Section 4 lists no paths at either level; every changed path is in the shut details.coverage-foot below the last section, generated, unclassified. No section 5, 6 or 7 exists, and nothing is marked pending or N/A in their place. The coverage gate still passes.",
       "files": [],
       "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --level brief --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
       "section_cases": [
         "cases/brief-tail.json — the merged section: whether the panel stays the spine, whether the diff is still accounted for once the classification is gone, and what must not leak in from full",
         "cases/behaviour-flows.json — the flows, which this level does not change",
-        "cases/blast-radius.json — the panel and the affected list, whose rules the merged section keeps verbatim"
+        "cases/reach.json — the panel and the affected list, whose rules the merged section keeps verbatim"
       ],
       "expectations": [
         "check.rb passes at --level brief, including the coverage gate: the merged section's Changed list carries all five paths with data-path, so a shorter page is still an accounted-for one",

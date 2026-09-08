@@ -29,11 +29,13 @@
 # first one and be reported as an invented class by the second. It is excluded by its class
 # on the opening tag, which is the same convention the doc-link and probe checks rely on.
 #
-# Two class families that used to be here are gone, not renamed. The blast radius is a .blast
-# box grid and the boundary chain is a .pipe spine — both CSS components, neither an SVG — so
+# Two class families that used to be here are gone, not renamed. Section 4's figure is the
+# .impact impact-paths panel and the boundary chain is a .pipe spine — both CSS components,
+# neither an SVG, because the size of each is a function of the diff rather than fixed — so
 # `legend` and `box-json` no longer style anything inside an <svg> and would be reported as
-# invented if a run reached for them. That is the intended behaviour: a run drawing a blast
-# radius as SVG should be told to use the component instead.
+# invented if a run reached for them. That is the intended behaviour: a run drawing impact
+# paths as SVG should be told to use the component instead, and checks/impact-paths.rb fails
+# an <svg> found inside the panel from the other side.
 #
 # TWO PLACES THIS FILE DECLINES TO REPRODUCE THE SHELL, both documented in
 # evals/README.md § Two intentional differences. The second is here: diagram.sh finds its

@@ -3,15 +3,15 @@
   "of": "page-template.html § the diagram catalogue, report-format.md § Depth rules",
   "produced_by": "drivers/diagrams.md",
   "scope": "diagram",
-  "notes": "Not a section — a primitive that appears in several. Two of the four kinds are now CSS components, not drawings: the blast radius is a .blast box grid and the boundary chain is a .pipe spine. So the first thing this case tests is that a run reaches for the COMPONENT and does not draw an SVG out of habit — checks/diagram.rb will report `legend` and `box-json` as invented classes, but a run that hand-rolls a blast radius from .box and .edge passes every mechanical check while throwing away reflow and comparability. That needs a reader. The two surviving SVG kinds are the ER fragment and the lifecycle, and NO FIXTURE HERE EARNS EITHER: rails-only-small adds one nullable column, monorepo-contract has no state machine. Covering them needs a new fixture with a migration and a status enum; until then diagram.rb checks those two layouts against the template itself and nothing else does. What no script settles either way: whether the figure is TRUE, and whether it is legible. Run with --visual and look at the PNGs.",
+  "notes": "Not a section — a primitive that appears in several. Two of the four kinds are CSS components, not drawings: section 4's figure is the .impact impact-paths panel and the boundary chain is a .pipe spine, both because their size is a function of the diff. So the first thing this case tests is that a run reaches for the COMPONENT and does not draw an SVG out of habit — checks/diagram.rb will report `legend` and `box-json` as invented classes, but a run that hand-rolls the panel from .box and .edge passes every mechanical check while throwing away reflow and comparability. What checks/impact-paths.rb settles is the panel's shape; what it cannot settle is whether these are the RIGHT 2-5 paths and whether each edge is TRUE. That needs a reader. The two surviving SVG kinds are the ER fragment and the lifecycle, and NO FIXTURE HERE EARNS EITHER: rails-only-small adds one nullable column, monorepo-contract has no state machine. Covering them needs a new fixture with a migration and a status enum; until then diagram.rb checks those two layouts against the template itself and nothing else does. What no script settles either way: whether the figure is TRUE, and whether it is legible. Run with --visual and look at the PNGs.",
   "cases": [
     {
       "id": "diagrams/rails-only-small",
       "fixture": "rails-only-small",
-      "check": "check.rb --fragment <out> --scope blast-radius; then --scope diagram",
-      "expected_output": "A .blast box grid in section 4, reaching from the new column through the model to the unchanged query that scopes the selectable list, with a .legend. NO SVG at all: no lifecycle, because archived_at is a timestamp and not a state machine, and no ER fragment for a single-column add.",
+      "check": "check.rb --fragment <out> --scope reach; then --scope diagram",
+      "expected_output": "An .impact panel in section 4 whose chains run from the new column, through the unchanged query that scopes the selectable list, to what a user then sees, with a .legend naming all three node kinds. NO SVG at all: no lifecycle, because archived_at is a timestamp and not a state machine, and no ER fragment for a single-column add.",
       "expectations": [
-        "The blast radius is a .blast box grid with a .legend, not an SVG — a run that draws it with .box and .edge has thrown away reflow and comparability while passing every mechanical check",
+        "Section 4's figure is the .impact panel with a .legend, not an SVG — a run that draws it with .box and .edge has thrown away reflow and comparability while passing every mechanical check",
         "Exactly the figures this diff earns: no lifecycle, because a nullable timestamp is not a state machine and drawing one would invent states the code does not have, and no ER fragment for one column",
         "Solid border is changed, dashed is unchanged-and-affected, and the legend says which is which",
         "The panel shows something the two lists cannot: the unchanged query sitting beside the changed column, as one frame rather than two sets",
@@ -23,11 +23,11 @@
       "id": "diagrams/monorepo-contract",
       "fixture": "monorepo-contract",
       "check": "check.rb --fragment <out> --scope behaviour-flows; then --scope diagram",
-      "expected_output": "A .pipe chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch named at the hop it happens, plus the .blast grid for section 4. Still no SVG: no state machine, and one column does not earn an ER fragment.",
+      "expected_output": "A .pipe chain for archived_at inside the flow that owns it, with the nullable/non-null mismatch named at the hop it happens, plus the .impact panel for section 4. Still no SVG: no state machine, and one column does not earn an ER fragment.",
       "expectations": [
         "A .pipe chain exists for archived_at and names the mismatch at the hop it occurs, rather than leaving the reader to compare two boxes",
         "The chain is a .pipe, not an SVG boundary chain — the terminal node is filled, so the thing the chain arrives at is last",
-        "The budget is respected: one figure per section, and a second only where the mechanism is genuinely different — a chain inside a flow and a blast grid in section 4 qualify, two views of one call path do not",
+        "The budget is respected: one figure per section, and a second only where the mechanism is genuinely different — a chain inside a flow and the impact panel in section 4 qualify, two views of one call path do not",
         "No ER fragment: one column plus its immediate neighbours does not earn one, and if the missing time_entries association is mentioned it is mentioned as ABSENT, which is the only reason to raise it",
         "The dashed boxes in section 4 are exactly the unchanged consumers, selectableProjects and ProjectSelector, and nothing changed by the diff is dashed",
         "Read the PNGs from --visual if any SVG was drawn: nothing overlaps, and both themes work"

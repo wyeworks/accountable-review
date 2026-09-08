@@ -1,21 +1,12 @@
-<!-- No planted defect. A staged PAGE, section 4 written and section 2 still pending. The trap it
-     pins: section 4 renders Changed / Affected-not-changed with dl.rows and legitimately has NO
-     .mech, so a behaviour-flows census that falls back to the whole page when it finds no
-     id="flow-" section reads that grid as a flattened flow. A real run hit exactly this at stage 2.
+<!-- The planted defect: the entry names a consequence a flow explains, but nothing links there.
+     An in-page anchor works at every link rung; rung 3 is not a reason to drop it. WARN, not
+     FAIL — a section 4 whose affected code is genuinely owned by no flow is a legitimate page.
 
-     Same shape as the older bug where article.cohort satisfied the unit check: section 1 always
-     supplies one, so the substitute was always present no matter what section 2 did. -->
-<div class="buildstate">
-  <strong>Still being written</strong> — 3 parts still pending. Parts marked <span class="pending">pending</span> below are not yet written. Their absence is not a finding.
-</div>
-<section id="flows">
-  <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
-  <h2>Behaviour flows</h2>
-  <p class="note"><span class="pending">pending</span> Two flows across five files; being written now.</p>
-</section>
+     Current markup: div.item / a.path. See reach-clean.html for why that matters. -->
 <section id="reach">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>What this change reaches</h2>
+
   <figure class="impact">
     <span class="lbl">Impact paths</span>
     <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
@@ -39,9 +30,23 @@
       <span><i class="key-aff"></i>Affected, not changed</span>
       <span><i class="key-out"></i>Behaviour</span>
     </div>
+    <p class="note">Out of reach of a name-based pass: a reader that reaches the column through an enum predicate.</p>
   </figure>
+
   <dl class="rows">
     <dt>Affected, not changed</dt>
-    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; unchanged, and it decides what the picker still offers <span class="tier">evidenced by unchanged code</span></div></dd>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes
+        the selectable list, which archival changes the meaning of
+        <span class="tier">evidenced by unchanged code</span></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>rg 'Project\.(where|all)' app lib</code> <span class="sr-r">one other caller</span></li>
+          </ul>
+        </div>
+      </details>
+    </dd>
   </dl>
 </section>

@@ -40,7 +40,9 @@ level decides how many sections there are to scale.
 
 **One thing is level-independent, deliberately:** every path in the diff still appears in the page,
 and the coverage gate still runs. § *The completeness invariant* says why, and what changes is only
-which component carries the paths.
+**where** the paths sit — § 7's classified ledger at `--full`, a shut `details.coverage-foot` below
+the last section at `--brief`. Neither is § 4: the inventory left that section at both levels,
+because § 4 is about consequences and a list of every changed path is not one.
 
 **Effort is not a level, and this file has nothing else to say about it.** `--effort high` (the
 default) and `--effort low` decide how hard the run works to be right — at `high`, `SKILL.md`
@@ -71,6 +73,8 @@ belongs in the sentences that cite this repository, which say it by naming real 
   into, and why none of the three is evidence
 - *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
   what code does, and the syntax tint that unchanged code gets and a hunk does not
+- *Impact paths* — the § 4 figure: directed chains from changed code, through the unchanged code
+  that gives the change its consequence, to an observable behaviour
 - *One canonical home* — every fact explained once, referenced from everywhere else
 - *Depth rules* — how much treatment a section earns, and the diagram budget
 - *The completeness invariant* — why every diff path appears, and why the check is one-directional
@@ -84,10 +88,10 @@ belongs in the sentences that cite this repository, which say it by naming real 
 | 1 | What changed | always | unchanged | Intent, scope, the metric strip, the use cases named |
 | 2 | Behaviour flows | the bulk | unchanged | One flow per behaviour, canonically — the mechanism, and the findings inside it |
 | 3 | Start here | always | unchanged | One prioritized list: where to go in the code, in the order to go there |
-| 4 | Blast radius | always | **the merged section** | Where consequences leave the diff, seen across every flow at once |
+| 4 | What this change reaches | always | **the merged section** | Where consequences leave the diff, seen across every flow at once |
 | 5 | Cross-cutting consequences | anything genuinely spans flows | folded in, consequential rows only | Schema structure, authorization, jobs, deploy order, test infrastructure |
 | 6 | Before approving | always | folded in, questions and validations | Author questions, validations, test gaps, a ≤5-question checkpoint |
-| 7 | Coverage | always | folded in as paths, unclassified | The ledger. No findings |
+| 7 | Coverage | always | moves to the page foot, unclassified | The ledger. No findings |
 
 The order is the reviewer's path, and each section assumes the ones before it. § 2 teaches the
 mechanisms; § 3 is the moment the reviewer opens the code, holding §§ 1–2; § 4 is a second pass over
@@ -585,6 +589,96 @@ Two corollaries:
 - **Never narrate an excerpt after showing it.** Restating in prose what the reader can now see is the
   duplication this whole format exists to remove, and it undoes the saving that justified the excerpt.
 
+## Impact paths
+
+The § 4 figure, and the page's fourth primitive. A **path** is a directed chain that runs from code
+this PR changed, through the affected-but-unchanged code that gives the change its consequence, to an
+**observable behaviour** — what a user or an operator would see. Rendered as `.impact`, assembled
+whole in `page-template.html`.
+
+It replaced a box grid, and the reason is worth keeping because the box grid looked reasonable. Its
+only encoding was border style, solid for changed and dashed for affected, so it carried membership
+of two sets and nothing else. Set beside each other, a changed function and an unchanged consumer say
+only that both are on the page; what a reviewer needs is *what the first does to the second*. Real
+pages then filled each box with a clause to supply the missing relation, and the figure became a grid
+of sentences with no edges — the layout arguing with its own content. So the edge is now the component's
+first-class part, and adjacency is not asked to imply anything.
+
+**The three node kinds, and the boundary.**
+
+| Kind | Class | Reads as |
+|---|---|---|
+| Changed by this PR | `.ip-chg` | solid border, page ground |
+| Affected, not changed | `.ip-aff` | dashed border |
+| Behaviour / outcome | `.ip-out` | filled, ink ground — the terminal treatment `.pipe`'s last node uses |
+
+`.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
+left, *the existing system* on the right, with a rule between them — is **derived from the kind and
+never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an observable
+behaviour belongs to neither half. So the boundary the reader sees is structurally true, and there is
+no lane class for a run to put on the wrong node.
+
+**The lane crossing draws itself too**, so there is nothing to add when a path changes side: a change
+of lane *is* a change of kind, and the stylesheet draws the elbow from it. Mark the kinds and leave
+the connectors alone — no extra element, no inline style, no `<svg>`.
+
+**Every node past a path's first carries its incoming relation**, as `<span class="ip-rel"><i></i>…`.
+An unlabelled edge is therefore a *missing element* rather than an empty one, which is what makes it
+checkable.
+
+**A label reads from the node above to the node below.** *`render_summary/4` — reads —
+`context.learning_objectives`* means the first reads the second. Get this backwards and the figure
+is still well-formed and says the opposite thing, which no check can catch.
+
+The relation is the causal verb, and this is the vocabulary:
+
+> calls · reads · writes · passes · returns · defaults to · falls back to · falls through to ·
+> filters · filtered out by · scopes · renders · builds · produces · serializes as · receives ·
+> enqueues · broadcasts · causes · read by · called by · rendered by · **ignored by**
+
+**The passive forms are in it deliberately**, and they are what keeps the direction rule above
+affordable. Half the edges on this page run producer to consumer — a changed column and the
+unchanged query underneath it — where the honest verb is *read by*, not *reads*. Without a passive
+a run has to invert the pair to find an active verb, which puts the consumer above the thing it
+consumes and reverses the figure to satisfy the vocabulary.
+
+**`ignored by` is the one to know**, because it labels the commonest finding this page carries: a
+consumer that does *not* account for what changed. Nothing happens, and that is the causal step —
+*`projects.archived_at` — ignored by — `ActiveProjects#call`* is the whole bug in one edge. The
+alternative is what the box grid did: put the omission in a clause and leave the reader to infer
+the relation.
+
+A verb outside the list is a **warning, not a failure**: a stack legitimately names relations this
+list lacks, and failing hard would teach a run to mislabel an edge to satisfy the check. Extend the
+list here and `CAUSAL` in `evals/checks/impact-paths.rb` together — the rule
+`evals/checks/diagram.rb` already states for its class vocabulary.
+
+**Shape rules. Each one is the difference between an impact path and something that merely looks
+like one.**
+
+- **A path starts at `.ip-chg` and ends at exactly one `.ip-out`, which is last.** A chain that stops
+  at a function has not reached a consequence, and the consequence is the reason the figure exists.
+- **Every path holds at least one `.ip-aff`.** A path with no unchanged node is a call stack inside
+  the diff — true, and visible in the diff already. Unchanged-but-affected code is what this page is
+  for, so a path that does not pass through any is not earning its place.
+- **At most two lane crossings.** The point is the one or two interactions that carry the
+  consequence, not every hop between them.
+- **Labels, never sentences, and no citations inside the panel.** `<b>` is an identifier;
+  `.ip-d` is a few words at most. The `file:line` belongs to *affected, not changed* below, which
+  keeps one canonical home and is what stops the panel becoming the grid of sentences it replaced.
+
+**Budget: 2–5 paths, 3–5 nodes each.** Wanting a sixth path is the signal that the first five are not
+doing their job — the same question § *Depth rules* asks about a second diagram. And a change with no
+nameable edge earns **no panel at all**: the affected list carries the entries either way, and a
+figure that cannot say what reaches what is the thing this component exists to stop.
+
+The panel **is** § 4's one figure, so § 4 earns no second, at either level.
+
+Two things the panel is not. It is not a dependency graph: it is 2–5 curated paths chosen because a
+reviewer has to hold them, and completeness here would destroy the thing that makes it readable. And
+it is not SVG — its size is a function of the diff, so a drawing would mean coordinates derived per
+run, which § *Depth rules* rules out for making two pages from this skill incomparable.
+
 ## One canonical home
 
 Every fact, finding, risk, uncertainty and reviewer action has **exactly one place** in the page that
@@ -602,9 +696,9 @@ reading, and everything after that point is wasted regardless of how good it is.
 
 | The concept | Lives in | Referenced from |
 |---|---|---|
-| A high-value finding | The flow it belongs to | *Start here*, as one prioritized entry; *Blast radius*, in one clause |
-| Unchanged code one flow gives new meaning to | That flow's *affected but unchanged* | *Blast radius*, as a named pointer |
-| Unchanged code no single flow owns | *Blast radius* | The flows it touches, in one clause |
+| A high-value finding | The flow it belongs to | *Start here*, as one prioritized entry; *What this change reaches*, in one clause |
+| Unchanged code one flow gives new meaning to | That flow's *affected but unchanged* | *What this change reaches*, as a named pointer |
+| Unchanged code no single flow owns | *What this change reaches* | The flows it touches, in one clause |
 | A consequence spanning flows | *Cross-cutting consequences* | Each flow it touches, in one clause |
 | Behaviour specific to one flow | That flow | Nowhere else |
 | An open question for the author | *Before approving* | The flow that raised it, if the reader needs it there |
@@ -674,14 +768,16 @@ wanting a second diagram, the honest question is whether the first one is doing 
 transition table with a `file:line` per row is often better than a second figure anyway. Never exceed
 two in one section.
 
-**Four kinds, and which section each belongs to — but only two are SVG.** Two of these outgrew
-being drawings: what they carry is membership of a set and order along a chain, and a component
-shows both as well as geometry did, reflows on a phone, and cannot be drawn wrong. The two that
-stayed SVG are the ones where the information genuinely *is* geometry.
+**Four kinds, and which section each belongs to — but only two are SVG.** Two of these are
+components rather than drawings, because their size is a function of the diff: an impact path is
+3–5 nodes and a PR earns 2–5 of them, a chain is as long as the boundary it crosses, so a drawing
+would mean geometry derived per run. A component reflows on a phone and cannot be drawn wrong. The
+two that stayed SVG are the ones where the information genuinely *is* geometry, and where the
+layout can therefore be worked out once, in the catalogue, and filled in.
 
 | Kind | Rendered as | Home |
 |---|---|---|
-| Blast radius | `.blast` box grid + `.legend` | § 4, on almost every PR |
+| Impact paths | `.impact` lanes + `.legend`, see § *Impact paths* | § 4, on almost every PR |
 | Boundary chain | `.pipe` numbered spine | § 2, inside the flow that owns the field, never a section of its own |
 | ER fragment | **SVG**, from the catalogue | § 5, if the schema moved |
 | Lifecycle | **SVG**, from the catalogue | § 5, and only if a status column, enum or state machine changed |
@@ -693,12 +789,16 @@ The SVG layouts are worked out in `page-template.html` — complete, to scale, a
 rather than re-derived, because a layout invented per run makes two pages from this skill
 incomparable for no gain.
 
-**What the box grid cannot do, and what to do instead.** `.blast` shows two sets — solid border
-changed, dashed unchanged-and-affected — and convergence, by spanning a box across columns. It
-cannot show a *directed edge*. So when the finding is "the shared error code stops being produced at
-this hop", adjacency will not say it: put it in the note under the panel, in words. The legend is not
-optional either — a dashed box with nothing explaining it reads as *deleted*, which is the opposite
+**The § 4 figure carries directed edges, and that is why it is not a box grid.** It used to be one:
+`.blast` encoded membership of two sets in its border style and could express nothing else. So when
+the finding was "the shared error code stops being produced at this hop", adjacency could not say it
+and the rule was to put it in the note underneath, in words — a figure with a footnote explaining
+what the figure could not draw. § *Impact paths* replaced it, the edge label is now a first-class
+part of the component, and that footnote rule is **gone** rather than inherited. The legend is not
+optional either: a dashed node with nothing explaining it reads as *deleted*, which is the opposite
 of *unchanged, and therefore worth reading*.
+
+Its budget and caps live in § *Impact paths*, the way an excerpt's live in § *Source excerpts*.
 
 **A diagram carries labels, not sentences.** Prose inside an 880-wide scroller cannot reflow, so a
 reader on a phone scrolls sideways to read it, and it is set in whatever size the diagram's own type
@@ -717,7 +817,7 @@ explanation is the whole product.
 above applies unchanged at `--brief`; what the level decides is how many sections there are to weigh,
 not how heavily each one is weighed. Two consequences for diagrams specifically: `--brief` draws no
 § 5 figures at all (no ER fragment, no lifecycle — migration safety is a row there), so its merged
-tail section holds the `.blast` panel and nothing else that could compete for the budget. And a run
+tail section holds the `.impact` panel and nothing else that could compete for the budget. And a run
 at `--brief` must not read the shorter page as licence to skimp on a flow's diagram, which is the
 one figure § 2 earns.
 
@@ -744,13 +844,25 @@ The one place equality *is* asserted is the coverage ledger, which is machine-ge
 for exactly that reason. Never "fix" a surplus elsewhere by deleting a citation to unchanged code.
 
 **The invariant does not have a detail level; only its carrier does.** At `--full` the paths live in
-§ 7's classified ledger. At `--brief` they live in the merged section's `Changed` list, generated by
-`ledger-rows.sh --paths-only` — one `.gt-paths` cell each, still carrying `data-path`, so
-`coverage-gate.sh` greps them page-wide and asserts the same equality it always did. That is the whole
-reason the brief carrier is a grid cell rather than a list item, and it is why a shorter page is
-legitimate rather than a silent gap: what `--brief` declines to do is *classify* the diff, never
-account for it. `data-path` stays reserved to whichever of the two carries it — an excerpt using it
-would register as a surplus path at either level.
+§ 7's classified ledger. At `--brief` they live in `details.coverage-foot`, a shut disclosure below
+the last section — generated by `ledger-rows.sh --paths-only`, one `.gt-paths` cell each, still
+carrying `data-path`, so `coverage-gate.sh` greps them page-wide and asserts the same equality it
+always did. That is the whole reason the carrier is a grid cell rather than a list item, and it is
+why a shorter page is legitimate rather than a silent gap: what `--brief` declines to do is
+*classify* the diff, never account for it. `data-path` stays reserved to whichever of the two
+carries it — an excerpt using it would register as a surplus path at either level.
+
+**Neither carrier is § 4, and that is a change from an earlier version of this format.** § 4 used to
+hold the whole diff as well — a `.filelist` at `--full`, `.gt-paths` cells at `--brief` — which put a
+list of every changed path in the middle of the section whose own spec says *completeness here is
+about consequences, not paths*. On a 24-file PR it rendered as 24 links above a caption explaining
+that the eight worth opening were ranked in § 3. It accounted for nothing § 7 was not already
+accounting for, so it is gone at both levels.
+
+**The foot disclosure is provenance, and collapsing it is legal for that reason.** The hard rule is
+that the page reads complete with every collapsed block shut, and an inventory of paths passes that
+test where a *finding* never would. So nothing a reviewer has to act on may be put in there — the
+same split § *What was searched* draws between a finding in the open prose and the grep behind it.
 
 ---
 
@@ -829,7 +941,7 @@ A **section**, which is the stub above, and the case at `--full`.
 A **`<h3>` sub-part**, at `--brief`, where the tail is one section written in parts: a half-written § 4
 marks its sub-parts pending in place, and the rail's one `04` entry carries a marker until all of them
 are written. The mistake to avoid is the section reading as complete because its first part is — a
-reader who finds a blast panel and no *before approving* has to be able to tell that one is coming
+reader who finds an impact panel and no *before approving* has to be able to tell that one is coming
 from that the diff earned nothing there.
 
 A **behaviour flow**, at both levels, because § 2 is delivered one flow at a time
@@ -920,7 +1032,7 @@ overlap.
 ## Section 2 · Behaviour flows — the bulk
 
 The reader's way into the change, and the **canonical home** for everything one behaviour owns. It
-comes before the route through the code and before the blast radius because both of those are easier
+comes before the route through the code and before § 4 because both of those are easier
 to write, and far easier to read, once the mechanisms are known.
 
 One flow per behaviour or user cohort, grouped as decided in step 6 of the procedure and **never by
@@ -1042,7 +1154,7 @@ Carry the sampling caveat here, once, and nowhere else in the page: these are wh
 surfaced, not an exhaustive list. Repeated runs over the same diff surface overlapping but different
 sets — the explanation is stable, the findings are a sample.
 
-## Section 4 · Blast radius — always
+## Section 4 · What this change reaches — always
 
 **This spec has two consumers.** It is § 4 at `--full`, and it is the spine of the merged section at
 `--brief` — so a change here lands in both, and § *Section 4 at brief* says only what differs. Where
@@ -1050,16 +1162,21 @@ consequences extend beyond the diff. This is the section a diff cannot produce a
 this point in the page it is a **second pass**: the reader has been through the flows one at a time,
 and now sees the same change as one system, with the edges that leave it.
 
-- **Blast-radius panel** — the primary flow end to end, secondary effects beside it, as a `.blast`
-  box grid. Changed boxes solid (`.bx-on`), affected-but-unchanged dashed (`.bx-off`), `.legend`
-  required. Span a box across columns to show convergence. The one figure that earns its place on
-  almost every PR. Arriving after § 2, it is a synthesis view: it shows flows the page explained
-  separately reaching the same unchanged code. It is not an SVG — see § *Depth rules* for why, and
-  for the one thing adjacency cannot say that the note underneath has to.
-- **Changed vs potentially affected**, two lists across the whole diff, stacked and each the full
-  measure — not columns. Both run on paths and inline code, which wrap mid-token at half width, and
-  the affected list carries the excerpts. They are read one after the other, not compared row against
-  row. The second is the point: every entry carries a citation and a clause on *why* it is affected.
+- **The impact-paths panel** — 2–5 directed chains, each from changed code through the unchanged
+  code that gives the change its consequence to an observable behaviour. § *Impact paths* owns the
+  component, the causal vocabulary, the shape rules and the budget, **and owns them alone**. The one
+  figure that earns its place on almost every PR. Arriving after § 2, it is a synthesis view: it
+  shows the flows the page explained separately reaching the same unchanged code, and says what each
+  one does to it.
+- **Affected, not changed** — one list, the full measure, running on paths and inline code, which
+  wrap mid-token at half width. It carries the excerpts. Every entry carries a citation and a clause
+  on *why* it is affected, and that is the point of the section: the panel shows the shape, the list
+  is where each entry is answered for.
+
+  **There is no `Changed` list here, at either level.** There was, and it was the whole diff — so
+  § 4 restated § 7 a few sections early, in a section whose own closing rule is that completeness
+  here is about consequences rather than paths. See § *The completeness invariant* for where the
+  inventory lives now.
 - **One clause where a flow already owns it.** Most affected code belongs to exactly one behaviour,
   and that flow's *affected but unchanged* field has explained it. Here it is a named pointer —
   *"`ActiveProjects` scopes the selectable list — Flow B"* — and nothing more. What this section
@@ -1120,10 +1237,11 @@ and now sees the same change as one system, with the edges that leave it.
 The prose here explains what the diagram *implies*. It does not transcribe the diagram — if a paragraph
 lists the same nodes and edges the figure already shows, delete the paragraph, not the figure.
 
-Completeness in this section is about consequences, not paths. § 7 is what accounts for every file,
-and this must not become a second ledger. What it owes the reader is that every consequence the page
-found has a place in the affected column — as a pointer where a flow explained it, as its own
-paragraph where nothing did.
+Completeness in this section is about consequences, not paths. § 7 accounts for every file at
+`--full` and `details.coverage-foot` does at `--brief`; **this section must not become a second
+ledger**, which is the rule that removed its `Changed` list. What it owes the reader is that every
+consequence the page found has a place in the affected list — as a pointer where a flow explained
+it, as its own paragraph where nothing did.
 
 ## Section 5 · Cross-cutting consequences — only what genuinely spans flows
 
@@ -1203,6 +1321,10 @@ Every changed file, the section covering it, its attention level (read / skim / 
 `scripts/ledger-rows.sh`, gated by `scripts/coverage-gate.sh`. Doubles as a checklist for a reviewer
 working through the whole diff.
 
+**This is the only place the diff is inventoried at `--full`.** § 4 does not list paths — see
+§ *The completeness invariant*. At `--brief` there is no § 7 and the same generated cells sit in
+`details.coverage-foot` below the last section, unclassified.
+
 **Each row carries its path in a `data-path` attribute** on the path cell:
 `<div class="c" data-path="app/models/project.rb">`. That attribute is the whole interface to the gate — it is
 what lets the check compare sets exactly instead of searching the rendered page, where `api/Gemfile`
@@ -1214,30 +1336,34 @@ is all that split was ever worth — it tells a reviewer which changes they may 
 model. Neutrally framed: "appears unrelated to archival; review independently" is the whole register,
 never a criticism of the author for bundling.
 
-## Section 4 at brief · Blast radius and what to check — replaces §§ 4–7
+## Section 4 at brief · Reach & checks — replaces §§ 4–7
 
 At `--brief` there is no § 5, § 6 or § 7. Sections 4 to 7 above are **one** section, whose spine is
 § 4 unchanged and whose tail is the part of §§ 5–7 a reviewer acts on. Take it from the assembled
 block in `page-template.html` — it is a novel composition of five components that each came from a
 different section, which is exactly the shape a run flattens when it is only described.
 
-**The parts, in this order.** § 4's own three come first and keep their specs verbatim; the folded-in
+**The parts, in this order.** § 4's own two come first and keep their specs verbatim; the folded-in
 material sits after them and must not dilute them.
 
 | Part | From | At this level |
 |---|---|---|
-| The `.blast` panel, `.legend`, and the note under it | § 4 | Unchanged, including what adjacency cannot say |
-| `Changed` | § 7 | **Every path in the diff**, generated by `ledger-rows.sh --paths-only`, as `.gt-paths` cells |
+| The `.impact` panel, `.legend`, and the note under it | § 4 | Unchanged — same paths, same caps, same causal vocabulary |
 | `Affected, not changed`, and the `details.searched` block | § 4 | Unchanged, pointers and all — collapsed at both levels |
 | `<h3 id="crosscutting">` | § 5 | Rows, and only what is both flow-spanning **and** consequential. Omitted outright if nothing is |
 | `<h3 id="approving">` | § 6 | Author questions and validations. **Last in the section** |
 
 **What `--brief` drops, and what it does not.**
 
-- **The ranking goes; the coverage does not.** `Changed` carries the whole diff, so the section still
-  accounts for every path and `coverage-gate.sh` still passes. What is lost is the attention level and
-  the primary / supporting / secondary group — a ledger row's three judgements, which are ranking. § 3
-  is still where the page says where the attention goes, and it says it by what is on that list.
+- **The ranking goes; the coverage does not.** `details.coverage-foot`, below the last section,
+  carries the whole diff, so the page still accounts for every path and `coverage-gate.sh` still
+  passes. What is lost is the attention level and the primary / supporting / secondary group — a
+  ledger row's three judgements, which are ranking. § 3 is still where the page says where the
+  attention goes, and it says it by what is on that list.
+
+  **It is not part of this section, and that is deliberate.** The inventory used to be a `Changed`
+  list inside it, which put 24 links in the middle of the material a reviewer came for. § 4 is about
+  consequences at both levels; the foot disclosure is where the accounting goes.
 - **No figures beyond the panel.** The ER fragment and the lifecycle belong to `--full`. Migration
   *safety* is a row here; schema *structure* is not.
 - **No comprehension checkpoint.** It is a comprehension test rather than something to weigh before
@@ -1250,15 +1376,18 @@ material sits after them and must not dilute them.
 **Three things the markup has to keep, because a check reads each of them.** Every one of these is
 why the merge costs the eval harness almost nothing:
 
-- `id="blast"` on the `<section>`, and `id="approving"` on the **last** `<h3>`.
-  `evals/checks/blast-radius.rb` takes its region from the first anchor to the next `<section`, and
+- `id="reach"` on the `<section>`, and `id="approving"` on the **last** `<h3>`.
+  `evals/checks/reach.rb` takes its region from the first anchor to the next `<section`, and
   `before-approving.rb` from the second anchor onward. Lose them and `before-approving.rb` prints a
   SKIP, which reads as verified.
 - The approving part is `<ul class="actions">`, **never** `<ol class="begin">`. An `ol.begin` inside
-  the region is how `blast-radius.rb` recognises the format's old ordering, where the reading list
-  came before the flows it depends on, and it fails on one.
-- The two `<dt>` labels stay `Changed` and `Affected, not changed`, verbatim. `evals/checks/searches.rb`
-  scopes by those markers rather than by any section id.
+  the region is how `reach.rb` recognises the format's old ordering, where the reading list came
+  before the flows it depends on, and it fails on one.
+- The `<dt>` label stays `Affected, not changed`, verbatim — `evals/checks/searches.rb` **opens** its
+  scope on that marker. An earlier version of this list also named `Changed` as load-bearing for that
+  check; it never was. `searches.rb` treats a `Changed` `<dt>` only as a scope *reset*, and in the
+  template's order it preceded `Affected`, so it never fired. The label is gone and the check is
+  unaffected.
 
 **Build state inside one section.** With one tail section rather than four, *pending* attaches to the
 `<h3>` sub-parts rather than to the section — see § *Build state*.

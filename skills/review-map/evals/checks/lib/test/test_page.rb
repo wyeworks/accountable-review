@@ -97,13 +97,13 @@ class TestRegions < Minitest::Test
   end
 
   # dl.rows is SHARED with section 4, so the flow census narrows on id="flow-" first. This
-  # is the false positive flows-blast-rows.html pins, expressed directly.
+  # is the false positive flows-reach-rows.html pins, expressed directly.
   def test_narrow_keeps_document_order_and_drops_unmatched_sections
     narrowed = page(<<~HTML).narrow(open: /<section [^>]*id="flow-/, close: SEC_END)
       <section id="flow-a">
       <dl class="rows">A</dl>
       </section>
-      <section id="blast">
+      <section id="reach">
       <dl class="rows">not a unit</dl>
       </section>
       <section id="flow-b">
@@ -123,14 +123,14 @@ class TestWithoutComments < Minitest::Test
   # on the anchor.
   def test_a_comment_cannot_steer_a_region
     doc = page(<<~HTML).without_comments
-      <!-- id="blast" on the <section> is what before-approving.sh reads -->
-      <section id="blast">
-      <div class="blast">panel</div>
+      <!-- id="reach" on the <section> is what before-approving.rb reads -->
+      <section id="reach">
+      <figure class="impact">panel</figure>
     HTML
 
     refute doc.has?(/before-approving/)
-    assert doc.has?(/<section id="blast">/)
-    assert doc.has?(/class="blast"/)
+    assert doc.has?(/<section id="reach">/)
+    assert doc.has?(/class="impact"/)
   end
 
   # The reason it is a scan and not a gsub.
@@ -249,17 +249,17 @@ class TestFrom < Minitest::Test
   # A section ends at the next section that is not itself — which no single pattern says,
   # hence a callable stop.
   def test_section_from_stops_at_the_next_section_but_not_its_own
-    doc = page(<<~HTML).section_from(/id="blast"/)
+    doc = page(<<~HTML).section_from(/id="reach"/)
       <section id="flows">
       <p>flows</p>
       </section>
-      <section class="x" id="blast">
-      <p>blast</p>
+      <section class="x" id="reach">
+      <p>reach</p>
       <section id="start">
       <p>start</p>
     HTML
 
-    assert_includes doc.lines.join, "blast"
+    assert_includes doc.lines.join, "reach"
     refute_includes doc.lines.join, "flows"
     refute_includes doc.lines.join, "start"
   end

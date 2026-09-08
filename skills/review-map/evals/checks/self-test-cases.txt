@@ -35,14 +35,29 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
  behaviour-flows    | flows-source-only.html        | 0 | no flow shows the hunk its behaviour turns on
  behaviour-flows    | flows-unit-flattened.html     | 1 | outside a dl.rows
  behaviour-flows    | flows-decisions-interleaved.html | 1 | belongs after the closing
- behaviour-flows    | flows-blast-rows.html         | 0 | every field row is inside a dl.rows
+ behaviour-flows    | flows-reach-rows.html        | 0 | every field row is inside a dl.rows
  behaviour-flows    | flows-pending-page.html       | 0 | section 2 is still pending | --page @GOLD@/flows-pending-page.html
  behaviour-flows    | flows-stubs-only-page.html    | 0 | every flow is still a stub | --page @GOLD@/flows-stubs-only-page.html
  behaviour-flows    | flows-partial-page.html       | 0 | every dl.rows is introduced by a .mech block | --page @GOLD@/flows-partial-page.html
- blast-radius       | blast-clean.html              | 0 | point into the flows that explain them
- blast-radius       | blast-readorder.html          | 1 | the reading order lives in section 3
- blast-radius       | blast-no-pointer.html         | 0 | an in-page anchor works at every link rung
- blast-radius       | blast-pointer-restated.html   | 1 | carry more than one citation
+ reach              | reach-clean.html              | 0 | point into the flows that explain them
+ reach              | reach-readorder.html          | 1 | the reading order lives in section 3
+ reach              | reach-no-pointer.html         | 0 | an in-page anchor works at every link rung
+ reach              | reach-pointer-restated.html   | 1 | carry more than one citation
+# The impact panel, which is section 4's one figure and the part of it a diff cannot produce.
+# Each fixture plants ONE defect, and between them they cover the two failures this component
+# was built to end: an edge with no label (adjacency again) and a node with a clause in it (the
+# word cloud). impact-prose-nodes.html expects exit 1 for its citation and is pinned on the
+# WARN substring instead, so it holds both verdicts at once.
+ impact-paths       | reach-clean.html              | 0 | every edge carries a label
+ impact-paths       | impact-no-outcome.html        | 1 | does not end at exactly one
+ impact-paths       | impact-no-affected.html       | 1 | contains no .ip-aff node
+ impact-paths       | impact-unlabelled-edge.html   | 1 | with no .ip-rel
+ impact-paths       | impact-prose-nodes.html       | 1 | a citation inside the .impact panel
+ impact-paths       | impact-six-paths.html         | 1 | the budget is 2 to 5
+# And the one that has to SKIP rather than pass: a fragment with no panel is reach.rb's
+# failure to report, not this check's. A PASS here would read as a verified figure that was
+# never looked at.
+ impact-paths       | searches-clean.html           | 0 | no .impact panel in this input
  searches           | searches-clean.html           | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
  searches           | searches-unreachable.html     | 1 | reachable from no recorded search | --repo @GOLD@/searches-repo
  searches           | searches-bre-dialect.html     | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
@@ -55,8 +70,8 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
  before-approving   | approving-six-questions.html  | 1 | the cap is 5
 # The brief detail level, where sections 4 to 7 are one section. The first three rows are
 # the level's own rule (the checkpoint belongs to --full); the last two are the ones that
-# matter more, because they pin that the merge did NOT need a flag: blast-radius.sh and
-# page-invariants.sh read the merged section through the anchors it kept, unchanged.
+# matter more, because they pin that the merge did NOT need a flag: reach.rb and
+# page-invariants.rb read the merged section through the anchors it kept, unchanged.
  before-approving   | approving-brief-clean.html      | 0 | right at --brief | --level brief
  before-approving   | approving-brief-checkpoint.html | 1 | the checkpoint belongs to --full | --level brief
  before-approving   | approving-brief-no-anchor.html  | 1 | carries it on its last | --page @GOLD@/approving-brief-no-anchor.html --level brief
@@ -65,8 +80,11 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
 # --brief page cites section 4 with a.path and carries none, so the rule counted the <li> under
 # "Before approving" as uncited section-4 entries and failed a correct page. This row pins the
 # condition rather than the shape.
- blast-radius       | blast-brief-uncited.html        | 0 | citations present alongside the lists | --level brief
- blast-radius       | approving-brief-clean.html      | 0 | no reading order here | --level brief
+ reach              | reach-brief-uncited.html        | 0 | citations present alongside the lists | --level brief
+ reach              | approving-brief-clean.html      | 0 | no reading order here | --level brief
+# The panel is level-independent — same paths, same caps, same vocabulary — so impact-paths.rb
+# must not read --level. This row is what notices if it starts to.
+ impact-paths       | reach-brief-uncited.html        | 0 | every path ends at exactly one observable behaviour | --level brief
  page-invariants    | approving-brief-clean.html      | 0 | data-path is only on ledger rows | --level brief
  page-invariants    | invariants-clean.html         | 0 | no severity chips
  page-invariants    | invariants-severity-chip.html | 1 | severity chips reintroduced

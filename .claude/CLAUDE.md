@@ -76,7 +76,7 @@ changed thing, and confirm no sentence anywhere grades the PR.
 
 Run both levels. They fail differently: `--full` strains the context and duplicates across seven
 sections, `--brief` compresses four kinds of material into one section and its characteristic defect
-is a tail that has quietly become a list of four things with the blast radius as one item. A wording
+is a tail that has quietly become a list of four things with the impact paths as one item. A wording
 change judged at one level says little about the other.
 
 `skills/review-map/evals/` is where that judging happens, at three scopes.
@@ -142,7 +142,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
+| `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, **impact paths**, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
@@ -151,12 +151,12 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
 | `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
-| `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the brief level's unclassified carrier |
+| `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the unclassified carrier the brief level's page foot holds |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire |
 | `bin/evals` | One command per eval scenario — `offline`, `section`, `page`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
-| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for eleven of the twelve checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
+| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `reach.rb` grades § 4's composition and `impact-paths.rb` the figure inside it, and neither repeats the other. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for twelve of the thirteen checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
@@ -192,16 +192,24 @@ Editing one of these means checking the others still agree.
   Two rules make the level cheap instead of a second product. **It changes how many sections there
   are, never what a section teaches**: §§ 1–3 are byte-for-byte the same spec at both levels, and a
   run reading a shorter page as licence to explain less has misread the option. And **the merged
-  section keeps the anchors**: `id="blast"` on the `<section>`, `id="approving"` on its last `<h3>`,
-  the `Changed` / `Affected, not changed` `<dt>` labels verbatim, and `<ul>` rather than
+  section keeps the anchors**: `id="reach"` on the `<section>`, `id="approving"` on its last `<h3>`,
+  the `Affected, not changed` `<dt>` label verbatim, and `<ul>` rather than
   `<ol class="begin">` in the approving part. That is why exactly one check knows the level —
-  `evals/checks/before-approving.rb`, for the checkpoint — while `blast-radius.rb`, `searches.rb` and
-  `page-invariants.rb` read the merged shape unchanged.
+  `evals/checks/before-approving.rb`, for the checkpoint — while `reach.rb`, `impact-paths.rb`,
+  `searches.rb` and `page-invariants.rb` read the merged shape unchanged.
+
+  The `Changed` label used to be on that list, and it was wrong twice over. `searches.rb` treats a
+  `Changed` `<dt>` only as a scope *reset*, and in the template's order it preceded `Affected`, so it
+  never fired — the docs asserted a dependency the code did not have. And the label is gone now
+  anyway: § 4 lists no paths at either level.
 
   That second rule is markup, so it is breakable by accident and invisible when broken: with the
   anchor gone, `before-approving.rb` prints a **SKIP**, which reads as verified.
-  `golden/approving-brief-clean.html` plus the `self-test.rb` rows running `blast-radius.rb` and
-  `page-invariants.rb` over it exist for the day someone moves one.
+  `golden/approving-brief-clean.html` plus the `self-test.rb` rows running `reach.rb` and
+  `page-invariants.rb` over it exist for the day someone moves one. That fixture carries the
+  page-foot coverage disclosure for a related reason: with the inventory out of § 4, a brief golden
+  without one gives `page-invariants.rb` § 4 zero `data-path` cells to look at, and it would pass on
+  nothing.
 
   `--brief` is the default, so it is what almost every real page will be. Judge it first.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
@@ -383,7 +391,7 @@ Editing one of these means checking the others still agree.
   flattened flow keeps its `.mech`, so a census over unit regions counts loose fields as housed and
   misreports the defect as something else. And `dl.rows` is **shared** with § 4, which renders
   Changed / Affected-not-changed with the same grid, so the check narrows to `id="flow-"` *before*
-  counting; `evals/golden/flows-blast-rows.html` pins that. It replaced
+  counting; `evals/golden/flows-reach-rows.html` pins that. It replaced
   `flows-endpoint-rows.html`, which pinned the same class of false positive when `.ep-row` was
   shared with `article.endpoint` — the sharing moved, the trap did not go away.
 
@@ -402,7 +410,7 @@ Editing one of these means checking the others still agree.
   than the presence of a wrapper.
 - **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the search recipes in
   `rails-nextjs.md` are how, and it surfaces twice, at different depths: the review-unit field inside
-  the flow that owns it **explains** it, and § 4 *Blast radius* shows the whole set at once, pointing
+  the flow that owns it **explains** it, and § 4 *What this change reaches* shows the whole set at once, pointing
   at that flow in a clause rather than restating it. Code no single flow owns is explained in § 4
   instead — that is what makes it a section rather than an index. The rule that makes the whole thing
   honest: **record what was searched**, so an empty result reads as evidence rather than as omission.
@@ -430,13 +438,28 @@ Editing one of these means checking the others still agree.
   and `searches.rb` passed them for as long as they matched nothing on any real page.
 - **Completeness, and the one mechanical check. It has no detail level.** Every path in the diff
   appears in the page, at every level, and the gate runs at every level. What the level changes is the
-  *carrier*: § 7's classified ledger at `--full`, the merged section's `Changed` list at `--brief`,
-  generated by `ledger-rows.sh --paths-only` as `.gt-paths` cells that still carry `data-path`. That is
-  the whole reason the brief carrier is a grid cell rather than a list item — `coverage-gate.sh` greps
-  `data-path` page-wide and `page-invariants.rb` § 4 requires it on a `div class="c"`, so a `.filelist`
-  would have cost the gate. `--brief` declines to *classify* the diff; it never declines to account for
-  it, and a run that skipped the gate for want of a § 7 has turned a shorter page into one that may
-  have dropped a file. Stated
+  *carrier*: § 7's classified ledger at `--full`, a shut `details.coverage-foot` below the last
+  section at `--brief`, generated either way by `ledger-rows.sh` as `.gt-paths` cells that still carry
+  `data-path`. That is the whole reason the carrier is a grid cell rather than a list item —
+  `coverage-gate.sh` greps `data-path` page-wide and `page-invariants.rb` § 4 requires it on a
+  `div class="c"`, so a `.filelist` would have cost the gate. `--brief` declines to *classify* the
+  diff; it never declines to account for it, and a run that skipped the gate for want of a § 7 has
+  turned a shorter page into one that may have dropped a file.
+
+  **Neither carrier is § 4 any more, and moving it out cost nothing because the gate never parsed
+  HTML.** § 4 used to hold the whole diff too — a `.filelist` at `--full`, `.gt-paths` cells at
+  `--brief` — which made it the second ledger its own closing rule forbids, a few sections early. On a
+  24-file PR that rendered as 24 links above a caption explaining that the eight worth opening were
+  ranked in § 3. `coverage-gate.sh` is a raw-byte page-wide grep, so it cannot tell whether a carrier
+  is visible, collapsed, or in a section at all: the whole change is markup and prose, and
+  `coverage-gate.sh`, `completeness.rb`, `excerpts.rb` and `ci/generate-review-map.sh` were not
+  touched. Collapsing it is legal because an inventory is *provenance*, which passes the reads-complete-when-shut
+  rule where a finding never would — so nothing a reviewer acts on may go in there.
+
+  One consequence for the harness, and it is the shape this repository keeps writing down: with the
+  inventory out of § 4, a brief golden carrying no `data-path` at all makes `page-invariants.rb` § 4
+  pass on zero cells. `golden/approving-brief-clean.html` and the three other brief fixtures carry
+  the foot disclosure so that row still has something to look at. Stated
   in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and enforced in
   step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work: the script
   reads a `data-path` attribute, the template emits it on the ledger's grid cell
@@ -543,7 +566,7 @@ Editing one of these means checking the others still agree.
   the `git grep` basic-regex caveat is exactly what a reader re-running a recorded search needs. So the
   rule is *keep the fact, drop the autobiography* — `SKILL.md` step 8's **correction replaces, never
   annotates**, which is a general-effort bullet rather than a `high`-only one, because a normal run
-  revising its own draft writes the same sentence. `report-format.md` § *Blast radius* carries it for
+  revising its own draft writes the same sentence. `report-format.md` § *Section 4* carries it for
   recorded searches, where it concentrates.
 
   Two things to know before editing § 2c. It **strips comments first** — `page-template.html`'s own
@@ -602,10 +625,10 @@ Editing one of these means checking the others still agree.
   explanation and the pointer back to it two paragraphs apart — duplication at conversational distance,
   which reads as thoroughness. A section eval cannot see it; `evals.json` case 6 can.
 - **The order is the reviewer's path, and the flow owns the explanation.** § 2 *Behaviour flows*
-  teaches the mechanisms; § 3 *Start here* is the moment they open the code; § 4 *Blast radius* is a
+  teaches the mechanisms; § 3 *Start here* is the moment they open the code; § 4 *What this change reaches* is a
   second pass over the same change through one lens. Everything after § 2 therefore **points back**
   at it — a flow never defers an explanation forward, and §§ 3 and 4 never re-explain one. The
-  earlier ordering put the blast radius and a findings list before the flows, which forced both to
+  earlier ordering put § 4 and a findings list before the flows, which forced both to
   carry enough mechanism to stand alone, and that was the page's main source of duplication. § 3 is
   **one list**: what most needs judgment and what to read first are the same question, and answering
   it twice is the shape to watch for coming back. Where the attention goes is expressed by what is on
@@ -692,11 +715,64 @@ Editing one of these means checking the others still agree.
   nothing. The budget, the permitted locations and the rung adjustment live in `report-format.md`
   **only**; `SKILL.md` points at them. An earlier version restated the cap in slightly different words
   and the two drifted apart within one run — hence the rule that this one has a single home.
+- **Impact paths are § 4's figure, and the edge is the point of them.** A path runs from changed
+  code, through the affected-but-unchanged code that gives the change its consequence, to an
+  observable behaviour, with every hop past the first carrying its incoming relation as a causal
+  verb. 2–5 paths, 3–5 nodes each, one `.ip-out` last, at least one `.ip-aff`, labels never
+  sentences, no citations inside the panel.
+
+  **What it replaced is the reason every one of those rules exists.** `.blast` was a four-column box
+  grid whose only encoding was border style, so it carried membership of two sets and nothing else —
+  and `report-format.md` conceded the gap in prose: *"It cannot show a directed edge … put it in the
+  note under the panel, in words."* A figure with a footnote explaining what the figure could not
+  draw. Real pages then supplied the missing relation by writing a clause into every box, and the
+  panel became a grid of sentences with no edges: the layout arguing with its own content. That
+  workaround rule is **deleted**, not inherited.
+
+  Two design choices carry most of the weight, and both remove a way a run can be wrong rather than
+  adding a rule about it. **The lane is derived from the node kind** — `.ip-chg` left, `.ip-aff`
+  right, `.ip-out` spanning both — so the changed/existing boundary is structurally true and there is
+  no lane class to put on the wrong node. And **the label is an element, not an attribute**, so an
+  unlabelled edge is a *missing* `.ip-rel` rather than an empty one, which is what makes the rule
+  that matters most mechanically checkable at all.
+
+  The first of those pays off twice, because **the lane crossing draws itself.** A change of lane
+  *is* `.ip-chg + .ip-aff` or its reverse, so an adjacent-sibling selector adds the elbow with no
+  extra markup and nothing for a run to place — it marks kinds, and the figure connects itself.
+  Worth knowing before editing the CSS: the elbow runs the whole way between the two connector
+  rails rather than stopping at the lane boundary. The boundary-stub version was the first attempt
+  and it left a crossing path looking like two disconnected halves, which is precisely the reading
+  the component exists to prevent. `.ip-aff + .ip-out` needs the same rule for the last hop,
+  because the spanning outcome's rail sits in lane 1.
+
+  **The vocabulary includes passive forms deliberately, and `ignored by` is the one to know.** A
+  label reads from the node above to the node below, and half the edges here run producer to
+  consumer, where the honest verb is *read by*. Without a passive a run inverts the pair to find an
+  active verb and quietly reverses the figure. `ignored by` labels the commonest finding the page
+  carries — a consumer that does *not* account for what changed — which is causal precisely because
+  nothing happens; the box grid could only put that in a clause.
+
+  Six files have to agree: `page-template.html` holds the CSS (head SKELETON range, so it is
+  emitted and a run never types geometry) and the panel assembled whole in **both** section blocks,
+  `report-format.md` § *Impact paths* owns the component, the vocabulary, the shape rules and the
+  budget **alone**, `SKILL.md` step 9 points at it, `evals/checks/impact-paths.rb` carries the rules
+  and its `CAUSAL` list, and the five `golden/impact-*.html` fixtures plus their `self-test.rb` rows
+  prove each one fires. Extend the vocabulary in the reference and in `CAUSAL` together — the rule
+  `diagram.rb` already states for its class vocabulary.
+
+  Verdicts split on purpose. Shape is a FAIL; an unlisted verb and an over-long label are WARNs,
+  because a hard failure on vocabulary teaches a run to mislabel an edge to satisfy the check, which
+  is worse than an unlisted verb that is true. And the thing no script settles: whether these are the
+  right 2–5 paths and whether each edge is **true**. `evals/cases/diagrams.json` is where that is
+  asked, and the panel needs eyes — `diagram-shot.rb --visual` renders `<svg>` only, so it does not
+  cover a component.
+
 - **Diagram layouts come from the catalogue, not from the run — and only two kinds are drawings.**
-  Blast radius is a `.blast` box grid and boundary chain is a `.pipe` spine: both carry membership of
-  a set and order along a chain, which a component shows as well as geometry did, reflows on a phone,
-  and cannot be drawn wrong. ER fragment and lifecycle stay as inline SVG, worked out complete and to
-  scale in `page-template.html`, with the grid stated in a comment above each.
+  § 4's figure is the `.impact` impact-paths panel and the boundary chain is a `.pipe` spine: both are
+  components because their **size is a function of the diff** — 2–5 paths of 3–5 nodes, a chain as
+  long as the boundary it crosses — so a drawing would mean geometry derived per run. A component
+  reflows on a phone and cannot be drawn wrong. ER fragment and lifecycle stay as inline SVG, worked
+  out complete and to scale in `page-template.html`, with the grid stated in a comment above each.
 
   Four files have to agree: the template holds the geometry and the SVG class vocabulary,
   `report-format.md` § *Depth rules* holds which kind belongs to which section and the budget (and
@@ -704,10 +780,11 @@ Editing one of these means checking the others still agree.
   catalogue and says which two are components, and `evals/checks/diagram.rb` carries the class
   vocabulary the template defines. A class added to one and not the other is either unstyled or
   reported as invented. `legend` and `box-json` were removed from that vocabulary deliberately, not
-  renamed: a run drawing a blast radius as SVG should be told to use the component instead.
+  renamed: a run drawing impact paths as SVG should be told to use the component instead, and
+  `impact-paths.rb` fails an `<svg>` found inside the panel from the other side.
 
   `--brief` draws no § 5 figures at all — no ER fragment, no lifecycle; migration safety is a row
-  there — so its merged section holds the `.blast` panel and nothing that could compete for the
+  there — so its merged section holds the `.impact` panel and nothing that could compete for the
   budget, and `diagram.rb`'s per-`<section>` count needs no level awareness. What it must not become is
   a reason to skip the one figure a *flow* earns.
 
@@ -770,7 +847,7 @@ Editing one of these means checking the others still agree.
   because the three blocks *existing* is not the same as a colour being in all three.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
-  pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.bx-on` — are written
+  pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.ip-out` — are written
   against tokens rather than literals precisely so they keep inverting *relative to the page* rather
   than flipping to an unreadable combination in one theme.
 
@@ -1082,7 +1159,7 @@ the one thing a 112-file run exposed that has not been fixed. Naming it here so 
 starts from the real question rather than rediscovering it.
 
 The run in question — 112 files, 14.8k insertions, a Rails API and a Next.js client in one diff — got
-through the goal, the blast radius and five verified affected-but-unchanged findings, and would have
+through the goal, § 4 and five verified affected-but-unchanged findings, and would have
 needed several times that budget to finish the behaviour flows and a 112-row ledger. Nothing about it
 failed. It simply ran out of room, in a way the procedure has no policy for.
 

@@ -238,48 +238,6 @@ exit=1
 FAIL  comprehension checkpoint has 6 questions — the cap is 5, and past it they turn into a quiz that restates the page
 PASS  1 author question(s), each apparently phrased as one
 PASS  validation steps carry command markup
-## --fragment blast-brief-uncited.html
-exit=0
-WARN  no comprehension checkpoint found inside 'Before approving'
-PASS  3 author question(s), each apparently phrased as one
-PASS  validation steps carry command markup
-## --page blast-brief-uncited.html
-exit=0
-WARN  no comprehension checkpoint found inside 'Before approving'
-PASS  3 author question(s), each apparently phrased as one
-PASS  validation steps carry command markup
-## --fragment blast-clean.html
-exit=0
-WARN  no comprehension checkpoint found inside 'Before approving'
-WARN  no 'ask the author' part — legitimate only if nothing needs the author
-PASS  validation steps carry command markup
-## --page blast-clean.html
-exit=0
-SKIP  no section 6 on this page (id="approving" absent)
-## --fragment blast-no-pointer.html
-exit=0
-WARN  no comprehension checkpoint found inside 'Before approving'
-WARN  no 'ask the author' part — legitimate only if nothing needs the author
-PASS  validation steps carry command markup
-## --page blast-no-pointer.html
-exit=0
-SKIP  no section 6 on this page (id="approving" absent)
-## --fragment blast-pointer-restated.html
-exit=0
-WARN  no comprehension checkpoint found inside 'Before approving'
-WARN  no 'ask the author' part — legitimate only if nothing needs the author
-PASS  validation steps carry command markup
-## --page blast-pointer-restated.html
-exit=0
-SKIP  no section 6 on this page (id="approving" absent)
-## --fragment blast-readorder.html
-exit=0
-WARN  no comprehension checkpoint found inside 'Before approving'
-WARN  no 'ask the author' part — legitimate only if nothing needs the author
-PASS  validation steps carry command markup
-## --page blast-readorder.html
-exit=0
-SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment diagram-clean.html
 exit=1
 WARN  no comprehension checkpoint found inside 'Before approving'
@@ -416,14 +374,6 @@ PASS  validation steps carry command markup
 ## --page excerpt-unchanged-changed-file.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
-## --fragment flows-blast-rows.html
-exit=1
-WARN  no comprehension checkpoint found inside 'Before approving'
-WARN  no 'ask the author' part — legitimate only if nothing needs the author
-FAIL  no <code> anywhere in section 6 — validations must be pasteable commands, not prose
-## --page flows-blast-rows.html
-exit=0
-SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment flows-clean.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'
@@ -472,6 +422,14 @@ PASS  validation steps carry command markup
 ## --page flows-primer-uncited-unit.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
+## --fragment flows-reach-rows.html
+exit=1
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+FAIL  no <code> anywhere in section 6 — validations must be pasteable commands, not prose
+## --page flows-reach-rows.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment flows-source-only.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'
@@ -510,6 +468,46 @@ WARN  no comprehension checkpoint found inside 'Before approving'
 WARN  no 'ask the author' part — legitimate only if nothing needs the author
 PASS  validation steps carry command markup
 ## --page flows-unit-uncited.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-no-affected.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-no-affected.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-no-outcome.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-no-outcome.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-prose-nodes.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-prose-nodes.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-six-paths.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-six-paths.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment impact-unlabelled-edge.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page impact-unlabelled-edge.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment invariants-assurance.html
@@ -590,6 +588,48 @@ WARN  no comprehension checkpoint found inside 'Before approving'
 WARN  no 'ask the author' part — legitimate only if nothing needs the author
 PASS  validation steps carry command markup
 ## --page invariants-verdict.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment reach-brief-uncited.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+PASS  3 author question(s), each apparently phrased as one
+PASS  validation steps carry command markup
+## --page reach-brief-uncited.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+PASS  3 author question(s), each apparently phrased as one
+PASS  validation steps carry command markup
+## --fragment reach-clean.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page reach-clean.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment reach-no-pointer.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page reach-no-pointer.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment reach-pointer-restated.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page reach-pointer-restated.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment reach-readorder.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page reach-readorder.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment searches-bre-dialect.html

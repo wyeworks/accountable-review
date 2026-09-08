@@ -24,7 +24,7 @@
   accent, Fraunces at weight 400 for display. The structural idea is that a
   review unit is NOT a card — it is a borderless 132px/1fr field grid with a
   hairline per row, introduced by a .mech block. Cards are reserved for the few
-  things that genuinely are objects: the pipeline, the blast panel, a decision.
+  things that genuinely are objects: the pipeline, the impact panel, a decision.
 
   THEME RULE, do not break it: every colour is a token defined on bare :root and
   redefined in BOTH dark blocks. Never declare a colour only inside a media or
@@ -32,7 +32,7 @@
   states are: explicit dark, explicit light, and the unstamped default that most
   viewers actually get, where only prefers-color-scheme applies.
   The source design is light-only; the dark half below is ours, and the pairs
-  that invert (.checkpoint, .att-read, .pipe's last node, .bx-on) are written
+  that invert (.checkpoint, .att-read, .pipe's last node, .ip-out) are written
   against tokens precisely so they keep inverting relative to the page.
 
   NO SEVERITY VOCABULARY, also by design: this system has no chip that grades the
@@ -85,19 +85,24 @@
                             this app, which is the only reason it may show "# =>"
     start here ............ ol.begin — one list: the route through the code, and what on
                             it needs judgment. Entries link into the flow that explains them
-    blast radius .......... .blast box grid + .legend. This replaces the old
-                            blast-radius SVG — solid border changed, dashed unchanged
+    impact paths .......... .impact — 2-5 directed chains + .legend. Each node past a
+                            path's first carries its INCOMING relation in .ip-rel, so an
+                            edge is labelled or it is missing. Lane comes from the kind:
+                            .ip-chg left, .ip-aff right, .ip-out spans and ends the path
     grid tables ........... .gt (gap:1px over --rule), .gt-ripple, .gt-ledger, .att, .grp
-                            .gt-paths — paths with no classification, the brief level's
-                            carrier for the diff. data-path still on a div.c, so the gate runs
+                            .gt-paths — paths with no classification. data-path stays on a
+                            div.c, so the gate runs wherever the inventory sits
+    coverage foot ......... details.coverage-foot — the diff inventory at --brief, below the
+                            last section. Not a section: no number, no rail entry, shut
     decisions ............. .decisions > .decision — after a unit, never inside one
     comprehension check ... .checkpoint — inverted tiles, section 6 only, max five
     build state ........... .buildstate banner and .pending markers — deleted at the
                             final publish, never left on a finished page
     diagram catalogue ..... TWO worked SVG layouts, to scale: ER fragment and lifecycle,
                             both section 5. Fill in the text, keep the geometry.
-                            Blast radius and boundary chain are NOT SVG any more —
-                            use .blast and .pipe
+                            Impact paths and boundary chain are NOT SVG — their node and
+                            path counts vary per PR, so a drawing would mean geometry
+                            derived per run. Use .impact and .pipe
     SVG vocabulary ........ .box, .box-hd, .node, .node-dead, .edge, .edge-dash,
                             .lifeline, and the svg text classes
     body skeleton ......... rail, sections 1 → 7, one behaviour flow assembled whole, and
@@ -720,32 +725,100 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 @media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
 
 /* ============================================================
-   Section 4 · blast radius. Replaces the blast-radius SVG.
-   Solid border = changed by this PR; dashed = unchanged and
-   affected. Span a box across columns to show convergence.
-   A legend is required — a dashed box with nothing explaining
-   it reads as "deleted".
+   Section 4 · IMPACT PATHS. Replaces the .blast box grid, which
+   carried membership of two sets and nothing else — so it read
+   as a word cloud, and the one thing it could not express is the
+   one thing this section is about: a directed edge.
+
+   A path runs from changed code, through the affected-but-
+   unchanged code that gives the change its consequence, to an
+   observable behaviour. Every node past the first carries its
+   INCOMING relation in .ip-rel, so an unlabelled edge is a
+   missing element rather than an empty one.
+
+   THE LANE IS DERIVED FROM THE NODE KIND, NEVER AUTHORED:
+   .ip-chg sits left, .ip-aff right, .ip-out spans both. So the
+   boundary between "changed by this PR" and "the existing
+   system" is structurally true, and there is no lane class for
+   a run to get backwards.
+
+   Under 780px the lanes collapse to one column and the lane
+   rule goes. Nothing is lost: the three node kinds still carry
+   changed / affected / behaviour, so the boundary is
+   reinforcement rather than the only encoding.
+
+   The component, the causal verb vocabulary, the shape rules
+   and the caps live in report-format.md § Impact paths, and
+   ONLY there — the way an excerpt's do in § Source excerpts.
+   § Depth rules holds the catalogue row and points at it.
    ============================================================ */
-.blast { padding: 24px; background: var(--surface-hi); border: 1px solid var(--rule); }
-.blast-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; align-items: stretch; }
-.blast-row + .blast-row { margin-top: 10px; }
-.bx { padding: 14px; display: flex; flex-direction: column; gap: 6px; }
-.bx-on  { border: 1px solid var(--ink); background: var(--ground); }
-.bx-off { border: 1px dashed var(--rule-dash); background: var(--surface-3); }
-.bx-note { border: 1px solid var(--rule); background: var(--surface-3); }
-.bx b { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
-.bx span { font-family: var(--mono); font-size: 11px; line-height: 1.45; color: var(--muted); overflow-wrap: anywhere; }
+.impact { padding: 24px; background: var(--surface-hi); border: 1px solid var(--rule); }
+.ip-lanes { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; margin: 16px 0 20px; }
+.ip-lanes > span { font-family: var(--mono); font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+
+/* One lane rule for the whole body, so every path aligns to it. Painted as a BACKGROUND, not
+   an absolutely positioned overlay: a background sits behind child content for free, and the
+   overlay version drew the line straight across the filled .ip-out node, splitting the one
+   box that spans both lanes into two. */
+.ip-body { background: linear-gradient(to right, transparent calc(50% - 0.5px), var(--rule-strong) calc(50% - 0.5px), var(--rule-strong) calc(50% + 0.5px), transparent calc(50% + 0.5px)); }
+
+.ip-hd { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+.ip-path + .ip-hd { margin-top: 34px; }
+.ip-path { list-style: none; margin: 0; padding: 0; }
+
+/* Each node is its own row; the lane is a column inside that row. */
+.ip-n { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+.ip-n > * { grid-column: 1; }
+.ip-aff > * { grid-column: 2; }
+.ip-out > * { grid-column: 1 / -1; }
+
+.ip-box { padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.ip-chg > .ip-box { border: 1px solid var(--ink); background: var(--ground); }
+.ip-aff > .ip-box { border: 1px dashed var(--rule-dash); background: var(--surface-3); }
+.ip-out > .ip-box { border: 1px solid var(--ink); background: var(--ink); }
+.ip-box b { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.ip-box .ip-d { font-family: var(--mono); font-size: 11px; line-height: 1.45; color: var(--muted); overflow-wrap: anywhere; }
+.ip-out > .ip-box b { color: var(--ground); }
+.ip-out > .ip-box .ip-d { color: var(--ground); opacity: .72; }
+
+/* The edge: a labelled connector. <i> is the gutter that draws
+   the hairline and the arrowhead, the way .pipe .n i does. */
+.ip-rel { display: flex; align-items: center; gap: 10px; min-height: 44px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ip-rel > i { flex: 0 0 22px; align-self: stretch; position: relative; }
+.ip-rel > i::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 7px; width: 1px; background: var(--rule-strong); }
+.ip-rel > i::after { content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid var(--rule-strong); }
+
+/* THE LANE CROSSING, drawn rather than implied. Without it a path that changes lane reads as
+   two disconnected halves: the chain simply reappears in the other column with no line back to
+   the node it descends from, and a reader cannot tell which one that was. The adjacent-sibling
+   selector is what makes it possible with no extra markup and nothing for a run to place — a
+   lane change IS `.ip-chg + .ip-aff` or its reverse, because the lane comes from the kind.
+   The elbow runs the whole way between the two rails — from the centre of the previous node's
+   22px rail, across the 40px gutter, to the centre of this connector's own — so it reads as
+   starting underneath the node it descends from. Stopping it at the lane boundary was the first
+   attempt, and it left the chain looking like it reappeared in the other column from nowhere. */
+.ip-chg + .ip-aff > .ip-rel, .ip-aff + .ip-chg > .ip-rel { position: relative; }
+.ip-chg + .ip-aff > .ip-rel::before { content: ""; position: absolute; top: 0; left: calc(-100% - 29px); width: calc(100% + 40px); height: 1px; background: var(--rule-strong); }
+.ip-aff + .ip-chg > .ip-rel::before { content: ""; position: absolute; top: 0; left: 11px; width: calc(100% + 40px); height: 1px; background: var(--rule-strong); }
+/* And the same for the last hop, where an .ip-aff node is followed by the .ip-out that spans
+   both lanes: the outcome's rail sits in lane 1, so without this the chain drops out of the
+   right lane and the arrow into the behaviour appears on the left with nothing joining them. */
+.ip-aff + .ip-out > .ip-rel { position: relative; }
+.ip-aff + .ip-out > .ip-rel::before { content: ""; position: absolute; top: 0; left: 11px; width: calc(50% + 20px); height: 1px; background: var(--rule-strong); }
+
 .legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule-soft); }
 .legend > span { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.key-on  { flex: 0 0 auto; width: 14px; height: 10px; border: 1px solid var(--ink); background: var(--ground); }
-.key-off { flex: 0 0 auto; width: 14px; height: 10px; border: 1px dashed var(--rule-dash); background: var(--surface-3); }
-@media (max-width: 780px) { .blast-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bx[style*="grid-column"] { grid-column: 1 / -1 !important; } }
-
-/* a file plus the flow that explains it */
-.filelist { display: flex; flex-direction: column; gap: 9px; }
-.filerow { display: flex; justify-content: space-between; gap: 16px; font-size: 14.5px; line-height: 1.55; }
-.filerow > .path { font-size: 12.5px; color: var(--ink-2); }
-.filerow > .ptr { font-family: var(--mono); font-size: 11px; color: var(--faint); text-decoration: none; white-space: nowrap; }
+.key-chg { flex: 0 0 auto; width: 14px; height: 10px; border: 1px solid var(--ink); background: var(--ground); }
+.key-aff { flex: 0 0 auto; width: 14px; height: 10px; border: 1px dashed var(--rule-dash); background: var(--surface-3); }
+.key-out { flex: 0 0 auto; width: 14px; height: 10px; border: 1px solid var(--ink); background: var(--ink); }
+@media (max-width: 780px) {
+  .ip-lanes { display: none; }
+  .ip-body { background: none; }
+  .ip-chg + .ip-aff > .ip-rel::before, .ip-aff + .ip-chg > .ip-rel::before,
+  .ip-aff + .ip-out > .ip-rel::before { display: none; }
+  .ip-n { grid-template-columns: minmax(0, 1fr); }
+  .ip-n > *, .ip-aff > *, .ip-out > * { grid-column: 1; }
+}
 
 /* ============================================================
    Grid tables. gap:1px over --rule, so every seam is a rule at
@@ -761,9 +834,10 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .gt-meta   { grid-template-columns: 2fr repeat(4, minmax(0, 1fr)); }
 .gt-ripple { grid-template-columns: 1fr 264px; }
 .gt-ledger { grid-template-columns: 1fr 100px 92px 108px; }
-/* .gt-paths is the brief level's carrier for the diff: paths only, no classification.
-   Still a .gt cell, because data-path has to sit on a `div class="c"` for the coverage
-   gate to keep running. Two columns, since a path is the whole cell. */
+/* .gt-paths is the diff inventory: paths only, no classification. At --brief it is what
+   details.coverage-foot below holds, since that level has no section 7. Still a .gt cell,
+   because data-path has to sit on a `div class="c"` for the coverage gate to keep
+   running. Two columns, since a path is the whole cell. */
 .gt-paths  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .gt-paths > .c { padding: 9px 14px; }
 @media (max-width: 900px) {
@@ -772,6 +846,29 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
   .gt-ledger { grid-template-columns: minmax(300px, 1fr) 94px 86px 100px; }
   .gt-paths  { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ============================================================
+   The page-foot coverage carrier, at --brief only. Section 4 is
+   about consequences, not paths, so the diff inventory does not
+   live there — and at --brief there is no section 7 to hold it.
+   It sits below the last section instead: not a section, no
+   number, no rail entry, shut by default.
+
+   It is PROVENANCE, not a claim, which is what makes collapsing
+   it legal under the hard rule that the page reads complete with
+   every collapsed block shut. A finding must never end up here.
+
+   coverage-gate.sh greps data-path page-wide on the raw bytes,
+   so it cannot tell that the carrier moved — which is the whole
+   reason this costs no script change.
+   ============================================================ */
+details.coverage-foot { margin-top: 62px; padding-top: 24px; border-top: 1px solid var(--rule); }
+details.coverage-foot > summary { display: flex; gap: 9px; align-items: center; cursor: pointer; list-style: none; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+details.coverage-foot > summary::-webkit-details-marker { display: none; }
+details.coverage-foot > summary::marker { content: ""; }
+.coverage-foot .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
+details.coverage-foot[open] .chev { transform: rotate(90deg); }
+.coverage-foot .gt { margin-top: 20px; }
 .att { padding: 2px 7px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; white-space: nowrap; }
 .att-read { border: 1px solid var(--ink); background: var(--ink); color: var(--ground); }
 .att-skim { border: 1px solid var(--rule-strong); background: var(--surface-2); color: var(--muted); }
@@ -893,7 +990,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
        Seven entries is the --full shape. At the default --brief level the tail
        is one section, so the rail is four entries and stops at 04:
 
-         <a data-rail="blast" href="#blast"><span class="n">04</span>Reach &amp; checks</a>
+         <a data-rail="reach" href="#reach"><span class="n">04</span>Reach &amp; checks</a>
 
        Nothing else about the rail changes — same numbering, same scroll-spy,
        same .pending markers.
@@ -915,7 +1012,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
       <a class="sub" data-rail="flow-a" href="#flow-a">Flow A &middot; {{SHORT_NAME}}</a>
       <a class="sub" data-rail="flow-b" href="#flow-b">Flow B &middot; {{SHORT_NAME}} <span class="pending">pending</span></a>
       <a data-rail="start" href="#start"><span class="n">03</span>Where to begin</a>
-      <a data-rail="blast" href="#blast"><span class="n">04</span>Blast radius</a>
+      <a data-rail="reach" href="#reach"><span class="n">04</span>What this change reaches</a>
       <a data-rail="crosscutting" href="#crosscutting"><span class="n">05</span>Cross&#8209;cutting</a>
       <a data-rail="approving" href="#approving"><span class="n">06</span>Before approving</a>
       <a data-rail="coverage" href="#coverage"><span class="n">07</span>Coverage ledger</a>
@@ -1396,49 +1493,78 @@ end)</pre>
       <p class="note" style="margin-top:18px">{{THESE_ARE_WHAT_THIS_PASS_SURFACED_NOT_AN_AUDIT}}</p>
     </section>
 
-    <!-- ===== Section 4 · Blast radius. A second pass over the same change through
-         one lens, so it POINTS AT the flows rather than re-explaining them. Code no
-         single flow owns is explained here instead — that is what makes this a
-         section and not an index.
+    <!-- ===== Section 4 · What this change reaches. A second pass over the same
+         change through one lens, so it POINTS AT the flows rather than
+         re-explaining them. Code no single flow owns is explained here instead —
+         that is what makes this a section and not an index.
 
-         The panel replaces the old blast-radius SVG. Solid border = changed by this
-         PR, dashed = unchanged and affected, and the legend is required: a dashed
-         box with nothing explaining it reads as "deleted". Span a box across
-         columns with style="grid-column:1 / 4" to show convergence. What adjacency
-         CANNOT show is a directed edge — if the finding is "the code stops being
-         produced at this hop", say it in the note. ===== -->
-    <section id="blast" style="padding-top:62px">
+         THE PANEL IS IMPACT PATHS, assembled whole below. It replaced a .blast box
+         grid whose only encoding was border style, so it carried membership of two
+         sets and nothing else — and the one thing it could not express, a directed
+         edge, is the thing this section is about. Do not go back to boxes.
+
+         A path runs from changed code, through the affected-but-unchanged code that
+         gives the change its consequence, to an observable behaviour. Read the
+         example: the last node is what a user or an operator would SEE, not another
+         function.
+
+         Four rules the markup carries, each of them checked:
+           - a path starts at .ip-chg and ends at exactly one .ip-out, which is last
+           - every path holds at least one .ip-aff. A path with no unchanged node is
+             not an impact path, it is a call stack inside the diff
+           - every node past the first carries its INCOMING relation in .ip-rel, with
+             the causal verb. An unlabelled edge is a missing element, not an empty one
+           - LABELS, NEVER SENTENCES, and no citations in here. The file:line lives in
+             the affected list below. A panel full of clauses is the word cloud this
+             component replaced
+
+         The lane is derived from the kind — .ip-chg left, .ip-aff right, .ip-out
+         spans both — so there is no lane class to get backwards, and the boundary
+         between the change and the existing system is structurally true.
+
+         The component, its causal vocabulary, its shape rules and its caps live in
+         report-format.md § Impact paths, and ONLY there. ===== -->
+    <section id="reach" style="padding-top:62px">
       <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
-      <h2 style="margin-bottom:22px">Blast radius</h2>
+      <h2 style="margin-bottom:22px">What this change reaches</h2>
 
-      <div class="blast">
-        <div class="blast-row">
-          <div class="bx bx-on"><b>{{ENTRY_POINT}}</b><span>{{WHERE_IT_GOES}}</span></div>
-          <div class="bx bx-on"><b>{{ENTRY_POINT}}</b><span>{{WHERE_IT_GOES}}</span></div>
-          <div class="bx bx-on"><b>{{ENTRY_POINT}}</b><span>{{WHERE_IT_GOES}}</span></div>
-          <div class="bx bx-off"><b>{{THE_PATH_THE_DIFF_MISSED}}</b><span>{{WHY_IT_DIFFERS}}</span></div>
-        </div>
-        <div class="blast-row">
-          <div class="bx bx-on" style="grid-column:1 / 4"><b>{{WHERE_THEY_CONVERGE}}</b><span>{{WHAT_IS_TRUE_OF_ALL_OF_THEM}}</span></div>
-          <div class="bx bx-off"><b>{{THE_UNCHANGED_CONSUMER}}</b><span>{{WHAT_IT_DOES_INSTEAD}}</span></div>
+      <figure class="impact">
+        <span class="lbl">Impact paths</span>
+        <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+
+        <div class="ip-body">
+          <span class="ip-hd">A &middot; {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}</span>
+          <ol class="ip-path">
+            <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span></span></li>
+            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>reads</span><span class="ip-box"><b>{{CHANGED_THING_IT_READS}}</b><span class="ip-d">{{WHAT_IT_CARRIES}}</span></span></li>
+            <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives {{WHAT_IT_RECEIVES}} from</span><span class="ip-box"><b>{{UNCHANGED_PRODUCER}}</b><span class="ip-d">{{WHAT_IT_RETURNS}}</span></span></li>
+            <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls back to</span><span class="ip-box"><b>{{THE_UNCHANGED_DEFAULT}}</b></span></li>
+            <li class="ip-n ip-out"><span class="ip-rel"><i></i>filtered out by</span><span class="ip-box"><b>{{WHAT_THE_USER_SEES}}</b><span class="ip-d">observable behaviour</span></span></li>
+          </ol>
+
+          <span class="ip-hd">B &middot; {{A_DIFFERENT_BEHAVIOUR}}</span>
+          <ol class="ip-path">
+            <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DIFFERENT_CHANGED_THING}}</b><span class="ip-d">{{WHAT_THAT_ONE_DOES}}</span></span></li>
+            <li class="ip-n ip-aff"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{UNCHANGED_CONSUMER}}</b><span class="ip-d">{{WHAT_IT_STILL_ASSUMES}}</span></span></li>
+            <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>{{WHAT_THE_OTHER_ONE_SHOWS}}</b><span class="ip-d">observable behaviour</span></span></li>
+          </ol>
         </div>
 
         <div class="legend">
-          <span><i class="key-on"></i>Changed by this PR</span>
-          <span><i class="key-off"></i>Unchanged, and affected</span>
+          <span><i class="key-chg"></i>Changed by this PR</span>
+          <span><i class="key-aff"></i>Affected, not changed</span>
+          <span><i class="key-out"></i>Behaviour</span>
         </div>
 
-        <p class="note" style="margin-top:16px">{{WHAT_THE_PANEL_DOES_NOT_SHOW_AND_WHAT_WAS_SEARCHED}}</p>
-      </div>
+        <p class="note" style="margin-top:16px">{{WHAT_A_NAME_BASED_PASS_COULD_NOT_REACH}}</p>
+      </figure>
 
+      <!-- No Changed list here, at either level. Completeness in this section is
+           about CONSEQUENCES, not paths: section 7's ledger accounts for every file
+           at --full, and details.coverage-foot does at --brief. A run that lists the
+           diff here has built the second ledger this section is told not to become,
+           and on a real page it was 24 links the reader had no use for. -->
       <dl class="rows" style="margin-top:34px">
-        <dt class="lbl-ink">Changed</dt>
-        <dd>
-          <div class="filelist">
-            <div class="filerow"><a class="path" href="{{LINK}}">{{PATH}}</a><a class="ptr" href="#flow-{{LETTER}}">Flow {{LETTER}}</a></div>
-          </div>
-        </dd>
-
         <dt>Affected, not changed</dt>
         <dd>
           <div class="item"><a class="path" href="{{LINK}}">{{PATH}}</a> &mdash; {{ONE_CLAUSE}} <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a></div>
@@ -1484,7 +1610,7 @@ end)</pre>
       <!-- ======================================================================
            THE DIAGRAM CATALOGUE · 1 and 2 of 2. Both live in section 5.
 
-           Blast radius and boundary chain are NOT here any more: they are .blast
+           Impact paths and boundary chain are NOT here any more: they are .impact
            and .pipe above. What survives as SVG is the two kinds where the
            information IS geometry — structure, and behaviour over time.
 
@@ -1629,7 +1755,7 @@ end)</pre>
          A PAGE CARRIES ONE SHAPE OR THE OTHER, NEVER BOTH. The ids below repeat
          the ones above deliberately, because this markup REPLACES those four
          sections rather than joining them. In a real page at --brief there is
-         exactly one id="blast", and no <section id="crosscutting">,
+         exactly one id="reach", and no <section id="crosscutting">,
          id="approving"> or id="coverage"> at all.
 
          It is shown here assembled rather than described because that is the
@@ -1640,70 +1766,65 @@ end)</pre>
 
          THREE THINGS THE MARKUP HAS TO KEEP, each because a check reads it:
 
-         1. id="blast" on the <section>, id="approving" on its LAST <h3>.
-            blast-radius.sh takes its region from the id="blast" anchor to the
-            next <section, and before-approving.sh from the id="approving"
-            anchor onward — so both scripts keep working on a merged page with
-            no change. Lose the anchors and before-approving.sh SKIPS, which
-            reads as verified.
+         1. id="reach" on the <section>, id="approving" on its LAST <h3>.
+            reach.rb takes its region from the id="reach" anchor to the next
+            <section, and before-approving.rb from the id="approving" anchor
+            onward — so both checks keep working on a merged page with no
+            change. Lose the anchors and before-approving.rb SKIPS, which reads
+            as verified.
          2. The approving part is <ul class="actions">, never <ol class="begin">.
-            An ol.begin inside the id="blast" region is how blast-radius.sh
-            recognises the old ordering, where the reading list came before the
-            flows, and it FAILS on one.
-         3. The <dt> labels stay Changed / Affected, not changed, verbatim.
-            searches.sh scopes by those two markers rather than by any id.
+            An ol.begin inside the id="reach" region is how reach.rb recognises
+            the old ordering, where the reading list came before the flows, and
+            it FAILS on one.
+         3. The <dt> label stays "Affected, not changed", verbatim. searches.rb
+            opens its scope on that marker rather than on any section id.
 
-         AND ONE THING IT DROPS: no .checkpoint here. The comprehension
+         AND TWO THINGS IT DROPS. No .checkpoint here: the comprehension
          checkpoint is a comprehension test, not a thing to weigh before
-         approving, and it belongs to --full. ===== -->
-    <section id="blast" style="padding-top:62px">
+         approving, and it belongs to --full. And no diff inventory — the paths
+         live in details.coverage-foot below the last section at this level,
+         because section 4 is about consequences rather than about files.
+         ===== -->
+    <section id="reach" style="padding-top:62px">
       <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
-      <h2 style="margin-bottom:22px">Blast radius and what to check</h2>
+      <h2 style="margin-bottom:22px">Reach &amp; checks</h2>
 
-      <!-- The spine, unchanged from section 4 above: same panel, same legend, same
-           note, same rules. The folded-in material sits AFTER it and must not
-           dilute it — this section is the blast radius, with the consequential
+      <!-- The spine, unchanged from section 4 above: same panel, same paths, same
+           legend, same rules, same caps. The folded-in material sits AFTER it and
+           must not dilute it — this section is section 4, with the consequential
            part of the tail attached. -->
-      <div class="blast">
-        <div class="blast-row">
-          <div class="bx bx-on"><b>{{ENTRY_POINT}}</b><span>{{WHERE_IT_GOES}}</span></div>
-          <div class="bx bx-on"><b>{{ENTRY_POINT}}</b><span>{{WHERE_IT_GOES}}</span></div>
-          <div class="bx bx-on"><b>{{ENTRY_POINT}}</b><span>{{WHERE_IT_GOES}}</span></div>
-          <div class="bx bx-off"><b>{{THE_PATH_THE_DIFF_MISSED}}</b><span>{{WHY_IT_DIFFERS}}</span></div>
-        </div>
-        <div class="blast-row">
-          <div class="bx bx-on" style="grid-column:1 / 4"><b>{{WHERE_THEY_CONVERGE}}</b><span>{{WHAT_IS_TRUE_OF_ALL_OF_THEM}}</span></div>
-          <div class="bx bx-off"><b>{{THE_UNCHANGED_CONSUMER}}</b><span>{{WHAT_IT_DOES_INSTEAD}}</span></div>
+      <figure class="impact">
+        <span class="lbl">Impact paths</span>
+        <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+
+        <div class="ip-body">
+          <span class="ip-hd">A &middot; {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}</span>
+          <ol class="ip-path">
+            <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span></span></li>
+            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>reads</span><span class="ip-box"><b>{{CHANGED_THING_IT_READS}}</b><span class="ip-d">{{WHAT_IT_CARRIES}}</span></span></li>
+            <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives {{WHAT_IT_RECEIVES}} from</span><span class="ip-box"><b>{{UNCHANGED_PRODUCER}}</b><span class="ip-d">{{WHAT_IT_RETURNS}}</span></span></li>
+            <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls back to</span><span class="ip-box"><b>{{THE_UNCHANGED_DEFAULT}}</b></span></li>
+            <li class="ip-n ip-out"><span class="ip-rel"><i></i>filtered out by</span><span class="ip-box"><b>{{WHAT_THE_USER_SEES}}</b><span class="ip-d">observable behaviour</span></span></li>
+          </ol>
+
+          <span class="ip-hd">B &middot; {{A_DIFFERENT_BEHAVIOUR}}</span>
+          <ol class="ip-path">
+            <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DIFFERENT_CHANGED_THING}}</b><span class="ip-d">{{WHAT_THAT_ONE_DOES}}</span></span></li>
+            <li class="ip-n ip-aff"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{UNCHANGED_CONSUMER}}</b><span class="ip-d">{{WHAT_IT_STILL_ASSUMES}}</span></span></li>
+            <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>{{WHAT_THE_OTHER_ONE_SHOWS}}</b><span class="ip-d">observable behaviour</span></span></li>
+          </ol>
         </div>
 
         <div class="legend">
-          <span><i class="key-on"></i>Changed by this PR</span>
-          <span><i class="key-off"></i>Unchanged, and affected</span>
+          <span><i class="key-chg"></i>Changed by this PR</span>
+          <span><i class="key-aff"></i>Affected, not changed</span>
+          <span><i class="key-out"></i>Behaviour</span>
         </div>
 
-        <p class="note" style="margin-top:16px">{{WHAT_THE_PANEL_DOES_NOT_SHOW_AND_WHAT_WAS_SEARCHED}}</p>
-      </div>
+        <p class="note" style="margin-top:16px">{{WHAT_A_NAME_BASED_PASS_COULD_NOT_REACH}}</p>
+      </figure>
 
       <dl class="rows" style="margin-top:34px">
-        <!-- Changed carries the WHOLE DIFF at this level — every path, generated,
-             one cell each. This is the coverage ledger's job done in one column:
-             the classification (section, attention, group) is what --brief drops,
-             and accounting for the diff is what it does not.
-
-               <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only
-               ... plus the link flag the rung earned, exactly as at --full
-
-             data-path is RESERVED to these cells and coverage-gate.sh greps it
-             page-wide, so it still runs and still asserts set equality here. -->
-        <dt class="lbl-ink">Changed</dt>
-        <dd>
-          <div class="gt gt-paths">
-            <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
-            <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
-          </div>
-          <p class="note" style="margin-top:14px">All {{N}} changed paths. {{WHICH_FLOW_OR_PART_COVERS_THE_ONES_WORTH_OPENING}}</p>
-        </dd>
-
         <dt>Affected, not changed</dt>
         <dd>
           <div class="item"><a class="path" href="{{LINK}}">{{PATH}}</a> &mdash; {{ONE_CLAUSE}} <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a></div>
@@ -1740,7 +1861,7 @@ end)</pre>
       </div>
 
       <!-- From section 6, condensed to the two parts a reviewer acts on. LAST in
-           the section, because before-approving.sh reads from this anchor onward.
+           the section, because before-approving.rb reads from this anchor onward.
            <ul>, never <ol class="begin">. Per-flow test gaps stay in their flows'
            `Tests` field at this level — gathering them was section 6's job. -->
       <h3 class="cc-h" id="approving" style="margin-top:46px">Before approving</h3>
@@ -1755,6 +1876,39 @@ end)</pre>
         <li><code>{{REAL_PASTEABLE_COMMAND}}</code> &mdash; {{WHAT_IT_SHOWS}}</li>
       </ul>
     </section>
+
+    <!-- =====================================================================
+         THE COVERAGE FOOT · the diff inventory at --brief, and ONLY at --brief.
+         At --full the paths live in section 7's classified ledger and this block
+         does not exist. A page carries one or the other, never both.
+
+         It is not a section: no number, no rail entry, no eyebrow, no <h2>. It
+         sits below the last section because section 4 is about consequences
+         rather than files, and a reviewer scrolling the page should never meet
+         a list of every changed path — on a real page that was 24 links above a
+         caption saying the eight worth opening were ranked elsewhere.
+
+         Shut by default, and legally so: this is PROVENANCE, not a claim. The
+         hard rule is that the page reads complete with every collapsed block
+         closed, and an inventory qualifies where a finding never would. Nothing
+         a reviewer has to act on goes in here.
+
+         Rows are GENERATED, never typed:
+
+           <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only
+           ... plus the link flag the rung earned, exactly as at --full
+
+         data-path is RESERVED to these cells. coverage-gate.sh greps it
+         page-wide on the raw bytes, so it neither knows nor cares that the
+         carrier moved out of section 4 — set equality against
+         git diff --name-only still runs, at every level. ===== -->
+    <details class="coverage-foot">
+      <summary><span class="chev">&#9656;</span> Coverage &middot; all {{N}} changed paths</summary>
+      <div class="gt gt-paths">
+        <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
+        <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
+      </div>
+    </details>
 
 <!-- SKELETON:TAIL:START -->
   </main>

@@ -1,17 +1,23 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# blast_radius.rb — section 4, the section a diff cannot produce at all.
+# reach.rb — section 4, "What this change reaches", the section a diff cannot produce at all.
 #
 # It runs after the behaviour flows, so it is a second pass rather than a first screen.
-# Three of its structural claims are checkable: there is a blast panel, there is an affected
-# list beside the changed one, and an empty search is recorded as a search rather than left as
+# Three of its structural claims are checkable: the impact panel is there, an affected-but-
+# unchanged list is there, and an empty search is recorded as a search rather than left as
 # silence.
 #
-# The panel is a .blast box grid, not an SVG: solid border changed, dashed unchanged-and-
-# affected. It replaced the blast-radius SVG because the information here is membership of two
-# sets, which adjacency shows as well as geometry did. What adjacency CANNOT show is a directed
-# edge, so the legend and the note carry that — both are checked below.
+# THE DIVISION WITH impact-paths.rb: this file asks whether the SECTION is composed right —
+# panel present, affected list present, no reading order, pointers that stay pointers,
+# citations on the entries. impact-paths.rb asks whether the FIGURE is right — the paths, the
+# node kinds, the labelled edges, the legend, the caps. Neither repeats the other, and when
+# the panel is missing entirely this file fails while that one skips, so a missing figure is
+# reported once.
+#
+# Section 4 used to carry a Changed list as well, and this file never checked for one. It is
+# gone now at both levels (report-format.md § The completeness invariant), so the rule below
+# asks for the affected list alone — which was always the one that mattered.
 #
 # The reading order used to live here and now lives in section 3, so its absence is checked
 # too: an ol.begin inside this region is the old shape, and the old shape puts the route
@@ -23,7 +29,7 @@
 
 require_relative "lib/review_map/check"
 
-ANCHOR = /id="blast"/
+ANCHOR = /id="reach"/
 # The region ends at the next <section> — and ALSO at id="crosscutting" or id="approving",
 # which at --brief are <h3> sub-parts of this very section rather than sections of their own.
 # Without that second bound this check reads the whole merged tail as section 4, and the author
@@ -124,34 +130,40 @@ region =
     source
   end
 
-# Scoped to the LISTS first. Section 4 holds a good deal that is not an entry — the panel's .bx
-# boxes, the .searched blocks, the notes, and, when a page has regressed, an ol.begin reading
-# order — and counting any of it is how a correct page gets reported as uncited. dl.rows is the
-# current housing for both lists; a region without one is the retired markup, where the whole
-# region is the best available scope.
-lists = region.has?(/class="rows"/) ? region.narrow(open: /class="rows"/, close: %r{</dl>}) : region
+# Scoped to the LIST first, and with the panel REMOVED before anything is counted. Section 4
+# holds a good deal that is not an entry — the .searched blocks, the notes, and, when a page
+# has regressed, an ol.begin reading order — and counting any of it is how a correct page gets
+# reported as uncited.
+#
+# The panel is the sharp case, and it is new. Its nodes are <li class="ip-n ...">, and
+# entries_in reads any <li> as an entry — so a fragment written without a dl.rows would have
+# its impact paths counted as entries carrying no citation, and the citation rule below would
+# fail a correct page for its own figure. Deliberately no citations live in the panel
+# (report-format.md § Impact paths), so there is nothing there to find. This is the same
+# removal behaviour-flows.rb does with the primer, for the same reason and by the same helper.
+scope = region.without(open: /<figure class="impact/, close: %r{</figure>})
+lists = scope.has?(/class="rows"/) ? scope.narrow(open: /class="rows"/, close: %r{</dl>}) : scope
 entries = entries_in(lists)
 
-# The panel. Almost every PR earns this one, and it is the only place the page shows
-# changed and affected in the same frame. An <svg> is accepted so a page built before the
-# box grid still passes.
-if region.has?(/<svg|class="blast"/)
-  check.ok("blast-radius panel present")
+# The panel. Almost every PR earns this one, and it is the only place the page shows what the
+# change does to code it did not touch.
+#
+# An <svg> is NOT accepted, and it used to be — "so a page built before the box grid still
+# passes". That escape outlived its reason and became a false pass: any <svg> anywhere in the
+# region satisfied it, so a fragment with no section 4 at all but a primer's 34px svg.pr-mark
+# was reported as having a panel. Prefix match on the class, because class="impact impact--x"
+# does not match class="impact" and every rule about this component has to survive a variant.
+if region.has?(/class="impact/)
+  check.ok("impact-paths panel present")
 else
-  check.bad("no blast panel in section 4 — the changed/affected split is what a list alone cannot show")
+  check.bad("no .impact panel in section 4 — what the change does to unchanged code is what a list alone cannot show")
 end
 
-# The legend is not decoration. A dashed box with nothing explaining it reads as "deleted",
-# which is the opposite of "unchanged, and therefore worth reading".
-if region.has?(/class="blast"/)
-  if region.has?(/class="legend"/)
-    check.ok("the blast panel carries a legend")
-  else
-    check.bad("a .blast panel with no .legend — dashed-means-unchanged has to be stated, or it reads as deleted")
-  end
-end
+# Everything ABOUT the panel — paths, node kinds, labelled edges, legend, caps — belongs to
+# impact-paths.rb. It is not repeated here, and it skips when there is no panel, so the line
+# above is the single report of a missing figure.
 
-# Changed beside affected. The second list is the point of the section.
+# The affected-but-unchanged list is the point of the section.
 if region.has?(/affected/i)
   check.ok("an affected-but-unchanged list is present")
 else

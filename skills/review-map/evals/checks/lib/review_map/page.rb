@@ -160,9 +160,9 @@ module ReviewMap
     # Every HTML comment removed, line structure preserved.
     #
     # A comment is not markup, and no check may let one steer it. The case that forced it: a
-    # golden documents its own anchors in a header comment ("id=\"blast\" on the <section> ... is
-    # what before-approving.sh reads"), and the section-4 region ended on the sentence DESCRIBING
-    # the anchor, reporting the fixture as having no blast panel at all. Real pages are exposed
+    # golden documents its own anchors in a header comment ("id=\"reach\" on the <section> ... is
+    # what before-approving.rb reads"), and the section-4 region ended on the sentence DESCRIBING
+    # the anchor, reporting the fixture as having no impact panel at all. Real pages are exposed
     # the same way, because a published page carries page-template.html's header comments
     # verbatim and those comments discuss the very class and id names the checks match on.
     #

@@ -1,31 +1,20 @@
-<!-- No planted defect. A staged PAGE, section 4 written and section 2 still pending. The trap it
-     pins: section 4 renders Changed / Affected-not-changed with dl.rows and legitimately has NO
-     .mech, so a behaviour-flows census that falls back to the whole page when it finds no
-     id="flow-" section reads that grid as a flattened flow. A real run hit exactly this at stage 2.
-
-     Same shape as the older bug where article.cohort satisfied the unit check: section 1 always
-     supplies one, so the substitute was always present no matter what section 2 did. -->
-<div class="buildstate">
-  <strong>Still being written</strong> — 3 parts still pending. Parts marked <span class="pending">pending</span> below are not yet written. Their absence is not a finding.
-</div>
-<section id="flows">
-  <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
-  <h2>Behaviour flows</h2>
-  <p class="note"><span class="pending">pending</span> Two flows across five files; being written now.</p>
-</section>
+<!-- PLANTED: path A stops at an .ip-aff node, so it never reaches an observable behaviour.
+     A chain that ends at a function has told the reader which code is involved and not what
+     goes wrong, which is the box grid's failure with arrows drawn on it. Path B is correct,
+     so the message has to name path 1 specifically. -->
 <section id="reach">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>What this change reaches</h2>
+
   <figure class="impact">
     <span class="lbl">Impact paths</span>
     <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
     <div class="ip-body">
       <span class="ip-hd">A &middot; Archiving a project</span>
       <ol class="ip-path">
-        <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">sets archived_at</span></span></li>
+        <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
         <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, no CHECK</span></span></li>
         <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on status only</span></span></li>
-        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
       </ol>
       <span class="ip-hd">B &middot; Building a project in a spec</span>
       <ol class="ip-path">
@@ -40,8 +29,17 @@
       <span><i class="key-out"></i>Behaviour</span>
     </div>
   </figure>
+
   <dl class="rows">
     <dt>Affected, not changed</dt>
-    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; unchanged, and it decides what the picker still offers <span class="tier">evidenced by unchanged code</span></div></dd>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes the selectable list, and archival does not narrow it <a href="#flow-a">Flow A</a></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run</summary>
+        <div class="sr-body"><ul class="sr-list">
+          <li><code>rg -n 'archived' app lib</code> <span class="sr-r">the scope</span></li>
+        </ul></div>
+      </details>
+    </dd>
   </dl>
 </section>

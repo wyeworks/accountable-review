@@ -166,7 +166,7 @@ module Searches
     end
   end
 
-  # Scoped by the template's own markers, the way blast_radius.rb scopes by id="blast":
+  # Scoped by the template's own markers, the way reach.rb scopes by id="reach":
   # § 4's card carries <p class="eyebrow">Affected, not changed</p>, § 2's field carries
   # <dt>Affected, unchanged</dt>. Sub-eyebrows inside the affected card (one per flow group) do
   # not reset it; the Changed column, the end of the field, and <h3> do.

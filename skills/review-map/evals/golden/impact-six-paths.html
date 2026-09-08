@@ -1,0 +1,69 @@
+<!-- PLANTED: six impact paths. The budget is 2 to 5, and the reason is not tidiness: past five
+     the panel stops being the one or two interactions a reviewer has to hold and becomes the
+     dependency graph the component is told not to be. Every path here is individually valid,
+     so the count is the only defect. -->
+<section id="reach">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>What this change reaches</h2>
+
+  <figure class="impact">
+    <span class="lbl">Impact paths</span>
+    <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+    <div class="ip-body">
+      <span class="ip-hd">A &middot; Consequence 1</span>
+      <ol class="ip-path">
+        <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 1</b><span class="ip-d">unchanged</span></span></li>
+        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 1</b><span class="ip-d">observable behaviour</span></span></li>
+      </ol>
+      <span class="ip-hd">B &middot; Consequence 2</span>
+      <ol class="ip-path">
+        <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 2</b><span class="ip-d">unchanged</span></span></li>
+        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 2</b><span class="ip-d">observable behaviour</span></span></li>
+      </ol>
+      <span class="ip-hd">C &middot; Consequence 3</span>
+      <ol class="ip-path">
+        <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 3</b><span class="ip-d">unchanged</span></span></li>
+        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 3</b><span class="ip-d">observable behaviour</span></span></li>
+      </ol>
+      <span class="ip-hd">D &middot; Consequence 4</span>
+      <ol class="ip-path">
+        <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 4</b><span class="ip-d">unchanged</span></span></li>
+        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 4</b><span class="ip-d">observable behaviour</span></span></li>
+      </ol>
+      <span class="ip-hd">E &middot; Consequence 5</span>
+      <ol class="ip-path">
+        <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 5</b><span class="ip-d">unchanged</span></span></li>
+        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 5</b><span class="ip-d">observable behaviour</span></span></li>
+      </ol>
+      <span class="ip-hd">F &middot; Consequence 6</span>
+      <ol class="ip-path">
+        <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+        <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 6</b><span class="ip-d">unchanged</span></span></li>
+        <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 6</b><span class="ip-d">observable behaviour</span></span></li>
+      </ol>
+    </div>
+    <div class="legend">
+      <span><i class="key-chg"></i>Changed by this PR</span>
+      <span><i class="key-aff"></i>Affected, not changed</span>
+      <span><i class="key-out"></i>Behaviour</span>
+    </div>
+  </figure>
+
+  <dl class="rows">
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes the selectable list, and archival does not narrow it <a href="#flow-a">Flow A</a></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run</summary>
+        <div class="sr-body"><ul class="sr-list">
+          <li><code>rg -n 'archived' app lib</code> <span class="sr-r">the scope</span></li>
+        </ul></div>
+      </details>
+    </dd>
+  </dl>
+</section>

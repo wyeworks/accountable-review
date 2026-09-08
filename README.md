@@ -338,8 +338,9 @@ To have one generated for every pull request instead of by hand, see
 /accountable-review:review-map 412 --full
 ```
 
-**`--brief`** merges the tail of the page — blast radius, cross-cutting consequences, before
-approving, coverage — into one section built around the blast radius. Four sections instead of seven.
+**`--brief`** merges the tail of the page — what the change reaches, cross-cutting consequences,
+before approving, coverage — into one section, *Reach & checks*, built around the impact paths. Four
+sections instead of seven.
 
 **`--full`** writes all seven. Reach for it on a diff you are going to live inside for an hour — a
 migration, a change spanning both sides of the API, someone else's hundred-file feature.
