@@ -910,6 +910,66 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 3 is a single list
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment links-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page links-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment links-collapsed-anchor.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page links-collapsed-anchor.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment links-collapsed-no-excerpt.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page links-collapsed-no-excerpt.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment links-range-truncated.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page links-range-truncated.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment links-unknown-anchor.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page links-unknown-anchor.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
 ## --fragment reach-brief-uncited.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none

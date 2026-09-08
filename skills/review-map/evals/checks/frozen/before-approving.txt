@@ -614,6 +614,46 @@ PASS  validation steps carry command markup
 ## --page invariants-verdict.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
+## --fragment links-clean.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page links-clean.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment links-collapsed-anchor.html
+exit=1
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+FAIL  no <code> anywhere in section 6 — validations must be pasteable commands, not prose
+## --page links-collapsed-anchor.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment links-collapsed-no-excerpt.html
+exit=1
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+FAIL  no <code> anywhere in section 6 — validations must be pasteable commands, not prose
+## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment links-range-truncated.html
+exit=1
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+FAIL  no <code> anywhere in section 6 — validations must be pasteable commands, not prose
+## --page links-range-truncated.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment links-unknown-anchor.html
+exit=1
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+FAIL  no <code> anywhere in section 6 — validations must be pasteable commands, not prose
+## --page links-unknown-anchor.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment reach-brief-uncited.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'

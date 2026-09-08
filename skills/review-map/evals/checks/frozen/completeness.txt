@@ -454,6 +454,36 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-verdict.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment links-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page links-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment links-collapsed-anchor.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page links-collapsed-anchor.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment links-collapsed-no-excerpt.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page links-collapsed-no-excerpt.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment links-range-truncated.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page links-range-truncated.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment links-unknown-anchor.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page links-unknown-anchor.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment reach-brief-uncited.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment

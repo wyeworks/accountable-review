@@ -7,13 +7,15 @@
 # into one the reader believes is checked. Every fragment in ../golden plants exactly one
 # defect, and self_test_cases.txt says what each check is supposed to say about it.
 #
-# No model, no fixtures, a couple of seconds. That is why it belongs in CI next to
-# `claude plugin validate`.
+# No model, and the only fixture it builds is a two-commit git repository — golden/links-repo.sh,
+# for the one rule that has to ask git which files GitHub renders. A couple of seconds either way,
+# which is why it belongs in CI next to `claude plugin validate`.
 #
 # The table is a DATA FILE rather than a heredoc here, and that is not tidiness: frozen.rb reads
-# the same rows, so the frozen corpus inherits every case that needs --repo, --base or --level.
-# One source of truth for what the corpus is.
+# the same rows, so the frozen corpus inherits every case that needs --repo, --base, --level or
+# the @REPO@ fixture. One source of truth for what the corpus is.
 
+require_relative "lib/review_map/fixture"
 require_relative "lib/review_map/page"
 
 HERE = __dir__
@@ -27,7 +29,8 @@ def rows
     next if line.strip.empty? || line.strip.start_with?("#")
 
     check, fragment, want_exit, want_text, extra = line.split("|").map { |c| c.to_s.strip }
-    Row.new(check, fragment, want_exit, want_text, extra.to_s.gsub("@GOLD@", GOLD))
+    expanded = ReviewMap.expand_fixtures(extra.to_s.gsub("@GOLD@", GOLD), GOLD)
+    Row.new(check, fragment, want_exit, want_text, expanded)
   end
 end
 

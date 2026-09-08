@@ -1,0 +1,17 @@
+<!-- ONE DEFECT, and it is a WARN rather than a failure: the citation takes the blob form
+     correctly, so the link lands on the line — but a blob shows the new line with nothing
+     marking what it replaced, which is the half the withheld diff was going to supply. The rule
+     is that the excerpt beside such a claim carries the loss; whether a given excerpt is
+     load-bearing is a judgement, and whether there is one at all is not. Exit stays 0. -->
+<section id="flow-a">
+  <div class="mech">Orders gain a state column, and the dump records it.</div>
+
+  <dl class="rows">
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The dump gains the column with no default
+        <a class="path" href="https://github.com/acme/shop/blob/6ebe1a49faca500d90efcb83a85a016df2cc256d/db/structure.sql#L4">db/structure.sql:4</a>
+        &mdash; every existing row reads NULL.</div>
+    </dd>
+  </dl>
+</section>

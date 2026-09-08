@@ -5,8 +5,10 @@
 #
 # Whether a Review Map is any good is a model run and cannot be asserted on. The scripts underneath
 # it are ordinary software with right answers, and this is where that half is held to account.
-# Today that is page-skeleton.sh: that what it emits is the template's own bytes and not a copy, and
-# that it refuses to overwrite a page somebody is already reading.
+# Today that is page-skeleton.sh — that what it emits is the template's own bytes and not a copy, and
+# that it refuses to overwrite a page somebody is already reading — plus diff-render.sh, whose
+# verdict decides which URL form a citation gets and is therefore the one script here whose output
+# a reader of the page can be misled by.
 #
 # It is NOT under evals/checks/ for the reason verify-catalogue.sh is not: check.rb dispatches
 # offline rules over a page, and this takes no page — it is a relation between two files in the
@@ -22,6 +24,12 @@
 #
 # One line per expectation, PASS or FAIL, in the same idiom as evals/checks — a test that prints
 # nothing when it passes is a test nobody can tell apart from one that never ran.
+#
+# RUN IT UNDER dash BEFORE PUSHING: `dash tests/run.sh`. CI's /bin/sh is dash, macOS's is bash in
+# POSIX mode, and they disagree about `$((cd dir && cmd) | filter)` — dash reads `$((` as
+# arithmetic expansion and dies with "Missing '))'", which is a syntax error the whole file dies
+# on rather than one row going red. This file shipped that once. The space in `$( (cd` is load
+# bearing.
 
 set -eu
 
@@ -29,6 +37,7 @@ HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 SKILL_DIR=$(dirname "$HERE")
 SKELETON=${REVIEW_MAP_SKELETON:-$SKILL_DIR/scripts/page-skeleton.sh}
 TEMPLATE=${REVIEW_MAP_TEMPLATE:-$SKILL_DIR/references/page-template.html}
+DIFF_RENDER=${REVIEW_MAP_DIFF_RENDER:-$SKILL_DIR/scripts/diff-render.sh}
 
 pass=0; fail=0
 ok()  { pass=$((pass + 1)); echo "PASS  $1"; }
@@ -148,6 +157,106 @@ rc=0; "$SKELETON" --template "$TEMPLATE" --out "$WORK/n.html" >/dev/null 2>&1 ||
 assert_eq "$rc" "2" "a missing --title is refused rather than written as a placeholder"
 rc=0; "$SKELETON" --template "$TEMPLATE" --title 'x' >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "2" "a missing --out is refused"
+
+# ================================================================ diff-render.sh
+# The verdict here decides whether a citation gets a diff anchor or a blob permalink
+# (report-format.md § When the diff will not render), and being wrong is invisible on the page:
+# an anchor into a file GitHub keeps behind "Load diff" lands on a stub, and the reader sees a
+# link that worked. So every signal gets a row, on a repository built here rather than on a
+# fixture, because the answer is a function of git's own attribute resolution and numstat.
+echo ""
+echo "diff-render  $DIFF_RENDER"
+echo ""
+
+REPO=$WORK/repo
+mkdir -p "$REPO/app" "$REPO/db" "$REPO/assets"
+(
+  cd "$REPO"
+  git init -q .
+  git config user.email test@example.com
+  git config user.name test
+  # .gitattributes is the signal git resolves for us — nested files and precedence included,
+  # which is why the script asks check-attr instead of grepping for the pattern.
+  printf 'db/structure.sql linguist-generated=true\nassets/*.min.js -diff\n' > .gitattributes
+  echo one > app/order.rb
+  seq 1 100 > app/big.rb
+  seq 1 30000 > db/structure.sql
+  echo 'v=1' > assets/app.min.js
+  printf '\000\001\000' > app/logo.png
+  echo '{"lockfileVersion":3}' > package-lock.json
+  git add -A
+  git commit -qm base
+  git rev-parse HEAD > "$WORK/base"
+  # One changed line in a generated file, a change over the auto-load threshold, a change over
+  # the hard cap, a binary, a -diff path, a one-line lockfile edit, and one ordinary small file.
+  echo two >> app/order.rb
+  seq 1 700 > app/big.rb
+  seq 1 60000 > db/structure.sql
+  echo 'v=2' > assets/app.min.js
+  printf '\000\002\000' > app/logo.png
+  echo '{"lockfileVersion":4}' > package-lock.json
+  git add -A
+  git commit -qm head
+) >/dev/null 2>&1
+BASE=$(cat "$WORK/base")
+
+verdict() { (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD) | awk -v p="$1" '$3 == p { print $1 "/" $2 }'; }
+
+assert_eq "$(verdict app/order.rb)"      "render/-"                "an ordinary small change renders, so its citation keeps the diff anchor"
+assert_eq "$(verdict app/big.rb)"        "collapse/over-autoload"  "a diff past 400 lines is behind Load diff, whatever the file is"
+assert_eq "$(verdict db/structure.sql)"  "collapse/generated"      "linguist-generated collapses on one changed line, where no size rule would fire"
+assert_eq "$(verdict assets/app.min.js)" "collapse/no-diff"        "a -diff path is reported as an attribute, not as a coincidence of its bytes"
+assert_eq "$(verdict app/logo.png)"      "collapse/binary"         "a binary file has no line to anchor to"
+assert_eq "$(verdict package-lock.json)" "collapse/lockfile"       "a lockfile collapses as generated even when its diff is one line"
+
+# The hard cap is a different sentence on the page from the auto-load threshold — past it Load
+# diff does not fully help either — so the reason has to survive, not just the verdict.
+# On its own branch, and checked out BACK afterwards: leaving the repository on that branch
+# redefines HEAD for every row below, and the first version of this file did exactly that —
+# three rows then ran against a two-file diff, one of them passing by matching only the verdict
+# of a `not-in-diff` answer.
+(
+  cd "$REPO"
+  was=$(git rev-parse --abbrev-ref HEAD)
+  git checkout -q -b hardcap "$BASE"
+  seq 1 30000 > db/big.txt
+  git add -A
+  git commit -qm hardcap
+  git checkout -q "$was"
+) >/dev/null 2>&1
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" hardcap) | awk '$3 == "db/big.txt" { print $2 }')" \
+  "over-hard-cap" "a diff past 20,000 lines is reported as over the hard cap, not merely un-auto-loaded"
+
+# --path is what a run asks while writing one citation, and a path outside the diff has to come
+# back renderable rather than collapse: an *affected but unchanged* citation is a blob link
+# already, and the commonest citation on the page must not be answered with a guess.
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/order.rb) | awk '{ print $1 "/" $2 }')" \
+  "render/-" "--path answers about one file"
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/untouched.rb) | awk '{ print $1 "/" $2 }')" \
+  "render/not-in-diff" "a path the diff never touched is not reported as collapsed"
+
+collapsed=$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^collapse' || true)
+assert_eq "$collapsed" "5" "--collapsed-only lists every collapsed path and no renderable one"
+assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^render' || true)" \
+  "0" "--collapsed-only emits no render rows"
+
+# The whole-diff caps are the two facts no per-path verdict can carry, so they are stated once.
+if (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD) | grep -q 'file(s),.*bytes of diff'; then
+  ok "the trailing summary states the file count and the diff size"
+else
+  bad "the trailing summary states the file count and the diff size"
+fi
+
+rc=0; (cd "$REPO" && "$DIFF_RENDER" >/dev/null 2>&1) || rc=$?
+assert_eq "$rc" "2" "a missing BASE is refused rather than diffed against nothing"
+
+# Asked and unable to answer is not an empty diff. Every git call here feeds a pipeline, so a
+# failing one leaves the exit status at 0 and prints no rows — which reads as "no file is
+# withheld", the most reassuring output this script has and the one with the least behind it.
+# evals/checks/excerpts.rb's state-tag rule shipped with exactly this bug.
+rc=0; out=$( (cd "$REPO" && "$DIFF_RENDER" 0000000000000000000000000000000000000000 HEAD) 2>/dev/null ) || rc=$?
+assert_eq "$rc" "4" "an unresolvable BASE exits 4 rather than reporting an empty diff"
+assert_eq "$(printf '%s' "$out" | grep -c . || true)" "0" "and prints nothing that could be read as a verdict"
 
 echo ""
 echo "run.sh: $pass passed, $fail failed"

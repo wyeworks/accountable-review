@@ -1302,6 +1302,56 @@ exit=0
 SKIP  doc links: none on this input
 SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
+## --fragment links-clean.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page links-clean.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment links-collapsed-anchor.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page links-collapsed-anchor.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment links-collapsed-no-excerpt.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment links-range-truncated.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page links-range-truncated.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment links-unknown-anchor.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page links-unknown-anchor.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment reach-brief-uncited.html
 exit=0
 SKIP  doc links: none on this input

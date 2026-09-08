@@ -43,6 +43,12 @@
 # A ledger row names a file, so both diff-page forms link the file rather than a
 # line — a diff page is where the reviewer is working, and the row is their way in.
 #
+# Which is also why nothing here consults diff-render.sh. A file-level anchor into a
+# diff GitHub withholds still arrives at that file, at its "Load diff" stub, which is
+# the correct landing for a row whose whole claim is "this path is in the change".
+# The collapsed-file rule is about a LINE that cannot be reached; see
+# report-format.md § When the diff will not render.
+#
 # Give exactly the one your rung calls for. Emitting an href you have not earned is
 # the failure mode report-format.md § Choosing a mode is about.
 

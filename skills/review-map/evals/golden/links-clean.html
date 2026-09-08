@@ -1,0 +1,31 @@
+<!-- No defect, and the fixture that pins two rules at once: a citation into a file GitHub
+     renders keeps its diff anchor, and a citation into one GitHub withholds takes the blob
+     form with an excerpt beside it. db/structure.sql is linguist-generated in links-repo.sh, so
+     its diff sits behind "Load diff" on one added line — the case no size threshold catches.
+
+     Every span here agrees with its href, including the range on the blob link, so rule 1 is
+     pinned on its own PASS line rather than by the absence of a failure. -->
+<section id="flow-a">
+  <div class="mech">Orders gain a state column, and the dump records it.</div>
+
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><a class="path" href="https://github.com/acme/shop/pull/7/files#diff-26bbec4be8ce33f60fa824e2bd29e6902e57541818578634bea06bce180b620eR3">app/models/order.rb:3</a> &mdash; the comment the change adds</div>
+    </dd>
+
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The dump carries no CHECK constraint for the new column
+        <a class="path" href="https://github.com/acme/shop/blob/6ebe1a49faca500d90efcb83a85a016df2cc256d/db/structure.sql#L3-L4">db/structure.sql:3-4</a>
+        &mdash; the column is nullable at the database level whatever the model says.
+        <details class="excerpt">
+          <summary>db/structure.sql:3-4</summary>
+          <p class="ex-src">Changed at <a class="cite" href="https://github.com/acme/shop/blob/6ebe1a49faca500d90efcb83a85a016df2cc256d/db/structure.sql#L3-L4">db/structure.sql:3-4</a></p>
+<pre data-src="db/structure.sql" style="counter-reset: exl 2"><span class="l">);</span>
+<span class="l">  state character varying,</span></pre>
+        </details>
+      </div>
+    </dd>
+  </dl>
+</section>

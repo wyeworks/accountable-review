@@ -454,6 +454,36 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-verdict.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment links-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page links-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment links-collapsed-anchor.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page links-collapsed-anchor.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment links-collapsed-no-excerpt.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page links-collapsed-no-excerpt.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment links-range-truncated.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page links-range-truncated.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment links-unknown-anchor.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page links-unknown-anchor.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment reach-brief-uncited.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

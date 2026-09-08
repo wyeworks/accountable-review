@@ -23,6 +23,7 @@ SKILL_DIR=$(dirname "$HERE")
 RUN=$HERE/run.sh
 TEMPLATE=$SKILL_DIR/references/page-template.html
 SKELETON=$SKILL_DIR/scripts/page-skeleton.sh
+DIFF_RENDER=$SKILL_DIR/scripts/diff-render.sh
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
@@ -33,6 +34,18 @@ ok=0; bad=0
 case_runs_red() {
   what=$1; tpl=$2; scr=$3
   if REVIEW_MAP_TEMPLATE="$tpl" REVIEW_MAP_SKELETON="$scr" "$RUN" >/dev/null 2>&1; then
+    bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
+  else
+    ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
+  fi
+}
+
+# The same, for the other script under test. Its rows are all script mutations: there is no
+# fixture to break, because the repository the rows run against is built by run.sh itself.
+case_render_red() {
+  what=$1; scr=$2
+  chmod 755 "$scr"
+  if REVIEW_MAP_DIFF_RENDER="$scr" "$RUN" >/dev/null 2>&1; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -84,6 +97,36 @@ case_runs_red "--rails is declared in only two of the three theme states" "$WORK
 # 7. The title placeholder gone means every page ships with the same tab name.
 sed 's|{{PR_TITLE_OR_BRANCH}} Review|Review|' "$TEMPLATE" > "$WORK/no-title.html"
 case_runs_red "the title placeholder is missing, so no page can be named" "$WORK/no-title.html" "$SKELETON"
+
+# ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
+#
+# All three are script mutations for the reason the first two cases above are: the repository
+# these rows run against is built by run.sh, so there is no fixture to break — and each of them
+# leaves a page that looks completely correct, with an anchor that arrives at a "Load diff" stub
+# and a reader who cannot tell.
+
+# 8. The signal no size rule can replace. One changed line in a linguist-generated file is a
+#    small diff by every measurement there is, and GitHub collapses it anyway.
+sed 's|^  if _why=$(attr_says "$_path"); then|  if false; then|' "$DIFF_RENDER" > "$WORK/no-attrs.sh"
+case_render_red "the script stops asking .gitattributes, so a generated file reads as renderable" "$WORK/no-attrs.sh"
+
+# 9. Reading GitHub's limits and keeping only the memorable pair. The hard cap is the number
+#    that sounds like the limit; 400 lines is the one that decides almost every real citation.
+sed 's|^AUTOLOAD_LINES=400$|AUTOLOAD_LINES=20000|' "$DIFF_RENDER" > "$WORK/hard-cap-only.sh"
+case_render_red "only the 20,000-line hard cap is enforced, not the 400-line auto-load threshold" "$WORK/hard-cap-only.sh"
+
+# 10. The other direction, and the one that costs the page its product: answering "collapse" for
+#     a path the diff never touched pushes every *affected but unchanged* citation off the blob
+#     form it requires and onto a diff anchor that cannot address an unchanged line at all.
+sed "s|printf 'render\\\\tnot-in-diff|printf 'collapse\\\\tnot-in-diff|" "$DIFF_RENDER" > "$WORK/unchanged-collapsed.sh"
+case_render_red "a path outside the diff is reported as collapsed" "$WORK/unchanged-collapsed.sh"
+
+# 11. The guard whose absence is a silent clean bill of health: with the refs unresolved, every
+#     git call still feeds a pipeline that exits 0 and prints nothing, so the script reports that
+#     no file is withheld. Written without the guard first, and this row is why it has one.
+awk '/^for ref in "\$BASE" "\$HEAD_REF"; do$/ { skip = 3 } skip { skip--; next } { print }' \
+  "$DIFF_RENDER" > "$WORK/no-ref-guard.sh"
+case_render_red "the ref guard is gone, so an unresolvable base reads as a diff with nothing withheld" "$WORK/no-ref-guard.sh"
 
 echo ""
 echo "self-test: $ok ok, $bad bad"

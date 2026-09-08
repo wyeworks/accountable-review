@@ -454,6 +454,36 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page invariants-verdict.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-collapsed-anchor.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-collapsed-anchor.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-collapsed-no-excerpt.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-range-truncated.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-range-truncated.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-unknown-anchor.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-unknown-anchor.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment reach-brief-uncited.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
