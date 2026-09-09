@@ -31,9 +31,22 @@ module BehaviourFlows
   MECH     = /class="mech"/
   GRID     = /<dl class="rows"/
   DL_CLOSE = %r{</dl>}
-  SECTION  = /<section [^>]*id="flow-/
+  SECTION  = /<section [^>]*id="flow-[^>]*>[[:space:]]*$/
   SEC_END  = %r{</section>}
   PENDING  = /class="pending"/
+  FLOW_ID  = /id="flow-[^"]*"/
+  # A drawing, not the primer's 34px brand badge — the same exclusion checks/diagram.rb and
+  # checks/diagram-shot.rb apply, and for the same reason.
+  FIGURE   = /<svg(?![^>]*class="pr-mark")/
+  # What makes a section-2 drawing a drawing rather than a redrawn .pipe: the boundary chain
+  # marks the hop where two sides stop agreeing, the guard fork marks that plus the gate never
+  # reached. Both are edges. A single unbroken track through a figure is the path, and the path
+  # is a component.
+  DIVERGE  = /class="edge-dash"|class="node-dead"/
+  # Citation extensions, used only to ask whether a flow's material spans the seam. Deliberately
+  # coarse: this decides a WARN, and which flow owns a crossing needs a reader.
+  SERVER   = /\.(?:rb|ex|exs|erb|heex)\b/
+  CLIENT   = /\.(?:ts|tsx|js|jsx|vue|svelte)\b/
 
   # The canonical field labels, verbatim from report-format.md § The review unit. Matching
   # these rather than every <dt> is what keeps dl.ba's Before/After out of the field census.
@@ -86,6 +99,15 @@ check.require_input
 # unit census. Gate on what the extractor actually matches, not on a looser search: the template
 # mentions id="flow-a" inside a comment, which a substring test accepts and this does not — and
 # an empty region then reads as a section with no units in it.
+#
+# SECTION REQUIRES THE TAG TO CLOSE AT END OF LINE, and that is not decoration. The pattern used
+# to end at `id="flow-`, and the template writes `<section id="flow-x">, so the generic pending
+# section IS the flow stub` inside a CSS comment — in the EMITTED head range, so it ships in
+# every published page. That line matched, opened a region, and swallowed everything down to the
+# next </section>. The comment above said the regex prevented this; it did not, and nothing
+# caught it because every rule here was page-wide over the concatenated region and tolerant of
+# junk. The first per-flow rule reported it instantly, as a flow called "flow-x" with no path.
+# Stripping HTML comments would not have helped: that one is a CSS comment.
 flows = check.page.narrow(open: BehaviourFlows::SECTION, close: BehaviourFlows::SEC_END)
 
 doc =
@@ -144,12 +166,88 @@ else
   check.maybe("the first flow opens with no prose before it — say why the split is what it is")
 end
 
+# PER-FLOW WORK. Three rules below ask a question of each flow rather than of the region, and
+# they need the flows separated. On a fragment there may be no <section id="flow-"> wrapper at
+# all, in which case the whole input is one flow — the same fallback `doc` itself makes above.
+#
+# A stub is excluded by its pending marker, not by looking for a missing .mech: a half-written
+# section 2 owes nothing yet, and "it has no path" is a wording complaint about a promise.
+flow_regions = doc.regions(open: BehaviourFlows::SECTION, close: BehaviourFlows::SEC_END)
+wrapped = !flow_regions.empty?
+flow_regions = [doc] unless wrapped
+written = flow_regions.reject { |f| f.has?(BehaviourFlows::PENDING) }
+
+# Naming an unwrapped fragment is worse than not naming it: there is exactly one region and no id
+# to read, so "flow-a" would be a guess and "unnamed" is furniture. `where` yields the flow names
+# on a page and an empty string on a fragment, so each message below reads correctly in both.
+name_of = lambda do |region|
+  found = region.scan(BehaviourFlows::FLOW_ID).first
+  found ? found[/flow-[^"]*/] : "this fragment"
+end
+where = lambda do |regions|
+  wrapped ? " in #{regions.map(&name_of).join(', ')}" : ""
+end
+
 # The path, as a pipeline. A chain the reader can follow beats a paragraph describing one.
 # ol.steps is accepted so a page built before .pipe still gets checked rather than warned at.
-if doc.has?(/class="pipe"|class="steps"/)
-  check.ok("at least one flow renders its path as a pipeline")
+#
+# PER FLOW, not page-wide. It was page-wide, which was tolerable only while .pipe carried both
+# of a flow's chains: one flow with a path absolved three without one. Now that .pipe means THE
+# PATH alone — the boundary chain went back to being a drawing — a page where one flow has a
+# spine and the rest have neither spine nor figure passed this rule clean.
+pathless = written.reject { |f| f.has?(/class="pipe"|class="steps"/) }
+if written.empty?
+  check.ok("no written flow yet, so none owes a path")
+elsif pathless.empty?
+  check.ok("every written flow renders its path as a pipeline")
 else
-  check.maybe("no .pipe — the end-to-end path is what makes a flow a flow")
+  check.maybe("no .pipe#{where.call(pathless)} — the end-to-end path is what makes a flow a flow")
+end
+
+# A SECTION-2 DRAWING HAS TO SHOW A DIVERGENCE. Both kinds a flow may draw are about an edge:
+# the boundary chain marks the hop where the two sides stop agreeing, the guard fork marks that
+# plus the gate the diverted class never reaches. A figure with one unbroken track through it is
+# the path redrawn, and the path is a .pipe — which is the regression a restored catalogue layout
+# most invites, because reaching for SVG out of habit produces exactly that shape.
+#
+# Comments are stripped first: the catalogue entries explain .edge-dash at length in the comment
+# above each figure, and those comments ship verbatim inside every published page, so a rule
+# reading them would be satisfied by the documentation rather than by the drawing.
+#
+# FAIL and not WARN because it is shape, which is this repository's split. Its LIMIT, stated
+# because no script can close it: a lifecycle mistakenly drawn inside a flow also carries
+# .edge-dash and passes here. Whether the right kind is earned is a judged expectation.
+drawn = doc.without_comments
+             .regions(open: BehaviourFlows::SECTION, close: BehaviourFlows::SEC_END)
+             .select { |f| f.has?(BehaviourFlows::FIGURE) }
+undirected = drawn.reject { |f| f.has?(BehaviourFlows::DIVERGE) }
+if drawn.empty?
+  check.ok("no flow draws a figure, so none can draw the path twice")
+elsif undirected.empty?
+  check.ok("every flow drawing shows a divergence")
+else
+  check.bad("the drawing#{where.call(undirected)} shows no divergence — a section 2 figure earns its place by marking a hop or a gate never reached, and one unbroken track through it is the path, which is a .pipe")
+end
+
+# A FLOW THAT SPANS THE SEAM AND DRAWS NOTHING. The predicate is the flow's own citations: a
+# region citing both a server file and a client file is a flow whose material is a field crossing
+# a boundary, and that crossing is what the chain draws.
+#
+# WARN, because a flow in a monorepo can legitimately be backend-only even while citing a type it
+# does not follow, and because which flow owns the crossing needs a reader.
+#
+# THE LAST BRANCH IS A PASS THAT NAMES WHAT IT LOOKED FOR, never a SKIP. A silent rule on a
+# Rails-only page reads as verified, and reading as verified is exactly how section 2's diagram
+# instruction stayed a dangling pointer at a deleted catalogue entry for two weeks: nothing knew
+# a flow could hold a figure, so the rule was never wrong — it had never been looked at.
+crossing = written.select { |f| f.has?(BehaviourFlows::SERVER) && f.has?(BehaviourFlows::CLIENT) }
+undrawn = crossing.reject { |f| f.has?(BehaviourFlows::FIGURE) }
+if crossing.empty?
+  check.ok("no flow here cites both sides of the boundary, so none owes a chain")
+elsif undrawn.empty?
+  check.ok("every flow that crosses the boundary draws the crossing")
+else
+  check.maybe("#{wrapped ? undrawn.map(&name_of).join(', ') : 'this flow'} cites both sides of the boundary and draws no chain — which hop the two sides stop agreeing at is the thing a list cannot say")
 end
 
 # The flows have to show the change, not only the unchanged code around it. A section whose

@@ -17,10 +17,17 @@
 # could not, and whether its edges match the real call path. Those are in the case, and
 # the PNGs from diagram-shot.sh are how a reader settles the last one.
 #
-# The vocabulary below is the template's, and it is now exactly the two surviving SVG kinds'
-# vocabulary: the ER fragment and the lifecycle. Extend both together — a class added here but
-# not to page-template.html has no styles, and one added there but not here is reported
-# as invented.
+# The vocabulary below is the template's, and it is exactly the four catalogue kinds'
+# vocabulary: the boundary chain and the guard fork in section 2, the ER fragment and the
+# lifecycle in section 5. Extend both together — a class added here but not to
+# page-template.html has no styles, and one added there but not here is reported as invented.
+#
+# The two section-2 kinds came back as drawings without adding a single class, which is why
+# restoring them was cheap: the chain is boxes and edges, and the fork gave `lifeline` its
+# first user. It had been styled and named in the template's map while being used by nothing —
+# unreachable rather than spare, because everything above the head SKELETON marker is EMITTED
+# by page-skeleton.sh and never read, so a run learns this vocabulary only by example from the
+# markup half.
 #
 # ONE <svg> on the page is not a diagram: svg.pr-mark, the brand mark in a primer callout
 # (page-template.html § Rails primer). Every rule below is about a figure — it must sit in a
@@ -30,12 +37,17 @@
 # on the opening tag, which is the same convention the doc-link and probe checks rely on.
 #
 # Two class families that used to be here are gone, not renamed. Section 4's figure is the
-# .impact impact-paths panel and the boundary chain is a .pipe spine — both CSS components,
-# neither an SVG, because the size of each is a function of the diff rather than fixed — so
-# `legend` and `box-json` no longer style anything inside an <svg> and would be reported as
-# invented if a run reached for them. That is the intended behaviour: a run drawing impact
-# paths as SVG should be told to use the component instead, and checks/impact-paths.rb fails
-# an <svg> found inside the panel from the other side.
+# .impact impact-paths panel — a CSS component, not an SVG, because its cards stack per PR and
+# its lanes collapse at 780px, so there is no canvas to work out once — so `legend` and
+# `box-json` no longer style anything inside a drawing and would be reported as invented if a
+# run reached for them. That is the intended behaviour: a run drawing impact paths as SVG
+# should be told to use the component instead, and checks/impact-paths.rb fails an SVG found
+# inside the panel from the other side.
+#
+# They belonged to the PANEL, and they stay gone even though the boundary chain does not: the
+# criterion is whether the DIFF sets a figure's size or its CLAIM does. A chain's claim is
+# which hop the two sides stop agreeing at, and a component has no addressable edge to mark —
+# which is why it is a drawing again, on a canvas that caps it at five stops.
 #
 # TWO PLACES THIS FILE DECLINES TO REPRODUCE THE SHELL, both documented in
 # evals/README.md § Two intentional differences. The second is here: diagram.sh finds its
@@ -321,7 +333,7 @@ end
 
 check.ok("#{starts.size} diagram(s) found")
 
-# The overflow contract: a diagram lives in figure.wide > .scroller, which is what lets a
+# The overflow contract: a diagram lives in figure > .scroller, which is what lets a
 # 880-wide figure sit on a phone without the page itself scrolling sideways.
 starts.each do |start|
   from = [start - 4, 1].max
@@ -376,12 +388,25 @@ end
 
 # The budget, which only means anything across a whole page: one per section, a second
 # only for a genuinely different mechanism.
+#
+# A BEHAVIOUR FLOW IS ITS OWN <section>, so this same count is the per-flow budget — and
+# there the "different mechanisms" escape hatch does NOT apply. A flow earns at most one
+# drawing (a boundary chain or a guard fork, never both), and a flow that earns two is two
+# flows. So a flow gets its own verdict and its own sentence: the ER-plus-lifecycle excuse
+# is about section 5 and reads as permission anywhere else.
 if check.kind != "page"
   check.skip("diagram budget: it is a per-section count, so a fragment cannot settle it")
 else
+  # Count the DRAWINGS this file graded, not every line with an <svg> on it — the same set
+  # by construction rather than by two predicates agreeing. It used to re-test the string,
+  # so it omitted the svg.pr-mark exclusion the discovery pass at the top applies: a flow
+  # carrying a framework primer plus its one earned figure counted as two and warned at a
+  # correct page. That stayed invisible for as long as no flow could hold a figure at all.
+  # Agreement by scope beats agreement by comment.
+  drawing_lines = starts.each_with_object({}) { |n, h| h[n] = true }
   counts = {}
   current = nil
-  lines.each do |raw|
+  lines.each_with_index do |raw, i|
     line = raw.chomp
     if line.match?(/<section [^>]*id="/)
       id = line.sub(/.*id="/, "").sub(/".*/, "")
@@ -389,14 +414,18 @@ else
       current = id
     end
     current = nil if line.include?("</section>")
-    counts[current] += 1 if line.include?("<svg") && current
+    counts[current] += 1 if current && drawing_lines[i + 1]
   end
 
   over = false
   counts.each do |section, count|
     next unless count.positive?
 
-    if count >= 3
+    flow = section.start_with?("flow-")
+    if flow && count >= 2
+      check.bad(%(flow "#{section}" carries #{count} drawings — a flow earns at most one, and a flow that earns two is two flows))
+      over = true
+    elsif count >= 3
       check.bad(%(section "#{section}" carries #{count} diagrams — the budget is one, and a second only for a different mechanism))
       over = true
     elsif count == 2

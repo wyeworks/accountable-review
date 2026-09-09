@@ -202,6 +202,18 @@ SKIP  no excerpts in this input
 ## --page diagram-edge-label-collision.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment diagram-flow-figure-primer.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-flow-figure-primer.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment diagram-flow-two-figures.html
+exit=0
+SKIP  no excerpts in this input
+## --page diagram-flow-two-figures.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment diagram-invented-class.html
 exit=0
 SKIP  no excerpts in this input
@@ -460,6 +472,18 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+## --fragment flows-crossing-chain-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-crossing-chain-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment flows-crossing-no-chain.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-crossing-no-chain.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment flows-decisions-interleaved.html
 exit=0
 PASS  1 source excerpt(s), each with a summary
@@ -484,6 +508,12 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+## --fragment flows-figure-linear.html
+exit=0
+SKIP  no excerpts in this input
+## --page flows-figure-linear.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment flows-layer-grouped.html
 exit=0
 PASS  1 source excerpt(s), each with a summary

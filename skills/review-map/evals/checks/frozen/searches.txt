@@ -184,6 +184,18 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page diagram-edge-label-collision.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-flow-figure-primer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-flow-figure-primer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment diagram-flow-two-figures.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page diagram-flow-two-figures.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment diagram-invented-class.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -280,10 +292,28 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page flows-clean.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-crossing-chain-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-crossing-chain-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-crossing-no-chain.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-crossing-no-chain.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment flows-decisions-interleaved.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page flows-decisions-interleaved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment flows-figure-linear.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page flows-figure-linear.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment flows-layer-grouped.html

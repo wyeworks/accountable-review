@@ -254,6 +254,22 @@ FAIL  no <code> anywhere in section 6 — validations must be pasteable commands
 ## --page diagram-edge-label-collision.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
+## --fragment diagram-flow-figure-primer.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page diagram-flow-figure-primer.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment diagram-flow-two-figures.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page diagram-flow-two-figures.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment diagram-invented-class.html
 exit=1
 WARN  no comprehension checkpoint found inside 'Before approving'
@@ -382,12 +398,36 @@ PASS  validation steps carry command markup
 ## --page flows-clean.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
+## --fragment flows-crossing-chain-clean.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page flows-crossing-chain-clean.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment flows-crossing-no-chain.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page flows-crossing-no-chain.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment flows-decisions-interleaved.html
 exit=0
 WARN  no comprehension checkpoint found inside 'Before approving'
 WARN  no 'ask the author' part — legitimate only if nothing needs the author
 PASS  validation steps carry command markup
 ## --page flows-decisions-interleaved.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment flows-figure-linear.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page flows-figure-linear.html
 exit=0
 SKIP  no section 6 on this page (id="approving" absent)
 ## --fragment flows-layer-grouped.html

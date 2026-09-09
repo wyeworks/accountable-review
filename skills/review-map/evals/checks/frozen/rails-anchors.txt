@@ -824,6 +824,48 @@ exit=0
 SKIP  doc links: none on this input
 SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
+## --fragment diagram-flow-figure-primer.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer(s), at most one per flow and each inside the flow it explains
+PASS  every primer carries the documentation link it escalated from
+PASS  1 demo block(s), all inside the primer that licenses them
+PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
+SKIP  demo receivers: needs --repo to ask whether the constants are this app's
+SKIP  runtime probes: none on this input
+## --page diagram-flow-figure-primer.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer(s), at most one per flow and each inside the flow it explains
+PASS  every primer carries the documentation link it escalated from
+PASS  1 demo block(s), all inside the primer that licenses them
+PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
+SKIP  demo receivers: needs --repo to ask whether the constants are this app's
+SKIP  runtime probes: none on this input
+## --fragment diagram-flow-two-figures.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page diagram-flow-two-figures.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment diagram-invented-class.html
 exit=0
 SKIP  doc links: none on this input
@@ -984,12 +1026,42 @@ exit=0
 SKIP  doc links: none on this input
 SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
+## --fragment flows-crossing-chain-clean.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page flows-crossing-chain-clean.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment flows-crossing-no-chain.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page flows-crossing-no-chain.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment flows-decisions-interleaved.html
 exit=0
 SKIP  doc links: none on this input
 SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page flows-decisions-interleaved.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --fragment flows-figure-linear.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  primer callouts: none on this input
+SKIP  runtime probes: none on this input
+## --page flows-figure-linear.html
 exit=0
 SKIP  doc links: none on this input
 SKIP  primer callouts: none on this input

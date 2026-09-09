@@ -35,7 +35,7 @@ Reading the other stack's file costs context and teaches the wrong searches.
 | `references/report-format.md` | steps 1, 7, 8, 9 | The detail levels, the sections each one produces, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
-| `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, the assembled flow, the two SVG diagram layouts — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
+| `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, the two assembled flows, the four SVG diagram layouts — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
 | `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
 | `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
@@ -389,7 +389,7 @@ how to validate · reviewer questions.
 
 A behaviour flow's **body is a unit** — a `.mech` block stating the mechanism, then the seven fields
 as `<dt>`/`<dd>` pairs in one `dl.rows`, never loose in the section — and the flow's path, diagram and
-decisions sit beside it, with decisions after the closing `</dl>`. Build it from the assembled flow in
+decisions sit beside it, with decisions after the closing `</dl>` and the diagram **before** the `.mech`, so it stays outside the unit rather than inside it. Build it from the assembled flow in
 `references/page-template.html` rather than from a description of it — `scripts/page-skeleton.sh --markup`
 prints the half that has it; the labels and the boundary are
 in `report-format.md` § *The review unit* and § *Section 2*.
@@ -679,16 +679,34 @@ Everything else about writing holds at every stage:
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
   yields nothing. Load it only if you have a deliberate reason to depart from the template, and
   `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
-- **Two of the four diagram kinds are components, not drawings.** Section 4's figure is the
-  `.impact` impact-paths panel and the boundary chain is a `.pipe` spine — build those from the
-  template's markup, not as SVG. The ER fragment and the lifecycle are still hand-authored inline
-  SVG using the template's classes, so they work in a local file as well as when published. **Take
-  those two layouts from the catalogue in `page-template.html` — worked out to scale — and fill in
-  the text rather than deriving geometry.** Which kind belongs to which section is in
-  `report-format.md` § *Depth rules*, beside the budget; the impact panel's own rules, its causal
-  verb vocabulary and its caps are in § *Impact paths*, and that section owns them alone. Deriving a
-  layout spends the run's attention on the part that does not matter: what matters is whether the
-  edges are true, and a followable edge that is wrong costs the reviewer more than no diagram.
+- **Two of the six diagram kinds are components; four are drawings.** Section 4's figure is the
+  `.impact` impact-paths panel and a flow's *path* is a `.pipe` spine — build those two from the
+  template's markup, not as SVG. The **boundary chain**, the **guard fork**, the **ER fragment** and
+  the **lifecycle** are hand-authored inline SVG using the template's classes, so they work in a
+  local file as well as when published. **Take all four layouts from `page-template.html` — worked
+  out to scale — and fill in the text rather than deriving geometry.** The two section-2 kinds are
+  assembled **inside flows A and B** there, not in the section-5 catalogue block, because where a
+  figure sits among a flow's siblings is half of what you are copying. Which kind belongs to which
+  section is in `report-format.md` § *Depth rules*, beside the budget; the impact panel's own rules,
+  its causal verb vocabulary and its caps are in § *Impact paths*, and that section owns them alone.
+  Deriving a layout spends the run's attention on the part that does not matter: what matters is
+  whether the edges are true, and a followable edge that is wrong costs the reviewer more than no
+  diagram.
+- **A flow draws at most one figure, and most flows draw none.** The boundary chain if the flow's
+  field crosses a seam, the guard fork if its behaviour is gated and the change reroutes a request
+  class — never both, because a flow that earns both is two flows. Three rules are easy to break
+  while looking careful. The chain has a **left margin per stop count** (3, 4 or 5) in the catalogue:
+  take the row that matches the chain you actually have, never invent a fourth, and **never narrow
+  the canvas to fit a short chain** — the scroller's child is `min-width:880px`, so a narrower
+  viewBox renders the whole figure larger than the rest of the page. Six stops or more is not drawn
+  at all: collapse to the hops where the field changes shape, or keep the chain as a second `.pipe`.
+  And the fork needs all three of its trigger conditions, § *Depth rules* has them — a guard that
+  returns early for one class is not a fork, and drawing one invents a population the code does not
+  distinguish.
+- **Inherit the geometry, never the strings.** Every label in those layouts is a claim about a file,
+  and a claim copied out of a specimen is a false claim nothing catches — a run once inherited the
+  last box's caption onto a component that never touches the field, and only a reader comparing the
+  figure with the code noticed. The x/y numbers are the reusable part.
 - **An impact path ends at a behaviour, and passes through unchanged code on the way.** The panel is
   2–3 chains, **each in its own `.ip-card`**, each starting in the diff and ending at something a
   user or an operator would see, with every hop carrying its causal verb — *reads*, *falls back to*,
