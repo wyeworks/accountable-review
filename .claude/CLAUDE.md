@@ -147,7 +147,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
-| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the two-layout diagram catalogue, and the page's one small script. Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
+| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the four-layout diagram catalogue (two of them assembled inside the flows), and the page's one small script. Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
 | `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
@@ -362,7 +362,18 @@ Editing one of these means checking the others still agree.
   primer removed**, because the callout lands inside a unit region and carries a `class="path"` — kept,
   it would absolve a unit whose grid cites nothing, and `golden/flows-primer-uncited-unit.html` is that
   regression. `diagram.rb` excludes `svg.pr-mark`, because every rule it has is about a figure and the
-  first one a 34px brand badge fails is *not inside `.scroller`*. The mark itself is geometric rather
+  first one a 34px brand badge fails is *not inside `.scroller`*.
+
+  **That exclusion was applied in the discovery pass and not in the per-section budget count, and the
+  gap survived for as long as no flow could hold a figure.** One `<svg>` in a section is never
+  reported, so the miscount had nothing to add to; the moment § 2 got a drawing back, a correct flow
+  carrying a primer *and* its one earned figure counted as two and warned. The count now reuses the
+  set of drawings the file already graded rather than re-testing the substring — agreement by scope
+  beats agreement by comment — and `golden/diagram-flow-figure-primer.html` pins the fix while
+  `diagram-flow-two-figures.html` pins that the rule did not go quiet. `diagram-shot.rb` had the same
+  gap and was rendering the logotype into the very PNGs a person opens to look for crowding.
+
+  The mark itself is geometric rather
   than the official logo: the run cannot fetch artwork and an external `<img>` is blocked by the
   artifact's CSP, so the trademark line at the foot of the callout is what keeps the stand-in honest.
 
@@ -376,7 +387,9 @@ Editing one of these means checking the others still agree.
 - **The review unit** is the page's primitive: seven fields, fixed order, defined in
   `report-format.md` and rendered as a `.mech` block followed by one `dl.rows` — **and rendered
   nowhere else.** A behaviour flow's body *is* a unit; the path, the diagram and the decisions block
-  sit beside it inside the flow section, with decisions after the closing `</dl>`. There is no
+  sit beside it inside the flow section, with decisions after the closing `</dl>` and the diagram
+  **before** the `.mech` — which is where unit regions open, so the figure stays outside every one of
+  them. The primer went into the other slot and had to be cut out of the census by hand. There is no
   endpoint card: the contract is the flow's own material and lives in its `.pipe` and its field rows.
   Two guards keep the unit from becoming ceremony — a unit needs a non-obvious *things to
   understand*, and fields may be omitted but never faked.
@@ -872,26 +885,63 @@ Editing one of these means checking the others still agree.
   asked, and the panel needs eyes — `diagram-shot.rb --visual` renders `<svg>` only, so it does not
   cover a component.
 
-- **Diagram layouts come from the catalogue, not from the run — and only two kinds are drawings.**
-  § 4's figure is the `.impact` impact-paths panel and the boundary chain is a `.pipe` spine: both are
-  components because their **size is a function of the diff** — 2–3 paths of 3–5 nodes, a chain as
-  long as the boundary it crosses — so a drawing would mean geometry derived per run. A component
-  reflows on a phone and cannot be drawn wrong. ER fragment and lifecycle stay as inline SVG, worked
-  out complete and to scale in `page-template.html`, with the grid stated in a comment above each.
+- **Diagram layouts come from the catalogue, not from the run — and the criterion is whose length is
+  load-bearing.** A kind is a **component when the *diff* sets its size, and a drawing when the
+  *claim* does.** Six kinds, two components: § 4's `.impact` panel, whose cards stack per PR and
+  whose lanes collapse at 780px, and a flow's **path** as a `.pipe` spine, as long as the chain it
+  follows. Neither has a canvas that survives, and a component reflows on a phone and cannot be drawn
+  wrong. The four drawings — boundary chain and guard fork in § 2, ER fragment and lifecycle in § 5 —
+  are worked out complete and to scale in `page-template.html`, with the grid stated in a comment
+  above each.
 
-  Four files have to agree: the template holds the geometry and the SVG class vocabulary,
-  `report-format.md` § *Depth rules* holds which kind belongs to which section and the budget (and
-  holds them **only** — the template does not restate the budget), `SKILL.md` step 9 points at the
-  catalogue and says which two are components, and `evals/checks/diagram.rb` carries the class
-  vocabulary the template defines. A class added to one and not the other is either unstyled or
-  reported as invented. `legend` and `box-json` were removed from that vocabulary deliberately, not
-  renamed: a run drawing impact paths as SVG should be told to use the component instead, and
-  `impact-paths.rb` fails an `<svg>` found inside the panel from the other side.
+  **That distinction was got wrong once, and the cost was a figure.** The boundary chain spent a
+  design generation as a `.pipe`. `734f267` argued that a chain "carries set membership and order
+  along a chain, which a component shows as well as geometry did while reflowing on a phone", and
+  `71c4391` restated it as *size is a function of the diff*. Both halves were true and the conclusion
+  was wrong: a component shows order fine and **cannot show which hop**, so real pages supplied the
+  missing relation by writing the mismatch into a node — the `.blast` footnote failure, arriving in
+  the vocabulary that had just replaced it. And the size argument was about an *unbounded* size. The
+  chain's is bounded at five stops by the canvas — `6 × 148 + 5 × 30` is 1038 against 880, so a sixth
+  box fails `diagram.rb`'s existing bounds rule and **no new check was needed to cap it.**
+
+  **The deletion also left a dangling pointer for two weeks and nothing noticed**, which is the part
+  worth remembering. `report-format.md` § 2 went on telling a flow to take "a diagram … from the
+  catalogue" while the catalogue banner said both layouts lived in § 5. No check fired, because no
+  check knew a flow could hold a figure at all: the § 2 rule had never been *wrong*, it had never
+  been **looked at**. `behaviour-flows.rb` now asks two questions of each flow for exactly that
+  reason, and its no-crossing branch is a PASS that names what it looked for rather than a SKIP.
+
+  Five files have to agree: the template holds the geometry, the SVG class vocabulary **and the two
+  § 2 kinds' placement inside the assembled flows**, `report-format.md` § *Depth rules* holds which
+  kind belongs to which section, the budget, the stop grids and the fork's trigger (and holds them
+  **only** — the template does not restate the budget), `SKILL.md` step 9 points at the catalogue and
+  says which two are components, `evals/checks/diagram.rb` carries the class vocabulary the template
+  defines plus the per-section count, and `evals/checks/behaviour-flows.rb` carries the divergence
+  and crossing rules. A class added to one and not the other is either unstyled or reported as
+  invented. `legend` and `box-json` were removed from that vocabulary deliberately, not renamed: they
+  belonged to the **panel**, and they stay gone even though the chain came back, because the panel is
+  still a component. A run drawing impact paths as SVG should be told to use the component instead,
+  and `impact-paths.rb` fails an `<svg>` found inside the panel from the other side.
+
+  **The two § 2 kinds cost no CSS, no token and no vocabulary entry**, which is why restoring them
+  was cheap: the chain is boxes and edges, and the fork gave `.lifeline` its first user. That class
+  had been styled and named in the template's own map while being used by nothing — **unreachable
+  rather than spare**, because everything above the head `SKELETON:` marker is emitted by
+  `page-skeleton.sh` and never read, so a run learns the SVG vocabulary only by example from the
+  markup half.
+
+  **A flow earns at most one drawing, and most earn none.** The chain if its field crosses a seam,
+  the fork if its behaviour is gated and the change reroutes a request class — never both, because
+  *a flow that earns both is two flows*. `diagram.rb` enforces that per `<section>`, which is already
+  per flow, and says it as a **failure** rather than the two-diagram warning § 5 gets: the "different
+  mechanisms" excuse is about an ER fragment beside a lifecycle and reads as permission anywhere else.
 
   `--brief` draws no § 5 figures at all — no ER fragment, no lifecycle; migration safety is a row
   there — so its merged section holds the `.impact` panel and nothing that could compete for the
   budget, and `diagram.rb`'s per-`<section>` count needs no level awareness. What it must not become is
-  a reason to skip the one figure a *flow* earns.
+  a reason to skip the one figure a *flow* earns — which is the boundary chain or the guard fork, and
+  which a `--brief` page carries where it carries no other. Both § 2 kinds are level-independent, like
+  the primer, because §§ 1–3 are byte-for-byte the same spec at both levels.
 
   The reason this is an invariant rather than a nicety: a diagram is the one component with no
   generator behind it, so a layout derived per run spends the run's attention on geometry instead of
@@ -905,11 +955,25 @@ Editing one of these means checking the others still agree.
   hop", the note under the panel has to say it), and **a diagram carries labels, not sentences** —
   prose in an 880-wide scroller cannot reflow, so searches and caveats go in the `figcaption`.
 
-  **No current fixture earns either surviving kind.** `rails-only-small` adds one nullable column and
-  `monorepo-contract` has no state machine, so `evals/cases/diagrams.json` now tests that a run
-  reaches for the *components* rather than SVG. Covering ER and lifecycle properly needs a new
-  fixture with a migration and a status enum; until then those two catalogue layouts are checked by
-  `diagram.rb` against the template itself and by nothing else.
+  **Both § 2 kinds are earned by a fixture; neither § 5 kind is.** `monorepo-contract` earns the
+  boundary chain exactly — a serializer emitting `archived_at` as nil against a type declaring
+  `archivedAt: string`, five stops with the mismatch on the JSON→TYPE hop, which is why the deleted
+  specimen pastes back with plausible strings: it was a drawing *of that fixture*. `monolith-guard-chain`
+  earns the fork in two flows, and between them they exercise both geometries — a redirect that
+  re-enters the chain, and an invitee who never reaches `authorize_leader!`. `rails-only-small` earns
+  neither, and is pinned as the negative case for both.
+
+  **ER fragment and lifecycle remain unearned by every fixture**, and that does not become less true
+  because two other kinds are now covered: `rails-only-small` adds one nullable column,
+  `monorepo-contract` has no state machine, `monolith-guard-chain` changes no schema. Covering them
+  needs a new fixture with a migration and a status enum; until then those two catalogue layouts are
+  checked by `diagram.rb` against the template itself and by nothing else.
+
+  One gap the caps themselves have: **nothing exercises the chain's refusal at six stops or its 3-
+  and 4-stop grids.** Closing it needs a fixture whose client has a real API-client layer — a
+  `camelCase` transform plus a runtime parse — so the honest chain is six stops and the canvas has to
+  refuse it. That is the load-bearing rule of the whole design, and it is recorded here rather than
+  hidden.
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four
   `SKELETON:` markers. Everything in the head and tail ranges — the `<head>`, the entire token
   block, the three highlight.js tags and the tint script, 54.5 KB of it — is written straight into

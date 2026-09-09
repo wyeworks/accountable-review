@@ -292,6 +292,18 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --page diagram-edge-label-collision.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-flow-figure-primer.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-flow-figure-primer.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment diagram-flow-two-figures.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page diagram-flow-two-figures.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
 ## --fragment diagram-invented-class.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
@@ -388,10 +400,28 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --page flows-clean.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-crossing-chain-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-crossing-chain-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-crossing-no-chain.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-crossing-no-chain.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
 ## --fragment flows-decisions-interleaved.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
 ## --page flows-decisions-interleaved.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment flows-figure-linear.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page flows-figure-linear.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
 ## --fragment flows-layer-grouped.html

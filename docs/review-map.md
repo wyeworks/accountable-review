@@ -23,6 +23,14 @@ unchanged and the last four are merged into one — see *Detail levels* below:
   backend/frontend boundary, the unchanged code it gives new meaning to, its tests and its test gap,
   and the decisions worth pausing on. It comes second because everything after it is easier to read
   once the mechanisms are known.
+
+  A flow may also carry **one drawing**, and most carry none. Where a field crosses the boundary it
+  is a **boundary chain** — serializer → JSON → type → hook → component, with the hop where the two
+  sides stop agreeing marked on the hop rather than described underneath. Where the change alters a
+  guard's condition and sends two kinds of request down different routes, it is a **guard fork**:
+  the gate chain with both routes on it, and the gate the diverted request never reaches drawn as
+  never reached. Both come from a fixed catalogue, so two Review Maps draw the same mechanism the
+  same way.
 - **Start here** — the moment you open the code: one list, in the order to read it, of where to go
   and why. What most needs judgment and what to read first are the same question, so it is answered
   once. Each entry links into the flow that explains it.

@@ -69,8 +69,11 @@
     review unit ........... .mech + dl.rows — the core primitive. Field rows are
                             dl.rows > dt/dd, and they appear nowhere else
     before / after ........ dl.ba — two rows, never one paragraph
-    pipelines ............. .pipe — call chains and contract chains. This replaces
-                            the old boundary-chain SVG
+    pipelines ............. .pipe — THE PATH: a call chain or a guard chain, unbounded
+                            in length and carrying no finding on any single hop. It is
+                            NOT the boundary chain — that is a drawing again (catalogue
+                            1 of 4), because its finding sits on a hop and .n i is a
+                            bare hairline with nothing to mark
     evidence tier ......... .tier, and the neutral .tag for an excerpt's state
     gaps .................. .gap (ochre, a stated absence), details.searched (what was
                             grepped — collapsed; provenance, never a claim)
@@ -99,13 +102,18 @@
     comprehension check ... .checkpoint — inverted tiles, section 6 only, max five
     build state ........... .buildstate banner and .pending markers — deleted at the
                             final publish, never left on a finished page
-    diagram catalogue ..... TWO worked SVG layouts, to scale: ER fragment and lifecycle,
-                            both section 5. Fill in the text, keep the geometry.
-                            Impact paths and boundary chain are NOT SVG — their node and
-                            path counts vary per PR, so a drawing would mean geometry
-                            derived per run. Use .impact and .pipe
+    diagram catalogue ..... FOUR worked SVG layouts, to scale. Boundary chain (1) and
+                            guard fork (2) are section 2 and are assembled inside the
+                            flows below, because a flow figure's PLACEMENT is half of
+                            what a run has to copy. ER fragment (3) and lifecycle (4)
+                            are section 5, in the catalogue block. Fill in the text,
+                            keep the geometry.
+                            Impact paths are NOT SVG: the panel's cards stack per PR
+                            and its lanes collapse at 780px, so there is no canvas
+                            that survives. Use .impact
     SVG vocabulary ........ .box, .box-hd, .node, .node-dead, .edge, .edge-dash,
-                            .lifeline, and the svg text classes
+                            .lifeline (the guard fork's gate rail), and the svg text
+                            classes
     body skeleton ......... rail, sections 1 → 7, one behaviour flow assembled whole, and
                             the brief level's merged tail section assembled whole
     script ................ scroll progress, rail scroll-spy, and the syntax tint on
@@ -428,9 +436,18 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 }
 
 /* ============================================================
-   Pipelines. Replaces the old boundary-chain SVG: a numbered
-   spine with the terminal node filled. Use for a call chain or
-   a contract chain, inside the flow that owns it.
+   Pipelines. THE PATH — a call chain or a guard chain, inside
+   the flow that owns it, with the terminal node filled so the
+   thing the chain arrives at reads last. Unbounded in length,
+   which is why it is a component: there is no canvas to lay it
+   out on.
+
+   It is NOT the boundary chain. That is a drawing (catalogue 1
+   of 4), because its finding sits on a HOP and .n i below is a
+   bare hairline with nothing to mark and nowhere to label —
+   which is how a run given the component wrote the mismatch
+   into a node instead, reproducing the footnote failure that
+   took .blast off this page one design generation earlier.
    ============================================================ */
 .pipe { margin-top: 30px; padding: 22px 24px; background: var(--surface-hi); border: 1px solid var(--rule); }
 .pipe > .lbl { display: block; font-size: 9.5px; letter-spacing: .18em; margin-bottom: 16px; }
@@ -1043,9 +1060,10 @@ section > .cc-h:first-of-type { margin-top: 0; }
 .rail-links .pending { font-size: 8.5px; padding: 0 4px; letter-spacing: .08em; }
 
 /* ============================================================
-   Wide blocks and figures — the two surviving SVG kinds
+   Wide blocks and figures — the four catalogue kinds
    ============================================================ */
 figure { margin: 0; }
+figure.inflow { margin-top: 30px; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
 figcaption strong { color: var(--ink-3); }
 .scroller { overflow-x: auto; background: var(--surface-hi); border: 1px solid var(--rule); }
@@ -1226,8 +1244,17 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
          field rows live in ONE dl.rows, introduced by ONE .mech, and the decisions
          block sits AFTER that dl — never inside it.
 
-         Order inside a flow: subhead → lede → before/after → pipeline → mech →
-         dl.rows (the seven fields) → decisions. Decisions last, always.
+         Order inside a flow: subhead → lede → before/after → pipeline → figure →
+         mech → primer → dl.rows (the seven fields) → decisions. Decisions last,
+         always.
+
+         THE FIGURE is a boundary chain or a guard fork, and a flow earns AT MOST
+         ONE — most earn none. It sits after the pipe and before the .mech for two
+         reasons. The pipe says where a request goes; the figure says which
+         requests get there, or where a field stops agreeing, so it answers the
+         question the spine raises and cannot settle and the two read adjacently.
+         And it stays OUTSIDE every unit region, which begin at .mech: the primer
+         landed inside one and had to be cut out of the census by hand.
          ========================================================================== -->
     <section id="flow-a" style="padding-top:52px">
       <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>{{THE_BEHAVIOUR}}</h3></div>
@@ -1247,6 +1274,90 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
           <li><span class="n"><b>3</b><i></i></span><span><span class="t">{{MODEL_OR_COLUMN}}</span><span class="s">{{WHAT_IS_TRUE_HERE}}</span></span></li>
         </ol>
       </div>
+
+      <!-- DIAGRAM 1 of 4 · BOUNDARY CHAIN. Section 2, inside the flow that owns the
+           field, never a section of its own — following one field end to end teaches
+           more than reviewing two file trees, and this is that walk drawn.
+
+           IT IS A DRAWING AND NOT A .pipe FOR ONE REASON: the finding sits on an EDGE.
+           "The two sides stop agreeing between the JSON and the type" is a claim about
+           a hop, and .pipe's connector is a bare hairline with nothing to mark and
+           nowhere to label. A run given the component wrote the mismatch into a node
+           instead — which is the footnote failure .blast was deleted for, reproduced
+           one design generation later. The path above stays a .pipe: it is unbounded in
+           length and carries no finding on any single hop.
+
+           GRID. Canvas ALWAYS 880 x 170. Box 148 x 54, pitch 178, gap 30 for the arrow.
+           Only the LEFT MARGIN changes with the stop count, so the box, the type size
+           and every y are identical at every length:
+
+               3 stops   x = 188 / 366 / 544
+               4 stops   x = 100 / 278 / 456 / 634
+               5 stops   x =  12 / 190 / 368 / 546 / 724      (drawn below)
+
+           Shared y, every length: edge label (.t-edge) y=34, box top y=48, layer name
+           (.t-lbl) y=68, symbol (.t-col) y=86, citation (.t-dim) y=122 below the box,
+           legend (.t-lbl) y=152 at the first stop's x, arrow y=75. All anchored middle
+           on the box centre except the legend.
+
+           Per hop, from a stop at x = s. Arithmetic, not judgment:
+               arrow       d="M{s+148} 75 L{s+174} 75 M{s+168} 70 L{s+174} 75 L{s+168} 80"
+               edge label  x = s+163, text-anchor="middle"
+
+           NEVER NARROW THE CANVAS TO FIT A SHORT CHAIN. .scroller's child is
+           min-width:880px with height:auto, so a 524-wide viewBox renders at 1.68x —
+           every glyph and every hairline larger than the rest of the page. Three stops
+           sit centred in 880 with whitespace either side, and that whitespace is honest.
+
+           SIX STOPS OR MORE IS NOT DRAWN, and the canvas is what says so rather than a
+           rule: 6 x 148 + 5 x 30 is 1038 against 880, so the sixth box fails
+           checks/diagram.rb's bounds test. A chain that long has listed layers instead
+           of following a field — a fetch wrapper or a cache that passes the value
+           through unaltered is a stop on the PATH. Collapse to the hops where the field
+           changes shape, is renamed or is dropped. If it really is longer, the drawing
+           is not earned: keep it as a second .pipe, which reflows.
+
+           Mark the mismatch on the HOP it happens at, with .edge-dash and a .t-edge
+           label above it. An edge label has to fit its 30px gap or sit at y=34 above the
+           row — checks/diagram.rb warns when one runs under a box, which is how the ER
+           label in diagram 3 got caught.
+
+           INHERIT THE GEOMETRY, NEVER THE STRINGS. Every label here is a claim about a
+           file, and a claim copied out of a specimen is a false claim nothing catches: a
+           run inherited the last box's caption onto a component that never touches the
+           field, and only a reader comparing the figure with the code noticed. The x/y
+           numbers are the reusable part. -->
+      <figure class="inflow">
+        <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="archived_at crosses the boundary as null and arrives in a type that declares it non-null">
+          <text class="t-edge" x="353" y="34" text-anchor="middle">null vs. string</text>
+          <rect class="box" x="12" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="86" y="68" text-anchor="middle">SERIALIZER</text>
+          <text class="t-col" x="86" y="86" text-anchor="middle">archived_at</text>
+          <text class="t-dim" x="86" y="122" text-anchor="middle">serializer.rb:9</text>
+          <path class="edge" d="M160 75 L186 75 M180 70 L186 75 L180 80"/>
+          <rect class="box" x="190" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="264" y="68" text-anchor="middle">JSON</text>
+          <text class="t-col" x="264" y="86" text-anchor="middle">"archived_at": null</text>
+          <text class="t-dim" x="264" y="122" text-anchor="middle">nil for the unarchived</text>
+          <path class="edge-dash" d="M338 75 L364 75 M358 70 L364 75 L358 80"/>
+          <rect class="box" x="368" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="442" y="68" text-anchor="middle">TYPE</text>
+          <text class="t-col" x="442" y="86" text-anchor="middle">archivedAt: string</text>
+          <text class="t-dim" x="442" y="122" text-anchor="middle">project.ts:4, by hand</text>
+          <path class="edge" d="M516 75 L542 75 M536 70 L542 75 L536 80"/>
+          <rect class="box" x="546" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="620" y="68" text-anchor="middle">HOOK</text>
+          <text class="t-col" x="620" y="86" text-anchor="middle">useProjects()</text>
+          <text class="t-dim" x="620" y="122" text-anchor="middle">no runtime parse</text>
+          <path class="edge" d="M694 75 L720 75 M714 70 L720 75 L714 80"/>
+          <rect class="box" x="724" y="48" width="148" height="54" rx="5"/>
+          <text class="t-lbl" x="798" y="68" text-anchor="middle">COMPONENT</text>
+          <text class="t-col" x="798" y="86" text-anchor="middle">ProjectSelector</text>
+          <text class="t-dim" x="798" y="122" text-anchor="middle">never reads the field</text>
+          <text class="t-lbl" x="12" y="152">DASHED &middot; THE HOP WHERE THE TWO SIDES STOP AGREEING</text>
+        </svg></div>
+        <figcaption>The type is hand-written, so this drift appears at runtime, not at build time. {{WHAT_WAS_SEARCHED_TO_CONFIRM_THE_HOP}}</figcaption>
+      </figure>
 
       <!-- The unit's "why this exists" field. It has no <dt> — it is this block. -->
       <div class="mech">
@@ -1574,6 +1685,197 @@ end)</pre>
       </div>
     </section>
 
+    <!-- ==========================================================================
+         A SECOND BEHAVIOUR FLOW, ASSEMBLED WHOLE — and it is here for one reason:
+         DIFFERENT FLOWS EARN DIFFERENT FIGURES. Flow A's field crosses a boundary,
+         so it draws a boundary chain. Flow B's behaviour is gated, so it draws a
+         guard fork. Neither flow draws both, and most real flows draw neither.
+
+         It carries no primer, deliberately: a primer is one per flow at most and
+         most flows earn none, and flow A already shows one assembled.
+         ========================================================================== -->
+    <section id="flow-b" style="padding-top:52px">
+      <div class="subhead"><span class="lbl lbl-wide">Flow B</span><h3>{{THE_GATED_BEHAVIOUR}}</h3></div>
+
+      <p class="lede">{{THE_MECHANISM_AND_WHY_THIS_IS_ONE_FLOW}}</p>
+
+      <dl class="ba">
+        <dt>Before</dt><dd>{{WHO_COULD_REACH_IT_AND_WHO_COULD_NOT}}</dd>
+        <dt class="now">After</dt><dd class="now">{{WHO_CAN_REACH_IT_NOW}}</dd>
+      </dl>
+
+      <!-- The PATH, as a .pipe: the gate chain in the order it runs. Unbounded in
+           length, no finding on any single step — which is exactly why it stays a
+           component and the figure below is a drawing. -->
+      <div class="pipe">
+        <span class="lbl">{{WHAT_THIS_CHAIN_IS}}</span>
+        <ol>
+          <li><span class="n"><b>1</b><i></i></span><span><span class="t">{{FIRST_GATE}}</span><span class="s">{{WHAT_IT_ASKS}}</span></span></li>
+          <li><span class="n"><b>2</b><i></i></span><span><span class="t">{{CHANGED_GATE}}</span><span class="s">{{WHAT_ITS_CONDITION_NOW_IS}}</span></span></li>
+          <li><span class="n"><b>3</b><i></i></span><span><span class="t">{{LATER_GATE}}</span><span class="s">{{WHO_IT_WAS_WRITTEN_TO_ADMIT}}</span></span></li>
+        </ol>
+      </div>
+
+      <!-- DIAGRAM 2 of 4 · GUARD FORK. Section 2, inside the flow whose behaviour is
+           gated. Assembled here and not in the catalogue block for the same reason
+           the chain is assembled in flow A: the placement is half of what a run copies.
+
+           OMIT IT unless ALL THREE hold: the diff changes a GATE'S CONDITION rather
+           than appending a new gate; that change sends two NAMEABLE request classes
+           down different routes through the same chain; and the finding is WHERE THE
+           DIVERTED CLASS LANDS — a gate it never reaches, or a destination that sends
+           it back. If the diverted class simply gets a 403 and that is the intent,
+           there is no figure: a refusal is a field row. A guard that returns early for
+           one class is not a fork, and drawing one invents a population the code does
+           not distinguish.
+
+           WHY IT IS A DRAWING AND NOT A COMPONENT. .pipe is an ordered list: exactly
+           one successor per node, and a terminal node whose fill MEANS "the chain
+           arrives here". A request that leaves the chain at step 2 has no position in
+           it at all, and when the diverted class re-enters the chain the finding is a
+           LOOP — which has no last node, so the component's terminal treatment asserts
+           an arrival that never happens. And its size is set by the CLAIM, not by the
+           diff: at this gate these two classes part, and this one lands there instead
+           of reaching that. Four nodes, however long the real chain is.
+
+           THREE RAILS AND TWO TRACKS, FIXED. A longer chain does not make a taller
+           figure: draw only the gates at which the two classes DIFFER, plus the one
+           gate the diverted class never reaches, and leave the rest to the .pipe above
+           and to the field rows. A third request class is a figure in the flow that
+           owns it, never a third track — that is how a drawing's size becomes a
+           function of the diff again, which is what took the boundary chain out of
+           this catalogue once already. Wanting a fourth rail is the signal that the
+           three you have are not the ones the finding turns on.
+
+           GRID, 880 x 196: three gate rails (.lifeline, x = 236 / 430 / 624, y 58 to
+           150), each guard's name in .t-col anchored middle above it at y=46. Two
+           request classes as tracks at y=92 and y=134, each named by a .t-lbl at x=44
+           above its own track. Each track is ONE .edge-accent path including its
+           arrowhead, so a class's whole route reads as one stroke. The class that
+           arrives ends in the .node at x=700 y=72; the diverted class DESCENDS at its
+           gate's x and only then turns — turning flush against the rail reads as
+           leaving sideways, where every other hop leaves rightward — and lands in the
+           .node at x=700 y=146. The hop it never takes is .edge-dash stopping 6px short
+           of the .node-dead door at x=596 y=118; draw the rail FIRST and the door
+           second, so the door's fill covers the rail it closes.
+
+           Boxes are 156 x 40, so a .t-col line fits about 23 characters and a .t-dim
+           line about 26 — two text elements per box, because runs of spaces collapse.
+           Keep &middot; and em dashes OUT of any label inside a box: checks/diagram.rb
+           measures a label in BYTES, so an entity inflates the estimate and the
+           overflow warning fires on correct content.
+
+           Only the changed guard carries its file:line (.t-dim, anchor end at x=418,
+           just left of the drop, which owns the gate's own x). Three citations do not
+           fit across 880 at this size, and the flow's field rows carry the other two.
+
+           WHEN THE DESTINATION RE-ENTERS THE CHAIN the finding is a loop, and the
+           figure has to close it, because a loop is the one thing a numbered spine
+           cannot say at all: add one .edge-dash,
+           d="M778 186 L778 192 L36 192 L36 140 M31 145 L36 140 L41 145" — out of the
+           destination's foot, along the bottom, back to an arrowhead at the lane's
+           start. That is why the legend is anchored end at the top right rather than at
+           the foot, where the other two entries put theirs.
+
+           INHERIT THE GEOMETRY, NEVER THE STRINGS. The same rule as the chain, and the
+           stakes are higher here: every box names a filter and a destination, and a
+           borrowed one is a claim about a request path nobody traced. -->
+      <figure class="inflow">
+        <div class="scroller"><svg viewBox="0 0 880 196" role="img" aria-label="An owner reaches the archive action; an admin who is not a project member is sent back to the index before the gate written to admit them is ever evaluated">
+          <text class="t-lbl" x="44" y="24">BEFORE_ACTION CHAIN &middot; PROJECTS#ARCHIVE</text>
+          <text class="t-lbl" x="856" y="24" text-anchor="end">DASHED &middot; THE HOP THAT DOES NOT HAPPEN</text>
+          <text class="t-col" x="236" y="46" text-anchor="middle">authenticate_user!</text>
+          <text class="t-col" x="430" y="46" text-anchor="middle">require_project_member!</text>
+          <text class="t-col" x="624" y="46" text-anchor="middle">authorize_admin_override!</text>
+          <line class="lifeline" x1="236" y1="58" x2="236" y2="150"/>
+          <line class="lifeline" x1="430" y1="58" x2="430" y2="150"/>
+          <line class="lifeline" x1="624" y1="58" x2="624" y2="150"/>
+          <text class="t-lbl" x="44" y="76">OWNER</text>
+          <path class="edge-accent" d="M44 92 L694 92 M688 87 L694 92 L688 97"/>
+          <rect class="node" x="700" y="72" width="156" height="40" rx="4"/>
+          <text class="t-col" x="778" y="88" text-anchor="middle">projects#archive</text>
+          <text class="t-dim" x="778" y="104" text-anchor="middle">archives the project</text>
+          <text class="t-lbl" x="44" y="118">ADMIN, NOT A MEMBER</text>
+          <path class="edge-accent" d="M44 134 L430 134 L430 166 L694 166 M688 161 L694 166 L688 171"/>
+          <text class="t-dim" x="418" y="158" text-anchor="end">projects_controller.rb:12</text>
+          <text class="t-edge" x="560" y="158" text-anchor="middle">redirect_to projects_path</text>
+          <rect class="node" x="700" y="146" width="156" height="40" rx="4"/>
+          <text class="t-col" x="778" y="162" text-anchor="middle">projects#index</text>
+          <text class="t-dim" x="778" y="178" text-anchor="middle">alert: not authorised</text>
+          <path class="edge-dash" d="M436 134 L590 134"/>
+          <rect class="node-dead" x="596" y="118" width="56" height="32" rx="4"/>
+          <text class="t-dim" x="588" y="124" text-anchor="end">never evaluated</text>
+        </svg></div>
+        <figcaption>The override gate sits <strong>after</strong> the membership gate, so an admin who is not a member never reaches the rule written to admit them. {{WHAT_WAS_SEARCHED_TO_CONFIRM_THE_ORDER}}</figcaption>
+      </figure>
+
+      <div class="mech">
+        <b>{{WHAT_THIS_CHANGE_IS}}</b>
+        <p>{{WHY_THIS_EXISTS}}</p>
+      </div>
+
+      <dl class="rows" style="margin-top:30px">
+
+        <dt>Implementation</dt>
+        <dd>
+          <div class="item">The gate at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+            {{WHAT_ITS_CONDITION_NOW_ADMITS}}</div>
+        </dd>
+
+        <dt>Tests</dt>
+        <dd>
+          <div class="item">{{WHICH_REQUEST_CLASS_IS_COVERED}} <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a></div>
+          <div class="item gap">{{THE_CLASS_NO_TEST_EXERCISES}}</div>
+        </dd>
+
+        <dt>Affected, unchanged</dt>
+        <dd>
+          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+            <span class="tier">evidenced by unchanged code</span> {{WHY_THIS_GATE_NOW_MEANS_SOMETHING_ELSE}}</div>
+          <details class="searched">
+            <summary><span class="chev">&#9656;</span> Searches run</summary>
+            <div class="sr-body">
+              <ul class="sr-list">
+                <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
+              </ul>
+            </div>
+          </details>
+        </dd>
+
+        <dt>Understand</dt>
+        <dd>
+          <div class="item">{{WHY_FILTER_ORDER_DECIDES_THIS}} <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a></div>
+        </dd>
+
+        <dt>Validate</dt>
+        <dd>
+          <div class="item"><code>{{REAL_PASTEABLE_STEP_FROM_THIS_REPO}}</code> &mdash; {{WHAT_IT_SHOWS}}</div>
+          <!-- Read-only, so no sandbox is needed and the label does not claim one.
+               The page shows the command and NEVER its output. -->
+          <span class="lbl">rails runner &middot; reads only</span>
+<pre class="probe">bin/rails runner 'pp ProjectsController._process_action_callbacks.map(&amp;:filter)'</pre>
+        </dd>
+
+        <dt>Questions</dt>
+        <dd>
+          <div class="item">{{QUESTION_PHRASED_AS_A_QUESTION}}?</div>
+        </dd>
+      </dl>
+
+      <!-- AFTER the dl, never inside it. -->
+      <div class="decisions">
+        <span class="lbl">Decisions to pay attention to</span>
+        <div class="decision">
+          <div class="dn">01</div>
+          <div>
+            <h4>{{THE_DECISION}}</h4>
+            <div class="why">{{WHY_IT_MATTERS}} <span class="cite">{{PATH}}:{{LINE}}</span></div>
+            <div class="trade"><span class="tag">Tradeoff</span><span>{{WHAT_WAS_ACCEPTED}}</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== Section 3 · Where to begin. ONE list — what most needs judgment and
          what to read first are the same question, and answering it twice is the
          duplication this format exists to remove. Every entry points BACK at the
@@ -1724,11 +2026,19 @@ end)</pre>
       <p class="note" style="margin-top:14px">{{HOW_THE_SET_WAS_VERIFIED_COMPLETE}}</p>
 
       <!-- ======================================================================
-           THE DIAGRAM CATALOGUE · 1 and 2 of 2. Both live in section 5.
+           THE DIAGRAM CATALOGUE · 3 and 4 of 4. Both of THESE live in section 5.
 
-           Impact paths and boundary chain are NOT here any more: they are .impact
-           and .pipe above. What survives as SVG is the two kinds where the
-           information IS geometry — structure, and behaviour over time.
+           Numbers 1 and 2 are the boundary chain and the guard fork, and they are
+           assembled inside flows A and B above rather than down here, because a
+           section 2 figure's placement in the flow is half of what a run has to
+           copy — and a composition described but never shown assembled does not
+           survive a weaker reader.
+
+           Impact paths are NOT here: section 4's figure is the .impact component,
+           whose cards stack per PR and whose lanes collapse at 780px, so there is
+           no canvas to work out once. These four are the kinds where the
+           information IS geometry — a crossing, a divergence, structure, and
+           behaviour over time.
 
            Take the geometry as given and fill in the text. A layout derived per
            run spends the run's attention on coordinates instead of on whether the
@@ -1741,7 +2051,7 @@ end)</pre>
            it. Searches, caveats and conclusions go in the figcaption.
            ====================================================================== -->
 
-      <!-- DIAGRAM 1 of 2 · ER FRAGMENT. Once for the diff: touched tables plus
+      <!-- DIAGRAM 3 of 4 · ER FRAGMENT. Once for the diff: touched tables plus
            immediate neighbours, never the whole schema.
 
            GRID, 880 x 215: two tables at x = 40 and 560, width 280. Header .box-hd 30 high at
@@ -1779,7 +2089,7 @@ end)</pre>
         <figcaption>The guard cannot raise <code>ArchiveError</code> as written; it raises <code>NoMethodError</code>. {{WHAT_WAS_SEARCHED_TO_CONFIRM_THE_ABSENCE}}</figcaption>
       </figure>
 
-      <!-- DIAGRAM 2 of 2 · LIFECYCLE. Only when a status column, enum or state machine
+      <!-- DIAGRAM 4 of 4 · LIFECYCLE. Only when a status column, enum or state machine
            changed — a nullable timestamp is not a state machine, and drawing one invents
            states the code does not have. It is the figure that reveals whether transitions
            are guarded at all, which is why each one carries the file:line that performs it.

@@ -720,8 +720,11 @@ second, at either level.
 
 Two things the panel is not. It is not a dependency graph: it is 2–3 curated paths chosen because a
 reviewer has to hold them, and completeness here would destroy the thing that makes it readable. And
-it is not SVG — its size is a function of the diff, so a drawing would mean coordinates derived per
-run, which § *Depth rules* rules out for making two pages from this skill incomparable.
+it is not SVG. Not because a figure cannot be pre-laid-out — both of § 2's are, on fixed canvases —
+but because *this* figure has two lanes, an elbow that draws itself from a class change, cards that
+stack as the path count varies, and a breakpoint at 780px where the lanes collapse. There is no
+canvas that survives all four, so a drawing would mean coordinates derived per run, which
+§ *Depth rules* rules out for making two pages from this skill incomparable.
 
 ## One canonical home
 
@@ -805,6 +808,12 @@ distinct mechanisms a reader has to hold, not on how many files carry them.
 show something a table cannot. A diagram that restates a list is worse than no diagram, because it
 costs the reader time and teaches nothing.
 
+**A behaviour flow is its own `<section>`, so in § 2 that budget is one figure per flow — and most
+flows earn none.** The escape hatch below is about § 5 and does not apply here: a flow's figure is a
+boundary chain *or* a guard fork, never both, because the two answer different questions about one
+behaviour and a flow that genuinely earns both is **two flows**. `evals/checks/diagram.rb` says the
+same thing from the other side, and says it as a failure rather than a warning.
+
 The one place a second is routinely earned is persistence: an ER diagram shows *structure*, a
 lifecycle diagram shows *behaviour over time*, and no single figure shows both. If the diff adds a
 status column or state machine on top of new tables, draw both. Elsewhere, if you find yourself
@@ -812,26 +821,71 @@ wanting a second diagram, the honest question is whether the first one is doing 
 transition table with a `file:line` per row is often better than a second figure anyway. Never exceed
 two in one section.
 
-**Four kinds, and which section each belongs to — but only two are SVG.** Two of these are
-components rather than drawings, because their size is a function of the diff: an impact path is
-3–5 nodes and a PR earns 2–3 of them, a chain is as long as the boundary it crosses, so a drawing
-would mean geometry derived per run. A component reflows on a phone and cannot be drawn wrong. The
-two that stayed SVG are the ones where the information genuinely *is* geometry, and where the
-layout can therefore be worked out once, in the catalogue, and filled in.
+**Six kinds, and which section each belongs to — four of them drawings.** The criterion is not how
+big the mechanism is, it is **whose length is load-bearing: a kind is a component when the *diff*
+sets its size, and a drawing when the *claim* does.** An impact path is 3–5 nodes and a PR earns 2–3
+of them; a path is as long as the call chain it follows. Neither has a canvas that survives, so both
+are components, and a component reflows on a phone and cannot be drawn wrong. The four drawings are
+the ones whose finding is attached to an **edge** or to a **position** — a hop where two sides stop
+agreeing, a gate a request never reaches, a foreign key nothing declares, a transition nothing
+guards — and a component has no addressable edge.
+
+**That distinction is worth stating carefully, because getting it wrong cost this format a figure
+once already.** The boundary chain spent a design generation as a `.pipe`, on the argument that a
+chain "carries order along a chain, which a component shows as well as geometry did." It does. What
+it cannot show is *which hop*, so real pages supplied the missing relation by writing the mismatch
+into a node — which is exactly the box-grid failure described below, arriving in the vocabulary that
+had just replaced it. **Size is a constraint on a drawing, not the reason for one:** the chain is
+capped at five stops because a sixth does not fit the canvas, and that cap is what lets the geometry
+be worked out once.
 
 | Kind | Rendered as | Home |
 |---|---|---|
 | Impact paths | `.impact` — one `.ip-card` per path + one `.legend`, see § *Impact paths* | § 4, on almost every PR |
-| Boundary chain | `.pipe` numbered spine | § 2, inside the flow that owns the field, never a section of its own |
-| ER fragment | **SVG**, from the catalogue | § 5, if the schema moved |
-| Lifecycle | **SVG**, from the catalogue | § 5, and only if a status column, enum or state machine changed |
+| The path | `.pipe` numbered spine | § 2, in every flow — the call or guard chain the behaviour runs through |
+| Boundary chain | **SVG**, catalogue 1 of 4 | § 2, inside the flow that owns the field, never a section of its own |
+| Guard fork | **SVG**, catalogue 2 of 4 | § 2, inside the flow whose behaviour is gated, and only when the change makes two request classes take different routes through one guard chain |
+| ER fragment | **SVG**, catalogue 3 of 4 | § 5, if the schema moved |
+| Lifecycle | **SVG**, catalogue 4 of 4 | § 5, and only if a status column, enum or state machine changed |
+
+**The boundary chain is capped at five stops, and the cap is the canvas rather than a rule.** The
+catalogue fixes the box at 148×54 and the pitch at 178 on an 880-wide canvas, and ships the left
+margin for three, four and five stops; six boxes need 1038px, so the sixth fails
+`evals/checks/diagram.rb`'s bounds test with no new number to keep in sync. Six stops means the chain
+has **listed layers instead of following a field** — a fetch wrapper or a cache that passes the value
+through unaltered is a stop on *the path*, not on the crossing. Collapse to the hops where the field
+changes shape, is renamed, or is dropped; if it is genuinely longer, the drawing is not earned and a
+second `.pipe` is the honest form, because a spine grows down the page and reflows. And **never
+narrow the canvas to fit a short chain**: the scroller's child is `min-width:880px` with
+`height:auto`, so a 524-wide viewBox renders at 1.68× and every glyph in the figure comes out larger
+than the rest of the page. Three stops sit centred in 880, and that whitespace is honest.
+
+**The guard fork is capped at three gate rails and two request-class tracks, and it is the one kind
+with a three-part trigger.** Draw it only when the diff changes a **gate's condition** rather than
+appending a gate; that change sends **two nameable request classes** down different routes through
+the same chain; and the finding is **where the diverted class lands** — a gate it never reaches, or a
+destination that sends it back. Miss the third and there is no figure: a class that gets a 403 where
+a 403 is the intent is a field row, and *a guard that returns early for one class is not a fork —
+drawing one invents a population the code does not distinguish.* A longer real chain does not make a
+taller figure: draw only the gates at which the two classes differ, plus the one gate never reached,
+and leave the rest to the `.pipe` and the field rows. A third class is a figure in the flow that owns
+it, never a third track. Wanting a fourth rail is the signal that the three you have are not the ones
+the finding turns on.
+
+Two things the fork can say that no numbered spine can, and they are why it is a drawing. A `.pipe`
+is an ordered list — exactly one successor per node — so a request that leaves the chain at step 2
+has **no position in it at all**. And when the diverted class re-enters the chain the finding is a
+**loop**, which has no last node, so the component's filled terminal asserts an arrival that never
+happens: the one ink it spends on emphasis would state the opposite of the finding.
 
 The last row is the one that gets abused: a nullable timestamp is not a state machine, and drawing one
 invents states the code does not have.
 
-The SVG layouts are worked out in `page-template.html` — complete, to scale, and to be filled in
+All four SVG layouts are worked out in `page-template.html` — complete, to scale, and to be filled in
 rather than re-derived, because a layout invented per run makes two pages from this skill
-incomparable for no gain.
+incomparable for no gain. The two § 2 kinds are assembled **inside the flows** there rather than in
+the § 5 catalogue block, because a flow figure's placement among six siblings is half of what a run
+has to copy, and a composition described but never shown assembled does not survive a weaker reader.
 
 **The § 4 figure carries directed edges, and that is why it is not a box grid.** It used to be one:
 `.blast` encoded membership of two sets in its border style and could express nothing else. So when
@@ -843,6 +897,15 @@ optional either: a dashed node with nothing explaining it reads as *deleted*, wh
 of *unchanged, and therefore worth reading*.
 
 Its budget and caps live in § *Impact paths*, the way an excerpt's live in § *Source excerpts*.
+
+**§ 2's missing relations could not be fixed the same way, and that is what its two drawings are
+for.** § 4's gap was a missing *edge*, and the answer was to make the edge a first-class part of the
+component — `.ip-rel` carries a causal verb, so the panel says what the box grid could not. A flow's
+gaps are a missing **hop** and a missing **branch**: a `.pipe` connector is a bare hairline with
+nothing to dash and nowhere to put a label, and a numbered list has exactly one successor per node,
+so a request that leaves a gate chain partway has no position in it and a loop has no last node. A
+component part can be added for a label; it cannot be added for a topology. So the boundary chain and
+the guard fork are drawings, on canvases that cap them.
 
 **A diagram carries labels, not sentences.** Prose inside an 880-wide scroller cannot reflow, so a
 reader on a phone scrolls sideways to read it, and it is set in whatever size the diagram's own type
@@ -863,7 +926,11 @@ not how heavily each one is weighed. Two consequences for diagrams specifically:
 § 5 figures at all (no ER fragment, no lifecycle — migration safety is a row there), so its merged
 tail section holds the `.impact` panel and nothing else that could compete for the budget. And a run
 at `--brief` must not read the shorter page as licence to skimp on a flow's diagram, which is the
-one figure § 2 earns.
+one figure **a flow** earns.
+
+Both § 2 kinds are therefore **level-independent**, like the primer: §§ 1–3 are byte-for-byte the
+same spec at both levels, so a `--brief` page carries a flow's drawing where it carries no other, and
+`evals/checks/diagram.rb` still needs no level awareness to count them.
 
 ## The completeness invariant
 
@@ -1100,12 +1167,24 @@ put the fields loose in the section and a decisions block in the middle of them.
   so put the thing the chain arrives at last. In a Phoenix LiveView flow the same chain is
   event in `.heex` → `handle_event/3` → context → changeset → `Repo` → column, with the return leg
   assigns → re-render → diff over the socket.
-- **The field crossing the boundary**, if it does, as a second chain — serializer → JSON → type → hook →
-  component. Following one field teaches more than reviewing both sides as separate file trees. The
-  mismatches worth hunting: nullable backend field typed non-null, backend enum value missing from the
-  frontend union, a new error status nothing handles, a required param the client never sends. If the
+- **The field crossing the boundary**, if it does, **as the flow's one drawing** — serializer → JSON →
+  type → hook → component. Layout from the catalogue in `page-template.html`, 1 of 4, assembled inside
+  flow A there: take the stop grid for the length you actually have and fill in the text. It goes after
+  the `.pipe` and before the `.mech`, not out here in list order, because it answers the question the
+  spine raises and cannot settle. Following one field teaches more than reviewing both sides as
+  separate file trees.
+
+  **It is a drawing rather than a second `.pipe` for one reason: the finding is *which hop* the two
+  sides stop agreeing at.** Mark that hop with `.edge-dash` and label it above the row. A numbered
+  spine has no edge to mark, so a run given the component wrote the mismatch into a node instead —
+  and a chain of clauses is not a figure. Three, four and five stops each have a left margin in the
+  catalogue; six is refused by the canvas, and § *Depth rules* has both rules and the reason.
+
+  The mismatches worth hunting: nullable backend field typed non-null, a key renamed with nothing
+  renaming it, backend enum value missing from the frontend union, a new error status nothing handles,
+  a required param the client never sends. If the
   client is in another repository or simply absent, say which and build the backend half only — do not
-  guess at code you cannot read.
+  guess at code you cannot read, and draw no chain for a crossing you could not trace.
 
   **A LiveView app has this chain too, and it is a different seam.** There is no serializer and no
   generated type, but there is still a contract with no compiler behind it: the `phx-*` attribute value
@@ -1113,7 +1192,10 @@ put the fields loose in the section and a decisions block in the middle of them.
   `stream_insert` versus an assign the template still reads, and `pushEvent` from a `phx-hook`. Build
   the second chain from those instead. The mismatches worth hunting are the same shape — an event with
   no clause (which crashes the process rather than rendering wrong), an input the changeset drops, a
-  broadcast payload no `handle_info` matches.
+  broadcast payload no `handle_info` matches. That crossing is a **4-stop** chain — `phx-*` value →
+  `handle_event/3` clause → changeset `cast` → assign the template reads — and a form-input-name →
+  permitted-params → column crossing in a server-rendered monolith is a **3-stop** one, which is why
+  the catalogue ships those margins rather than only the five-stop case.
 - **The endpoint** it goes through, if the diff changed one: params with required/optional and where
   they are coerced, a real success body, the **full** error list with statuses, and a side-effects row
   — reads only / writes / calls an external service / idempotent or not. That last row is the
@@ -1129,8 +1211,18 @@ put the fields loose in the section and a decisions block in the middle of them.
   It goes between the `.mech` and the grid rather than out here with the rest of this list, because
   it explains the mechanism the `.mech` has just stated. One per flow at most, and most flows earn
   none; § *Framework anchors* owns that and everything else about it.
-- **A diagram**, where one shows a mechanism a list cannot. Layout from the catalogue in
-  `page-template.html`; which kind and how many, per § *Depth rules*.
+- **The gate chain, as a guard fork**, when the change makes two request classes take different
+  routes through it. Layout from the catalogue, 2 of 4, assembled inside flow B in
+  `page-template.html`, and it sits in the same slot as the chain — after the `.pipe`, before the
+  `.mech`. Three gate rails, two tracks, and **all three of these must hold or there is no figure**:
+  the diff changes a gate's *condition* rather than appending a gate; two *nameable* request classes
+  part at it; and the finding is *where the diverted class lands* — a gate it never reaches, or a
+  destination that sends it back. A class that gets a 403 where a 403 is the intent is a field row.
+  § *Depth rules* owns the caps and the overflow rule.
+
+  **A flow draws at most one figure — the chain or the fork, never both.** They answer different
+  questions about one behaviour, and a flow that genuinely earns both is two flows. Most flows earn
+  neither, and a flow with no figure is the normal case rather than a gap.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
   decision, where it lives, why it matters, the tradeoff accepted. Mine them from comments explaining
   *why*, commit messages, named constants, transaction boundaries, `rescue` clauses, and anything the

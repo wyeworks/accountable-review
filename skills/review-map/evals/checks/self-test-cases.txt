@@ -40,6 +40,23 @@ diagram            | diagram-clean.html            | 0 | labels fit their boxes
  behaviour-flows    | flows-pending-page.html       | 0 | section 2 is still pending | --page @GOLD@/flows-pending-page.html
  behaviour-flows    | flows-stubs-only-page.html    | 0 | every flow is still a stub | --page @GOLD@/flows-stubs-only-page.html
  behaviour-flows    | flows-partial-page.html       | 0 | every dl.rows is introduced by a .mech block | --page @GOLD@/flows-partial-page.html
+
+# SECTION 2'S TWO DRAWINGS. The boundary chain and the guard fork are catalogue layouts again,
+# so a flow can hold a figure — which is what these rows exist for, because until it could, every
+# rule about a flow's figure was unreachable rather than passing.
+#
+# Each rule gets a fixture that fires AND a clean counterpart that must not. A cap that fires on
+# correct content teaches a run to stop drawing a true figure, which is the lesson the impact-path
+# label cap paid for once already.
+behaviour-flows    | flows-crossing-chain-clean.html | 0 | every flow that crosses the boundary draws the crossing
+behaviour-flows    | flows-crossing-no-chain.html  | 0 | cites both sides of the boundary and draws no chain
+behaviour-flows    | flows-figure-linear.html      | 1 | shows no divergence
+behaviour-flows    | flows-clean.html              | 0 | no flow here cites both sides of the boundary, so none owes a chain
+# The pr-mark exclusion in the per-section budget. The clean row is the load-bearing one: it is a
+# flow carrying a primer AND its one earned drawing, which is what the old count reported as two.
+# The pair proves the fix did not silence the rule.
+diagram            | diagram-flow-figure-primer.html | 0 | diagram budget respected in every section | --page @GOLD@/diagram-flow-figure-primer.html
+diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most one | --page @GOLD@/diagram-flow-two-figures.html
  reach              | reach-clean.html              | 0 | point into the flows that explain them
  reach              | reach-readorder.html          | 1 | the reading order lives in section 3
  reach              | reach-no-pointer.html         | 0 | an in-page anchor works at every link rung

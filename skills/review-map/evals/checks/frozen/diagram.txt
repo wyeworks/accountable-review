@@ -210,6 +210,54 @@ PASS  diagram 1 has no placeholders left
 PASS  diagram 1 draws inside its viewBox
 WARN  diagram 1 · "an edge label far too long for the gap i" is about 308px wide and runs under a box at x=40 — an edge label wider than its gap
 PASS  diagram budget respected in every section
+## --fragment diagram-flow-figure-primer.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page diagram-flow-figure-primer.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment diagram-flow-two-figures.html
+exit=0
+PASS  2 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram 2 explains its dashed nodes
+PASS  diagram 2 uses only template classes
+PASS  diagram 2 takes every colour from a class
+PASS  diagram 2 has no placeholders left
+PASS  diagram 2 draws inside its viewBox
+PASS  diagram 2 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page diagram-flow-two-figures.html
+exit=1
+PASS  2 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram 2 explains its dashed nodes
+PASS  diagram 2 uses only template classes
+PASS  diagram 2 takes every colour from a class
+PASS  diagram 2 has no placeholders left
+PASS  diagram 2 draws inside its viewBox
+PASS  diagram 2 labels fit their boxes
+FAIL  flow "flow-a" carries 2 drawings — a flow earns at most one, and a flow that earns two is two flows
 ## --fragment diagram-invented-class.html
 exit=1
 PASS  1 diagram(s) found
@@ -396,12 +444,54 @@ SKIP  no diagrams in this input
 ## --page flows-clean.html
 exit=0
 SKIP  no diagrams in this input
+## --fragment flows-crossing-chain-clean.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page flows-crossing-chain-clean.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment flows-crossing-no-chain.html
+exit=0
+SKIP  no diagrams in this input
+## --page flows-crossing-no-chain.html
+exit=0
+SKIP  no diagrams in this input
 ## --fragment flows-decisions-interleaved.html
 exit=0
 SKIP  no diagrams in this input
 ## --page flows-decisions-interleaved.html
 exit=0
 SKIP  no diagrams in this input
+## --fragment flows-figure-linear.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page flows-figure-linear.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
 ## --fragment flows-layer-grouped.html
 exit=0
 SKIP  no diagrams in this input
@@ -674,33 +764,55 @@ exit=0
 SKIP  no diagrams in this input
 ## --fragment page-template.html
 exit=0
-PASS  2 diagram(s) found
-PASS  diagram 1 explains its dashed nodes
+PASS  4 diagram(s) found
 PASS  diagram 1 uses only template classes
 PASS  diagram 1 takes every colour from a class
 PASS  diagram 1 has no placeholders left
 PASS  diagram 1 draws inside its viewBox
 PASS  diagram 1 labels fit their boxes
+PASS  diagram 2 explains its dashed nodes
 PASS  diagram 2 uses only template classes
 PASS  diagram 2 takes every colour from a class
 PASS  diagram 2 has no placeholders left
 PASS  diagram 2 draws inside its viewBox
 PASS  diagram 2 labels fit their boxes
+PASS  diagram 3 explains its dashed nodes
+PASS  diagram 3 uses only template classes
+PASS  diagram 3 takes every colour from a class
+PASS  diagram 3 has no placeholders left
+PASS  diagram 3 draws inside its viewBox
+PASS  diagram 3 labels fit their boxes
+PASS  diagram 4 uses only template classes
+PASS  diagram 4 takes every colour from a class
+PASS  diagram 4 has no placeholders left
+PASS  diagram 4 draws inside its viewBox
+PASS  diagram 4 labels fit their boxes
 SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
 ## --page page-template.html
 exit=0
-PASS  2 diagram(s) found
-PASS  diagram 1 explains its dashed nodes
+PASS  4 diagram(s) found
 PASS  diagram 1 uses only template classes
 PASS  diagram 1 takes every colour from a class
 PASS  diagram 1 has no placeholders left
 PASS  diagram 1 draws inside its viewBox
 PASS  diagram 1 labels fit their boxes
+PASS  diagram 2 explains its dashed nodes
 PASS  diagram 2 uses only template classes
 PASS  diagram 2 takes every colour from a class
 PASS  diagram 2 has no placeholders left
 PASS  diagram 2 draws inside its viewBox
 PASS  diagram 2 labels fit their boxes
+PASS  diagram 3 explains its dashed nodes
+PASS  diagram 3 uses only template classes
+PASS  diagram 3 takes every colour from a class
+PASS  diagram 3 has no placeholders left
+PASS  diagram 3 draws inside its viewBox
+PASS  diagram 3 labels fit their boxes
+PASS  diagram 4 uses only template classes
+PASS  diagram 4 takes every colour from a class
+PASS  diagram 4 has no placeholders left
+PASS  diagram 4 draws inside its viewBox
+PASS  diagram 4 labels fit their boxes
 WARN  section "crosscutting" carries 2 diagrams — legitimate only if they show different mechanisms (ER plus lifecycle is the usual case)
 ## --fragment diagram-clean.html
 exit=0
@@ -787,6 +899,30 @@ PASS  diagram 1 has no placeholders left
 PASS  diagram 1 draws inside its viewBox
 WARN  diagram 1 · "an edge label far too long for the gap i" is about 308px wide and runs under a box at x=40 — an edge label wider than its gap
 SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --fragment diagram-flow-figure-primer.html --page diagram-flow-figure-primer.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment diagram-flow-two-figures.html --page diagram-flow-two-figures.html
+exit=1
+PASS  2 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram 2 explains its dashed nodes
+PASS  diagram 2 uses only template classes
+PASS  diagram 2 takes every colour from a class
+PASS  diagram 2 has no placeholders left
+PASS  diagram 2 draws inside its viewBox
+PASS  diagram 2 labels fit their boxes
+FAIL  flow "flow-a" carries 2 drawings — a flow earns at most one, and a flow that earns two is two flows
 ## --fragment anchors-primer-clean.html
 exit=0
 SKIP  no diagrams in this input

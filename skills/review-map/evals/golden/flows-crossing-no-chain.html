@@ -1,0 +1,40 @@
+<!-- DEFECT: a flow whose material spans the seam — it cites a serializer and a generated type
+     — and which draws nothing. Section 2's one figure is the crossing, and which hop the two
+     sides stop agreeing at is the thing a list cannot say.
+
+     This is flows-crossing-chain-clean.html with the figure deleted and NOTHING else changed,
+     so the WARN here and the PASS there pin the two branches of one rule. WARN rather than
+     FAIL because a monorepo flow can legitimately be backend-only while citing a type it does
+     not follow, and because which flow owns a crossing needs a reader. -->
+<section id="flow-a">
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Reading a project's archived state on the client</h3></div>
+  <p class="lede">One field, followed from the column that stores it to the component that
+    renders it — which is where the two sides turn out to disagree.</p>
+  <div class="pipe">
+    <span class="lbl">Path of a read</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span><span class="t">GET /api/projects</span><span class="s">params permitted in the controller</span></span></li>
+      <li><span class="n"><b>2</b><i></i></span><span class="t">ProjectSerializer</span></li>
+    </ol>
+  </div>
+
+  <div class="mech">
+    <b>ProjectSerializer#archived_at</b>
+    <p>The column is nullable and the serializer passes the nil straight through.</p>
+  </div>
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/serializers/project_serializer.rb:9</a> &mdash; emits archived_at</div>
+    </dd>
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">The client type declares the field non-null <span class="tier">evidenced by unchanged code</span>
+        <a class="path" href="#">web/src/types/project.ts:4</a></div>
+    </dd>
+    <dt>Validate</dt>
+    <dd>
+      <div class="item"><code>bundle exec rspec spec/serializers/project_serializer_spec.rb</code></div>
+    </dd>
+  </dl>
+</section>

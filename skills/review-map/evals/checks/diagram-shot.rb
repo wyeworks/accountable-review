@@ -59,7 +59,12 @@ out_dir = check.outdir.to_s.empty? ? File.join(File.dirname(check.input), "shots
 FileUtils.mkdir_p(out_dir)
 
 lines = check.page.lines
-starts = lines.each_index.select { |i| lines[i].include?("<svg") }.map { |i| i + 1 }
+# svg.pr-mark is excluded for the same reason checks/diagram.rb excludes it: it is the 34px
+# brand badge in a primer callout, not a figure. Rendering it produced a pair of PNGs of a
+# logotype in the very set of images a person opens to look for crowding and stray arrowheads.
+starts = lines.each_index
+              .select { |i| lines[i].include?("<svg") && !lines[i].include?('class="pr-mark"') }
+              .map { |i| i + 1 }
 if starts.empty?
   check.skip("no diagrams to render")
   check.finish

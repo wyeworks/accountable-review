@@ -1,0 +1,62 @@
+<!-- DEFECT: a flow that draws the PATH. One unbroken track through three boxes, no .edge-dash
+     and no .node-dead — so the figure carries an ordering the .pipe above it already carries,
+     and nothing else. That is the regression a restored catalogue layout most invites: reaching
+     for SVG out of habit produces exactly this shape, and it passes every rule in
+     checks/diagram.rb because the geometry and the vocabulary are impeccable.
+
+     A section 2 drawing earns its place by marking an EDGE — the hop where two sides stop
+     agreeing, or the gate a diverted request never reaches. FAIL rather than WARN because it is
+     shape.
+
+     The rule's LIMIT, which this fixture cannot pin: a lifecycle mistakenly drawn inside a flow
+     also carries .edge-dash and passes. Which kind is earned is a judged expectation. -->
+<section id="flow-a">
+  <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>Archiving a project</h3></div>
+  <p class="lede">The write path, drawn — which is the path the pipeline above already shows.</p>
+  <div class="pipe">
+    <span class="lbl">Path of a write</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span class="t">PATCH /api/projects/:id</span></li>
+      <li><span class="n"><b>2</b><i></i></span><span class="t">Project#archive!</span></li>
+    </ol>
+  </div>
+
+  <figure class="inflow">
+    <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="a request passes through the controller and the model to the column">
+      <rect class="box" x="188" y="48" width="148" height="54" rx="5"/>
+      <text class="t-lbl" x="262" y="68" text-anchor="middle">CONTROLLER</text>
+      <text class="t-col" x="262" y="86" text-anchor="middle">update</text>
+      <text class="t-dim" x="262" y="122" text-anchor="middle">projects_controller.rb:18</text>
+      <path class="edge" d="M336 75 L362 75 M356 70 L362 75 L356 80"/>
+      <rect class="box" x="366" y="48" width="148" height="54" rx="5"/>
+      <text class="t-lbl" x="440" y="68" text-anchor="middle">MODEL</text>
+      <text class="t-col" x="440" y="86" text-anchor="middle">archive!</text>
+      <text class="t-dim" x="440" y="122" text-anchor="middle">project.rb:31</text>
+      <path class="edge" d="M514 75 L540 75 M534 70 L540 75 L534 80"/>
+      <rect class="box" x="544" y="48" width="148" height="54" rx="5"/>
+      <text class="t-lbl" x="618" y="68" text-anchor="middle">COLUMN</text>
+      <text class="t-col" x="618" y="86" text-anchor="middle">archived_at</text>
+      <text class="t-dim" x="618" y="122" text-anchor="middle">structure.sql:304</text>
+    </svg></div>
+    <figcaption>The write path from request to column.</figcaption>
+  </figure>
+
+  <div class="mech">
+    <b>Project#archive!</b>
+    <p>Archival had to preserve historical entries.</p>
+  </div>
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:31</a> &mdash; sets archived_at</div>
+    </dd>
+    <dt>Understand</dt>
+    <dd>
+      <div class="item">Archival is soft <span class="tier">evidenced by unchanged code</span></div>
+    </dd>
+    <dt>Validate</dt>
+    <dd>
+      <div class="item"><code>bundle exec rspec spec/models/project_spec.rb</code></div>
+    </dd>
+  </dl>
+</section>

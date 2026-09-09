@@ -370,6 +370,30 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 3 is a single list
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment diagram-flow-figure-primer.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page diagram-flow-figure-primer.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment diagram-flow-two-figures.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page diagram-flow-two-figures.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
 ## --fragment diagram-invented-class.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -562,6 +586,30 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 3 is a single list
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment flows-crossing-chain-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page flows-crossing-chain-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment flows-crossing-no-chain.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page flows-crossing-no-chain.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
 ## --fragment flows-decisions-interleaved.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -569,6 +617,18 @@ PASS  section 3 is a single list
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
 ## --page flows-decisions-interleaved.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment flows-figure-linear.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page flows-figure-linear.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 3 is a single list
