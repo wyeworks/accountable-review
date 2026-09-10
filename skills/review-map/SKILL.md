@@ -35,8 +35,8 @@ Reading the other stack's file costs context and teaches the wrong searches.
 | `references/report-format.md` | steps 1, 7, 8, 9 | The detail levels, the sections each one produces, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
-| `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, the two assembled flows, the four SVG diagram layouts — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
-| `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
+| `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, the two assembled flows, the four SVG diagram layouts — with `scripts/page-skeleton.sh --markup --level <the level from step 1>`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
+| `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup --level <level>` is how the rest of the template is read, and it leaves out the tail shape the other level would have written |
 | `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
@@ -390,7 +390,7 @@ how to validate · reviewer questions.
 A behaviour flow's **body is a unit** — a `.mech` block stating the mechanism, then the seven fields
 as `<dt>`/`<dd>` pairs in one `dl.rows`, never loose in the section — and the flow's path, diagram and
 decisions sit beside it, with decisions after the closing `</dl>` and the diagram **before** the `.mech`, so it stays outside the unit rather than inside it. Build it from the assembled flow in
-`references/page-template.html` rather than from a description of it — `scripts/page-skeleton.sh --markup`
+`references/page-template.html` rather than from a description of it — `scripts/page-skeleton.sh --markup --level <level>`
 prints the half that has it; the labels and the boundary are
 in `report-format.md` § *The review unit* and § *Section 2*.
 
@@ -643,8 +643,14 @@ Everything else about writing holds at every stage:
 
 - Follow `references/report-format.md` for the seven sections, when each appears, how deep it goes,
   and the rule that each fact has one home. Follow `references/page-template.html` for the design
-  system, layout, and diagram styles — read with `scripts/page-skeleton.sh --markup`, which prints
-  the component half and leaves out the 54 KB you are about to be given for free.
+  system, layout, and diagram styles — read with
+  `scripts/page-skeleton.sh --markup --level <the level settled in step 1>`, which prints the
+  component half and leaves out the 54 KB you are about to be given for free.
+
+  **Pass the level.** Sections 4 to 7 and the merged brief section are two renderings of the same
+  tail, and so is the rail below 03: without `--level` you are handed both and must pick, which is
+  18 KB at `--brief` you re-pay on every later request. With it, **the rail you are given is the
+  rail to publish** — four entries at `--brief`, seven at `--full`. Copy it; do not renumber it.
 - **Write the skeleton once, before anything else in stage 1:**
 
   ```sh
