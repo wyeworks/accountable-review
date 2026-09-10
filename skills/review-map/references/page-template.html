@@ -443,10 +443,20 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
   .rows > dd { padding-top: 0; border-top: 0; }
 }
 
-/* before / after — two rows, never one paragraph */
-.ba { display: grid; grid-template-columns: 132px 1fr; gap: 0 28px; margin-top: 28px; border-top: 1px solid var(--rule); }
+/* before / after — two rows, never one paragraph.
+
+   Its spacing is deliberately asymmetric, and the reason is its top hairline.
+   That rule is the block announcing itself, so it needs room ABOVE to read as a
+   new thing starting rather than as the bottom border of whatever sat there
+   before — 40, the widest gap in the section, where .pipe and .mech take 30. It
+   needs almost nothing BELOW: the last row's own 22px of padding was landing on
+   top of the next component's margin or the next section's 58, and the pair read
+   as a hole. The block ends at its last line and the gap after it belongs to
+   whatever comes next. */
+.ba { display: grid; grid-template-columns: 132px 1fr; gap: 0 28px; margin-top: 40px; border-top: 1px solid var(--rule); }
 .ba > dt { padding: 20px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
 .ba > dd { margin: 0; padding: 20px 0 22px; max-width: 62ch; font-size: 15.5px; line-height: 1.66; color: var(--ink-3); }
+.ba > dd:last-of-type { padding-bottom: 6px; }
 .ba > dt.now { color: var(--ink); }
 .ba > dt.now, .ba > dd.now { border-top: 1px solid var(--rule); }
 .ba > dd.now { color: var(--ink-2); }
@@ -1031,12 +1041,6 @@ details.coverage-foot[open] .chev { transform: rotate(90deg); }
    version stacked them with a hand-written border-top:0 on each sibling, so the
    stacking belongs here. */
 .usecases { display: flex; flex-direction: column; margin-top: 26px; }
-/* The before/after grid continues that stack: its border-top lands on the last
-   usecase's bottom border and the two read as one block. That was an inline
-   margin-top:0 in the markup half, which is the same mistake as the hand-written
-   border-top:0 above — a join between two components is theirs to know about,
-   not something a run has to copy correctly. */
-.usecases + .ba { margin-top: 0; }
 .usecase {
   display: flex; align-items: center; gap: 12px; padding: 14px 18px;
   background: var(--surface-hi); border: 1px solid var(--rule);
