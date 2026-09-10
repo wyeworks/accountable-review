@@ -1095,6 +1095,51 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 <div class="wrap">
 <!-- SKELETON:HEAD:END -->
 
+  <!-- ===== CITATION LINKS, and the two forms every file:line on this page takes.
+       WHICH FORM IS NOT A PREFERENCE — it follows from the line. A line the diff
+       contains links into the diff, where the reviewer already is and where the
+       before and after sit side by side. A line the diff does not contain has no
+       address in a diff view at all, and those lines are this page's product.
+
+           {{DIFF}}   https://github.com/{{ORG}}/{{REPO}}/pull/{{N}}/files#diff-{{SHA256_OF_PATH}}
+                      rung 2: .../compare/{{BASE}}...{{HEAD}}#diff-{{SHA256_OF_PATH}}
+           {{BLOB}}   https://github.com/{{ORG}}/{{REPO}}/blob/{{SHA}}/{{PATH}}
+
+       Both are spelled out at every citation below rather than hidden behind one
+       opaque placeholder, because the ANCHOR is the part that goes wrong and an
+       opaque href teaches nothing about its shape. The doc links in the flows are
+       shown already pinned for the same reason: a template that hides the form
+       teaches a run to publish a page that fails its own check.
+
+       A CITATION THAT NAMES A RANGE LINKS A RANGE. `foo.rb:51-72` under an href
+       ending at R51 selects one line of twenty-two: the text promises a span the
+       link does not deliver, and nothing on the page says which to believe. So the
+       two numbers appear in the text and in the href, and they are THE SAME TWO —
+
+           <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+           <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+
+       — which is why they are written as two placeholders and not as one {{LINES}}.
+       Repeat the side letter on both ends and keep both ends on the same side: R is
+       the right of the hunk, L the left, and a range starting left and ending right
+       is not addressable. A renderer that ignores the range lands the reader at its
+       start, which is what a one-line anchor does anyway, so the form costs nothing
+       where it is not honoured.
+
+       Sites below take {{DIFF}} or {{BLOB}} by what the field means: Implementation
+       and "Changed at" are changed lines; "Affected, unchanged", "Unchanged at" and
+       anything tiered `from unchanged code` are not, and no diff view can reach them.
+       Where a field can carry either, the commoner one is shown — switch it when the
+       line you actually cite sits on the other side. A citation naming no line at all
+       — a ledger row, a § 4 entry — has no anchor to get wrong and keeps {{LINK}};
+       scripts/ledger-rows.sh writes the ledger's own links from the rung it is given,
+       so those are never typed either.
+
+       The rung ladder that decides whether any of this is clickable at all, the
+       blob's base-SHA case, and the files GitHub will not render (which take
+       {{BLOB}} even for a line inside the diff — scripts/diff-render.sh) are in
+       report-format.md § Deep links, which owns all of it. ===== -->
+
   <!-- ===== The rail. Numbered, because the order IS the reviewer's path:
        section 2 teaches the mechanisms, 3 is the moment they open the code,
        4 is a second pass through one lens. Flows are sub-entries of 02.
@@ -1279,6 +1324,25 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
            field, never a section of its own — following one field end to end teaches
            more than reviewing two file trees, and this is that walk drawn.
 
+           DRAW IT WHENEVER THIS FLOW'S MATERIAL IS A FIELD YOU TRACED ACROSS THE SEAM
+           and you can name the hop where the two sides stop agreeing. That is the whole
+           trigger, and it is not a rare one: on any PR touching both sides of an API it
+           is the ordinary case, and the flow's own citations are the tell — a flow
+           citing a serializer and a type, a controller and a client call, a .heex event
+           and a handle_event clause, is a flow whose finding sits on a hop.
+           checks/behaviour-flows.rb warns on exactly that predicate.
+
+           OMIT IT in two cases and no others. You could not read the client — say which
+           and build the backend half; a chain drawn through code nobody opened is four
+           invented boxes. Or the two sides agree at every hop you traced, and there is
+           no dashed edge to draw, which makes the .pipe above the honest form.
+
+           THE FAILURE THIS COMMENT EXISTS TO PREVENT IS NOT A WRONG CHAIN, IT IS NO
+           CHAIN. An SVG is the most expensive thing on this page to type and the budget
+           language around figures reads as discouragement, so the path of least effort
+           is always to decide the flow did not earn one. It costs a reviewer the one
+           question the field rows cannot answer: at WHICH hop does the agreement stop.
+
            IT IS A DRAWING AND NOT A .pipe FOR ONE REASON: the finding sits on an EDGE.
            "The two sides stop agreeing between the JSON and the type" is a claim about
            a hop, and .pipe's connector is a bare hairline with nothing to mark and
@@ -1435,7 +1499,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
               failures are silent.</p>
             <!-- The primer cites the line that earned it, like every other doc link.
                  Without this the aside is a Rails lesson with no stake in the repo. -->
-            <div class="item">The callback at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+            <div class="item">The callback at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
               runs after the write, so it is the second form it has to ask.</div>
             <!-- THE /v8.0/ IS SUBSTITUTED PER RUN from this app's Rails series, exactly
                  as in the Understand field below. URL from references/rails-docs.md. -->
@@ -1490,7 +1554,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
             <p>The rescue that turns it into a response is app-level and opt-in, which is why the
               status a denied request gets is a decision this repository makes rather than one the
               gem makes.</p>
-            <div class="item">The action at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+            <div class="item">The action at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
               relies on that raise reaching the handler rather than on a returned value.</div>
             <!-- A gem's URL is pinned to the LOCKED GEM VERSION, not to the Rails series,
                  and the tag's `v` prefix is data from the catalogue rather than a form you
@@ -1521,13 +1585,11 @@ authorize @post, :update?
 
         <dt>Implementation</dt>
         <dd>
-          <!-- {{LINES}} AND {{LINK}} HAVE TO AGREE. A range in the text is a range in the href —
-               #diff-{sha256}R51-R72 inside the diff, #L51-L72 in a blob — because a citation
-               reading :51-72 whose link selects line 51 promises a span it does not deliver, and
-               nothing on the page says which is meant. And a file GitHub will not render (see
-               scripts/diff-render.sh) takes the blob form even for a line inside the diff: an
+          <!-- {{START}} and {{END}} are the same two numbers in the text and in the href, per
+               CITATION LINKS at the top of this half. A file GitHub will not render (see
+               scripts/diff-render.sh) takes {{BLOB}} even for a line inside the diff: an
                anchor there lands on a "Load diff" stub. report-format.md § Deep links. -->
-          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}:{{LINES}}</a> &mdash; {{WHAT_IT_DOES}}</div>
+          <div class="item"><a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a> &mdash; {{WHAT_IT_DOES}}</div>
           <!-- generated by scripts/excerpt.sh --diff — never typed -->
           <details class="excerpt excerpt--diff">
             <summary>
@@ -1542,20 +1604,20 @@ authorize @post, :update?
 <span class="l add"><span class="sig">+</span>    raise ArchiveError if time_entries.open.exists?</span>
 <span class="l"><span class="sig"> </span>    update!(archived_at: Time.current)</span>
 </pre>
-              <p class="ex-src">Changed at <a class="cite" href="{{LINK}}">{{PATH}}:{{LINES}}</a></p>
+              <p class="ex-src">Changed at <a class="cite" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
             </div>
           </details>
         </dd>
 
         <dt>Tests</dt>
         <dd>
-          <div class="item"><a class="path" href="{{LINK}}">{{SPEC}}:{{LINES}}</a> &mdash; {{WHAT_IT_PINS}}</div>
+          <div class="item"><a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{SPEC}}:{{START}}-{{END}}</a> &mdash; {{WHAT_IT_PINS}}</div>
           <div class="gap"><b>GAP</b><span>{{WHAT_THEY_LEAVE_OPEN}}</span></div>
         </dd>
 
         <dt>Affected, unchanged</dt>
         <dd>
-          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a> &mdash; {{WHY_AFFECTED}}</div>
+          <div class="item"><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> &mdash; {{WHY_AFFECTED}}</div>
           <!-- generated by scripts/excerpt.sh --source. This is the variant that
                carries the product: no diff view can address an unchanged line.
                data-lang is the generator's guess from the path, and the only
@@ -1582,7 +1644,7 @@ authorize @post, :update?
 <span class="l">    Project.where(archived_at: nil)</span>
 <span class="l">  end</span>
 </pre>
-              <p class="ex-src">Unchanged at <a class="cite" href="{{LINK}}">{{PATH}}:{{LINES}}</a></p>
+              <p class="ex-src">Unchanged at <a class="cite" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
             </div>
           </details>
           <!-- The flow's own searches, same component and same rule: collapsed, one row
@@ -1611,7 +1673,7 @@ authorize @post, :update?
                below is one example app, not a constant to copy: an unpinned link
                silently means current stable, and evals/checks/rails-anchors.sh fails a
                page carrying one. § Pinning in whichever catalogue applies. -->
-          <div class="item">Bulk writes at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a> never
+          <div class="item">Bulk writes at <a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> never
             run this validation &mdash; <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
             skips validations and callbacks. <span class="tier">from unchanged code</span></div>
           <!-- ELIXIR VARIANT of the two lines above. Same components, same rules;
@@ -1628,7 +1690,7 @@ authorize @post, :update?
                entirely and the sentence keeps only its file:line and its tier. The
                probe below is unaffected, and is what an Elixir page anchors with.
 
-          <div class="item">Bulk writes at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a> never
+          <div class="item">Bulk writes at <a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> never
             build a changeset &mdash; <a class="doc" href="https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3">update_all</a>
             casts nothing and runs no validation. <span class="tier">from unchanged code</span></div>
           <span class="lbl">mix run &middot; read-only</span>
@@ -1818,19 +1880,19 @@ end)</pre>
 
         <dt>Implementation</dt>
         <dd>
-          <div class="item">The gate at <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+          <div class="item">The gate at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
             {{WHAT_ITS_CONDITION_NOW_ADMITS}}</div>
         </dd>
 
         <dt>Tests</dt>
         <dd>
-          <div class="item">{{WHICH_REQUEST_CLASS_IS_COVERED}} <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a></div>
+          <div class="item">{{WHICH_REQUEST_CLASS_IS_COVERED}} <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a></div>
           <div class="item gap">{{THE_CLASS_NO_TEST_EXERCISES}}</div>
         </dd>
 
         <dt>Affected, unchanged</dt>
         <dd>
-          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a>
+          <div class="item"><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a>
             <span class="tier">evidenced by unchanged code</span> {{WHY_THIS_GATE_NOW_MEANS_SOMETHING_ELSE}}</div>
           <details class="searched">
             <summary><span class="chev">&#9656;</span> Searches run</summary>
@@ -1844,7 +1906,7 @@ end)</pre>
 
         <dt>Understand</dt>
         <dd>
-          <div class="item">{{WHY_FILTER_ORDER_DECIDES_THIS}} <a class="path" href="{{LINK}}">{{PATH}}:{{LINE}}</a></div>
+          <div class="item">{{WHY_FILTER_ORDER_DECIDES_THIS}} <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a></div>
         </dd>
 
         <dt>Validate</dt>
@@ -1887,7 +1949,7 @@ end)</pre>
         <li>
           <span class="n">01</span>
           <span class="t">
-            <a class="path" href="{{LINK}}">{{PATH}}:{{LINES}}</a>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
             <span class="why">{{WHY_THIS_BEFORE_THAT_OR_WHY_IT_NEEDS_JUDGMENT}} <span class="tier">{{TIER_IF_NOT_EXPLICITLY_CHANGED}}</span></span>
           </span>
           <a class="ptr" href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}} &rarr;</a>

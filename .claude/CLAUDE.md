@@ -647,6 +647,22 @@ Editing one of these means checking the others still agree.
   The diff-anchor range form was missing from `report-format.md` entirely, so the run had nowhere to
   put the `72` — the defect was in the spec, not in the writing.
 
+  **Fixing the spec did not fix the pages, and `page-template.html` is why.** Two real runs published
+  73 ranged citations between them under one-line anchors *after* the range form landed in
+  § *Deep links*, because every citation in the template rendered as `href="{{LINK}}"` — one opaque
+  placeholder over the one link on the page whose **form is load-bearing** (diff versus blob, `R`
+  versus `L`, line versus range). The rule was stated in a comment beside the fourth citation of
+  fourteen, by which point a run had already copied three. So the template now spells the anchor out
+  at every line-bearing citation — `{{DIFF}}R{{START}}-R{{END}}`, `{{BLOB}}#L{{START}}-L{{END}}`,
+  with the *same two placeholders* in the text — and defines `{{DIFF}}` and `{{BLOB}}` once at the
+  top of the markup half, before any citation appears. `{{LINK}}` survives only where a citation
+  names no line and so has no anchor to get wrong.
+
+  This is the doc-link precedent applied to the other link, and it was missed for the same reason
+  the doc link's was: § *Pinning* already argues that a template carrying the unpinned form teaches
+  a run to publish a page that fails its own check. A template carrying an *unformed* href does the
+  same thing, and costs 4.4 KB of the markup half to fix.
+
   Five files have to agree on those two: `report-format.md` § *When the diff will not render* owns
   the rule **alone** and § *Deep links* carries the three URL forms, `SKILL.md` step 3 runs the
   classifier once and step 9 points at both, `scripts/diff-render.sh` holds the verdict,
@@ -935,6 +951,24 @@ Editing one of these means checking the others still agree.
   *a flow that earns both is two flows*. `diagram.rb` enforces that per `<section>`, which is already
   per flow, and says it as a **failure** rather than the two-diagram warning § 5 gets: the "different
   mechanisms" excuse is about an ER fragment beside a lifecycle and reads as permission anywhere else.
+
+  **"Most earn none" was true of the fork and false of the chain, and stating it of both is what
+  made § 2 draw nothing.** Two real pages at `--brief` — nine flows, a Rails monolith and a Phoenix
+  app — published **zero `<svg>`** with the layouts sitting readable in the markup half the whole
+  time. `behaviour-flows.rb` caught it on both (*"flow-a, flow-b cites both sides of the boundary and
+  draws no chain"*), and nothing read the warning, because `check.rb` only ever runs against
+  fixtures. So the prose was the whole lever, and it was pointing the wrong way: three sentences said
+  a figure is exceptional, one clause said `--brief` is not an excuse, and the chain's own comment in
+  the template gave **geometry with no trigger at all** while the fork's opened with *OMIT IT unless*.
+
+  The fork's rarity is real — its three-part conjunction genuinely fires seldom. The chain's is not:
+  its trigger is *you traced a field across the seam*, which on a PR touching both sides is the
+  ordinary case. § 2 now states it affirmatively and names the only two excuses (you could not read
+  the client; the two sides agree at every hop), § *Depth rules* says a budget is a ceiling rather
+  than a discouragement and routes the trigger to § 2, and the template's chain comment leads with
+  when to draw before how. **An SVG is the most expensive thing on the page to type, so the failure
+  mode is never a wrong chain — it is no chain**, and it costs the reviewer the one question the
+  field rows cannot answer: at which hop does the agreement stop.
 
   `--brief` draws no § 5 figures at all — no ER fragment, no lifecycle; migration safety is a row
   there — so its merged section holds the `.impact` panel and nothing that could compete for the
