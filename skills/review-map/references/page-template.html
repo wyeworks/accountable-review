@@ -333,6 +333,26 @@ p { margin: 0; max-width: 64ch; }
 strong { font-weight: 600; }
 em { font-style: italic; }
 
+/* Prose flow, and the one piece of spacing a run types rather than copies.
+   p is margin:0 because inside .mech, .pr-main and dl.rows > dd the gap belongs
+   to the container's own padding or flex gap, and a paragraph bringing its own
+   would double it. Every BLOCK below carries a top margin instead — .ba 28,
+   .pipe 30, .mech 30, .decisions 34 — so the only gap with no owner is the one
+   after a paragraph, and a run writing two of them in a row got a wall of text
+   with nothing between the sentences. A published page shipped exactly that:
+   section 1's two intro paragraphs set solid, and the .usecases block below
+   them starting on the line where the prose stopped.
+
+   So the paragraph carries a bottom margin where prose actually flows, which is
+   a section's own children and nowhere else. This is the idiom the markup half
+   already used by hand — style="margin-bottom:22px" on the paragraph above a
+   .gt — moved here so it stops being something to remember. Adjacent margins
+   collapse, so a component's own larger top margin still decides the gap and
+   nothing that was 28 or 30 becomes 46. :not(:last-child) because a section has
+   no bottom padding to collapse against: a trailing paragraph would push the
+   next section's 58 out to 76, and only sometimes. */
+section > p:not(:last-child) { margin-bottom: 18px; }
+
 .lede { margin-top: 22px; font-size: 15.5px; line-height: 1.68; color: var(--ink-3); }
 .note { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 70ch; }
 
@@ -423,10 +443,20 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
   .rows > dd { padding-top: 0; border-top: 0; }
 }
 
-/* before / after — two rows, never one paragraph */
-.ba { display: grid; grid-template-columns: 132px 1fr; gap: 0 28px; margin-top: 28px; border-top: 1px solid var(--rule); }
+/* before / after — two rows, never one paragraph.
+
+   Its spacing is deliberately asymmetric, and the reason is its top hairline.
+   That rule is the block announcing itself, so it needs room ABOVE to read as a
+   new thing starting rather than as the bottom border of whatever sat there
+   before — 40, the widest gap in the section, where .pipe and .mech take 30. It
+   needs almost nothing BELOW: the last row's own 22px of padding was landing on
+   top of the next component's margin or the next section's 58, and the pair read
+   as a hole. The block ends at its last line and the gap after it belongs to
+   whatever comes next. */
+.ba { display: grid; grid-template-columns: 132px 1fr; gap: 0 28px; margin-top: 40px; border-top: 1px solid var(--rule); }
 .ba > dt { padding: 20px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
 .ba > dd { margin: 0; padding: 20px 0 22px; max-width: 62ch; font-size: 15.5px; line-height: 1.66; color: var(--ink-3); }
+.ba > dd:last-of-type { padding-bottom: 6px; }
 .ba > dt.now { color: var(--ink); }
 .ba > dt.now, .ba > dd.now { border-top: 1px solid var(--rule); }
 .ba > dd.now { color: var(--ink-2); }
@@ -1022,7 +1052,7 @@ details.coverage-foot[open] .chev { transform: rotate(90deg); }
 /* Section 1 · use-case rows. One per actor-and-path. A run given only the inline
    version stacked them with a hand-written border-top:0 on each sibling, so the
    stacking belongs here. */
-.usecases { display: flex; flex-direction: column; }
+.usecases { display: flex; flex-direction: column; margin-top: 26px; }
 .usecase {
   display: flex; align-items: center; gap: 12px; padding: 14px 18px;
   background: var(--surface-hi); border: 1px solid var(--rule);
@@ -1233,7 +1263,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
         <div class="usecase"><b>B</b><span>{{ACTOR_DOES_THING}}</span></div>
       </div>
 
-      <dl class="ba" style="margin-top:0">
+      <dl class="ba">
         <dt>Before</dt><dd>{{WHAT_WAS_POSSIBLE_OR_WENT_WRONG}}</dd>
         <dt class="now">After</dt>
         <dd class="now">{{WHAT_IS_POSSIBLE_NOW_OR_IS_NOW_PREVENTED}} <span class="tier tier-inf">{{TIER_IF_NOT_SHOWN_BY_THE_DIFF}}</span></dd>
