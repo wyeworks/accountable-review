@@ -1,5 +1,9 @@
 # accountable-review 🧭
 
+> [!NOTE]
+> **Beta — early stages.** This is still under active development, and things may change or
+> break between commits. We plan to have a ready-to-use version in the coming days.
+
 > **AI-assisted code review for teams that want to move faster with coding agents without losing control of their codebase.**
 
 `accountable-review` turns a pull request into a **Review Map**: a published HTML page that guides a
@@ -11,7 +15,6 @@ codebase, with or without a separate client such as Next.js; and **`setup-ci`**,
 one to be produced automatically on every review-ready pull request.
 
 Built by **WyeWorks**.
-Rails-first. Open source. A [Claude Code](https://claude.com/claude-code) plugin.
 
 ---
 
