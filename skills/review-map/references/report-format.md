@@ -23,20 +23,31 @@ invocation; there is no per-section renegotiation of it.
 
 | Level | Flag | Shape |
 |---|---|---|
-| **brief** | `--brief`, or no flag | §§ 1–3 as written below. §§ 4–7 collapse into **one** section, § *Section 4 at brief* |
+| **brief** | `--brief`, or no flag | §§ 1–3 as written below, written to the word budget in § *The brief budget*. §§ 4–7 collapse into **one** section, § *Section 4 at brief* |
 | **full** | `--full` | The seven sections below, exactly as written |
 | **review** | `--review` | Full, plus a code-review pass threaded through it. **Not implemented** — the skill stops and says so |
 
-**The level changes what the tail of the page is; it never changes what a section teaches.**
-§§ 1–3 are identical at both levels — same depth rules, same excerpt budget, same review unit, same
-rules about what a flow owns. The behaviour flows are the product, and a level that thinned them
-would be selling the thing the page exists for. What `--brief` does is decline to spend four section
-shells on material that is often one screen: it merges, it drops the ranking, and it drops the
-comprehension checkpoint. It does not summarise § 2.
+**The level changes how many sections there are and how many words they may spend; it never
+changes what a section teaches.** That distinction is the whole of it, and it is finer than the one
+this file used to draw. §§ 1–3 exist at both levels with the same depth rules, the same excerpt
+budget, the same review unit and the same rules about what a flow owns — and at `--brief` they are
+written **shorter**, to the caps in § *The brief budget*. Saying a claim in fewer words is not
+teaching less. Dropping the claim is, and the level never does that: no finding, no citation, no
+evidence tier, no field the flow has material for, and **no figure** comes out for the level's sake.
+What `--brief` also does is decline to spend four section shells on material that is often one
+screen — it merges, it drops the ranking, and it drops the comprehension checkpoint. It does not
+summarise § 2.
 
-So the two things that scale a page are **orthogonal**, and confusing them is the way to get this
-wrong: § *Depth rules* scales each section by what the diff puts into it, at either level, and the
-level decides how many sections there are to scale.
+**An earlier version of this paragraph said §§ 1–3 were byte-for-byte the same spec at both levels,
+and the price of that was a default page nobody had costed.** `--brief` bought 35% fewer words than
+`--full` by merging four sections, which left the bulk — § 2 — running at full length on the page
+almost every reader gets. The budget is what closed that, and it closed it on prose rather than on
+material, because the alternative reading of "shorter" is the one that loses findings.
+
+So the three things that scale a page are **orthogonal**, and confusing them is the way to get this
+wrong: § *Depth rules* scales each section by what the diff puts into it, at either level; the level
+decides how many sections there are to scale; and § *The brief budget* caps what the scaling may
+spend at the default level.
 
 **One thing is level-independent, deliberately:** every path in the diff still appears in the page,
 and the coverage gate still runs. § *The completeness invariant* says why, and what changes is only
@@ -62,6 +73,163 @@ belongs in the sentences that cite this repository, which say it by naming real 
 
 ---
 
+## The brief budget
+
+`--brief` is the default, so this is what almost every real page costs. § *Detail levels* says how
+many sections it has. This says how much prose, and it is the one number in this file that is a
+budget rather than a depth rule — § *Depth rules* scales a section by what the diff puts into it,
+and this caps how many words that scaling may spend.
+
+**The target is about half the prose the same diff would get written to §§ 1–7's uncapped specs,
+with nothing removed that a reviewer acts on.** Halving a page by dropping a finding is trivial and
+worthless, and it is the failure this section is most likely to cause. What comes out is explanation
+the reader did not need twice, ceremony the components already carry, and three concepts that belong
+to `--full`. What stays is every finding, every citation, every evidence tier, **every figure**, and
+the completeness gate.
+
+### The ceiling
+
+Counted in **visible words**: what a reader reads with the page as it arrives. The exemptions below
+are most of the reason that is a fair measure.
+
+| Part | Budget | Made of |
+|---|---|---|
+| § 1 | 260 | Masthead and metric strip ~55, intent ≤ 65, the `dl.ba` pair ~50, five use cases at ~15 |
+| § 3 | 300 | Six entries at ~35, plus the grouping sentence and the sampling caveat at ~45 each. Eight entries is the cap's own upper end and spends the whole 300 |
+| Merged tail | 400 | The panel's prose ~40, the affected list at ~30 an entry, cross-cutting rows at ~25, approving items at ~18 |
+| Each behaviour flow | 440 | `.mech` ≤ 45, seven fields at ~35 with *understand* at ~60, the endpoint rows ~50, one or two decisions at ~45 |
+
+**Ceiling: 950 words, plus 440 per behaviour flow.** Three flows is 2,270; six is 3,590. Past it
+`evals/checks/brief-budget.rb` warns, and the warning names the part that overspent.
+
+**The caps do the cutting; the ceiling is the backstop.** That order matters when reading this
+section, because the ceiling is the number that gets quoted and the caps are what actually halve a
+page: a field written at 70 words and capped at 35 is the whole 50%, repeated seven times a flow,
+and the ceiling only catches what has no cap on it — § 1's intent, the endpoint rows, the notes and
+the approving items, each of which can grow without any single cap firing while the page as a whole
+stops being readable in twenty minutes. A page inside every cap is normally well inside the ceiling.
+
+**Those numbers are a first calibration and they are stated so they can be argued with.** They were
+derived from the component budgets above rather than measured on a corpus of published pages, because
+the corpus did not exist when the budget was written — the honest way to move them is
+`bin/evals page` over a fixture, three runs, and a number that came out of a page. Expect the ceiling
+to be the loose one: a well-written single-flow page lands far enough under it that the caps are what
+the run is really working against.
+
+### Six files have to agree
+
+This section owns the budget **alone**, and everything else points at it. `SKILL.md` step 1 reads it
+with the level, step 7 writes the fields to their caps, step 9 says to draft to the budget rather than
+edit down to it, and § *How big should the page be?* says it is still not the answer to a diff that
+will not fit. `page-template.html` **gates** the two components it drops inside `SKELETON:ONLY:level=full`
+regions, so a brief run is handed neither, with `skills/review-map/tests/run.sh` counting them per
+level and `self-test.sh` breaking the gate in both directions — ungating the primer, and widening
+the gate over a flow's figure, which is the tidy-looking mutation that would make a page shorter by
+losing a drawing. `evals/checks/brief-budget.rb` carries the numbers, the
+exemptions, the split verdicts and the floor, with `golden/brief-*.html` and the `self-test.rb` rows
+proving each rule fires. `evals/cases/brief-flows.json` and page case 7 in `evals/evals.json` ask the
+half no script can. And `docs/review-map.md` and `README.md` are the public restatement, which own
+nothing — where they disagree with this section, they are the ones that are wrong.
+
+### What the ceiling does not count
+
+A budget that counted these would be a budget against the page's own evidence, and it would be
+satisfied fastest by deleting the best content on it.
+
+- **Everything inside an `<svg>`, its `figcaption`, and its `.legend`.** A figure is not prose and
+  is not shortened here. Every drawing keeps the spec, the geometry, the caps and the labels
+  § *Depth rules* gives it, at both levels: `--brief` removes no figure, trims no figure, and
+  a flow's boundary chain or guard fork is drawn exactly as it is at `--full`. The one figure rule
+  the level has ever carried is that § 5's two kinds do not appear, which is a consequence of § 5
+  not existing and not a cut.
+- **The `.pipe` spine's node labels and the `.impact` panel's box text.** Labels, capped already by
+  § *Impact paths* and § *Depth rules*, and both components are figures by the criterion in
+  § *Depth rules* even though neither is a drawing.
+- **Anything inside `<code>` or `<pre>`.** A command and a quotation are bytes. Shortening a
+  validation step is inventing one.
+- **Anything inside a collapsed `<details>`** — a source excerpt, and the `details.searched`
+  record. Neither is reading length: both are shut when the page arrives, and counting them would
+  charge the page for the two components that exist to carry provenance. The rule that makes this
+  safe is already in `SKILL.md`: the page reads complete with every collapsed block closed, so
+  nothing the budget stops counting is anything a reader needs.
+
+### The per-component caps
+
+Warnings, not failures, and the direction of that choice is deliberate: a hard failure on length
+teaches a run to drop a claim, which is the one outcome worse than a long page. Shape is a FAIL
+below; verbosity is a WARN.
+
+| Component | Cap | Note |
+|---|---|---|
+| `.mech` | 45 words | The mechanism, not its history. Two sentences reaches this comfortably |
+| A field `<dd>` | 35 words | Per § *The review unit*'s seven, and the claim plus its clause fits |
+| *Understand* `<dd>` | 60 words | The highest-value field on the page gets the largest field budget |
+| A `.decision` | 45 words | The decision, where it lives, the tradeoff. The narrative around it is what goes |
+| An `ol.begin` entry | 40 words | Where to go, and why here |
+| § 1's intent | 65 words | What was possible, what is now, what is prevented |
+| A cross-cutting row | 30 words | It is a row at this level, per § *Section 4 at brief* |
+
+### The floor, which is the half that matters
+
+**No field may be compressed into its own label.** A `<dd>` carrying fewer than four visible words
+is not a terse field, it is a deleted one with the `<dt>` left behind — and it reads, in the 132px
+gutter, exactly like a field that was filled in. `brief-budget.rb` **fails** on one, and that is the
+rule the rest of this section is measured against: every cap above is a cap on how a claim is
+written, never on whether it is there.
+
+The rules that already say this from other directions all still hold at `--brief`, unchanged and
+uncapped: a unit needs a non-obvious *things to understand*; fields may be omitted but never faked;
+every flow shows the hunk its behaviour turns on; a search that found nothing is recorded as a
+search; the sampling caveat is carried once.
+
+### The three concepts `--brief` drops
+
+Each is a whole component or field that comes out, rather than prose that gets shorter, and each
+loses no finding — which is the test a fourth candidate has to pass before it joins them.
+
+- **The framework primer.** `aside.primer` is the heaviest component on the page carrying no
+  evidence of its own, and § *The primer callout* already caps it at one per flow with most flows
+  earning none. At `--brief` it earns none, and a run at that level is **never handed the markup**:
+  the callout sits inside a `SKELETON:ONLY:level=full` region, so `page-skeleton.sh --markup
+  --level brief` drops it. the flow explains the mechanism in its own prose against
+  its `file:line` and keeps the pinned `a.doc` link, which is what the primer escalates *from*. The
+  link survives, the lesson does not. **This shape is already proven rather than invented** — it is
+  exactly where a Phoenix page stands today while `elixir-docs.md` § *Version* withholds every link,
+  and it needs no exemption in `evals/checks/rails-anchors.rb` for the same reason: a page that emits
+  no primer has no primer to fail.
+- **The flow's own `dl.ba` pair**, gated the same way and dropped from the markup at this level.
+  § 1 carries the change's before and after, as two rows, and at `--brief` that is the page's one
+  transition block — § 1's pair is emitted at **both** levels, so what the level moves is where the
+  transition lives and not whether the page has one. A flow states its own transition inside the
+  `.mech`, where the mechanism it belongs to already is. On a single-flow PR the two were the same
+  pair twice.
+- **The endpoint's full error list.** What the diff **adds, moves or removes** — with statuses —
+  plus a count of the ones it leaves alone. The params, the success body and the side-effects row
+  are unchanged: the side-effects row is the reviewer's actual question and no diff answers it. The
+  inventory of untouched error cases is the part a reviewer can read off the code, and this is the
+  same trade § *Section 4 at brief* makes with the ledger — the level declines to *inventory*, never
+  to account.
+
+**Two of those three are structural, and the third is a rule.** The primer and the `dl.ba` are
+gated out of the markup a brief run reads, for the reason the rail is: a comment telling a run to
+delete a block at one level is a deletion performed from prose with nothing checking it, which is
+how the seven-entry rail shipped at both levels for as long as it did. The endpoint's error
+inventory cannot be gated — it is a sentence inside a field, not a block — so it stays a rule here
+and `brief-budget.rb` has nothing to say about it. Both shape rules in that check remain, because
+a run can still write either component from memory rather than from the template.
+
+**§ 3's entries lose a sub-part rather than a concept**, so it is not a fourth: *what remains
+uncertain* folds into the *why* clause with its evidence tier intact, rather than standing as its own
+line. The tier is the load-bearing half and it survives.
+
+**What is emphatically not on this list**, because each would look like thrift and cost the page its
+product: any figure; the `--diff` excerpt floor; `details.searched`; the coverage foot or its gate;
+any of the seven fields the flow has material for; the evidence tiers; the sampling caveat. And
+nothing here licenses a thinner § 2 — see § *Detail levels* on what the level may and may not do to
+a flow.
+
+---
+
 ## Contents
 
 **Primitives and rules** — read these before writing anything.
@@ -78,6 +246,8 @@ belongs in the sentences that cite this repository, which say it by naming real 
 - *One canonical home* — every fact explained once, referenced from everywhere else
 - *Depth rules* — how much treatment a section earns, and the diagram budget
 - *The completeness invariant* — why every diff path appears, and why the check is one-directional
+- *The brief budget* — how much prose the default level may spend, what it never counts, and the
+  three concepts it drops
 - *Build state* — the banner and pending markers that keep a staged page honest while it fills in
 
 **The seven sections, in default order** — each with what triggers it, and what becomes of it at
@@ -162,6 +332,10 @@ Rules that keep units from becoming ceremony:
 - Three of the fields may carry a collapsed source excerpt: *implementation*, *affected but unchanged*
   and *things to understand*. See § *Source excerpts* for the budget and for the rule that the field
   still has to read complete with the excerpt closed.
+- **At `--brief` the fields are capped, not culled.** 35 words a `<dd>`, 60 for *understand*, 45 for
+  the `.mech` — § *The brief budget* owns the numbers. The seven fields, their order, their labels and
+  the two rules above are the same at both levels, and a `<dd>` compressed below four words is a
+  deleted field wearing its own label, which that section fails rather than warns on.
 
 ## Evidence tiers
 
@@ -291,6 +465,15 @@ that wants two is a flow explaining Rails rather than explaining its own change 
 results reads as more thorough while getting less navigable, which is the failure mode this budget
 exists for. The escalation test is the same one the excerpt budget uses: not *is this interesting*, but
 *would the reviewer decide differently not knowing it*.
+
+**It is `--full` only, and that is the second of two gates rather than a new kind of rule.** At
+`--brief` no flow earns one: the callout is the heaviest component on the page carrying no evidence
+of its own, and § *The brief budget* spends that weight elsewhere. The flow keeps the pinned `a.doc`
+link the primer would have escalated from, and explains the mechanism in its own prose against its
+`file:line`. The gate is **structural**: the callout sits in a `SKELETON:ONLY:level=full` region,
+so `page-skeleton.sh --markup --level brief` does not hand it to the run at all. Like the gate below
+it, this needs no exemption in `evals/checks/rails-anchors.rb` — a page that emits no primer has no
+primer to fail — which is why `rails-anchors.rb` still must not read `LEVEL`.
 
 **A primer is gated on its doc link, so a closed catalogue means no primers for that stack.** It is
 what a link escalates *into*, and `evals/checks/rails-anchors.rb` fails one that carries none — so the
@@ -922,17 +1105,30 @@ take on faith. Neither is earned by file count.
 Adaptivity trims ceremony on small PRs. It never trims teaching on a large one — on a big change,
 explanation is the whole product.
 
-**The detail level is a different axis, and the two multiply rather than substitute.** Everything
-above applies unchanged at `--brief`; what the level decides is how many sections there are to weigh,
-not how heavily each one is weighed. Two consequences for diagrams specifically: `--brief` draws no
-§ 5 figures at all (no ER fragment, no lifecycle — migration safety is a row there), so its merged
-tail section holds the `.impact` panel and nothing else that could compete for the budget. And a run
-at `--brief` must not read the shorter page as licence to skimp on a flow's diagram, which is the
-one figure **a flow** earns.
+**The detail level is a different axis, and the three multiply rather than substitute.** Everything
+above applies unchanged at `--brief` — what the level decides is how many sections there are to
+weigh, not how heavily each one is weighed, and § *The brief budget* then caps the **prose** a
+weighed section may spend. Two consequences for diagrams specifically: `--brief` draws no § 5 figures
+at all (no ER fragment, no lifecycle — migration safety is a row there), so its merged tail section
+holds the `.impact` panel and nothing else that could compete for the budget. And a run at `--brief`
+must not read the shorter page as licence to skimp on a flow's diagram, which is the one figure
+**a flow** earns.
 
-Both § 2 kinds are therefore **level-independent**, like the primer: §§ 1–3 are byte-for-byte the
-same spec at both levels, so a `--brief` page carries a flow's drawing where it carries no other, and
-`evals/checks/diagram.rb` still needs no level awareness to count them.
+**The word budget reaches no figure, in either direction.** It does not remove one, does not trim
+one, and does not count one: every `<svg>`, its `figcaption`, its `.legend`, the `.pipe` spine's
+labels and the `.impact` panel's box text are exempt from it by name. A run that answered a
+length warning by dropping a drawing has read the budget backwards — the geometry here is worked
+out once precisely so it is not the thing a run negotiates.
+
+Both § 2 kinds are therefore **level-independent**: §§ 1–3 have the same spec at both levels and the
+budget exempts every figure from its count, so a `--brief` page carries a flow's drawing where it
+carries no other, and `evals/checks/diagram.rb` still needs no level awareness to count them.
+
+**The primer used to be the companion example here and no longer is**, which is worth stating rather
+than quietly dropping: it is `--full` only now (§ *The brief budget*), so the two things that share a
+flow's slot either side of the `.mech` are governed differently — the figure is level-independent, the
+callout is not. `diagram.rb` still needs no level awareness and `rails-anchors.rb` still must not read
+the level, for the same reason in both cases: a page that emits no primer has no primer to fail.
 
 ## The completeness invariant
 
@@ -1122,6 +1318,7 @@ overlap.
   `schema.rb` churn is not 150 lines of review surface, and reporting it as such makes every migration
   look terrifying.
 - **What it is for, and what changes**, in a few sentences derived from the code, tests and commits —
+  65 words at `--brief`, per § *The brief budget* —
   **not** copied from the PR description. What was possible before, what is possible now, what is now
   prevented. Then the use cases, one line each, as actor plus behaviour:
 
@@ -1163,7 +1360,9 @@ put the fields loose in the section and a decisions block in the middle of them.
 **Beside the unit, in this order.** Take what the flow needs and omit the rest:
 
 - **Before / after** — what was possible, what is now, what is now prevented. `dl.ba`, per § 1's rule
-  that the two are rows and never one sentence.
+  that the two are rows and never one sentence. **At `--brief` the flow does not carry this block**:
+  § 1's pair is the page's one transition block and the flow states its own transition inside the
+  `.mech`. See § *The brief budget*.
 - **The path**, as `.pipe`: UI → request → controller → operation → model → column, and the
   response path back if it carries anything interesting. The numbered spine fills its terminal node,
   so put the thing the chain arrives at last. In a Phoenix LiveView flow the same chain is
@@ -1212,7 +1411,8 @@ put the fields loose in the section and a decisions block in the middle of them.
   permitted-params → column crossing in a server-rendered monolith is a **3-stop** one, which is why
   the catalogue ships those margins rather than only the five-stop case.
 - **The endpoint** it goes through, if the diff changed one: params with required/optional and where
-  they are coerced, a real success body, the **full** error list with statuses, and a side-effects row
+  they are coerced, a real success body, the **full** error list with statuses — at `--brief`, the
+  errors the diff adds, moves or removes, plus a count of the rest — and a side-effects row
   — reads only / writes / calls an external service / idempotent or not. That last row is the
   reviewer's actual question and no diff answers it. There is **no endpoint card**: the contract is
   the flow's own material, so it goes in the `.pipe` chain and the field rows that already exist.
@@ -1225,7 +1425,9 @@ put the fields loose in the section and a decisions block in the middle of them.
 - **A framework primer**, where the decision turns on a framework behaviour the reviewer may not know.
   It goes between the `.mech` and the grid rather than out here with the rest of this list, because
   it explains the mechanism the `.mech` has just stated. One per flow at most, and most flows earn
-  none; § *Framework anchors* owns that and everything else about it.
+  none; § *Framework anchors* owns that and everything else about it. **`--full` only** — at
+  `--brief` a flow keeps the pinned `a.doc` link and explains the mechanism in its own prose, per
+  § *The brief budget*.
 - **The gate chain, as a guard fork**, when the change makes two request classes take different
   routes through it. Layout from the catalogue, 2 of 4, assembled inside flow B in
   `page-template.html`, and it sits in the same slot as the chain — after the `.pipe`, before the
@@ -1290,7 +1492,9 @@ Render as `ol.begin`. Each entry carries:
 - **Where to go** — the file, the method or the flow, with its citation.
 - **Why here**, in a `span.why` — why this before the next thing, or what makes it worth judgment. A
   reason, never a restatement of the filename.
-- **What remains uncertain**, if anything, with its evidence tier and what would settle it.
+- **What remains uncertain**, if anything, with its evidence tier and what would settle it. At
+  `--brief` this folds into the `span.why` rather than standing as its own line, tier and all — the
+  tier is the load-bearing half and it survives. § *The brief budget* has the entry's 40-word cap.
 - **Which flow explains it** — a link into § 2. The entry *names* the finding and says why it
   matters; it never re-explains it, and it does not repeat the flow's citation or tier.
 
@@ -1527,8 +1731,11 @@ material sits after them and must not dilute them.
   approving, and it is § 6's most expensive item to write well. `--full` is where it lives.
 - **Test gaps are not gathered.** Each flow already carries its own in *relevant tests*; collecting
   them in one place was § 6's job, and there is no § 6.
-- **Nothing about §§ 1–3 changes**, and nothing here summarises § 2. A finding a flow explains is a
-  pointer here, in the pointer shape § 4 defines, exactly as at `--full`.
+- **Nothing about §§ 1–3 changes in kind**, and nothing here summarises § 2. A finding a flow
+  explains is a pointer here, in the pointer shape § 4 defines, exactly as at `--full`. What does
+  change across the whole page is how many words each part may spend — § *The brief budget*, which
+  caps this section's rows at 30 words and its approving items at 18, and drops three concepts from
+  the flows above without dropping anything they found.
 
 **Three things the markup has to keep, because a check reads each of them.** Every one of these is
 why the merge costs the eval harness almost nothing:

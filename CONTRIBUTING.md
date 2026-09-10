@@ -111,7 +111,7 @@ regression suites, which run in CI and take a few seconds:
 ```bash
 ruby skills/review-map/evals/checks/self-test.rb        # every golden fragment's asserted verdict
 ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner, directly
-skills/review-map/evals/checks/frozen.rb                # ~2500 cases against their recorded output
+skills/review-map/evals/checks/frozen.rb                # ~3000 cases against their recorded output
 skills/review-map/tests/run.sh                          # page-skeleton.sh and diff-render.sh
 skills/review-map/tests/self-test.sh                    # eleven deliberate breaks, each must fail it
 skills/setup-ci/tests/run.sh                            # what the generated workflow contains

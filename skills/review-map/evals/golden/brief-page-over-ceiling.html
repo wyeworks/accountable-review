@@ -1,0 +1,197 @@
+<!-- PLANTED: a finished brief page over the word ceiling. One written flow, so the ceiling
+     is 950 + 440 = 1390 visible words, and this page runs past it.
+
+     The overspend sits ENTIRELY in parts that have no per-component cap — section 1's intent
+     prose, the flow's endpoint rows, section 3's grouping and caveat notes, and the approving
+     items. That is the whole point of the fixture: it pins that the ceiling catches what the
+     caps cannot, so exactly one rule fires and no cap WARN fires beside it. The flow itself is
+     brief-flow-clean.html unchanged.
+
+     It WARNS and exits 0, like every length rule here. Graded as --page --final --level brief:
+     the ceiling is a whole-page question and a draft is mid-write by definition. -->
+<section id="changed">
+  <div class="eyebrow"><span class="lbl lbl-a">01</span><i></i></div>
+  <h2>What changed</h2>
+  <dl class="mast">
+    <dt>Pull request</dt><dd>#412 &middot; Add project archival</dd>
+    <dt>Branch</dt><dd>add-project-archival &rarr; main</dd>
+    <dt>Revision</dt><dd>a1b2c3d &rarr; 9f8e7d6</dd>
+    <dt>Author</dt><dd>rlee</dd>
+  </dl>
+  <p>This change introduces the ability for a workspace administrator to archive a project, and the intent behind it is best understood by reading what the branch does to the write path rather than by reading the description that accompanies it, because the description describes an earlier version of the work. Before this branch a project existed in exactly one state for the whole of its life, which meant that a team finishing a piece of work had no way to stop new time entries arriving against it, and the workarounds people reached for instead were renaming the project with a disused prefix or removing every member from it, both of which lose information that the reporting screens then cannot recover. What is now possible is that an administrator marks the project archived, which prevents new time entries from being created against it while preserving every entry that already exists, and what is now prevented is the creation of a time entry against a project whose archived timestamp has been set, enforced in the service object rather than in the database. The change also carries a second, smaller intent that the commits make plain and the description does not mention at all, which is that the selectable project list on the time entry screen was already filtering on a status column that this branch does not touch, and the branch's author appears to have assumed that filtering would pick archival up. It is worth setting out at some length how that assumption is visible in the branch, because the narration is where a page of this kind most easily spends words it did not need to spend, and this paragraph is an example of exactly that: the commit that adds the service object carries a message saying that archived projects will drop out of the picker, the specs added alongside it assert the guard in the service and assert nothing at all about the picker, and the query object that builds the picker is not opened by any commit on the branch. Each of those three observations is load-bearing and each is stated again, in fewer words and against a citation, inside the behaviour flow below, which is where a reader looking for the finding will actually go and where the page has decided that finding lives. Restating all three here, in a narrative register, is what pushes this section past what it needs, and the reason the ceiling exists as a whole-page rule rather than only as a set of per-component caps is that no component here is individually oversized: the intent paragraph has no mechanical cap on it, the endpoint block has none, the caveat under the reading list has none, and each of them can grow comfortably without any single warning firing while the page as a whole becomes something a reviewer with twenty minutes will not finish. The caps name a component; the ceiling names the page, and a page can be over the second while being inside every one of the first. The same is true of the reading list further down and of the block that sets out the endpoint, both of which are written here at the length a run reaches for when it is narrating rather than stating, and both of which a reader would meet as three tight sentences on a page that had been written to the budget in the first place instead of being edited down to it afterwards. Writing to the cap and cutting to the cap are not the same operation and they do not produce the same page: cutting takes whichever clause looks least essential on a second reading, which is very often the one a claim was resting on, while writing to it takes the sentence that was never needed at all. That is why the budget is stated as something to draft against rather than as a gate at the end.</p>
+  <dl class="ba">
+    <dt>Before</dt><dd>a project stayed selectable for new time entries forever</dd>
+    <dt class="now">After</dt><dd class="now">archiving it prevents new entries and preserves the historical ones <span class="tier">inferred from tests</span></dd>
+  </dl>
+  <ul class="usecases">
+    <li>A workspace admin archives a project &mdash; new time entries are prevented, historical ones preserved.</li>
+    <li>A member opens the time entry screen &mdash; archived projects should no longer be offered.</li>
+    <li>An admin re-opens an archived project &mdash; the timestamp is cleared and entries resume.</li>
+  </ul>
+</section>
+
+<section id="flow-a" style="padding-top:52px">
+  <div class="eyebrow"><span class="lbl lbl-a">Flow A</span><i></i></div>
+  <h3>Archiving a project</h3>
+
+  <div class="pipe">
+    <span class="lbl">Path of a write</span>
+    <ol>
+      <li><span class="n"><b>1</b><i></i></span><span><span class="t">Project settings screen</span><span class="s">the admin confirms the archive action in a modal that names the consequence</span></span></li>
+      <li><span class="n"><b>2</b><i></i></span><span class="t">POST /api/projects/:id/archive</span></li>
+      <li><span class="n"><b>3</b><i></i></span><span class="t">ProjectsController#archive</span></li>
+      <li><span class="n"><b>4</b><i></i></span><span class="t">Projects::Archive service object, which wraps the write in a transaction</span></li>
+      <li><span class="n"><b>5</b><i></i></span><span class="t">projects.archived_at</span></li>
+    </ol>
+  </div>
+
+    <figure class="inflow">
+      <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="archived_at crosses the boundary as null and arrives in a type that declares it non-null">
+        <text class="t-edge" x="353" y="34" text-anchor="middle">null vs. string</text>
+        <rect class="box" x="12" y="48" width="148" height="54" rx="5"/>
+        <text class="t-lbl" x="86" y="68" text-anchor="middle">SERIALIZER</text>
+        <text class="t-col" x="86" y="86" text-anchor="middle">archived_at</text>
+        <text class="t-dim" x="86" y="122" text-anchor="middle">serializer.rb:9</text>
+        <path class="edge" d="M160 75 L186 75 M180 70 L186 75 L180 80"/>
+        <rect class="box" x="190" y="48" width="148" height="54" rx="5"/>
+        <text class="t-lbl" x="264" y="68" text-anchor="middle">JSON</text>
+        <text class="t-col" x="264" y="86" text-anchor="middle">"archived_at": null</text>
+        <text class="t-dim" x="264" y="122" text-anchor="middle">nil for the unarchived</text>
+        <path class="edge-dash" d="M338 75 L364 75 M358 70 L364 75 L358 80"/>
+        <rect class="box" x="368" y="48" width="148" height="54" rx="5"/>
+        <text class="t-lbl" x="442" y="68" text-anchor="middle">TYPE</text>
+        <text class="t-col" x="442" y="86" text-anchor="middle">archivedAt: string</text>
+        <text class="t-dim" x="442" y="122" text-anchor="middle">project.ts:4, by hand</text>
+        <path class="edge" d="M516 75 L542 75 M536 70 L542 75 L536 80"/>
+        <rect class="box" x="546" y="48" width="148" height="54" rx="5"/>
+        <text class="t-lbl" x="620" y="68" text-anchor="middle">HOOK</text>
+        <text class="t-col" x="620" y="86" text-anchor="middle">useProjects()</text>
+        <text class="t-dim" x="620" y="122" text-anchor="middle">no runtime parse</text>
+        <path class="edge" d="M694 75 L720 75 M714 70 L720 75 L714 80"/>
+        <rect class="box" x="724" y="48" width="148" height="54" rx="5"/>
+        <text class="t-lbl" x="798" y="68" text-anchor="middle">COMPONENT</text>
+        <text class="t-col" x="798" y="86" text-anchor="middle">ProjectSelector</text>
+        <text class="t-dim" x="798" y="122" text-anchor="middle">never reads the field</text>
+        <text class="t-lbl" x="12" y="152">DASHED &middot; THE HOP WHERE THE TWO SIDES STOP AGREEING</text>
+      </svg></div>
+      <figcaption>The type is hand-written, so this drift appears at runtime, not at build time. Confirmed with a search for archivedAt across web/ and for archived_at across api/app/serializers.</figcaption>
+    </figure>
+
+  <div class="ep">
+    <span class="lbl">The endpoint</span>
+    <p>POST /api/projects/:id/archive takes the project identifier from the route and no body parameters at all, which is a deliberate choice by the author and one worth knowing about, because the sibling endpoints in this controller all accept a body and coerce their parameters through a strong-parameters call in a private method at the foot of the file, and this one skips that path entirely. A successful call returns the serialized project with its archived timestamp set, using the same serializer the show action uses, so the response shape is one the client already knows how to read and no new deserialization code was needed on the other side of the boundary for the success case. The error cases this branch adds are a 409 when the project is already archived and a 403 when the caller is not an administrator of the workspace that owns the project; the endpoint also inherits the 404 for a missing project, the 401 for a missing credential and the 422 that the base controller emits for a failed validation, none of which this branch touches. The side effects are that the call writes one column on one row and enqueues one notification job, that it calls no external service, and that it is not idempotent because a second call against an already archived project returns the 409 rather than succeeding quietly.</p>
+  </div>
+
+  <div class="mech">
+    <b>A timestamp, not a status</b>
+    <p>Archival is a nullable timestamp on projects, written inside the service's transaction, and every consumer decides for itself what a set value means.</p>
+  </div>
+
+  <dl class="rows">
+    <dt>Implementation</dt>
+    <dd>
+      <div class="item"><a class="cite" href="#">app/services/projects/archive.rb:12-24</a> &mdash; stamps the column and enqueues the notification inside one transaction</div>
+      <details class="excerpt excerpt--diff">
+        <summary><span class="chev">&#9656;</span> app/services/projects/archive.rb:12-24 &middot; <span class="state">Changed</span> &mdash; the guard the behaviour turns on</summary>
+        <pre><code>+      return failure(:already_archived) if project.archived_at
++      project.update!(archived_at: Time.current)</code></pre>
+      </details>
+    </dd>
+    <dt>Tests</dt>
+    <dd><div class="item"><a class="cite" href="#">spec/services/projects/archive_spec.rb:8</a> &mdash; pins the double-archive guard, and leaves the notification path unasserted</div></dd>
+    <dt>Affected, unchanged</dt>
+    <dd><div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; scopes the selectable list on status alone, so archival does not narrow it <a class="cite" href="#">app/queries/active_projects.rb:9</a> <span class="tier">from unchanged code</span></div></dd>
+    <dt>Understand</dt>
+    <dd>The column is nullable with no CHECK behind it, so archived and never-archived are the same shape to the database, and the guard above is the only thing preventing a second stamp overwriting the first one silently. <a class="cite" href="#">db/schema.rb:141</a> <span class="tier">from unchanged code</span></dd>
+    <dt>Validate</dt>
+    <dd><pre class="probe"><code>bin/rails runner 'p Projects::Archive.new(Project.first).call'</code></pre></dd>
+    <dt>Questions</dt>
+    <dd>Should an archived project's time entries stay editable, or is archival meant to freeze them?</dd>
+  </dl>
+
+  <div class="decisions">
+    <span class="lbl">Decisions to pay attention to</span>
+    <div class="decision">
+      <div class="dn">01</div>
+      <div>
+        <h4>A timestamp rather than a status enum</h4>
+        <div class="why">Keeps the migration additive and reversible <span class="cite">db/migrate/20240118_add_archived_at.rb:4</span></div>
+        <div class="trade"><span class="tag">Tradeoff</span><span>no state machine, so every reader re-derives what archived means</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="eyebrow"><span class="lbl lbl-a">03</span><i></i></div>
+  <h2>Start here</h2>
+  <p>The route below is ordered by what the change rests on rather than by where the files sit, which for this branch means the schema first and the client last, and the reason that ordering matters more than usual here is that the column this branch adds is nullable and carries no constraint, so every claim further down the list about what archived means is a claim about application code and not about the database. Read the service object twice: once for what it writes and once for what it enqueues inside the same transaction.</p>
+  <ol class="begin">
+    <li><span class="n">01</span><span class="t"><a class="path" href="#">db/migrate/20240118_add_archived_at.rb:1-8</a><span class="why">additive and reversible, and it is what every other entry on this list assumes</span></span><a class="ptr" href="#flow-a">Flow A &rarr;</a></li>
+    <li><span class="n">02</span><span class="t"><a class="path" href="#">app/services/projects/archive.rb:12-24</a><span class="why">the guard and the enqueue share a transaction, which is the decision to weigh</span></span><a class="ptr" href="#flow-a">Flow A &rarr;</a></li>
+    <li><span class="n">03</span><span class="t"><a class="path" href="#">app/queries/active_projects.rb:9</a><span class="why">not in the diff, and it is what decides whether the feature works at all <span class="tier">from unchanged code</span></span></span><a class="ptr" href="#flow-a">Flow A &rarr;</a></li>
+    <li><span class="n">04</span><span class="t"><a class="path" href="#">app/serializers/project_serializer.rb:14</a><span class="why">emits the key the client type does not declare</span></span><a class="ptr" href="#flow-a">Flow A &rarr;</a></li>
+    <li><span class="n">05</span><span class="t"><a class="path" href="#">spec/services/projects/archive_spec.rb:8</a><span class="why">read last, for what it leaves open rather than what it pins</span></span><a class="ptr" href="#flow-a">Flow A &rarr;</a></li>
+  </ol>
+  <p class="note">These are what this pass surfaced and not an exhaustive list, and the distinction is worth stating plainly rather than leaving as a caveat at the foot of the page: the explanation above is reproducible, in that a second pass over this diff would describe the same mechanisms in the same order, while the findings are a sample, in that a second pass would surface an overlapping but different set of them. Where you need assurance rather than orientation, a dedicated review pass is the tool for it, and this page is not a substitute for one.</p>
+</section>
+
+<section id="reach">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>Reach &amp; checks</h2>
+  <figure class="impact">
+    <span class="lbl">Impact paths</span>
+    <div class="ip-card">
+      <span class="ip-hd">A &middot; Archiving a project</span>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+        <ol class="ip-path">
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on status only</span></span></li>
+          <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="ip-card">
+      <span class="ip-hd">B &middot; Building a project in a spec</span>
+      <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+      <div class="ip-body">
+        <ol class="ip-path">
+          <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the service treats it as authoritative</span></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span></span></li>
+          <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Specs build a state the service forbids</b><span class="ip-d">observable behaviour</span></span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="legend"><span><i class="key-chg"></i>Changed by this PR</span><span><i class="key-aff"></i>Affected, not changed</span><span><i class="key-out"></i>Behaviour</span></div>
+    <p class="note">Out of reach of a name-based pass: a reader that reaches the column through an enum predicate.</p>
+  </figure>
+  <dl class="rows">
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/queries/active_projects.rb</a> &mdash; scopes the selectable list, and archival does not narrow it <a href="#flow-a">Flow A</a></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body"><ul class="sr-list"><li><code>rg -n 'archived' app lib</code> <span class="sr-r">the scope</span></li></ul></div>
+      </details>
+    </dd>
+  </dl>
+  <h3 class="cc-h" id="approving">Before approving</h3>
+  <span class="lbl act-group">Ask the author</span>
+  <ul class="actions">
+    <li>Should an archived project's existing time entries stay editable, or is archival intended to freeze them as well as prevent new ones, and if the intent is to freeze them then where is that meant to be enforced given that the service object only writes the column?</li>
+    <li>Was the selectable project list expected to pick archival up through the status column it already filters on, since that column is not written by this branch and the two are independent of each other?</li>
+    <li>Is the notification job meant to be enqueued inside the transaction, so that a rolled-back archive cannot notify, or was the enqueue placed there without that consequence in mind?</li>
+  </ul>
+  <span class="lbl act-group">Run</span>
+  <ul class="actions"><li><code>bundle exec rspec spec/services/projects/archive_spec.rb</code> &mdash; pins the guard</li></ul>
+</section>
+
+<details class="coverage-foot">
+  <summary><span class="chev">&#9656;</span> Coverage &middot; all 3 changed paths</summary>
+  <div class="gt gt-paths">
+    <div class="c" data-path="app/services/projects/archive.rb"><a class="path" href="#">app/services/projects/archive.rb</a></div>
+    <div class="c" data-path="db/schema.rb"><a class="path" href="#">db/schema.rb</a></div>
+    <div class="c" data-path="db/migrate/20240118_add_archived_at.rb"><a class="path" href="#">db/migrate/20240118_add_archived_at.rb</a></div>
+  </div>
+</details>

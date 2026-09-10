@@ -238,6 +238,56 @@ exit=1
 FAIL  comprehension checkpoint has 6 questions — the cap is 5, and past it they turn into a quiz that restates the page
 PASS  1 author question(s), each apparently phrased as one
 PASS  validation steps carry command markup
+## --fragment brief-field-stub.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page brief-field-stub.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment brief-field-verbose.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page brief-field-verbose.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment brief-flow-ba.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page brief-flow-ba.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment brief-flow-clean.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page brief-flow-clean.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment brief-flow-primer.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+WARN  no 'ask the author' part — legitimate only if nothing needs the author
+PASS  validation steps carry command markup
+## --page brief-flow-primer.html
+exit=0
+SKIP  no section 6 on this page (id="approving" absent)
+## --fragment brief-page-over-ceiling.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+PASS  3 author question(s), each apparently phrased as one
+PASS  validation steps carry command markup
+## --page brief-page-over-ceiling.html
+exit=0
+WARN  no comprehension checkpoint found inside 'Before approving'
+PASS  3 author question(s), each apparently phrased as one
+PASS  validation steps carry command markup
 ## --fragment diagram-clean.html
 exit=1
 WARN  no comprehension checkpoint found inside 'Before approving'

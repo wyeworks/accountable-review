@@ -120,6 +120,32 @@ diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most on
 # must not read --level. This row is what notices if it starts to.
  impact-paths       | reach-brief-uncited.html        | 0 | every path ends at exactly one observable behaviour | --level brief
  page-invariants    | approving-brief-clean.html      | 0 | data-path is only on ledger rows | --level brief
+# The word budget the brief level carries, which is the second thing --level decides and the
+# second check to read it. Two rows on the clean fragment, pinned on different PASS lines, and
+# the pair is deliberate: the caps row is what goes red if EXEMPT stops matching, because that
+# fragment's figure, figcaption, legend, .pipe spine, probe and collapsed excerpt would put it
+# over three separate caps the moment a word count starts seeing them. The floor row pins the
+# other half of the same exemption — the Validate <dd> there is nothing but a command, so a
+# floor that did not stand aside for it would fail every clean page on this rule.
+ brief-budget       | brief-flow-clean.html           | 0 | every component is inside its word cap | --level brief
+ brief-budget       | brief-flow-clean.html           | 0 | no field is compressed into its own label | --level brief
+ brief-budget       | brief-flow-primer.html          | 1 | belongs to --full | --level brief
+ brief-budget       | brief-flow-ba.html              | 1 | belongs in its .mech | --level brief
+ brief-budget       | brief-field-stub.html           | 1 | compressed into their own label | --level brief
+# Length WARNS and exits 0, both of these deliberately: a hard failure on length teaches a run
+# to drop a claim to get under a number. The ceiling row is the one that needs a whole page —
+# and its fixture overspends only where no per-component cap applies, so it pins that the
+# ceiling catches what the caps cannot rather than duplicating one of them.
+ brief-budget       | brief-field-verbose.html        | 0 | against a cap of 35 | --level brief
+# The substring is from the WARN alone. "against a ceiling of" is in the PASS line too, so a
+# fixture that drifted back under the ceiling would keep this row green — the shape of bypass
+# this file exists to catch.
+ brief-budget       | brief-page-over-ceiling.html    | 0 | over. The caps above name which part | --page @GOLD@/brief-page-over-ceiling.html --final --level brief
+# And the level gate itself. With no --level the input is graded at full, where no budget
+# exists — so this must SKIP saying plainly that nothing was measured. A silent pass here is
+# the failure this whole file exists to prevent, one level up: it would report every full page
+# as inside a budget nobody wrote for it.
+ brief-budget       | brief-flow-clean.html           | 0 | nothing measured
  page-invariants    | invariants-clean.html         | 0 | no severity chips
  page-invariants    | invariants-severity-chip.html | 1 | severity chips reintroduced
  page-invariants    | invariants-verdict.html       | 1 | verdict language found

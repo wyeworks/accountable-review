@@ -130,6 +130,28 @@ done
 assert_eq "$(count "$WORK/full" 'class="checkpoint"')" "1" "--level full keeps the comprehension checkpoint"
 assert_eq "$(count "$WORK/brief" 'class="checkpoint"')" "0" "--level brief drops the checkpoint"
 
+# The two components inside a FLOW that the brief level drops, per report-format.md § The brief
+# budget. They are gated for the reason the rail is: a comment telling a run to delete a block at
+# one level is a deletion done from prose with nothing checking it.
+#
+# Section 1 keeps its own pair at both levels, which is what makes the brief count 1 rather than 0
+# -- the level moves the page's transition block into one place, it does not remove it. A rule
+# asserting 0 here would pass on a page that had lost the before/after entirely.
+assert_eq "$(count "$WORK/full"  'class="ba"')" "3" "--level full keeps section 1's before/after pair and both flows' own"
+assert_eq "$(count "$WORK/brief" 'class="ba"')" "1" "--level brief keeps section 1's before/after pair and neither flow's"
+assert_eq "$(count "$WORK/full"  'class="primer')" "2" "--level full keeps both primer variants"
+assert_eq "$(count "$WORK/brief" 'class="primer')" "0" "--level brief drops the primer callout"
+
+# AND THE FLOW ITSELF IS UNTOUCHED BY EITHER, which is the half worth asserting: the budget caps
+# prose and removes no figure, so both assembled flows keep their .mech, their unit grid and every
+# .pipe spine at both levels. A filter that took a flow's drawing with the primer would satisfy
+# every rule above.
+for lvl in brief full; do
+  assert_eq "$(count "$WORK/$lvl" 'class="mech"')" "2" "--level $lvl keeps both assembled flows' .mech"
+  assert_eq "$(count "$WORK/$lvl" 'class="pipe"')" "3" "--level $lvl keeps every .pipe spine"
+  assert_eq "$(count "$WORK/$lvl" '<figure class="inflow">')" "2" "--level $lvl keeps both flow drawings"
+done
+
 # THE MERGED SECTION KEEPS THE ANCHORS. This is markup, so it breaks by accident and reads as
 # verified when broken -- before-approving.rb prints a SKIP with the anchor gone.
 assert_eq "$(grep -c '^ *<section id="reach"' "$WORK/brief" || true)" "1" "--level brief keeps exactly one <section id=\"reach\">"

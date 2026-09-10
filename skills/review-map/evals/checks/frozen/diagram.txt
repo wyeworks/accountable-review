@@ -172,6 +172,114 @@ SKIP  no diagrams in this input
 ## --page approving-six-questions.html
 exit=0
 SKIP  no diagrams in this input
+## --fragment brief-field-stub.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page brief-field-stub.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment brief-field-verbose.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page brief-field-verbose.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment brief-flow-ba.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page brief-flow-ba.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment brief-flow-clean.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page brief-flow-clean.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment brief-flow-primer.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page brief-flow-primer.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
+## --fragment brief-page-over-ceiling.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+SKIP  diagram budget: it is a per-section count, so a fragment cannot settle it
+## --page brief-page-over-ceiling.html
+exit=0
+PASS  1 diagram(s) found
+PASS  diagram 1 uses only template classes
+PASS  diagram 1 takes every colour from a class
+PASS  diagram 1 has no placeholders left
+PASS  diagram 1 draws inside its viewBox
+PASS  diagram 1 labels fit their boxes
+PASS  diagram budget respected in every section
 ## --fragment diagram-clean.html
 exit=0
 PASS  1 diagram(s) found

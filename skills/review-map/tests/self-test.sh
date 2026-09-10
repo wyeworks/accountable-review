@@ -142,6 +142,22 @@ awk '/SKELETON:ONLY:level=brief:START/ { b = 1 }
      { print }' "$TEMPLATE" > "$WORK/no-brief-rail.html"
 case_runs_red "the brief rail entry is gone, so --brief must derive its rail again" "$WORK/no-brief-rail.html" "$SKELETON"
 
+# 14. The primer's gate goes, so a --brief run is handed the callout again and is back to being
+#     told in a comment not to write one. The page still renders and every other level rule still
+#     passes -- which is the whole reason this case exists rather than a reading of the template.
+awk '/SKELETON:ONLY:level=full:START/ && !seen && ++hits == 2 { seen = 1; next }
+     { print }' "$TEMPLATE" > "$WORK/ungated-primer.html"
+case_runs_red "the primer is no longer gated to --full, so a brief run is handed it" "$WORK/ungated-primer.html" "$SKELETON"
+
+# 15. And the other direction, which is the one that looks like tidying: the gate is widened over
+#     the flow's figure, so --brief loses a drawing. The budget caps prose and removes no figure,
+#     so a filter that takes one has broken the invariant while making the page shorter -- exactly
+#     the compression this level is most likely to be wrong about.
+awk '/<figure class="inflow">/ && !done { print "      <!-- SKELETON:ONLY:level=full:START -->"; f = 1 }
+     f && /<\/figure>/ && !done { print; print "      <!-- SKELETON:ONLY:level=full:END -->"; f = 0; done = 1; next }
+     { print }' "$TEMPLATE" > "$WORK/gated-figure.html"
+case_runs_red "a flow's drawing is gated out of --brief, so a shorter page loses a figure" "$WORK/gated-figure.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
 # All three are script mutations for the reason the first two cases above are: the repository

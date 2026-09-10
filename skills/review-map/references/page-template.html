@@ -1404,10 +1404,19 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 
       <p class="lede">{{THE_MECHANISM_AND_WHY_THIS_IS_ONE_FLOW}}</p>
 
+      <!-- SKELETON:ONLY:level=full:START -->
+      <!-- A FLOW'S OWN before/after pair, at --full. At --brief section 1 holds the
+           page's one transition block and the flow states its own inside the .mech,
+           so this region is not handed to a run at that level at all —
+           report-format.md § The brief budget. Gated rather than commented for the
+           reason the rail is: a note saying "delete this at --brief" is a deletion
+           done from prose with nothing checking it. checks/brief-budget.rb still
+           fails one on a brief page, for the run that writes it from memory. -->
       <dl class="ba">
         <dt>Before</dt><dd>{{WHAT_WAS_POSSIBLE_OR_WENT_WRONG}}</dd>
         <dt class="now">After</dt><dd class="now">{{WHAT_IS_POSSIBLE_NOW_OR_IS_NOW_PREVENTED}}</dd>
       </dl>
+      <!-- SKELETON:ONLY:level=full:END -->
 
       <div class="pipe">
         <span class="lbl">{{WHAT_THIS_CHAIN_IS}}</span>
@@ -1527,6 +1536,7 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
         <p>{{WHY_THIS_EXISTS}}</p>
       </div>
 
+      <!-- SKELETON:ONLY:level=full:START -->
       <!-- ASSEMBLED IN PLACE, and this is the placement: after the .mech, before
            the grid. The reader meets the unfamiliar API immediately after the
            mechanism that uses it and before the fields that cite it.
@@ -1546,7 +1556,18 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 
            Note what it does NOT contain: no .mech, no dl.rows, no <dt>. That is
            deliberate, and it is what keeps a flow with a primer from reading as a
-           flattened flow to checks/behaviour-flows.sh. -->
+           flattened flow to checks/behaviour-flows.sh.
+
+           --full ONLY, and this is the second of the callout's two gates, which is why
+           this whole region — both variants and everything above — is dropped at
+           --brief. At that level no flow earns a primer: keep the pinned a.doc link it
+           escalates from and explain the mechanism in the flow's own prose against its
+           file:line. report-format.md § The brief budget owns that and § The primer
+           callout states it beside the closed-catalogue gate. Both gates work the same
+           way, and it is worth knowing why neither needs a check of its own: the skill
+           emits no primer, so there is no primer to grade, rails-anchors.rb still must
+           not read the level, and checks/brief-budget.rb fails one only for the run
+           that writes a primer from memory rather than from this file. -->
       <aside class="primer">
         <div class="pr-head">
           <!-- The official logotype, inlined: an external <img> is blocked by the
@@ -1675,6 +1696,7 @@ authorize @post, :update?
           </div>
         </div>
       </aside>
+      <!-- SKELETON:ONLY:level=full:END -->
 
       <!-- The seven fields, in this order, labels VERBATIM from report-format.md.
            Omit a field rather than fake it; a unit with nothing non-obvious to put
@@ -1859,10 +1881,12 @@ end)</pre>
 
       <p class="lede">{{THE_MECHANISM_AND_WHY_THIS_IS_ONE_FLOW}}</p>
 
+      <!-- SKELETON:ONLY:level=full:START -->
       <dl class="ba">
         <dt>Before</dt><dd>{{WHO_COULD_REACH_IT_AND_WHO_COULD_NOT}}</dd>
         <dt class="now">After</dt><dd class="now">{{WHO_CAN_REACH_IT_NOW}}</dd>
       </dl>
+      <!-- SKELETON:ONLY:level=full:END -->
 
       <!-- The PATH, as a .pipe: the gate chain in the order it runs. Unbounded in
            length, no finding on any single step — which is exactly why it stays a

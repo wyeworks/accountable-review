@@ -79,6 +79,15 @@ sections, `--brief` compresses four kinds of material into one section and its c
 is a tail that has quietly become a list of four things with the impact paths as one item. A wording
 change judged at one level says little about the other.
 
+**`--brief` now has a second characteristic defect, and it is the one to look for first**, because it
+is the price of the word budget: a page that came in under the numbers by losing something rather than
+by tightening it. It arrives in three shapes — a field compressed to a bare citation or a two-word
+label (which `brief-budget.rb`'s floor fails, so check the WARNs and the omissions rather than the
+FAILs), a finding quietly not carried at all, and a flow whose figure or `--diff` excerpt went missing
+because they looked like length. Read a brief page against a `--full` page of the same fixture: the
+findings should match and only the prose should differ. If a page is short and *also* thinner, the
+budget did the wrong thing and the numbers are what to argue with, never the findings.
+
 `skills/review-map/evals/` is where that judging happens, at three scopes.
 `fixtures/make-fixtures.sh` builds four repositories whose interesting findings sit deliberately
 *outside* the diff, so there is a written right answer to check against. A **page** case is a whole
@@ -142,7 +151,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the detail levels and which sections each produces, what triggers each section, the review unit, the evidence tiers, source excerpts, **impact paths**, the canonical-home rule, depth rules and the deep-link ladder |
+| `references/report-format.md` | Page structure — the detail levels and which sections each produces, **the brief level's word budget**, what triggers each section, the review unit, the evidence tiers, source excerpts, **impact paths**, the canonical-home rule, depth rules and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
@@ -157,7 +166,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git rather than of a fixture |
 | `bin/evals` | One command per eval scenario — `offline`, `section`, `page`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
-| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `reach.rb` grades § 4's composition and `impact-paths.rb` the figure inside it, and neither repeats the other. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the second check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests; `checks/frozen/` holds every case's exact output for thirteen of the fourteen checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
+| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `reach.rb` grades § 4's composition and `impact-paths.rb` the figure inside it, and neither repeats the other. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the second check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests; `brief-budget.rb` is the default level's word budget and the second check to read `--level`; it splits its verdicts on purpose — shape FAILs, length WARNs, the field floor FAILs — and exempts every figure, command and collapsed block from its count, so a page is never over budget by a diagram or a quotation. `checks/frozen/` holds every case's exact output for fourteen of the fifteen checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
@@ -191,13 +200,42 @@ Editing one of these means checking the others still agree.
   what it produces — **and own it alone.** Every other file points at them.
 
   Two rules make the level cheap instead of a second product. **It changes how many sections there
-  are, never what a section teaches**: §§ 1–3 are byte-for-byte the same spec at both levels, and a
-  run reading a shorter page as licence to explain less has misread the option. And **the merged
-  section keeps the anchors**: `id="reach"` on the `<section>`, `id="approving"` on its last `<h3>`,
-  the `Affected, not changed` `<dt>` label verbatim, and `<ul>` rather than
-  `<ol class="begin">` in the approving part. That is why exactly one check knows the level —
-  `evals/checks/before-approving.rb`, for the checkpoint — while `reach.rb`, `impact-paths.rb`,
-  `searches.rb` and `page-invariants.rb` read the merged shape unchanged.
+  are and how many words they may spend, never what a section teaches**: a claim said in fewer words
+  is not a claim taught less, and a run reading a shorter page as licence to explain less has misread
+  the option. And **the merged section keeps the anchors**: `id="reach"` on the `<section>`,
+  `id="approving"` on its last `<h3>`, the `Affected, not changed` `<dt>` label verbatim, and `<ul>`
+  rather than `<ol class="begin">` in the approving part. That is why exactly two checks know the
+  level — `evals/checks/before-approving.rb`, for the checkpoint, and `brief-budget.rb`, for the
+  words — while `reach.rb`, `impact-paths.rb`, `searches.rb` and `page-invariants.rb` read the merged
+  shape unchanged.
+
+  **That first rule is finer than it used to be, and the older wording is worth knowing because it
+  cost something.** It said §§ 1–3 were *byte-for-byte the same spec at both levels*, which was true
+  and left the default page uncosted: merging four sections bought 35% fewer words, all of it out of
+  the tail, while § 2 — the bulk, on the page almost every reader gets — ran at full length. So
+  `--brief` now carries a **word budget**, owned by `report-format.md` § *The brief budget* alone:
+  950 visible words plus 440 per behaviour flow, per-component caps, and three concepts that belong
+  to `--full` (the primer callout, a flow's own `dl.ba`, the endpoint's inventory of untouched
+  errors). It caps prose and nothing else. No finding, no citation, no evidence tier, no field a flow
+  has material for and **no figure** comes out for the level's sake — every drawing is the same
+  drawing at the same size from the same catalogue, and every `<svg>`, `figcaption`, `.legend`,
+  `.pipe` label and `.impact` box is exempt from the count by name, so a page can never be over
+  budget by a diagram.
+
+  **The dangerous half of a budget is the compression that deletes rather than tightens**, which is
+  why `brief-budget.rb` splits its verdicts: shape FAILs, length WARNs, and the floor FAILs. A hard
+  failure on length would teach a run to drop a claim to get under a number — worse than the long
+  page — and the floor is the counterweight: a `<dd>` under four words is a deleted field with the
+  `<dt>` left behind, which in the 132px gutter reads exactly like a filled one. Omitting the field
+  is honest; stubbing it is not. What no script settles is whether the half that came out was the
+  half nobody needed: a page can sit inside every number and have spent its words on the wrong
+  sentences, or have got under the ceiling by losing a finding. `evals/cases/brief-flows.json` and
+  page case 7 in `evals.json` are where that is asked, and case 7 asks it as a comparison against
+  case 2's page over the same fixture.
+
+  The ceiling's numbers are a **first calibration**, derived from the component budgets rather than
+  measured on published pages, and `report-format.md` says so of itself. The way to move them is
+  three runs and a number that came out of a page, not an argument.
 
   The `Changed` label used to be on that list, and it was wrong twice over. `searches.rb` treats a
   `Changed` `<dt>` only as a scope *reset*, and in the template's order it preceded `Affected`, so it
@@ -219,7 +257,24 @@ Editing one of these means checking the others still agree.
   the default level. `tests/run.sh` counts the entries per level and `self-test.sh` breaks the
   brief entry to prove the count fires.
 
-  `--brief` is the default, so it is what almost every real page will be. Judge it first.
+  **The word budget is the other thing that level flag now carries into a run**, and the two are
+  worth reading together: `--markup --level` decides which markup a run is handed, and
+  § *The brief budget* decides how many words it may spend filling it in. Neither is a licence for
+  the other — a shorter rail is not a thinner page.
+
+  **Two of the budget's three dropped concepts ride on that same filter rather than on a comment**,
+  which is the rail's lesson applied twice more: a flow's own `dl.ba` and the `aside.primer` sit in
+  `SKELETON:ONLY:level=full` regions, so a brief run is handed neither. The first version of the
+  budget marked them with a comment saying *--full ONLY*, which is exactly the shape the rail had
+  just been rescued from. `tests/run.sh` counts both per level, and it also counts what must
+  **not** move — each assembled flow's `.mech`, its `.pipe` and its drawing, at both levels —
+  because a filter that took a flow's figure along with the primer would satisfy every other rule
+  and make the page shorter by losing a diagram. `self-test.sh` breaks the gate in both directions
+  for that reason. The endpoint's error inventory is the third concept and cannot be gated: it is a
+  sentence inside a field rather than a block, so it stays a rule in the reference.
+
+  `--brief` is the default, so it is what almost every real page will be — and now the only level
+  with a budget on it. Judge it first.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
   Rails (`Gemfile`, `config/application.rb`) or Elixir (`mix.exs`) and **names** one lens file and
   one catalogue. Both roots, or neither, are handled explicitly — ask in the first case, degrade
@@ -355,10 +410,15 @@ Editing one of these means checking the others still agree.
   flattens the whole aside into one block, which stops it both omitting its own citation and borrowing
   the one above it.
 
-  Two things worth knowing before editing. The anchors are **level-independent** — they live in fields
-  `--brief` leaves alone, and a primer lives in a flow, which §§ 1–3 render identically at both levels
-  — so `rails-anchors.rb` must not read `LEVEL`, and `before-approving.rb` stays the only check that
-  knows the level. And the link and the probe are built from **existing** tokens on purpose: `a.doc`
+  Two things worth knowing before editing. The link and the probe are **level-independent** — they
+  live in fields `--brief` leaves alone — while the **primer is `--full` only**, gated out of the
+  markup half by `page-skeleton.sh --markup --level brief`, and the two facts together are why
+  `rails-anchors.rb` must still not read `LEVEL`: the level is enforced by a run never being handed
+  the component, and a page with no primer has nothing for that check's primer rules to grade.
+  Teaching it the level would be adding a flag to say what an empty match already says, and it would
+  be the third check to know the level where two is the whole set (`before-approving.rb` for the
+  checkpoint, `brief-budget.rb` for the words). And the link and the probe are built from **existing**
+  tokens on purpose: `a.doc`
   and `pre.probe` introduce no colour. The primer breaks that, knowingly, for exactly one token:
   `--rails`, declared on bare `:root` and in **both** dark blocks, with `page-invariants.rb` § 6
   counting it by name — because nothing on the page depends on that colour to be readable, so a half
@@ -549,9 +609,11 @@ Editing one of these means checking the others still agree.
   the 0.9% as though it settled the cost question is the mistake this paragraph exists to prevent,
   and it is the one the first version of it made.
 
-  The level is not where the budget goes: `--brief` bought 4.6% of wall clock
-  for 35% fewer words, because the time is in step 5's consumer tracing rather than in writing
-  sections. **Effort decides whether the page is right; the level decides how long it is.** Effort produces **no section, no
+  The level is not where the *time* goes: `--brief` bought 4.6% of wall clock for 35% fewer words,
+  because the time is in step 5's consumer tracing rather than in writing sections. The word budget
+  does not change that arithmetic — it takes more words out of the same 4.6%, so a shorter page is
+  still not a faster run, and reaching for `--brief` to save minutes is reaching for the wrong axis.
+  **Effort decides whether the page is right; the level decides how long it is.** Effort produces **no section, no
   marker, no chip and no sentence**: two pages of the same target at the two efforts differ in their
   claims, never in their shape, and a reader cannot tell which produced the one in front of them.
 
@@ -981,8 +1043,11 @@ Editing one of these means checking the others still agree.
   there — so its merged section holds the `.impact` panel and nothing that could compete for the
   budget, and `diagram.rb`'s per-`<section>` count needs no level awareness. What it must not become is
   a reason to skip the one figure a *flow* earns — which is the boundary chain or the guard fork, and
-  which a `--brief` page carries where it carries no other. Both § 2 kinds are level-independent, like
-  the primer, because §§ 1–3 are byte-for-byte the same spec at both levels.
+  which a `--brief` page carries where it carries no other. Both § 2 kinds are level-independent
+  because §§ 1–3 have the same spec at both levels and the budget exempts every figure from its
+  count. **The primer was the companion example in this sentence and is no longer one** — it is
+  `--full` only now — so the two components sharing a flow's slot either side of the `.mech` are
+  governed differently, and that asymmetry is deliberate rather than an oversight to tidy up.
 
   The reason this is an invariant rather than a nicety: a diagram is the one component with no
   generator behind it, so a layout derived per run spends the run's attention on geometry instead of

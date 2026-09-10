@@ -58,15 +58,25 @@ unchanged and the last four are merged into one — see *Detail levels* below:
 **`--brief`**, the default, merges the tail of the page — what the change reaches, cross-cutting
 consequences, before approving, coverage — into **one** section, *Reach & checks*, built around the
 impact paths, with the questions and commands a reviewer acts on attached. Four sections instead of
-seven.
+seven, and about half the prose: the level carries a word budget, roughly 950 words plus 440 for each
+behaviour flow.
 
-**`--full`** writes all seven.
+**`--full`** writes all seven, at whatever length the change earns.
 
-What `--brief` does **not** do is thin out the first three sections. The behaviour flows are the
+What `--brief` does **not** do is thin out what those sections teach. The behaviour flows are the
 product, and a level that summarised them would be selling the thing the page exists for — so §§ 1–3
-are identical at both levels, same depth, same excerpts, same rules. What it declines to spend is
-four section shells on material that is often one screen: it merges, it drops the coverage ledger's
-attention and grouping columns, and it drops the comprehension checkpoint. Every changed file still
+exist at both levels with the same depth rules, the same excerpts and the same review unit, and the
+budget bounds how a claim is written rather than whether it is there. Nothing is dropped to make the
+page fit: every finding, every citation, every evidence tier, every field a flow has material for and
+**every diagram** is the same at both levels, drawn at the same size from the same catalogue. What it
+does spend less on is prose — a mechanism stated rather than narrated, a field's claim plus its clause
+rather than a paragraph.
+
+Three things come out of the page entirely at this level, and none of them is a finding: the framework
+primer callout (the pinned documentation link it escalates from stays), a flow's own before/after
+block (§ 1 carries the change's), and the endpoint's inventory of error cases the diff does not touch
+(every error it adds, moves or removes is still named). It also merges, drops the coverage ledger's
+attention and grouping columns, and drops the comprehension checkpoint. Every changed file still
 appears, and the completeness check still runs, at both levels.
 
 Reach for `--full` on a diff you are going to live inside for an hour — a migration, a change

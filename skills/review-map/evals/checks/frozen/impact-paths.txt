@@ -280,6 +280,78 @@ SKIP  no .impact panel in this input — reach.rb is what reports a section 4 mi
 ## --page approving-six-questions.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment brief-field-stub.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page brief-field-stub.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment brief-field-verbose.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page brief-field-verbose.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment brief-flow-ba.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page brief-flow-ba.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment brief-flow-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page brief-flow-clean.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment brief-flow-primer.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --page brief-flow-primer.html
+exit=0
+SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one
+## --fragment brief-page-over-ceiling.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page brief-page-over-ceiling.html
+exit=0
+PASS  one impact panel
+PASS  2 impact paths, within the 2-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  no citations inside the panel
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
 ## --fragment diagram-clean.html
 exit=0
 SKIP  no .impact panel in this input — reach.rb is what reports a section 4 missing one

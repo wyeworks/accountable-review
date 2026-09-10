@@ -1,0 +1,38 @@
+{
+  "section": "brief-flows",
+  "of": "report-format.md § The brief budget, § Detail levels, § Section 2",
+  "produced_by": "drivers/brief-flows.md",
+  "scope": "behaviour-flows",
+  "level": "brief",
+  "notes": "Section 2 written to the default level's word budget. The mechanical half of the budget is checks/brief-budget.rb, which this scope now runs: the caps, the field floor, and the two concepts the level drops. What it cannot settle is the only question that matters about a compression — whether the half that came out was the half nobody needed. A page can sit inside every number in that check and have spent its words on the wrong sentences, and it can sit inside them by having quietly dropped a finding, which the check reads as a short field passing its cap rather than as a loss. So these expectations are deliberately paired: each one names something that must still be there at 440 words a flow, rather than naming something that must be shorter. Read them against cases/behaviour-flows.json, which is the same section at --full over the same fixtures — the two together are what says whether the budget cost teaching or only prose. Six judged expectations per case, for the reason that file gives.",
+  "cases": [
+    {
+      "id": "brief-flows/rails-only-small",
+      "fixture": "rails-only-small",
+      "check": "check.rb --fragment <out> --scope behaviour-flows --level brief --expect 'active_projects'",
+      "expected_output": "The same flows the full level produces over this diff, written to the budget: each .mech at most 45 words, each field at most 35 with Understand at 60, no aside.primer, no dl.ba inside a flow, and every flow still showing the hunk its behaviour turns on. app/queries/active_projects.rb is still found and still explained in the flow that owns it, not compressed to a bare citation. The nullable column with no CHECK behind it is still in Understand.",
+      "expectations": [
+        "Nothing the full level finds is missing: active_projects.rb is named and explained in the flow that owns it, with the clause on why archival does not narrow the selectable list, and the slug validation with no unique index behind it is still stated as an application invariant rather than a database one",
+        "The compression is in the writing and not in the material. Every field the flow has material for is present, each carries its claim plus the clause the claim rests on, and none is reduced to a citation or a label with two words after it — the honest move for a field with nothing to say is to omit it",
+        "No flow carries an aside.primer, and where a framework behaviour is load-bearing the flow explains the mechanism in its own prose against a file:line and keeps the pinned a.doc link the primer would have escalated from. The link is what survives; the lesson is what does not",
+        "No flow carries a dl.ba pair. Where a flow's transition matters it is stated inside the .mech, in the sentence about the mechanism, rather than as a second before/after block after section 1's",
+        "Every flow still shows the hunk its behaviour turns on as a --diff excerpt. The budget rations prose and the excerpt floor is not prose: a flow that answered the caps by dropping its hunk has compressed away the one thing section 2 is read before the diff for",
+        "The prose that came out was prose nobody needed — no sentence restates what the .pipe above it already shows, no field re-explains what a sibling field established, and no flow narrates its own drafting or the history of a correction"
+      ]
+    },
+    {
+      "id": "brief-flows/monorepo-contract",
+      "fixture": "monorepo-contract",
+      "check": "check.rb --fragment <out> --scope behaviour-flows --level brief --expect 'archivedAt'",
+      "expected_output": "The boundary-crossing flow at the budget. The chain is drawn exactly as it is at --full — same catalogue layout, same stop grid, the dashed hop on the JSON→TYPE crossing, the figcaption carrying what was searched — because no figure is counted against the budget or trimmed by it. The nullable/non-null mismatch, the unhandled 422 and selectableProjects are all still here.",
+      "expectations": [
+        "The boundary chain is drawn, at full size, from the catalogue layout, with the mismatch marked on the hop where the two sides stop agreeing. The budget exempts every svg, figcaption, legend, .pipe label and .impact box, so a shorter page is never a page with a smaller or absent figure",
+        "The figcaption still carries what was searched to confirm the hop, at the length that takes. It is not a component the caps reach, and shortening it is how the searches behind a figure become unrecorded",
+        "All three of the findings this fixture plants survive: archived_at emitted as null against a type declaring archivedAt non-null, the 422 nothing in web/ handles, and selectableProjects filtering the list without knowing about archival. Each is explained once, in the flow that owns it",
+        "The client half is still traced. A flow that stopped at the API boundary has not compressed, it has dropped half the contract — and at this level that is the cheapest-looking cut available",
+        "Fields are at their caps rather than over or hollowed out: the mismatch's Understand field uses the room the level gives it (60 words) because it is the flow's load-bearing claim, while the fields around it sit near 35",
+        "No sentence grades the change, and nothing on the fragment says it was written to a budget, checked, verified or shortened. The level is invisible on the page for the same reason effort is"
+      ]
+    }
+  ]
+}
