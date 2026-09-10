@@ -523,8 +523,21 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 
    A row is a command and a result clause, never a paragraph. The block was a single
    run-on div and real pages filled it with three-sentence explanations of entries the
-   reader had just read; the grid is what makes a long one scannable and a verbose one
-   look wrong. */
+   reader had just read; the two-part row is what makes a long one scannable and a
+   verbose one look wrong.
+
+   The row WRAPS, it is not a two-column grid, and the difference is the whole reason
+   this reads. A grep with two --include flags is 70 monospace characters, and as
+   `minmax(0, max-content) 1fr` that command took the whole width while the clause
+   column collapsed to its own min-content: a six-line row reading one word per line,
+   beside a command that had wrapped anyway. So the pair is a flex line instead. A
+   short command keeps its clause alongside; a long one pushes the clause onto its own
+   full-width line, which is the stacked form arriving per row rather than at a
+   breakpoint the content cannot see. Two things then say which command a dropped
+   clause belongs to, and both are load-bearing because nothing else does: a hanging
+   indent (16px of padding on the row, pulled back off the command) and a row gap of
+   11px against the 2px between a command and its own clause. Take either away and a
+   clause on its own line reads as the start of the next search. */
 details.searched { border: 1px solid var(--rule-soft); background: var(--surface-3); margin: 12px 0; }
 details.searched > summary { display: flex; gap: 10px; align-items: baseline; padding: 10px 14px; cursor: pointer; list-style: none; font-size: 13.5px; color: var(--muted); }
 details.searched > summary::-webkit-details-marker { display: none; }
@@ -532,12 +545,11 @@ details.searched > summary::marker { content: ""; }
 .searched .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
 details.searched[open] .chev { transform: rotate(90deg); }
 .searched .sr-body { padding: 0 14px 12px; border-top: 1px solid var(--rule-soft); }
-.searched .sr-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 7px; }
-.searched .sr-list > li { display: grid; grid-template-columns: minmax(0, max-content) 1fr; gap: 2px 10px; align-items: baseline; }
-.searched .sr-list code { font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
-.searched .sr-r { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.searched .sr-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 11px; }
+.searched .sr-list > li { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; padding-left: 16px; }
+.searched .sr-list code { min-width: 0; margin-left: -16px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.searched .sr-r { flex: 1 1 24ch; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .searched .sr-limit { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 72ch; }
-@media (max-width: 640px) { .searched .sr-list > li { grid-template-columns: 1fr; } }
 
 /* ============================================================
    Framework anchors — a documentation link, a runtime probe, and
