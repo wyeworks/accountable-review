@@ -1,5 +1,9 @@
 # accountable-review 🧭
 
+> [!NOTE]
+> **Beta — early stages.** This is still under active development, and things may change or
+> break between commits. We plan to have a ready-to-use version in the coming days.
+
 > **AI-assisted code review for teams that want to move faster with coding agents without losing control of their codebase.**
 
 `accountable-review` turns a pull request into a **Review Map**: a published HTML page that guides a
@@ -11,7 +15,6 @@ codebase, with or without a separate client such as Next.js; and **`setup-ci`**,
 one to be produced automatically on every review-ready pull request.
 
 Built by **WyeWorks**.
-Rails-first. Open source. A [Claude Code](https://claude.com/claude-code) plugin.
 
 ---
 
@@ -277,30 +280,25 @@ Our goal is simple:
 
 ### Claude Code
 
-Inside Claude Code — register the marketplace, then install the plugin:
-
-```text
-/plugin marketplace add wyeworks/claude-plugins
-/plugin install accountable-review@wyeworks
-```
-
-Or non-interactively, from a terminal:
+While this is in beta, point Claude Code at a checkout. Clone the repository:
 
 ```bash
-claude plugin marketplace add wyeworks/claude-plugins
-claude plugin install accountable-review@wyeworks
+git clone https://github.com/wyeworks/accountable-review.git
 ```
 
-For a team that wants it enabled for everyone working on a repository, install at project scope so
-the plugin is declared in the repo's settings rather than your own:
+Then start Claude Code from the repository you want to review, passing the checkout with
+`--plugin-dir`:
 
 ```bash
-claude plugin marketplace add wyeworks/claude-plugins --scope project
-claude plugin install accountable-review@wyeworks --scope project
+cd /path/to/your/app
+claude --plugin-dir /path/to/accountable-review
 ```
 
-Scopes are `user` (default, every project), `project` (checked in, shared with collaborators), and
-`local` (this machine, this project, uncommitted).
+The skills are available as `/accountable-review:review-map` and `/accountable-review:setup-ci` for
+that session. Nothing is installed, so `git pull` in the checkout is how you update.
+
+Installation from the Claude Code plugin marketplace — one `/plugin install`, no checkout to keep
+around — is coming soon.
 
 ### Codex
 
