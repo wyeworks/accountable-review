@@ -94,9 +94,123 @@ else
   bad "the markup half still carries the assembled flow a run reads"
 fi
 
+# ---------------------------------------------------------------- the level filter
+# Sections 4 to 7 and the merged brief section are two renderings of the same tail, and so is
+# the rail below 03. --level hands a run one of each instead of both. Bare --markup is still
+# every byte -- the partition above is that assertion, and it is why these rows can be about
+# the filter alone.
+"$SKELETON" --template "$TEMPLATE" --markup --level brief > "$WORK/brief"
+"$SKELETON" --template "$TEMPLATE" --markup --level full  > "$WORK/full"
+
+# SUBTRACTIVE BY CONSTRUCTION, stated as "no line was added". Comparing against a second
+# extraction would test the script against its own awk, which is the oracle problem this file
+# opens with; "the filter cannot invent a line" needs no oracle.
+for lvl in brief full; do
+  added=$(diff "$WORK/markup" "$WORK/$lvl" | grep -c '^>' || true)
+  assert_eq "$added" "0" "--level $lvl removes lines and never adds one"
+done
+
+# The carriers, one per level. THE COMPLETENESS INVARIANT HAS NO LEVEL -- every path in the diff
+# appears in the page at both -- so what a level changes is only which carrier holds them, and a
+# level that dropped both would produce a page that may have lost a file.
+assert_eq "$(count "$WORK/brief" 'class="coverage-foot"')" "1" "--level brief keeps the collapsed coverage foot"
+assert_eq "$(count "$WORK/brief" 'class="gt gt-paths"')"   "1" "--level brief keeps the foot's data-path carrier"
+assert_eq "$(count "$WORK/full"  'class="coverage-foot"')" "0" "--level full drops the coverage foot"
+assert_eq "$(count "$WORK/full"  'gt-paths')"              "0" "--level full drops the foot's carrier"
+assert_eq "$(count "$WORK/full"  'class="gt gt-ledger"')"  "1" "--level full keeps section 7's classified ledger"
+assert_eq "$(count "$WORK/brief" 'gt-ledger')"             "0" "--level brief drops the classified ledger"
+
+# The four --full section shells, and their absence at --brief. ANCHORED AT LINE START on
+# purpose: the brief tail's own comment names the sections it must not contain, so a rule that
+# matched anywhere on the line would read that disclaimer as the defect it warns about.
+for sec in crosscutting approving coverage; do
+  assert_eq "$(grep -c "^ *<section id=\"$sec\"" "$WORK/full"  || true)" "1" "--level full keeps <section id=\"$sec\">"
+  assert_eq "$(grep -c "^ *<section id=\"$sec\"" "$WORK/brief" || true)" "0" "--level brief has no <section id=\"$sec\">"
+done
+assert_eq "$(count "$WORK/full" 'class="checkpoint"')" "1" "--level full keeps the comprehension checkpoint"
+assert_eq "$(count "$WORK/brief" 'class="checkpoint"')" "0" "--level brief drops the checkpoint"
+
+# The two components inside a FLOW that the brief level drops, per report-format.md § The brief
+# budget. They are gated for the reason the rail is: a comment telling a run to delete a block at
+# one level is a deletion done from prose with nothing checking it.
+#
+# Section 1 keeps its own pair at both levels, which is what makes the brief count 1 rather than 0
+# -- the level moves the page's transition block into one place, it does not remove it. A rule
+# asserting 0 here would pass on a page that had lost the before/after entirely.
+assert_eq "$(count "$WORK/full"  'class="ba"')" "3" "--level full keeps section 1's before/after pair and both flows' own"
+assert_eq "$(count "$WORK/brief" 'class="ba"')" "1" "--level brief keeps section 1's before/after pair and neither flow's"
+assert_eq "$(count "$WORK/full"  'class="primer')" "2" "--level full keeps both primer variants"
+assert_eq "$(count "$WORK/brief" 'class="primer')" "0" "--level brief drops the primer callout"
+
+# AND THE FLOW ITSELF IS UNTOUCHED BY EITHER, which is the half worth asserting: the budget caps
+# prose and removes no figure, so both assembled flows keep their .mech, their unit grid and every
+# .pipe spine at both levels. A filter that took a flow's drawing with the primer would satisfy
+# every rule above.
+for lvl in brief full; do
+  assert_eq "$(count "$WORK/$lvl" 'class="mech"')" "2" "--level $lvl keeps both assembled flows' .mech"
+  assert_eq "$(count "$WORK/$lvl" 'class="pipe"')" "3" "--level $lvl keeps every .pipe spine"
+  assert_eq "$(count "$WORK/$lvl" '<figure class="inflow">')" "2" "--level $lvl keeps both flow drawings"
+done
+
+# THE MERGED SECTION KEEPS THE ANCHORS. This is markup, so it breaks by accident and reads as
+# verified when broken -- before-approving.rb prints a SKIP with the anchor gone.
+assert_eq "$(grep -c '^ *<section id="reach"' "$WORK/brief" || true)" "1" "--level brief keeps exactly one <section id=\"reach\">"
+assert_eq "$(grep -c '^ *<section id="reach"' "$WORK/full"  || true)" "1" "--level full keeps exactly one <section id=\"reach\">"
+assert_eq "$(count "$WORK/brief" 'class="cc-h" id="crosscutting"')" "1" "--level brief keeps the crosscutting part as an h3"
+assert_eq "$(count "$WORK/brief" 'class="cc-h" id="approving"')"    "1" "--level brief keeps the approving part as an h3"
+
+# The rail is ASSEMBLED at both shapes, never derived. It used to ship in the seven-entry --full
+# form with a comment telling a --brief run to cut it to four and renumber, which is a
+# transformation performed from prose that nothing ever checked.
+assert_eq "$(count "$WORK/brief" 'class="rail-links"')" "1" "--level brief has exactly one rail"
+assert_eq "$(count "$WORK/full"  'class="rail-links"')" "1" "--level full has exactly one rail"
+assert_eq "$(count "$WORK/brief" 'data-rail=')" "6" "the brief rail is four entries and two flow sub-entries"
+assert_eq "$(count "$WORK/full"  'data-rail=')" "9" "the full rail is seven entries and two flow sub-entries"
+assert_eq "$(count "$WORK/brief" '07</span>')"  "0" "the brief rail stops at 04"
+
+# LEVEL-INDEPENDENT MATERIAL SURVIVES BOTH. Sections 1 to 3 are byte-for-byte the same spec at
+# either level, and section 4's two standing rules sit above the rail for exactly this reason: a
+# rule true at both levels must not live inside a region one of them drops.
+for f in markup brief full; do
+  case $f in markup) lvl="bare --markup" ;; *) lvl="--level $f" ;; esac
+  for frag in 'class="mech"' 'id="flow-a"' 'figure class="impact"' "SECTION 4'S TWO STANDING RULES"; do
+    if grep -q -F -e "$frag" "$WORK/$f"; then
+      ok "$frag survives $lvl"
+    else
+      bad "$frag is missing from $lvl"
+    fi
+  done
+done
+
+# A canary for a region that lost its markers: the drop is large, and a silent un-marking would
+# show up here long before anyone noticed a section missing from a page.
+bare_b=$(wc -c < "$WORK/markup"); brief_b=$(wc -c < "$WORK/brief"); full_b=$(wc -c < "$WORK/full")
+if [ "$((bare_b - brief_b))" -ge 14000 ]; then
+  ok "--level brief drops at least 14 KB of markup a brief run cannot write"
+else
+  bad "--level brief drops at least 14 KB (dropped $((bare_b - brief_b)))"
+fi
+if [ "$((bare_b - full_b))" -ge 9000 ]; then
+  ok "--level full drops at least 9 KB of markup a full run cannot write"
+else
+  bad "--level full drops at least 9 KB (dropped $((bare_b - full_b)))"
+fi
+
+# ---------------------------------------------------------------- the level refusals
+# Fail closed. Each of these would otherwise be a flag that quietly did nothing.
+"$SKELETON" --template "$TEMPLATE" --markup --level bogus >/dev/null 2>&1 || st=$?
+assert_eq "${st:-0}" "2" "--level takes brief or full, and refuses anything else"
+st=0
+"$SKELETON" --template "$TEMPLATE" --out "$WORK/lv.html" --title T --level brief >/dev/null 2>&1 || st=$?
+assert_eq "${st:-0}" "2" "--level with --out is refused, because the emitted halves carry no section"
+st=0
+
 # ---------------------------------------------------------------- markers
 for m in SKELETON:HEAD:START SKELETON:HEAD:END SKELETON:TAIL:START SKELETON:TAIL:END; do
   assert_eq "$(count "$TEMPLATE" "$m")" "1" "template has exactly one $m"
+done
+for f in markup brief full; do
+  assert_eq "$(count "$WORK/$f" 'SKELETON:')" "0" "no marker survives into the markup half ($f)"
 done
 assert_eq "$(count "$WORK/head" 'SKELETON:')" "0" "no marker survives into the emitted head"
 assert_eq "$(count "$WORK/tail" 'SKELETON:')" "0" "no marker survives into the emitted tail"

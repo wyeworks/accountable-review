@@ -89,7 +89,7 @@ for f in $files; do
       if (match($0, /"judge_effort":"[^"]*"/)) jeffort = substr($0, RSTART + 16, RLENGTH - 17)
 
 
-      if (match($0, /"falsifier_model":"[^"]*"/)) fmodel = substr($0, RSTART + 20, RLENGTH - 21)
+      if (match($0, /"falsifier_model":"[^"]*"/)) fmodel = substr($0, RSTART + 19, RLENGTH - 20)
       if (fmodel == "") fmodel = "-"
 
       # The detail level is part of the group key for the same reason model and effort are: a

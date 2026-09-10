@@ -158,7 +158,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the four-layout diagram catalogue (two of them assembled inside the flows), and the page's one small script. Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
-| `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
+| `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`, filtered to one detail level by `--level`. Holds no bytes of its own — `tests/run.sh` proves that by partition, and that the filter is subtractive |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the unclassified carrier the brief level's page foot holds |
@@ -249,6 +249,29 @@ Editing one of these means checking the others still agree.
   page-foot coverage disclosure for a related reason: with the inventory out of § 4, a brief golden
   without one gives `page-invariants.rb` § 4 zero `data-path` cells to look at, and it would pass on
   nothing.
+
+  **The rail is emitted per level, not edited down.** `page-skeleton.sh --markup --level` hands a
+  run four entries at `--brief` and seven at `--full`, both assembled in the template. Before that
+  the seven-entry rail shipped at both levels with a comment describing the short one, so every
+  `--brief` page's rail was a deletion-and-renumber done from prose with nothing checking it — on
+  the default level. `tests/run.sh` counts the entries per level and `self-test.sh` breaks the
+  brief entry to prove the count fires.
+
+  **The word budget is the other thing that level flag now carries into a run**, and the two are
+  worth reading together: `--markup --level` decides which markup a run is handed, and
+  § *The brief budget* decides how many words it may spend filling it in. Neither is a licence for
+  the other — a shorter rail is not a thinner page.
+
+  **Two of the budget's three dropped concepts ride on that same filter rather than on a comment**,
+  which is the rail's lesson applied twice more: a flow's own `dl.ba` and the `aside.primer` sit in
+  `SKELETON:ONLY:level=full` regions, so a brief run is handed neither. The first version of the
+  budget marked them with a comment saying *--full ONLY*, which is exactly the shape the rail had
+  just been rescued from. `tests/run.sh` counts both per level, and it also counts what must
+  **not** move — each assembled flow's `.mech`, its `.pipe` and its drawing, at both levels —
+  because a filter that took a flow's figure along with the primer would satisfy every other rule
+  and make the page shorter by losing a diagram. `self-test.sh` breaks the gate in both directions
+  for that reason. The endpoint's error inventory is the third concept and cannot be gated: it is a
+  sentence inside a field rather than a block, so it stays a rule in the reference.
 
   `--brief` is the default, so it is what almost every real page will be — and now the only level
   with a budget on it. Judge it first.
@@ -388,9 +411,10 @@ Editing one of these means checking the others still agree.
   the one above it.
 
   Two things worth knowing before editing. The link and the probe are **level-independent** — they
-  live in fields `--brief` leaves alone — while the **primer is `--full` only**, and the two facts
-  together are why `rails-anchors.rb` must still not read `LEVEL`: the level is enforced by the skill
-  not emitting a primer, and a page with no primer has nothing for that check's primer rules to grade.
+  live in fields `--brief` leaves alone — while the **primer is `--full` only**, gated out of the
+  markup half by `page-skeleton.sh --markup --level brief`, and the two facts together are why
+  `rails-anchors.rb` must still not read `LEVEL`: the level is enforced by a run never being handed
+  the component, and a page with no primer has nothing for that check's primer rules to grade.
   Teaching it the level would be adding a flag to say what an empty match already says, and it would
   be the third check to know the level where two is the whole set (`before-approving.rb` for the
   checkpoint, `brief-budget.rb` for the words). And the link and the probe are built from **existing**
@@ -692,6 +716,22 @@ Editing one of these means checking the others still agree.
   The diff-anchor range form was missing from `report-format.md` entirely, so the run had nowhere to
   put the `72` — the defect was in the spec, not in the writing.
 
+  **Fixing the spec did not fix the pages, and `page-template.html` is why.** Two real runs published
+  73 ranged citations between them under one-line anchors *after* the range form landed in
+  § *Deep links*, because every citation in the template rendered as `href="{{LINK}}"` — one opaque
+  placeholder over the one link on the page whose **form is load-bearing** (diff versus blob, `R`
+  versus `L`, line versus range). The rule was stated in a comment beside the fourth citation of
+  fourteen, by which point a run had already copied three. So the template now spells the anchor out
+  at every line-bearing citation — `{{DIFF}}R{{START}}-R{{END}}`, `{{BLOB}}#L{{START}}-L{{END}}`,
+  with the *same two placeholders* in the text — and defines `{{DIFF}}` and `{{BLOB}}` once at the
+  top of the markup half, before any citation appears. `{{LINK}}` survives only where a citation
+  names no line and so has no anchor to get wrong.
+
+  This is the doc-link precedent applied to the other link, and it was missed for the same reason
+  the doc link's was: § *Pinning* already argues that a template carrying the unpinned form teaches
+  a run to publish a page that fails its own check. A template carrying an *unformed* href does the
+  same thing, and costs 4.4 KB of the markup half to fix.
+
   Five files have to agree on those two: `report-format.md` § *When the diff will not render* owns
   the rule **alone** and § *Deep links* carries the three URL forms, `SKILL.md` step 3 runs the
   classifier once and step 9 points at both, `scripts/diff-render.sh` holds the verdict,
@@ -981,6 +1021,24 @@ Editing one of these means checking the others still agree.
   per flow, and says it as a **failure** rather than the two-diagram warning § 5 gets: the "different
   mechanisms" excuse is about an ER fragment beside a lifecycle and reads as permission anywhere else.
 
+  **"Most earn none" was true of the fork and false of the chain, and stating it of both is what
+  made § 2 draw nothing.** Two real pages at `--brief` — nine flows, a Rails monolith and a Phoenix
+  app — published **zero `<svg>`** with the layouts sitting readable in the markup half the whole
+  time. `behaviour-flows.rb` caught it on both (*"flow-a, flow-b cites both sides of the boundary and
+  draws no chain"*), and nothing read the warning, because `check.rb` only ever runs against
+  fixtures. So the prose was the whole lever, and it was pointing the wrong way: three sentences said
+  a figure is exceptional, one clause said `--brief` is not an excuse, and the chain's own comment in
+  the template gave **geometry with no trigger at all** while the fork's opened with *OMIT IT unless*.
+
+  The fork's rarity is real — its three-part conjunction genuinely fires seldom. The chain's is not:
+  its trigger is *you traced a field across the seam*, which on a PR touching both sides is the
+  ordinary case. § 2 now states it affirmatively and names the only two excuses (you could not read
+  the client; the two sides agree at every hop), § *Depth rules* says a budget is a ceiling rather
+  than a discouragement and routes the trigger to § 2, and the template's chain comment leads with
+  when to draw before how. **An SVG is the most expensive thing on the page to type, so the failure
+  mode is never a wrong chain — it is no chain**, and it costs the reviewer the one question the
+  field rows cannot answer: at which hop does the agreement stop.
+
   `--brief` draws no § 5 figures at all — no ER fragment, no lifecycle; migration safety is a row
   there — so its merged section holds the `.impact` panel and nothing that could compete for the
   budget, and `diagram.rb`'s per-`<section>` count needs no level awareness. What it must not become is
@@ -1050,6 +1108,39 @@ Editing one of these means checking the others still agree.
   `script` or `svg` tag would corrupt a check that has nothing to do with this. Each marker is also
   **one line**: extraction is a line range over the marker line, so a marker spilling onto a second
   line would emit half a comment into every page.
+
+  **`--markup` is now filtered by detail level, and the second reason is again the better one.**
+  A second marker kind, `SKELETON:ONLY:level=<brief|full>`, brackets the regions that belong to one
+  level: §§ 4–7 against the merged brief section, and the rail below 03. `--markup --level brief`
+  drops 16.3 KB and `--level full` 11.0 KB off a half that is resident for every request after
+  step 9 — the same rule as *step 2 stopped reading two files it only needed to name*, applied
+  inside one file. Bare `--markup` keeps everything and only strips the markers, which is what the
+  partition test and all five eval drivers read, so **no existing caller changed.**
+
+  The payoff that is not tokens: **the rail is assembled at both shapes instead of derived at one.**
+  It shipped in the seven-entry `--full` form with a comment telling a `--brief` run to cut it to
+  four and renumber — a transformation performed from prose that no check ever looked at, on the
+  default level. Now `--level` hands over the rail to publish.
+
+  Three rules make the filter safe, and each of them is a way a section could go missing while the
+  page still looked finished. It is **subtractive**: the only actions are print and do-not, asserted
+  as *no line was added*, which needs no oracle where a second extraction would test the script
+  against its own awk. It **fails closed**: an unpaired marker, a nested pair, an unknown tag, or a
+  tag in the vocabulary with no region at all exits non-zero. And **a marker is matched as a whole
+  one-line comment** — the first version matched any line containing the prefix and duly read the
+  maintainer note *documenting* the markers as a marker, which is this repository's recurring shape:
+  the prose quotes the thing the rule is about, and `verify-catalogue.sh` reads table rows only for
+  exactly the same reason.
+
+  **What must stay outside those pairs is anything true at both levels**, and getting that wrong
+  loses content rather than bytes. Two comments were inside the `--full` range while being
+  level-independent — the impact panel's authoring contract and the *no `Changed` list, at either
+  level* guard — and the brief tail pointed at them with "*unchanged from section 4 above*". They
+  now live above the rail as § *Section 4's two standing rules*, with both section blocks pointing
+  there, and `tests/run.sh` asserts they survive at both levels and bare. Five files agree now
+  rather than four: `tests/self-test.sh` is the fifth, and its two filter mutations are **script**
+  mutations for the reason the other two are — a template mutation cannot prove a filter fires,
+  because the filter and the thing it filters move together.
 
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is

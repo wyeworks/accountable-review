@@ -121,8 +121,11 @@ the run is really working against.
 This section owns the budget **alone**, and everything else points at it. `SKILL.md` step 1 reads it
 with the level, step 7 writes the fields to their caps, step 9 says to draft to the budget rather than
 edit down to it, and § *How big should the page be?* says it is still not the answer to a diff that
-will not fit. `page-template.html` marks the two components it drops as `--full` only, in place, where
-a run copying an assembled flow is looking. `evals/checks/brief-budget.rb` carries the numbers, the
+will not fit. `page-template.html` **gates** the two components it drops inside `SKELETON:ONLY:level=full`
+regions, so a brief run is handed neither, with `skills/review-map/tests/run.sh` counting them per
+level and `self-test.sh` breaking the gate in both directions — ungating the primer, and widening
+the gate over a flow's figure, which is the tidy-looking mutation that would make a page shorter by
+losing a drawing. `evals/checks/brief-budget.rb` carries the numbers, the
 exemptions, the split verdicts and the floor, with `golden/brief-*.html` and the `self-test.rb` rows
 proving each rule fires. `evals/cases/brief-flows.json` and page case 7 in `evals/evals.json` ask the
 half no script can. And `docs/review-map.md` and `README.md` are the public restatement, which own
@@ -186,14 +189,18 @@ loses no finding — which is the test a fourth candidate has to pass before it 
 
 - **The framework primer.** `aside.primer` is the heaviest component on the page carrying no
   evidence of its own, and § *The primer callout* already caps it at one per flow with most flows
-  earning none. At `--brief` it earns none: the flow explains the mechanism in its own prose against
+  earning none. At `--brief` it earns none, and a run at that level is **never handed the markup**:
+  the callout sits inside a `SKELETON:ONLY:level=full` region, so `page-skeleton.sh --markup
+  --level brief` drops it. the flow explains the mechanism in its own prose against
   its `file:line` and keeps the pinned `a.doc` link, which is what the primer escalates *from*. The
   link survives, the lesson does not. **This shape is already proven rather than invented** — it is
   exactly where a Phoenix page stands today while `elixir-docs.md` § *Version* withholds every link,
   and it needs no exemption in `evals/checks/rails-anchors.rb` for the same reason: a page that emits
   no primer has no primer to fail.
-- **The flow's own `dl.ba` pair.** § 1 carries the change's before and after, as two rows, and at
-  `--brief` that is the page's one transition block. A flow states its own transition inside the
+- **The flow's own `dl.ba` pair**, gated the same way and dropped from the markup at this level.
+  § 1 carries the change's before and after, as two rows, and at `--brief` that is the page's one
+  transition block — § 1's pair is emitted at **both** levels, so what the level moves is where the
+  transition lives and not whether the page has one. A flow states its own transition inside the
   `.mech`, where the mechanism it belongs to already is. On a single-flow PR the two were the same
   pair twice.
 - **The endpoint's full error list.** What the diff **adds, moves or removes** — with statuses —
@@ -202,6 +209,14 @@ loses no finding — which is the test a fourth candidate has to pass before it 
   inventory of untouched error cases is the part a reviewer can read off the code, and this is the
   same trade § *Section 4 at brief* makes with the ledger — the level declines to *inventory*, never
   to account.
+
+**Two of those three are structural, and the third is a rule.** The primer and the `dl.ba` are
+gated out of the markup a brief run reads, for the reason the rail is: a comment telling a run to
+delete a block at one level is a deletion performed from prose with nothing checking it, which is
+how the seven-entry rail shipped at both levels for as long as it did. The endpoint's error
+inventory cannot be gated — it is a sentence inside a field, not a block — so it stays a rule here
+and `brief-budget.rb` has nothing to say about it. Both shape rules in that check remain, because
+a run can still write either component from memory rather than from the template.
 
 **§ 3's entries lose a sub-part rather than a concept**, so it is not a fourth: *what remains
 uncertain* folds into the *why* clause with its evidence tier intact, rather than standing as its own
@@ -455,9 +470,10 @@ exists for. The escalation test is the same one the excerpt budget uses: not *is
 `--brief` no flow earns one: the callout is the heaviest component on the page carrying no evidence
 of its own, and § *The brief budget* spends that weight elsewhere. The flow keeps the pinned `a.doc`
 link the primer would have escalated from, and explains the mechanism in its own prose against its
-`file:line`. Like the gate below it, this needs no exemption in `evals/checks/rails-anchors.rb` —
-a page that emits no primer has no primer to fail — which is why `rails-anchors.rb` still must not
-read `LEVEL`.
+`file:line`. The gate is **structural**: the callout sits in a `SKELETON:ONLY:level=full` region,
+so `page-skeleton.sh --markup --level brief` does not hand it to the run at all. Like the gate below
+it, this needs no exemption in `evals/checks/rails-anchors.rb` — a page that emits no primer has no
+primer to fail — which is why `rails-anchors.rb` still must not read `LEVEL`.
 
 **A primer is gated on its doc link, so a closed catalogue means no primers for that stack.** It is
 what a link escalates *into*, and `evals/checks/rails-anchors.rb` fails one that carries none — so the
@@ -975,8 +991,10 @@ distinct mechanisms a reader has to hold, not on how many files carry them.
 show something a table cannot. A diagram that restates a list is worse than no diagram, because it
 costs the reader time and teaches nothing.
 
-**A behaviour flow is its own `<section>`, so in § 2 that budget is one figure per flow — and most
-flows earn none.** The escape hatch below is about § 5 and does not apply here: a flow's figure is a
+**A behaviour flow is its own `<section>`, so in § 2 that budget is one figure per flow.** What earns
+that one is § 2's to say, not this section's: a budget states a ceiling and says nothing about how
+often the ceiling is reached, and reading it as discouragement is how § 2 came to draw nothing at
+all. The escape hatch below is about § 5 and does not apply here: a flow's figure is a
 boundary chain *or* a guard fork, never both, because the two answer different questions about one
 behaviour and a flow that genuinely earns both is **two flows**. `evals/checks/diagram.rb` says the
 same thing from the other side, and says it as a failure rather than a warning.
@@ -1350,12 +1368,25 @@ put the fields loose in the section and a decisions block in the middle of them.
   so put the thing the chain arrives at last. In a Phoenix LiveView flow the same chain is
   event in `.heex` → `handle_event/3` → context → changeset → `Repo` → column, with the return leg
   assigns → re-render → diff over the socket.
-- **The field crossing the boundary**, if it does, **as the flow's one drawing** — serializer → JSON →
-  type → hook → component. Layout from the catalogue in `page-template.html`, 1 of 4, assembled inside
+- **The field crossing the boundary, as the flow's one drawing** — serializer → JSON →
+  type → hook → component. **If you traced a field across the seam for this flow, draw it.** That is
+  the trigger, and on a PR touching both sides it is the ordinary case rather than an exceptional
+  one: the flow's own citations are the tell, and a flow citing a serializer and a type, a controller
+  and a client call, or a `.heex` event and its `handle_event` clause has its finding on a hop.
+  Layout from the catalogue in `page-template.html`, 1 of 4, assembled inside
   flow A there: take the stop grid for the length you actually have and fill in the text. It goes after
   the `.pipe` and before the `.mech`, not out here in list order, because it answers the question the
   spine raises and cannot settle. Following one field teaches more than reviewing both sides as
   separate file trees.
+
+  **Two things excuse a flow that spans the seam, and nothing else does.** You could not read the
+  client — say which, and build the backend half; a chain drawn through code nobody opened is four
+  invented boxes. Or the two sides agree at every hop you traced, so there is no dashed edge and the
+  `.pipe` is the honest form. Deciding the flow "did not earn one" is not a third: the drawing is the
+  most expensive thing on the page to type, which makes not drawing it the path of least effort and
+  the failure to watch for. `evals/checks/behaviour-flows.rb` warns on this exact predicate — a flow
+  citing both sides with no figure — because the miss is invisible on a page that otherwise reads
+  well.
 
   **It is a drawing rather than a second `.pipe` for one reason: the finding is *which hop* the two
   sides stop agreeing at.** Mark that hop with `.edge-dash` and label it above the row. A numbered
@@ -1407,8 +1438,13 @@ put the fields loose in the section and a decisions block in the middle of them.
   § *Depth rules* owns the caps and the overflow rule.
 
   **A flow draws at most one figure — the chain or the fork, never both.** They answer different
-  questions about one behaviour, and a flow that genuinely earns both is two flows. Most flows earn
-  neither, and a flow with no figure is the normal case rather than a gap.
+  questions about one behaviour, and a flow that genuinely earns both is two flows.
+
+  **"Most flows earn neither" is true of the fork, and is not a general licence.** The fork's
+  three-part trigger is genuinely rare: a flow whose behaviour is not gated draws nothing, and
+  drawing one anyway invents a population the code does not distinguish. The chain's trigger is not
+  rare. So a flow with no figure is the normal case *where nothing crossed a seam* — and on a flow
+  that traced a field across one, a missing chain is a gap rather than restraint.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
   decision, where it lives, why it matters, the tradeoff accepted. Mine them from comments explaining
   *why*, commit messages, named constants, transaction boundaries, `rescue` clauses, and anything the
