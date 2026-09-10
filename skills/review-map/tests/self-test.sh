@@ -98,6 +98,50 @@ case_runs_red "--rails is declared in only two of the three theme states" "$WORK
 sed 's|{{PR_TITLE_OR_BRANCH}} Review|Review|' "$TEMPLATE" > "$WORK/no-title.html"
 case_runs_red "the title placeholder is missing, so no page can be named" "$WORK/no-title.html" "$SKELETON"
 
+# ---- the level filter ----
+#
+# The first two are SCRIPT mutations, for the reason the top of this file gives: a template
+# mutation cannot prove a filter fires, because the filter and the thing it filters move
+# together. Both of these leave a page that still looks finished, which is the whole risk.
+
+# 8. The filter never drops anything, so --level is a flag that quietly does nothing and every
+#    run keeps paying for the tail it cannot write. Nothing about the page changes, which is
+#    exactly why no other assertion here would notice.
+sed 's|else if (keep != "" # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----# ---- diff-render.sh: every mutation here publishes a link that lands on nothing ---- tag != "level=" keep) drop = 1|else if (0) drop = 1|' \
+  "$SKELETON" > "$WORK/filter-inert.sh"
+case_runs_red "the level filter drops nothing, so --level does nothing" "$TEMPLATE" "$WORK/filter-inert.sh"
+
+# 9. The opposite, and the one that loses content: --level brief drops the merged tail as well,
+#    so a brief run is handed no section 4 carrier at all — and the completeness invariant has
+#    no level, so the page it writes may have lost a file with nothing saying so.
+sed 's|else if (keep != "" # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----# ---- diff-render.sh: every mutation here publishes a link that lands on nothing ---- tag != "level=" keep) drop = 1|else if (keep != "") drop = 1|' \
+  "$SKELETON" > "$WORK/filter-drops-both.sh"
+case_runs_red "--level drops its own level's regions too, leaving no carrier for the diff" "$TEMPLATE" "$WORK/filter-drops-both.sh"
+
+# 10. An unpaired region. The END marker goes and the region runs to the end of the markup half,
+#     so --level full takes the brief tail with it and --level brief keeps nothing after it.
+grep -v 'SKELETON:ONLY:level=full:END' "$TEMPLATE" > "$WORK/only-unpaired.html"
+case_runs_red "an ONLY region is never closed" "$WORK/only-unpaired.html" "$SKELETON"
+
+# 11. A typo in a tag. This is the bypass worth its own rule: level=fulll matches no level, so
+#     the region is kept at every level and the filter silently stops filtering that one.
+sed 's|SKELETON:ONLY:level=full:START|SKELETON:ONLY:level=fulll:START|' "$TEMPLATE" > "$WORK/only-typo.html"
+case_runs_red "an ONLY tag is misspelled, so its region belongs to no level" "$WORK/only-typo.html" "$SKELETON"
+
+# 12. A nested pair. The inner END closes the outer region early, so the rest of the outer one
+#     survives at a level that must not have it — and the markers still read as correct.
+awk '/<section id="reach" style="padding-top:62px">/ && !d {
+       print "    <!-- SKELETON:ONLY:level=brief:START -->"; print; print "    <!-- SKELETON:ONLY:level=brief:END -->"; d = 1; next
+     } { print }' "$TEMPLATE" > "$WORK/only-nested.html"
+case_runs_red "an ONLY region nests inside another" "$WORK/only-nested.html" "$SKELETON"
+
+# 13. The rail's brief shape goes, so a --brief run is handed the seven-entry rail again and is
+#     back to deriving four entries from a comment. The page still renders.
+awk '/SKELETON:ONLY:level=brief:START/ { b = 1 }
+     b && /<a data-rail="reach" href="#reach"><span class="n">04<\/span>Reach/ { b = 0; next }
+     { print }' "$TEMPLATE" > "$WORK/no-brief-rail.html"
+case_runs_red "the brief rail entry is gone, so --brief must derive its rail again" "$WORK/no-brief-rail.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
 # All three are script mutations for the reason the first two cases above are: the repository

@@ -149,7 +149,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the four-layout diagram catalogue (two of them assembled inside the flows), and the page's one small script. Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
-| `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
+| `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`, filtered to one detail level by `--level`. Holds no bytes of its own — `tests/run.sh` proves that by partition, and that the filter is subtractive |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the unclassified carrier the brief level's page foot holds |
@@ -211,6 +211,13 @@ Editing one of these means checking the others still agree.
   page-foot coverage disclosure for a related reason: with the inventory out of § 4, a brief golden
   without one gives `page-invariants.rb` § 4 zero `data-path` cells to look at, and it would pass on
   nothing.
+
+  **The rail is emitted per level, not edited down.** `page-skeleton.sh --markup --level` hands a
+  run four entries at `--brief` and seven at `--full`, both assembled in the template. Before that
+  the seven-entry rail shipped at both levels with a comment describing the short one, so every
+  `--brief` page's rail was a deletion-and-renumber done from prose with nothing checking it — on
+  the default level. `tests/run.sh` counts the entries per level and `self-test.sh` breaks the
+  brief entry to prove the count fires.
 
   `--brief` is the default, so it is what almost every real page will be. Judge it first.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
@@ -1036,6 +1043,39 @@ Editing one of these means checking the others still agree.
   `script` or `svg` tag would corrupt a check that has nothing to do with this. Each marker is also
   **one line**: extraction is a line range over the marker line, so a marker spilling onto a second
   line would emit half a comment into every page.
+
+  **`--markup` is now filtered by detail level, and the second reason is again the better one.**
+  A second marker kind, `SKELETON:ONLY:level=<brief|full>`, brackets the regions that belong to one
+  level: §§ 4–7 against the merged brief section, and the rail below 03. `--markup --level brief`
+  drops 16.3 KB and `--level full` 11.0 KB off a half that is resident for every request after
+  step 9 — the same rule as *step 2 stopped reading two files it only needed to name*, applied
+  inside one file. Bare `--markup` keeps everything and only strips the markers, which is what the
+  partition test and all five eval drivers read, so **no existing caller changed.**
+
+  The payoff that is not tokens: **the rail is assembled at both shapes instead of derived at one.**
+  It shipped in the seven-entry `--full` form with a comment telling a `--brief` run to cut it to
+  four and renumber — a transformation performed from prose that no check ever looked at, on the
+  default level. Now `--level` hands over the rail to publish.
+
+  Three rules make the filter safe, and each of them is a way a section could go missing while the
+  page still looked finished. It is **subtractive**: the only actions are print and do-not, asserted
+  as *no line was added*, which needs no oracle where a second extraction would test the script
+  against its own awk. It **fails closed**: an unpaired marker, a nested pair, an unknown tag, or a
+  tag in the vocabulary with no region at all exits non-zero. And **a marker is matched as a whole
+  one-line comment** — the first version matched any line containing the prefix and duly read the
+  maintainer note *documenting* the markers as a marker, which is this repository's recurring shape:
+  the prose quotes the thing the rule is about, and `verify-catalogue.sh` reads table rows only for
+  exactly the same reason.
+
+  **What must stay outside those pairs is anything true at both levels**, and getting that wrong
+  loses content rather than bytes. Two comments were inside the `--full` range while being
+  level-independent — the impact panel's authoring contract and the *no `Changed` list, at either
+  level* guard — and the brief tail pointed at them with "*unchanged from section 4 above*". They
+  now live above the rail as § *Section 4's two standing rules*, with both section blocks pointing
+  there, and `tests/run.sh` asserts they survive at both levels and bare. Five files agree now
+  rather than four: `tests/self-test.sh` is the fifth, and its two filter mutations are **script**
+  mutations for the reason the other two are — a template mutation cannot prove a filter fires,
+  because the filter and the thing it filters move together.
 
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
