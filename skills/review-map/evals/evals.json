@@ -124,17 +124,38 @@
       "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --level brief --expect 'app/queries/active_projects.rb' --forbid 'N/A'",
       "section_cases": [
         "cases/brief-tail.json — the merged section: whether the panel stays the spine, whether the diff is still accounted for once the classification is gone, and what must not leak in from full",
-        "cases/behaviour-flows.json — the flows, which this level does not change",
+        "cases/brief-flows.json — the flows at this level's word budget: whether the compression cost prose or teaching",
         "cases/reach.json — the panel and the affected list, whose rules the merged section keeps verbatim"
       ],
       "expectations": [
         "check.rb passes at --level brief, including the coverage gate: the merged section's Changed list carries all five paths with data-path, so a shorter page is still an accounted-for one",
         "Four sections and four rail entries. No section 5, 6 or 7, and their absence is silent — not an N/A row, not an empty shell, not a pending marker for something this level never produces",
-        "The behaviour flows are at their full depth: same review unit, same seven fields, same diff excerpt on the hunk each behaviour turns on. Nothing about section 2 is thinner than it would be at --full",
+        "The behaviour flows keep every field: same review unit, same seven fields, same diff excerpt on the hunk each behaviour turns on. What is thinner than --full is the prose around them, per report-format.md § The brief budget — no field is missing, none is compressed into its own label, and no aside.primer or flow-level dl.ba survives at this level",
         "No comprehension checkpoint anywhere, and no ER or lifecycle figure. The migration's safety, if it has anything worth saying, is a row rather than a diagram",
         "app/queries/active_projects.rb is still found and still explained in the flow that owns it, with the merged section pointing at that flow in a clause. The shorter shape has not cost the finding the page exists for",
         "The page says which detail level produced it, so a reader who wanted more knows there is more to ask for — and says it once, not as a caveat on each section",
         "No sentence grades the change, and nothing reads as a clean bill of health because the page is short"
+      ]
+    },
+    {
+      "id": 7,
+      "fixture": "monorepo-contract",
+      "level": "brief",
+      "prompt": "give me a review map for project-archival — keep it tight, I've got about fifteen minutes",
+      "expected_output": "The same diff as case 2 and the same findings, at roughly half the prose. Four sections. Every finding case 2 carries is here: archived_at emitted as null against a type declaring archivedAt non-null, the 422 nothing in web/ handles, and selectableProjects filtering the list without knowing about archival. The boundary chain is drawn at full size from the catalogue. No aside.primer, no flow-level dl.ba, no endpoint inventory of untouched error cases. brief-budget.rb reports the page inside its ceiling with no cap warnings and no compressed field.",
+      "files": [],
+      "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --level brief --expect 'selectableProjects' --expect 'archivedAt'",
+      "section_cases": [
+        "cases/brief-flows.json — the flows at the budget, over this same fixture, which is where most of the words are",
+        "cases/brief-tail.json — the merged tail, whose own caps are 30 a cross-cutting row and 18 an approving item"
+      ],
+      "expectations": [
+        "Read against case 2's page over the same fixture, this one is about half the prose and carries the same findings. That comparison is the case: a page that is half as long because it found less has failed it, and brief-budget.rb cannot tell the two apart",
+        "check.rb passes at --level brief, brief-budget.rb included: inside the ceiling of 950 plus 440 a flow, no per-component cap warning, and no field compressed into its own label",
+        "Every figure is drawn as it would be at --full — the boundary chain from the catalogue at its own stop grid, the impact panel with its cards, legends and lane labels, each .pipe as long as the chain it follows. Nothing is smaller, cropped or absent because the page is short, and no figcaption is trimmed",
+        "The three concepts the level drops are gone and nothing they carried is: no aside.primer, but the pinned doc link the primer would have escalated from is still on the claim it belongs to; no flow-level dl.ba, but each flow's transition is stated in its .mech; no inventory of untouched error cases, but every error the diff adds, moves or removes is named with its status",
+        "The client half of the contract is fully traced. It is the cheapest-looking cut at this level and the one that would make the page wrong rather than short",
+        "Nothing on the page says it was written to a budget, compressed, shortened, tightened or checked, and no sentence grades the change. A reader cannot tell from the page that a word budget exists"
       ]
     }
   ]

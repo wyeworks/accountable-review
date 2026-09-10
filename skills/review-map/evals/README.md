@@ -120,6 +120,7 @@ and dropping the default is the whole of what it means. Underneath:
 ./run.sh behaviour-flows -n 3 --judge --fast -j 3   # the iteration loop; see below
 ./run.sh diagrams --fixture monorepo-contract --visual
 ./run.sh brief-tail -n 3 --judge                # the default level's merged tail section
+./run.sh brief-flows -n 3 --judge               # section 2 written to the default level's word budget
 ./run.sh reach -n 3 --level brief              # the same case, other level: override the case file
 ./report.sh behaviour-flows
 ```
@@ -190,8 +191,11 @@ default is the *harness's*, not the skill's, and the two differ on purpose: read
 as brief because the skill's default changed would silently reinterpret every result line already on
 disk. `check.rb` takes `--level` too, and defaults it the same way.
 
-Only one check reads it: `before-approving.rb`, because a missing comprehension checkpoint is correct
-at brief and worth a WARN at full. Everything else survives the merge without a flag, because the
+Two checks read it. `before-approving.rb`, because a missing comprehension checkpoint is correct at
+brief and worth a WARN at full. And `brief-budget.rb`, which is the whole of the level's word budget
+and therefore has nothing to measure at full — where it SKIPs, saying out loud that nothing was
+measured, because a silent pass there would report every full page as inside a cap nobody wrote for
+it. Everything else survives the merge without a flag, because the
 merged section keeps the `id="reach"` and `id="approving"` anchors the region extractors read — which
 is a property of the markup, and therefore a thing to break by accident. `golden/approving-brief-*.html`
 and the `self-test.rb` rows over them are what notice: three rows for the level's own rule, and two more
@@ -509,9 +513,26 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `link-form.rb` | the href against the citation it sits on: the span its text names, a `#diff-` fragment that hashes back to a path in the diff, and no anchor into a diff GitHub withholds | page and fragment |
 | `diagram.rb` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
 | `diagram-shot.rb` | renders each diagram in both themes to PNG | page and fragment |
+| `brief-budget.rb` | the default level's word budget: the page ceiling, the per-component caps, the field floor, and the two concepts whose removal is structural. Reads `--level`; every count is a WARN and every shape rule a FAIL | page and fragment |
 
 All Ruby, with `lib/review_map/` as their shared library — see § *checks/ is Ruby* for how they
 got that way, and for the four defects that the byte-for-byte corpus alone could not have found.
+
+**`brief-budget.rb` is the one whose verdicts are split by design rather than by confidence.** Shape
+fails, length warns, and the floor fails. A hard failure on length would teach a run to drop a claim
+to get under a number, which is worse than the long page the rule was written to prevent — the same
+reasoning `impact-paths.rb` uses for an unlisted causal verb. Its exemptions are the other half:
+every `<svg>`, `figcaption`, `.legend`, `.pipe` label, `.impact` box, `<code>`, `<pre>` and collapsed
+`<details>` is invisible to the word count, so no figure and no quotation can ever be what a page is
+over budget by. `golden/brief-flow-clean.html` is what notices if that stops being true — it carries
+a catalogue figure, a caption, a probe and an excerpt precisely so that a broken exemption puts it
+over three caps at once, and two `self-test.rb` rows read it on different PASS lines.
+
+What it cannot settle is whether the half that came out was the half nobody needed. A page can sit
+inside every number in it and have spent its words on the wrong sentences, or have got under the
+ceiling by quietly dropping a finding — which the check reads as a short field passing its cap.
+`cases/brief-flows.json` and page case 7 in `evals.json` are where that is asked, and case 7 asks it
+as a comparison against case 2's page over the same fixture.
 
 `SKIP` is load-bearing. A check that cannot run on this input says so out loud — a fragment has no
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
@@ -839,6 +860,12 @@ Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a
 it only makes the reader look the number up. That rule earned itself when §§ 2 and 4 swapped places:
 `reach` and `behaviour-flows` kept their files and their history, and only their
 prose had to move.
+
+`brief-flows` reuses the `behaviour-flows` scope the same way and carries its **own driver**, which is
+the one place it differs from `brief-tail`. The reading list is what the case is about — it adds
+§ *The brief budget* — and editing the shared driver instead would have changed `driver_sha` on every
+`behaviour-flows` line already in `results/`, making the corpus this case is meant to be compared
+against incomparable with it. A new driver costs one file; a changed one costs the baseline.
 
 `rails-anchors` reuses the `behaviour-flows` scope rather than adding one, the way `brief-tail` reuses
 `reach`: the anchors live inside the review unit's fields, so what it grades is a § 2 fragment.

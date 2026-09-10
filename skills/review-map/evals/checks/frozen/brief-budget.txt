@@ -1,0 +1,682 @@
+## --fragment anchors-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-demo-outside-primer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-demo-outside-primer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-fabricated-output.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-fabricated-output.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-hexdocs-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-hexdocs-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-hexdocs-unpinned.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-invented-attribute.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-invented-attribute.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-invented-scope.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-invented-scope.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-link-alone.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-link-alone.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-link-in-excerpt.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-link-in-excerpt.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-mixed-series.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-mixed-series.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-app-symbol.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-app-symbol.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-lib-rails-mark.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-lib.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-lib.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-no-citation.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-no-citation.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-no-link.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-no-link.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-no-trademark.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-no-trademark.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-scaffold-receiver.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-primer-two-in-flow.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-primer-two-in-flow.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-probe-legit-forms.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-probe-legit-forms.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-runner-mutates.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-runner-mutates.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-uncatalogued-url.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-uncatalogued-url.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment anchors-unpinned-link.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page anchors-unpinned-link.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment approving-brief-checkpoint.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page approving-brief-checkpoint.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment approving-brief-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page approving-brief-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment approving-brief-no-anchor.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page approving-brief-no-anchor.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment approving-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page approving-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment approving-six-questions.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page approving-six-questions.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment brief-field-stub.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page brief-field-stub.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment brief-field-verbose.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page brief-field-verbose.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment brief-flow-ba.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page brief-flow-ba.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment brief-flow-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page brief-flow-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment brief-flow-primer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page brief-flow-primer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment brief-page-over-ceiling.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page brief-page-over-ceiling.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-edge-label-collision.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-edge-label-collision.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-flow-figure-primer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-flow-figure-primer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-flow-two-figures.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-flow-two-figures.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-invented-class.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-invented-class.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-label-overflow.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-label-overflow.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-literal-colour.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-literal-colour.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-no-legend.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-no-legend.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-offcanvas.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-offcanvas.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-placeholder.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-placeholder.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment diagram-unwrapped.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page diagram-unwrapped.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-at-head.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-at-head.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-diff-lang.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-diff-lang.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-duplicate.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-duplicate.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-open.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-open.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-typed-highlight.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-typed-highlight.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-typed-tag.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-typed-tag.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment excerpt-unchanged-changed-file.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page excerpt-unchanged-changed-file.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-crossing-chain-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-crossing-chain-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-crossing-no-chain.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-crossing-no-chain.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-decisions-interleaved.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-decisions-interleaved.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-figure-linear.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-figure-linear.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-layer-grouped.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-layer-grouped.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-partial-page.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-partial-page.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-pending-page.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-pending-page.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-primer-uncited-unit.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-primer-uncited-unit.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-reach-rows.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-reach-rows.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-source-only.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-source-only.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-stubs-only-page.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-stubs-only-page.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-unit-flattened.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-unit-flattened.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-unit-no-understand.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-unit-no-understand.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment flows-unit-uncited.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page flows-unit-uncited.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-card-no-lanes.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-card-no-lanes.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-entities-vocab-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-entities-vocab-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-four-paths.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-four-paths.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-no-affected.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-no-affected.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-no-outcome.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-no-outcome.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-prose-nodes.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-prose-nodes.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-shared-card.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-shared-card.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment impact-unlabelled-edge.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page impact-unlabelled-edge.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-assurance.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-assurance.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-draft-narration.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-draft-narration.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-loose-data-path.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-loose-data-path.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-no-tier.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-no-tier.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-risk-score-leading.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-risk-score-leading.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-risk-score-trailing.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-risk-score-trailing.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-risk-score.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-risk-score.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-severity-chip.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-severity-chip.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment invariants-verdict.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page invariants-verdict.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment links-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page links-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment links-collapsed-anchor.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page links-collapsed-anchor.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment links-collapsed-no-excerpt.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment links-range-truncated.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page links-range-truncated.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment links-unknown-anchor.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page links-unknown-anchor.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment reach-brief-uncited.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page reach-brief-uncited.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment reach-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page reach-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment reach-no-pointer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page reach-no-pointer.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment reach-pointer-restated.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page reach-pointer-restated.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment reach-readorder.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page reach-readorder.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment searches-bre-dialect.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page searches-bre-dialect.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment searches-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page searches-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment searches-git-grep.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page searches-git-grep.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment searches-unreachable.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page searches-unreachable.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment start-here-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page start-here-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment start-here-no-why.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page start-here-no-why.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment start-here-two-lists.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page start-here-two-lists.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment page-template.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --page page-template.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full
+## --fragment brief-flow-clean.html --level brief
+exit=0
+PASS  no aside.primer, which is right at --brief: the callout belongs to --full and the flow keeps the pinned doc link it would have escalated from
+PASS  no flow carries a dl.ba pair, which is right at --brief: section 1 holds the page's one before/after block
+PASS  no field is compressed into its own label: every prose <dd> in the flows carries at least 4 words
+PASS  every component is inside its word cap
+SKIP  no page ceiling on a fragment: 167 visible words here, but the ceiling is 950 plus 440 a flow across the whole page
+## --fragment brief-flow-clean.html --level brief
+exit=0
+PASS  no aside.primer, which is right at --brief: the callout belongs to --full and the flow keeps the pinned doc link it would have escalated from
+PASS  no flow carries a dl.ba pair, which is right at --brief: section 1 holds the page's one before/after block
+PASS  no field is compressed into its own label: every prose <dd> in the flows carries at least 4 words
+PASS  every component is inside its word cap
+SKIP  no page ceiling on a fragment: 167 visible words here, but the ceiling is 950 plus 440 a flow across the whole page
+## --fragment brief-flow-primer.html --level brief
+exit=1
+FAIL  1 framework primer(s) at --brief — the heaviest component carrying no evidence of its own belongs to --full; keep the a.doc link and explain the mechanism in the flow's own prose
+PASS  no flow carries a dl.ba pair, which is right at --brief: section 1 holds the page's one before/after block
+PASS  no field is compressed into its own label: every prose <dd> in the flows carries at least 4 words
+PASS  every component is inside its word cap
+SKIP  no page ceiling on a fragment: 223 visible words here, but the ceiling is 950 plus 440 a flow across the whole page
+## --fragment brief-flow-ba.html --level brief
+exit=1
+PASS  no aside.primer, which is right at --brief: the callout belongs to --full and the flow keeps the pinned doc link it would have escalated from
+FAIL  1 flow(s) carry a dl.ba before/after pair at --brief — section 1 already states the transition, and the flow's own belongs in its .mech
+PASS  no field is compressed into its own label: every prose <dd> in the flows carries at least 4 words
+PASS  every component is inside its word cap
+SKIP  no page ceiling on a fragment: 188 visible words here, but the ceiling is 950 plus 440 a flow across the whole page
+## --fragment brief-field-stub.html --level brief
+exit=1
+PASS  no aside.primer, which is right at --brief: the callout belongs to --full and the flow keeps the pinned doc link it would have escalated from
+PASS  no flow carries a dl.ba pair, which is right at --brief: section 1 holds the page's one before/after block
+FAIL  field(s) compressed into their own label — Understand in flow 1 (2 words). A <dd> this short is a deleted field with the <dt> left behind, and in the 132px gutter it reads like a filled one. Omit the field instead
+PASS  every component is inside its word cap
+SKIP  no page ceiling on a fragment: 128 visible words here, but the ceiling is 950 plus 440 a flow across the whole page
+## --fragment brief-field-verbose.html --level brief
+exit=0
+PASS  no aside.primer, which is right at --brief: the callout belongs to --full and the flow keeps the pinned doc link it would have escalated from
+PASS  no flow carries a dl.ba pair, which is right at --brief: section 1 holds the page's one before/after block
+PASS  no field is compressed into its own label: every prose <dd> in the flows carries at least 4 words
+WARN  flow 1's Tests field runs to 59 words against a cap of 35 — report-format.md § The brief budget
+SKIP  no page ceiling on a fragment: 215 visible words here, but the ceiling is 950 plus 440 a flow across the whole page
+## --fragment brief-page-over-ceiling.html --page brief-page-over-ceiling.html --final --level brief
+exit=0
+PASS  no aside.primer, which is right at --brief: the callout belongs to --full and the flow keeps the pinned doc link it would have escalated from
+PASS  no flow carries a dl.ba pair, which is right at --brief: section 1 holds the page's one before/after block
+PASS  no field is compressed into its own label: every prose <dd> in the flows carries at least 4 words
+PASS  every component is inside its word cap
+WARN  1576 visible words against a ceiling of 1390 (950 + 440 × 1 flow(s)) — 186 over. The caps above name which part, and none of the overspend is a figure: every svg, figcaption, legend, .pipe label and .impact box is exempt from this count
+## --fragment brief-flow-clean.html
+exit=0
+SKIP  nothing measured: the word budget belongs to --brief, and this input was graded at --level full

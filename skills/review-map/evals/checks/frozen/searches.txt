@@ -172,6 +172,42 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page approving-six-questions.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment brief-field-stub.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page brief-field-stub.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment brief-field-verbose.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page brief-field-verbose.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment brief-flow-ba.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page brief-flow-ba.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment brief-flow-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page brief-flow-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment brief-flow-primer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page brief-flow-primer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment brief-page-over-ceiling.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page brief-page-over-ceiling.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment diagram-clean.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

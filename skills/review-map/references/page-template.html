@@ -1273,6 +1273,11 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 
       <p class="lede">{{THE_MECHANISM_AND_WHY_THIS_IS_ONE_FLOW}}</p>
 
+      <!-- --full ONLY. At --brief a flow carries no dl.ba: section 1 holds the page's one
+           before/after block and the flow states its transition inside the .mech. See
+           report-format.md § The brief budget. It is assembled here because that is where
+           it belongs at --full, and a run at the default level that copies this flow
+           wholesale is the way it comes back — checks/brief-budget.rb fails it. -->
       <dl class="ba">
         <dt>Before</dt><dd>{{WHAT_WAS_POSSIBLE_OR_WENT_WRONG}}</dd>
         <dt class="now">After</dt><dd class="now">{{WHAT_IS_POSSIBLE_NOW_OR_IS_NOW_PREVENTED}}</dd>
@@ -1396,7 +1401,15 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 
            Note what it does NOT contain: no .mech, no dl.rows, no <dt>. That is
            deliberate, and it is what keeps a flow with a primer from reading as a
-           flattened flow to checks/behaviour-flows.sh. -->
+           flattened flow to checks/behaviour-flows.sh.
+
+           --full ONLY, and this is the second of the callout's two gates. At --brief no
+           flow earns one: keep the pinned a.doc link it escalates from and explain the
+           mechanism in the flow's own prose against its file:line. report-format.md
+           § The brief budget owns that, § The primer callout states it beside the
+           closed-catalogue gate, and checks/brief-budget.rb fails a primer at that
+           level. Both gates work the same way — the skill emits no primer, so no check
+           needs an exemption and rails-anchors.rb still must not read the level. -->
       <aside class="primer">
         <div class="pr-head">
           <!-- The official logotype, inlined: an external <img> is blocked by the

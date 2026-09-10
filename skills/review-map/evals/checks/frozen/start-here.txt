@@ -346,6 +346,82 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 3 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for flow links
 WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment brief-field-stub.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page brief-field-stub.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment brief-field-verbose.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page brief-field-verbose.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment brief-flow-ba.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page brief-flow-ba.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment brief-flow-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page brief-flow-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment brief-flow-primer.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --page brief-flow-primer.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 3 is a single list
+SKIP  no entries to check for flow links
+WARN  no sampling caveat in section 3 — it lives here, once, and without it the list reads as an audit
+## --fragment brief-page-over-ceiling.html
+exit=0
+PASS  start here: 5 entr(ies), each with a why
+PASS  section 3 is a single list
+PASS  entries link into the flows that explain them (5)
+PASS  citations present alongside the entries (5)
+PASS  5 entries, within the shape of a starting point
+PASS  the sampling caveat is carried here
+## --page brief-page-over-ceiling.html
+exit=0
+PASS  start here: 5 entr(ies), each with a why
+PASS  section 3 is a single list
+PASS  entries link into the flows that explain them (5)
+PASS  citations present alongside the entries (5)
+PASS  5 entries, within the shape of a starting point
+PASS  the sampling caveat is carried here
 ## --fragment diagram-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none

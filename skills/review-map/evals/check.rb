@@ -18,10 +18,12 @@
 #     check.rb --page page.html --repo DIR --base REF --level brief
 #
 # --level defaults to `full`. It is a third axis, separate from build state and from the
-# section slug, and only one check reads it: before_approving.rb, because a missing
-# comprehension checkpoint is correct at brief and a WARN at full. Everything else keeps
-# working across the merge because the merged section keeps the section anchors the region
-# extractors read — see report-format.md § Section 4 at brief.
+# section slug, and exactly two checks read it. before_approving.rb, because a missing
+# comprehension checkpoint is correct at brief and a WARN at full. And brief_budget.rb,
+# because the word budget in report-format.md § The brief budget belongs to that level and
+# there is no cap at all at full — where it SKIPs, out loud, saying nothing was measured.
+# Everything else keeps working across the merge because the merged section keeps the section
+# anchors the region extractors read — see report-format.md § Section 4 at brief.
 #
 # Three grading scopes, and the difference matters. A PAGE carries invariants no fragment
 # can: completeness, one canonical home, the excerpt budget, the build state. A FRAGMENT is
@@ -39,15 +41,15 @@ require_relative "checks/lib/review_map/check"
 SCOPES = {
   "all"              => %w[completeness build-state page-invariants excerpts behaviour-flows
                            start-here reach impact-paths before-approving searches rails-anchors
-                           link-form diagram],
+                           link-form diagram brief-budget],
   "core"             => %w[completeness build-state page-invariants excerpts before-approving
-                           rails-anchors link-form],
+                           rails-anchors link-form brief-budget],
   "behaviour-flows"  => %w[page-invariants excerpts behaviour-flows searches rails-anchors
-                           link-form diagram],
-  "start-here"       => %w[page-invariants start-here link-form],
+                           link-form diagram brief-budget],
+  "start-here"       => %w[page-invariants start-here link-form brief-budget],
   "reach"            => %w[page-invariants excerpts reach impact-paths searches rails-anchors
-                           link-form diagram],
-  "before-approving" => %w[page-invariants before-approving rails-anchors link-form],
+                           link-form diagram brief-budget],
+  "before-approving" => %w[page-invariants before-approving rails-anchors link-form brief-budget],
   "diagram"          => %w[diagram],
 }.freeze
 

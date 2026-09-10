@@ -65,6 +65,11 @@ instructions are its own, which is the point of putting them in a separate conte
     to tell.
   - Say which level you are producing when you first speak, in the same breath as the URL — a reader
     who wanted the full page should find that out at minute two, not at the end.
+  - **`--brief` carries a word budget, and it is the default, so expect to be writing to it.**
+    § *The brief budget* in that file owns it: a ceiling of 950 words plus 440 per behaviour flow,
+    per-component caps, and three concepts that belong to `--full`. Read it with § *Detail levels*
+    rather than discovering the caps while drafting stage 3. It caps prose only — it removes no
+    finding, no field, no tier and **no figure**.
 - **Read the effort off the invocation too, and hold it the same way.** One of `--effort high`,
   `--effort low`, in any position; **no flag means `high`**. It decides how hard the run works to
   be right, and at `--effort high` that buys exactly one thing today: the falsification pass in
@@ -89,8 +94,9 @@ instructions are its own, which is the point of putting them in a separate conte
   second is what they add to the bill. `evals/profile.sh` prints them side by side, and the falsifier
   runs on its own model (`agents/claim-falsifier.md`) so the second number can be bought down without
   touching the first. Effort, not the detail level, is what decides whether the page is right —
-  `--brief` bought 4.6% of wall clock for 35% fewer words, because the time goes into tracing
-  consumers and not into writing sections. Three rules, two of them the level's own:
+  `--brief` bought 4.6% of wall clock for 35% fewer words before it carried a word budget, and the
+  budget takes more words out of that same 4.6% — the time goes into tracing consumers, not into
+  writing sections, so a shorter page is not a faster run. Three rules, two of them the level's own:
   - **It is a separate axis from the detail level, and they multiply rather than substitute.** Effort
     produces no section, changes no depth rule and moves no excerpt budget — the page is the same
     *shape* at either. `--brief --effort high` is the useful combination, not a contradiction: a short
@@ -398,6 +404,14 @@ The unit is **borderless by design**, which makes this easier to get wrong than 
 spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
 example.
 
+**At `--brief`, write the fields to their caps** — 35 words a `<dd>`, 60 for *understand*, 45 for the
+`.mech`, from `report-format.md` § *The brief budget*. The seven fields, their order and their labels
+do not change; what changes is that a claim gets its clause and not a paragraph. Two failure modes,
+and the second is the one to fear: padding a field to look thorough, and **compressing a field into
+its own label** — a `<dd>` of two or three words is a deleted field with the `<dt>` left behind, and
+in the 132px gutter it reads exactly like a filled one. Omit the field instead; an omitted field is
+honest and a stub is not.
+
 **This is where the catalogue opens** — `references/rails-docs.md` or `references/elixir-docs.md`,
 whichever step 2 named, and not before now. It is a lookup table, not a reading: you go to it with a
 concept a claim already needs, never to it to find concepts. **Read its § *Version* first.** A
@@ -601,7 +615,16 @@ through the section list. What differs is where the pending markers go: with one
 than four, stage 2 writes the top of section 4 and marks its `<h3>` sub-parts pending in place. Take
 that section from the block assembled whole in `references/page-template.html` — it composes five
 components that each came from a different section, and a composition that is only described is the
-one that gets flattened. Stage 3 is unchanged by the level: section 2 is identical at both.
+one that gets flattened. Stage 3 is unchanged by the level in *shape*: section 2 has the same spec at
+both, written to the word budget at this one.
+
+**Write to the budget as you draft, not by editing it back down afterwards.** `report-format.md`
+§ *The brief budget* caps every part this stage writes, and a stage that overspends and then
+compresses pays for the same prose twice — once streamed, once re-edited — which is the cost step 9
+exists to avoid. It also compresses in the wrong direction: cutting a drafted paragraph tends to take
+the clause a claim rested on, where writing to the cap takes the sentence that was never needed.
+Nothing here is negotiable against a figure: the caps exempt every `<svg>`, `figcaption`, `.legend`,
+`.pipe` label and `.impact` box, so a long page is never fixed by dropping a drawing.
 
 **The page fills in out of document order, and that is fine.** Step 5 produces section 4; step
 6 produces the flows. So section 4 lands while section 2 is still a pending stub, and a reader
@@ -984,9 +1007,13 @@ a paragraph without a citation, a section the diff did not earn, a review unit w
 This runs in a single context by design, so a very large diff will strain it. That is a signal worth
 reporting, not one to hide: if you had to skim a region to fit, say which region, in the page.
 
-**The detail level is not a budget for this.** `--brief` produces fewer sections; it does not licence
-a thinner account of the ones it does produce, and it is not the answer to a diff that will not fit.
-A strained run at `--brief` still says which region it skimmed.
+**The detail level is a budget for prose and is still not the answer to this.** `--brief` produces
+fewer sections and caps how many words each part may spend (`report-format.md` § *The brief budget*),
+and neither of those is room for a diff that will not fit: the budget bounds how a claim is written,
+never how many claims there are, so a hundred-file diff at `--brief` is a hundred files' worth of
+findings written tightly. It also does not licence a thinner *account* — capped is not culled, and
+the floor in that section fails a field compressed into its own label. A strained run at `--brief`
+still says which region it skimmed.
 
 **Nor is `--effort high` a way to make a large diff fit** — it points the other way. The falsifier
 has its own context, but every challenge it returns comes back into *yours*, and you have to open

@@ -172,6 +172,42 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page approving-six-questions.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment brief-field-stub.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page brief-field-stub.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment brief-field-verbose.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page brief-field-verbose.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment brief-flow-ba.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page brief-flow-ba.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment brief-flow-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page brief-flow-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment brief-flow-primer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page brief-flow-primer.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment brief-page-over-ceiling.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page brief-page-over-ceiling.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment diagram-clean.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

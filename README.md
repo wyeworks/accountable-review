@@ -340,13 +340,17 @@ To have one generated for every pull request instead of by hand, see
 
 **`--brief`** merges the tail of the page — what the change reaches, cross-cutting consequences,
 before approving, coverage — into one section, *Reach & checks*, built around the impact paths. Four
-sections instead of seven.
+sections instead of seven, and written tight: it carries a word budget, so a brief page is about half
+the prose of the same change at `--full`.
 
-**`--full`** writes all seven. Reach for it on a diff you are going to live inside for an hour — a
-migration, a change spanning both sides of the API, someone else's hundred-file feature.
+**`--full`** writes all seven, at whatever length the change earns. Reach for it on a diff you are
+going to live inside for an hour — a migration, a change spanning both sides of the API, someone
+else's hundred-file feature.
 
-The level changes how many sections there are, never how deeply the behaviour flows are explained:
-the first three sections are identical at both levels, and every changed file appears either way.
+The level changes how many sections there are and how many words they spend. It never changes what a
+section teaches: the first three sections exist at both levels with the same rules, and no finding, no
+citation, no evidence tier and **no diagram** comes out to make a page shorter. Every changed file
+appears either way.
 
 **`--review`** — a code-review pass threaded into the map — is declared but not implemented. Passing
 it stops the run and says so, rather than producing a page that quietly leaves it out.

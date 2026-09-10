@@ -726,6 +726,198 @@ FAIL  no dl.rows — a behaviour flow's body IS a unit, and fields rendered with
 ## --page approving-six-questions.html
 exit=1
 FAIL  no <section id="flow-..."> on the page — section 2 is the bulk of the report and it is absent
+## --fragment brief-field-stub.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page brief-field-stub.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment brief-field-verbose.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page brief-field-verbose.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment brief-flow-ba.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page brief-flow-ba.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment brief-flow-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page brief-flow-clean.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment brief-flow-primer.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page brief-flow-primer.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --fragment brief-page-over-ceiling.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
+## --page brief-page-over-ceiling.html
+exit=0
+PASS  no flow is grouped by directory or layer
+PASS  prose precedes the first flow, where the grouping principle belongs
+PASS  every written flow renders its path as a pipeline
+PASS  every flow drawing shows a divergence
+PASS  every flow that crosses the boundary draws the crossing
+PASS  the flows quote changed lines, not only unchanged ones
+PASS  every dl.rows is introduced by a .mech block
+PASS  every field row is inside a dl.rows
+PASS  decisions sit outside the unit, where .decision reads correctly
+PASS  field labels match the canonical set
+PASS  unit "A timestamp, not a status" fills things-to-understand
+PASS  unit "A timestamp, not a status" carries citations
+PASS  unit "A timestamp, not a status" validation steps are commands
+PASS  1 review unit(s) inspected
 ## --fragment diagram-clean.html
 exit=1
 PASS  no flow is grouped by directory or layer
