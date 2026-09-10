@@ -808,8 +808,10 @@ distinct mechanisms a reader has to hold, not on how many files carry them.
 show something a table cannot. A diagram that restates a list is worse than no diagram, because it
 costs the reader time and teaches nothing.
 
-**A behaviour flow is its own `<section>`, so in § 2 that budget is one figure per flow — and most
-flows earn none.** The escape hatch below is about § 5 and does not apply here: a flow's figure is a
+**A behaviour flow is its own `<section>`, so in § 2 that budget is one figure per flow.** What earns
+that one is § 2's to say, not this section's: a budget states a ceiling and says nothing about how
+often the ceiling is reached, and reading it as discouragement is how § 2 came to draw nothing at
+all. The escape hatch below is about § 5 and does not apply here: a flow's figure is a
 boundary chain *or* a guard fork, never both, because the two answer different questions about one
 behaviour and a flow that genuinely earns both is **two flows**. `evals/checks/diagram.rb` says the
 same thing from the other side, and says it as a failure rather than a warning.
@@ -1167,12 +1169,25 @@ put the fields loose in the section and a decisions block in the middle of them.
   so put the thing the chain arrives at last. In a Phoenix LiveView flow the same chain is
   event in `.heex` → `handle_event/3` → context → changeset → `Repo` → column, with the return leg
   assigns → re-render → diff over the socket.
-- **The field crossing the boundary**, if it does, **as the flow's one drawing** — serializer → JSON →
-  type → hook → component. Layout from the catalogue in `page-template.html`, 1 of 4, assembled inside
+- **The field crossing the boundary, as the flow's one drawing** — serializer → JSON →
+  type → hook → component. **If you traced a field across the seam for this flow, draw it.** That is
+  the trigger, and on a PR touching both sides it is the ordinary case rather than an exceptional
+  one: the flow's own citations are the tell, and a flow citing a serializer and a type, a controller
+  and a client call, or a `.heex` event and its `handle_event` clause has its finding on a hop.
+  Layout from the catalogue in `page-template.html`, 1 of 4, assembled inside
   flow A there: take the stop grid for the length you actually have and fill in the text. It goes after
   the `.pipe` and before the `.mech`, not out here in list order, because it answers the question the
   spine raises and cannot settle. Following one field teaches more than reviewing both sides as
   separate file trees.
+
+  **Two things excuse a flow that spans the seam, and nothing else does.** You could not read the
+  client — say which, and build the backend half; a chain drawn through code nobody opened is four
+  invented boxes. Or the two sides agree at every hop you traced, so there is no dashed edge and the
+  `.pipe` is the honest form. Deciding the flow "did not earn one" is not a third: the drawing is the
+  most expensive thing on the page to type, which makes not drawing it the path of least effort and
+  the failure to watch for. `evals/checks/behaviour-flows.rb` warns on this exact predicate — a flow
+  citing both sides with no figure — because the miss is invisible on a page that otherwise reads
+  well.
 
   **It is a drawing rather than a second `.pipe` for one reason: the finding is *which hop* the two
   sides stop agreeing at.** Mark that hop with `.edge-dash` and label it above the row. A numbered
@@ -1221,8 +1236,13 @@ put the fields loose in the section and a decisions block in the middle of them.
   § *Depth rules* owns the caps and the overflow rule.
 
   **A flow draws at most one figure — the chain or the fork, never both.** They answer different
-  questions about one behaviour, and a flow that genuinely earns both is two flows. Most flows earn
-  neither, and a flow with no figure is the normal case rather than a gap.
+  questions about one behaviour, and a flow that genuinely earns both is two flows.
+
+  **"Most flows earn neither" is true of the fork, and is not a general licence.** The fork's
+  three-part trigger is genuinely rare: a flow whose behaviour is not gated draws nothing, and
+  drawing one anyway invents a population the code does not distinguish. The chain's trigger is not
+  rare. So a flow with no figure is the normal case *where nothing crossed a seam* — and on a flow
+  that traced a field across one, a missing chain is a gap rather than restraint.
 - **Decisions to pay attention to** — the least automatable, highest-value content in the page. The
   decision, where it lives, why it matters, the tradeoff accepted. Mine them from comments explaining
   *why*, commit messages, named constants, transaction boundaries, `rescue` clauses, and anything the
