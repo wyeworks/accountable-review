@@ -13,7 +13,7 @@
 # The whole schema:
 #
 #   review_map:
-#     mode: brief            # brief | full
+#     mode: brief            # brief | light  (accepted, and decides nothing)
 #     effort: high           # high | low  (`normal` accepted, means `low`)
 #     delivery:
 #       provider: github-artifact
@@ -94,8 +94,12 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
     }
 
     if (key == "mode") {
-      if (val == "review") fail("mode `review` is not implemented — use brief or full")
-      if (val != "brief" && val != "full") fail("mode must be brief or full, got `" val "`")
+      # The page has one shape. brief and light are the same page and are taken; full is
+      # refused rather than mapped, because it used to mean seven sections and handing back
+      # four under the old name is a config that quietly changed meaning.
+      if (val == "review") fail("mode `review` is not implemented — use brief or light")
+      if (val == "full") fail("mode `full` is not implemented in this version — the Review Map has one shape; use brief or light")
+      if (val != "brief" && val != "light") fail("mode must be brief or light, got `" val "`")
       emit("mode", val)
     } else if (key == "effort") {
       if (val == "normal") val = "low"

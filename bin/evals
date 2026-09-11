@@ -3,8 +3,7 @@
 #
 #   bin/evals offline                        every no-model suite. What CI checks. About a minute.
 #   bin/evals offline frozen                 just one: self-test | unit | frozen | review-map | setup-ci | manifest
-#   bin/evals section behaviour-flows        3 repetitions, judged, at once — then the report
-#   bin/evals section behaviour-flows --fast the same on a cheaper reader (costs comparability)
+#   bin/evals section <case>                 DEFERRED — see evals/deferred/README.md
 #   bin/evals report [case]                  aggregate what is already in results/
 #   bin/evals page [id]                      the recipe for one whole-page case
 #   bin/evals page-check <id> <page.html>    that case's mechanical check, flags filled in
@@ -136,8 +135,11 @@ cmd_offline() {
 
 # ---------------------------------------------------------------- section
 
+# The section cases are deferred, not deleted: they graded one section of the page this one
+# replaced, and the agenda's equivalent unit is a checkpoint rather than a section. See
+# evals/deferred/README.md. Until they are re-expressed, there is nothing for this to list.
 list_cases() {
-  echo "cases: $(ls "$EVALS/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
+  echo "cases: none — the section cases are deferred; see $EVALS/deferred/README.md" >&2
 }
 
 cmd_section() {
@@ -172,7 +174,7 @@ case_field() { jq -r --argjson id "$1" '.evals[] | select(.id == $id) | .'"$2"' 
 
 list_pages() {
   echo "page cases in evals.json:"
-  jq -r '.evals[] | "  \(.id)  \(.fixture)  --\(.level // "full")"' "$EVALS/evals.json"
+  jq -r '.evals[] | "  \(.id)  \(.fixture)"' "$EVALS/evals.json"
   echo
   echo "run one with: evals page <id>"
 }
@@ -199,12 +201,11 @@ cmd_page() {
   [ -n "$fixture" ] || die "no page case with id $id (try: evals page)"
   ensure_fixture "$fixture"
 
-  level=$(case_field "$id" level); [ -n "$level" ] || level=full
   prompt=$(case_field "$id" prompt)
   check=$(case_field "$id" check)
 
   cat <<EOF
-page case $id · fixture $fixture · level $level
+page case $id · fixture $fixture
 
 1. cd $FIXTURES/$fixture
 2. claude --plugin-dir $ROOT
