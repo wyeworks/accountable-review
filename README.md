@@ -117,10 +117,11 @@ frontend contract
 On Phoenix the hops are different — router, controller or LiveView, context, changeset, `Repo`,
 worker, template — and the point is the same: no directory contains the behaviour.
 
-`accountable-review` reorganizes the PR around the **behaviour being implemented**, not just the
-order of files in the diff. Persistence, the endpoint contract and the frontend boundary get no
-sections of their own, on purpose: one behaviour crosses all three, and giving each its own section
-means describing that behaviour three times.
+`accountable-review` traces the PR around the **behaviour being implemented**, not the order of
+files in the diff — and then publishes the part of that work you have to act on: three to five
+judgments the change asks of you, and where to look to make each one. Persistence, the endpoint
+contract and the frontend boundary get no sections of their own, on purpose: one behaviour crosses
+all three, and giving each its own section means describing that behaviour three times.
 
 ---
 
@@ -150,28 +151,34 @@ can re-run.
 
 ## What is a Review Map? 🧭
 
-A Review Map is a guided path through the PR.
+A Review Map is a **review agenda**: the smallest set of things you have to judge before you can
+approve a change, with the code that settles each one attached.
 
-It helps the reviewer understand:
-
-1. **What is this change for?**
-2. **What behaviours were added or modified?**
-3. **How does each behaviour work?**
-4. **What existing code is affected?**
-5. **What should I pay attention to?**
-6. **How can I validate important assumptions?**
-7. **What questions still need human judgment?**
-
-For each meaningful behaviour, the map can include:
+Four parts, and a shut evidence block at the foot:
 
 ```text
-why this exists
-implementation
-relevant tests
-affected but unchanged code
-things to understand
-how to validate
-reviewer questions
+What changed                    one paragraph: what is now true that was not
+What needs your attention       3-5 checkpoints, each one judgment, framed as a question
+Read the code in this order     3-7 stops, in the order that builds understanding
+Impact outside the diff         1-3 chains, from changed code into code it gives new meaning to
+▸ Evidence & diff coverage      every changed path, the searches run, the rest of what was found
+```
+
+A **checkpoint** is the primitive. Not a category — *ProjectSearcher implementation* names a file —
+but a judgment you could get wrong:
+
+```text
+Is nil → cross_facility an intentional semantic default?
+
+  The constructor now defaults a missing facility rather than raising, and two searchers
+  read that value. On /transactions the current facility is nil, so the fallback decides
+  what the page scopes to.                                    from unchanged code
+
+  Look at   BaseSearcher#initialize:14-19   where the default is applied
+            ProjectSearcher#options:31      the consumer that widens with it
+
+  Open question  Whether cross-facility scope is intended there, or an artefact of the
+                 constructor change.
 ```
 
 Claims about unchanged code come with the code attached: a collapsed excerpt of the real source,
@@ -183,8 +190,8 @@ The Review Map does **not** replace the diff.
 
 It helps the diff make sense.
 
-📖 Full anatomy of the page — every section, the staging behaviour, the excerpt and Rails-anchor
-rules — is in [`docs/review-map.md`](docs/review-map.md).
+📖 Full anatomy of the page — every section, the checkpoint, the staging behaviour, the excerpt and
+framework-anchor rules — is in [`docs/review-map.md`](docs/review-map.md).
 
 ---
 
@@ -323,35 +330,35 @@ same PR republishes to the same URL — so the Review Map tracks the PR across p
 scattering links.
 
 It publishes early and fills in as parts complete: open it at minute two, watch it arrive, start
-reading the moment the part you need lands. While it is unfinished it says so in a banner, and every
-part still coming is marked pending, so a half-written page can never be mistaken for a finished one.
+reading the moment the part you need lands. The checkpoints arrive one at a time, and their
+*questions* arrive first — so you know what the change is asking you to judge well before the
+explanations land. While it is unfinished it says so in a banner, and every part still coming is
+marked pending, so a half-written page can never be mistaken for a finished one.
 
 To have one generated for every pull request instead of by hand, see
 [CI integration](#ci-integration-) below.
 
-### How much page
+### One page shape
+
+There is one page, and no flag chooses it:
 
 ```text
-/accountable-review:review-map 412              # --brief, the default
-/accountable-review:review-map 412 --full
+/accountable-review:review-map 412
 ```
 
-**`--brief`** merges the tail of the page — what the change reaches, cross-cutting consequences,
-before approving, coverage — into one section, *Reach & checks*, built around the impact paths. Four
-sections instead of seven, and written tight: it carries a word budget, so a brief page is about half
-the prose of the same change at `--full`.
+`--brief` and `--light` are accepted and change nothing — an invocation kept in a script is not a
+typo. `--full` and `--review` stop the run and say they are not implemented in this version, rather
+than quietly handing back something else under a name that used to mean seven sections.
 
-**`--full`** writes all seven, at whatever length the change earns. Reach for it on a diff you are
-going to live inside for an hour — a migration, a change spanning both sides of the API, someone
-else's hundred-file feature.
+The page used to have two shapes and a word budget to tell them apart. What a reviewer wants is not a
+length setting: it is an answer to *what do I have to judge here, and where do I look?* The analysis
+underneath is unchanged and deep — the run traces consumers across the whole diff, reads the tests,
+follows values across the boundary and attacks its own conclusions. What reaches the page is the part
+you have to act on, which on a small or medium PR is usually 700 to 1,500 words.
 
-The level changes how many sections there are and how many words they spend. It never changes what a
-section teaches: the first three sections exist at both levels with the same rules, and no finding, no
-citation, no evidence tier and **no diagram** comes out to make a page shorter. Every changed file
-appears either way.
-
-**`--review`** — a code-review pass threaded into the map — is declared but not implemented. Passing
-it stops the run and says so, rather than producing a page that quietly leaves it out.
+Short is not thin. No finding, no citation, no evidence tier and no figure comes out to make a page
+shorter, the number of checkpoints is never traded against a word count, and every changed file is
+still accounted for.
 
 ### How hard it works
 
@@ -364,12 +371,12 @@ A separate axis, orthogonal to the one above:
 
 Everything the skill writes rests on claims it checked itself — and the context that wrote a claim is
 the one least able to see what it assumed. **`--effort high`**, the default, adds a second reader that
-does not share that context: once the behaviour flows are written, one read-only `claim-falsifier`
-subagent is sent at each of them, with a single mandate — assume this flow is wrong in ways that
-matter, and find evidence in the repository that contradicts it. It rewrites nothing; it returns
-challenges, each anchored in a line it opened. The run then opens the cited file itself and corrects,
-downgrades or drops the claim. A challenge it cannot confirm is dropped, exactly as an unconfirmed
-finding is.
+does not share that context. The run writes its analysis down first, one note per behaviour, and
+sends a read-only `claim-falsifier` subagent at each note **before any of it reaches the page**, with
+a single mandate: assume this is wrong in ways that matter, and find evidence in the repository that
+contradicts it. It rewrites nothing; it returns challenges, each anchored in a line it opened. The run
+then opens the cited file itself and corrects, downgrades or drops the claim. A challenge it cannot
+confirm is dropped, exactly as an unconfirmed finding is.
 
 It is on by default because it is very nearly free and it changes what the page finds: on a 28-file
 pull request the whole pass cost 23 seconds of waiting, under 1% of the run, and the same change
@@ -390,12 +397,14 @@ four-file bugfix produces a one-screen page in a couple of minutes.
 
 What a good example shows:
 
-- behaviour-oriented navigation, with a contents rail that fills in as the page is written
-- affected-but-unchanged code, with the searches that found it recorded and re-runnable
+- three to five checkpoints, each a question you could answer wrongly, in the order you would most
+  regret getting wrong — and nothing anywhere that reads as a severity or a verdict
+- affected-but-unchanged code, drawn as chains from the change to what someone would observe, with
+  the searches that found it recorded and re-runnable
 - evidence vs. inference, labelled per claim
 - collapsed source excerpts, quoted verbatim from your repository
-- validation steps as real commands against your app
-- reviewer questions only the author can answer
+- a reading order that builds understanding rather than following the diff
+- open questions only the author can answer
 
 ---
 
@@ -434,7 +443,6 @@ the second run compares what it would write against what is there and says *unch
 | Triggers | `ready_for_review`, `synchronize`, `reopened` |
 | Draft pull requests | Ignored — pushing to a draft costs nothing |
 | Fork pull requests | Skipped: a `pull_request` run from a fork gets no secrets |
-| Detail level | `--brief` |
 | Delivery | GitHub Actions artifact, kept 30 days |
 | Concurrency | One run per pull request; superseded runs cancelled |
 | Permissions | `contents: read`, and nothing else |
@@ -462,17 +470,17 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 
 | | |
 | --- | --- |
-| **Supported agents** | Claude Code. Two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, spawned per behaviour flow at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Supported agents** | Claude Code. Two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
 | **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
 | **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
-| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Those sections need both sides in the diff; with no client, or a PR that does not touch one, they are omitted rather than filled in. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
+| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Contract judgments need both sides in the diff; with no client, or a PR that does not touch one, none is raised rather than raised emptily. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
 | **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
-| **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. Behaviour flows come from grouping the diff by behaviour; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
-| **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, inline SVG diagrams from a fixed catalogue, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
+| **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into three to five checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
+| **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
 | **Publishing** | Interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
-| **Completeness** | One mechanical check at the final publish: set equality between the page's coverage ledger and `git diff --name-only`. A file cannot be silently dropped. |
+| **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
 | **CI execution** | GitHub Actions, via `setup-ci`: one workflow, `contents: read`, drafts and forks skipped, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact. |
 
 ---
@@ -487,7 +495,6 @@ What you choose per run:
 | | |
 | --- | --- |
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
-| **Detail level** | `--brief` (default) or `--full`. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Output** | A published artifact by default; `--output <dir>` writes static HTML instead. |
 
@@ -496,12 +503,14 @@ optional:
 
 ```yaml
 review_map:
-  mode: full             # brief | full
   effort: high           # high | low
   delivery:
     provider: github-artifact
     retention_days: 14
 ```
+
+`mode` is still read and still validated, and it decides nothing: `brief` and `light` are the same
+page, and `full` is rejected rather than silently downgraded.
 
 Precedence is `explicit flags > .accountable-review.yml > defaults`, and it is implemented rather
 than aspirational: the config reader emits a line only for a key the file actually contains, so

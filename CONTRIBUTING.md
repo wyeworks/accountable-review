@@ -25,7 +25,7 @@ the unit of quality is instruction clarity, not compilation.
 
 ```
 .claude-plugin/plugin.json         plugin manifest (name, version, metadata)
-agents/claim-falsifier.md          adversarial verifier, spawned per flow at --effort high
+agents/claim-falsifier.md          adversarial verifier, one per analysis note at --effort high
 ci/                                what runs in CI, not what a skill reads
 ├── generate-review-map.sh         runs review-map non-interactively into a static directory
 └── delivery/
@@ -38,18 +38,18 @@ docs/                              the public documentation the README links out
 skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
-│   ├── report-format.md           parts, review-unit format, evidence tiers, deep links
+│   ├── report-format.md           the five sections, the checkpoint, chains, tiers, deep links
 │   ├── rails-nextjs.md            Rails: what to look for per layer, runtime probes, search recipes
 │   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the other stack
 │   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
-│   └── page-template.html         design system, components, and the diagram catalogue
+│   └── page-template.html         design system and components — no svg, by design
 ├── scripts/
 │   ├── page-skeleton.sh           emits the head, the token block and the tint script into the page
 │   ├── diff-render.sh             says which files GitHub will not render, which decides the link form
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
-│   ├── ledger-rows.sh             generates the ledger rows from the diff
-│   └── coverage-gate.sh           asserts the ledger accounts for every changed path
+│   ├── ledger-rows.sh             generates the evidence foot's inventory from the diff
+│   └── coverage-gate.sh           asserts the inventory accounts for every changed path
 ├── tests/                         the deterministic tests for those scripts, and the proof they fire
 └── evals/                         fixtures, page and section cases, and the mechanical checks
 skills/setup-ci/
@@ -88,22 +88,25 @@ by running the skill against a real PR and reading the page it produces.
 Because defect discovery is sampling rather than a deterministic function of the diff, a single run
 is weak evidence. When judging whether a wording change improved things, run the same target more
 than once, or the same wording against several PRs of different shapes — a four-file bugfix, a
-migration, a hundred-file feature spanning both sides of the API. Run both detail levels: they fail
-differently, and a wording change judged at one says little about the other.
+migration, a hundred-file feature spanning both sides of the API. Two things are worth checking on
+every run, because they are where this version is most likely to be wrong: open two entries from
+*Impact outside the diff* and confirm the cited file really consumes the changed thing, and confirm
+that every checkpoint is a judgment a reviewer could get wrong rather than a heading naming a file.
 
 `skills/review-map/evals/` is where that judging is systematised — fixtures with deliberately planted
-findings, whole-page and single-section cases, and one mechanical check script per rule family. The
-loop is:
+findings, whole-page cases, and one mechanical check script per rule family:
 
 ```bash
-cd skills/review-map/evals
-./run.sh behaviour-flows -n 3 --judge && ./report.sh behaviour-flows
+bin/evals page 1          # the recipe for one whole-page case
+bin/evals page-check 1 page.html
 ```
 
-Results carry the skill's git sha, the model and the effort, so a pass rate is attributable to a
-version of the prose. `evals/README.md` has the rest — the split between mechanical and judged
-expectations, how to add a case, and `profile.sh` for when the question is where a run's minutes went
-rather than whether the page was right.
+The single-section cases are deferred: they graded one section of the page this design replaced, and
+their equivalent unit is a checkpoint rather than a section (`evals/deferred/README.md`). Results
+carry the skill's git sha, the model and the effort, so a pass rate is attributable to a version of
+the prose. `evals/README.md` has the rest — the split between mechanical and judged expectations, how
+to add a case, and `profile.sh` for when the question is where a run's minutes went rather than
+whether the page was right.
 
 The checks are Ruby — `check.rb` dispatches one script per rule family — and they have their own
 regression suites, which run in CI and take a few seconds:
@@ -111,9 +114,9 @@ regression suites, which run in CI and take a few seconds:
 ```bash
 ruby skills/review-map/evals/checks/self-test.rb        # every golden fragment's asserted verdict
 ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner, directly
-skills/review-map/evals/checks/frozen.rb                # ~3000 cases against their recorded output
+skills/review-map/evals/checks/frozen.rb                # ~1000 cases against their recorded output
 skills/review-map/tests/run.sh                          # page-skeleton.sh and diff-render.sh
-skills/review-map/tests/self-test.sh                    # eleven deliberate breaks, each must fail it
+skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
 skills/setup-ci/tests/run.sh                            # what the generated workflow contains
 skills/setup-ci/tests/self-test.sh                      # ten deliberate breaks, each must fail it
 ```

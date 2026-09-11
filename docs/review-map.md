@@ -10,81 +10,54 @@ The product principle every rule below serves:
 
 ## The sections
 
-At `--full`, seven sections in the order a reviewer actually works, each owning one kind of thing,
-with any the diff does not earn omitted outright. At the default `--brief`, the first three are these
-unchanged and the last four are merged into one — see *Detail levels* below:
+Five parts in the order a reviewer actually works, each owning one kind of thing, with any the diff
+does not earn omitted outright.
 
-- **What changed** — intent, scope and the central behavioural change, with the use cases named as
-  actor plus behaviour. Derived from tests, code and commits rather than copied from a possibly-stale
-  PR description.
-- **Behaviour flows** — the bulk, grouped by behaviour rather than by directory, and the one place
-  each finding is explained. Each flow carries only what is specific to it: before and after, the
-  path through the stack, the column it writes, the endpoint it goes through, the field crossing the
-  backend/frontend boundary, the unchanged code it gives new meaning to, its tests and its test gap,
-  and the decisions worth pausing on. It comes second because everything after it is easier to read
-  once the mechanisms are known.
+- **What changed** — the masthead, then one paragraph: what problem this solves, what is now true
+  that was not, who is affected. Derived from tests, code and commits rather than copied from a
+  possibly-stale PR description. A limit the run hit — a region it had to skim, a client it could not
+  read — is stated here and nowhere else.
+- **What needs your attention** — the page's core. Three to five **review checkpoints**, each one
+  judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
+  intended scope?* rather than *ProjectSearcher implementation*. A checkpoint carries the question,
+  two to four sentences on why it is one, one to four places to look with a clause each, and — when
+  the judgment turns on something prose cannot hold — a compact chain showing the mechanism. A line
+  labelled *Open question* names what only the author can settle.
 
-  A flow may also carry **one drawing**, and most carry none. Where a field crosses the boundary it
-  is a **boundary chain** — serializer → JSON → type → hook → component, with the hop where the two
-  sides stop agreeing marked on the hop rather than described underneath. Where the change alters a
-  guard's condition and sends two kinds of request down different routes, it is a **guard fork**:
-  the gate chain with both routes on it, and the gate the diverted request never reaches drawn as
-  never reached. Both come from a fixed catalogue, so two Review Maps draw the same mechanism the
-  same way.
-- **Start here** — the moment you open the code: one list, in the order to read it, of where to go
-  and why. What most needs judgment and what to read first are the same question, so it is answered
-  once. Each entry links into the flow that explains it.
-- **What this change reaches** — the same change seen whole, after the flows. Its figure is
-  **impact paths**: two or three directed chains, each in a card of its own, each running from code
-  the PR changed, through the code that is *affected but unchanged* — the callers, serializers,
-  queries, factories, policies and TypeScript types whose meaning this diff just changed — to what
-  someone would then observe. Every hop carries the relation that makes it causal: *reads*, *falls
-  back to*, *ignored by*. Beneath the figure, each affected entry gets a citation and a clause;
-  where a flow already explained one, this is a pointer back to it, and what no single flow owns is
-  explained here. This is the part no diff can produce, and the reason the page exists.
-- **Cross-cutting consequences** — only what genuinely spans flows: schema structure and migration
-  safety, application invariants set beside database invariants, the authorization model, background
-  jobs, deploy ordering, test infrastructure that changes how other specs behave, and changes to
-  `CLAUDE.md`, hooks and skills, which alter how every human and agent works in the repo.
-- **Before approving** — questions only the author can answer, validations worth running, the test
-  gaps gathered in one place, and a comprehension checkpoint of at most five questions.
-- **Coverage** — every changed file, where it is covered, and whether it is primary, supporting or
-  secondary work. At `--brief` there is no such section and the file list sits in a shut disclosure
-  at the foot of the page, because a list of every changed path is an inventory rather than
-  something to read.
+  They are ordered by what a reviewer would most regret misunderstanding. **That order is not a
+  scale**: there is no severity word, no number beside a question, and nothing that reads as a
+  verdict on any part of the change.
+- **Read the code in this order** — the moment you open the code: three to seven stops, in the order
+  that builds understanding rather than diff order. Schema before the code that trusts it; the
+  smallest complete example before the bulk; irreversible code last. Each stop says why it is there
+  in one sentence and links to the checkpoint it belongs to.
+- **Impact outside the diff** — the part no diff can produce, and the reason the page exists. One to
+  three directed chains, each in a card of its own, each running from code the PR changed, through
+  the code that is *affected but unchanged* — the callers, serializers, queries, factories, policies
+  and TypeScript types whose meaning this diff just changed — to what someone would then observe.
+  Every hop carries the relation that makes it causal: *reads*, *falls back to*, *ignored by*.
+  Beneath the figure, each affected entry gets a citation and a clause, pointing at the checkpoint
+  that turns on it rather than explaining it twice. If nothing crosses into unchanged code, the
+  section is not there at all.
+- **Evidence & diff coverage** — one shut disclosure at the foot, holding every changed path, the
+  searches the run ran and what they returned, and the affected code no checkpoint turns on. It is
+  provenance: the page reads complete with it closed, and nothing a reviewer has to act on lives only
+  in there.
 
-## Detail levels
+## One page shape
 
-**`--brief`**, the default, merges the tail of the page — what the change reaches, cross-cutting
-consequences, before approving, coverage — into **one** section, *Reach & checks*, built around the
-impact paths, with the questions and commands a reviewer acts on attached. Four sections instead of
-seven, and about half the prose: the level carries a word budget, roughly 950 words plus 440 for each
-behaviour flow.
+There is one page. `--brief` and `--light` are accepted and change nothing; `--full` and `--review`
+stop the run and say they are not implemented in this version.
 
-**`--full`** writes all seven, at whatever length the change earns.
+That is a deliberate narrowing. The page used to have two shapes and a word budget to tell them
+apart, and what a reader actually wants is not a length setting but an answer to one question: *what
+do I have to judge before approving this, and where do I look to judge it?* The analysis behind the
+page is unchanged and deep — the run traces consumers across the whole diff, reads the tests, follows
+values across the boundary and attacks its own conclusions. What reaches you is the part you have to
+act on.
 
-What `--brief` does **not** do is thin out what those sections teach. The behaviour flows are the
-product, and a level that summarised them would be selling the thing the page exists for — so §§ 1–3
-exist at both levels with the same depth rules, the same excerpts and the same review unit, and the
-budget bounds how a claim is written rather than whether it is there. Nothing is dropped to make the
-page fit: every finding, every citation, every evidence tier, every field a flow has material for and
-**every diagram** is the same at both levels, drawn at the same size from the same catalogue. What it
-does spend less on is prose — a mechanism stated rather than narrated, a field's claim plus its clause
-rather than a paragraph.
-
-Three things come out of the page entirely at this level, and none of them is a finding: the framework
-primer callout (the pinned documentation link it escalates from stays), a flow's own before/after
-block (§ 1 carries the change's), and the endpoint's inventory of error cases the diff does not touch
-(every error it adds, moves or removes is still named). It also merges, drops the coverage ledger's
-attention and grouping columns, and drops the comprehension checkpoint. Every changed file still
-appears, and the completeness check still runs, at both levels.
-
-Reach for `--full` on a diff you are going to live inside for an hour — a migration, a change
-spanning both sides of the API, someone else's hundred-file feature.
-
-**`--review`** is planned: a code-review pass on top of the map, with its findings verified and
-threaded into the flow that owns each one. It is not implemented, and passing it stops the run and
-says so rather than producing a page that quietly leaves it out.
+A future full mode would keep this agenda and add supporting evidence beneath it, rather than making
+you read the evidence to reach the overview.
 
 ## Each fact has one home
 
@@ -98,9 +71,9 @@ from anywhere else in a sentence. On a real PR that took a 21-page page to 9 wit
 removed. The reader who thinks *"I already read this"* stops reading, and everything after that is
 wasted no matter how good it is.
 
-The section order is what makes that affordable. The flows come before the starting list and before
-the reach section, so those two can point at a flow — *"`ActiveProjects` is explained in Flow B"* —
-instead of carrying enough of the mechanism to be readable on their own.
+The section order is what makes that affordable. The checkpoints come before the reading order and
+before the impact section, so those two can point at a checkpoint — *"`ActiveProjects` is what
+checkpoint 2 turns on"* — instead of carrying enough of the mechanism to be readable on their own.
 
 ## It arrives in stages
 
@@ -108,26 +81,30 @@ A large diff takes a while to explain, and a reviewer holding a ticket should no
 The page is published early and republished as parts complete, always to the same URL: open it at
 minute two, watch it fill in, start reading the moment the part you need lands.
 
-The behaviour flows are the bulk of the page, so they arrive **one flow at a time** rather than all
-together — the split and what each flow will cover land first, then each flow as it is written.
+The checkpoints are the bulk of the page, so they arrive **one at a time** — and the stage that opens
+them publishes every checkpoint's *question* first, before any explanation is written. A reader who
+learns what the three judgments are has most of what they came for, well before the prose arrives.
 
 While it is still being written it says so, in a banner, and every part that is coming but not yet
 written is marked pending in the contents and in place. That is the difference between a useful
-early page and a dangerous one — a reader who sees no contract section should be able to tell whether
+early page and a dangerous one — a reader who sees no impact section should be able to tell whether
 there was nothing to say or whether it simply has not been written yet. At the final publish the
 banner and the markers are removed, and the coverage gate runs.
 
 A run that dies halfway therefore leaves a page that is honest about being half a page, rather than
 leaving nothing at all.
 
-## The review unit
+## The review checkpoint
 
-Every meaningful change gets the same seven fields: why this exists · implementation · relevant
-tests · **affected but unchanged** · things to understand · how to validate · reviewer questions.
+The page's primitive, and what replaced a fixed seven-field block on every meaningful change. That
+block asked you to read implementation, tests, affected code, things to understand, validation and
+questions for each one, whether or not each row had anything to say — right as analysis, a form as a
+reading obligation.
 
-Validation steps are real commands against your repository, not invented ceremony. Tests appear
-twice on purpose: beside the behaviour they pin, and again as their own section when the change
-touches the test machinery itself.
+A checkpoint carries only what that judgment needs. One may need a chain and an open question;
+another two links and three sentences; another a test that pins one branch and leaves another open.
+Validation steps are real commands against your repository, not invented ceremony, and they appear
+where running one would settle the question rather than gathered into a list of their own.
 
 ## The code comes to you
 
@@ -215,23 +192,10 @@ no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.
 Phoenix. The page says which, because a reviewer should not be able to change a database by pasting
 what it told them to.
 
-**And occasionally a primer** — a short callout inside the flow it belongs to, naming the API, saying
-what the behaviour actually is in two paragraphs, and pointing at the pinned documentation. It is for
-the narrower case where you cannot make the decision in front of you *without* the framework rule:
-which of `archived_at_changed?` and `saved_change_to_archived_at?` a callback wants, say, when the
-answer decides whether the callback fires at all. It cites the line in your code that earned it, like
-any other link, and the four-line snippet beside it runs on a class your app does not have — so its
-`# =>` lines quote the manual rather than claiming something about your application that nothing ran.
-
-It works for the rest of the stack too, minus the branding: a primer about a library — Pundit's
-`authorize` raising rather than returning false, a Sidekiq job re-running `perform` from the top —
-is the same callout with the mark and the trademark line dropped and a neutral rule in place of the
-red one. The logotype is an attribution, not decoration, so it appears only where the link does.
-
-There is at most one per flow, and most flows get none. That ceiling is the point: the failure mode
-here is not a wrong link, it is a page that explains every mechanism it touches, becomes a Rails
-tutorial with a diff attached, and reads as more thorough while getting harder to navigate. An anchor
-of any kind has to be earned by a decision you have to make.
+**There is at most one link per checkpoint, and many checkpoints get none.** That ceiling is the
+point: the failure mode here is not a wrong link, it is a page that explains every mechanism it
+touches, becomes a Rails tutorial with a diff attached, and reads as more thorough while getting
+harder to navigate. An anchor of any kind has to be earned by a decision you have to make.
 
 ## It separates evidence from inference
 
@@ -243,22 +207,27 @@ intent cannot be established, the page says so instead of guessing:
 
 ## It adapts to the PR
 
-The detail level decides how many sections there are; this decides how heavily each one is weighed,
-and the two are separate axes. Parts appear only when the diff earns them, and depth scales with
-weight. A four-file bugfix produces a one-screen page, not an empty template. If a PR genuinely does
-not need one, the skill says so instead of generating ceremony.
+Parts appear only when the diff earns them, and a small change gets a small agenda: three checkpoints
+where three is all there is, and no impact section at all when nothing crosses into unchanged code. A
+four-file bugfix produces a one-screen page, not an empty template. If a PR genuinely does not need
+one, the skill says so instead of generating ceremony.
+
+What never scales down is the number of judgments the change actually asks of you. The page is short
+because it says each thing once and only says what you have to act on — never because it dropped one
+to hit a length.
 
 ## It covers the whole diff
 
-Ranking attention is not the same as skipping things. Every file in the diff appears somewhere, even
-if only as a ledger row reading "regenerated by the migration". A reviewer who wants to read all of
-it can, and never has to wonder whether something was quietly dropped. A mechanical check runs at the
-final publish and fails the run if the page and `git diff --name-only` disagree.
+Ranking attention is not the same as skipping things. Every file in the diff appears in the page's
+evidence foot, even the ones whose whole story is "regenerated by the migration". A reviewer who
+wants to read all of it can, and never has to wonder whether something was quietly dropped. A
+mechanical check runs at the final publish and fails the run if the page and `git diff --name-only`
+disagree.
 
-Where that inventory sits is the one thing the detail level moves: the *Coverage* section at `--full`,
-a shut disclosure at the foot of the page at `--brief`. It is deliberately not inside *What this
-change reaches* — that section is about consequences, and a list of every changed path in the middle
-of it is a second copy of the ledger where a reader is looking for something else.
+That inventory is deliberately in the foot and not inside *Impact outside the diff* — that section is
+about consequences, and a list of every changed path in the middle of it is a second inventory where
+a reader is looking for something else. It is collapsed because it is provenance rather than
+something to read.
 
 ## It is not a code reviewer, and it does not grade
 
