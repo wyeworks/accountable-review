@@ -1,3 +1,19 @@
+## --fragment agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+PASS  the sampling caveat is on the page
 ## --fragment anchors-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -685,4 +701,20 @@ FAIL  section 03 carries 2 lists — it is one list; a second is the findings/re
 PASS  entries link into the checkpoints that explain them (4)
 PASS  citations present alongside the entries (4)
 PASS  4 entries, within the shape of a reading order
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --fragment agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --fragment agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it

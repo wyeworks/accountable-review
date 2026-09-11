@@ -1,3 +1,17 @@
+## --fragment agenda-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page agenda-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment

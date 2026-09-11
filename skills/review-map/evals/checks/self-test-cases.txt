@@ -123,3 +123,16 @@
 # evidence, which is the shape excerpts.rb's state-tag rule shipped with once.
  link-form          | links-clean.html                | 0 | needs --repo and --base to ask which files GitHub renders
  link-form          | links-clean.html                | 0 | could not read                     | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000
+
+# THE POSITIVE CASE, and the only fixture carrying every component this format introduced. Each
+# row pins one rule's PASS line rather than a defect, because a suite made only of defect
+# fixtures cannot notice a rule that starts firing on correct markup — which is what the
+# hexdocs-clean rows exist for one level down. One row per check that has anything to say about
+# the new shape.
+ impact-paths       | agenda-clean.html             | 0 | within the 1-3 budget
+ impact-paths       | agenda-clean.html             | 0 | the panel is a component, not a drawing
+ start-here         | agenda-clean.html             | 0 | entries link into the checkpoints that explain them
+ start-here         | agenda-clean.html             | 0 | within the shape of a reading order
+ page-invariants    | agenda-clean.html             | 0 | evidence tiers used
+ page-invariants    | agenda-clean.html             | 0 | data-path is only on ledger rows
+ excerpts           | agenda-clean.html             | 0 | no excerpt quotes the same lines twice

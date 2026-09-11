@@ -1,3 +1,27 @@
+## --fragment agenda-clean.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page agenda-clean.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
 ## --fragment anchors-clean.html
 exit=0
 SKIP  no excerpts in this input
@@ -668,6 +692,18 @@ PASS  no placeholder summaries
 FAIL  a state tag is outside the generator's vocabulary, so it was typed: Modified on lib/admin_dashboard/reports/layout_updater.rb:18-24;
 WARN  the changed set could not be read from golden/searches-repo: git cannot resolve 0000000000000000000000000000000000000000..HEAD — a page carrying a ledger is still checked against that, and one without is not checked at all
 SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment agenda-clean.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
 SKIP  excerpt tints: a fragment carries no token block
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only

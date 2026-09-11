@@ -1,3 +1,9 @@
+## --fragment agenda-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page agenda-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-clean.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

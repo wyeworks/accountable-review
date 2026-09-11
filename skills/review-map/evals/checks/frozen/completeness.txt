@@ -1,3 +1,9 @@
+## --fragment agenda-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page agenda-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-clean.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
