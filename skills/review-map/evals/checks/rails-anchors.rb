@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# rails_anchors.rb — the three framework anchors: documentation links, runtime probes,
-# and the primer callout a link escalates into.
+# rails_anchors.rb — the two framework anchors: documentation links and runtime probes.
 #
-# All three exist to make a claim about Rails followable. All three fail in ways that look
+# Both exist to make a claim about the framework followable. Both fail in ways that look
 # like diligence, which is why they are checked mechanically rather than trusted:
 #
 #   a URL nobody opened            reads as a citation, resolves to a 404
@@ -12,9 +11,7 @@
 #   a probe with output beneath it reads as the most concrete thing on the page,
 #                                  and is the one part of it that is fiction
 #   a probe naming a missing scope reads as pasteable, fails on first paste
-#   a demo naming an app class     reads as a quotation of the manual and is a claim
-#                                  about this application that nobody ran
-#   a primer on every mechanism    reads as thoroughness and is a Rails manual with a
+#   a link on every mechanism      reads as thoroughness and is a Rails manual with a
 #                                  diff attached
 #
 # The catalogue is the allowlist, and this script derives it from the files rather than
@@ -34,19 +31,14 @@
 # --repo is what makes rule 7 possible, the way it makes searches.rb possible. Without it
 # the identifier check SKIPs rather than passing on evidence it does not have.
 #
-# LEVEL-INDEPENDENT, deliberately. A primer lives inside a behaviour flow, and §§ 1-3 are the
-# same spec at both detail levels, so nothing here reads `level` — before_approving.rb stays
-# the only check that knows it.
+# THE PRIMER IS GONE, along with the aside it lived in and the pre.demo it licensed. It was a
+# --full-only callout on a page that no longer has levels, and a component with no markup left
+# cannot be graded: what remains is the link and the probe, which are what an agenda page
+# actually anchors with. report-format.md § A future full mode records what the rules were.
 
 require_relative "lib/review_map/check"
 
 module RailsAnchors
-  PRIMER_OPEN = /<aside class="primer/
-  PRIMER_CLOSE = %r{</aside>}
-  DEMO_OPEN = /<pre class="demo"/
-  FLOW_SECTION = /<section [^>]*id="flow-/
-  SECTION_CLOSE = %r{</section>}
-
   # A code permalink belongs to the deep-link ladder, which page_invariants.rb § 5 owns.
   # `tree/` is NOT excluded, though it once was: a tag-pinned gem README — the only github.com
   # shape a doc link may take — is exactly `tree/v2.8.0#section`, so excluding it meant the one
@@ -156,35 +148,17 @@ module RailsAnchors
        .sub(%r{/tree/v[0-9][0-9A-Za-z.-]*}, "/tree/v{version}")
   end
 
-  # A primer is judged as ONE block, so it is flattened to a single line first. Its link and the
-  # citation that earned it sit in different children of the aside, and the rule is about the
-  # callout having a stake in this repository — not about which child holds the path. Flattening
-  # plus the two extra break tokens below also stop it working in the other direction: a primer
-  # with no citation of its own cannot borrow the one in the .item that happens to precede it.
-  def self.flatten_primers(page)
-    out = []
-    buffer = nil
-    page.lines.each do |raw|
-      line = raw.chomp
-      buffer = "" if line.match?(PRIMER_OPEN) && buffer.nil?
-      if buffer
-        buffer = "#{buffer} #{line}"
-        if line.match?(PRIMER_CLOSE)
-          out << buffer
-          buffer = nil
-        end
-        next
-      end
-      out << line
-    end
-    out
-  end
+  # What separates one block from the next. A doc link belongs with the sentence around it, and
+  # these are the boundaries that sentence cannot cross: a list item, a paragraph, a checkpoint,
+  # a figure caption. Without the closers a link in one block would borrow the citation in the
+  # one above it, which is the rule working backwards.
+  BLOCK_BREAK = %r{<li[ >]|</li>|<p[ >]|</p>|<section class="cp|</section>|<figcaption|<div class="item"}
 
-  # Blocked, not line-by-line: HTML wraps, and the rule is about the FIELD carrying the link,
-  # not about one physical line. A line-based test failed the template's own example, where the
-  # citation and the link sit on consecutive lines.
-  BLOCK_BREAK = %r{<div class="item"|<dd>|<dt>|</dd>|<aside class="primer|</aside>}
-
+  # A doc link is judged with the block it sits in, because the link and the citation that
+  # earned it are often different children of the same sentence. The rule is about the sentence
+  # having a stake in this repository, not about which child holds the path — and the break
+  # tokens are what stop it working in the other direction: a link with no citation of its own
+  # cannot borrow the one in the paragraph that happens to precede it.
   def self.link_blocks(lines)
     blocks = []
     buffer = ""
@@ -384,7 +358,7 @@ end
 unless external.empty?
   # A doc link is provenance. The claim it decorates still has to cite this repository, so the
   # element carrying the link needs a file:line — its own, not one from elsewhere on the page.
-  alone = RailsAnchors.link_blocks(RailsAnchors.flatten_primers(page)).count do |block|
+  alone = RailsAnchors.link_blocks(page.lines).count do |block|
     next false if block.include?('class="path"') || block.include?('class="cite"')
 
     # A bare path:line with no anchor counts too — that is the rung-3 and rung-4 form.
@@ -412,157 +386,11 @@ unless external.empty?
     check.ok("no documentation link hidden inside an excerpt")
   end
 
-  # The budget's mechanical edge. One per field is the rule; a page where most fields carry one
-  # has stopped selecting, and that needs a reader.
-  fields = page.count(/<dt>/)
-  if fields.positive? && external.size > fields
-    check.maybe("#{external.size} doc link(s) across #{fields} field(s) — at most one per field, and a page near that ratio has stopped selecting")
-  end
-end
-
-# ---------------------------------------------------------------- primer callouts
-#
-# The primer is the heaviest thing on the page that carries no evidence of its own, which makes
-# it the one most able to turn the report into a Rails manual with a diff attached. The rules
-# below are the mechanical half of the budget; whether a particular primer was earned needs a
-# reader and lives in the case.
-nprimer = page.count(RailsAnchors::PRIMER_OPEN)
-ndemo = page.count(RailsAnchors::DEMO_OPEN)
-if nprimer.zero? && ndemo.zero?
-  check.skip("primer callouts: none on this input")
-else
-  # The budget, and where a primer may live. At most one per behaviour flow, and none outside
-  # one: a primer explains a mechanism some flow is about, and one adrift in section 4 or 6 is a
-  # lesson with no behaviour attached to it. Counted per flow rather than per page, because the
-  # cap scales with the flow count and a page-wide number would mean nothing.
-  in_flow = false
-  here = 0
-  over = 0
-  loose = 0
-  page.lines.each do |raw|
-    line = raw.chomp
-    if line.match?(RailsAnchors::FLOW_SECTION)
-      in_flow = true
-      here = 0
-    end
-    if line.match?(RailsAnchors::PRIMER_OPEN)
-      if in_flow
-        here += 1
-        over += 1 if here > 1
-      else
-        loose += 1
-      end
-    end
-    in_flow = false if line.match?(RailsAnchors::SECTION_CLOSE)
-  end
-
-  if over.positive?
-    check.bad("#{over} flow(s) carry more than one primer — at most one per flow, and a flow needing two is a flow explaining Rails rather than its own change")
-  elsif loose.positive?
-    check.bad(%(#{loose} primer(s) sit outside a <section id="flow-..."> — a primer explains a mechanism a flow is about, and one on its own is a lesson with no behaviour attached))
-  elsif nprimer.positive?
-    check.ok("#{nprimer} primer(s), at most one per flow and each inside the flow it explains")
-  end
-
-  # A primer carries a doc link. It is what a link escalates INTO, so one without a link has
-  # kept the teaching and dropped the provenance — the shape that reads most like a tutorial.
-  in_primer = false
-  has_link = false
-  nolink = 0
-  page.lines.each do |raw|
-    line = raw.chomp
-    if line.match?(RailsAnchors::PRIMER_OPEN)
-      in_primer = true
-      has_link = false
-    end
-    has_link = true if in_primer && line.match?(/class="doc"/)
-    next unless line.match?(RailsAnchors::PRIMER_CLOSE)
-
-    nolink += 1 if in_primer && !has_link
-    in_primer = false
-  end
-  if nolink.positive?
-    check.bad("#{nolink} primer(s) carry no documentation link — a primer is what a link escalates into, so one without a link is teaching with no provenance")
-  elsif nprimer.positive?
-    check.ok("every primer carries the documentation link it escalated from")
-  end
-
-  # pre.demo only ever inside a primer. THE LOAD-BEARING ONE: a demo may show a "# =>" line
-  # because it quotes the manual, so a demo loose on the page is a general-purpose hole for
-  # output nobody observed, straight past rule 5. The two blocks are separate classes for
-  # exactly this reason and must never be merged.
-  in_primer = false
-  loose_demo = 0
-  page.lines.each do |raw|
-    line = raw.chomp
-    in_primer = true if line.match?(RailsAnchors::PRIMER_OPEN)
-    loose_demo += 1 if line.match?(RailsAnchors::DEMO_OPEN) && !in_primer
-    in_primer = false if line.match?(RailsAnchors::PRIMER_CLOSE)
-  end
-  if loose_demo.positive?
-    check.bad("#{loose_demo} pre.demo block(s) outside a primer — a demo may show a result only because it quotes the manual, so one loose on the page is fabricated output with the rule turned off")
-  elsif ndemo.positive?
-    check.ok("#{ndemo} demo block(s), all inside the primer that licenses them")
-  end
-
-  # The Rails mark is only worn by a Rails primer, and never without the notice. Both failures
-  # are attributions rather than layout: a gem primer wearing the Rails logotype says the Rails
-  # Foundation wrote that gem, and the logotype with no .pr-tm shows someone's mark without
-  # saying whose it is. Neither looks wrong on the page.
-  in_primer = false
-  mark = tm = rails = false
-  bad_host = 0
-  no_tm = 0
-  page.lines.each do |raw|
-    line = raw.chomp
-    if line.match?(RailsAnchors::PRIMER_OPEN)
-      in_primer = true
-      mark = tm = rails = false
-    end
-    if in_primer
-      mark = true if line.match?(/class="pr-mark"/)
-      tm = true if line.match?(/class="pr-tm"/)
-      rails = true if line.match?(/rubyonrails\.org/)
-    end
-    next unless line.match?(RailsAnchors::PRIMER_CLOSE)
-
-    if in_primer
-      bad_host += 1 if mark && !rails
-      no_tm += 1 if mark && !tm
-    end
-    in_primer = false
-  end
-  if bad_host.positive?
-    check.bad("#{bad_host} primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead")
-  elsif no_tm.positive?
-    check.bad("#{no_tm} primer(s) show the Rails mark with no trademark line — the .pr-tm row exists to say whose mark is on display, and dropping it is the one part of this component that is not ours to drop")
-  else
-    check.ok("the Rails mark appears only on Rails primers, each carrying its trademark line")
-  end
-
-  # The demo's receiver is NOT from this repository — the inverse of rule 7, and the whole
-  # reason a "# =>" is allowed here. A demo on an application class is a claim about the app
-  # under review that the run never made.
-  if ndemo.zero?
-    # nothing to check
-  elsif check.repo.to_s.empty?
-    check.skip("demo receivers: needs --repo to ask whether the constants are this app's")
-  elsif !File.directory?(check.repo)
-    check.bad("demo receivers: --repo is not a directory: #{check.repo}")
-  else
-    body = RailsAnchors.body_of(page, RailsAnchors::DEMO_OPEN)
-    # `Application*` is exempt, and a real run is what found this: a demo reading
-    # `class Post < ApplicationRecord` was reported as naming an application class, because
-    # every Rails app really does define one. The scaffold base classes exist in every app of
-    # their kind and say nothing about THIS one, so naming one is not the defect this rule is
-    # looking for. Flagging them made the idiomatic generic receiver the hardest one to write.
-    consts = RailsAnchors.constants_in(body).reject { |c| c.match?(/\AApplication[A-Z]/) }
-    real = consts.select { |c| RailsAnchors.defined_in?(check, c) }
-    if real.empty?
-      check.ok("every demo receiver is a generic class, so its result lines quote the manual")
-    else
-      check.bad("#{real.size} demo receiver(s) are classes from this repository — a result line on an application class is output nobody observed: #{real.join(" ")} ")
-    end
+  # The budget's mechanical edge. At most one per checkpoint is the rule; a page carrying more
+  # links than judgments has stopped selecting, and that needs a reader.
+  cps = page.count(/<section class="cp/)
+  if cps.positive? && external.size > cps
+    check.maybe("#{external.size} doc link(s) across #{cps} checkpoint(s) — at most one each, and a page near that ratio has stopped selecting")
   end
 end
 

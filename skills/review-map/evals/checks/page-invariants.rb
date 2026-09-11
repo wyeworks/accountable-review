@@ -207,19 +207,6 @@ else
     check.bad("theme states missing: #{missing.join(" ")}")
   end
 
-  # The blocks existing is not the same as a colour being in all three of them. --rails is
-  # checked by name because it is the newest colour and the easiest to half-declare: nothing
-  # on the page depends on it to be readable, so a set missing from the dark blocks is
-  # invisible until someone opens a primer with the OS in dark mode. Same idiom as the
-  # --syn-* sweep in excerpts.rb, and for the same reason.
-  rails = page.count("--rails:")
-  if rails.zero?
-    check.skip("--rails: this page has no primer colour to check")
-  elsif rails >= 3
-    check.ok("--rails defined in all three theme blocks")
-  else
-    check.bad("--rails is declared #{rails} time(s), needs 3 — bare :root plus both dark blocks")
-  end
 end
 
 check.finish

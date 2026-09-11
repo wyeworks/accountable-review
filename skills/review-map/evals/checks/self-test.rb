@@ -96,7 +96,7 @@ end
 %w[completeness build-state].each do |check|
   out, err, status = ReviewMap.capture({ "CHECK_TALLY" => "0" }, "ruby",
                                     File.join(HERE, "#{check}.rb"),
-                                    "--fragment", File.join(GOLD, "flows-clean.html"))
+                                    "--fragment", File.join(GOLD, "start-here-clean.html"))
   output = out + err
   if status.exitstatus == 3 && output.include?("needs a whole page")
     pass += 1
