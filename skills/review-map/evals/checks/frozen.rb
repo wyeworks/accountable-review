@@ -59,7 +59,7 @@ end
 
 # The same two case sources equivalence.rb used, so the frozen corpus is the corpus it graded:
 # the whole of golden/ and the real template in both kinds, plus every self-test row replayed
-# with its own arguments — which is where --repo, --base and --level live.
+# with its own arguments — which is where --repo and --base live.
 def cases_for(check)
   inputs = Dir[File.join(GOLD, "*.html")].sort +
            [File.expand_path(File.join(EVALS, "..", "references", "page-template.html"))]

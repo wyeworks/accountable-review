@@ -12,7 +12,7 @@
 # which is why it belongs in CI next to `claude plugin validate`.
 #
 # The table is a DATA FILE rather than a heredoc here, and that is not tidiness: frozen.rb reads
-# the same rows, so the frozen corpus inherits every case that needs --repo, --base, --level or
+# the same rows, so the frozen corpus inherits every case that needs --repo, --base or
 # the @REPO@ fixture. One source of truth for what the corpus is.
 
 require_relative "lib/review_map/fixture"
