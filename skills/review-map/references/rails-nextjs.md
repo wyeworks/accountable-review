@@ -114,7 +114,8 @@ finding is reported by absence, not by a green tick.
 ## The boundary: serializers to types
 
 This is the one place in the stack with no compiler and no test that spans it, which is why the page
-follows one field across it end to end — inside the flow that owns the field, not as a section of
+follows one field across it end to end — as an impact path when a hop lands in unchanged code, as
+the chain inside the checkpoint that turns on it when it does not, and never as a section of
 its own. What to look for:
 
 - A **nullable backend field typed non-null** on the client. The Ruby side returns `nil` on some path;
@@ -201,10 +202,10 @@ answers *what validates this now*, including the validation in a concern nobody 
 shows the `dependent:` actually in force rather than the one written on the line you are reading.
 
 So for a change to a scope, a validation, an association, a callback or a column, **reach for a probe
-before reaching for a paragraph.** Where a probe would settle a claim the page is making, it belongs
-in *how to validate*; where it makes a mechanism legible that the page has already established, it
-belongs in *things to understand*. `references/report-format.md` § *Framework anchors* owns that
-routing rule and the budget.
+before reaching for a paragraph.** Where a probe would settle the judgment a checkpoint asks for, it
+goes inside that checkpoint, after its explanation; where it would only make a mechanism legible, a
+clause in the explanation does the job and the probe is not earned.
+`references/report-format.md` § *Framework anchors* owns that routing rule and the budget.
 
 **These are proposed, never run.** This skill does not boot the application under review, which means
 the page shows the command and never its output. A fabricated `=> true`, or an invented line of SQL
@@ -223,8 +224,9 @@ Three rules make a probe safe to paste, and they matter more than the list below
   jobs, mailers and cache invalidation hanging off commit are all invisible for the same reason.
 - **Prefer a probe that answers on an empty database.** `Model.new`, `.to_sql` and class-level
   reflection need no rows, so they work in a fresh checkout and expose no real data. A probe that
-  needs seeded records is a validation step with a setup cost: it goes in section 6 beside the seed
-  command, not inside a flow.
+  needs seeded records is a validation step with a setup cost: it goes inside the checkpoint it
+  settles, with the seed command beside it — there is no separate validations section to send it to —
+  and a probe that answers on an empty database is the one to prefer.
 
 Never propose a snippet with `RAILS_ENV=production`, and never one whose output would print personal
 data. Substitute the project's real constants throughout — a probe naming a scope this repository does

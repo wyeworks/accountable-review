@@ -8,8 +8,8 @@ cannot be inferred from a diff — it is what makes the page a review map rather
 Where a lens turns on a Phoenix, LiveView or Ecto behaviour the reader might reasonably not know, the
 canonical URL for it is in `references/elixir-docs.md`, and `report-format.md` § *Framework anchors*
 says when a claim has earned a link. Do not construct one from memory. **Read that file's § *Version*
-first**: while the catalogue is unverified it yields no links at all — and so no primer callouts
-either, since a primer is what a link escalates into — and the anchor an Elixir run actually gets is
+first**: while the catalogue is unverified it yields no links at all, and the anchor an Elixir run
+actually gets is
 the probe.
 
 Two app shapes are covered, and a repo is often both. A **LiveView app** has its sharpest seam between
@@ -151,7 +151,7 @@ what the socket actually holds.
   at all — without it a form validates only on submit.
 - `push_patch` re-enters the same LiveView through `handle_params/3` (no remount, assigns kept);
   `push_navigate` mounts a different LiveView (assigns lost); `redirect` leaves LiveView entirely.
-  Changing which one a flow uses changes what survives, and the diff of the call site does not say so.
+  Changing which one a LiveView uses changes what survives, and the diff of the call site does not say so.
 - `live_action` comes from the router's third argument, and `handle_params/3` is where it is read. A
   new action added to the router with no clause for it in `handle_params` renders the default.
 - `assign_new/3` exists so a parent's assign is not recomputed in the child; a plain `assign` in a
@@ -253,10 +253,10 @@ the field a macro added. `Ecto.Adapters.SQL.to_sql/3` shows a query as the datab
 every composed filter applied.
 
 So for a change to a changeset, a query, an association, a schema field or a route, **reach for a probe
-before reaching for a paragraph.** Where a probe would settle a claim the page is making, it belongs
-in *how to validate*; where it makes a mechanism legible that the page has already established, it
-belongs in *things to understand*. `references/report-format.md` § *Framework anchors* owns that
-routing rule and the budget.
+before reaching for a paragraph.** Where a probe would settle the judgment a checkpoint asks for, it
+goes inside that checkpoint, after its explanation; where it would only make a mechanism legible, a
+clause in the explanation does the job and the probe is not earned.
+`references/report-format.md` § *Framework anchors* owns that routing rule and the budget.
 
 **These are proposed, never run.** This skill does not boot the application under review, which means
 the page shows the command and never its output. A fabricated `{:ok, %Project{}}`, or an invented line
@@ -282,7 +282,9 @@ Three rules make a probe safe to paste, and they matter more than the list below
 - **Prefer a probe that answers on an empty database.** `__schema__/1`, `to_sql/3`, a changeset built
   from a bare struct, and `mix phx.routes` all need no rows, so they work in a fresh checkout and
   expose no real data. A probe that needs seeded records is a validation step with a setup cost: it
-  goes in section 6 beside the seed command, not inside a flow.
+  goes inside the checkpoint it settles, with the seed command beside it — there is no separate
+  validations section to send it to — and a probe that answers on an empty database is the one to
+  prefer.
 
 Never propose a snippet with `MIX_ENV=prod`, and never one whose output would print personal data.
 Substitute the project's real module names throughout — a probe naming a context this repository does
