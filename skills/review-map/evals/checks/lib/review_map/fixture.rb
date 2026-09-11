@@ -17,7 +17,7 @@ require_relative "page"
 # Two constraints it has to respect, and both come from checks/frozen.rb.
 #
 #   It is built under TMPDIR, never inside the checkout. frozen.rb's own header refuses
-#   diagram-shot for rendering into references/shots/ during a sweep, and a corpus that writes a
+#   a check that rendered images into references/shots/ during a sweep, and a corpus that writes a
 #   git repository into the working tree is the same violation with a different file type.
 #
 #   Its base SHA is therefore FIXED by links-repo.sh, because a frozen record is a function of

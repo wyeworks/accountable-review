@@ -300,9 +300,8 @@ else
   check.ok("the panel is a component, not a drawing")
 end
 
-# Citations live in the affected list. Keeping them out is what stops the panel growing back
-# into a second copy of that list, and it is also why reach.rb can drop the panel before its
-# own entry census without losing anything.
+# Citations live in the affected list beside the panel. Keeping them out is what stops the panel
+# growing back into a second copy of that list.
 if panel.has?(/class="(?:path|cite)"/)
   check.bad("a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it")
 else

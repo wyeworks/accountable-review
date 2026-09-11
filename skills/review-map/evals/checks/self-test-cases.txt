@@ -25,7 +25,7 @@
 # the substring is the whole of the assertion here.
  impact-paths       | impact-entities-vocab-clean.html | 0 | nodes carry labels rather than prose
  impact-paths       | impact-entities-vocab-clean.html | 0 | leads with a causal verb from the vocabulary
-# And the one that has to SKIP rather than pass: a fragment with no panel is reach.rb's
+# And the one that has to SKIP rather than pass: a fragment with no panel has nothing for this
 # failure to report, not this check's. A PASS here would read as a verified figure that was
 # never looked at.
  impact-paths       | searches-clean.html           | 0 | no .impact panel in this input
