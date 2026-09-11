@@ -1,13 +1,18 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — goal and use cases, behaviour flows carrying the API and client contract, where to start reading, what the change reaches including the unchanged code it gives new meaning to, and what to check before approving — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range, plus a detail level: --brief (the default) merges the tail of the page into one section, --full writes all seven, --review is not implemented yet. An effort level is separate and orthogonal: --effort high is the default and tries to falsify the page's own claims before it is finished, --effort low skips that pass. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — what changed, the three to five judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no level flag: --brief and --light are accepted and change nothing, --full and --review stop the run as not implemented in this version. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
 
-Turns a diff into one published page that makes a medium or large change navigable: what it is for,
-how its behaviours work, what the API and the client now agree on, where the decisions live, where to
-start reading, and what it can break.
+Turns a diff into one published page a reviewer can work from: what the change is for, which three
+to five judgments it asks of them and where to look to make each one, the order to read the code in,
+and what the change reaches outside the lines it touched.
+
+**The page is a review agenda, and the deep analysis is how it is built — not what it prints.** A run
+traces consumers across the whole diff, reads the tests, follows a value across the boundary and
+attacks its own conclusions. What reaches the reader is the part they have to act on. Reducing the
+reading obligation is the goal; reducing the analysis is the failure.
 
 **Do not determine whether the PR is correct. Help a competent reviewer determine whether it is.**
 That is the whole product. A page good enough to approve from without reading code is a failure — the
@@ -32,49 +37,52 @@ Reading the other stack's file costs context and teaches the wrong searches.
 
 | File | Read at | For |
 |---|---|---|
-| `references/report-format.md` | steps 1, 7, 8, 9 | The detail levels, the sections each one produces, the review-unit format, the evidence tiers, source excerpts, the canonical-home rule, depth rules and the deep-link ladder |
+| `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
-| `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, the two assembled flows, the four SVG diagram layouts — with `scripts/page-skeleton.sh --markup --level <the level from step 1>`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
-| `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup --level <level>` is how the rest of the template is read, and it leaves out the tail shape the other level would have written |
+| `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, two assembled checkpoints, the chain and the impact panel — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
+| `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
 | `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
-| `scripts/ledger-rows.sh` | step 10 | Generates the coverage-ledger rows, and their deep links, from the diff |
+| `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
 
 Paths are relative to the base directory named at the top of this skill when it loads. That value is
 how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
 
 One thing bundled with the plugin is not a file you read: the `accountable-review:claim-falsifier`
-subagent, spawned by name in step 8 at `--effort high`, which is the default. It is addressed, never loaded — its
-instructions are its own, which is the point of putting them in a separate context.
+subagent, spawned by name at the end of step 6 at `--effort high`, which is the default, and handed
+one analysis note this run wrote. Its challenges are folded in at step 8. It is addressed, never
+loaded — its instructions are its own, which is the point of putting them in a separate context.
 
-## 1. Resolve the target, the detail level and the effort
+## 1. Resolve the target and the effort
 
 - Argument may be a PR number, a PR URL, a branch, or a diff range. With no argument, use the
   current branch against its base.
-- **Read the detail level off the invocation, and hold it for the whole run.** One of `--brief`,
-  `--full`, `--review`, in any position; **no flag means `--brief`**. What each level produces is in
-  `references/report-format.md` § *Detail levels* — read it now, with the rest of that file, rather
-  than inferring the shape from the section list. Three rules about the flag itself:
-  - `--review` **stops the run.** It is not implemented; see § *The review level is not implemented
-    yet* below for what to say. Do not fall back to another level and do not write a page.
-  - An argument starting with `--` that is none of the three, and is not one of `--effort`,
-    `--output`, `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not
-    guessed at**. A misread flag silently produces the wrong shape of page, and the reader has no way
-    to tell.
-  - Say which level you are producing when you first speak, in the same breath as the URL — a reader
-    who wanted the full page should find that out at minute two, not at the end.
-  - **`--brief` carries a word budget, and it is the default, so expect to be writing to it.**
-    § *The brief budget* in that file owns it: a ceiling of 950 words plus 440 per behaviour flow,
-    per-component caps, and three concepts that belong to `--full`. Read it with § *Detail levels*
-    rather than discovering the caps while drafting stage 3. It caps prose only — it removes no
-    finding, no field, no tier and **no figure**.
+- **There is one page shape, and no flag chooses it.** Three flags about the shape still arrive on
+  the command line, and each is handled explicitly rather than guessed at:
+  - `--full` and `--review` **stop the run.** Neither is implemented in this version; see § *Two
+    levels are not implemented in this version* below for what to say. Do not fall back to the
+    default page and do not write one — a reader who asked for seven sections and got five would
+    have no way to tell from the page that they had.
+  - `--brief` and `--light` are **accepted and change nothing.** `--brief` was the name of this
+    page's ancestor and an invocation someone kept in a script is not a typo; `--light` is the same
+    courtesy for a reader guessing the opposite of `--full`. Take both silently.
+  - An argument starting with `--` that is none of those, and is not one of `--effort`, `--output`,
+    `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not guessed at**. A
+    misread flag silently produces the wrong run, and the reader has no way to tell.
+- **The page has a word budget, stated as guidance, and you write to it rather than trimming to
+  it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
+  *What changed*, 50 to 140 a checkpoint, 700 to 1,500 visible words on a small or medium PR. Read
+  it now, with the rest of that file, rather than discovering the caps while drafting. It caps prose
+  and nothing else: no checkpoint, no citation, no evidence tier and no figure comes out for the
+  budget's sake, and **the number it never touches is the checkpoint count.**
 - **Read the effort off the invocation too, and hold it the same way.** One of `--effort high`,
   `--effort low`, in any position; **no flag means `high`**. It decides how hard the run works to
-  be right, and at `--effort high` that buys exactly one thing today: the falsification pass in
-  step 8. `--effort low` opts out of it, and is the flag to reach for when the diff is small enough
-  that a second reader has nothing to find.
+  be right, and at `--effort high` that buys exactly one thing today: the falsification pass —
+  spawned at the end of step 6 against the analysis notes, folded in at step 8. `--effort low` opts
+  out of it, and is the flag to reach for when the diff is small enough that a second reader has
+  nothing to find.
 
   **`--effort normal` is accepted and means `low`.** It was the name of the opt-out back when it was
   the default, and a name that says *normal* for the path fewer runs take is the wrong way round.
@@ -82,7 +90,7 @@ instructions are its own, which is the point of putting them in a separate conte
   and this is the one `--effort` value that is not guessing.
 
   **`high` is the default because it changes what the page finds, and it costs time it does not cost
-  tokens.** Measured on one 28-file PR at `--brief`: the falsifiers cost **23 seconds of blocked
+  tokens.** Measured on one 28-file PR: the falsifiers cost **23 seconds of blocked
   parent, 0.9% of a 2607-second run**, because they run while stage 4 is drafted rather than instead
   of it. The same target at `low` missed five findings the falsified run carried, including the two
   the reviewer most needed.
@@ -93,20 +101,17 @@ instructions are its own, which is the point of putting them in a separate conte
   they answer different questions — the first is why spawning them does not slow the run down, the
   second is what they add to the bill. `evals/profile.sh` prints them side by side, and the falsifier
   runs on its own model (`agents/claim-falsifier.md`) so the second number can be bought down without
-  touching the first. Effort, not the detail level, is what decides whether the page is right —
-  `--brief` bought 4.6% of wall clock for 35% fewer words before it carried a word budget, and the
-  budget takes more words out of that same 4.6% — the time goes into tracing consumers, not into
-  writing sections, so a shorter page is not a faster run. Three rules, two of them the level's own:
-  - **It is a separate axis from the detail level, and they multiply rather than substitute.** Effort
-    produces no section, changes no depth rule and moves no excerpt budget — the page is the same
-    *shape* at either. `--brief --effort high` is the useful combination, not a contradiction: a short
-    page whose claims were attacked.
-  - An `--effort` value that is none of the three is **reported, not guessed at**, for the level's
-    reason — work that silently differs, with nothing in the output to tell the reader which they got.
-  - `--review` stops the run at every effort level. Effort does not implement it.
+  touching the first. **Effort is what decides whether the page is right, and nothing makes a run
+  faster by making the page shorter** — the time goes into tracing consumers at step 5, not into
+  writing sections. Three rules:
+  - **It produces no section, no marker, no chip and no sentence.** Two pages of the same target at
+    the two efforts differ in their claims, never in their shape, and a reader cannot tell which
+    produced the one in front of them.
+  - An `--effort` value that is none of the three is **reported, not guessed at** — work that
+    silently differs, with nothing in the output to tell the reader which they got.
+  - `--full` and `--review` stop the run at either effort. Effort implements neither.
 
-  Unlike the level, **do not announce the effort** — nothing about the pass reaches the page, and
-  § *At `--effort high`* in step 8 says why.
+  **Do not announce the effort** — nothing about the pass reaches the page, and step 8 says why.
 - **`--output <dir>` makes the run non-interactive.** It is the only flag that changes where the page
   goes rather than what is on it: the page is written to `<dir>/index.html` and **nothing is
   published** — no `Artifact` call, at any stage. Everything else is identical, and has to be. Same
@@ -199,8 +204,8 @@ reads:
   umbrella — **ask which to cover** rather than picking. Same rule as several Rails roots, and for the
   same reason: covering the wrong half produces a page that is confidently about code the reviewer is
   not reading.
-- **Neither** — say so plainly, cover the diff with the stack-independent material (the sections, the
-  review unit, the tiers, the impact paths, the ledger), and **emit no documentation link and no
+- **Neither** — say so plainly, cover the diff with the stack-independent material (the five
+  sections, the checkpoints, the tiers, the impact chains, the evidence foot), and **emit no documentation link and no
   probe.** Do not default to Rails: a Rails lens applied to a Go service invents findings, and a
   catalogue that does not describe this application is the failure both catalogues fail closed to
   avoid.
@@ -251,8 +256,7 @@ than a sentence.
 type to reconcile, so skip to *Conventions* and let § *LiveView* in the lens file carry the seam. A
 LiveView app's boundary is the `phx-*` attribute and the callback that answers it, not a JSON contract.
 Otherwise locate the client the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
-find the seam between the two sides, because that is what the boundary material inside each
-behaviour flow is built from:
+find the seam between the two sides, because that is what a contract judgment is built from:
 
 - the API client or fetch wrapper, and where base URLs and error handling live;
 - **whether types crossing the boundary are generated from the backend or hand-written.** Generated
@@ -293,7 +297,7 @@ unchanged code of the same kind — often more accurate than a stale document.
 - If the whole diff is trivial (a few files, no migration, no new behaviour), say so and offer to
   stop rather than generate ceremony. A page nobody needs is worse than no page.
 
-## 4. Derive the goal and the use cases
+## 4. Derive what changed
 
 Before any layer, establish what the change is *for*. The reviewer cannot judge a mechanism without
 knowing the behaviour it is meant to produce.
@@ -311,15 +315,19 @@ primary execution paths.
 | Commit messages | Often carry the *why* that comments do not |
 | The PR description | A **claim**. Cite it as intent, never as fact — it is frequently stale or thin, and that gap is exactly what this page exists to close |
 
-Write each use case as an actor plus a behaviour plus a path, not as a feature name:
+Write each behaviour down for yourself as an actor plus a behaviour plus a path, not as a feature
+name. This is the notation step 6 clusters on and step 7 builds chains from:
 
 ```
-Use case A — A workspace admin archives a project
-Archiving prevents new time entries but preserves historical ones.
-
+A workspace admin archives a project — new time entries are prevented, historical ones preserved.
 ProjectSettings → PATCH /api/projects/:id → ProjectsController#update
   → Projects::Archive → Project → projects.archived_at
 ```
+
+**That is analysis, and it is not the page.** *What changed* gets one paragraph and at most a handful
+of bullets — `references/report-format.md` § *Section 1* — and the paths feed step 6's clustering and
+step 7's chains rather than being published as a list. A page that opened with five use cases and
+their execution paths spent its first screen on material the checkpoints then said again.
 
 **Say which parts you inferred.** Where the intended behaviour is not pinned by a test or spelled out
 in code, name the gap instead of smoothing it over: *"It is unclear whether existing time entries stay
@@ -352,16 +360,17 @@ do not improvise a grep and call the area clear.
 **Record what you searched, not just what you found — but the finding goes in the open prose and the
 search goes in the collapsed record.** "Nothing else calls `Project#archive`" is the finding, and it
 is a sentence a reader meets without opening anything; `rg 'archive[!?]?\b' app lib` is how you know,
-and it belongs in `details.searched`, shut. Unrecorded entirely, absence and omission look identical
+and it belongs in `details.searched`, shut, inside the evidence foot. Unrecorded entirely, absence and omission look identical
 and the reviewer redoes the work; left *only* inside the toggle, the finding is hidden rather than
 disclosed. **One row per search: the command, then what it returned in a clause** — the form and the
 budget are `references/report-format.md` § *What was searched*, which owns them.
 
 Then draw the primary flow end to end, from user action to persistence and back, and list the
-secondary effects hanging off it. That flow is the page's backbone: the behaviour flows in
-section 2 are its parts, and section 4 is the same picture seen whole.
+secondary effects hanging off it. That flow is the run's backbone: step 6 splits it into flows for
+analysis, *Impact outside the diff* shows the crossings whole, and the checkpoints are the judgments
+it turns on. **Milestone 2 publishes after this step** (step 9).
 
-## 6. Cluster into behaviour flows, then classify
+## 6. Cluster into flows, write the analysis notes, spawn the falsifiers
 
 **Group by behaviour, never by directory.** `Services / Models / Hooks / Components` is the repository's
 structure, not the change's, and a reviewer who reads it still has to assemble the behaviour themselves.
@@ -374,10 +383,15 @@ Flow B — Preventing time entries against archived projects
 Flow C — Showing archived projects in historical reports
 ```
 
-Say why you split it that way. The split *is* the insight, and a defensible one is the backbone of
-the whole section.
+Say why you split it that way, to yourself. The split *is* the insight, and it is what keeps a
+checkpoint from turning out to be a directory.
 
-Then label each flow and each leftover file:
+**The flow is the unit of ANALYSIS and no longer a unit of the page.** Nothing below writes a flow
+section: a flow becomes a note, the note is what gets attacked, and step 7 turns notes into the three
+to five judgments the reader actually gets.
+
+Then label each flow and each leftover file, for your own ranking in step 7 — the label reaches the
+page only as what *What changed* leads with and what the agenda leaves off:
 
 - **Primary** — directly implements the stated use cases.
 - **Supporting** — refactors or infrastructure the primary behaviour needed.
@@ -387,71 +401,201 @@ Then label each flow and each leftover file:
 separately, not to criticize the author for bundling. "Appears unrelated to archival; no correctness
 concern identified; review independently" is the whole register.
 
-## 7. Build the review units
 
-Every meaningful change gets the same seven-field shape, defined in `references/report-format.md`:
-why this exists · implementation · relevant tests · affected but unchanged · things to understand ·
-how to validate · reviewer questions.
+### 6b. Write one analysis note per flow
 
-A behaviour flow's **body is a unit** — a `.mech` block stating the mechanism, then the seven fields
-as `<dt>`/`<dd>` pairs in one `dl.rows`, never loose in the section — and the flow's path, diagram and
-decisions sit beside it, with decisions after the closing `</dl>` and the diagram **before** the `.mech`, so it stays outside the unit rather than inside it. Build it from the assembled flow in
-`references/page-template.html` rather than from a description of it — `scripts/page-skeleton.sh --markup --level <level>`
-prints the half that has it; the labels and the boundary are
-in `report-format.md` § *The review unit* and § *Section 2*.
+Before anything is synthesised, write `$W/analysis/flow-<x>.md` for each flow — plain markdown, no
+page markup. It is the record the falsifier attacks and the record step 7 ranks from, so it is
+written for both readers at once: complete, cited, and dull.
 
-The unit is **borderless by design**, which makes this easier to get wrong than it looks: a flow that
-spills its rows straight into the `<section>` still renders and reads nearly right. Copy the assembled
-example.
+Each note carries, under these headings:
 
-**At `--brief`, write the fields to their caps** — 35 words a `<dd>`, 60 for *understand*, 45 for the
-`.mech`, from `report-format.md` § *The brief budget*. The seven fields, their order and their labels
-do not change; what changes is that a claim gets its clause and not a paragraph. Two of that
-section's dropped concepts need no attention here at all: the markup `--markup --level brief` hands
-you already omits the flow's `dl.ba` and the primer, so writing either means writing it from memory
-rather than from the template. Two failure modes,
-and the second is the one to fear: padding a field to look thorough, and **compressing a field into
-its own label** — a `<dd>` of two or three words is a deleted field with the `<dt>` left behind, and
-in the 132px gutter it reads exactly like a filled one. Omit the field instead; an omitted field is
-honest and a stub is not.
+- **Behaviour** — the actor, the behaviour and the path, from step 4.
+- **Trace** — every hop with a `file:line`, in execution order, and the hunk each changed hop turns
+  on.
+- **Affected, not changed** — one entry per finding: `path:line`, the clause on why the change
+  reaches it, and its evidence tier written out (`diff`, `from unchanged code`, `inferred from
+  tests`, `inferred`, `uncertain`). Write the tier on **every** entry here, the `diff` ones included.
+  On the page silence means the first tier; in a note silence is a claim nobody labelled, and the
+  falsifier is told to treat it as one.
+- **Searched** — one line per search, the command then the result clause, in the form
+  `details.searched` will take.
+- **Tests** — which behaviour each pins, which branch it leaves open.
+- **Open** — what you could not establish, and what would settle it.
 
-**This is where the catalogue opens** — `references/rails-docs.md` or `references/elixir-docs.md`,
-whichever step 2 named, and not before now. It is a lookup table, not a reading: you go to it with a
-concept a claim already needs, never to it to find concepts. **Read its § *Version* first.** A
-catalogue can be closed as a whole, and then the answer it returns for every concept is *no link* and
-there is nothing else in the file you need.
+**Why a file and not a slice of the page.** The falsifier used to be handed a published
+`<section id="flow-x">`, which meant a flow was wrong in public for as long as a challenge took to
+arrive, and meant the agent read markup, excerpts and a rail to find the claims. A note has neither
+cost. It also survives the run: on a diff that strains the context, `$W/analysis/` is what says which
+region got a trace and which got skimmed.
 
-**Three anchors are available for a claim that rests on the framework rather than on this diff**: a
-documentation link, a console probe the reviewer runs, and the primer callout a link escalates into.
-The first two land inside fields the unit already has — *things to understand* to make a mechanism
-legible, *how to validate* to settle something. The third sits between the flow's `.mech` and its
-grid, and is for the narrower case where the reviewer cannot make the decision **without** the
-framework rule: at most one per flow, and most flows earn none.
-`references/report-format.md` § *Framework anchors* owns the routing, the budget and the three
-rules that matter most: a doc link never appears without a `file:line` beside it, a probe never
-appears with output beneath it, and a primer's demo never names a class from this repository.
+### 6c. At `--effort high`: send the falsifiers at the notes
 
-**A primer is gated on its documentation link**, which it escalates from, so a stack whose catalogue
-is closed gets none at all — today that is Elixir, per `references/elixir-docs.md` § *Version*. Explain
-the mechanism in the flow's own prose against its `file:line` and propose a probe instead. The page is
-narrower, not wrong, which is the same trade the withhold already makes.
+Everything so far is this run checking its own work. That is the weakest kind of check — the context
+that wrote a claim is the one least able to see what it assumed. At `--effort high` the notes get a
+second reader whose only job is to break them.
 
-Where a flow's change is **framework-shaped, reach for a probe before reaching for a paragraph** — the
-§ *Runtime probes* section of whichever lens file step 2 selected has them. The reason is the same in
-both stacks: the behaviour is assembled from places the diff cannot show together. In Rails a
-validation, a scope or a `dependent:` comes together at boot, from the class, its concerns, its
-superclass and the schema. In Phoenix a changeset, an association's `on_replace:`, or the `on_mount`
-hook a `live` route inherits comes together at compile time, from macros and from a `live_session`
-block the hunk does not include.
+**When.** Here, as soon as the notes are written, and **before any of it reaches the page.** That is
+the whole reason this moved: the pass used to run after the flows were published, so a corrected
+claim had been public for as long as the challenge took to arrive.
 
-Two rules keep it from becoming ceremony:
+**How.** One `accountable-review:claim-falsifier` per note, **all spawned in a single message.**
+This is the one exception to the rule against subagents in § *Hard rules*.
 
-- **Units are for meaningful changes only.** A file whose whole story is "regenerated by the
-  migration" gets a ledger row, not seven fields. If you cannot fill *things to understand* with
-  something a reader would not have guessed, it is not a unit.
-- **Validation steps must be real.** The actual rake task, the actual route, the actual factory in
-  this repo — a command a reviewer can paste. Invented steps are worse than none, because they burn
-  the reader's trust in the whole page on the first paste that fails.
+**Then keep working — do not wait on them.** They come back as notifications, not as a blocked turn,
+and the parent's job in the meantime is step 7. Measured on a real run: five falsifiers launched over
+23 seconds, each returning a launch receipt in about 2 seconds, with the first challenges arriving
+365 seconds later while the parent drafted. Blocked time was **0.9% of the run**. A run that spawns
+them and then idles has converted the cheapest thing in this procedure into the most expensive.
+
+**Cheap in wall clock is not cheap in tokens, and the cap is what holds the second one down.** Each
+falsifier reads in its own context, and across three real runs the pass came to **17-23% of every
+cache-read token the run spent** over 145-216 requests — the most expensive thing in the procedure
+after step 5, and invisible in the parent's transcript. That is the cap's real job: six agents is the
+point past which a second reader stops paying for itself.
+
+Spawn them in one message anyway. It costs nothing, it keeps the challenges arriving together rather
+than trickling, and if a future harness does make them block, one message stalls the run once — for
+the slowest — where the same agents one at a time stall it once each. That is not hypothetical: a run
+that reached for a single blocking `Explore` agent paid 997 seconds, 41% of its wall clock, for one
+sequential spawn.
+
+Give each agent three things and no more: the repository path, `BASE` and `HEAD`, and **the path of
+that one note**. Not the whole set — a falsifier holding every note is one long blocked turn again,
+and it has no way to tell which claims are its to attack.
+
+**Cap it at six.** Past that, take the notes carrying the most *affected, not changed* entries and
+the most `inferred` and `uncertain` tiers. Those are the claims a reader cannot check cheaply, which
+is the only reason to spend an agent on them.
+
+## 7. Synthesise the agenda
+
+The notes are the analysis. This step turns them into the page's argument, and it is a step of its
+own because the failure it prevents is structural: a run that goes from notes straight to prose
+writes one section per flow, which is the page this one replaced.
+
+Nothing here opens a file the notes have not already cited. The work is deciding, not tracing. Do it
+in this order, and write the outcome of each part into `$W/analysis/agenda.md` before moving on — the
+falsifiers' challenges are arriving while you do this, and a written agenda is what lets step 8 fold
+one in without re-deriving the ranking.
+
+**7a. Name the semantic delta.** One sentence: what is true of the system after this change that was
+not true before, in behavioural terms. Not what files moved — what a user, an operator or a
+downstream caller now experiences differently. If the notes support two unrelated sentences, the PR
+bundles two changes and *What changed* says so, neutrally. This sentence is the spine of section 01,
+and every checkpoint has to be a judgment about it.
+
+**7b. Identify the human judgments.** For each note, ask what a competent reviewer has to *decide*
+rather than *learn*: whether a scope is still the one that was intended, whether a nil default is
+safe for every consumer, whether a guard's new order admits a class it used to refuse, whether a
+migration is safe to run against the rows that already exist. Write each as a question.
+
+A judgment is something the reviewer could get wrong, with consequences. A fact is something they
+read once. Facts feed the explanations; only judgments become checkpoints.
+
+Some judgments hide outside any one flow, and a flow-by-flow reading is exactly what misses them.
+`references/report-format.md` § *The review checkpoint* carries the list to ask against — migration
+safety, an application invariant with no database counterpart, the authorization model, deploy
+ordering, test infrastructure, agentic tooling, jobs and flags and environment variables and
+transaction boundaries. Each is a checkpoint only if it is a judgment for *this* diff; the list is a
+prompt, not a form.
+
+**7c. Merge related observations.** A constructor change, the nil default it introduces and the two
+consumers that do not handle nil are one judgment — *is nil safe here?* — not four observations.
+Merge until each candidate is a single question whose answer settles everything under it.
+
+This is where the agenda gets short honestly. Three observations that share a question are one
+checkpoint, and a run that lists them separately has written the same judgment three times.
+
+**7d. Rank.** Order the candidates by four things, in this priority: the consequence if the reviewer
+misunderstands it; how uncertain the notes are about it, because the reviewer's attention is worth
+most where the page's own evidence is weakest; how far it sits from the obvious reading of the diff,
+since a consequence visible in the hunk needs less help than one three files away; and how important
+the affected unchanged code is.
+
+**The order is the order to think about them, and it is not a scale.** No number that reads as
+severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the reading path refer to a
+checkpoint by its question.
+
+**7e. Select the smallest useful agenda.** Three to five checkpoints. Fewer for a PR small enough
+that three would be padding — a run that reached this step on a diff step 3 nearly stopped for may
+have one. Ask: *if the reviewer understood and investigated these, would they have the right mental
+model of this change?* If yes, stop.
+
+A sixth candidate is a signal to merge again, not to add a sixth; if it will not merge, the checkpoint
+nearest to it names it in one clause. **A finding that does not become a checkpoint is not lost** —
+affected code keeps its entry in *Impact outside the diff* or in the evidence foot, and the sampling
+caveat under the heading is what makes leaving a judgment off honest rather than hidden. What is never
+done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
+checkpoint is written, never on how many there are.
+
+**7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
+two to four sentences. Then decide whether it also earns a chain, and how many *Look at* entries it
+needs.
+
+**The chain is earned when the judgment turns on a mechanism the reader cannot hold from prose** — a
+guard order, a value derived across three or more hops, a request path with a branch in it. Ask it
+affirmatively rather than looking for an excuse: *if the explanation would have to name three hops in
+sequence, draw them.* It shows that mechanism **inside the change**, so if the chain you want to draw
+crosses into unchanged code, it is an impact path: it belongs in section 04, drawn once, and the
+checkpoint says so in a clause.
+
+Diagram and prose have different jobs. The chain says how the value gets there; the explanation says
+what the reader has to judge about it. **An explanation that walks the chain node by node is the
+defect** — it doubles the length and teaches nothing twice, and it is what a run reaches for when it
+is unsure the figure landed.
+
+**7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it:
+
+- Which citations are load-bearing for the judgment. Those get a collapsed excerpt beside the *Look
+  at* entry they confirm, generated in step 9.
+- Which claims carry an evidence tier.
+- Whether a probe would settle the question — a `pre.probe`, proposed and never run, inside the
+  checkpoint after its explanation, with any setup it needs beside it. There is no separate
+  validations section to send it to.
+- Whether a doc link explains why the framework consequence follows. At most one `a.doc` per
+  checkpoint, and never on a claim with no `file:line` beside it.
+
+**The catalogue opens here** — `references/rails-docs.md` or `references/elixir-docs.md`, whichever
+step 2 named, and not before. It is a lookup table: you go to it with a concept a claim already
+needs, never read it to find concepts. Read its § *Version* first; a closed catalogue returns *no
+link* for every concept, and a page with no doc link is narrower rather than wrong.
+
+**Tests and author questions are facets, not sections.** A test appears inside a checkpoint when it
+changes how the reviewer judges it — *"the spec at `:88` pins the admin branch and leaves the invitee
+branch open"* — and a list of the specs that touch the file does not appear at all. An author question
+goes on the checkpoint's `p.open` line.
+
+**7h. Build the reading path.** Three to seven stops, in the order that builds understanding — schema
+before the code that trusts it, the smallest complete example before the bulk, irreversible code last.
+Each stop is a path, one sentence on why here, and a link to the checkpoint it belongs to. It is built
+after the agenda because it is a route through the agenda. Ask, per stop: *what does the reviewer have
+to understand first for the next file to make sense?*
+
+**7i. Identify the external impact.** One to three paths from the notes' *affected, not changed*
+entries: each starts in changed code, passes through at least one unchanged consumer, and ends at
+something a user or an operator would see. Choosing the third-best over the fourth is the work; the
+fourth keeps its entry below the figure or in the foot. **If nothing crosses into unchanged code,
+section 04 is omitted and the rail loses its entry** — an empty section saying nothing reaches
+unchanged code reads as a clean bill of health.
+
+**7j. Deduplicate.** *What changed*, a checkpoint's explanation, a chain, the reading path and the
+impact section can all mention the same scope. Each occurrence must serve a **different purpose** —
+intent, judgment, mechanism, route, consequence — and be one clause wherever it is not the canonical
+home. Read `references/report-format.md` § *One canonical home* for the routing table, then read your
+agenda once looking only for the second time anything is explained.
+
+Two rules keep this from becoming ceremony:
+
+- **A checkpoint is a judgment, never a category.** *Controller changes* is a directory; *Does the
+  new filter preserve the intended scope?* is a question a reviewer can get wrong. If a candidate
+  cannot be phrased as a question the reviewer answers by looking at the code, it is an explanation
+  and belongs in a sentence somewhere else.
+- **Validation steps must be real.** The actual rake or mix task, the actual route, the actual
+  factory in this repo — a command a reviewer can paste. Invented steps are worse than none, because
+  they burn the reader's trust in the whole page on the first paste that fails.
+
+**Milestone 3 opens after this step** (step 9), with one pending stub per checkpoint.
 
 ## 8. Verify before asserting — at every publish boundary
 
@@ -492,55 +636,25 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
   document got drafted is not part of it. `evals/checks/page-invariants.rb` § 2c fails a page that
   does it.
 
-### At `--effort high`: falsify each flow before the page is finished
+### Fold the falsifiers' challenges in
 
-Everything above is this run checking its own work. That is the weakest kind of check — the context
-that wrote a claim is the one least able to see what it assumed. At `--effort high` the flows get a
-second reader whose only job is to break them.
+At `--effort high` the falsifiers were spawned at the end of step 6 and have been reading while you
+synthesised. Their challenges are the second half of this step.
 
-**When.** Once, after every behaviour flow has been **written** — which on a staged page means the
-end of stage 3 in step 9, before stage 4. Not per flow as it is drafted: that would serialise a
-blocked turn through the longest phase of the run. The trigger is the flows being written rather
-than the stage, so it still applies when the flows are not being published at all.
-
-**How.** One `accountable-review:claim-falsifier` per written flow, **all spawned in a single
-message.** This is the one exception to the rule against subagents in § *Hard rules*.
-
-**Then keep working — do not wait on them.** They come back as notifications, not as a blocked
-turn, and the parent's job in the meantime is stage 4. Measured on a real run: five falsifiers
-launched over 23 seconds, each returning a launch receipt in about 2 seconds, with the first
-challenges arriving 365 seconds later while the parent drafted. Blocked time was **0.9% of the
-run**. A run that spawns them and then idles has converted the cheapest thing in this procedure
-into the most expensive.
-
-**Cheap in wall clock is not cheap in tokens, and the cap is what holds the second one down.** Each
-falsifier reads in its own context, and across three real runs the pass came to **17-23% of every
-cache-read token the run spent** over 145-216 requests — the most expensive thing in the procedure
-after step 5, and invisible in the parent's transcript. That is the cap's real job: six agents is
-the point past which a second reader stops paying for itself. Spawn the six that carry the most
-unverifiable claims, not the first six written.
-
-Spawn them in one message anyway. It costs nothing, it keeps the flows' challenges arriving
-together rather than trickling, and if a future harness does make them block, one message stalls the
-run once — for the slowest — where the same agents one at a time stall it once each. That is not
-hypothetical: a run that reached for a single blocking `Explore` agent paid 997 seconds, 41% of its
-wall clock, for one sequential spawn.
-
-Give each agent three things and no more: the repository path, `BASE` and `HEAD`, and **that one
-flow's written HTML**, sliced out of `$W/page.html` by its `<section id="flow-x">` anchor. Not the
-whole page — a falsifier holding the whole document is one long blocked turn again, and it has no way
-to tell which claims are its to attack.
-
-**Cap it at six.** Past that, take the flows carrying the most *affected but unchanged* entries and
-the most `inferred` and `uncertain` tiers. Those are the claims a reader cannot check cheaply, which
-is the only reason to spend an agent on them.
+**When.** Before a checkpoint's stub is replaced with the written thing, read whatever has landed for
+the notes it draws on. Draft in ranked order; if the next checkpoint's note still has a falsifier out,
+draft the one after it. If every checkpoint is drafted and one agent is still out, publish — the rules
+above ran on your own reading of the files — and fold the late challenge in as an `Edit`. **Never
+idle waiting**: the 0.9% holds only because the parent works while they read.
 
 **A challenge is a claim to verify, not a finding to accept.** This step's first rule applies to the
-falsifier exactly as it applies to you: open the cited file yourself. Then correct the flow, downgrade
-its evidence tier, or drop the claim — and do not backfill a dropped claim with something weaker. A
-challenge you cannot confirm is dropped, the same as any other finding that does not survive.
+falsifier exactly as it applies to you: open the cited file yourself. Then correct the note and the
+checkpoint that draws on it, downgrade the evidence tier, or drop the claim — and do not backfill a
+dropped claim with something weaker. A challenge you cannot confirm is dropped, the same as any other
+finding that does not survive.
 
-Corrections land as `Edit`s on the flow already in the page, never as a rewrite of it (step 9).
+Corrections land as `Edit`s on the checkpoint already in the page, when one is, never as a rewrite of
+it (step 9).
 
 **Nothing about the pass reaches the page.** Not a sentence, not a marker, not a count of what it
 corrected. Two reasons, and both are hard rules already: a tally of corrected claims grades this
@@ -548,15 +662,14 @@ page's own draft, and a page advertising that it was checked reads as the clean 
 page must never be. Say what changed to the user, in chat, and leave the artifact silent.
 
 **The form this actually takes never mentions the pass at all.** It is *"the first version of this
-section got it wrong"* — a correction annotated with the history that produced it, which is this
-pass, narrated. A run reads that as honesty and writes ten of them. The rule against it is the
-correction rule above, and it applies to every claim you revise here: fix the sentence, keep the
-caveat a reader would need, and let the draft history go.
+section got it wrong"* — a correction annotated with the history that produced it, which is this pass,
+narrated. A run reads that as honesty and writes ten of them. The rule against it is the correction
+rule above, and it applies to every claim you revise here: fix the sentence, keep the caveat a reader
+would need, and let the draft history go.
 
-A flow published at stage 3 and corrected here **was wrong while it was public**, and that is the
-cost of running this after the flows rather than before each one. It is the right trade — the gate
-above still runs at every flow's publish, and a claim retracted before the final publish beats one
-that is never retracted — but it is a cost, not a free check.
+**A checkpoint is published only after the analysis under it has been attacked**, which is what moving
+the pass ahead of the page bought. What remains is the late challenge, and the rule for it is the one
+above: a claim retracted before the final publish beats one that is never retracted.
 
 ## 9. Write and publish in stages
 
@@ -580,63 +693,55 @@ someone mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
-| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then section 1 (what changed) and the outline of the sections this diff earns, each marked pending |
-| 2 · Reach | 5 | Adds section 4: the impact-paths panel, affected but not changed, and what was searched |
-| 3 · Flows | 6, then per flow | Section 2's intro and the split — plus one pending stub per flow, named. Then each flow replaces its own stub as it is written |
-| 4 · Complete | 10 | Sections 3, 5, 6 and 7, gate passed, build banner and every marker gone |
+| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending |
+| 2 · Impact | 5 | *Impact outside the diff* — or, when nothing crosses into unchanged code, its stub and its rail entry removed |
+| 3 · Agenda | 7, then per checkpoint | Section 02's heading, its one caveat sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
-**At `--effort high` the falsification pass sits between stages 3 and 4** — see step 8. It adds no
-milestone: it produces corrections to flows already published, not an arrival worth opening the tab
-for, and the reader never learns it ran.
+**At `--effort high` the falsifiers were spawned at the end of step 6 and fold in during stage 3** —
+see step 8. They add no milestone: they produce corrections to analysis, not an arrival worth opening
+the tab for, and the reader never learns they ran.
 
-**The behaviour flow is the unit of staging, not section 2.** Section 2 is the bulk, so a stage that
+**The checkpoint is the unit of staging, not section 02.** Section 02 is the bulk, so a stage that
 delivered it whole would put the longest wait of the run behind one arrival — which is the shape
-staging exists to avoid. Nothing new is needed to split it: `<section id="flows">` carries only the
-intro, and each flow is already its own sibling `<section id="flow-x">` with a unique `id`, which is
-exactly the anchor a later stage edits. The rail already renders a per-flow marker — take it and the
-pending-section shape from `references/page-template.html` rather than inventing markup.
+staging exists to avoid. Nothing new is needed to split it: `<section id="attention">` carries the
+heading and the caveat, and each checkpoint is already its own nested `<section class="cp" id="cp-x">`
+with a unique `id`, which is exactly the anchor a later stage edits. The rail already renders a
+per-checkpoint marker — take it and the pending stub from `references/page-template.html` rather than
+inventing markup.
 
-So stage 3 **opens with a cheap publish**: the split rationale, and one named stub per flow saying what
-it will cover. That arrival is worth having on its own — a reader learns the shape of the change before
-any flow is written. Each flow then lands in its own republish. Two rules keep this from becoming a
-republish per paragraph:
+So stage 3 **opens with a cheap publish**: the heading, the caveat, and one stub per checkpoint whose
+line of substance is **the question**. That arrival is worth having on its own — a reader learns what
+the judgments *are* before any of them is written, which is most of what they came for. Each
+checkpoint then lands in its own republish. Two rules keep this from becoming a republish per
+paragraph:
 
-- **One publish per flow that lands, not per edit.** If two flows land in the same turn, one publish
+- **One publish per checkpoint that lands, not per edit.** If two land in the same turn, one publish
   covers both. That bounds the arrivals by turns, which is the right bound: the turn is what a reader
   waits through.
 - **Step 8 is the gate on each of them.** More publish boundaries means more gates, not a looser one.
-  A flow is published when it is verified, not when it is drafted — a wrong claim corrected two flows
-  later was still wrong when it shipped.
+  A checkpoint is published when it is verified, not when it is drafted.
 
-Sections 3, 5, 6 and 7 land together in stage 4 rather than one at a time, and that is not
-inconsistency: section 3 is a route through the flows and cannot precede them, section 7's ledger and
-the completeness gate both belong to step 10, and sections 5 and 6 are small. A stage has to be worth
-opening the tab for.
-
-**The four milestones are the same at `--brief`**, because they are cuts through the *procedure*, not
-through the section list. What differs is where the pending markers go: with one tail section rather
-than four, stage 2 writes the top of section 4 and marks its `<h3>` sub-parts pending in place. Take
-that section from the block assembled whole in `references/page-template.html` — it composes five
-components that each came from a different section, and a composition that is only described is the
-one that gets flattened. Stage 3 is unchanged by the level in *shape*: section 2 has the same spec at
-both, written to the word budget at this one.
+*Read the code in this order* and the evidence foot land together in stage 4, and that is not
+inconsistency: the reading path is a route through the checkpoints and cannot precede them, and the
+foot belongs to step 10's gate. A stage has to be worth opening the tab for.
 
 **Write to the budget as you draft, not by editing it back down afterwards.** `report-format.md`
-§ *The brief budget* caps every part this stage writes, and a stage that overspends and then
-compresses pays for the same prose twice — once streamed, once re-edited — which is the cost step 9
-exists to avoid. It also compresses in the wrong direction: cutting a drafted paragraph tends to take
-the clause a claim rested on, where writing to the cap takes the sentence that was never needed.
-Nothing here is negotiable against a figure: the caps exempt every `<svg>`, `figcaption`, `.legend`,
-`.pipe` label and `.impact` box, so a long page is never fixed by dropping a drawing.
+§ *The agenda budget* has the numbers, and a stage that overspends and then compresses pays for the
+same prose twice — once streamed, once re-edited — which is the cost step 9 exists to avoid. It also
+compresses in the wrong direction: cutting a drafted paragraph tends to take the clause a claim
+rested on, where writing to the cap takes the sentence that was never needed. Nothing there is
+negotiable against a figure: the count exempts every chain label, every `<code>` and `<pre>`, and
+everything inside a collapsed block, so a long page is never fixed by dropping a drawing.
 
-**The page fills in out of document order, and that is fine.** Step 5 produces section 4; step
-6 produces the flows. So section 4 lands while section 2 is still a pending stub, and a reader
-arriving at stage 2 sees a gap above written material — and once stage 3 is under way, a written flow
-sits above a pending sibling flow. The pending marker is what makes both readable — the risk the
+**The page fills in out of document order, and that is fine.** Step 5 produces the impact section;
+step 7 produces the checkpoints. So section 04 lands while section 02 is still stubs, and a reader
+arriving at stage 2 sees a gap above written material — and once stage 3 is under way, a written
+checkpoint sits above a pending sibling. The pending marker is what makes both readable — the risk the
 build state exists to prevent is an unwritten section looking like an empty one, not a section
 arriving early.
 
-Saving as each flow completes has a second payoff worth stating: a crash then leaves a useful page
+Saving as each checkpoint completes has a second payoff worth stating: a crash then leaves a useful page
 rather than nothing.
 
 **Fill the page in; do not rewrite it.** After the first `Write`, every later stage replaces that
@@ -649,9 +754,9 @@ its finished 82 KB version as one 35,000-token `Write` that re-emitted the first
 call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
 anchor you already have.
 
-**Write section 3 last of the prose sections** — which is why it sits in stage 4 above. It is a route
-through the flows and an index into them, so it cannot be written before they exist without being
-guessed at.
+**Write *Read the code in this order* last of the prose sections** — which is why it sits in stage 4
+above. It is a route through the checkpoints and an index into them, so it cannot be written before
+they exist without being guessed at.
 
 **The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
 than no page at all: a reviewer sees no cross-cutting section, concludes there was nothing to say
@@ -667,16 +772,13 @@ as a different page. The title is pinned earlier than that and by the script —
 into the head and HTML-escapes it, which a PR title containing an `&` needs — so do not write it again.
 Everything else about writing holds at every stage:
 
-- Follow `references/report-format.md` for the seven sections, when each appears, how deep it goes,
+- Follow `references/report-format.md` for the five sections, when each appears, how deep it goes,
   and the rule that each fact has one home. Follow `references/page-template.html` for the design
-  system, layout, and diagram styles — read with
-  `scripts/page-skeleton.sh --markup --level <the level settled in step 1>`, which prints the
+  system and the components — read with `scripts/page-skeleton.sh --markup`, which prints the
   component half and leaves out the 54 KB you are about to be given for free.
 
-  **Pass the level.** Sections 4 to 7 and the merged brief section are two renderings of the same
-  tail, and so is the rail below 03: without `--level` you are handed both and must pick, which is
-  18 KB at `--brief` you re-pay on every later request. With it, **the rail you are given is the
-  rail to publish** — four entries at `--brief`, seven at `--full`. Copy it; do not renumber it.
+  **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 04 entry
+  only when step 7i found nothing crossing into unchanged code, and then remove the section with it.
 - **Write the skeleton once, before anything else in stage 1:**
 
   ```sh
@@ -711,52 +813,48 @@ Everything else about writing holds at every stage:
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
   yields nothing. Load it only if you have a deliberate reason to depart from the template, and
   `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
-- **Two of the six diagram kinds are components; four are drawings.** Section 4's figure is the
-  `.impact` impact-paths panel and a flow's *path* is a `.pipe` spine — build those two from the
-  template's markup, not as SVG. The **boundary chain**, the **guard fork**, the **ER fragment** and
-  the **lifecycle** are hand-authored inline SVG using the template's classes, so they work in a
-  local file as well as when published. **Take all four layouts from `page-template.html` — worked
-  out to scale — and fill in the text rather than deriving geometry.** The two section-2 kinds are
-  assembled **inside flows A and B** there, not in the section-5 catalogue block, because where a
-  figure sits among a flow's siblings is half of what you are copying. Which kind belongs to which
-  section is in `report-format.md` § *Depth rules*, beside the budget; the impact panel's own rules,
-  its causal verb vocabulary and its caps are in § *Impact paths*, and that section owns them alone.
-  Deriving a layout spends the run's attention on the part that does not matter: what matters is
-  whether the edges are true, and a followable edge that is wrong costs the reviewer more than no
-  diagram.
-- **A flow draws at most one figure, and most flows draw none.** The boundary chain if the flow's
-  field crosses a seam, the guard fork if its behaviour is gated and the change reroutes a request
-  class — never both, because a flow that earns both is two flows. Three rules are easy to break
-  while looking careful. The chain has a **left margin per stop count** (3, 4 or 5) in the catalogue:
-  take the row that matches the chain you actually have, never invent a fourth, and **never narrow
-  the canvas to fit a short chain** — the scroller's child is `min-width:880px`, so a narrower
-  viewBox renders the whole figure larger than the rest of the page. Six stops or more is not drawn
-  at all: collapse to the hops where the field changes shape, or keep the chain as a second `.pipe`.
-  And the fork needs all three of its trigger conditions, § *Depth rules* has them — a guard that
-  returns early for one class is not a fork, and drawing one invents a population the code does not
-  distinguish.
-- **Inherit the geometry, never the strings.** Every label in those layouts is a claim about a file,
-  and a claim copied out of a specimen is a false claim nothing catches — a run once inherited the
-  last box's caption onto a component that never touches the field, and only a reader comparing the
-  figure with the code noticed. The x/y numbers are the reusable part.
+- **Figures are components, and there is no `<svg>` on this page.** Two figure vocabularies exist and
+  the template assembles both: the vertical labelled chain — `figure.impact` in section 04,
+  `figure.chain` inside a checkpoint — and the `dl.ba` before/after pair. Build them from the
+  template's markup. `report-format.md` § *Chains* owns the node kinds, the causal vocabulary and the
+  rule that decides which of the two figures a given chain is; § *Impact paths* owns the panel's own
+  caps and owns them alone.
+
+  What this replaced was four SVG layouts worked out to scale in the template. They cost more than
+  they carried: an `<svg>` is the most expensive thing on a page to type, so the characteristic
+  failure was never a wrong drawing but **no drawing** — two real pages published nine flows and zero
+  figures with the layouts sitting readable in the template the whole time. A component reflows on a
+  phone, has no canvas to overflow, and cannot be drawn wrong. The only thing left to get wrong is
+  whether the edges are true, which is the part worth your attention.
+- **A checkpoint chain shows mechanism inside the change, and holds no affected-unchanged node.** A
+  request path, a value derived over several hops, the order guards run in — `.ip-chg` and `.ip-step`
+  nodes ending at one `.ip-out`. The moment a hop lands in unchanged code whose meaning the change
+  altered, it is an impact path: draw it once in section 04 and let the checkpoint say so in a clause.
+  Redrawing it there is the canonical-home regression arriving as a figure.
+- **Inherit the markup, never the strings.** Every label in the assembled examples is a claim about a
+  file, and a claim copied out of a specimen is a false claim nothing catches — a run once inherited
+  a specimen's last box caption onto a component that never touches the field, and only a reader
+  comparing the figure with the code noticed.
 - **An impact path ends at a behaviour, and passes through unchanged code on the way.** The panel is
-  2–3 chains, **each in its own `.ip-card`**, each starting in the diff and ending at something a
+  1–3 chains, **each in its own `.ip-card`**, each starting in the diff and ending at something a
   user or an operator would see, with every hop carrying its causal verb — *reads*, *falls back to*,
   *filtered out by*. A chain that stops at a function has not reached a consequence; a chain with no
-  unchanged node is a call stack inside the diff, which the diff already shows. And it carries
-  **labels, not sentences**: the `file:line` and the clause belong to *affected, not changed* below
-  it. The panel this replaced was a grid of boxes, and every real page filled the boxes with prose to
-  supply the relation the layout could not express — which is the failure to watch for coming back.
+  unchanged node is a call stack inside the diff, and belongs inside the checkpoint it explains. And
+  it carries **labels, not sentences**: the `file:line` and the clause belong to the affected entries
+  below it. The panel this replaced was a grid of boxes, and every real page filled the boxes with
+  prose to supply the relation the layout could not express — which is the failure to watch for
+  coming back.
 - **Three paths, not five, and one per card.** Choosing the third-best consequence over the fifth is
-  the work here: the two that do not make the panel are not dropped, their entries are in *affected,
-  not changed* and their explanations in the flows that own them. A run that stacks four or five
-  chains inside one card has rebuilt the panel this replaced, where the reader on the third chain has
-  the first one's geometry behind them.
-- **Generate source excerpts, do not type them.** Two things get quoted, not one. The lines a claim
-  would otherwise ask the reader to take on faith — above all *affected but unchanged*, which no diff
-  view can address — and **the changed hunk each behaviour flow turns on**, because § 2 is read before
-  the reviewer opens the diff in § 3, so a flow that only describes its change is asking to be
-  believed until then. Quote both inline as collapsed excerpts, from the generator:
+  the work here: the two that do not make the panel are not dropped, their entries are in the
+  affected list below it or in the evidence foot, and their explanation is in the checkpoint that
+  turns on them, if one does. A run that stacks four or five chains inside one card has rebuilt the
+  panel this replaced, where the reader on the third chain has the first one's geometry behind them.
+- **Generate source excerpts, do not type them.** An excerpt sits collapsed **beside the claim or the
+  *Look at* entry it confirms** — never in a block of its own, and never in the evidence foot. What
+  earns one is a citation the judgment turns on: the lines a reader would otherwise take on faith,
+  above all *affected, not changed*, which no diff view can address, and the changed hunk where
+  seeing it is what makes the judgment possible. Quote inline as collapsed excerpts, from the
+  generator:
 
   ```sh
   <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --base BASE --why "..."
@@ -788,11 +886,11 @@ Everything else about writing holds at every stage:
   cannot show what the committed code permits; the tag is what has to be true.
 
   Two rules travel with them. The page must read completely with every excerpt **closed** — that one
-  is a hard rule below, and it is judged field by field, not page-wide. And an excerpt is earned by a
+  is a hard rule below, and it is judged entry by entry, not page-wide. And an excerpt is earned by a
   citation that is **load-bearing for a decision the reviewer has to make**, not by a citation merely
-  pointing at unchanged code — otherwise every *affected but unchanged* entry earns one automatically
-  and the budget caps nothing. That test rations what sits on top of the per-flow hunk; it is never a
-  reason a flow goes without showing its own change.
+  pointing at unchanged code — otherwise every affected entry earns one automatically and the budget
+  caps nothing. There is no per-section floor: a checkpoint about a changed guard quotes the guard
+  because the judgment turns on it, not because a rule says every part of the page shows its diff.
 
   **Do not carry a number in your head for this.** The budget, the locations excerpts may appear in,
   and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and
@@ -831,14 +929,6 @@ Everything else about writing holds at every stage:
   `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it changes the reviewer's database.
   Use the project's real constants and module names: a probe naming a scope or a context this repo does
   not have is an invented command.
-- **A primer's demo names nothing from this repository.** `pre.demo` may carry a `# =>` line — or an
-  `iex>` one — for one reason only: its receiver is a class or module the app under review does not
-  have, so the block quotes the manual rather than reporting what this application does. Write it on a
-  generic receiver, and never put a `pre.demo` anywhere but inside a primer — loose on the page it is
-  the fabricated-output defect with the rule switched off. Same budget discipline as the rest: one
-  primer per flow at most, a flow whose decision does not turn on the framework behaviour earns none,
-  and a stack whose catalogue is closed earns none at all, because a primer needs the link it
-  escalated from.
 - Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
   the diff contains gets the PR diff anchor, so the reviewer lands in the review they are already
   working in rather than in the file at head, where nothing marks what the line replaced. A line the
@@ -864,40 +954,28 @@ URL: say where the file is, once, and nothing more.
 
 ## 10. Complete the page and gate it
 
-- **Remove the build banner and every pending marker** — including the per-flow stubs and the rail's
-  flow markers from stage 3. A finished page still carrying "2 parts still pending" is the worst
+- **Remove the build banner and every pending marker** — including the per-checkpoint stubs and the
+  rail's checkpoint markers from stage 3. A finished page still carrying "2 parts still pending" is the worst
   outcome of staged delivery: it undersells work that is actually done, and the next reader cannot
   tell whether you stopped early or forgot the banner. If a section really was left unwritten, say so
   in prose as a stated limit — that is a different sentence from "pending".
-- **Generate the ledger, do not type it.** Run the bundled generator from the repository under review
-  and paste its output into the ledger table:
-
-  ```sh
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD
-  ```
-
-  It emits one row per changed path with the `data-path` attribute already set, each preceded by a
-  hint comment carrying the git status letter and line counts — usually enough to decide the attention
-  level without opening the file. Three cells are left as placeholders for you to fill: which section
-  covers the file, its attention level, and its group. A row still reading `{{SECTION}}` is a row
-  nobody classified, which is the point.
-
-  **At `--brief`, add `--paths-only`** and paste the result into `details.coverage-foot`, the shut
-  disclosure below the last section:
+- **Generate the inventory, do not type it.** Run the bundled generator from the repository under
+  review and paste its cells into `div.gt.gt-paths` inside `details.evidence`, the shut disclosure
+  below the last section:
 
   ```sh
   <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only
   ```
 
-  One cell per path instead of four — no section, no attention level, no group, because those three
-  judgements are the ledger's ranking and `--brief` declines to do it. The path and its `data-path`
-  are unchanged, which is what keeps the gate below running at both levels. Combine it with the link
-  flag your rung earned exactly as at `--full`.
+  One cell per path, each with its `data-path` attribute already set and preceded by a hint comment
+  carrying the git status letter and line counts. No section, no attention level, no group: those
+  three judgements were a classified ledger the page no longer carries. Where a reviewer's attention
+  goes is said by what is on the reading path, and saying it again in a column beside every file was
+  the second inventory section 04 is told not to become — on a real page, 24 links above a caption
+  explaining that the eight worth opening were ranked elsewhere.
 
-  **It does not go in section 4, at either level.** Section 4 is about consequences, not paths, and a
-  list of every changed file in the middle of it is the second ledger that section is told not to
-  become. At `--full` the paths live in section 7 and there is no foot disclosure; at `--brief` there
-  is no section 7 and the foot disclosure is where they live. One or the other, never both.
+  **It does not go in section 04.** That section is about consequences, and a list of every changed
+  file inside it is exactly the shape above.
 
   **Pass the link option your rung earned**, so the rows come out linked and you never type inside the
   cell the gate reads:
@@ -933,13 +1011,13 @@ URL: say where the file is, once, and nothing more.
   what is missing and what is surplus, and fails loudly when the `data-path` attributes are absent
   instead of reporting a pass it did not earn.
 
-  The gate runs once, here, against the finished page, **at every detail level**. `--brief` produces a
-  shorter page, not an unaccounted-for one: it drops the ledger's three judgements and keeps its one
-  guarantee. A run that skipped the gate because the page has no section 7 has quietly turned a
-  shorter page into a page that may have dropped a file, which is the one thing the level was never
-  allowed to do. Earlier stages ship with the path list visibly marked partial; a gate that passed on
-  a partial list would mean nothing.
-- Confirm the page renders: no horizontal overflow on `body`, diagrams and wide tables fit or scroll
+  The gate runs once, here, against the finished page. The inventory being **collapsed** is legal —
+  it is provenance, and an inventory passes the reads-complete-when-shut rule where a finding never
+  would — but collapsed is not optional, and neither is the gate: a run that skipped it because the
+  path list is out of sight has turned a shorter page into one that may have dropped a file. Earlier
+  stages ship with the list visibly marked partial; a gate that passed on a partial list would mean
+  nothing.
+- Confirm the page renders: no horizontal overflow on `body`, chains and wide tables fit or scroll
   in their own container, and all three theme states resolve (`data-theme="dark"`,
   `data-theme="light"`, and the unstamped `prefers-color-scheme` default most viewers get). The design
   is warm-paper light; the dark half is ours, so a colour declared in only one place is a bug the
@@ -948,7 +1026,7 @@ URL: say where the file is, once, and nothing more.
   three `<script src>` lines above it (the core bundle plus the `erb` and `elixir` grammars, neither of
   which is in the common bundle). It is a scroll-progress bar, a rail scroll-spy and the syntax tint on
   unchanged excerpts: presentation only, and the page reads correctly with the whole block deleted, in
-  one ink. Do not give § 6 checkboxes, tick state or an "n of m" counter — a count of cleared items
+  one ink. Do not give the checkpoints checkboxes, tick state or an "n of m" counter — a count of cleared items
   reads as progress toward approval, which is the verdict this page does not carry.
 - Publish the final state to the same path — or, with `--output`, simply leave the finished file at
   `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
@@ -972,30 +1050,34 @@ Convert it instead into a stated limit — the same components, different words:
 - The banner says what was covered, that the run stopped, and that the absence of the rest is not a
   finding about the change.
 - Every marker changes from *pending* to *not written*. Pending is a promise; not written is a fact.
-- The ledger note says the gate did not run, and warns against reading the written sections as a full
-  account of the diff.
+- The evidence foot's summary says the gate did not run, and warns against reading the written
+  sections as a full account of the diff.
 
 `evals/check.rb --stopped` checks all four. This is the third legitimate state of the page, alongside
 in-progress and complete, and the only one that requires a deliberate edit rather than a deletion.
 
-## The review level is not implemented yet
+## Two levels are not implemented in this version
 
-`--review` is meant to run the project's code-review pass as well, and thread its findings through
-the map. That is not built, and no effort level implements it: `--effort high` falsifies the page's
-own claims, which is a different job from importing someone else's findings. **Stop, and say so** —
-do not fall back to another level and do not write a page:
+`--full` used to write seven sections, and `--review` was meant to run the project's code-review pass
+as well and thread its findings through the map. Neither exists in this version, and no effort level
+implements either: `--effort high` falsifies this run's own analysis, which is a different job from
+importing someone else's findings. **Stop, and say so** — do not fall back to the default page and do
+not write one:
 
-> `--review` runs a code-review pass on top of the review map, and is not implemented yet. Re-run
-> with `--brief` for the default page or `--full` for all seven sections. Nothing was published.
+> `--full` and `--review` are not implemented in this version of review-map. Re-run without a level
+> flag for the review agenda: what changed, what needs your attention, the order to read the code in,
+> and what the change reaches outside the diff. Nothing was published.
+
+`--brief` and `--light` are the opposite case — accepted, silent, and without effect, because the
+default page is already the short one and a script that still passes `--brief` should keep working.
 
 Offer the project's own review command if it has one, and say plainly that it answers a different
 question — that offer is the same one step 10 makes at the end of an ordinary run.
 
-Publishing a page and labelling the review part *pending* is the wrong answer here, for the reason
+Publishing a page and labelling the missing part *pending* is the wrong answer here, for the reason
 `references/report-format.md` § *Build state* gives: pending is a promise, and nothing is coming.
-`.claude/CLAUDE.md` carries the design notes on what this level has to solve before it can ship —
-the short version is that a code-review pass produces graded findings and this page carries no
-verdicts, so a finding has to enter as a *claim to verify* rather than as a finding to display.
+`.claude/CLAUDE.md` carries the design notes on both, and `references/report-format.md` § *A future
+full mode* records which components this page put down and where their rules would return.
 
 ## Working in a worktree
 
@@ -1006,57 +1088,70 @@ fighting the sandbox with quoting.
 
 ## How big should the page be?
 
-Adaptivity trims ceremony on small PRs; it does not cap large ones. A hundred-file diff legitimately
-produces a long reference document — the run this guidance came from wrote ~135 KB and that was
-right. The pressure while writing is always to cut, so: **do not trim a large page toward some
-imagined ideal length.** Trim only content that fails its own test — a diagram that restates a table,
-a paragraph without a citation, a section the diff did not earn, a review unit with nothing in
-*things to understand*.
+Short by design and long by exception, and the two are governed differently.
+
+**Prose is governed by guidance**, in `references/report-format.md` § *The agenda budget*: 80 to 160
+words for *What changed*, 50 to 140 a checkpoint, 700 to 1,500 visible words on a small or medium PR.
+A hundred-file diff legitimately runs past those numbers — but not by adding checkpoints. Five is the
+ceiling and a sixth is merged or named in a clause; what a big diff buys is more *Look at* entries
+per checkpoint, the impact figure's third card, and an inventory that grows with the diff at no cost
+to anyone, because it is collapsed.
+
+**Trim only content that fails its own test** — a chain whose explanation walks its nodes, a *Look at*
+entry with no clause, an explanation that restates *What changed*, a checkpoint that turns out to be
+a category. Never trim toward an imagined length, and **never trim a checkpoint out**. A page that
+came in under the numbers by losing a judgment has done the one thing the budget forbids; the numbers
+are what to argue with, never the agenda.
 
 This runs in a single context by design, so a very large diff will strain it. That is a signal worth
-reporting, not one to hide: if you had to skim a region to fit, say which region, in the page.
+reporting, not one to hide: if you had to skim a region to fit, say which region, in *What changed*,
+in the same voice as any other stated limit. `$W/analysis/` is what shows which flows got a trace and
+which got a glance.
 
-**The detail level is a budget for prose and is still not the answer to this.** `--brief` produces
-fewer sections and caps how many words each part may spend (`report-format.md` § *The brief budget*),
-and neither of those is room for a diff that will not fit: the budget bounds how a claim is written,
-never how many claims there are, so a hundred-file diff at `--brief` is a hundred files' worth of
-findings written tightly. It also does not licence a thinner *account* — capped is not culled, and
-the floor in that section fails a field compressed into its own label. A strained run at `--brief`
-still says which region it skimmed.
-
-**Nor is `--effort high` a way to make a large diff fit** — it points the other way. The falsifier
-has its own context, but every challenge it returns comes back into *yours*, and you have to open
-each cited file to act on it. On a diff already straining this context, that is more pressure, not
-less. Say which region you skimmed at either effort, and let the cap of six do its work: the flows
-carrying the most unverifiable claims are worth the challenges, and the rest are worth the room.
+**`--effort high` is not a way to make a large diff fit** — it points the other way. The falsifier has
+its own context, but every challenge it returns comes back into *yours*, and you have to open each
+cited file to act on it. On a diff already straining this context, that is more pressure, not less.
+Say which region you skimmed at either effort, and let the cap of six do its work: the notes carrying
+the most unverifiable claims are worth the challenges, and the rest are worth the room.
 
 ## Hard rules
 
 - Every claim carries a `file:line`, linked when a link is possible.
 - **Never grade the PR.** No approval recommendation, no risk score, no confidence percentage, no
   "looks good". The reviewer decides; the page equips them. Evidence, relationships, invariants,
-  uncertainty, and validation steps are the output — verdicts are not.
+  uncertainty, and validation steps are the output — verdicts are not. **The checkpoints are ordered
+  and an order is not a scale**: no number beside a question, no *blocking*, no *watch*. The line that
+  names an unresolved thing is labelled *Open question* and nothing else.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
 - **Never invent a URL, and never invent output.** Documentation links come from the catalogue the
   stack detected in step 2 — `references/rails-docs.md` or `references/elixir-docs.md` — and from
   nowhere else, including when that catalogue is closed and the answer is no link at all. Console
-  probes are proposed unrun, with no transcript beneath them. The one result line the page may carry is
-  inside a primer's `pre.demo`, and only because its receiver is a class this repository does not have:
-  the block quotes the manual rather than reporting what this application did. Name an application
-  class there and it is invented output again, with the rule switched off.
-- **The page must read completely with every collapsed block closed.** Two components collapse — a
-  source excerpt and `details.searched` — and the rule is the same for both: they confirm a claim the
-  prose already made, and never carry one. A claim that exists only inside a collapsed block is hidden
-  content wearing the clothes of progressive disclosure. Judge this **field by field**: a citation
-  that appears elsewhere on the page does not rescue a field whose only `file:line` is inside the
-  block a reader has not opened. For the search record specifically, the trap is the empty result: "no
-  other caller" is a finding and belongs in the open; the grep proving it is what collapses.
+  probes are proposed unrun, with no transcript beneath them. There is no exception: the page never
+  shows a result line, because the run never booted the application, and a fabricated `=> …` is the
+  most concrete-looking thing on the page and the one part of it that is fiction.
+- **The page must read completely with every collapsed block closed.** Three components collapse — a
+  source excerpt beside the entry it confirms, `details.searched`, and `details.evidence`, the foot
+  that is section 05 — and the rule is the same for all three: they confirm a claim the prose already
+  made, and never carry one. A claim that exists only inside a collapsed block is hidden content
+  wearing the clothes of progressive disclosure. Judge this **entry by entry**: a citation that
+  appears elsewhere on the page does not rescue a *Look at* entry whose only `file:line` is inside the
+  block a reader has not opened.
+
+  For the search record the trap is the empty result: "no other caller" is a finding and belongs in
+  the open; the grep proving it is what collapses. For the foot the trap is **promotion by omission** —
+  lower-priority affected code and the recorded searches may live there because they are provenance,
+  but nothing a reviewer acts on may live *only* there. If an entry in the foot is a judgment they
+  have to make, it is a checkpoint that was mis-filed.
 - **Never imply the page found everything.** It did not, and measurably so: three independent
   analyses of the same 109-file diff produced eight distinct headline findings between them, with
   only *one* appearing in all three. Explanation is reproducible; defect discovery is sampling. Say
   plainly that what the page surfaced is a pass, not an audit, and never let it read as a clean bill
-  of health. Where a reviewer needs assurance rather than orientation, point them at a dedicated
+  of health. Say it **once**, under *What needs your attention*, and nowhere else. Where a reviewer needs assurance rather than orientation, point them at a dedicated
   review pass.
+- **Never draw an `<svg>`.** The page's figures are two components — the vertical labelled chain and
+  the `dl.ba` pair — assembled from the template. A drawing derived per run spends the run's attention
+  on geometry instead of on whether the edges are true, and makes two pages from this skill
+  incomparable; a component cannot be drawn wrong.
 - Never drop a file from the page to keep it tidy.
 - Never post to GitHub, Linear, or anywhere outside the artifact.
 - Never commit the page into the repo under review, and never write it there. `--output` does not
@@ -1071,10 +1166,11 @@ carrying the most unverifiable claims are worth the challenges, and the rest are
   diff is too large to hold, say which region you skimmed — that is the honest failure and it is a
   signal worth having.
 
-  **The exception is the falsification pass in step 8, which now runs by default.** It is the one
-  split that does not commit the mistake above: the seam is per *behaviour flow*, and a flow is
-  already a whole behaviour rather than a layer of one, so nothing is fragmented that was not already
-  separate. It is read-only, it returns challenges rather than page content — you still write every
+  **The exception is the falsification pass spawned at the end of step 6 and folded in at step 8,
+  which runs by default.** It is the one split that does not commit the mistake above: the seam is per
+  *analysis note*, which is per flow, and a flow is already a whole behaviour rather than a layer of
+  one, so nothing is fragmented that was not already separate. It reads a note this run wrote, never
+  the page. It is read-only, it returns challenges rather than page content — you still write every
   word — and its agents go out in a single message and are not waited on, so the run keeps drafting
   while they read. Nothing else spawns anything, at any effort level, and a run that reaches for an
   `Explore` agent to help with step 5 has broken this rule whatever flag it was given.
