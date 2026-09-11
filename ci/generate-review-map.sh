@@ -4,7 +4,7 @@
 #
 #   Usage: generate-review-map.sh --output DIR --repository owner/repo
 #                                 --pr N --base-sha SHA --head-sha SHA
-#                                 [--mode brief|full] [--effort high|low]
+#                                 [--mode brief|light] [--effort high|low]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 [--plugin-dir DIR] [--claude-bin claude]
 #                                 [--strict-gate] [--print-invocation]
@@ -77,7 +77,18 @@ fi
 [ -n "$MODE" ]   || MODE=${CFG_mode:-brief}
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 
-case $MODE in brief|full) ;; *) die "--mode must be brief or full, got '$MODE'" ;; esac
+# THE PAGE HAS ONE SHAPE, so --mode decides nothing and is not passed to the skill at all.
+# `brief` and `light` are the same page and are taken silently, because a workflow that has
+# been passing --mode brief for months is not a workflow with a bug in it. `full` is refused
+# rather than mapped: it used to mean seven sections, and quietly handing back four under the
+# old name is how a team ends up reviewing a page they did not ask for and cannot tell apart.
+case $MODE in
+  brief|light) ;;
+  full)   die "--mode full is not implemented in this version. The Review Map has one shape now:
+what changed, what needs your attention, the order to read the code in, and what the change
+reaches outside the diff. Drop the mode, or set it to brief." ;;
+  *) die "--mode must be brief or light, got '$MODE'" ;;
+esac
 # `normal` was this value's name while it was the default; the skill still takes it and
 # means `low`, so a config file written before the rename keeps working here too.
 case $EFFORT in normal) EFFORT=low ;; esac
@@ -107,7 +118,7 @@ PAGE=$OUTPUT_ABS/index.html
 
 # ---------------------------------------------------------------- invocation --
 
-PROMPT="/accountable-review:review-map${PR:+ $PR} --$MODE --effort $EFFORT --output $OUTPUT_ABS"
+PROMPT="/accountable-review:review-map${PR:+ $PR} --effort $EFFORT --output $OUTPUT_ABS"
 if [ -n "$REPOSITORY" ]; then PROMPT="$PROMPT --repository $REPOSITORY"; fi
 if [ -n "$BASE_SHA" ];   then PROMPT="$PROMPT --base-sha $BASE_SHA"; fi
 PROMPT="$PROMPT --head-sha $HEAD_SHA"
@@ -142,7 +153,7 @@ The Review Map is built from BASE...HEAD, so the base commit has to be present:
 check out with fetch-depth: 0 rather than the default shallow clone."
   fi
 
-  echo "accountable-review: generating a $MODE review map at effort $EFFORT"
+  echo "accountable-review: generating a review map at effort $EFFORT"
   echo "accountable-review: ${REPOSITORY:-this repository}${PR:+ PR #$PR} ${BASE_SHA:+$(printf '%.7s' "$BASE_SHA")..}$(printf '%.7s' "$HEAD_SHA")"
   ( cd "$REPO_DIR" && exec "$@" ) || die "the review-map run failed. No Review Map was produced."
 fi
@@ -194,7 +205,7 @@ version=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
 
 cat > "$OUTPUT_ABS/manifest.json" <<JSON
 {
-  "schema": "accountable-review/review-map-manifest@1",
+  "schema": "accountable-review/review-map-manifest@2",
   "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "plugin": {
     "name": "accountable-review",
@@ -202,7 +213,6 @@ cat > "$OUTPUT_ABS/manifest.json" <<JSON
   },
   "review_map": {
     "entry": "index.html",
-    "mode": "$MODE",
     "effort": "$EFFORT"
   },
   "revision": {

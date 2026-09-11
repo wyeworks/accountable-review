@@ -5,63 +5,67 @@
      why no model declares one. Everything between HEAD:END and TAIL:START is the markup a
      run does read, with page-skeleton.sh --markup.
 
-     SKELETON:ONLY:level=<brief|full> pairs inside the markup half mark the regions that
-     belong to ONE detail level: the rail tail, and sections 4 to 7 against the merged
-     brief section. page-skeleton.sh --markup --level <level> drops the other level's
-     regions, and bare --markup keeps everything and strips the markers -- which is what
-     the tests and the eval drivers read. Anything TRUE AT BOTH LEVELS must sit outside
-     these pairs, which is why section 4 keeps its two standing rules above the rail.
-
      Each marker is ONE line and its own comment, because extraction is a line range over
      the marker line -- a marker spilling onto a second line would emit half a comment into
      every page. Keep marker text free of the opening tags for style, script and svg, of the
-     unit and ledger class and attribute names, and of the syntax-tint class prefix: each
-     opens a range that some check scans for, and Page#range re-opens.  This note sits ABOVE
-     HEAD:START on purpose, so it stays out of every published page. -->
+     checkpoint and inventory class and attribute names, and of the syntax-tint class prefix:
+     each opens a range that some check scans for, and Page#range re-opens.
+
+     Two things must not appear in the markup half at all, and tests/run.sh counts both at
+     zero: an svg opening tag, because this page has no drawings, and a literal tint class,
+     because the tint is applied at read time and a hand-coloured quotation is a quotation
+     someone edited. That is why the excerpt block below describes that class rather than
+     spelling it. This note sits ABOVE HEAD:START on purpose, so it stays out of every
+     published page. -->
 <!-- SKELETON:HEAD:START -->
 <!--
   accountable-review · review-map page template
 
   Copy this file, fill in the content, delete unused component examples and any
-  section the diff does not touch. Everything below is verified working: no
+  section the diff does not earn. Everything below is verified working: no
   horizontal overflow, wide blocks scroll in their own container, and all three
   theme states resolve.
 
   Design language: "PR review interface redesign". Warm paper ground, slate-blue
   accent, Fraunces at weight 400 for display. The structural idea is that a
-  review unit is NOT a card — it is a borderless 132px/1fr field grid with a
-  hairline per row, introduced by a .mech block. Cards are reserved for the few
-  things that genuinely are objects: the pipeline, the impact panel, a decision.
+  checkpoint is NOT a card — it is a question, the two or three sentences that
+  make it one, and where to look; a hairline separates one from the next. Cards
+  are reserved for the few things that genuinely are objects: a chain figure,
+  the impact panel.
 
   THEME RULE, do not break it: every colour is a token defined on bare :root and
   redefined in BOTH dark blocks. Never declare a colour only inside a media or
   [data-theme] block — that is the classic unreadable-artifact bug. The three
   states are: explicit dark, explicit light, and the unstamped default that most
   viewers actually get, where only prefers-color-scheme applies.
-  The source design is light-only; the dark half below is ours, and the pairs
-  that invert (.checkpoint, .att-read, .pipe's last node, .ip-out) are written
-  against tokens precisely so they keep inverting relative to the page.
+  The source design is light-only; the dark half below is ours, and the pair
+  that inverts (.ip-out, the filled node that ends a chain) is written against
+  tokens precisely so it keeps inverting relative to the page.
 
-  NO SEVERITY VOCABULARY, also by design: this system has no chip that grades the
-  PR. Claims carry an evidence tier (span.tier) where the diff does not show them
-  directly; .att is attention level and .grp is grouping, neither is a verdict.
+  NO SEVERITY VOCABULARY, by design: this system has no chip that grades the PR.
+  Claims carry an evidence tier (span.tier) where the diff does not show them
+  directly, and that is the whole vocabulary. The checkpoints are ORDERED by
+  what a reviewer would most regret misunderstanding, and an order is not a
+  scale: no number beside a question, no "blocking", no "watch". The one line
+  that names an unresolved thing is p.open, labelled "Open question".
 
   AND NO VERIFICATION BADGE, for the same reason and in the same place so the two
   cannot come back separately. A run at --effort high sends an adversarial pass at
-  its own flows (SKILL.md step 8); nothing about that reaches the page. There is no
-  "verified" chip, no "checked" marker, no count of corrected claims. An evidence
-  tier says how a claim is known; a badge saying how hard someone looked is the
-  clean bill of health this page must never read as.
+  its own analysis before any of this is written (SKILL.md steps 6 and 8); nothing
+  about that reaches the page. There is no "verified" chip, no "checked" marker,
+  no count of corrected claims. An evidence tier says how a claim is known; a
+  badge saying how hard someone looked is the clean bill of health this page must
+  never read as.
 
   AND NO STACK BADGE, in the same place for the same reason. This template serves
   both Rails and Phoenix pages. What differs between them is the content of the
-  sentences, the nodes in a .pipe chain and the command inside a pre.probe — never
-  a chip, a marker or a section. A reader should not be able to tell which lens
-  file produced the page except by reading what it says about their repository.
+  sentences, the nodes in a figure.chain and the command inside a pre.probe —
+  never a chip, a marker or a section. A reader should not be able to tell which
+  lens file produced the page except by reading what it says about their
+  repository.
 
-  Section 6 is a read-only list — it carries no tick state and no "n of m"
-  counter, because a count of cleared items reads as progress toward approval.
-  See report-format.md.
+  The page carries no tick state and no "n of m" counter anywhere, because a
+  count of cleared items reads as progress toward approval. See report-format.md.
 
   Placeholders are written as {{LIKE_THIS}}.
 
@@ -71,58 +75,44 @@
                             prefers-color-scheme dark, [data-theme="dark"]
     shell, rail ........... .wrap, main, .progress, and the sticky numbered rail
     type .................. headings, .lede, .note, .lbl, .path, .cite, code
-    section furniture ..... .eyebrow (label + rule-fill), .subhead for a flow
-    use cases ............. .usecases > .usecase — section 1, one per actor and path
-    review unit ........... .mech + dl.rows — the core primitive. Field rows are
-                            dl.rows > dt/dd, and they appear nowhere else
-    before / after ........ dl.ba — two rows, never one paragraph
-    pipelines ............. .pipe — THE PATH: a call chain or a guard chain, unbounded
-                            in length and carrying no finding on any single hop. It is
-                            NOT the boundary chain — that is a drawing again (catalogue
-                            1 of 4), because its finding sits on a hop and .n i is a
-                            bare hairline with nothing to mark
+    section furniture ..... .eyebrow — a label and a rule that fills the row
+    before / after ........ dl.ba — two rows, never one paragraph. Section 01
+                            only, and only when a workflow fundamentally changed
     evidence tier ......... .tier, and the neutral .tag for an excerpt's state
     gaps .................. .gap (ochre, a stated absence), details.searched (what was
                             grepped — collapsed; provenance, never a claim)
-    source excerpts ....... details.excerpt -- generated by scripts/excerpt.sh.
-                            The --source variant is syntax-tinted at runtime from
-                            its data-lang; --diff is not, its colour means +/-
+    source excerpts ....... details.excerpt -- generated by scripts/excerpt.sh, and
+                            it sits BESIDE the claim or the .lookat entry it
+                            confirms. The --source variant is syntax-tinted at
+                            runtime from its data-lang; --diff is not, its colour
+                            means +/-
     framework anchors ..... a.doc (a link from references/rails-docs.md, never a
-                            constructed URL), pre.probe (a command the reviewer
-                            runs; the page never shows its output), and
-                            aside.primer -- what a link escalates into, at most one
-                            per flow. Its pre.demo quotes the manual rather than
-                            this app, which is the only reason it may show "# =>"
-    start here ............ ol.begin — one list: the route through the code, and what on
-                            it needs judgment. Entries link into the flow that explains them
-    impact paths .......... .impact — 2-3 directed chains + .legend, ONE PATH PER .ip-card,
-                            so three diagrams read as three. Each node past a path's first
-                            carries its INCOMING relation in .ip-rel, so an edge is labelled
-                            or it is missing. Lane comes from the kind: .ip-chg left,
+                            constructed URL) and pre.probe (a command the reviewer
+                            runs; the page never shows its output). At most one
+                            doc link per checkpoint
+    review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
+                            sentences, an optional figure.chain, ul.lookat (1-4
+                            places to look, a clause each), an optional p.open
+    start here ............ ol.begin — one list: the route through the code, 3-7
+                            stops. Entries link into the checkpoint that owns them
+    chains ................ figure.chain inside a checkpoint — mechanism INSIDE the
+                            change, and therefore no .ip-aff node. .ip-step is the
+                            neutral hop, and exists only here
+    impact paths .......... .impact — section 04. 1-3 directed chains + .legend,
+                            ONE PATH PER .ip-card, so three diagrams read as three.
+                            Each node past a path's first carries its INCOMING
+                            relation in .ip-rel, so an edge is labelled or it is
+                            missing. Lane comes from the kind: .ip-chg left,
                             .ip-aff right, .ip-out spans and ends the path
-    grid tables ........... .gt (gap:1px over --rule), .gt-ripple, .gt-ledger, .att, .grp
-                            .gt-paths — paths with no classification. data-path stays on a
-                            div.c, so the gate runs wherever the inventory sits
-    coverage foot ......... details.coverage-foot — the diff inventory at --brief, below the
-                            last section. Not a section: no number, no rail entry, shut
-    decisions ............. .decisions > .decision — after a unit, never inside one
-    comprehension check ... .checkpoint — inverted tiles, section 6 only, max five
+    grid tables ........... .gt (gap:1px over --rule), .gt-meta, .gt-paths — the
+                            inventory, paths with no classification. data-path stays
+                            on a div.c, so the gate runs wherever the inventory sits
+    evidence foot ......... details.evidence — section 05, below the last section.
+                            Not a section: no number, no rail entry, shut
     build state ........... .buildstate banner and .pending markers — deleted at the
                             final publish, never left on a finished page
-    diagram catalogue ..... FOUR worked SVG layouts, to scale. Boundary chain (1) and
-                            guard fork (2) are section 2 and are assembled inside the
-                            flows below, because a flow figure's PLACEMENT is half of
-                            what a run has to copy. ER fragment (3) and lifecycle (4)
-                            are section 5, in the catalogue block. Fill in the text,
-                            keep the geometry.
-                            Impact paths are NOT SVG: the panel's cards stack per PR
-                            and its lanes collapse at 780px, so there is no canvas
-                            that survives. Use .impact
-    SVG vocabulary ........ .box, .box-hd, .node, .node-dead, .edge, .edge-dash,
-                            .lifeline (the guard fork's gate rail), and the svg text
-                            classes
-    body skeleton ......... rail, sections 1 → 7, one behaviour flow assembled whole, and
-                            the brief level's merged tail section assembled whole
+    body skeleton ......... rail, sections 01 -> 04, two checkpoints assembled whole
+                            and one pending stub, the impact panel, the evidence foot
     script ................ scroll progress, rail scroll-spy, and the syntax tint on
                             unchanged excerpts. Nothing else — no state, no
                             localStorage, no counters. All three are presentation:
@@ -167,13 +157,6 @@
   --accent-hi:   oklch(0.38 0.13 252);
   --accent-line: #c3cade;
   --select:      #dfe6f5;
-
-  /* Rails red, spent on the primer callout's rule and wordmark and on nothing
-     else. Deliberately not the accent: the accent means navigation on this page,
-     and a framework's own colour borrowed for a link would say the page itself is
-     Rails documentation. The one new colour the framework anchors introduced,
-     which is why it is declared here and in BOTH dark blocks below. */
-  --rails:       oklch(0.50 0.13 25);
 
   --warn-bg:     oklch(0.98 0.015 85);
   --warn-bg-2:   oklch(0.96 0.03 80);
@@ -233,10 +216,6 @@
     --accent-line: #4d5a7a;
     --select:      #2a3450;
 
-    /* Lightened, not the light value: oklch(0.50 …) on the dark ground is the
-       unreadable half of a two-theme colour. */
-    --rails:       oklch(0.78 0.11 25);
-
     --warn-bg:     oklch(0.24 0.03 80);
     --warn-bg-2:   oklch(0.28 0.05 80);
     --warn-rule:   oklch(0.42 0.06 80);
@@ -284,8 +263,6 @@
   --accent-hi:   oklch(0.85 0.08 252);
   --accent-line: #4d5a7a;
   --select:      #2a3450;
-
-  --rails:       oklch(0.78 0.11 25);
 
   --warn-bg:     oklch(0.24 0.03 80);
   --warn-bg-2:   oklch(0.28 0.05 80);
@@ -341,13 +318,13 @@ strong { font-weight: 600; }
 em { font-style: italic; }
 
 /* Prose flow, and the one piece of spacing a run types rather than copies.
-   p is margin:0 because inside .mech, .pr-main and dl.rows > dd the gap belongs
-   to the container's own padding or flex gap, and a paragraph bringing its own
-   would double it. Every BLOCK below carries a top margin instead — .ba 28,
-   .pipe 30, .mech 30, .decisions 34 — so the only gap with no owner is the one
-   after a paragraph, and a run writing two of them in a row got a wall of text
-   with nothing between the sentences. A published page shipped exactly that:
-   section 1's two intro paragraphs set solid, and the .usecases block below
+   p is margin:0 because inside a collapsed block and a .lookat clause the gap
+   belongs to the container's own padding or flex gap, and a paragraph bringing
+   its own would double it. Every BLOCK below carries a top margin instead —
+   .ba 40, figure.chain 26, .lookat 22, .open 20 — so the only gap with no owner
+   is the one after a paragraph, and a run writing two of them in a row got a
+   wall of text with nothing between the sentences. A published page shipped
+   exactly that: section 1's two intro paragraphs set solid, and the block below
    them starting on the line where the prose stopped.
 
    So the paragraph carries a bottom margin where prose actually flows, which is
@@ -355,7 +332,7 @@ em { font-style: italic; }
    already used by hand — style="margin-bottom:22px" on the paragraph above a
    .gt — moved here so it stops being something to remember. Adjacent margins
    collapse, so a component's own larger top margin still decides the gap and
-   nothing that was 28 or 30 becomes 46. :not(:last-child) because a section has
+   nothing that was 22 or 26 becomes 44. :not(:last-child) because a section has
    no bottom padding to collapse against: a trailing paragraph would push the
    next section's 58 out to 76, and only sometimes. */
 section > p:not(:last-child) { margin-bottom: 18px; }
@@ -415,47 +392,24 @@ main { flex: 1 1 auto; min-width: 0; padding: 0 56px 140px; }
 
 /* ============================================================
    Section furniture. A section announces itself with a label and
-   a rule that fills the rest of the row; a flow gets the heavier
-   .subhead so section 2's three flows read as subordinate to it.
+   a rule that fills the rest of the row.
    ============================================================ */
 section { padding: 58px 0 0; scroll-margin-top: 20px; }
-.eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; }
+/* An eyebrow carries a .lbl span in a section head, and bare text where it labels a
+   list inside one — "Affected, not changed", which searches.rb opens its scope on and
+   therefore has to sit directly after the class attribute. So the label typography
+   lives on the eyebrow itself and a .lbl child still overrides it, being matched
+   directly rather than inherited. */
+.eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 26px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
 .eyebrow > i { flex: 1; height: 1px; background: var(--rule); }
-.subhead { display: flex; align-items: baseline; gap: 16px; padding-bottom: 18px; border-bottom: 2px solid var(--ink); }
-.subhead h3 { max-width: 34ch; }
-@media (max-width: 700px) { .subhead { flex-direction: column; gap: 8px; } }
-
-/* ============================================================
-   THE REVIEW UNIT. A .mech block states the mechanism, then
-   dl.rows carries the seven fields. There is no card: the rows
-   are borderless, separated by a hairline each, and the label
-   column is a fixed 132px — sized for Roboto Mono at 10px with
-   .16em tracking, which is wider than the face this design was
-   drafted in. A label that wraps turns the gutter into noise.
-   Field rows appear NOWHERE ELSE. See report-format.md.
-   ============================================================ */
-.mech { margin-top: 30px; padding: 20px 22px; border-left: 2px solid var(--accent); background: var(--surface-3); }
-.mech > b { display: block; font-family: var(--mono); font-size: 13.5px; font-weight: 500; line-height: 1.5; color: var(--ink); }
-.mech > p { margin-top: 8px; max-width: 62ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
-
-.rows { display: grid; grid-template-columns: 132px 1fr; gap: 0 28px; border-top: 1px solid var(--rule); }
-.rows > dt { padding: 22px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
-.rows > dd { margin: 0; padding: 22px 0 24px; max-width: 66ch; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.rows > dt ~ dt, .rows > dd ~ dd { border-top: 1px solid var(--rule); }
-.rows > dt:first-of-type, .rows > dd:first-of-type { border-top: 0; }
-.rows .item { font-size: 15px; line-height: 1.62; color: var(--ink-3); }
-@media (max-width: 700px) {
-  .rows { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .rows > dt { padding-bottom: 10px; }
-  .rows > dd { padding-top: 0; border-top: 0; }
-}
 
 /* before / after — two rows, never one paragraph.
 
    Its spacing is deliberately asymmetric, and the reason is its top hairline.
    That rule is the block announcing itself, so it needs room ABOVE to read as a
    new thing starting rather than as the bottom border of whatever sat there
-   before — 40, the widest gap in the section, where .pipe and .mech take 30. It
+   before — 40, the widest gap in the section, where figure.chain takes 26. It
    needs almost nothing BELOW: the last row's own 22px of padding was landing on
    top of the next component's margin or the next section's 58, and the pair read
    as a hole. The block ends at its last line and the gap after it belongs to
@@ -473,37 +427,6 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 }
 
 /* ============================================================
-   Pipelines. THE PATH — a call chain or a guard chain, inside
-   the flow that owns it, with the terminal node filled so the
-   thing the chain arrives at reads last. Unbounded in length,
-   which is why it is a component: there is no canvas to lay it
-   out on.
-
-   It is NOT the boundary chain. That is a drawing (catalogue 1
-   of 4), because its finding sits on a HOP and .n i below is a
-   bare hairline with nothing to mark and nowhere to label —
-   which is how a run given the component wrote the mismatch
-   into a node instead, reproducing the footnote failure that
-   took .blast off this page one design generation earlier.
-   ============================================================ */
-.pipe { margin-top: 30px; padding: 22px 24px; background: var(--surface-hi); border: 1px solid var(--rule); }
-.pipe > .lbl { display: block; font-size: 9.5px; letter-spacing: .18em; margin-bottom: 16px; }
-.pipe ol { list-style: none; margin: 0; padding: 0; }
-.pipe li { display: grid; grid-template-columns: 26px 1fr; gap: 14px; align-items: start; padding-bottom: 14px; }
-.pipe li:last-child { padding-bottom: 0; }
-.pipe .n { display: flex; flex-direction: column; align-items: center; gap: 4px; align-self: stretch; }
-.pipe .n b {
-  flex: 0 0 auto; width: 22px; height: 22px; border: 1px solid var(--rule-strong); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--muted);
-}
-.pipe li:last-child .n b { background: var(--ink); border-color: var(--ink); color: var(--ground); }
-.pipe .n i { flex: 1 1 auto; width: 1px; background: var(--rule); min-height: 14px; }
-.pipe li:last-child .n i { display: none; }
-.pipe .t { display: block; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; color: var(--ink-2); overflow-wrap: anywhere; }
-.pipe li:last-child .t { color: var(--ink); font-weight: 500; }
-.pipe .s { display: block; font-size: 13px; line-height: 1.5; color: var(--muted); margin-top: 3px; }
-
 /* ============================================================
    Evidence tier and the neutral tag. Neither grades the change.
    A claim the diff shows directly carries NO tier: silence is
@@ -559,15 +482,12 @@ details.searched[open] .chev { transform: rotate(90deg); }
 .searched .sr-limit { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 72ch; }
 
 /* ============================================================
-   Framework anchors — a documentation link, a runtime probe, and
-   the primer callout a link escalates into. NONE OF THE THREE IS
-   EVIDENCE. The claim still rests on a file:line; see
+   Framework anchors — a documentation link and a runtime probe.
+   NEITHER IS EVIDENCE. The claim still rests on a file:line; see
    report-format.md § Framework anchors, which owns the rules and
-   the budget. The link and the probe are built out of tokens that
-   already exist, deliberately. The primer spends exactly one new
-   colour, --rails, and pays that price knowingly: a new colour is
-   a new thing to declare in all three theme blocks and forget in
-   one of them, which is why page-invariants.sh § 6 counts it.
+   the budget. Both are built out of tokens that already exist,
+   deliberately: an anchor that introduced a colour would be a new
+   thing to declare in all three theme blocks and forget in one.
    ============================================================ */
 a.doc { font-family: var(--mono); font-size: 12px; white-space: nowrap; text-decoration-color: var(--rule-strong); }
 a.doc::after { content: "\2197"; margin-left: 2px; font-size: .9em; color: var(--faint); }
@@ -581,103 +501,6 @@ pre.probe {
   font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
   white-space: pre; color: var(--ink-2);
   background: var(--surface-3); border-left: 2px solid var(--rule-strong);
-}
-
-/* ============================================================
-   Rails primer — what a doc link escalates into, and not a
-   second kind of link. It is for the case where the reviewer
-   cannot make the decision in front of them without knowing a
-   framework behaviour they may not know. At most one per
-   behaviour flow; report-format.md § Framework anchors owns that
-   budget and what earns one.
-
-   Three things it must not become, all of which look like
-   diligence on the way:
-     · a probe. pre.demo below quotes documented framework
-       behaviour on a GENERIC receiver, so it may carry a "# =>"
-       line. pre.probe asks THIS application and may never show
-       output, because the run did not boot it. Never merge them,
-       and never put a pre.demo outside a primer — that would make
-       it a general-purpose hole for output nobody observed.
-     · a tutorial. A behaviour every Rails developer already knows
-       earns nothing here. A page that explains each one has become
-       a Rails manual with a diff attached, which reads as more
-       thorough while getting less navigable.
-     · an unevidenced claim. The primer cites the line in THIS
-       repository that earned it, exactly like every other doc
-       link. Two paragraphs of framework prose read as
-       self-justifying, which is why the citation is checked.
-
-   It carries no .mech, no dl.rows and no <dt>, deliberately: that
-   is what keeps it out of both censuses in
-   checks/behaviour-flows.sh, so a flow that has one cannot read
-   as a flattened flow.
-   ============================================================ */
-.primer {
-  --pr-rule: var(--rails);
-  margin-top: 18px; background: var(--surface-hi);
-  border: 1px solid var(--rule); border-top: 2px solid var(--pr-rule);
-}
-/* The variant for anything that is not Rails — a gem, a client library. It
-   drops the mark and the trademark line with it, and takes the rule back to a
-   neutral hairline, because a Pundit explanation in Rails red is a claim about
-   who wrote Pundit. Nothing else changes: same head, same two columns, same
-   demo rules. */
-.primer--lib { --pr-rule: var(--rule-strong); }
-.pr-head {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  padding: 13px 20px; border-bottom: 1px solid var(--rule-soft);
-}
-/* The official logotype, sized by height so its own aspect ratio decides the
-   width. It carries the word "RAILS" itself, which is why the Rails variant has
-   no .pr-brand beside it — two wordmarks in one header is a duplicate, not a
-   lockup. currentColor rather than the brand hex: the mark has to stay legible
-   on the dark ground, and --rails is the one colour on this page that is
-   already defined for both. */
-.pr-mark { height: 26px; width: auto; flex: 0 0 auto; color: var(--rails); }
-/* The name in the .primer--lib variant, where there is no mark to carry it. */
-.pr-brand {
-  font-family: var(--display); font-weight: 400; font-size: 19px;
-  line-height: 1; letter-spacing: -.01em; color: var(--ink);
-}
-.pr-sep { width: 1px; height: 16px; background: var(--rule); }
-.pr-api { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--faint); overflow-wrap: anywhere; }
-
-.pr-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
-.pr-main { min-width: 0; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 11px; }
-.pr-main > b { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
-.pr-main > p { max-width: 56ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); text-wrap: pretty; }
-.pr-main > .item { font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
-.pr-main > a.doc { align-self: flex-start; margin-top: 3px; white-space: normal; }
-
-.pr-side {
-  min-width: 0; padding: 18px 20px 20px;
-  background: var(--surface-3); border-left: 1px solid var(--rule-soft);
-  display: flex; flex-direction: column; gap: 10px;
-}
-.pr-side > .lbl { font-size: 9.5px; }
-.pr-side > .note { font-size: 13px; line-height: 1.58; }
-
-/* The manual, quoted. It SCROLLS rather than wrapping, which is
-   the opposite of what this started as: a wrapped result line puts
-   "# => true" on a line of its own, where it reads as another
-   statement instead of as the answer to the one above it. Code
-   that wraps says something different from the code that was
-   written, and a quotation may not do that. Keep the lines short —
-   under about 38 characters and nothing scrolls at all. */
-pre.demo {
-  margin: 0; overflow-x: auto;
-  font-family: var(--mono); font-size: 12px; line-height: 1.75;
-  color: var(--ink-2); white-space: pre;
-}
-
-.pr-tm {
-  padding: 9px 20px 10px; border-top: 1px solid var(--rule-soft);
-  font-family: var(--mono); font-size: 9.5px; line-height: 1.5; color: var(--fainter);
-}
-@media (max-width: 700px) {
-  .pr-body { grid-template-columns: minmax(0, 1fr); }
-  .pr-side { border-left: 0; border-top: 1px solid var(--rule-soft); }
 }
 
 /* ============================================================
@@ -760,25 +583,6 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt--source .ex-body span[class^="hljs-"] { font-weight: inherit; background: none; }
 
 /* ============================================================
-   Decisions — after a unit, never inside one
-   ============================================================ */
-.decisions { margin-top: 34px; }
-.decisions > .lbl { display: block; font-size: 10px; letter-spacing: .18em; margin-bottom: 14px; }
-.decision {
-  display: grid; grid-template-columns: auto 1fr; gap: 0 20px;
-  padding: 22px 24px; background: var(--surface-hi);
-  border: 1px solid var(--rule-card); box-shadow: 0 1px 0 var(--rule-soft);
-}
-.decision + .decision { margin-top: 14px; }
-.decision > .dn { font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1; color: var(--rule-strong); font-variant-numeric: tabular-nums; }
-.decision > div { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.decision h4 { max-width: 44ch; }
-.decision .why { max-width: 62ch; font-size: 15px; line-height: 1.66; color: var(--ink-3); }
-.decision .trade { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding-top: 12px; border-top: 1px solid var(--rule-soft); }
-.decision .trade > .tag { background: var(--warn-bg-2); border: 1px solid var(--warn-rule); color: var(--warn-ink); height: fit-content; }
-.decision .trade > span { max-width: 60ch; font-size: 14.5px; line-height: 1.64; color: var(--ink-3); }
-
-/* ============================================================
    Section 3 · start here. ONE list: the route through the code
    and what on it needs judgment are the same question.
    ============================================================ */
@@ -790,6 +594,43 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .begin .t > .why { display: block; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); max-width: 64ch; }
 .begin .ptr { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding-top: 4px; white-space: nowrap; }
 @media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
+
+/* ============================================================
+   Section 02 · THE REVIEW CHECKPOINT. One judgment the reviewer
+   has to make: the question as the h3, why it is a question in
+   the paragraph, and where to look below that. It is NOT a card
+   — a hairline between checkpoints is the whole frame, because a
+   box drawn around each of five judgments reads as five reports,
+   which is the shape this page replaced.
+
+   .cp is a <section> so the rail can spy on it and so a pending
+   stub is the same element as a written one.
+   ============================================================ */
+.cp { padding: 44px 0 0; scroll-margin-top: 20px; }
+.cp + .cp { margin-top: 10px; border-top: 1px solid var(--rule); }
+.cp > .lbl { display: block; margin-bottom: 12px; }
+.cp > h3 { max-width: 38ch; }
+.cp > p { margin-top: 14px; }
+
+/* Where to look — one to four locations, a clause each. The clause is not
+   optional furniture: a bare citation is a location the reader has to open to
+   find out why it is on the list, which is the deleted-field defect wearing a
+   link. Hanging indent by flex-basis so a wrapped clause stays under its own
+   path, the device .sr-list already uses, and an excerpt takes the full row
+   beneath the pair it confirms. */
+.lookat { list-style: none; margin: 22px 0 0; padding: 0; border-top: 1px solid var(--rule); }
+.lookat > li { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--rule); }
+.lookat > li > .path { flex: 0 0 auto; }
+.lookat > li > span { flex: 1 1 28ch; min-width: 0; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.lookat .excerpt { flex: 1 1 100%; margin-bottom: 2px; }
+
+/* An open question. Ochre like .gap and for the same reason: a stated absence
+   is evidence, never a severity. The label is fixed at "Open question" —
+   "Watch" and "Blocking" are a severity vocabulary with the chip taken off,
+   and page-invariants.rb warns on both. */
+.open { margin-top: 20px; padding: 14px 16px; background: var(--warn-bg-2); border-left: 2px solid var(--warn-rule); max-width: 66ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.open > b { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--warn-ink); }
+
 
 /* ============================================================
    Section 4 · IMPACT PATHS. Replaces the .blast box grid, which
@@ -894,7 +735,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .ip-out > .ip-box .ip-d { color: var(--ground); opacity: .72; }
 
 /* The edge: a labelled connector. <i> is the gutter that draws
-   the hairline and the arrowhead, the way .pipe .n i does. */
+   the hairline and the arrowhead, the way a numbered spine does. */
 .ip-rel { display: flex; align-items: center; gap: 10px; min-height: 44px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .ip-rel > i { flex: 0 0 22px; align-self: stretch; position: relative; }
 .ip-rel > i::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 7px; width: 1px; background: var(--rule-strong); }
@@ -972,111 +813,82 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
   .ip-n > *, .ip-aff > *, .ip-out > * { grid-column: 1; }
 }
 
+
+/* ============================================================
+   figure.chain — the same vertical chain inside a CHECKPOINT,
+   where the job is different. Section 04 shows a consequence
+   crossing into code the change did not touch; a chain in a
+   checkpoint shows a mechanism INSIDE the change — a request
+   path, a value derived over several hops, the order guards run
+   in. So it reuses every node and edge rule above and drops the
+   two-lane apparatus: no lanes, no legend, no card header, and
+   NO .ip-aff.
+
+   That last one is a rule rather than a style. A hop that lands
+   in unchanged code whose meaning the change altered IS an impact
+   path: it belongs in section 04, drawn once, and the checkpoint
+   that turns on it says so in a clause. Drawing it here as well
+   is the same consequence drawn twice at conversational distance,
+   which reads as thoroughness.
+
+   .ip-step is the kind that exists only here — a hop that claims
+   nothing about the diff, drawn as the plain solid box so a
+   reader is never asked to decide whether it means "changed".
+   report-format.md § Chains owns all of it.
+   ============================================================ */
+figure.chain { margin-top: 26px; padding: 20px 24px 22px; background: var(--surface-hi); border: 1px solid var(--rule); }
+figure.chain .ip-n { grid-template-columns: minmax(0, 1fr); }
+figure.chain .ip-n > * { grid-column: 1; }
+figure.chain > figcaption { margin-top: 14px; }
+.ip-step > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
+
 /* ============================================================
    Grid tables. gap:1px over --rule, so every seam is a rule at
    any wrap point and there is no border-collapse to fight.
    Column widths are tuned for Roboto Mono; the container scrolls
    rather than crushing the path column.
-
-   AND THE PROSE COLUMN GETS THE SPACE, not the path column. A
-   path has a natural maximum width — 40-odd characters of 11.5px
-   mono — while "what a reviewer has to know" is a paragraph with
-   no maximum at all, so sizing the first at 1fr and the second at
-   a fixed 264px handed the widest content on the row the narrowest
-   cell: on a real page it wrapped every inline <code> in the
-   explanation to two lines beside a mostly empty left column.
-   The .gt-ripple ratio below is that inverted.
    ============================================================ */
 .gt { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); overflow-x: auto; }
 .gt > .h { background: var(--surface-2); padding: 11px 16px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
 .gt > .c { background: var(--surface); padding: 12px 16px; min-width: 0; }
 .gt .path { font-size: 11.5px; line-height: 1.5; color: var(--ink-2); }
-.gt .fix, .gt .sec { font-size: 13.5px; color: var(--ink-3); }
 .gt-meta   { grid-template-columns: 2fr repeat(4, minmax(0, 1fr)); }
-.gt-ripple { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
-.gt-ledger { grid-template-columns: 1fr 100px 92px 108px; }
-/* .gt-paths is the diff inventory: paths only, no classification. At --brief it is what
-   details.coverage-foot below holds, since that level has no section 7. Still a .gt cell,
-   because data-path has to sit on a `div class="c"` for the coverage gate to keep
-   running. Two columns, since a path is the whole cell. */
+/* .gt-paths is the diff inventory: paths only, no classification. It is what
+   details.evidence below holds. Still a .gt cell, because data-path has to sit
+   on a `div class="c"` for the coverage gate to keep running. Two columns,
+   since a path is the whole cell. */
 .gt-paths  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .gt-paths > .c { padding: 9px 14px; }
 @media (max-width: 900px) {
   .gt-meta   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .gt-ripple { grid-template-columns: minmax(200px, 1fr) minmax(0, 1.6fr); }
-  .gt-ledger { grid-template-columns: minmax(300px, 1fr) 94px 86px 100px; }
   .gt-paths  { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ============================================================
-   The page-foot coverage carrier, at --brief only. Section 4 is
-   about consequences, not paths, so the diff inventory does not
-   live there — and at --brief there is no section 7 to hold it.
-   It sits below the last section instead: not a section, no
-   number, no rail entry, shut by default.
+   The evidence foot — section 05, and not a section: no number,
+   no rail entry, shut. It holds the diff inventory, what was
+   grepped, and the affected code no checkpoint turns on.
 
    It is PROVENANCE, not a claim, which is what makes collapsing
    it legal under the hard rule that the page reads complete with
-   every collapsed block shut. A finding must never end up here.
+   every collapsed block shut. A finding must never end up here:
+   anything in the foot that is a judgment the reviewer has to
+   make is a checkpoint that was mis-filed.
 
    coverage-gate.sh greps data-path page-wide on the raw bytes,
-   so it cannot tell that the carrier moved — which is the whole
-   reason this costs no script change.
+   so it neither knows nor cares that the carrier sits in here.
    ============================================================ */
-details.coverage-foot { margin-top: 62px; padding-top: 24px; border-top: 1px solid var(--rule); }
-details.coverage-foot > summary { display: flex; gap: 9px; align-items: center; cursor: pointer; list-style: none; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-details.coverage-foot > summary::-webkit-details-marker { display: none; }
-details.coverage-foot > summary::marker { content: ""; }
-.coverage-foot .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
-details.coverage-foot[open] .chev { transform: rotate(90deg); }
-.coverage-foot .gt { margin-top: 20px; }
-.att { padding: 2px 7px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; white-space: nowrap; }
-.att-read { border: 1px solid var(--ink); background: var(--ink); color: var(--ground); }
-.att-skim { border: 1px solid var(--rule-strong); background: var(--surface-2); color: var(--muted); }
-.att-mech { border: 1px solid var(--rule); background: var(--surface-3); color: var(--faint); }
-.grp { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--muted); }
+details.evidence { margin-top: 62px; padding-top: 24px; border-top: 1px solid var(--rule); }
+details.evidence > summary { display: flex; gap: 9px; align-items: center; cursor: pointer; list-style: none; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+details.evidence > summary::-webkit-details-marker { display: none; }
+details.evidence > summary::marker { content: ""; }
+.evidence .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
+details.evidence[open] .chev { transform: rotate(90deg); }
+.evidence .gt { margin-top: 20px; }
+.evidence .eyebrow { margin: 30px 0 14px; }
+.evidence .ev-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.evidence .ev-list > li { font-size: 14.5px; line-height: 1.6; color: var(--ink-3); }
 
-/* ============================================================
-   Section 6 · comprehension checkpoint. Inverted tiles, at most
-   five, and each must be answerable from the page but NOT by
-   copying one sentence out of it. Read-only: no ticks, no count.
-   ============================================================ */
-.checkpoint { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-@media (max-width: 780px) { .checkpoint { grid-template-columns: minmax(0, 1fr); } }
-.checkpoint > div { padding: 18px 20px; background: var(--ink); color: var(--on-ink); display: flex; gap: 14px; align-items: start; }
-.checkpoint b { flex: 0 0 auto; font-family: var(--display); font-weight: 400; font-size: 22px; line-height: 1; color: var(--faint); }
-.checkpoint span { font-size: 14.5px; line-height: 1.62; }
-.checkpoint code { background: none; padding: 0; color: var(--on-ink-code); font-size: 12.5px; }
-
-/* Section 6's plain lists — questions, commands, gaps. No tick state. */
-.actions { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-.actions-warn { background: var(--warn-rule); border-color: var(--warn-rule); }
-.actions > li { background: var(--surface); padding: 16px 18px; font-size: 15px; line-height: 1.62; color: var(--ink-3); }
-.actions-warn > li { background: var(--warn-bg); }
-.act-group { display: block; font-size: 10px; letter-spacing: .18em; margin: 30px 0 12px; }
-.act-group:first-of-type { margin-top: 0; }
-
-/* Section 1 · use-case rows. One per actor-and-path. A run given only the inline
-   version stacked them with a hand-written border-top:0 on each sibling, so the
-   stacking belongs here. */
-.usecases { display: flex; flex-direction: column; margin-top: 26px; }
-.usecase {
-  display: flex; align-items: center; gap: 12px; padding: 14px 18px;
-  background: var(--surface-hi); border: 1px solid var(--rule);
-}
-.usecase + .usecase { border-top: 0; }
-.usecase > b {
-  flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
-  background: var(--ink); color: var(--ground);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 11px; font-weight: 400;
-}
-.usecase > span { font-size: 15px; color: var(--ink-2); }
-
-/* section 5 sub-heads */
-.cc-h { margin: 0 0 14px; font-family: var(--display); font-weight: 500; font-size: 22px; line-height: 1.2; font-optical-sizing: auto; font-variation-settings: 'SOFT' 0, 'WONK' 0; }
-section > .cc-h { margin-top: 40px; }
-section > .cc-h:first-of-type { margin-top: 0; }
 
 /* ============================================================
    Build state. A staged page must never look finished. Four
@@ -1085,13 +897,12 @@ section > .cc-h:first-of-type { margin-top: 0; }
    did not earn it. Both of these are DELETED at the final publish;
    leaving a .pending behind is worse than publishing late.
 
-   .pending attaches at three granularities: a whole <section>, an
-   <h3> sub-part of the merged tail at --brief, and a BEHAVIOUR FLOW,
-   since section 2 is delivered one flow at a time. The markup for
-   that third one is already here and needs nothing added — the rail
-   carries a per-flow marker below, and each flow is its own
-   <section id="flow-x">, so the generic pending section IS the flow
-   stub with the flow's id on it.
+   .pending attaches at two granularities: a whole <section>, and a
+   CHECKPOINT, since section 02 is delivered one checkpoint at a
+   time. The second needs no markup of its own — a checkpoint is
+   already its own <section class="cp" id="cp-x">, so the generic
+   pending section IS the checkpoint stub with the question on it,
+   and the rail carries a per-checkpoint marker below.
    ============================================================ */
 .buildstate {
   display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
@@ -1109,31 +920,13 @@ section > .cc-h:first-of-type { margin-top: 0; }
 .rail-links .pending { font-size: 8.5px; padding: 0 4px; letter-spacing: .08em; }
 
 /* ============================================================
-   Wide blocks and figures — the four catalogue kinds
+   Figures. There are two, and neither is a drawing: figure.chain
+   inside a checkpoint and figure.impact in section 04, both built
+   out of the same .ip-* chain. Nothing on this page is an <svg>.
    ============================================================ */
 figure { margin: 0; }
-figure.inflow { margin-top: 30px; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
 figcaption strong { color: var(--ink-3); }
-.scroller { overflow-x: auto; background: var(--surface-hi); border: 1px solid var(--rule); }
-.scroller > svg { display: block; width: 100%; min-width: 880px; height: auto; }
-
-/* SVG vocabulary. Every colour comes from a token — a literal
-   hex in a diagram is invisible in one of the three themes. */
-svg text { font-family: var(--mono); fill: var(--ink); }
-svg .t-title { font-family: var(--display); font-weight: 500; font-size: 13px; }
-svg .t-col { font-size: 11px; }
-svg .t-dim { fill: var(--muted); font-size: 10.5px; }
-svg .t-lbl { font-size: 9.5px; letter-spacing: .14em; fill: var(--faint); }
-svg .t-edge { font-size: 10.5px; fill: var(--ink-3); }
-svg .box { fill: var(--ground); stroke: var(--ink); stroke-width: 1; }
-svg .box-hd { fill: var(--surface-2); stroke: var(--ink); stroke-width: 1; }
-svg .node { fill: var(--ground); stroke: var(--ink); stroke-width: 1; }
-svg .node-dead { fill: var(--surface-3); stroke: var(--rule-dash); stroke-width: 1; stroke-dasharray: 4 3; }
-svg .edge { stroke: var(--rule-dash); stroke-width: 1.25; fill: none; }
-svg .edge-dash { stroke: var(--warn-rule-2); stroke-width: 1.25; fill: none; stroke-dasharray: 5 4; }
-svg .edge-accent { stroke: var(--accent); stroke-width: 1.5; fill: none; }
-svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
@@ -1156,9 +949,9 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 
        Both are spelled out at every citation below rather than hidden behind one
        opaque placeholder, because the ANCHOR is the part that goes wrong and an
-       opaque href teaches nothing about its shape. The doc links in the flows are
-       shown already pinned for the same reason: a template that hides the form
-       teaches a run to publish a page that fails its own check.
+       opaque href teaches nothing about its shape. The doc link is shown already
+       pinned for the same reason: a template that hides the form teaches a run to
+       publish a page that fails its own check.
 
        A CITATION THAT NAMES A RANGE LINKS A RANGE. `foo.rb:51-72` under an href
        ending at R51 selects one line of twenty-two: the text promises a span the
@@ -1175,24 +968,23 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
        start, which is what a one-line anchor does anyway, so the form costs nothing
        where it is not honoured.
 
-       Sites below take {{DIFF}} or {{BLOB}} by what the field means: Implementation
-       and "Changed at" are changed lines; "Affected, unchanged", "Unchanged at" and
-       anything tiered `from unchanged code` are not, and no diff view can reach them.
-       Where a field can carry either, the commoner one is shown — switch it when the
-       line you actually cite sits on the other side. A citation naming no line at all
-       — a ledger row, a § 4 entry — has no anchor to get wrong and keeps {{LINK}};
-       scripts/ledger-rows.sh writes the ledger's own links from the rung it is given,
-       so those are never typed either.
+       Sites below take {{DIFF}} or {{BLOB}} by what the line IS, not by which
+       component it sits in. A ul.lookat entry and an ol.begin stop both carry
+       either: they point at the code that settles a judgment, and half of what
+       settles a judgment is code this PR did not touch. Anything tiered
+       `from unchanged code`, and every entry under "Affected, not changed", takes
+       {{BLOB}} — no diff view can reach those lines, which is the whole reason
+       this page exists. A citation naming no line at all — an inventory cell, an
+       affected entry given as a whole file — has no anchor to get wrong and keeps
+       {{LINK}}; scripts/ledger-rows.sh writes the inventory's own links from the
+       rung it is given, so those are never typed either.
 
        The rung ladder that decides whether any of this is clickable at all, the
        blob's base-SHA case, and the files GitHub will not render (which take
        {{BLOB}} even for a line inside the diff — scripts/diff-render.sh) are in
        report-format.md § Deep links, which owns all of it. ===== -->
 
-  <!-- ===== SECTION 4'S TWO STANDING RULES. Section 4 is "what this change reaches"
-       at --full and the merged tail section at --brief. These two rules are the same
-       in both, so they live here rather than inside either block: the level changes
-       how many sections there are, never what a section teaches.
+  <!-- ===== SECTION 04'S TWO STANDING RULES.
 
        ONE · THE PANEL IS IMPACT PATHS. It replaced a .blast box grid whose only
        encoding was border style, so it carried membership of two sets and nothing
@@ -1205,13 +997,14 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
        another function.
 
        Five rules the markup carries, each of them checked:
-         - ONE PATH PER .ip-card, and 2 to 3 cards. What this replaced was five paths
+         - ONE PATH PER .ip-card, and 1 to 3 cards. What this replaced was five paths
            stacked inside one frame under five .ip-hd headers, and at that length they
            stop reading as diagrams: the reader on the third chain has the first one's
            geometry behind them, and a shared frame invites a sixth
          - a path starts at .ip-chg and ends at exactly one .ip-out, which is last
          - every path holds at least one .ip-aff. A path with no unchanged node is
-           not an impact path, it is a call stack inside the diff
+           not an impact path, it is a call stack inside the diff — and a chain of
+           that shape belongs inside the checkpoint it explains, as a figure.chain
          - every node past the first carries its INCOMING relation in .ip-rel, with
            the causal verb. An unlabelled edge is a missing element, not an empty one
          - LABELS, NEVER SENTENCES, and no citations in here. The file:line lives in
@@ -1223,33 +1016,29 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
        between the change and the existing system is structurally true.
 
        The component, its causal vocabulary, its shape rules and its caps live in
-       report-format.md § Impact paths, and ONLY there.
+       report-format.md § Impact paths, and ONLY there. § Chains owns what this
+       panel and a checkpoint's figure.chain share, and the rule that decides which
+       one a given chain is.
 
-       TWO · NO Changed LIST, at either level. Completeness in section 4 is about
-       CONSEQUENCES, not paths: section 7's classified ledger accounts for every file
-       at --full and the collapsed coverage foot does at --brief, and both are
-       generated by scripts/ledger-rows.sh. A run that lists the diff in section 4
-       has built the second ledger that section is told not to become, and on a real
-       page it was 24 links the reader had no use for. ===== -->
+       TWO · NO Changed LIST. Completeness in section 04 is about CONSEQUENCES, not
+       paths: details.evidence at the foot accounts for every file in the diff, and
+       it is generated by scripts/ledger-rows.sh. A run that lists the diff in
+       section 04 has built the second inventory that section is told not to become,
+       and on a real page it was 24 links the reader had no use for. ===== -->
 
-  <!-- ===== The rail. Numbered, because the order IS the reviewer's path:
-       section 2 teaches the mechanisms, 3 is the moment they open the code,
-       4 is a second pass through one lens. Flows are sub-entries of 02.
+  <!-- ===== The rail. Numbered, because the order IS the reviewer's path: 02 is
+       the judgments, 03 is the moment they open the code, 04 is what the change
+       reaches outside it. Checkpoints are sub-entries of 02.
        Delete the .pending markers at the final publish.
 
-       BOTH SHAPES ARE ASSEMBLED BELOW, and page-skeleton.sh --level hands you
-       exactly one of them: seven entries at --full, four at --brief, where the
-       tail is one section and the rail stops at 04. Copy what you were given.
-       Nothing else about the rail changes — same numbering, same scroll-spy,
-       same .pending markers. An earlier version emitted the seven-entry rail at
-       both levels and described the short one in this comment, which made every
-       --brief rail a deletion-and-renumber a run performed from prose and no
-       check ever looked at.
+       The per-checkpoint sub-entries are also the staging markers for section 02,
+       which arrives one checkpoint at a time: entry 02 keeps a .pending until
+       every checkpoint under it is written.
 
-       The per-flow sub-entries below are also the staging markers for section 2,
-       which arrives one flow at a time: entry 02 keeps a .pending until every
-       flow under it is written. That is why a flow gets a rail entry of its own
-       and section 5's subheadings do not. ===== -->
+       Entry 04 goes when the section does. A diff whose consequences all stay
+       inside it earns no impact section, and an empty one with a line saying
+       nothing reaches unchanged code is worse than none: omitted and pending have
+       to stay distinguishable. ===== -->
   <nav class="rail" aria-label="Sections">
     <div class="rail-id">
       <div class="lbl" style="letter-spacing:.18em">Review map</div>
@@ -1259,19 +1048,12 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
 
     <div class="rail-links">
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
-      <a data-rail="flows" href="#flows"><span class="n">02</span>Behaviour flows</a>
-      <a class="sub" data-rail="flow-a" href="#flow-a">Flow A &middot; {{SHORT_NAME}}</a>
-      <a class="sub" data-rail="flow-b" href="#flow-b">Flow B &middot; {{SHORT_NAME}} <span class="pending">pending</span></a>
-      <a data-rail="start" href="#start"><span class="n">03</span>Where to begin</a>
-      <!-- SKELETON:ONLY:level=full:START -->
-      <a data-rail="reach" href="#reach"><span class="n">04</span>What this change reaches</a>
-      <a data-rail="crosscutting" href="#crosscutting"><span class="n">05</span>Cross&#8209;cutting</a>
-      <a data-rail="approving" href="#approving"><span class="n">06</span>Before approving</a>
-      <a data-rail="coverage" href="#coverage"><span class="n">07</span>Coverage ledger</a>
-      <!-- SKELETON:ONLY:level=full:END -->
-      <!-- SKELETON:ONLY:level=brief:START -->
-      <a data-rail="reach" href="#reach"><span class="n">04</span>Reach &amp; checks</a>
-      <!-- SKELETON:ONLY:level=brief:END -->
+      <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">{{SHORT_FORM_OF_THE_QUESTION}}</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">{{SHORT_FORM_OF_THE_QUESTION}}</a>
+      <a class="sub" data-rail="cp-x" href="#cp-x">{{SHORT_FORM_OF_THE_QUESTION}} <span class="pending">pending</span></a>
+      <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
+      <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
     </div>
   </nav>
 
@@ -1308,41 +1090,29 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
       </div>
     </header>
 
-    <!-- ===== Section 1 · What changed ===== -->
+    <!-- ===== Section 01 · What changed. One paragraph of 80 to 160 words, and at
+         most a handful of bullets when the PR genuinely contains independent
+         changes. It answers "what is this PR doing", never "what files changed".
+
+         A stated limit goes here and only here: a region you had to skim, a dirty
+         working tree, a client you could not read. Say it in a sentence, in the
+         same voice as anything else on the page. ===== -->
     <section id="changed">
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
       <h2 style="max-width:30ch;margin-bottom:18px">{{BEHAVIOURAL_CHANGE}}</h2>
 
-      <!-- One .usecase per actor-and-path. They stack; do not hand-write border-top:0. -->
-      <div class="usecases">
-        <div class="usecase"><b>A</b><span>{{ACTOR_DOES_THING}}</span></div>
-        <div class="usecase"><b>B</b><span>{{ACTOR_DOES_THING}}</span></div>
-      </div>
+      <p>{{WHAT_IS_TRUE_OF_THE_SYSTEM_NOW_THAT_WAS_NOT_BEFORE}}</p>
+      <p>{{THE_MECHANISM_ONLY_WHERE_IT_IS_NEEDED_TO_FOLLOW_THE_CHANGE}} <span class="tier tier-inf">{{TIER_IF_NOT_SHOWN_BY_THE_DIFF}}</span></p>
 
+      <!-- OPTIONAL, and most pages do not earn it: the before/after pair is for a
+           workflow that fundamentally changed, not for every PR. Two rows, never
+           one paragraph, and one tier for the pair, on the After row. Delete the
+           whole block when the change is an addition rather than a replacement. -->
       <dl class="ba">
         <dt>Before</dt><dd>{{WHAT_WAS_POSSIBLE_OR_WENT_WRONG}}</dd>
         <dt class="now">After</dt>
         <dd class="now">{{WHAT_IS_POSSIBLE_NOW_OR_IS_NOW_PREVENTED}} <span class="tier tier-inf">{{TIER_IF_NOT_SHOWN_BY_THE_DIFF}}</span></dd>
       </dl>
-
-      <div class="pipe">
-        <span class="lbl">Path of a write</span>
-        <ol>
-          <li><span class="n"><b>1</b><i></i></span><span><span class="t">{{UI_ENTRY}}</span><span class="s">{{WHAT_HAPPENS_HERE}}</span></span></li>
-          <li><span class="n"><b>2</b><i></i></span><span class="t">{{VERB_AND_ROUTE}}</span></li>
-          <li><span class="n"><b>3</b><i></i></span><span class="t">{{CONTROLLER_ACTION}}</span></li>
-          <li><span class="n"><b>4</b><i></i></span><span class="t">{{OPERATION_OR_SERVICE}}</span></li>
-          <li><span class="n"><b>5</b><i></i></span><span class="t">{{MODEL_OR_COLUMN}}</span></li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ===== Section 2 · Behaviour flows. The intro states the split and why;
-         each flow is then its own <section id="flow-x">. ===== -->
-    <section id="flows" style="padding-top:48px">
-      <div class="eyebrow"><span class="lbl lbl-a">Behaviour</span><i></i></div>
-      <h2 style="margin-bottom:18px">Behaviour flows</h2>
-      <p>{{HOW_THE_CHANGE_WAS_SPLIT_AND_WHY_THAT_SPLIT}}</p>
     </section>
 
     <!-- ===== A PENDING SECTION, while the page is staged. Say what it will cover
@@ -1350,748 +1120,267 @@ svg .lifeline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
          say here". Delete the marker when the section lands; if the run STOPS,
          edit this into a stated limit — a promise left behind is worse.
 
-         A pending FLOW is the same idea with a flow's own header — shown
-         assembled below, because section 2 arrives one flow at a time. ===== -->
+         A pending CHECKPOINT is the same idea with a checkpoint's own header —
+         shown assembled below, because section 02 arrives one at a time. ===== -->
     <section id="{{ID}}">
       <div class="eyebrow"><span class="lbl lbl-a">{{EYEBROW}}</span><i></i></div>
       <h2>{{SECTION}}</h2>
       <p class="note" style="margin-top:18px"><span class="pending">pending</span> {{WHAT_IT_WILL_COVER_AND_HOW_BIG}}</p>
     </section>
 
-    <!-- ===== A PENDING FLOW, while section 2 fills in one flow at a time. Same
-         .subhead as a written flow, so the reader sees the split's real shape
-         before any of it is written; the line of substance is the flow's NAME and
-         what it covers, never "coming soon". The whole <section> is the anchor the
-         later Edit replaces, which is what keeps a stage from re-writing the page.
+    <!-- ===== Section 02 · What needs your attention. THE PAGE'S CORE, and the one
+         section a reader who has time for nothing else should read.
 
-         It carries no .mech and no dl.rows, and that is deliberate: it therefore
-         adds nothing to the unit census in evals/checks/behaviour-flows.sh, so a
-         half-written section 2 is not read as a flattened one. ===== -->
-    <section id="flow-{{X}}" style="padding-top:52px">
-      <div class="subhead"><span class="lbl lbl-wide">Flow {{X}}</span><h3>{{THE_BEHAVIOUR}} <span class="pending">pending</span></h3></div>
-      <p class="note">{{WHAT_THIS_FLOW_WILL_COVER_AND_WHICH_FILES}}</p>
-    </section>
+         Three to five checkpoints, each ONE JUDGMENT the reviewer has to make.
+         Fewer for a small PR. A sixth candidate is a signal that two of them are
+         the same question — merge, or name it in a clause of the nearest one.
 
-    <!-- ==========================================================================
-         A BEHAVIOUR FLOW, ASSEMBLED WHOLE. Copy this shape; do not rebuild it from
-         the prose in report-format.md.
+         ORDERED BY WHAT A REVIEWER WOULD MOST REGRET MISUNDERSTANDING, and an
+         order is not a scale. No number that reads as severity, no "blocking", no
+         "watch", no chip: the reader is told where to start thinking, not how bad
+         anything is.
 
-         The composition is the thing that regresses. A previous version of this
-         template showed the section shell, the unit and the decisions block as
-         three DETACHED siblings and stated the composition only in prose — and a
-         run read the prose, copied the markup as shown, and flattened all three of
-         its flows into loose field rows. Nothing errored and no check fired.
+         THE SAMPLING CAVEAT LIVES HERE, ONCE, and nowhere else on the page. It is
+         what stops an agenda of five judgments reading as the complete set.
+         ===== -->
+    <section id="attention" style="padding-top:48px">
+      <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
+      <h2 style="margin-bottom:18px">What needs your attention</h2>
+      <p>{{WHAT_THESE_TURN_ON_AND_WHY_THEY_ARE_IN_THIS_ORDER}}</p>
+      <p class="note">{{THESE_ARE_WHAT_THIS_PASS_SURFACED_NOT_AN_AUDIT}}</p>
 
-         That risk is HIGHER in this design, not lower: dl.rows has no card to lose,
-         so a flattened flow looks almost right. What holds it together is that the
-         field rows live in ONE dl.rows, introduced by ONE .mech, and the decisions
-         block sits AFTER that dl — never inside it.
+      <!-- ======================================================================
+           A CHECKPOINT, ASSEMBLED WHOLE. Copy the composition, not just the parts:
+           the h3 is the question, the paragraph says why it is one, the figure
+           shows the mechanism, ul.lookat says where to settle it, and p.open names
+           what the code cannot settle. There is no card and no border around the
+           whole thing — a box drawn around each of five judgments reads as five
+           reports, which is the page this one replaced.
 
-         Order inside a flow: subhead → lede → before/after → pipeline → figure →
-         mech → primer → dl.rows (the seven fields) → decisions. Decisions last,
-         always.
+           THE QUESTION IS A JUDGMENT, NEVER A CATEGORY. "Controller changes" names
+           a directory; "Does the new filter preserve the intended scope?" names
+           something a reviewer can get wrong. If it cannot be phrased as a
+           question the reviewer answers by looking at the code, it is an
+           explanation and belongs in a sentence somewhere else.
 
-         THE FIGURE is a boundary chain or a guard fork, and a flow earns AT MOST
-         ONE — most earn none. It sits after the pipe and before the .mech for two
-         reasons. The pipe says where a request goes; the figure says which
-         requests get there, or where a field stops agreeing, so it answers the
-         question the spine raises and cannot settle and the two read adjacently.
-         And it stays OUTSIDE every unit region, which begin at .mech: the primer
-         landed inside one and had to be cut out of the census by hand.
-         ========================================================================== -->
-    <section id="flow-a" style="padding-top:52px">
-      <div class="subhead"><span class="lbl lbl-wide">Flow A</span><h3>{{THE_BEHAVIOUR}}</h3></div>
+           Fields are FACETS, not rows. Tests appear when they change the judgment
+           — "the spec pins the admin branch and leaves the invitee branch open" —
+           and not as an inventory. A probe or a command appears when running it
+           would settle the question. An author question goes on the p.open line.
+           Anything with nothing to say is not written, and no label is left behind
+           to say so.
+           ====================================================================== -->
+      <section class="cp" id="cp-a">
+        <span class="lbl lbl-wide">Checkpoint A</span>
+        <h3>{{THE_QUESTION_THE_REVIEWER_HAS_TO_SETTLE}}?</h3>
 
-      <p class="lede">{{THE_MECHANISM_AND_WHY_THIS_IS_ONE_FLOW}}</p>
+        <p>{{WHAT_CHANGED_HERE_AND_WHAT_FOLLOWS_FROM_IT}} {{WHAT_THE_REVIEWER_IS_BEING_ASKED_TO_DECIDE}}</p>
 
-      <!-- SKELETON:ONLY:level=full:START -->
-      <!-- A FLOW'S OWN before/after pair, at --full. At --brief section 1 holds the
-           page's one transition block and the flow states its own inside the .mech,
-           so this region is not handed to a run at that level at all —
-           report-format.md § The brief budget. Gated rather than commented for the
-           reason the rail is: a note saying "delete this at --brief" is a deletion
-           done from prose with nothing checking it. checks/brief-budget.rb still
-           fails one on a brief page, for the run that writes it from memory. -->
-      <dl class="ba">
-        <dt>Before</dt><dd>{{WHAT_WAS_POSSIBLE_OR_WENT_WRONG}}</dd>
-        <dt class="now">After</dt><dd class="now">{{WHAT_IS_POSSIBLE_NOW_OR_IS_NOW_PREVENTED}}</dd>
-      </dl>
-      <!-- SKELETON:ONLY:level=full:END -->
+        <!-- THE CHAIN IS OPTIONAL AND MOST CHECKPOINTS EARN NONE — but draw it
+             when the explanation would otherwise have to name three hops in
+             sequence. It shows the mechanism INSIDE the change: a request path, a
+             value derived over several hops, the order guards run in.
 
-      <div class="pipe">
-        <span class="lbl">{{WHAT_THIS_CHAIN_IS}}</span>
-        <ol>
-          <li><span class="n"><b>1</b><i></i></span><span><span class="t">{{VERB_AND_ROUTE}}</span><span class="s">{{WHERE_IT_GOES}}</span></span></li>
-          <li><span class="n"><b>2</b><i></i></span><span class="t">{{OPERATION_OR_SERVICE}}</span></li>
-          <li><span class="n"><b>3</b><i></i></span><span><span class="t">{{MODEL_OR_COLUMN}}</span><span class="s">{{WHAT_IS_TRUE_HERE}}</span></span></li>
-        </ol>
-      </div>
+             NO .ip-aff NODE IN HERE. A hop that lands in unchanged code whose
+             meaning the change altered is an impact path: it belongs in section
+             04, drawn once, and this checkpoint says so in a clause. .ip-step is
+             the neutral hop, and it is the kind that exists only in this figure.
 
-      <!-- BOUNDARY CHAIN, one of the two section-2 kinds. Inside the flow that owns the
-           field, never a section of its own — following one field end to end teaches
-           more than reviewing two file trees, and this is that walk drawn.
+             Three to five nodes. Fewer is a sentence; more is listing layers
+             instead of following a value — a wrapper that passes a field through
+             unaltered is not a hop. Labels, never sentences: the figcaption
+             carries anything that needs a verb of its own, and the paragraph
+             above carries the judgment. A paragraph that walks the chain node by
+             node after the chain has shown exactly that is the defect this
+             component is most likely to produce. -->
+        <figure class="chain">
+          <ol class="ip-path">
+            <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span></span></li>
+            <li class="ip-n ip-step"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{HOP_INSIDE_THE_CHANGE}}</b><span class="ip-d">{{WHAT_IS_TRUE_HERE}}</span></span></li>
+            <li class="ip-n ip-step"><span class="ip-rel"><i></i>scopes</span><span class="ip-box"><b>{{THE_NEXT_HOP}}</b><span class="ip-d">{{WHAT_IT_CARRIES}}</span></span></li>
+            <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>{{WHAT_THE_USER_SEES}}</b><span class="ip-d">observable behaviour</span></span></li>
+          </ol>
+          <figcaption>{{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}</figcaption>
+        </figure>
 
-           DRAW IT WHENEVER THIS FLOW'S MATERIAL IS A FIELD YOU TRACED ACROSS THE SEAM
-           and you can name the hop where the two sides stop agreeing. That is the whole
-           trigger, and it is not a rare one: on any PR touching both sides of an API it
-           is the ordinary case, and the flow's own citations are the tell — a flow
-           citing a serializer and a type, a controller and a client call, a .heex event
-           and a handle_event clause, is a flow whose finding sits on a hop.
-           checks/behaviour-flows.rb warns on exactly that predicate.
-
-           OMIT IT in two cases and no others. You could not read the client — say which
-           and build the backend half; a chain drawn through code nobody opened is four
-           invented boxes. Or the two sides agree at every hop you traced, and there is
-           no dashed edge to draw, which makes the .pipe above the honest form.
-
-           THE FAILURE THIS COMMENT EXISTS TO PREVENT IS NOT A WRONG CHAIN, IT IS NO
-           CHAIN. An SVG is the most expensive thing on this page to type and the budget
-           language around figures reads as discouragement, so the path of least effort
-           is always to decide the flow did not earn one. It costs a reviewer the one
-           question the field rows cannot answer: at WHICH hop does the agreement stop.
-
-           IT IS A DRAWING AND NOT A .pipe FOR ONE REASON: the finding sits on an EDGE.
-           "The two sides stop agreeing between the JSON and the type" is a claim about
-           a hop, and .pipe's connector is a bare hairline with nothing to mark and
-           nowhere to label. A run given the component wrote the mismatch into a node
-           instead — which is the footnote failure .blast was deleted for, reproduced
-           one design generation later. The path above stays a .pipe: it is unbounded in
-           length and carries no finding on any single hop.
-
-           GRID. Canvas ALWAYS 880 x 170. Box 148 x 54, pitch 178, gap 30 for the arrow.
-           Only the LEFT MARGIN changes with the stop count, so the box, the type size
-           and every y are identical at every length:
-
-               3 stops   x = 188 / 366 / 544
-               4 stops   x = 100 / 278 / 456 / 634
-               5 stops   x =  12 / 190 / 368 / 546 / 724      (drawn below)
-
-           Shared y, every length: edge label (.t-edge) y=34, box top y=48, layer name
-           (.t-lbl) y=68, symbol (.t-col) y=86, citation (.t-dim) y=122 below the box,
-           legend (.t-lbl) y=152 at the first stop's x, arrow y=75. All anchored middle
-           on the box centre except the legend.
-
-           Per hop, from a stop at x = s. Arithmetic, not judgment:
-               arrow       d="M{s+148} 75 L{s+174} 75 M{s+168} 70 L{s+174} 75 L{s+168} 80"
-               edge label  x = s+163, text-anchor="middle"
-
-           NEVER NARROW THE CANVAS TO FIT A SHORT CHAIN. .scroller's child is
-           min-width:880px with height:auto, so a 524-wide viewBox renders at 1.68x —
-           every glyph and every hairline larger than the rest of the page. Three stops
-           sit centred in 880 with whitespace either side, and that whitespace is honest.
-
-           SIX STOPS OR MORE IS NOT DRAWN, and the canvas is what says so rather than a
-           rule: 6 x 148 + 5 x 30 is 1038 against 880, so the sixth box fails
-           checks/diagram.rb's bounds test. A chain that long has listed layers instead
-           of following a field — a fetch wrapper or a cache that passes the value
-           through unaltered is a stop on the PATH. Collapse to the hops where the field
-           changes shape, is renamed or is dropped. If it really is longer, the drawing
-           is not earned: keep it as a second .pipe, which reflows.
-
-           Mark the mismatch on the HOP it happens at, with .edge-dash and a .t-edge
-           label above it. An edge label has to fit its 30px gap or sit at y=34 above the
-           row — checks/diagram.rb warns when one runs under a box, which is how the ER
-           label in diagram 3 got caught.
-
-           INHERIT THE GEOMETRY, NEVER THE STRINGS. Every label here is a claim about a
-           file, and a claim copied out of a specimen is a false claim nothing catches: a
-           run inherited the last box's caption onto a component that never touches the
-           field, and only a reader comparing the figure with the code noticed. The x/y
-           numbers are the reusable part. -->
-      <figure class="inflow">
-        <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="archived_at crosses the boundary as null and arrives in a type that declares it non-null">
-          <text class="t-edge" x="353" y="34" text-anchor="middle">null vs. string</text>
-          <rect class="box" x="12" y="48" width="148" height="54" rx="5"/>
-          <text class="t-lbl" x="86" y="68" text-anchor="middle">SERIALIZER</text>
-          <text class="t-col" x="86" y="86" text-anchor="middle">archived_at</text>
-          <text class="t-dim" x="86" y="122" text-anchor="middle">serializer.rb:9</text>
-          <path class="edge" d="M160 75 L186 75 M180 70 L186 75 L180 80"/>
-          <rect class="box" x="190" y="48" width="148" height="54" rx="5"/>
-          <text class="t-lbl" x="264" y="68" text-anchor="middle">JSON</text>
-          <text class="t-col" x="264" y="86" text-anchor="middle">"archived_at": null</text>
-          <text class="t-dim" x="264" y="122" text-anchor="middle">nil for the unarchived</text>
-          <path class="edge-dash" d="M338 75 L364 75 M358 70 L364 75 L358 80"/>
-          <rect class="box" x="368" y="48" width="148" height="54" rx="5"/>
-          <text class="t-lbl" x="442" y="68" text-anchor="middle">TYPE</text>
-          <text class="t-col" x="442" y="86" text-anchor="middle">archivedAt: string</text>
-          <text class="t-dim" x="442" y="122" text-anchor="middle">project.ts:4, by hand</text>
-          <path class="edge" d="M516 75 L542 75 M536 70 L542 75 L536 80"/>
-          <rect class="box" x="546" y="48" width="148" height="54" rx="5"/>
-          <text class="t-lbl" x="620" y="68" text-anchor="middle">HOOK</text>
-          <text class="t-col" x="620" y="86" text-anchor="middle">useProjects()</text>
-          <text class="t-dim" x="620" y="122" text-anchor="middle">no runtime parse</text>
-          <path class="edge" d="M694 75 L720 75 M714 70 L720 75 L714 80"/>
-          <rect class="box" x="724" y="48" width="148" height="54" rx="5"/>
-          <text class="t-lbl" x="798" y="68" text-anchor="middle">COMPONENT</text>
-          <text class="t-col" x="798" y="86" text-anchor="middle">ProjectSelector</text>
-          <text class="t-dim" x="798" y="122" text-anchor="middle">never reads the field</text>
-          <text class="t-lbl" x="12" y="152">DASHED &middot; THE HOP WHERE THE TWO SIDES STOP AGREEING</text>
-        </svg></div>
-        <figcaption>The type is hand-written, so this drift appears at runtime, not at build time. {{WHAT_WAS_SEARCHED_TO_CONFIRM_THE_HOP}}</figcaption>
-      </figure>
-
-      <!-- The unit's "why this exists" field. It has no <dt> — it is this block. -->
-      <div class="mech">
-        <b>{{WHAT_THIS_CHANGE_IS}}</b>
-        <p>{{WHY_THIS_EXISTS}}</p>
-      </div>
-
-      <!-- SKELETON:ONLY:level=full:START -->
-      <!-- ASSEMBLED IN PLACE, and this is the placement: after the .mech, before
-           the grid. The reader meets the unfamiliar API immediately after the
-           mechanism that uses it and before the fields that cite it.
-
-           OMIT THIS BLOCK unless a decision the reviewer has to make turns on a
-           framework behaviour they may not know. At most one per flow, and most
-           flows earn none — an inline a.doc is what a citation normally looks
-           like. report-format.md § Framework anchors owns both rules.
-
-           OMIT IT ENTIRELY when the stack's catalogue is closed. A primer is what
-           a doc link escalates INTO, so it cannot exist without one, and
-           elixir-docs.md § Version currently withholds every link — so a Phoenix
-           page carries no primer at all and explains the mechanism in the flow's
-           own prose instead. The variant below is the one Elixir gets when that
-           catalogue opens: Ecto and Phoenix are libraries, so they take the
-           unbranded .primer--lib and never the Rails mark.
-
-           Note what it does NOT contain: no .mech, no dl.rows, no <dt>. That is
-           deliberate, and it is what keeps a flow with a primer from reading as a
-           flattened flow to checks/behaviour-flows.sh.
-
-           --full ONLY, and this is the second of the callout's two gates, which is why
-           this whole region — both variants and everything above — is dropped at
-           --brief. At that level no flow earns a primer: keep the pinned a.doc link it
-           escalates from and explain the mechanism in the flow's own prose against its
-           file:line. report-format.md § The brief budget owns that and § The primer
-           callout states it beside the closed-catalogue gate. Both gates work the same
-           way, and it is worth knowing why neither needs a check of its own: the skill
-           emits no primer, so there is no primer to grade, rails-anchors.rb still must
-           not read the level, and checks/brief-budget.rb fails one only for the run
-           that writes a primer from memory rather than from this file. -->
-      <aside class="primer">
-        <div class="pr-head">
-          <!-- The official logotype, inlined: an external <img> is blocked by the
-               artifact's CSP and the run has no fetch step, so the artwork lives
-               here or nowhere. It carries the wordmark itself, so there is no
-               .pr-brand beside it — that span is for the .primer--lib variant.
-               The mark is why .pr-tm at the foot exists: show it, say whose it
-               is. rails-anchors.sh enforces both halves of that. -->
-          <svg class="pr-mark" role="img" aria-label="Ruby on Rails" fill="currentColor" viewBox="0 0 411 155">
-          <g>
-          <path d="M242.3 76.8h-19.5c-13.9 0-18.6 12.6-18.6 18.6v52.2h19.5v-12.5H242v12.5h18.9V95.4c0-15.2-13.8-18.6-18.6-18.6Zm-.4 38.1h-18.3V97.6s0-3.9 6.1-3.9h6.7c5.4 0 5.5 3.9 5.5 3.9v17.3Z"/>
-          <path d="M194.9 101c0-22.6-21.2-24.7-21.2-24.7h-38.2v71.3h19.2v-17.2l16.6 17.2h28.4l-22.3-22.5s17.5-1.5 17.5-24.1Zm-24.9 9.5h-15.3V94.2h15.4s4.3 1.6 4.3 8.1-4.4 8.2-4.4 8.2Z"/>
-          <path d="M379.374 120.643c.333.002.446.002 0 0Z"/>
-          <path d="M385.3 103.4H369V95h32.3V76.8h-31c-8 0-18.7 6.6-18.7 18.9v6.3c0 12.3 10.6 18.6 18.7 18.6 5.868.026 8.304.039 9.074.043-1.298-.008-5.906-.043 6.326-.043v8.8l-33.1.1v18.1h32.7c6.7 0 18.2-4.9 18.6-18.6v-7c0-11.7-9.6-18.6-18.6-18.6Z"/>
-          <path d="M269.8 76.8h20.3v70.8h-20.3z"/>
-          <path d="M318.6 76.8h-20.2v70.8h47.5v-18.3h-27.3V76.8z"/>
-          </g>
-          <g>
-          <path d="M180 17.8c-.9-.5-3.4-1.7-9.7-3.5l-.4 6.6c3.3 1.1 6.5 2.3 9.7 3.6l.4-6.7Z"/>
-          <path d="M124.9 18.9c-29.2 2.6-65 29.1-86 64.1S15 147.6 15 147.6h79s-15.1-68.9 34.9-96.8c10.9-5.3 45.6-25.1 102.4 16.9 1.8-1.5 3.5-2.7 3.5-2.7s-52-51.9-109.9-46.1Z"/>
-          <path d="m54.7 54.7-7.1-6.2c-2.6 2.5-5.1 5-7.4 7.5l7.7 6.6c2.1-2.7 4.4-5.4 6.8-7.9Z"/>
-          <path d="M92.5 25 88 18.1c-2.5 1.3-5.1 2.7-7.8 4.3l4.6 7c2.6-1.6 5.1-3.1 7.7-4.4Z"/>
-          <path d="M24.5 99.4 13 95.2c-1.9 4.3-4 9.3-5 12l11.5 4.2c1.3-3.4 3.4-8.3 5-12Z"/>
-          <path d="M133.1 14.5h1l-2-6.1c-3.1 0-6.3.2-9.6.6l1.9 5.9c2.9-.3 5.8-.4 8.7-.4Z"/>
-          <path d="M97 127.6c.2 5.3.7 9.6 1.2 12.6l12 4.3c-.9-3.9-1.8-8.3-2.4-13L97 127.6Z"/>
-          <path d="m137.9 51.3 2.3 6.9c2.9-1.4 5.8-2.6 8.7-3.5l-2.2-6.6c-3.4 1-6.3 2.1-8.8 3.2Z"/>
-          <path d="M169.7 52c3.3.1 6.6.5 9.9 1.2l.4-6.2c-3.4-.7-6.7-1.1-9.9-1.3l-.4 6.3Z"/>
-          <path d="M101.5 91.2c-1.3 3.7-2.2 7.4-3 11l8.1 6.4c.4-3.9 1.1-7.8 2.1-11.7l-7.2-5.7Z"/>
-          <path d="m113 70 4.8 7.2c1.7-2.5 3.7-4.8 5.9-7.1l-4.5-6.8c-2.3 2.1-4.4 4.4-6.2 6.7Z"/>
-          </g>
-          </svg>
-          <i class="pr-sep"></i>
-          <span class="lbl">Primer</span>
-          <span class="pr-api">ActiveModel::Dirty</span>
-        </div>
-
-        <div class="pr-body">
-          <div class="pr-main">
-            <b>archived_at_changed? vs saved_change_to_archived_at?</b>
-            <p>Every ActiveRecord attribute carries two questions, and they are true at
-              different moments. <code>archived_at_changed?</code> asks whether the value in
-              memory differs from the one loaded from the row &mdash; true <em>before</em> the save
-              and false after it. <code>saved_change_to_archived_at?</code> asks what the save just
-              wrote, and is only true <em>after</em> it.</p>
-            <p>Which one a callback wants therefore depends on when it runs. A
-              <code>before_save</code> that asks the second question never fires; an
-              <code>after_commit</code> that asks the first one never fires either, and both
-              failures are silent.</p>
-            <!-- The primer cites the line that earned it, like every other doc link.
-                 Without this the aside is a Rails lesson with no stake in the repo. -->
-            <div class="item">The callback at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
-              runs after the write, so it is the second form it has to ask.</div>
-            <!-- THE /v8.0/ IS SUBSTITUTED PER RUN from this app's Rails series, exactly
-                 as in the Understand field below. URL from references/rails-docs.md. -->
-            <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
-          </div>
-
-          <div class="pr-side">
-            <span class="lbl">In practice</span>
-            <!-- pre.demo, NOT pre.probe. The receiver is deliberately a class this
-                 repository does not have: that is the whole reason a "# =>" line here
-                 is a quotation of the manual rather than output nobody observed. Name
-                 an application class here and it becomes exactly the fiction the probe
-                 rule exists to prevent. -->
-<pre class="demo">post = Post.find(1)
-post.title = "new"
-post.title_changed?          # =&gt; true
-post.save
-post.title_changed?          # =&gt; false
-post.saved_change_to_title?  # =&gt; true</pre>
-            <p class="note">Both predicates are generated per attribute, so they exist for
-              every column without being written anywhere.</p>
-          </div>
-        </div>
-
-        <div class="pr-tm">Ruby on Rails name and logo are trademarks of the Rails Foundation, shown here for reference only.</div>
-      </aside>
-
-      <!-- THE SAME COMPONENT FOR ANYTHING THAT IS NOT RAILS — a gem, a client
-           library. SHOWN HERE AS THE ALTERNATIVE, NOT AS A SECOND CALLOUT: the
-           budget is one primer per flow, so delete whichever of the two this
-           flow does not need. Three differences and no others: .primer--lib
-           takes the rule back to a neutral hairline, the name goes in
-           .pr-brand because there is no artwork to carry it, and there is NO
-           .pr-tm — the trademark line exists to say whose mark is on display,
-           so a callout with no mark has nothing to disclaim. Everything else
-           is identical, the demo rules included. -->
-      <aside class="primer primer--lib">
-        <div class="pr-head">
-          <span class="pr-brand">Pundit</span>
-          <i class="pr-sep"></i>
-          <span class="lbl">Primer</span>
-          <span class="pr-api">Pundit::Authorization</span>
-        </div>
-
-        <div class="pr-body">
-          <div class="pr-main">
-            <b>authorize raises; it does not return false</b>
-            <p><code>authorize</code> looks up a policy class by the record's class name, calls the
-              question method, and <em>raises</em> <code>Pundit::NotAuthorizedError</code> when the
-              answer is false. It is a guard clause, not a predicate — so a controller that treats
-              its return value as a boolean has written a branch that never runs.</p>
-            <p>The rescue that turns it into a response is app-level and opt-in, which is why the
-              status a denied request gets is a decision this repository makes rather than one the
-              gem makes.</p>
-            <div class="item">The action at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
-              relies on that raise reaching the handler rather than on a returned value.</div>
-            <!-- A gem's URL is pinned to the LOCKED GEM VERSION, not to the Rails series,
-                 and the tag's `v` prefix is data from the catalogue rather than a form you
-                 may derive. rails-docs.md § Gems. -->
-            <a class="doc" href="https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies">github.com/varvet/pundit</a>
-          </div>
-
-          <div class="pr-side">
-            <span class="lbl">In practice</span>
-<pre class="demo">class PostPolicy
-  def update?
-    user.admin?
-  end
-end
-
-authorize @post, :update?
-# =&gt; raises Pundit::NotAuthorizedError</pre>
-            <p class="note">The lookup is by class name, so a subclass with no policy of its own
-              falls back to nothing and raises on lookup instead.</p>
-          </div>
-        </div>
-      </aside>
-      <!-- SKELETON:ONLY:level=full:END -->
-
-      <!-- The seven fields, in this order, labels VERBATIM from report-format.md.
-           Omit a field rather than fake it; a unit with nothing non-obvious to put
-           in Understand is a ledger row, not a unit. -->
-      <dl class="rows" style="margin-top:30px">
-
-        <dt>Implementation</dt>
-        <dd>
-          <!-- {{START}} and {{END}} are the same two numbers in the text and in the href, per
-               CITATION LINKS at the top of this half. A file GitHub will not render (see
-               scripts/diff-render.sh) takes {{BLOB}} even for a line inside the diff: an
-               anchor there lands on a "Load diff" stub. report-format.md § Deep links. -->
-          <div class="item"><a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a> &mdash; {{WHAT_IT_DOES}}</div>
-          <!-- generated by scripts/excerpt.sh --diff — never typed -->
-          <details class="excerpt excerpt--diff">
-            <summary>
-              <span class="chev">&#9656;</span>
-              <span class="ex-loc">{{PATH}}:{{LINES}}</span>
-              <span class="tag">Changed</span>
-              <span class="ex-why">{{WHY_THIS_MATTERS}}</span>
-            </summary>
-            <div class="ex-body">
+        <!-- WHERE TO LOOK — one to four locations, the smallest set that settles
+             the question, each with a clause saying what to see there. A bare
+             citation is a location the reader has to open to find out why it is
+             on the list. An excerpt sits BESIDE the entry it confirms, collapsed,
+             and only where seeing the exact bytes is what makes the judgment
+             possible; the entry has to read complete with the block shut. -->
+        <ul class="lookat">
+          <li>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <span>{{WHAT_TO_CHECK_THERE}}</span>
+            <!-- generated by scripts/excerpt.sh --diff — never typed -->
+            <details class="excerpt excerpt--diff">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">{{PATH}}:{{LINES}}</span>
+                <span class="tag">Changed</span>
+                <span class="ex-why">{{WHY_THIS_MATTERS}}</span>
+              </summary>
+              <div class="ex-body">
 <pre data-src="{{PATH}}" style="counter-reset: exl {{START_MINUS_1}}"><span class="l"><span class="sig"> </span>  def archive!</span>
 <span class="l del"><span class="sig">-</span>    return if archived?</span>
 <span class="l add"><span class="sig">+</span>    raise ArchiveError if time_entries.open.exists?</span>
 <span class="l"><span class="sig"> </span>    update!(archived_at: Time.current)</span>
 </pre>
-              <p class="ex-src">Changed at <a class="cite" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
-            </div>
-          </details>
-        </dd>
+                <p class="ex-src">Changed at <a class="cite" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
+              </div>
+            </details>
+          </li>
+          <li>
+            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <span>{{WHAT_THIS_UNCHANGED_CODE_STILL_ASSUMES}} <span class="tier">from unchanged code</span></span>
+          </li>
+          <li>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{SPEC}}:{{START}}-{{END}}</a>
+            <span>{{WHICH_BRANCH_IT_PINS_AND_WHICH_IT_LEAVES_OPEN}}</span>
+          </li>
+        </ul>
 
-        <dt>Tests</dt>
-        <dd>
-          <div class="item"><a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{SPEC}}:{{START}}-{{END}}</a> &mdash; {{WHAT_IT_PINS}}</div>
-          <div class="gap"><b>GAP</b><span>{{WHAT_THEY_LEAVE_OPEN}}</span></div>
-        </dd>
+        <!-- A probe makes the mechanism legible in THIS app, and goes inside the
+             checkpoint it settles — there is no separate validations section to
+             send it to. No output line ever follows it: the run did not boot the
+             application, so a "=>" line here would be the one piece of fiction on
+             the page. A probe that writes goes in a sandboxed console and the
+             label says so; a probe that needs seeded records carries the seed
+             command beside it. The Elixir form has no sandbox console at all —
+             see the lens file's § Runtime probes. -->
+        <span class="lbl">rails runner &middot; read-only</span>
+<pre class="probe">bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'</pre>
 
-        <dt>Affected, unchanged</dt>
-        <dd>
-          <div class="item"><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> &mdash; {{WHY_AFFECTED}}</div>
-          <!-- generated by scripts/excerpt.sh --source. This is the variant that
-               carries the product: no diff view can address an unchanged line.
-               data-lang is the generator's guess from the path, and the only
-               reason this variant is tinted and the diff variant is not. Never
-               type an hljs- class into the code: the tint is applied at runtime
-               so the quotation stays the bytes git gave the script.
+        <p class="open"><b>Open question</b>{{WHAT_THE_CODE_DOES_NOT_SETTLE_AND_ONLY_THE_AUTHOR_CAN}}?</p>
+      </section>
 
-               THE TAG IS COMPUTED, NOT COPIED. It reads Unchanged here because
-               this path is outside the diff. The generator derives it from
-               --base -- Unchanged, Added, Removed, At head, Before the change --
-               so a changed file quoted at head comes back tagged `At head`, and a
-               page that says Unchanged about a path in its own ledger fails
-               evals/checks/excerpts.sh. report-format.md § Source excerpts. -->
-          <details class="excerpt excerpt--source">
-            <summary>
-              <span class="chev">&#9656;</span>
-              <span class="ex-loc">{{PATH}}:{{LINES}}</span>
-              <span class="tag">Unchanged</span>
-              <span class="ex-why">{{WHY_THIS_MATTERS}}</span>
-            </summary>
-            <div class="ex-body">
+      <!-- ===== A CHECKPOINT WITHOUT A FIGURE, which is the ordinary shape. The
+           doc link sits inside the sentence it explains, and the sentence still
+           carries its own file:line: a link with no citation beside it is an
+           unevidenced claim wearing one. At most one doc link per checkpoint.
+
+           THE VERSION IS NOT PART OF THE URL — it is substituted per run from this
+           app's own lock file. The catalogue stores the path without it. The value
+           below is one example app, not a constant to copy: an unpinned link
+           silently means current stable, and evals/checks/rails-anchors.rb fails a
+           page carrying one. § Pinning in whichever catalogue applies.
+
+           ELIXIR: read elixir-docs.md § Version FIRST. That catalogue is closed
+           until a verification run opens it, so today a Phoenix page omits the doc
+           link entirely and the sentence keeps only its file:line and its tier.
+           The probe is unaffected, and is what an Elixir page anchors with. ===== -->
+      <section class="cp" id="cp-b">
+        <span class="lbl lbl-wide">Checkpoint B</span>
+        <h3>{{A_DIFFERENT_JUDGMENT_PHRASED_AS_A_QUESTION}}?</h3>
+
+        <p>Bulk writes at <a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> never run this
+          validation &mdash; <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
+          skips validations and callbacks. {{WHAT_THAT_MEANS_FOR_THE_ROWS_THIS_PR_TOUCHES}}
+          <span class="tier">from unchanged code</span></p>
+
+        <ul class="lookat">
+          <li>
+            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <span>{{WHAT_TO_CHECK_THERE}}</span>
+            <!-- generated by scripts/excerpt.sh --source. This is the variant that
+                 carries the product: no diff view can address an unchanged line.
+                 data-lang is the generator's guess from the path, and the only
+                 reason this variant is tinted and the diff variant is not. Never
+                 type a tint class into the code: the tint is applied at runtime so
+                 the quotation stays the bytes git gave the script.
+
+                 THE TAG IS COMPUTED, NOT COPIED. It reads Unchanged here because
+                 this path is outside the diff. The generator derives it from
+                 --base -- Unchanged, Added, Removed, At head, Before the change --
+                 so a changed file quoted at head comes back tagged `At head`, and a
+                 page that says Unchanged about a path in its own inventory fails
+                 evals/checks/excerpts.rb. report-format.md § Source excerpts. -->
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">{{PATH}}:{{LINES}}</span>
+                <span class="tag">Unchanged</span>
+                <span class="ex-why">{{WHY_THIS_MATTERS}}</span>
+              </summary>
+              <div class="ex-body">
 <pre data-src="{{PATH}}" data-lang="ruby" style="counter-reset: exl {{START_MINUS_1}}"><span class="l">class ActiveProjects</span>
 <span class="l">  def call</span>
 <span class="l">    Project.where(archived_at: nil)</span>
 <span class="l">  end</span>
 </pre>
-              <p class="ex-src">Unchanged at <a class="cite" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
-            </div>
-          </details>
-          <!-- The flow's own searches, same component and same rule: collapsed, one row
-               each, and nothing in here that the field above needs in order to be read. -->
-          <details class="searched">
-            <summary><span class="chev">&#9656;</span> Searches run</summary>
-            <div class="sr-body">
-              <ul class="sr-list">
-                <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
-              </ul>
-            </div>
-          </details>
-        </dd>
+                <p class="ex-src">Unchanged at <a class="cite" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
+              </div>
+            </details>
+          </li>
+          <li>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <span>{{WHAT_TO_CHECK_THERE}}</span>
+          </li>
+        </ul>
 
-        <dt>Understand</dt>
-        <dd>
-          <div class="item">{{NON_OBVIOUS_INVARIANT_OR_DECISION}}</div>
-          <!-- The doc link sits inside the sentence it explains, and the sentence
-               still carries its own file:line. A link with no citation beside it is
-               an unevidenced claim wearing one. URL from the catalogue the stack
-               selected in step 2 — references/rails-docs.md or references/elixir-docs.md
-               — and from nowhere else.
+        <div class="gap"><b>GAP</b><span>{{WHAT_THE_TESTS_LEAVE_OPEN_WHERE_IT_CHANGES_THE_JUDGMENT}}</span></div>
+      </section>
 
-               THE VERSION IS NOT PART OF THE URL — it is substituted per run from this
-               app's own lock file. The catalogue stores the path without it. The value
-               below is one example app, not a constant to copy: an unpinned link
-               silently means current stable, and evals/checks/rails-anchors.sh fails a
-               page carrying one. § Pinning in whichever catalogue applies. -->
-          <div class="item">Bulk writes at <a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> never
-            run this validation &mdash; <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
-            skips validations and callbacks. <span class="tier">from unchanged code</span></div>
-          <!-- ELIXIR VARIANT of the two lines above. Same components, same rules;
-               only the host, the pin and the runner differ. Copy these instead on a
-               Phoenix page — do not emit both stacks.
-
-               The pin is PER PACKAGE, from mix.lock, not one series for the whole
-               framework: hexdocs serves exact versions, so a correct Elixir page
-               carries several different version segments and that is not a defect.
-               `3.12.5` below is one example app's ecto.
-
-               AND READ elixir-docs.md § Version FIRST. That catalogue is closed
-               until a verification run opens it, so today the doc link is omitted
-               entirely and the sentence keeps only its file:line and its tier. The
-               probe below is unaffected, and is what an Elixir page anchors with.
-
-          <div class="item">Bulk writes at <a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> never
-            build a changeset &mdash; <a class="doc" href="https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3">update_all</a>
-            casts nothing and runs no validation. <span class="tier">from unchanged code</span></div>
-          <span class="lbl">mix run &middot; read-only</span>
-<pre class="probe">mix run -e 'cs = MyApp.Project.changeset(%MyApp.Project{}, %{}); IO.inspect({cs.errors, cs.required})'</pre>
-          -->
-          <!-- A probe makes the mechanism legible in THIS app. No output line
-               follows it: the skill did not run it. -->
-          <span class="lbl">rails runner &middot; read-only</span>
-<pre class="probe">bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'</pre>
-          <div class="item">{{WHAT_THE_OUTPUT_WOULD_TELL_THE_READER}}</div>
-        </dd>
-
-        <dt>Validate</dt>
-        <dd>
-          <div class="item"><code>{{REAL_PASTEABLE_STEP_FROM_THIS_REPO}}</code> &mdash; {{WHAT_IT_SHOWS}}</div>
-          <!-- A probe that writes goes in a sandboxed console, and the label says so.
-               --sandbox rolls back, so after_commit never fires there. -->
-          <span class="lbl">rails console --sandbox &middot; rolled back on exit</span>
-<pre class="probe">bin/rails console --sandbox
-p = Project.create!(name: "probe"); p.archive!; p.reload.attributes.slice("archived_at")</pre>
-          <!-- ELIXIR VARIANT. There is NO sandbox console — that is the one probe rule
-               that does not carry over — so a write wraps itself in an explicit
-               rollback, and the label says which. Nothing that depends on the commit
-               happens inside it: a broadcast or an Oban job inserted in the same Multi
-               is rolled back too, so when the behaviour under review IS the
-               post-commit effect, say the probe cannot see it and name what would.
-
-          <span class="lbl">iex -S mix &middot; explicit rollback, nothing commits</span>
-<pre class="probe">MyApp.Repo.transaction(fn ->
-  {:ok, p} = MyApp.Projects.archive_project(project)
-  IO.inspect(Map.take(p, [:archived_at]))
-  MyApp.Repo.rollback(:probe)
-end)</pre>
-          -->
-        </dd>
-
-        <dt>Questions</dt>
-        <dd>
-          <div class="item">{{QUESTION_PHRASED_AS_A_QUESTION}}?</div>
-        </dd>
-      </dl>
-
-      <!-- AFTER the dl, never inside it. -->
-      <div class="decisions">
-        <span class="lbl">Decisions to pay attention to</span>
-        <div class="decision">
-          <div class="dn">01</div>
-          <div>
-            <h4>{{THE_DECISION}}</h4>
-            <div class="why">{{WHY_IT_MATTERS}} <span class="cite">{{PATH}}:{{LINE}}</span></div>
-            <div class="trade"><span class="tag">Tradeoff</span><span>{{WHAT_WAS_ACCEPTED}}</span></div>
-          </div>
-        </div>
-      </div>
+      <!-- ===== A PENDING CHECKPOINT, while section 02 fills in one at a time.
+           The line of substance is the QUESTION — a reader learns what the
+           judgments are before any of them is written, which is the whole reason
+           stage 3 opens with a cheap publish. Never "coming soon". The whole
+           <section> is the anchor the later Edit replaces, which is what keeps a
+           stage from re-writing the page. ===== -->
+      <section class="cp" id="cp-x">
+        <span class="lbl lbl-wide">Checkpoint {{X}}</span>
+        <h3>{{THE_QUESTION}} <span class="pending">pending</span></h3>
+        <p class="note">{{WHAT_IT_WILL_TURN_ON_AND_WHICH_FILES}}</p>
+      </section>
     </section>
 
-    <!-- ==========================================================================
-         A SECOND BEHAVIOUR FLOW, ASSEMBLED WHOLE — and it is here for one reason:
-         DIFFERENT FLOWS EARN DIFFERENT FIGURES. Flow A's field crosses a boundary,
-         so it draws a boundary chain. Flow B's behaviour is gated, so it draws a
-         guard fork. Neither flow draws both, and most real flows draw neither.
+    <!-- ===== Section 03 · Read the code in this order. ONE list, three to seven
+         stops, in the order that BUILDS UNDERSTANDING — schema before the code
+         that trusts it, the smallest complete example before the bulk,
+         irreversible code last. Not diff order, not alphabetical, not layer order.
 
-         It carries no primer, deliberately: a primer is one per flow at most and
-         most flows earn none, and flow A already shows one assembled.
-         ========================================================================== -->
-    <section id="flow-b" style="padding-top:52px">
-      <div class="subhead"><span class="lbl lbl-wide">Flow B</span><h3>{{THE_GATED_BEHAVIOUR}}</h3></div>
-
-      <p class="lede">{{THE_MECHANISM_AND_WHY_THIS_IS_ONE_FLOW}}</p>
-
-      <!-- SKELETON:ONLY:level=full:START -->
-      <dl class="ba">
-        <dt>Before</dt><dd>{{WHO_COULD_REACH_IT_AND_WHO_COULD_NOT}}</dd>
-        <dt class="now">After</dt><dd class="now">{{WHO_CAN_REACH_IT_NOW}}</dd>
-      </dl>
-      <!-- SKELETON:ONLY:level=full:END -->
-
-      <!-- The PATH, as a .pipe: the gate chain in the order it runs. Unbounded in
-           length, no finding on any single step — which is exactly why it stays a
-           component and the figure below is a drawing. -->
-      <div class="pipe">
-        <span class="lbl">{{WHAT_THIS_CHAIN_IS}}</span>
-        <ol>
-          <li><span class="n"><b>1</b><i></i></span><span><span class="t">{{FIRST_GATE}}</span><span class="s">{{WHAT_IT_ASKS}}</span></span></li>
-          <li><span class="n"><b>2</b><i></i></span><span><span class="t">{{CHANGED_GATE}}</span><span class="s">{{WHAT_ITS_CONDITION_NOW_IS}}</span></span></li>
-          <li><span class="n"><b>3</b><i></i></span><span><span class="t">{{LATER_GATE}}</span><span class="s">{{WHO_IT_WAS_WRITTEN_TO_ADMIT}}</span></span></li>
-        </ol>
-      </div>
-
-      <!-- GUARD FORK, the other section-2 kind. Inside the flow whose behaviour is
-           gated. Assembled here and not in the catalogue block for the same reason
-           the chain is assembled in flow A: the placement is half of what a run copies.
-
-           OMIT IT unless ALL THREE hold: the diff changes a GATE'S CONDITION rather
-           than appending a new gate; that change sends two NAMEABLE request classes
-           down different routes through the same chain; and the finding is WHERE THE
-           DIVERTED CLASS LANDS — a gate it never reaches, or a destination that sends
-           it back. If the diverted class simply gets a 403 and that is the intent,
-           there is no figure: a refusal is a field row. A guard that returns early for
-           one class is not a fork, and drawing one invents a population the code does
-           not distinguish.
-
-           WHY IT IS A DRAWING AND NOT A COMPONENT. .pipe is an ordered list: exactly
-           one successor per node, and a terminal node whose fill MEANS "the chain
-           arrives here". A request that leaves the chain at step 2 has no position in
-           it at all, and when the diverted class re-enters the chain the finding is a
-           LOOP — which has no last node, so the component's terminal treatment asserts
-           an arrival that never happens. And its size is set by the CLAIM, not by the
-           diff: at this gate these two classes part, and this one lands there instead
-           of reaching that. Four nodes, however long the real chain is.
-
-           THREE RAILS AND TWO TRACKS, FIXED. A longer chain does not make a taller
-           figure: draw only the gates at which the two classes DIFFER, plus the one
-           gate the diverted class never reaches, and leave the rest to the .pipe above
-           and to the field rows. A third request class is a figure in the flow that
-           owns it, never a third track — that is how a drawing's size becomes a
-           function of the diff again, which is what took the boundary chain out of
-           this catalogue once already. Wanting a fourth rail is the signal that the
-           three you have are not the ones the finding turns on.
-
-           GRID, 880 x 196: three gate rails (.lifeline, x = 236 / 430 / 624, y 58 to
-           150), each guard's name in .t-col anchored middle above it at y=46. Two
-           request classes as tracks at y=92 and y=134, each named by a .t-lbl at x=44
-           above its own track. Each track is ONE .edge-accent path including its
-           arrowhead, so a class's whole route reads as one stroke. The class that
-           arrives ends in the .node at x=700 y=72; the diverted class DESCENDS at its
-           gate's x and only then turns — turning flush against the rail reads as
-           leaving sideways, where every other hop leaves rightward — and lands in the
-           .node at x=700 y=146. The hop it never takes is .edge-dash stopping 6px short
-           of the .node-dead door at x=596 y=118; draw the rail FIRST and the door
-           second, so the door's fill covers the rail it closes.
-
-           Boxes are 156 x 40, so a .t-col line fits about 23 characters and a .t-dim
-           line about 26 — two text elements per box, because runs of spaces collapse.
-           Keep &middot; and em dashes OUT of any label inside a box: checks/diagram.rb
-           measures a label in BYTES, so an entity inflates the estimate and the
-           overflow warning fires on correct content.
-
-           Only the changed guard carries its file:line (.t-dim, anchor end at x=418,
-           just left of the drop, which owns the gate's own x). Three citations do not
-           fit across 880 at this size, and the flow's field rows carry the other two.
-
-           WHEN THE DESTINATION RE-ENTERS THE CHAIN the finding is a loop, and the
-           figure has to close it, because a loop is the one thing a numbered spine
-           cannot say at all: add one .edge-dash,
-           d="M778 186 L778 192 L36 192 L36 140 M31 145 L36 140 L41 145" — out of the
-           destination's foot, along the bottom, back to an arrowhead at the lane's
-           start. That is why the legend is anchored end at the top right rather than at
-           the foot, where the other two entries put theirs.
-
-           INHERIT THE GEOMETRY, NEVER THE STRINGS. The same rule as the chain, and the
-           stakes are higher here: every box names a filter and a destination, and a
-           borrowed one is a claim about a request path nobody traced. -->
-      <figure class="inflow">
-        <div class="scroller"><svg viewBox="0 0 880 196" role="img" aria-label="An owner reaches the archive action; an admin who is not a project member is sent back to the index before the gate written to admit them is ever evaluated">
-          <text class="t-lbl" x="44" y="24">BEFORE_ACTION CHAIN &middot; PROJECTS#ARCHIVE</text>
-          <text class="t-lbl" x="856" y="24" text-anchor="end">DASHED &middot; THE HOP THAT DOES NOT HAPPEN</text>
-          <text class="t-col" x="236" y="46" text-anchor="middle">authenticate_user!</text>
-          <text class="t-col" x="430" y="46" text-anchor="middle">require_project_member!</text>
-          <text class="t-col" x="624" y="46" text-anchor="middle">authorize_admin_override!</text>
-          <line class="lifeline" x1="236" y1="58" x2="236" y2="150"/>
-          <line class="lifeline" x1="430" y1="58" x2="430" y2="150"/>
-          <line class="lifeline" x1="624" y1="58" x2="624" y2="150"/>
-          <text class="t-lbl" x="44" y="76">OWNER</text>
-          <path class="edge-accent" d="M44 92 L694 92 M688 87 L694 92 L688 97"/>
-          <rect class="node" x="700" y="72" width="156" height="40" rx="4"/>
-          <text class="t-col" x="778" y="88" text-anchor="middle">projects#archive</text>
-          <text class="t-dim" x="778" y="104" text-anchor="middle">archives the project</text>
-          <text class="t-lbl" x="44" y="118">ADMIN, NOT A MEMBER</text>
-          <path class="edge-accent" d="M44 134 L430 134 L430 166 L694 166 M688 161 L694 166 L688 171"/>
-          <text class="t-dim" x="418" y="158" text-anchor="end">projects_controller.rb:12</text>
-          <text class="t-edge" x="560" y="158" text-anchor="middle">redirect_to projects_path</text>
-          <rect class="node" x="700" y="146" width="156" height="40" rx="4"/>
-          <text class="t-col" x="778" y="162" text-anchor="middle">projects#index</text>
-          <text class="t-dim" x="778" y="178" text-anchor="middle">alert: not authorised</text>
-          <path class="edge-dash" d="M436 134 L590 134"/>
-          <rect class="node-dead" x="596" y="118" width="56" height="32" rx="4"/>
-          <text class="t-dim" x="588" y="124" text-anchor="end">never evaluated</text>
-        </svg></div>
-        <figcaption>The override gate sits <strong>after</strong> the membership gate, so an admin who is not a member never reaches the rule written to admit them. {{WHAT_WAS_SEARCHED_TO_CONFIRM_THE_ORDER}}</figcaption>
-      </figure>
-
-      <div class="mech">
-        <b>{{WHAT_THIS_CHANGE_IS}}</b>
-        <p>{{WHY_THIS_EXISTS}}</p>
-      </div>
-
-      <dl class="rows" style="margin-top:30px">
-
-        <dt>Implementation</dt>
-        <dd>
-          <div class="item">The gate at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
-            {{WHAT_ITS_CONDITION_NOW_ADMITS}}</div>
-        </dd>
-
-        <dt>Tests</dt>
-        <dd>
-          <div class="item">{{WHICH_REQUEST_CLASS_IS_COVERED}} <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a></div>
-          <div class="item gap">{{THE_CLASS_NO_TEST_EXERCISES}}</div>
-        </dd>
-
-        <dt>Affected, unchanged</dt>
-        <dd>
-          <div class="item"><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a>
-            <span class="tier">evidenced by unchanged code</span> {{WHY_THIS_GATE_NOW_MEANS_SOMETHING_ELSE}}</div>
-          <details class="searched">
-            <summary><span class="chev">&#9656;</span> Searches run</summary>
-            <div class="sr-body">
-              <ul class="sr-list">
-                <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
-              </ul>
-            </div>
-          </details>
-        </dd>
-
-        <dt>Understand</dt>
-        <dd>
-          <div class="item">{{WHY_FILTER_ORDER_DECIDES_THIS}} <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a></div>
-        </dd>
-
-        <dt>Validate</dt>
-        <dd>
-          <div class="item"><code>{{REAL_PASTEABLE_STEP_FROM_THIS_REPO}}</code> &mdash; {{WHAT_IT_SHOWS}}</div>
-          <!-- Read-only, so no sandbox is needed and the label does not claim one.
-               The page shows the command and NEVER its output. -->
-          <span class="lbl">rails runner &middot; reads only</span>
-<pre class="probe">bin/rails runner 'pp ProjectsController._process_action_callbacks.map(&amp;:filter)'</pre>
-        </dd>
-
-        <dt>Questions</dt>
-        <dd>
-          <div class="item">{{QUESTION_PHRASED_AS_A_QUESTION}}?</div>
-        </dd>
-      </dl>
-
-      <!-- AFTER the dl, never inside it. -->
-      <div class="decisions">
-        <span class="lbl">Decisions to pay attention to</span>
-        <div class="decision">
-          <div class="dn">01</div>
-          <div>
-            <h4>{{THE_DECISION}}</h4>
-            <div class="why">{{WHY_IT_MATTERS}} <span class="cite">{{PATH}}:{{LINE}}</span></div>
-            <div class="trade"><span class="tag">Tradeoff</span><span>{{WHAT_WAS_ACCEPTED}}</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Section 3 · Where to begin. ONE list — what most needs judgment and
-         what to read first are the same question, and answering it twice is the
-         duplication this format exists to remove. Every entry points BACK at the
-         flow that explains it; a flow never defers an explanation forward. ===== -->
+         Every entry points at the checkpoint that owns it and never re-explains
+         it: this section routes, section 02 teaches. ===== -->
     <section id="start" style="padding-top:62px">
       <div class="eyebrow"><span class="lbl lbl-a">Where to begin</span><i></i></div>
-      <h2 style="margin-bottom:22px">Where to begin</h2>
+      <h2 style="margin-bottom:22px">Read the code in this order</h2>
       <ol class="begin">
         <li>
           <span class="n">01</span>
           <span class="t">
             <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
-            <span class="why">{{WHY_THIS_BEFORE_THAT_OR_WHY_IT_NEEDS_JUDGMENT}} <span class="tier">{{TIER_IF_NOT_EXPLICITLY_CHANGED}}</span></span>
+            <span class="why">{{WHY_THIS_BEFORE_THAT}} <span class="tier">{{TIER_IF_NOT_EXPLICITLY_CHANGED}}</span></span>
           </span>
-          <a class="ptr" href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}} &rarr;</a>
+          <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <span class="t">
+            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <span class="why">{{WHY_THIS_UNCHANGED_FILE_IS_ON_THE_ROUTE}} <span class="tier">from unchanged code</span></span>
+          </span>
+          <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
         </li>
       </ol>
-      <p class="note" style="margin-top:18px">{{THESE_ARE_WHAT_THIS_PASS_SURFACED_NOT_AN_AUDIT}}</p>
     </section>
 
-    <!-- SKELETON:ONLY:level=full:START -->
-    <!-- ===== Section 4 · What this change reaches. A second pass over the same
-         change through one lens, so it POINTS AT the flows rather than
-         re-explaining them. Code no single flow owns is explained here instead —
-         that is what makes this a section and not an index.
+    <!-- ===== Section 04 · Impact outside the diff. One to three paths, each
+         crossing from changed code into code the change did not touch, ending at
+         something a user or an operator would see. The authoring contract is
+         § SECTION 04'S TWO STANDING RULES, above the rail.
 
-         The panel is IMPACT PATHS, assembled whole below, and its authoring
-         contract is above the rail — § SECTION 4'S TWO STANDING RULES, which hold
-         at both detail levels. Read it before filling this in. ===== -->
-    <section id="reach" style="padding-top:62px">
+         OMIT THE WHOLE SECTION, and its rail entry, when nothing crosses. A
+         section saying nothing reaches unchanged code is worse than no section:
+         omitted and pending must stay distinguishable, and an empty one reads as
+         a clean bill of health.
+
+         The affected entries below the figure are the ones the paths run through
+         and the ones a checkpoint turns on. Everything else the pass found goes
+         in details.evidence at the foot. ===== -->
+    <section id="impact" style="padding-top:62px">
       <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
-      <h2 style="margin-bottom:22px">What this change reaches</h2>
+      <h2 style="margin-bottom:22px">Impact outside the diff</h2>
 
       <figure class="impact">
         <span class="lbl">Impact paths</span>
@@ -2135,377 +1424,74 @@ end)</pre>
         <p class="note" style="margin-top:16px">{{WHAT_A_NAME_BASED_PASS_COULD_NOT_REACH}}</p>
       </figure>
 
-      <!-- No Changed list here — rule two of § SECTION 4'S TWO STANDING RULES,
-           above the rail. -->
-      <dl class="rows" style="margin-top:34px">
-        <dt>Affected, not changed</dt>
-        <dd>
-          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}</a> &mdash; {{ONE_CLAUSE}} <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a></div>
-          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}</a> &mdash; {{WHY_AFFECTED}} <span class="tier">{{TIER}}</span></div>
-          <!-- Collapsed, and it stays collapsed for most readers. One row per search:
-               the command, then what it returned in a clause. If a row needs a sentence
-               to explain WHY the result matters, that sentence belongs in the div.item
-               above, not here. A search that came up empty is still a row — that is the
-               whole reason the block exists — but the finding it supports is stated in
-               the open prose, never left for a reader to infer from an empty result. -->
-          <details class="searched">
-            <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
-            <div class="sr-body">
-              <ul class="sr-list">
-                <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
-                <li><code>{{SEARCH_THAT_CAME_UP_EMPTY}}</code> <span class="sr-r">no hits</span></li>
-              </ul>
-              <p class="sr-limit"><strong>Out of reach.</strong> {{THE_LIMIT_OF_A_NAME_BASED_SEARCH}}</p>
-            </div>
-          </details>
-        </dd>
-      </dl>
-    </section>
-
-    <!-- ===== Section 5 · Cross-cutting consequences. ONLY what genuinely spans
-         flows. Persistence, endpoint contracts and the backend/frontend boundary
-         have no sections of their own — they are covered inside the flow they
-         serve. Reintroducing a per-layer section is how the old duplication comes
-         back, and it will look like an improvement when it does. ===== -->
-    <section id="crosscutting" style="padding-top:62px">
-      <div class="eyebrow"><span class="lbl lbl-a">Beyond one flow</span><i></i></div>
-      <h2 style="margin-bottom:30px">Cross&#8209;cutting consequences</h2>
-
-      <h3 class="cc-h">{{THE_THING_THAT_SPANS_FLOWS}}</h3>
-      <p style="margin-bottom:22px;color:var(--ink-3)">{{WHAT_IT_IS_AND_WHY_IT_SPANS}}</p>
-
-      <div class="gt gt-ripple">
-        <div class="h">File</div><div class="h">{{WHAT_VARIES}}</div>
-        <div class="c"><a class="path" href="{{LINK}}">{{PATH}}</a></div><div class="c"><span class="fix">{{WHAT_WAS_DONE}}</span></div>
-      </div>
-      <p class="note" style="margin-top:14px">{{HOW_THE_SET_WAS_VERIFIED_COMPLETE}}</p>
-
-      <!-- ======================================================================
-           THE DIAGRAM CATALOGUE · 3 and 4 of 4. Both of THESE live in section 5.
-
-           Numbers 1 and 2 are the boundary chain and the guard fork, and they are
-           assembled inside flows A and B above rather than down here, because a
-           section 2 figure's placement in the flow is half of what a run has to
-           copy — and a composition described but never shown assembled does not
-           survive a weaker reader.
-
-           Impact paths are NOT here: section 4's figure is the .impact component,
-           whose cards stack per PR and whose lanes collapse at 780px, so there is
-           no canvas to work out once. These four are the kinds where the
-           information IS geometry — a crossing, a divergence, structure, and
-           behaviour over time.
-
-           Take the geometry as given and fill in the text. A layout derived per
-           run spends the run's attention on coordinates instead of on whether the
-           edges are true, and makes two pages from this skill incomparable.
-
-           Budget lives in report-format.md § Depth rules, and ONLY there.
-
-           A diagram carries LABELS, NOT SENTENCES. Prose inside an 880-wide
-           scroller cannot reflow, so a reader on a phone scrolls sideways to read
-           it. Searches, caveats and conclusions go in the figcaption.
-           ====================================================================== -->
-
-      <!-- DIAGRAM 3 of 4 · ER FRAGMENT. Once for the diff: touched tables plus
-           immediate neighbours, never the whole schema.
-
-           GRID, 880 x 215: two tables at x = 40 and 560, width 280. Header .box-hd 30 high at
-           y=28, body .box 110 high at y=58, rows every 22px from y=80. Column name (.t-col) at
-           x+12, type (.t-dim) at x+130 — two text elements per row, because runs of spaces
-           collapse in SVG and the column will not line up.
-
-           Draw an ABSENT relationship where the absence is the point: dashed table, dashed edge,
-           and the label split across two lines so it fits the gap between the tables. The
-           .t-lbl NEW badge is anchored end, inside the body box. -->
-      <figure style="margin-top:40px">
-        <div class="scroller"><svg viewBox="0 0 880 215" role="img" aria-label="projects gains archived_at, and the association the model calls is not declared anywhere">
-          <rect class="box-hd" x="40" y="28" width="280" height="30" rx="4"/>
-          <text class="t-title" x="52" y="48">projects</text>
-          <rect class="box" x="40" y="58" width="280" height="110"/>
-          <text class="t-col" x="52" y="80">id</text>
-          <text class="t-dim" x="170" y="80">bigint</text>
-          <text class="t-col" x="52" y="102">name</text>
-          <text class="t-dim" x="170" y="102">varchar not null</text>
-          <text class="t-col" x="52" y="124">slug</text>
-          <text class="t-dim" x="170" y="124">varchar</text>
-          <text class="t-col" x="52" y="146">archived_at</text>
-          <text class="t-dim" x="170" y="146">datetime</text>
-          <text class="t-lbl" x="308" y="146" text-anchor="end">NEW</text>
-          <path class="edge-dash" d="M320 113 L556 113"/>
-          <text class="t-edge" x="438" y="103" text-anchor="middle">time_entries.running</text>
-          <text class="t-dim" x="438" y="131" text-anchor="middle">no has_many declared</text>
-          <rect class="node-dead" x="560" y="28" width="280" height="30" rx="4"/>
-          <text class="t-title" x="572" y="48">time_entries</text>
-          <rect class="node-dead" x="560" y="58" width="280" height="110"/>
-          <text class="t-dim" x="572" y="82">not present in this repository</text>
-          <text class="t-dim" x="572" y="104">called from project.rb:5</text>
-          <text class="t-lbl" x="40" y="196">DASHED &middot; REFERENCED BY THE CODE, ABSENT FROM THE SCHEMA</text>
-        </svg></div>
-        <figcaption>The guard cannot raise <code>ArchiveError</code> as written; it raises <code>NoMethodError</code>. {{WHAT_WAS_SEARCHED_TO_CONFIRM_THE_ABSENCE}}</figcaption>
-      </figure>
-
-      <!-- DIAGRAM 4 of 4 · LIFECYCLE. Only when a status column, enum or state machine
-           changed — a nullable timestamp is not a state machine, and drawing one invents
-           states the code does not have. It is the figure that reveals whether transitions
-           are guarded at all, which is why each one carries the file:line that performs it.
-
-           GRID, 880 x 170: states at x = 60 / 460, box 200 x 52 at y=64. Transition label
-           (.t-edge) at y=82 with its citation (.t-dim) at y=98, both centred in the gap. A
-           self-transition loops out of the box top at one x and back in at another — an
-           arrowhead that lands beside the box instead of on it is invisible to every check and
-           obvious in a screenshot. -->
-      <figure style="margin-top:40px">
-        <div class="scroller"><svg viewBox="0 0 880 170" role="img" aria-label="A project moves from active to archived, and nothing stops it being archived twice">
-          <rect class="node" x="60" y="64" width="200" height="52" rx="4"/>
-          <text class="t-col" x="160" y="86" text-anchor="middle">active</text>
-          <text class="t-dim" x="160" y="104" text-anchor="middle">archived_at IS NULL</text>
-          <text class="t-edge" x="360" y="82" text-anchor="middle">Project#archive!</text>
-          <text class="t-dim" x="360" y="98" text-anchor="middle">project.rb:9</text>
-          <path class="edge-accent" d="M260 112 L456 112 M450 107 L456 112 L450 117"/>
-          <rect class="node" x="460" y="64" width="200" height="52" rx="4"/>
-          <text class="t-col" x="560" y="86" text-anchor="middle">archived</text>
-          <text class="t-dim" x="560" y="104" text-anchor="middle">archived_at set</text>
-          <path class="edge-dash" d="M620 64 L620 34 L520 34 L520 64 M515 58 L520 64 L525 58"/>
-          <text class="t-edge" x="570" y="26" text-anchor="middle">archive! again re-stamps it</text>
-          <text class="t-lbl" x="60" y="152">DASHED &middot; NOT IDEMPOTENT IN EFFECT</text>
-        </svg></div>
-        <figcaption>Two states, and one transition that is not idempotent in effect. No guard refuses the second call, and no test covers it.</figcaption>
-      </figure>
-    </section>
-
-    <!-- ===== Section 6 · Before approving — questions, commands, gaps, and the
-         comprehension checkpoint. All four live HERE; the old standalone
-         checkpoint part overlapped all three of the others.
-
-         READ-ONLY by design. No checkboxes, no tick state, no "n of m" counter:
-         a count of cleared items reads as progress toward approval, and this page
-         does not carry a verdict. ===== -->
-    <section id="approving" style="padding-top:62px">
-      <div class="eyebrow"><span class="lbl lbl-a">Reviewer actions</span><i></i></div>
-      <h2 style="margin-bottom:26px">Before approving</h2>
-
-      <span class="lbl act-group">Ask the author</span>
-      <ul class="actions">
-        <li>{{QUESTION_PHRASED_AS_A_QUESTION}}?</li>
-      </ul>
-
-      <span class="lbl act-group">Run</span>
-      <ul class="actions">
-        <li><code>{{REAL_PASTEABLE_COMMAND}}</code> &mdash; {{WHAT_IT_SHOWS}}</li>
-      </ul>
-
-      <span class="lbl act-group">Test gaps</span>
-      <ul class="actions actions-warn">
-        <li>{{WHAT_IS_NOT_PINNED}} <span class="cite">{{PATH}}:{{LINES}}</span></li>
-      </ul>
-
-      <!-- AT MOST FIVE, and each must be answerable from the page but NOT by
-           copying one sentence out of it. A question whose verbatim answer sits in
-           a paragraph above is restatement wearing a question mark. -->
-      <span class="lbl act-group">Comprehension checkpoint</span>
-      <div class="checkpoint">
-        <div><b>1</b><span>{{QUESTION_JOINING_TWO_ESTABLISHED_FACTS}}</span></div>
-        <div><b>2</b><span>{{QUESTION_JOINING_TWO_ESTABLISHED_FACTS}}</span></div>
-      </div>
-    </section>
-
-    <!-- ===== Section 7 · Coverage ledger. Every path in the diff appears here,
-         and coverage-gate.sh checks set equality against git diff --name-only.
-         Rows are generated by scripts/ledger-rows.sh — never typed. data-path is
-         RESERVED to these cells: the gate greps it page-wide, so a data-path
-         anywhere else registers as a surplus path. ===== -->
-    <section id="coverage" style="padding-top:62px">
-      <div class="eyebrow"><span class="lbl lbl-a">Completeness</span><i></i></div>
-      <h2 style="margin-bottom:8px">Coverage ledger</h2>
-      <p class="note" style="margin-bottom:24px">Every file in the diff, and where this page covers it. All {{N}} rows.</p>
-
-      <div class="gt gt-ledger">
-        <div class="h">File</div><div class="h">Section</div><div class="h">Attention</div><div class="h">Group</div>
-        <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
-        <div class="c"><span class="sec"><a href="#flow-{{LETTER}}">{{SECTION}}</a></span></div>
-        <div class="c"><span class="att att-read">READ</span></div>
-        <div class="c"><span class="grp">PRIMARY</span></div>
-      </div>
-      <p class="note" style="margin-top:14px"><span class="pending">partial</span> The ledger fills in as sections are written.</p>
-    </section>
-    <!-- SKELETON:ONLY:level=full:END -->
-
-    <!-- SKELETON:ONLY:level=brief:START -->
-    <!-- =====================================================================
-         THE BRIEF TAIL · one section, and what sections 4 to 7 above become at
-         the default --brief detail level. See report-format.md § Detail levels.
-
-         A PAGE CARRIES ONE SHAPE OR THE OTHER, NEVER BOTH. The ids below repeat
-         the ones above deliberately, because this markup REPLACES those four
-         sections rather than joining them. In a real page at --brief there is
-         exactly one id="reach", and no <section id="crosscutting">,
-         id="approving"> or id="coverage"> at all.
-
-         It is shown here assembled rather than described because that is the
-         only form a composition survives in. A run given the flow section as
-         three detached siblings plus a paragraph of prose flattened all three
-         of its flows. This is a novel composition of five components that each
-         came from a different section, which is the same trap one size larger.
-
-         THREE THINGS THE MARKUP HAS TO KEEP, each because a check reads it:
-
-         1. id="reach" on the <section>, id="approving" on its LAST <h3>.
-            reach.rb takes its region from the id="reach" anchor to the next
-            <section, and before-approving.rb from the id="approving" anchor
-            onward — so both checks keep working on a merged page with no
-            change. Lose the anchors and before-approving.rb SKIPS, which reads
-            as verified.
-         2. The approving part is <ul class="actions">, never <ol class="begin">.
-            An ol.begin inside the id="reach" region is how reach.rb recognises
-            the old ordering, where the reading list came before the flows, and
-            it FAILS on one.
-         3. The <dt> label stays "Affected, not changed", verbatim. searches.rb
-            opens its scope on that marker rather than on any section id.
-
-         AND TWO THINGS IT DROPS. No .checkpoint here: the comprehension
-         checkpoint is a comprehension test, not a thing to weigh before
-         approving, and it belongs to --full. And no diff inventory — the paths
-         live in details.coverage-foot below the last section at this level,
-         because section 4 is about consequences rather than about files.
-         ===== -->
-    <section id="reach" style="padding-top:62px">
-      <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
-      <h2 style="margin-bottom:22px">Reach &amp; checks</h2>
-
-      <!-- The spine is section 4's own: same panel, same paths, same legend, and
-           the same authoring contract — § SECTION 4'S TWO STANDING RULES, above the
-           rail, which is where it lives precisely because it holds at both levels.
-           The folded-in material sits AFTER it and must not dilute it: this section
-           IS section 4, with the consequential part of the tail attached. -->
-      <figure class="impact">
-        <span class="lbl">Impact paths</span>
-
-        <!-- One path per .ip-card, and the card is the frame. The lane labels belong to the
-             card and repeat in every one of them: a card is a whole diagram, so a reader
-             arriving at the second must not scroll back for what its two columns mean. -->
-        <div class="ip-card">
-          <span class="ip-hd">A &middot; {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}</span>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-          <div class="ip-body">
-            <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span></span></li>
-              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>reads</span><span class="ip-box"><b>{{CHANGED_THING_IT_READS}}</b><span class="ip-d">{{WHAT_IT_CARRIES}}</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives {{WHAT_IT_RECEIVES}} from</span><span class="ip-box"><b>{{UNCHANGED_PRODUCER}}</b><span class="ip-d">{{WHAT_IT_RETURNS}}</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls back to</span><span class="ip-box"><b>{{THE_UNCHANGED_DEFAULT}}</b></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>filtered out by</span><span class="ip-box"><b>{{WHAT_THE_USER_SEES}}</b><span class="ip-d">observable behaviour</span></span></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="ip-card">
-          <span class="ip-hd">B &middot; {{A_DIFFERENT_BEHAVIOUR}}</span>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-          <div class="ip-body">
-            <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DIFFERENT_CHANGED_THING}}</b><span class="ip-d">{{WHAT_THAT_ONE_DOES}}</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{UNCHANGED_CONSUMER}}</b><span class="ip-d">{{WHAT_IT_STILL_ASSUMES}}</span></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>{{WHAT_THE_OTHER_ONE_SHOWS}}</b><span class="ip-d">observable behaviour</span></span></li>
-            </ol>
-          </div>
-        </div>
-
-        <!-- One legend for the whole group: the three kinds mean the same thing in every card. -->
-        <div class="legend">
-          <span><i class="key-chg"></i>Changed by this PR</span>
-          <span><i class="key-aff"></i>Affected, not changed</span>
-          <span><i class="key-out"></i>Behaviour</span>
-        </div>
-
-        <p class="note" style="margin-top:16px">{{WHAT_A_NAME_BASED_PASS_COULD_NOT_REACH}}</p>
-      </figure>
-
-      <dl class="rows" style="margin-top:34px">
-        <dt>Affected, not changed</dt>
-        <dd>
-          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}</a> &mdash; {{ONE_CLAUSE}} <a href="#flow-{{LETTER}}">{{FLOW_THAT_EXPLAINS_IT}}</a></div>
-          <div class="item"><a class="path" href="{{LINK}}">{{PATH}}</a> &mdash; {{WHY_AFFECTED}} <span class="tier">{{TIER}}</span></div>
-          <!-- Collapsed, and it stays collapsed for most readers. One row per search:
-               the command, then what it returned in a clause. If a row needs a sentence
-               to explain WHY the result matters, that sentence belongs in the div.item
-               above, not here. A search that came up empty is still a row — that is the
-               whole reason the block exists — but the finding it supports is stated in
-               the open prose, never left for a reader to infer from an empty result. -->
-          <details class="searched">
-            <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
-            <div class="sr-body">
-              <ul class="sr-list">
-                <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
-                <li><code>{{SEARCH_THAT_CAME_UP_EMPTY}}</code> <span class="sr-r">no hits</span></li>
-              </ul>
-              <p class="sr-limit"><strong>Out of reach.</strong> {{THE_LIMIT_OF_A_NAME_BASED_SEARCH}}</p>
-            </div>
-          </details>
-        </dd>
-      </dl>
-
-      <!-- From section 5, and only the part of it that is BOTH flow-spanning and
-           consequential: migration safety, deploy ordering, an authorization-model
-           change, test infrastructure that changes other specs, a change to
-           CLAUDE.md or a hook. Rows, not subsection shells — and no figures: the
-           ER fragment and the lifecycle belong to --full. Omit this whole h3 when
-           the diff has nothing that qualifies. -->
-      <h3 class="cc-h" id="crosscutting" style="margin-top:46px">Spans more than one flow</h3>
-      <div class="gt gt-ripple">
-        <div class="h">{{WHAT_SPANS}}</div><div class="h">{{THE_CONSEQUENCE}}</div>
-        <div class="c"><a class="path" href="{{LINK}}">{{PATH}}</a></div><div class="c"><span class="fix">{{WHAT_A_REVIEWER_HAS_TO_KNOW}}</span></div>
-      </div>
-
-      <!-- From section 6, condensed to the two parts a reviewer acts on. LAST in
-           the section, because before-approving.rb reads from this anchor onward.
-           <ul>, never <ol class="begin">. Per-flow test gaps stay in their flows'
-           `Tests` field at this level — gathering them was section 6's job. -->
-      <h3 class="cc-h" id="approving" style="margin-top:46px">Before approving</h3>
-
-      <span class="lbl act-group">Ask the author</span>
-      <ul class="actions">
-        <li>{{QUESTION_PHRASED_AS_A_QUESTION}}?</li>
-      </ul>
-
-      <span class="lbl act-group">Run</span>
-      <ul class="actions">
-        <li><code>{{REAL_PASTEABLE_COMMAND}}</code> &mdash; {{WHAT_IT_SHOWS}}</li>
+      <!-- The entries the paths run through, with their citations — a figure
+           carries no file:line, so this is where the reader gets the address. One
+           clause each, and a pointer at the checkpoint that turns on it rather
+           than a second explanation. -->
+      <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
+      <ul class="ev-list">
+        <li><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> &mdash; {{ONE_CLAUSE}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></li>
+        <li><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> &mdash; {{WHY_AFFECTED}} <span class="tier">{{TIER}}</span></li>
       </ul>
     </section>
 
     <!-- =====================================================================
-         THE COVERAGE FOOT · the diff inventory at --brief, and ONLY at --brief.
-         At --full the paths live in section 7's classified ledger and this block
-         does not exist. A page carries one or the other, never both.
+         SECTION 05 · THE EVIDENCE FOOT. Not a section: no number, no rail entry,
+         no eyebrow, no <h2>. It sits below the last section because a reviewer
+         scrolling the page should never meet a list of every changed path — on a
+         real page that was 24 links above a caption saying the eight worth
+         opening were ranked elsewhere.
 
-         It is not a section: no number, no rail entry, no eyebrow, no <h2>. It
-         sits below the last section because section 4 is about consequences
-         rather than files, and a reviewer scrolling the page should never meet
-         a list of every changed path — on a real page that was 24 links above a
-         caption saying the eight worth opening were ranked elsewhere.
-
-         Shut by default, and legally so: this is PROVENANCE, not a claim. The
+         Shut by default, and legally so: everything in here is PROVENANCE. The
          hard rule is that the page reads complete with every collapsed block
-         closed, and an inventory qualifies where a finding never would. Nothing
-         a reviewer has to act on goes in here.
+         closed, and an inventory, a record of searches and the affected code no
+         checkpoint turns on all qualify where a finding never would. NOTHING A
+         REVIEWER ACTS ON GOES IN HERE — if an entry below is a judgment they have
+         to make, it is a checkpoint that was mis-filed.
 
          Rows are GENERATED, never typed:
 
            <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only
-           ... plus the link flag the rung earned, the same flag section 7's
-           ledger is generated with
+           ... plus the link flag the rung earned
 
-         data-path is RESERVED to these cells. coverage-gate.sh greps it
-         page-wide on the raw bytes, so it neither knows nor cares that the
-         carrier moved out of section 4 — set equality against
-         git diff --name-only still runs, at every level. ===== -->
-    <details class="coverage-foot">
-      <summary><span class="chev">&#9656;</span> Coverage &middot; all {{N}} changed paths</summary>
+         data-path is RESERVED to these cells. coverage-gate.sh greps it page-wide
+         on the raw bytes, so set equality against git diff --name-only runs
+         wherever the carrier sits. The summary says "partial" until the gate has
+         run at the final publish. ===== -->
+    <details class="evidence">
+      <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all {{N}} changed paths</summary>
+
       <div class="gt gt-paths">
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
       </div>
+
+      <!-- What was grepped, including the searches that came up empty. One row per
+           search: the command, then what it returned in a clause. If a row needs a
+           sentence to explain WHY the result matters, that sentence belongs in the
+           checkpoint the search supports, not here. A search that came up empty is
+           still a row — that is the whole reason the block exists — but the
+           finding it supports is stated in the open prose, never left for a reader
+           to infer from an empty result. -->
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
+            <li><code>{{SEARCH_THAT_CAME_UP_EMPTY}}</code> <span class="sr-r">no hits</span></li>
+          </ul>
+          <p class="sr-limit"><strong>Out of reach.</strong> {{THE_LIMIT_OF_A_NAME_BASED_SEARCH}}</p>
+        </div>
+      </details>
+
+      <!-- The affected code no checkpoint turns on and no impact path runs
+           through. It is here because it is real and was found, and not above
+           because nothing a reviewer decides depends on it. -->
+      <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
+      <ul class="ev-list">
+        <li><a class="path" href="{{LINK}}">{{PATH}}</a> &mdash; {{WHY_AFFECTED_LOWER_PRIORITY}}</li>
+      </ul>
     </details>
-    <!-- SKELETON:ONLY:level=brief:END -->
 
 <!-- SKELETON:TAIL:START -->
   </main>

@@ -212,7 +212,6 @@ explained in `references/workflow.md`.
 | Triggers | `ready_for_review`, `synchronize`, `reopened` |
 | Draft pull requests | Skipped |
 | Fork pull requests | Skipped — no secrets are available to them |
-| Detail level | `brief` |
 | Effort | `high` |
 | Delivery | `github-artifact` |
 | Retention | 30 days |

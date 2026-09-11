@@ -1,8 +1,8 @@
 {
   "name": "accountable-review",
   "displayName": "Accountable Review",
-  "description": "Turns a pull request into a published review map — goal, behaviour flows carrying the API and client contract, where to start reading, impact paths through the unchanged code it gives new meaning to — so a reviewer can explain the change before judging it, at the depth the change is worth. Ships review-map for Rails and for Elixir/Phoenix, with or without a separate client, and setup-ci to generate one automatically on every review-ready pull request.",
-  "version": "0.22.0",
+  "description": "Turns a pull request into a published review agenda — what changed, the three to five judgments a reviewer has to make with the exact lines that settle each one, the order to read the code in, and the impact outside the diff through the unchanged code the change gives new meaning to — so a reviewer can explain the change before judging it. Ships review-map for Rails and for Elixir/Phoenix, with or without a separate client, and setup-ci to generate one automatically on every review-ready pull request.",
+  "version": "0.23.0",
   "author": {
     "name": "WyeWorks",
     "url": "https://github.com/wyeworks"

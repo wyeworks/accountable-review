@@ -1,0 +1,220 @@
+<!-- A WHOLE AGENDA PAGE, CLEAN. The one fixture that carries every component this format
+     introduced: two section.cp checkpoints, a figure.chain with no .ip-aff node, ul.lookat
+     entries with their clauses, the impact panel, and details.evidence holding the inventory
+     and the searches.
+
+     It is the positive case, which is the half a suite of defect fixtures cannot supply: every
+     rule below reports a PASS on it, so a rule that starts firing on correct markup goes red
+     here rather than in the field. That is the anchors-hexdocs-clean pattern, one level up.
+
+     It is a FRAGMENT rather than a page because the head is 40 KB of emitted tokens and the
+     three theme states are already pinned against the template itself. What this pins is the
+     markup a run actually writes. -->
+  <nav class="rail" aria-label="Sections">
+    <div class="rail-id">
+      <div class="lbl" style="letter-spacing:.18em">Review map</div>
+      <div class="tick">add-project-archival</div>
+      <div class="cite">5 files</div>
+    </div>
+    <div class="rail-links">
+      <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
+      <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">Do lists still show archived projects?</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">Is slug uniqueness enforced only in Ruby?</a>
+      <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
+      <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
+    </div>
+  </nav>
+
+  <main>
+    <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
+      <div class="lbl lbl-wide" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px">
+        <span>acme</span><span style="color:var(--rule-strong)">/</span><span>app</span><span style="color:var(--rule-strong)">&middot;</span><span>jordan</span>
+      </div>
+      <h1>Projects can be archived, and nothing yet hides them</h1>
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">A nullable <code>archived_at</code> column, a model method that sets it, and a controller action that calls it.</p>
+      <div class="gt gt-meta" style="margin-top:44px">
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">add-project-archival <span style="color:var(--fainter)">&rarr;</span> main</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">c6c9a35 <span>&rarr;</span> cca6501</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">feature</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">1</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">5</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">4 / 1</div></div>
+      </div>
+    </header>
+
+    <section id="changed">
+      <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
+      <h2 style="max-width:30ch;margin-bottom:18px">Projects gain an archived state</h2>
+      <p>A project can now be archived. The migration adds a nullable <code>archived_at</code>, <code>Project#archive!</code> stamps it, and a new controller action exposes that. Archiving is the only thing this change does: nothing reads the column yet, and no list filters on it.</p>
+      <p>The same commit adds a uniqueness validation on <code>slug</code>, which is independent of archival and is the second thing to judge here. <span class="tier tier-inf">inferred</span></p>
+      <p>Citations on this page are plain text: nothing on this branch is pushed to a remote, so there is no revision to link a line to.</p>
+    </section>
+
+    <section id="attention" style="padding-top:48px">
+      <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
+      <h2 style="margin-bottom:18px">What needs your attention</h2>
+      <p>Two judgments, in the order you would most regret getting wrong. The first is about what the change does not do; the second is about a validation that shares the commit.</p>
+      <p class="note">These are what this pass surfaced, not an audit. Repeated passes over the same diff turn up overlapping but different sets.</p>
+
+      <section class="cp" id="cp-a">
+        <span class="lbl lbl-wide">Checkpoint A</span>
+        <h3>Should archived projects still appear wherever projects are listed?</h3>
+        <p>Archiving writes <code>archived_at</code> and touches nothing else. Every selectable-project list in the app goes through one query object, and that object scopes on <code>discarded_at</code> — a different column — so an archived project stays in every list it was in before. <span class="tier">from unchanged code</span> Whether that is the intended first step or an omission is the thing to decide.</p>
+        <figure class="chain">
+          <ol class="ip-path">
+            <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">stamps archived_at</span></span></li>
+            <li class="ip-n ip-step"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, indexed</span></span></li>
+            <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>A project marked archived</b><span class="ip-d">observable behaviour</span></span></li>
+          </ol>
+          <figcaption>Everything the change itself does. The consequence is in what does not read this column.</figcaption>
+        </figure>
+        <ul class="lookat">
+          <li>
+            <span class="path">app/models/project.rb:10-12</span>
+            <span>the whole write path — an update and nothing else</span>
+            <details class="excerpt excerpt--diff">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">app/models/project.rb:10-12</span>
+                <span class="tag">Changed</span>
+                <span class="ex-why">what archiving does, in full</span>
+              </summary>
+              <div class="ex-body">
+<pre data-src="app/models/project.rb" style="counter-reset: exl 9"><span class="l add"><span class="sig">+</span>  def archive!</span>
+<span class="l add"><span class="sig">+</span>    update!(archived_at: Time.current)</span>
+<span class="l add"><span class="sig">+</span>  end</span>
+</pre>
+                <p class="ex-src">Changed at <span class="cite">app/models/project.rb:10-12</span></p>
+              </div>
+            </details>
+          </li>
+          <li>
+            <span class="path">app/queries/active_projects.rb:3-5</span>
+            <span>not in the diff, and the reason archived projects keep appearing <span class="tier">from unchanged code</span></span>
+          </li>
+        </ul>
+        <span class="lbl">rails runner &middot; read-only</span>
+<pre class="probe">bin/rails runner 'pp ActiveProjects.new.call.to_sql'</pre>
+        <p class="open"><b>Open question</b> Is hiding archived projects meant to land in a later change, or was this one expected to do it?</p>
+      </section>
+
+      <section class="cp" id="cp-b">
+        <span class="lbl lbl-wide">Checkpoint B</span>
+        <h3>Is slug uniqueness meant to be enforced only in Ruby?</h3>
+        <p>The commit adds <code>validates :slug, uniqueness: true</code>, and the schema has no unique index behind it — <code>slug</code> is a plain string column. <span class="tier">from unchanged code</span> Two concurrent requests can both pass the validation and both write. Whether that matters depends on how slugs are produced, which this diff does not say.</p>
+        <ul class="lookat">
+          <li>
+            <span class="path">app/models/project.rb:6</span>
+            <span>the validation, and the comment already acknowledging the gap</span>
+          </li>
+          <li>
+            <span class="path">db/schema.rb:4-8</span>
+            <span>the column and the one index the migration did add, which is on archived_at</span>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">db/schema.rb:4-8</span>
+                <span class="tag">At head</span>
+                <span class="ex-why">the whole projects table, so the absence is visible</span>
+              </summary>
+              <div class="ex-body">
+<pre data-src="db/schema.rb" data-lang="ruby" style="counter-reset: exl 3"><span class="l">    t.string "slug"</span>
+<span class="l">    t.datetime "discarded_at"</span>
+<span class="l">    t.datetime "archived_at"</span>
+<span class="l">    t.index ["archived_at"], name: "index_projects_on_archived_at"</span>
+</pre>
+                <p class="ex-src">At head, <span class="cite">db/schema.rb:4-8</span></p>
+              </div>
+            </details>
+          </li>
+        </ul>
+        <div class="gap"><b>GAP</b><span>The spec covers archiving; nothing exercises two writers racing on the same slug.</span></div>
+      </section>
+    </section>
+
+    <section id="start" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Where to begin</span><i></i></div>
+      <h2 style="margin-bottom:22px">Read the code in this order</h2>
+      <ol class="begin">
+        <li>
+          <span class="n">01</span>
+          <span class="t">
+            <span class="path">db/migrate/20260101000000_add_archived_at_to_projects.rb:1-7</span>
+            <span class="why">What the column is and what it permits, before any code that trusts it.</span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <span class="t">
+            <span class="path">app/models/project.rb:1-13</span>
+            <span class="why">Both judgments live in this file: the write, and the validation with no index behind it.</span>
+          </span>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <span class="t">
+            <span class="path">app/queries/active_projects.rb:1-6</span>
+            <span class="why">Not in the diff, and the file that decides whether archiving is visible anywhere. <span class="tier">from unchanged code</span></span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+      </ol>
+    </section>
+
+    <section id="impact" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+      <h2 style="margin-bottom:22px">Impact outside the diff</h2>
+      <figure class="impact">
+        <span class="lbl">Impact paths</span>
+        <div class="ip-card">
+          <span class="ip-hd">A &middot; Where an archived project still shows up</span>
+          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <div class="ip-body">
+            <ol class="ip-path">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">new column</span></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on discarded_at</span></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>ProjectsController#index</b><span class="ip-d">the only list endpoint</span></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived projects stay selectable</b><span class="ip-d">observable behaviour</span></span></li>
+            </ol>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="key-chg"></i>Changed by this PR</span>
+          <span><i class="key-aff"></i>Affected, not changed</span>
+          <span><i class="key-out"></i>Behaviour</span>
+        </div>
+        <p class="note" style="margin-top:16px">A name-based pass cannot see a list built by string interpolation or reached from another repository; nothing here suggests one exists.</p>
+      </figure>
+      <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
+      <ul class="ev-list">
+        <li><span class="path">app/queries/active_projects.rb:4</span> &mdash; scopes on the wrong column for archival. <a href="#cp-a">Checkpoint A</a></li>
+      </ul>
+    </section>
+
+    <details class="evidence">
+      <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all 5 changed paths</summary>
+      <div class="gt gt-paths">
+        <div class="c" data-path="app/controllers/projects_controller.rb"><span class="path">app/controllers/projects_controller.rb</span></div>
+        <div class="c" data-path="app/models/project.rb"><span class="path">app/models/project.rb</span></div>
+        <div class="c" data-path="db/migrate/20260101000000_add_archived_at_to_projects.rb"><span class="path">db/migrate/20260101000000_add_archived_at_to_projects.rb</span></div>
+        <div class="c" data-path="db/schema.rb"><span class="path">db/schema.rb</span></div>
+        <div class="c" data-path="spec/models/project_spec.rb"><span class="path">spec/models/project_spec.rb</span></div>
+      </div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>grep -rn "archived_at" app</code> <span class="sr-r">two hits, both in the diff</span></li>
+            <li><code>grep -rn "discarded_at" app</code> <span class="sr-r">one reader, active_projects.rb</span></li>
+            <li><code>grep -rn "ActiveProjects" app</code> <span class="sr-r">one caller, the index action</span></li>
+          </ul>
+          <p class="sr-limit"><strong>Out of reach.</strong> A scope built by interpolation, or a list rendered from another repository, would not appear in either search.</p>
+        </div>
+      </details>
+      <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
+      <ul class="ev-list">
+        <li><span class="path">app/controllers/projects_controller.rb:5</span> &mdash; renders the query object's result; carries no logic of its own.</li>
+      </ul>
+    </details>

@@ -1,66 +1,3 @@
-# The checks, checked. Every fragment in golden/ plants exactly one defect, and a row here says
-# what a check is supposed to say about it.
-#
-#   check | golden fragment | expected exit | a substring the output must contain | extra args
-#
-# Expected exit is 0 or 1. A WARN is not a failure, so a fragment that only warns expects 0 and
-# is pinned by its substring instead.
-#
-# The fifth column is optional and exists for a check that needs more than a fragment. @GOLD@
-# expands to the golden directory, so searches can be handed a repository to search, and @REPO@
-# plus @REPO_BASE@ to the two-commit git repository golden/links-repo.sh builds, which is what
-# link-form needs to ask git which files GitHub renders. Those two are the checks whose rule is a
-# relation between the page and a repository, and a check that can only SKIP here is exactly what
-# this file exists to prevent. The column also carries --level for a fragment produced at the
-# skill's brief detail level, --page for a rule that only holds on a whole page, and an
-# unresolvable ref for the rules that ask git a question and must not read a failure as an answer.
-#
-# A DATA FILE, not a heredoc, because two readers need it: self_test.rb asserts these verdicts,
-# and frozen.rb replays the same rows so the frozen corpus covers --repo, --base, --level and the
-# fixture repository, none of which its fixture sweep ever passes. It was a heredoc parsed with
-# `while IFS='|' read`, which needed a sed trim per column and a deliberately unquoted fifth field.
-
-diagram            | diagram-clean.html            | 0 | labels fit their boxes
- diagram            | diagram-literal-colour.html   | 1 | is a literal colour
- diagram            | diagram-offcanvas.html        | 1 | outside the 880x200 viewBox
- diagram            | diagram-invented-class.html   | 1 | is not in the template vocabulary
- diagram            | diagram-label-overflow.html   | 0 | likely spills
- diagram            | diagram-no-legend.html        | 1 | reads as deleted
- diagram            | diagram-placeholder.html      | 1 | survives inside the diagram
- diagram            | diagram-unwrapped.html        | 1 | is not inside .scroller
- diagram            | diagram-edge-label-collision.html | 0 | runs under a box
- behaviour-flows    | flows-clean.html              | 0 | no flow is grouped by directory
- behaviour-flows    | flows-layer-grouped.html      | 1 | is a layer name
- behaviour-flows    | flows-unit-no-understand.html | 1 | has no things-to-understand
- behaviour-flows    | flows-unit-uncited.html       | 1 | makes claims with no file:line
- behaviour-flows    | flows-source-only.html        | 0 | no flow shows the hunk its behaviour turns on
- behaviour-flows    | flows-unit-flattened.html     | 1 | outside a dl.rows
- behaviour-flows    | flows-decisions-interleaved.html | 1 | belongs after the closing
- behaviour-flows    | flows-reach-rows.html        | 0 | every field row is inside a dl.rows
- behaviour-flows    | flows-pending-page.html       | 0 | section 2 is still pending | --page @GOLD@/flows-pending-page.html
- behaviour-flows    | flows-stubs-only-page.html    | 0 | every flow is still a stub | --page @GOLD@/flows-stubs-only-page.html
- behaviour-flows    | flows-partial-page.html       | 0 | every dl.rows is introduced by a .mech block | --page @GOLD@/flows-partial-page.html
-
-# SECTION 2'S TWO DRAWINGS. The boundary chain and the guard fork are catalogue layouts again,
-# so a flow can hold a figure — which is what these rows exist for, because until it could, every
-# rule about a flow's figure was unreachable rather than passing.
-#
-# Each rule gets a fixture that fires AND a clean counterpart that must not. A cap that fires on
-# correct content teaches a run to stop drawing a true figure, which is the lesson the impact-path
-# label cap paid for once already.
-behaviour-flows    | flows-crossing-chain-clean.html | 0 | every flow that crosses the boundary draws the crossing
-behaviour-flows    | flows-crossing-no-chain.html  | 0 | cites both sides of the boundary and draws no chain
-behaviour-flows    | flows-figure-linear.html      | 1 | shows no divergence
-behaviour-flows    | flows-clean.html              | 0 | no flow here cites both sides of the boundary, so none owes a chain
-# The pr-mark exclusion in the per-section budget. The clean row is the load-bearing one: it is a
-# flow carrying a primer AND its one earned drawing, which is what the old count reported as two.
-# The pair proves the fix did not silence the rule.
-diagram            | diagram-flow-figure-primer.html | 0 | diagram budget respected in every section | --page @GOLD@/diagram-flow-figure-primer.html
-diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most one | --page @GOLD@/diagram-flow-two-figures.html
- reach              | reach-clean.html              | 0 | point into the flows that explain them
- reach              | reach-readorder.html          | 1 | the reading order lives in section 3
- reach              | reach-no-pointer.html         | 0 | an in-page anchor works at every link rung
- reach              | reach-pointer-restated.html   | 1 | carry more than one citation
 # The impact panel, which is section 4's one figure and the part of it a diff cannot produce.
 # Each fixture plants ONE defect, and between them they cover the two failures this component
 # was built to end: an edge with no label (adjacency again) and a node with a clause in it (the
@@ -77,7 +14,7 @@ diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most on
  impact-paths       | impact-no-affected.html       | 1 | contains no .ip-aff node
  impact-paths       | impact-unlabelled-edge.html   | 1 | with no .ip-rel
  impact-paths       | impact-prose-nodes.html       | 1 | a citation inside the .impact panel
- impact-paths       | impact-four-paths.html        | 1 | the budget is 2 to 3
+ impact-paths       | impact-four-paths.html        | 1 | the budget is 1 to 3
  impact-paths       | impact-shared-card.html       | 1 | do not pair one-to-one
  impact-paths       | impact-card-no-lanes.html     | 1 | with no .ip-lanes of their own
 # And one CLEAN fragment, which is the anchors-hexdocs-clean.html job: both of the things it
@@ -88,7 +25,7 @@ diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most on
 # the substring is the whole of the assertion here.
  impact-paths       | impact-entities-vocab-clean.html | 0 | nodes carry labels rather than prose
  impact-paths       | impact-entities-vocab-clean.html | 0 | leads with a causal verb from the vocabulary
-# And the one that has to SKIP rather than pass: a fragment with no panel is reach.rb's
+# And the one that has to SKIP rather than pass: a fragment with no panel has nothing for this
 # failure to report, not this check's. A PASS here would read as a verified figure that was
 # never looked at.
  impact-paths       | searches-clean.html           | 0 | no .impact panel in this input
@@ -100,52 +37,10 @@ diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most on
  start-here         | start-here-clean.html         | 0 | each with a why
  start-here         | start-here-no-why.html        | 1 | is not a reading order
  start-here         | start-here-two-lists.html     | 1 | it is one list
- before-approving   | approving-clean.html          | 0 | within the cap of 5
- before-approving   | approving-six-questions.html  | 1 | the cap is 5
-# The brief detail level, where sections 4 to 7 are one section. The first three rows are
-# the level's own rule (the checkpoint belongs to --full); the last two are the ones that
-# matter more, because they pin that the merge did NOT need a flag: reach.rb and
-# page-invariants.rb read the merged section through the anchors it kept, unchanged.
- before-approving   | approving-brief-clean.html      | 0 | right at --brief | --level brief
- before-approving   | approving-brief-checkpoint.html | 1 | the checkpoint belongs to --full | --level brief
- before-approving   | approving-brief-no-anchor.html  | 1 | carries it on its last | --page @GOLD@/approving-brief-no-anchor.html --level brief
-# And the sharpened version of those last two. approving-brief-clean.html pins the merged SHAPE,
-# and passed the citation rule only because it happens to carry one <a class="cite">; a real
-# --brief page cites section 4 with a.path and carries none, so the rule counted the <li> under
-# "Before approving" as uncited section-4 entries and failed a correct page. This row pins the
-# condition rather than the shape.
- reach              | reach-brief-uncited.html        | 0 | citations present alongside the lists | --level brief
- reach              | approving-brief-clean.html      | 0 | no reading order here | --level brief
-# The panel is level-independent — same paths, same caps, same vocabulary — so impact-paths.rb
-# must not read --level. This row is what notices if it starts to.
- impact-paths       | reach-brief-uncited.html        | 0 | every path ends at exactly one observable behaviour | --level brief
- page-invariants    | approving-brief-clean.html      | 0 | data-path is only on ledger rows | --level brief
-# The word budget the brief level carries, which is the second thing --level decides and the
-# second check to read it. Two rows on the clean fragment, pinned on different PASS lines, and
-# the pair is deliberate: the caps row is what goes red if EXEMPT stops matching, because that
-# fragment's figure, figcaption, legend, .pipe spine, probe and collapsed excerpt would put it
-# over three separate caps the moment a word count starts seeing them. The floor row pins the
-# other half of the same exemption — the Validate <dd> there is nothing but a command, so a
-# floor that did not stand aside for it would fail every clean page on this rule.
- brief-budget       | brief-flow-clean.html           | 0 | every component is inside its word cap | --level brief
- brief-budget       | brief-flow-clean.html           | 0 | no field is compressed into its own label | --level brief
- brief-budget       | brief-flow-primer.html          | 1 | belongs to --full | --level brief
- brief-budget       | brief-flow-ba.html              | 1 | belongs in its .mech | --level brief
- brief-budget       | brief-field-stub.html           | 1 | compressed into their own label | --level brief
-# Length WARNS and exits 0, both of these deliberately: a hard failure on length teaches a run
-# to drop a claim to get under a number. The ceiling row is the one that needs a whole page —
-# and its fixture overspends only where no per-component cap applies, so it pins that the
-# ceiling catches what the caps cannot rather than duplicating one of them.
- brief-budget       | brief-field-verbose.html        | 0 | against a cap of 35 | --level brief
-# The substring is from the WARN alone. "against a ceiling of" is in the PASS line too, so a
-# fixture that drifted back under the ceiling would keep this row green — the shape of bypass
-# this file exists to catch.
- brief-budget       | brief-page-over-ceiling.html    | 0 | over. The caps above name which part | --page @GOLD@/brief-page-over-ceiling.html --final --level brief
-# And the level gate itself. With no --level the input is graded at full, where no budget
-# exists — so this must SKIP saying plainly that nothing was measured. A silent pass here is
-# the failure this whole file exists to prevent, one level up: it would report every full page
-# as inside a budget nobody wrote for it.
- brief-budget       | brief-flow-clean.html           | 0 | nothing measured
+# The inventory carrier moved to the evidence foot and data-path moved with it. This row is the
+# POSITIVE case: a page that carries the attribute on a div.c passes, which is what an assertion
+# about where it may NOT sit would otherwise never look at.
+ page-invariants    | excerpt-at-head.html          | 0 | data-path is only on ledger rows
  page-invariants    | invariants-clean.html         | 0 | no severity chips
  page-invariants    | invariants-severity-chip.html | 1 | severity chips reintroduced
  page-invariants    | invariants-verdict.html       | 1 | verdict language found
@@ -180,38 +75,6 @@ diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most on
  rails-anchors      | anchors-hexdocs-unpinned.html | 1 | unpinned hexdocs link(s)          | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-hexdocs-wrong-package.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-clean.html            | 0 | needs --repo to ask whether
-# The primer callout. The first row is the clean one; the five after it are the rules that
-# would otherwise be checked by nothing. The demo rows are the pair worth reading together:
-# a demo may carry a result line ONLY because its receiver is not this application's, so one
-# rule asks whether the receiver is generic and the other asks whether the block is inside a
-# primer at all — without the second, pre.demo is a hole through the fabricated-output rule
-# that anything on the page could use.
- rails-anchors      | anchors-primer-clean.html     | 0 | quote the manual                  | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-primer-app-symbol.html | 1 | are classes from this repository | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-demo-outside-primer.html | 1 | outside a primer               | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-primer-no-citation.html | 1 | with no file:line beside them   | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-primer-no-link.html   | 1 | carry no documentation link       | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-primer-two-in-flow.html | 1 | more than one primer            | --repo @GOLD@/searches-repo
-# The component is not Rails-only — a gem or a client library takes .primer--lib, which is the
-# same callout with no mark, no trademark line and a neutral rule. Both failures it guards are
-# attributions rather than layout, and neither looks wrong on the page: the logotype on a gem
-# primer says the Rails Foundation wrote that gem, and the logotype with no .pr-tm shows someone's
-# mark without saying whose. The scaffold row is a REGRESSION rather than a rule — a real eval run
-# had `class Post < ApplicationRecord` reported as naming an application class, which made the
-# idiomatic generic receiver the hardest one to write.
- rails-anchors      | anchors-primer-lib.html       | 0 | quote the manual                  | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-primer-lib-rails-mark.html | 1 | no rubyonrails.org link      | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-primer-no-trademark.html | 1 | no trademark line              | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-primer-scaffold-receiver.html | 0 | quote the manual          | --repo @GOLD@/searches-repo
-# And the two other scripts a primer passes through, which is where it could break something
-# that has nothing to do with it. behaviour-flows.sh must not read a flow with a callout as a
-# flattened one, and must NOT let the callout's own citation stand in for the unit's — the
-# last row is that regression, and it fails only because the unit census is taken over a copy
-# with the primer removed. diagram.sh must not mistake a 34px brand mark for a figure: every
-# rule it has is about a figure, and the first one it would fail is "not inside .scroller".
- behaviour-flows    | anchors-primer-clean.html     | 0 | every dl.rows is introduced by a .mech block
- behaviour-flows    | flows-primer-uncited-unit.html | 1 | makes claims with no file:line
- diagram            | anchors-primer-clean.html     | 0 | no diagrams in this input
  excerpts           | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
  excerpts           | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang
 # The state tag. A published page carried db/structure.sql:304-313 tagged Unchanged while its
@@ -260,3 +123,16 @@ diagram            | diagram-flow-two-figures.html | 1 | a flow earns at most on
 # evidence, which is the shape excerpts.rb's state-tag rule shipped with once.
  link-form          | links-clean.html                | 0 | needs --repo and --base to ask which files GitHub renders
  link-form          | links-clean.html                | 0 | could not read                     | --repo @GOLD@/searches-repo --base 0000000000000000000000000000000000000000
+
+# THE POSITIVE CASE, and the only fixture carrying every component this format introduced. Each
+# row pins one rule's PASS line rather than a defect, because a suite made only of defect
+# fixtures cannot notice a rule that starts firing on correct markup — which is what the
+# hexdocs-clean rows exist for one level down. One row per check that has anything to say about
+# the new shape.
+ impact-paths       | agenda-clean.html             | 0 | within the 1-3 budget
+ impact-paths       | agenda-clean.html             | 0 | the panel is a component, not a drawing
+ start-here         | agenda-clean.html             | 0 | entries link into the checkpoints that explain them
+ start-here         | agenda-clean.html             | 0 | within the shape of a reading order
+ page-invariants    | agenda-clean.html             | 0 | evidence tiers used
+ page-invariants    | agenda-clean.html             | 0 | data-path is only on ledger rows
+ excerpts           | agenda-clean.html             | 0 | no excerpt quotes the same lines twice

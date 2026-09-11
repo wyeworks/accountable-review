@@ -7,28 +7,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 There is no application code here. The repository is the `accountable-review` Claude Code plugin. It
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
-a skill nor read by one. `review-map` turns a pull request into a published HTML review map: what the
-change is for, what it can break, what the API and its client now agree on, and where the decisions
-live. Two stacks are supported: a Rails API with a Next.js client, which came first, and
-Elixir/Phoenix — a LiveView app or a JSON API. Step 2 detects which, and the run reads that
-stack's lens file and its doc catalogue, never both. `setup-ci` writes the GitHub
-Actions workflow that produces one automatically on every review-ready pull request, and `ci/` is
-what that workflow runs.
+a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
+what changed, the three to five judgments the reviewer has to make with the lines that settle each
+one, the order to read the code in, and what the change reaches in code it did not touch. Two stacks
+are supported: a Rails API with a Next.js client, which came first, and Elixir/Phoenix — a LiveView
+app or a JSON API. Step 2 detects which, and the run reads that stack's lens file and its doc
+catalogue, never both. `setup-ci` writes the GitHub Actions workflow that produces one automatically
+on every review-ready pull request, and `ci/` is what that workflow runs.
 
 **`review-map` is the product; `setup-ci` is plumbing for it.** The second exists so a team gets the
 first without anyone remembering to ask, and nothing about it may change what the page is. The page
 produced in CI and the page produced by a person are the same page from the same procedure — the
 only difference is `--output`, which decides where the bytes land.
 
+**The deep analysis is how the page is built, not what it prints.** A run traces consumers across
+the whole diff, reads the tests, follows a value across the boundary and attacks its own conclusions;
+what reaches the reader is the part they have to act on. Reducing the reading obligation is the goal.
+Reducing the analysis is the failure, and it is the failure that will look like success — a shorter
+page is easy to produce by looking less hard.
+
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
-command. It takes a target, a **detail level** — `--brief` (the default), `--full`, `--review` — and an
-orthogonal **effort** — `--effort high` (the default, adding an adversarial pass over the flows) or
-`--effort low`, which opts out —
+command. It takes a target and an **effort** — `--effort high` (the default, sending an adversarial
+pass at the run's own analysis before any of it is written) or `--effort low`, which opts out —
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
-frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. The "source" is
-prose that another Claude instance executes, so the unit of quality is instruction clarity, not
-compilation.
+frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. **There is no
+level flag**: `--brief` and `--light` are accepted and change nothing, `--full` and `--review` stop
+the run as not implemented in this version. The "source" is prose that another Claude instance
+executes, so the unit of quality is instruction clarity, not compilation.
 
 There is no build and no linter, and the **prose** has no test suite: changes to it are verified by
 running the skill against a real PR and reading the page it produces.
@@ -59,7 +65,7 @@ edits without restarting:
 cd /path/to/app && claude --plugin-dir /path/to/accountable-review
 ```
 
-Then: `/accountable-review:review-map <PR number | PR URL | branch | ""> `.
+Then: `/accountable-review:review-map <PR number | PR URL | branch | "">`.
 
 Before pushing, `claude plugin validate . --strict` must pass — CI runs the same check, and so does
 the community-marketplace review pipeline.
@@ -70,45 +76,56 @@ than once, or the same wording against several PRs of different shapes (a 4-file
 a 100-file feature spanning both sides of the API) — small PRs and large ones exercise opposite
 failure modes.
 
-Two checks are worth making on every run, because they are where this version is most likely to be
-wrong: open two entries from *affected but unchanged* and confirm the cited file really consumes the
-changed thing, and confirm no sentence anywhere grades the PR.
+**Three things are worth checking on every run, and the first is the one this version is most likely
+to be wrong about.**
 
-Run both levels. They fail differently: `--full` strains the context and duplicates across seven
-sections, `--brief` compresses four kinds of material into one section and its characteristic defect
-is a tail that has quietly become a list of four things with the impact paths as one item. A wording
-change judged at one level says little about the other.
+**Is every checkpoint a judgment?** The failure mode is a heading: *ProjectSearcher implementation*,
+*Tests*, *Controller changes*. Each names a place rather than a decision, and each reads as
+organised. The test is whether a reviewer could answer it by looking at the code and could get the
+answer wrong. A page of five headings is the old per-layer format with the section shells removed,
+and it will arrive looking tidier than the thing it replaced.
 
-**`--brief` now has a second characteristic defect, and it is the one to look for first**, because it
-is the price of the word budget: a page that came in under the numbers by losing something rather than
-by tightening it. It arrives in three shapes — a field compressed to a bare citation or a two-word
-label (which `brief-budget.rb`'s floor fails, so check the WARNs and the omissions rather than the
-FAILs), a finding quietly not carried at all, and a flow whose figure or `--diff` excerpt went missing
-because they looked like length. Read a brief page against a `--full` page of the same fixture: the
-findings should match and only the prose should differ. If a page is short and *also* thinner, the
-budget did the wrong thing and the numbers are what to argue with, never the findings.
+**Did the merge happen?** Step 7c is what makes the agenda short honestly. A constructor change, the
+nil default it introduces and the two consumers that do not handle nil are one judgment; a run that
+writes three checkpoints has said the same thing three times and will have spent its budget doing it.
+Read the agenda asking which two of these are the same question.
 
-`skills/review-map/evals/` is where that judging happens, at three scopes.
-`fixtures/make-fixtures.sh` builds four repositories whose interesting findings sit deliberately
-*outside* the diff, so there is a written right answer to check against. A **page** case is a whole
-run, graded on what only a whole page carries. A **section** case produces one fragment from the
-hand-authored upstream in `frozen/` and grades that — which is what makes "run it three times"
-affordable, and three runs is the smallest sample that separates a wording change from noise. A
-**component** check runs on a script's output or on one `<svg>`.
+**Open two entries from *Impact outside the diff* and confirm the cited file really consumes the
+changed thing.** That is unchanged from every previous version, and it is still where a page is most
+expensively wrong.
 
-`bin/evals section behaviour-flows` is the loop — `./run.sh behaviour-flows -n 3 -j 3 --judge` then
-`./report.sh`, which is what that dispatcher supplies and all it supplies; results carry the skill's
-git sha, so a pass rate is attributable to a version of the prose. `--judge` adds the other half: one
-model pass per fragment over the written expectations, anchored by running inside the fixture with
-the frozen upstream, its counts under their own keys and never summed with the mechanical ones.
+And the standing one: confirm no sentence anywhere grades the PR. **The checkpoints are ordered, and
+an order is one step away from a scale** — a number beside a question, a *high* that crept into a
+title, a first checkpoint described as the important one. That is the easiest way to undo this
+iteration, and it will arrive as helpfulness.
 
-Every second of that loop is the model — the fixtures build in under a second and `check.rb` in under
-two tenths — so `run.sh` takes `-j N` to run the repetitions at once and `--fast` (`--model sonnet
---effort low`) to read each one more cheaply. The first is free; the second is not, and the price is
-comparability, which is why the model and effort land on every result line and `report.sh` makes them
-part of the group key. Shape a wording change on the fast loop, then re-measure on the shipping model
-before quoting a number. `--fast` leaves the judge alone deliberately: the producer is what is under
-test, the judge is the measurement, and a cheap measurement is not a faster loop.
+**The page has a word budget and nothing checks it.** `report-format.md` § *The agenda budget* is
+prose: 700–1,500 visible words on a small or medium PR, 80–160 for *What changed*, 50–140 a
+checkpoint. `brief-budget.rb` used to enforce its predecessor and is deleted with the level it
+belonged to, so the numbers are read by a person or by nobody. That is the honest state — the numbers
+are a first calibration derived from component caps rather than measured on published pages — but it
+means a page drifting long drifts silently. The one number that must never be graded is the
+**checkpoint count**: a page that came in under a ceiling by losing a judgment has done the one thing
+the budget forbids.
+
+`skills/review-map/evals/` is where judging happens, and it currently has **one scope rather than
+three**. `fixtures/make-fixtures.sh` builds four repositories whose interesting findings sit
+deliberately *outside* the diff, so there is a written right answer to check against. A **page** case
+is a whole run, graded on what only a whole page carries. A **component** check runs on a script's
+output. The **section** cases are deferred — they graded one section of the page this design
+replaced, and the agenda's unit is a checkpoint, which is a different driver rather than a rename
+(`evals/deferred/README.md`).
+
+**That deferral is the largest hole in the harness and should not be permanent.** A section case was
+what made "run it three times" affordable, and three runs is the smallest sample that separates a
+wording change from noise; without one, every question about whether prose improved is a whole-page
+run or a guess. `evals/README.md` § *Adding a case* says what a checkpoint case has to grade and why
+it is different in kind: the mechanical half is thin, and almost everything worth knowing about a
+checkpoint — is it a judgment, was the merge right, did the chain earn its place — is judged.
+
+`bin/evals offline` is what CI runs and what you run before pushing. `bin/evals page <id>` prints the
+recipe for one whole-page case. Results carry the skill's git sha, so a pass rate is attributable to
+a version of the prose.
 
 When the question is where the minutes went rather than whether the page was right,
 `evals/profile.sh` reads the transcript of a run — an eval repetition or a real PR — and splits its
@@ -130,7 +147,10 @@ side and never one instead of the other.
 It also reads the **subagent** transcripts under `<session>/subagents/`, which nothing used to. The
 falsification pass costs 0.9% of blocked wall clock and **17-23% of every cache-read token** — the
 first number is why spawning them does not slow the run, the second is what they add to the bill,
-and a profile that reported only the first is why the pass read as free.
+and a profile that reported only the first is why the pass read as free. **Both numbers were measured
+against the old seam**, where the falsifier read a published flow section; it now reads an analysis
+note, which is smaller and carries no markup, so the token figure is an upper bound that has not been
+re-measured.
 
 It infers nothing the transcript does not carry:
 publish stages are mechanical, the ten steps are **not** —
@@ -138,11 +158,7 @@ publish stages are mechanical, the ten steps are **not** —
 trace at all, so they get no row. Read `evals/README.md` § *Where the time goes* and § *Profiling one
 run* before quoting one of its numbers.
 
-Section files are named by slug, never by number: `report-format.md`'s numbering is already the
-source of order, and a filename repeating it only makes the reader look the number up. Read
-`evals/README.md` before adding a case. Two things there are worth preserving above the rest — the
-split between mechanical and judged expectations, and the plainly stated limit that a section eval
-cannot see whether the page repeats itself.
+Read `evals/README.md` before adding a case.
 
 ## How the documents divide the work
 
@@ -150,23 +166,23 @@ Each reference owns one axis; keep them from bleeding into each other.
 
 | File | Owns |
 |---|---|
-| `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the detail levels and which sections each produces, **the brief level's word budget**, what triggers each section, the review unit, the evidence tiers, source excerpts, **impact paths**, the canonical-home rule, depth rules and the deep-link ladder |
+| `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing, step 7 being the synthesis that turns analysis into an agenda — plus the product principle and the hard rules |
+| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint**, **chains** and the rule that decides which figure a chain is, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
-| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the SVG vocabulary, the four-layout diagram catalogue (two of them assembled inside the flows), and the page's one small script. Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
-| `agents/claim-falsifier.md` | The adversarial mandate — what to attack, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
-| `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`, filtered to one detail level by `--level`. Holds no bytes of its own — `tests/run.sh` proves that by partition, and that the filter is subtractive |
+| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the assembled checkpoint, the chain and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
+| `agents/claim-falsifier.md` | The adversarial mandate — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too. At the **plugin root**, not under `skills/`: it is addressed by name, never read |
+| `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
-| `scripts/ledger-rows.sh` | Generates the ledger rows and their deep links, so the gate checks classification rather than typing. `--paths-only` emits the unclassified carrier the brief level's page foot holds |
-| `scripts/coverage-gate.sh` | The one mechanical check — set equality between the ledger and the diff |
+| `scripts/ledger-rows.sh` | Generates the evidence foot's inventory cells and their deep links, so the gate checks the page rather than someone's typing. `--paths-only` is the only mode the page uses |
+| `scripts/coverage-gate.sh` | The one mechanical check — set equality between the inventory and the diff |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git rather than of a fixture |
-| `bin/evals` | One command per eval scenario — `offline`, `section`, `page`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
-| `evals/` | Fixtures with planted findings, the frozen upstream, the drivers, the cases, `checks/`, and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
-| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. `reach.rb` grades § 4's composition and `impact-paths.rb` the figure inside it, and neither repeats the other. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the second check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests; `brief-budget.rb` is the default level's word budget and the second check to read `--level`; it splits its verdicts on purpose — shape FAILs, length WARNs, the field floor FAILs — and exempts every figure, command and collapsed block from its count, so a page is never over budget by a diagram or a quotation. `checks/frozen/` holds every case's exact output for fourteen of the fifteen checks — `diagram-shot`'s verdict is a function of the machine rather than of the input — and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
+| `bin/evals` | One command per eval scenario — `offline`, `page`, `catalogue`, and the rest in its own header; `section` is deferred with the cases it dispatched. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
+| `evals/` | Fixtures with planted findings, the frozen upstream, `checks/`, `deferred/` (the section cases and drivers, unrun), and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
+| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. Nine of them, down from fifteen: six graded markup the agenda does not have, and two of those six would have SKIPped forever, which is worse than none because a SKIP reads as verified. `impact-paths.rb` grades `figure.impact` and nothing else, so a checkpoint's `figure.chain` — same markup, different job — is invisible to it by scope rather than by an exemption. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output for all nine, and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
@@ -174,10 +190,10 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/templates/workflow.yml` | The workflow itself. Four substitutions, and nothing else is configurable by design |
 | `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically, `install-workflow.sh` writes idempotently and refuses to clobber, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
-| `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page |
+| `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page — and refuses `mode: full` rather than remapping it |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
 | `README.md` | The public face — why comprehension debt is the problem, what a Review Map is, install, usage, CI setup, and the technical overview. Written for someone deciding whether to use this, so depth past that decision belongs in `docs/` |
-| `docs/review-map.md` | The page anatomy for a reader who already wants it: the sections, the detail levels, staging, the review unit, excerpts, the framework anchors, the evidence tiers, and what the skill assumes about a repository. It **restates** `report-format.md` for the public and owns nothing — where the two disagree, the reference wins and this file is the one that is wrong |
+| `docs/review-map.md` | The page anatomy for a reader who already wants it: the five sections, the checkpoint, staging, excerpts, the framework anchors, the evidence tiers, and what the skill assumes about a repository. It **restates** `report-format.md` for the public and owns nothing — where the two disagree, the reference wins and this file is the one that is wrong |
 | `docs/ci.md` | The public half of `setup-ci/references/delivery.md` — artifacts as a default rather than a contract, the DeliveryResult, and how a team adds a provider. Same rule: it restates, the reference owns |
 | `CONTRIBUTING.md` | How to work on the plugin from a checkout — the layout, the eval loop, the self-tests, and the release process. Why a rule exists stays in this file; `CONTRIBUTING.md` is only how to run things |
 | `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in a catalogue — `rails-docs.md` across every Rails series the floor admits, `elixir-docs.md` at each package's newest release — and reports dead pages, dead anchors, and the rows that differ by version. Maintenance for the first, the **release gate** for the second, never part of a run — see § *The catalogue is the one thing a run cannot verify* |
@@ -194,87 +210,111 @@ the only place skipping is impossible.
 
 Editing one of these means checking the others still agree.
 
-- **Two page shapes, and one of them is the default.** `--brief` merges §§ 4–7 into one section;
-  `--full` writes all seven; `--review` stops. The level is settled in `SKILL.md` step 1 beside the
-  target and the link rung, and `report-format.md` § *Detail levels* and § *Section 4 at brief* own
-  what it produces — **and own it alone.** Every other file points at them.
+- **One page shape, and no flag chooses it.** `--full` and `--review` stop the run as not implemented
+  in this version; `--brief` and `--light` are accepted and change nothing. The refusal is settled in
+  `SKILL.md` step 1 beside the target and the link rung, its wording is in § *Two levels are not
+  implemented in this version*, and `report-format.md` § *One page shape* states the consequence for
+  the format.
 
-  Two rules make the level cheap instead of a second product. **It changes how many sections there
-  are and how many words they may spend, never what a section teaches**: a claim said in fewer words
-  is not a claim taught less, and a run reading a shorter page as licence to explain less has misread
-  the option. And **the merged section keeps the anchors**: `id="reach"` on the `<section>`,
-  `id="approving"` on its last `<h3>`, the `Affected, not changed` `<dt>` label verbatim, and `<ul>`
-  rather than `<ol class="begin">` in the approving part. That is why exactly two checks know the
-  level — `evals/checks/before-approving.rb`, for the checkpoint, and `brief-budget.rb`, for the
-  words — while `reach.rb`, `impact-paths.rb`, `searches.rb` and `page-invariants.rb` read the merged
-  shape unchanged.
+  **Refusing `--full` rather than mapping it is the load-bearing half.** It named a seven-section
+  page. Handing back a five-section agenda under that name is a flag that quietly changed meaning,
+  and the reader has nothing on the page to tell them which they got. The same argument runs through
+  the CI config: `ci/generate-review-map.sh` and `read-config.sh` reject `mode: full` and accept
+  `brief` and `light` as aliases that reach nothing.
 
-  **That first rule is finer than it used to be, and the older wording is worth knowing because it
-  cost something.** It said §§ 1–3 were *byte-for-byte the same spec at both levels*, which was true
-  and left the default page uncosted: merging four sections bought 35% fewer words, all of it out of
-  the tail, while § 2 — the bulk, on the page almost every reader gets — ran at full length. So
-  `--brief` now carries a **word budget**, owned by `report-format.md` § *The brief budget* alone:
-  950 visible words plus 440 per behaviour flow, per-component caps, and three concepts that belong
-  to `--full` (the primer callout, a flow's own `dl.ba`, the endpoint's inventory of untouched
-  errors). It caps prose and nothing else. No finding, no citation, no evidence tier, no field a flow
-  has material for and **no figure** comes out for the level's sake — every drawing is the same
-  drawing at the same size from the same catalogue, and every `<svg>`, `figcaption`, `.legend`,
-  `.pipe` label and `.impact` box is exempt from the count by name, so a page can never be over
-  budget by a diagram.
+  **What the narrowing replaced is worth knowing, because the pressure to reintroduce it will come
+  back as generosity.** There were two shapes, `--brief` merging four sections into one and carrying a
+  word budget to keep it short, and `--full` writing all seven. Two products, only one of which anyone
+  developed against, and a reader choosing between them was choosing a length rather than a document.
+  What a reviewer wants is not a length setting: it is an answer to *what do I have to judge here, and
+  where do I look?* A future full mode is the same agenda with depth beneath it — `report-format.md`
+  § *A future full mode* records the four components this page put down and the rules they had —
+  never a second document reached by a flag.
 
-  **The dangerous half of a budget is the compression that deletes rather than tightens**, which is
-  why `brief-budget.rb` splits its verdicts: shape FAILs, length WARNs, and the floor FAILs. A hard
-  failure on length would teach a run to drop a claim to get under a number — worse than the long
-  page — and the floor is the counterweight: a `<dd>` under four words is a deleted field with the
-  `<dt>` left behind, which in the 132px gutter reads exactly like a filled one. Omitting the field
-  is honest; stubbing it is not. What no script settles is whether the half that came out was the
-  half nobody needed: a page can sit inside every number and have spent its words on the wrong
-  sentences, or have got under the ceiling by losing a finding. `evals/cases/brief-flows.json` and
-  page case 7 in `evals.json` are where that is asked, and case 7 asks it as a comparison against
-  case 2's page over the same fixture.
+  **The agenda budget survived the level that carried it, and lost its check.** `report-format.md`
+  § *The agenda budget* is prose: 700–1,500 visible words on a small or medium PR, per-part caps, a
+  floor stated as a rule rather than a number. `brief-budget.rb` enforced its predecessor and is
+  deleted, so nothing counts words now. Two of its lessons are kept in that section deliberately.
+  Length is guidance rather than a failure, because a hard failure on length teaches a run to drop a
+  claim to get under a number, which is worse than the long page. And **the checkpoint count is never
+  budgeted**: a page that came in under the ceiling by losing a judgment has done the one thing the
+  budget forbids.
 
-  The ceiling's numbers are a **first calibration**, derived from the component budgets rather than
-  measured on published pages, and `report-format.md` says so of itself. The way to move them is
-  three runs and a number that came out of a page, not an argument.
+  **The rail is emitted, not edited down.** `page-skeleton.sh --markup` hands a run the whole markup
+  half, seven `data-rail` entries: four numbered sections and three checkpoint sub-entries. That used
+  to be filtered per level by `SKELETON:ONLY:level=` markers and a validator that failed closed, all
+  of which is deleted with the level. What replaced the filter is nothing, which is the right amount
+  of machinery for a page with one shape: `tests/run.sh` counts the entries and `self-test.sh`
+  duplicates one to prove the count fires.
+- **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
+  attention*, each **one judgment** the reviewer has to make: an `<h3>` question, two to four
+  sentences, an optional `figure.chain`, a `ul.lookat` of one to four deep-linked citations each with
+  a clause, and an optional `p.open` labelled *Open question*. `report-format.md` § *The review
+  checkpoint* owns all of it and owns it **alone**; `page-template.html` assembles one with every
+  optional part, one without, and a pending stub.
 
-  The `Changed` label used to be on that list, and it was wrong twice over. `searches.rb` treats a
-  `Changed` `<dt>` only as a scope *reset*, and in the template's order it preceded `Affected`, so it
-  never fired — the docs asserted a dependency the code did not have. And the label is gone now
-  anyway: § 4 lists no paths at either level.
+  **It replaced a seven-field review unit, and the reason is the thing to preserve.** Every meaningful
+  change got the same grid — implementation, tests, affected code, things to understand, validation,
+  questions — whether or not each row had anything to say, and a reviewer read seven labelled rows per
+  flow to find the one that mattered. The fields were right as *analysis* and wrong as a reading
+  obligation. They are facets now: a test appears inside a checkpoint when it changes the judgment,
+  and a list of the specs that touch the file does not appear at all.
 
-  That second rule is markup, so it is breakable by accident and invisible when broken: with the
-  anchor gone, `before-approving.rb` prints a **SKIP**, which reads as verified.
-  `golden/approving-brief-clean.html` plus the `self-test.rb` rows running `reach.rb` and
-  `page-invariants.rb` over it exist for the day someone moves one. That fixture carries the
-  page-foot coverage disclosure for a related reason: with the inventory out of § 4, a brief golden
-  without one gives `page-invariants.rb` § 4 zero `data-path` cells to look at, and it would pass on
-  nothing.
+  **The failure mode is a checkpoint that is a category**, and it will look organised. *ProjectSearcher
+  implementation*, *Tests*, *Controller changes* each name a place rather than a decision. The test is
+  whether a reviewer could answer it by looking at the code and could get the answer wrong. Five
+  headings is the per-layer format this repository has now removed twice, arriving with the section
+  shells taken off.
 
-  **The rail is emitted per level, not edited down.** `page-skeleton.sh --markup --level` hands a
-  run four entries at `--brief` and seven at `--full`, both assembled in the template. Before that
-  the seven-entry rail shipped at both levels with a comment describing the short one, so every
-  `--brief` page's rail was a deletion-and-renumber done from prose with nothing checking it — on
-  the default level. `tests/run.sh` counts the entries per level and `self-test.sh` breaks the
-  brief entry to prove the count fires.
+  **The second failure mode is a checkpoint that should have been merged.** `SKILL.md` step 7c is what
+  makes the agenda short honestly: a constructor change, the nil default it introduces and the two
+  consumers that do not handle nil are one judgment. A run that writes three has said the same thing
+  three times, and will have spent its budget doing it.
 
-  **The word budget is the other thing that level flag now carries into a run**, and the two are
-  worth reading together: `--markup --level` decides which markup a run is handed, and
-  § *The brief budget* decides how many words it may spend filling it in. Neither is a licence for
-  the other — a shorter rail is not a thinner page.
+  **Ordering is not grading, and the distance between them is one word.** The checkpoints are ranked by
+  what a reviewer would most regret misunderstanding. A number beside a question, a *high* in a title,
+  a first checkpoint described as the important one — each of those is a severity scale, and each will
+  arrive as helpfulness. The one line that names an unresolved thing is `p.open`, labelled *Open
+  question* and nothing else; `page-invariants.rb` warns on a bare `Watch` or `Blocking` label for
+  exactly this reason, and that rule outlived the component it was written for.
 
-  **Two of the budget's three dropped concepts ride on that same filter rather than on a comment**,
-  which is the rail's lesson applied twice more: a flow's own `dl.ba` and the `aside.primer` sit in
-  `SKELETON:ONLY:level=full` regions, so a brief run is handed neither. The first version of the
-  budget marked them with a comment saying *--full ONLY*, which is exactly the shape the rail had
-  just been rescued from. `tests/run.sh` counts both per level, and it also counts what must
-  **not** move — each assembled flow's `.mech`, its `.pipe` and its drawing, at both levels —
-  because a filter that took a flow's figure along with the primer would satisfy every other rule
-  and make the page shorter by losing a diagram. `self-test.sh` breaks the gate in both directions
-  for that reason. The endpoint's error inventory is the third concept and cannot be gated: it is a
-  sentence inside a field rather than a block, so it stays a rule in the reference.
+  Nothing mechanical grades a checkpoint. `start-here.rb` requires the reading path to point at one,
+  `rails-anchors.rb` counts them as the denominator for its doc-link budget, and `tests/run.sh` asserts
+  the template assembles three. Whether a question is a judgment is a judged expectation, and
+  `evals.json` is where it is asked.
+- **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is
+  mechanical.** `figure.impact` in section 04 and `figure.chain` inside a checkpoint are the same
+  `ol.ip-path` with the same node kinds and the same causal verbs. `report-format.md` § *Chains* owns
+  what they share; § *Impact paths* owns the panel's own caps and owns them alone.
 
-  `--brief` is the default, so it is what almost every real page will be — and now the only level
-  with a budget on it. Judge it first.
+  **The rule: a chain that crosses from changed code into unchanged code whose meaning the change
+  altered is an impact path.** It lives in section 04, drawn once, and a checkpoint that turns on it
+  says so in a clause. A chain inside a checkpoint shows mechanism *within* the change and therefore
+  carries **no `.ip-aff`** — which makes the rule checkable rather than a matter of taste, and
+  `tests/run.sh` checks it on the template with an awk range over the assembled chain. `.ip-step` is
+  the kind that exists only in a checkpoint's chain: a hop that claims nothing about the diff.
+
+  Without that rule the same consequence gets drawn twice at conversational distance, which reads as
+  thoroughness — the canonical-home regression arriving as a figure rather than as a paragraph.
+- **There is no `<svg>` on the page, at all.** Four SVG layouts used to be worked out to scale in the
+  template — a boundary chain, a guard fork, an ER fragment, a lifecycle — so a run filled in text
+  rather than deriving geometry. They are deleted, with the SVG class vocabulary, `.scroller`,
+  `figure.inflow` and `.pipe`.
+
+  **The reason is a measurement, not a preference.** An `<svg>` is the most expensive thing on a page
+  to type, so the characteristic failure was never a wrong drawing but **no drawing**: two real pages
+  published nine flows and zero figures with the layouts sitting readable in the template the whole
+  time, and `behaviour-flows.rb` warned on both while nothing read the warning. A component has the
+  opposite failure profile. It reflows on a phone, has no canvas to overflow, and cannot be drawn
+  wrong — the only thing a run can get wrong is whether the edges are true, which is the thing worth
+  its attention.
+
+  What went with the catalogue: `diagram.rb`, whose whole subject was SVG conformance, and
+  `diagram-shot.rb`, which rendered figures to PNG for a person to look at. Both would now SKIP
+  forever. **That is a real loss** — crowding, overlap and an arrowhead landing beside its box needed
+  eyes, and both defects that argument was built on were found in diagrams `diagram.rb` had just
+  called clean. The trade is that a component cannot produce those defects, so the eyes are no longer
+  owed. Reintroducing an SVG reintroduces the need, and `SKILL.md`'s hard rules say not to.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
   Rails (`Gemfile`, `config/application.rb`) or Elixir (`mix.exs`) and **names** one lens file and
   one catalogue. Both roots, or neither, are handled explicitly — ask in the first case, degrade
@@ -289,10 +329,9 @@ Editing one of these means checking the others still agree.
   scope, so the whole file bought one fact. It is still read at step 7 rather than hoisted, because
   the fact's home is `elixir-docs.md` § *Version* and six files already have to agree about it.
 
-  The stack multiplies with the detail level and the effort exactly as those two multiply with each
-  other, and like effort it **produces no section, no field, no tier, no component and no marker.**
-  What it changes is the content of sentences, the nodes in a `.pipe` chain, and the command inside a
-  `pre.probe`. `report-format.md` § *Detail levels* states this beside the effort paragraph, and
+  Like effort, the stack **produces no section, no field, no tier, no component and no marker.**
+  What it changes is the content of sentences, the nodes in a chain, and the command inside a
+  `pre.probe`. `report-format.md` § *One page shape* states this beside the effort paragraph, and
   `page-template.html`'s header comment refuses a stack badge in the same breath as the severity chip
   and the verification badge — the three come back the same way and are refused in the same place.
 
@@ -309,8 +348,8 @@ Editing one of these means checking the others still agree.
   linking them and a crashed process rather than a wrong render when they disagree. Renaming an event
   in a `.heex` template without renaming its clause is this stack's canonical piece of
   affected-but-unchanged code, which is why step 5's table has a row for it, why the search recipes
-  say to search **both directions**, and why `report-format.md` § 2 gives it the second chain the
-  serializer-to-type seam gets in Rails.
+  say to search **both directions**, and why and it earns a checkpoint's chain the way the
+  serializer-to-type seam does in Rails.
 - **The page never grades the change.** No severity scale, no risk score, no confidence percentage,
   no approval language. Stated as the product principle at the top of `SKILL.md`, repeated in its hard
   rules, and enforced structurally: the template has no chip that expresses a verdict, and
@@ -320,7 +359,7 @@ Editing one of these means checking the others still agree.
   **A page is allowed to *refuse* a grade out loud, and the check has to know the difference.**
   `page-invariants.rb` § 2 splits its patterns in two for this. Approval language is never right in
   any form; a graded *noun* — risk score, overall risk, severity score — fails only where nothing
-  negates it, because § 7's ledger legitimately writes *"attention is a reading estimate, not a risk
+  negates it, because a page legitimately writes *"attention is a reading estimate, not a risk
   score"*. That sentence is the invariant defending itself in the one place a reader is most likely
   to read a column as severity, and the check used to fail it for containing the words. A rule that
   punishes a page for refusing a verdict teaches the run to stop refusing it out loud.
@@ -342,12 +381,10 @@ Editing one of these means checking the others still agree.
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
 - **Framework anchors are provenance, not evidence, and there is still no sixth tier.** A doc link
-  explains why a Rails consequence follows; a console probe asks the reviewer's own application; a
-  primer callout is what a link escalates into when the reviewer cannot make the decision without the
-  rule itself. The
+  explains why a Rails consequence follows; a console probe asks the reviewer's own application. The
   claim underneath keeps resting on a repo `file:line` at the tier it already carried, which is what
-  keeps the five-tier invariant — four files agreeing — untouched. It is also the answer already
-  written down for `--review`: where a claim came from is provenance, and provenance is not evidence.
+  keeps the five-tier invariant untouched. It is also the answer already written down for `--review`:
+  where a claim came from is provenance, and provenance is not evidence.
 
   Two rules carry the link and the probe, and both are the kind that look like diligence when broken.
   **A doc link may only be a row of `references/rails-docs.md`, pinned to the version this app runs**,
@@ -356,211 +393,138 @@ Editing one of these means checking the others still agree.
   documentation for a Rails this app may not be running. Both fail while looking correct. See
   § *Pinning, and the two things it does not fix* for why the pin is about checkability rather than
   precision, and for the two marks that stop the page asserting a behaviour that moved. **A probe is
-  proposed, never run**, so the page shows a command and never output: a fabricated `=> …` is the most
-  concrete-looking thing on the page and the one part of it that is fiction. `report-format.md` § *Framework anchors* owns all of it — the primer included, in § *The primer callout* — plus the routing
-  (verify → *Validate*, explain → *Understand*) and the budget, **and owns them alone**; `SKILL.md`
-  steps 7 and 9 point at it, the § *Runtime probes* of whichever lens file the stack selected holds the
-  probes and the rule for running them safely — `runner`-versus-`console --sandbox` in Rails, and in
-  Elixir `mix run -e` plus the fact that there is **no sandbox console at all**, so a write wraps itself
-  in `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` — and `evals/checks/rails-anchors.rb`
-  derives its allowlist from **both** catalogue files rather than hard-coding hosts. Its name is
-  Rails-shaped and its scope is not, deliberately: renaming it would churn six files for no
-  behavioural gain.
+  proposed, never run**, so the page shows a command and never output: a fabricated `=> …` is the
+  most concrete-looking thing on the page and the one part of it that is fiction.
 
-  **The primer is the third anchor, and it is the one that can undo the other two.** `aside.primer`
-  sits between a flow's `.mech` and its `dl.rows`: a header naming the API, a paragraph or two, the
-  citation that earned it, the pinned link, and a short `pre.demo`. It is the heaviest component on
-  the page carrying no evidence of its own, which is why it has the tightest budget of anything here —
-  **one per behaviour flow, and most flows earn none.**
+  `report-format.md` § *Framework anchors* owns all of it — the routing (verify → the checkpoint the
+  probe settles, explain → a clause in its explanation) and the budget, **and owns them alone**;
+  `SKILL.md` steps 7g and 9 point at it, the § *Runtime probes* of whichever lens file the stack
+  selected holds the probes and the rule for running them safely — `runner`-versus-`console --sandbox`
+  in Rails, and in Elixir `mix run -e` plus the fact that there is **no sandbox console at all**, so a
+  write wraps itself in `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` — and
+  `evals/checks/rails-anchors.rb` derives its allowlist from **both** catalogue files rather than
+  hard-coding hosts. Its name is Rails-shaped and its scope is not, deliberately: renaming it would
+  churn several files for no behavioural gain.
 
-  **It is not Rails-only, and the artwork is an attribution rather than decoration.** The catalogue
-  carries gems and client libraries, so `.primer--lib` is the same callout with no mark, no
-  trademark line and a neutral rule. Two failures follow from getting that wrong, and neither looks
-  wrong on the page: the Rails logotype on a Pundit primer says the Rails Foundation wrote Pundit,
-  and the logotype with no `.pr-tm` shows someone's mark without saying whose. Both are checked.
-  The logotype is inlined from the official SVG because an external `<img>` is CSP-blocked and the
-  run has no fetch step — it is drawn in `currentColor` off `--rails` rather than the brand hex, so
-  it stays legible on the dark ground.
+  **There was a third anchor and it is gone: the primer callout**, an `aside.primer` inside a flow,
+  one per flow at most, `--full` only, gated on the doc link it escalated from, carrying a `file:line`
+  and a `pre.demo` that could show a `# =>` line only because its receiver was a class the app under
+  review did not have. It went with the level that gated it, and `report-format.md` § *A future full
+  mode* records its rules. Three things it taught are worth keeping without it.
 
-  **`.primer--lib` is also the variant Elixir gets, and today Elixir gets no primer at all.** A primer
-  cannot exist without the doc link it escalates from, and `elixir-docs.md` § *Version* withholds every
-  link in that file — so while the catalogue is closed a Phoenix page carries no `aside.primer`, and
-  the flow explains the mechanism in its own prose against a `file:line`. That is not a gap in the
-  component, it is two correct rules meeting, and it needs **no exemption in the check**: a linkless
-  primer should fail, so the fix is that the skill does not emit one. Four files say so —
-  `report-format.md` § *The primer callout*, `elixir-docs.md` § *Version*, `phoenix-liveview.md`'s
-  opening pointer, and the template's comment above the assembled block. When the catalogue opens,
-  Ecto and Phoenix take the unbranded variant for the reason directly above: the mark names whoever
-  wrote the API.
+  **`pre.demo` and `pre.probe` were different components because the receiver differed**, and merging
+  them would have opened a hole through the one rule protecting the most concrete-looking fiction the
+  page can carry. There is no `pre.demo` now, which means the page's rule is simply *no output, ever*
+  — simpler, and the simplicity is the point.
 
-  A consequence worth knowing before editing a check: `class="primer primer--lib"` does not match
-  `class="primer"`, so **every primer matcher is a prefix match**. Written the obvious way, each rule
-  about primers silently skipped the variant — the failure mode this repository keeps writing down,
-  a rule that passes because it never looked.
+  **A doc-link budget needs a denominator**, and `rails-anchors.rb` used `<dt>` count when the fields
+  were the unit. It counts checkpoints now: at most one link each, and a page carrying more links than
+  judgments has stopped selecting.
 
-  Two rules carry it, and each is invisible when broken. **`pre.demo` is not `pre.probe`, and the
-  difference is the receiver.** A demo may show a `# =>` line *because* it runs on a class the app
-  under review does not have: it quotes the manual, and the manual states results. Name an application
-  class there and it is the fabricated-output defect with the rule switched off — which is why
-  `rails-anchors.rb` asks the *inverse* of the probe-identifier question (a constant that **does**
-  exist in the repo is the failure), and why a `pre.demo` anywhere outside a primer is refused
-  outright. Merging the two classes would open a hole through the one rule protecting the most
-  concrete-looking fiction the page could carry. **And a primer cites a `file:line` like every other
-  doc link** — two paragraphs of framework prose read as self-justifying, so the citation rule
-  flattens the whole aside into one block, which stops it both omitting its own citation and borrowing
-  the one above it.
+  **And the failure mode the primer concentrated is still the failure mode.** It is not a wrong link.
+  It is a page that links everything, becomes a Rails tutorial with a diff attached, and reads as more
+  thorough while getting less navigable — the canonical-home regression arriving as citation instead
+  of as repetition. The rule against it is the excerpt budget's: an anchor is earned by a decision the
+  reviewer has to make. A script can check that a link is real and legally placed, never that the
+  judgment needed it.
+- **The synthesis phase is where the agenda comes from, and it is a step of its own for a reason.**
+  `SKILL.md` step 7 takes the analysis notes and produces the page's argument: name the semantic
+  delta, identify the human judgments, merge the observations that share one, rank by consequence if
+  misunderstood, select three to five, choose each one's representation, select its evidence, build
+  the reading path, pick the impact chains, dedupe across the five places a fact can land.
 
-  Two things worth knowing before editing. The link and the probe are **level-independent** — they
-  live in fields `--brief` leaves alone — while the **primer is `--full` only**, gated out of the
-  markup half by `page-skeleton.sh --markup --level brief`, and the two facts together are why
-  `rails-anchors.rb` must still not read `LEVEL`: the level is enforced by a run never being handed
-  the component, and a page with no primer has nothing for that check's primer rules to grade.
-  Teaching it the level would be adding a flag to say what an empty match already says, and it would
-  be the third check to know the level where two is the whole set (`before-approving.rb` for the
-  checkpoint, `brief-budget.rb` for the words). And the link and the probe are built from **existing**
-  tokens on purpose: `a.doc`
-  and `pre.probe` introduce no colour. The primer breaks that, knowingly, for exactly one token:
-  `--rails`, declared on bare `:root` and in **both** dark blocks, with `page-invariants.rb` § 6
-  counting it by name — because nothing on the page depends on that colour to be readable, so a half
-  declaration is invisible until someone opens a primer with the OS in dark mode.
+  **A run that goes from notes straight to prose writes one section per flow**, which is the page this
+  one replaced wearing new section names. That is the failure the step exists to prevent, and it is
+  why "make the report shorter" is not an instruction that could have produced this design: the
+  shortening has to happen in what gets *decided*, not in how the decisions get written up.
 
-  Two other checks had to be taught about it, and both for the same reason: the primer looks like
-  something they already know about. `behaviour-flows.rb` takes its unit census over a **copy with the
-  primer removed**, because the callout lands inside a unit region and carries a `class="path"` — kept,
-  it would absolve a unit whose grid cites nothing, and `golden/flows-primer-uncited-unit.html` is that
-  regression. `diagram.rb` excludes `svg.pr-mark`, because every rule it has is about a figure and the
-  first one a 34px brand badge fails is *not inside `.scroller`*.
-
-  **That exclusion was applied in the discovery pass and not in the per-section budget count, and the
-  gap survived for as long as no flow could hold a figure.** One `<svg>` in a section is never
-  reported, so the miscount had nothing to add to; the moment § 2 got a drawing back, a correct flow
-  carrying a primer *and* its one earned figure counted as two and warned. The count now reuses the
-  set of drawings the file already graded rather than re-testing the substring — agreement by scope
-  beats agreement by comment — and `golden/diagram-flow-figure-primer.html` pins the fix while
-  `diagram-flow-two-figures.html` pins that the rule did not go quiet. `diagram-shot.rb` had the same
-  gap and was rendering the logotype into the very PNGs a person opens to look for crowding.
-
-  The mark itself is geometric rather
-  than the official logo: the run cannot fetch artwork and an external `<img>` is blocked by the
-  artifact's CSP, so the trademark line at the foot of the callout is what keeps the stand-in honest.
-
-  The failure mode to watch is not a wrong link. It is a page that links everything, becomes a Rails
-  tutorial with a diff attached, and reads as more thorough while getting less navigable — the
-  canonical-home regression arriving as citation instead of as repetition. The rule against it is the
-  excerpt budget's: an anchor is earned by a decision the reviewer has to make. **The primer is the
-  most persuasive way for that regression to return**, because a callout that teaches something true
-  looks like care rather than like padding; a script can check that one is placed and cited legally
-  and never that the flow needed it, which is what `evals/cases/rails-anchors.json` is for.
-- **The review unit** is the page's primitive: seven fields, fixed order, defined in
-  `report-format.md` and rendered as a `.mech` block followed by one `dl.rows` — **and rendered
-  nowhere else.** A behaviour flow's body *is* a unit; the path, the diagram and the decisions block
-  sit beside it inside the flow section, with decisions after the closing `</dl>` and the diagram
-  **before** the `.mech` — which is where unit regions open, so the figure stays outside every one of
-  them. The primer went into the other slot and had to be cut out of the census by hand. There is no
-  endpoint card: the contract is the flow's own material and lives in its `.pipe` and its field rows.
-  Two guards keep the unit from becoming ceremony — a unit needs a non-obvious *things to
-  understand*, and fields may be omitted but never faked.
-
-  Four files have to agree: `page-template.html` holds one behaviour flow **assembled whole** and
-  the `<dt>` labels, `report-format.md` § *The review unit* holds those labels in a column of their
-  own plus § 2's split between what the unit carries and what sits beside it,
-  `evals/checks/behaviour-flows.rb` checks the `.mech`-per-`dl.rows` pairing and counts field labels
-  outside a grid, and `evals/golden/flows-clean.html` is the reference markup.
-
-  Two subtleties the check has to keep. It takes **two extractions, not one**: unit regions anchored
-  on `.mech` for the per-unit guards and for naming, and the grids alone for the housing census — a
-  flattened flow keeps its `.mech`, so a census over unit regions counts loose fields as housed and
-  misreports the defect as something else. And `dl.rows` is **shared** with § 4, which renders
-  Changed / Affected-not-changed with the same grid, so the check narrows to `id="flow-"` *before*
-  counting; `evals/golden/flows-reach-rows.html` pins that. It replaced
-  `flows-endpoint-rows.html`, which pinned the same class of false positive when `.ep-row` was
-  shared with `article.endpoint` — the sharing moved, the trap did not go away.
-
-  The reason this is an invariant and not a convention: the template used to show the section
-  shell, the unit and the decisions block as three *detached* siblings, with the composition stated
-  only in prose. A run read the prose, copied the markup as shown, and flattened all three flows
-  into loose field blocks parented to the `<section>` — losing the card, handing field spacing
-  to `section > * + *`, un-scoping every `.unit ...` rule, and dropping one flow's *things to
-  understand* entirely when a decisions block took its slot. Nothing errored and no check fired.
-  **A composition that is described but never shown assembled does not survive a weaker reader** —
-  the same reasoning that puts diagram geometry in a catalogue instead of deriving it per run.
-
-  **This is now more fragile, not less.** The unit used to be a bordered card, so a flattened flow
-  visibly lost its box. A `.mech` plus a hairline grid is borderless by design: a flow that spills
-  its rows into the `<section>` looks very nearly correct, which is why the pairing is checked rather
-  than the presence of a wrapper.
+  The step opens no file the notes have not already cited. It is the one place in the procedure whose
+  work is entirely judgment, and the one place where the falsifiers' challenges arrive while it runs.
 - **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the search recipes in
-  `rails-nextjs.md` are how, and it surfaces twice, at different depths: the review-unit field inside
-  the flow that owns it **explains** it, and § 4 *What this change reaches* shows the whole set at once, pointing
-  at that flow in a clause rather than restating it. Code no single flow owns is explained in § 4
-  instead — that is what makes it a section rather than an index. The rule that makes the whole thing
-  honest: **record what was searched**, so an empty result reads as evidence rather than as omission.
+  `rails-nextjs.md` are how, and it surfaces at three depths on the page. The **checkpoint** that
+  turns on it explains it, with the line in its *Look at* list. **Section 04** shows the crossings
+  whole — one to three chains, with the entries the chains run through cited beneath the figure and
+  pointing back at the checkpoint in a clause. The **evidence foot** holds what is real, found and
+  cited but not something the reviewer has to decide about.
+
+  **That third bucket is where this invariant is most likely to fail quietly.** Moving an entry down
+  is the easiest way to make the page shorter and the hardest to notice, and the rule against it is
+  one sentence: nothing a reviewer acts on lives only in the foot. If a foot entry is a judgment they
+  have to make, it is a checkpoint that was mis-filed.
+
+  The rule that makes the whole thing honest is unchanged: **record what was searched**, so an empty
+  result reads as evidence rather than as omission.
 
   **The record is collapsed, and splitting it is what keeps that rule from eating the page.**
-  `details.searched` is shut by default — the second component on the page a reader has to open — and
-  it holds `ul.sr-list`, one row per search, each a command and a result *clause*. The finding stays
-  in the open prose: "nothing else reads this column" is a sentence a reviewer meets without clicking,
-  and the grep behind it is provenance. Get that split wrong in the other direction and the rule
-  inverts — a finding left to be inferred from an empty row inside a shut toggle is hidden, not
-  disclosed, which is the excerpt hard rule (`SKILL.md`, now written for *every* collapsed block
-  rather than for excerpts alone).
+  `details.searched` is shut by default, inside the foot, and holds `ul.sr-list`, one row per search,
+  each a command and a result *clause*. The finding stays in the open prose: "nothing else reads this
+  column" is a sentence a reviewer meets without clicking, and the grep behind it is provenance. Get
+  that split wrong in the other direction and the rule inverts — a finding left to be inferred from an
+  empty row inside a shut toggle is hidden, not disclosed, which is the closed-block hard rule.
 
-  It was collapsed because open it was the longest thing in § 4 and the first thing a reviewer met,
-  and because real pages filled it with paragraph-long re-explanations of entries sitting two inches
-  above — § *One canonical home*'s restatement regression arriving disguised as provenance. Hence the
-  row format: a `<code>` and a clause makes a verbose one *look* wrong, which prose never did.
+  It was collapsed because open it was the longest thing in the section that held it and the first
+  thing a reviewer met, and because real pages filled it with paragraph-long re-explanations of
+  entries sitting two inches above — § *One canonical home*'s restatement regression arriving
+  disguised as provenance. Hence the row format: a `<code>` and a clause makes a verbose one *look*
+  wrong, which prose never did.
 
   Four files agree: `page-template.html` holds the component and its CSS, `report-format.md` § *What
   was searched* owns the form, the budget and the open/collapsed split **alone**, `SKILL.md` step 5
   points at it, and `evals/checks/searches.rb` re-runs the recorded searches against the repository.
-  That check keys on **text nodes beginning with a search tool**, not on the class or the element, so
-  it survived this move untouched — but its four `golden/searches-*.html` fixtures did not, and
-  migrating them is the actual work. They had already gone stale once when the design system changed,
-  and `searches.rb` passed them for as long as they matched nothing on any real page.
-- **Completeness, and the one mechanical check. It has no detail level.** Every path in the diff
-  appears in the page, at every level, and the gate runs at every level. What the level changes is the
-  *carrier*: § 7's classified ledger at `--full`, a shut `details.coverage-foot` below the last
-  section at `--brief`, generated either way by `ledger-rows.sh` as `.gt-paths` cells that still carry
-  `data-path`. That is the whole reason the carrier is a grid cell rather than a list item —
-  `coverage-gate.sh` greps `data-path` page-wide and `page-invariants.rb` § 4 requires it on a
-  `div class="c"`, so a `.filelist` would have cost the gate. `--brief` declines to *classify* the
-  diff; it never declines to account for it, and a run that skipped the gate for want of a § 7 has
-  turned a shorter page into one that may have dropped a file.
 
-  **Neither carrier is § 4 any more, and moving it out cost nothing because the gate never parsed
-  HTML.** § 4 used to hold the whole diff too — a `.filelist` at `--full`, `.gt-paths` cells at
-  `--brief` — which made it the second ledger its own closing rule forbids, a few sections early. On a
-  24-file PR that rendered as 24 links above a caption explaining that the eight worth opening were
-  ranked in § 3. `coverage-gate.sh` is a raw-byte page-wide grep, so it cannot tell whether a carrier
-  is visible, collapsed, or in a section at all: the whole change is markup and prose, and
-  `coverage-gate.sh`, `completeness.rb`, `excerpts.rb` and `ci/generate-review-map.sh` were not
-  touched. Collapsing it is legal because an inventory is *provenance*, which passes the reads-complete-when-shut
-  rule where a finding never would — so nothing a reviewer acts on may go in there.
+  **That check needed one edit and it is worth knowing why.** It scopes its affected-entry region on
+  the verbatim `Affected, not changed` eyebrow and resets on a small set of closing tags. The label
+  now appears twice — beside the impact panel and again in the foot — with `details.searched` between
+  them, so without `</ul>` and `</section>` among the resets the region opened in section 04 ran
+  straight into the foot and read **every recorded search as a claim that needed a recorded search**.
+  The check keys on text nodes beginning with a search tool rather than on a class, which is why
+  nothing else about it moved.
+- **Completeness, and the one mechanical check.** Every path in the diff appears in the page, and the
+  gate runs on the finished page. The carrier is `div.gt.gt-paths` inside `details.evidence` at the
+  foot, generated by `ledger-rows.sh --paths-only` as `.gt-paths` cells carrying `data-path`. That is
+  the whole reason the carrier is a grid cell rather than a list item — `coverage-gate.sh` greps
+  `data-path` page-wide and `page-invariants.rb` § 4 requires it on a `div class="c"`, so a
+  `.filelist` would have cost the gate.
 
-  One consequence for the harness, and it is the shape this repository keeps writing down: with the
-  inventory out of § 4, a brief golden carrying no `data-path` at all makes `page-invariants.rb` § 4
-  pass on zero cells. `golden/approving-brief-clean.html` and the three other brief fixtures carry
-  the foot disclosure so that row still has something to look at. Stated
-  in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and enforced in
-  step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work: the script
-  reads a `data-path` attribute, the template emits it on the ledger's grid cell
-  (`<div class="c" data-path="…">`, not a `<td>` — the ledger is a CSS grid now), `report-format.md`
-  § 7 requires it, and `SKILL.md` step 10 runs the script. Break any one and the gate stops
+  **The classification went and the accounting stayed.** The page used to carry a ledger with three
+  judgements per row: which section covers the file, how much attention it needs, and which group it
+  belongs to. Where a reviewer's attention goes is now said by what is on the reading path and in what
+  order, and saying it again in a column beside every file was a second ranking competing with the
+  first. `ledger-rows.sh` still emits the four-cell form without `--paths-only`; nothing calls it, and
+  `report-format.md` § *A future full mode* is where it is written down.
+
+  **The carrier is not section 04, and the gate never noticed it move.** § 04 used to hold the whole
+  diff too, which made it the second inventory its own closing rule forbids. On a 24-file PR that
+  rendered as 24 links above a caption explaining that the eight worth opening were ranked elsewhere.
+  `coverage-gate.sh` is a raw-byte page-wide grep, so it cannot tell whether a carrier is visible,
+  collapsed, or in a section at all — which is why that change cost no script. Collapsing it is legal
+  because an inventory is *provenance*, which passes the reads-complete-when-shut rule where a finding
+  never would. Collapsed is not optional and neither is the gate: a run that skipped it because the
+  list is out of sight has turned a shorter page into one that may have dropped a file.
+
+  Stated in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and
+  enforced in step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work:
+  the script reads a `data-path` attribute, the template emits it on the inventory's grid cell
+  (`<div class="c" data-path="…">`, not a `<td>` — the inventory is a CSS grid), `report-format.md`
+  § *Section 5* requires it, and `SKILL.md` step 10 runs the script. Break any one and the gate stops
   checking. Note the asymmetry in the invariant itself: the page-wide rule is a subset test (the page
   cites unchanged files everywhere by design), while the gate is exact set equality against
   `git diff --name-only`, compared as whole strings — never substring matching, because `api/Gemfile`
   matches inside `api/Gemfile.lock`.
 - **A staged page must never look finished.** The page publishes early and fills in at one URL
-  (`SKILL.md` step 9) at both levels — the four milestones are cuts through the procedure, not through
-  the section list. What the level moves is where a marker attaches: a section at `--full`, an `<h3>`
-  sub-part at `--brief`, where the tail is one section written in pieces and the hazard is its first
-  part making the whole thing read as done. Staging is only safe because an unfinished page says so: a build banner while it
-  is being written, an explicit *pending* marker for every part that is coming, and both removed at
+  (`SKILL.md` step 9). Staging is only safe because an unfinished page says so: a build banner while
+  it is being written, an explicit *pending* marker for every part that is coming, and both removed at
   the final publish. Four states have to stay distinguishable — written, pending, *not written*
   because the run stopped, and omitted because the diff did not earn it — since the whole risk is a
   reader taking any of the last three for "nothing to say here". A stopped run is the one that needs a
-  deliberate edit: pending is a promise, and leaving one behind is worse than publishing late. The form lives in `report-format.md` § *Build state*, the components are
-  `.buildstate` and `.pending`, and `evals/check.rb --draft` / `--final` check both ends of it.
+  deliberate edit: pending is a promise, and leaving one behind is worse than publishing late. The
+  form lives in `report-format.md` § *Build state*, the components are `.buildstate` and `.pending`,
+  and `evals/check.rb --draft` / `--final` check both ends of it.
+
+  **Omitted and pending is where the agenda makes that harder, and section 04 is the case.** A diff
+  whose consequences all stay inside it earns no impact section: the section and its rail entry go,
+  and what must not appear is a stub saying nothing reaches unchanged code. That sentence is a clean
+  bill of health with a marker on it.
 
   The pending marker earns a second keep, found by profiling rather than by reading: it is the
   **anchor a later stage edits**, which is what keeps staging from costing the whole document per
@@ -569,31 +533,25 @@ Editing one of these means checking the others still agree.
   23 KB byte for byte, 56% of everything that run spent streaming. Staging is only cheap if a stage
   writes what is new, so `SKILL.md` step 9 says fill in with `Edit`, never rewrite.
 
-  **The behaviour flow — not § 2 — is the unit of staging**, which is the third granularity a
-  `.pending` attaches at. This is what the milestone count moved for: §§ 1–3 and 5–7 have three
-  arrivals between them and § 2 has as many as the diff earns flows, so a stage that delivered § 2
-  whole would put the longest wait of the run behind one arrival, which is the thing staging exists
-  to prevent. It cost no markup — `<section id="flows">` was already just the intro, each flow was
-  already its own `<section id="flow-x">`, and the rail already rendered a per-flow marker. What was
-  missing was the instruction to use them, and the instruction it replaced was conditional
-  (*"if that stretches over many turns"*), which is why every real run delivered the tail in one
-  chunk. Consequence for the banner: it counts **parts still pending** rather than *stage N of M*,
-  because the total now depends on the flow count and a run would have to commit to it before
-  knowing one. Nothing greps the count; `checks/build-state.rb` greps "absence is not a finding",
-  which is why that sentence is the one that must survive editing.
+  **The checkpoint — not section 02 — is the unit of staging.** Section 02 is the bulk, so a stage
+  that delivered it whole would put the longest wait of the run behind one arrival, which is the thing
+  staging exists to prevent. It costs no markup: `<section id="attention">` is the heading and the
+  caveat, each checkpoint is already its own nested `<section class="cp" id="cp-x">`, and the rail
+  renders a per-checkpoint marker.
 
-  The flow stub is assembled in `page-template.html` beside the pending section, for the reason
-  every composition there is: it carries no `.mech` and no `dl.rows`, which is what keeps it out of
-  both censuses in `checks/behaviour-flows.rb` — a half-written § 2 must not read as a flattened one.
-  `golden/flows-partial-page.html` pins that, and `golden/flows-stubs-only-page.html` pins the one
-  narrow `skip` for the moment stage 3 opens and no flow is written yet. That skip takes a pending
-  marker as its precondition deliberately: a SKIP reads as verified, so it has to be unreachable on
-  a finished page.
-- **Effort is orthogonal to the detail level, and invisible on the page.** `--effort high` (the
-  default) and `--effort low` decide how hard a run works to be right; the level decides how many
-  sections there are. They multiply rather than substitute, and `--brief --effort high` — a short
-  page whose claims were attacked — is the combination worth having, which is why it is the one you
-  get by default.
+  **And the checkpoint stub is worth more than the flow stub it replaced**, which is the part to keep.
+  A flow stub said what the flow would cover. A checkpoint stub carries **the question** — so stage 3
+  opens by publishing what the change is asking the reviewer to judge, ten minutes before any
+  explanation exists. That is most of what a reader came for, arriving first.
+
+  Consequence for the banner: it counts **parts still pending** rather than *stage N of M*, because the
+  total depends on how many checkpoints the diff earns and a run would have to commit to it before
+  knowing one. Nothing greps the count; `checks/build-state.rb` greps "absence is not a finding", which
+  is why that sentence is the one that must survive editing.
+- **Effort decides whether the page is right, and it is invisible on the page.** `--effort high` (the
+  default) and `--effort low` decide how hard a run works to be right. Nothing else varies: there is
+  one page shape, and two pages of the same target at the two efforts differ in their claims and never
+  in their form.
 
   **The default moved to `high` in 0.16.0, on two measurements against fayron#529.** The pass costs
   0.9% of wall clock because the falsifiers do not block (§ *Deliberately single-context*), and the
@@ -609,20 +567,33 @@ Editing one of these means checking the others still agree.
   the 0.9% as though it settled the cost question is the mistake this paragraph exists to prevent,
   and it is the one the first version of it made.
 
-  The level is not where the *time* goes: `--brief` bought 4.6% of wall clock for 35% fewer words,
-  because the time is in step 5's consumer tracing rather than in writing sections. The word budget
-  does not change that arithmetic — it takes more words out of the same 4.6%, so a shorter page is
-  still not a faster run, and reaching for `--brief` to save minutes is reaching for the wrong axis.
-  **Effort decides whether the page is right; the level decides how long it is.** Effort produces **no section, no
-  marker, no chip and no sentence**: two pages of the same target at the two efforts differ in their
-  claims, never in their shape, and a reader cannot tell which produced the one in front of them.
+  **Both numbers were measured against the old seam and have not been re-measured.** The falsifier
+  used to be handed a published `<section id="flow-x">` — markup, excerpts, a rail — and is now handed
+  an analysis note, which is smaller and is prose. The token figure is an upper bound; the wall-clock
+  figure should be unchanged, since what made it 0.9% is that the parent keeps working, and it still
+  does. Re-measuring is worth a `profile.sh` run on the first real PR through this version.
 
-  Six files have to agree: `SKILL.md` step 1 parses it beside the level and step 8 owns what `high`
-  does, `report-format.md` § *Detail levels* states that this file has nothing else to say about it,
-  `page-template.html`'s header comment refuses the badge in the same breath as the severity chip,
-  `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.rb` §§ 2b and 2c fail
-  a page that advertises having been checked or narrates its own drafting, and `README.md` § *How hard
-  it works* is the public wording.
+  **The seam moved ahead of the page, and that is the change worth stating.** Step 6 writes one
+  analysis note per flow to `$W/analysis/`, sends one falsifier at each, and step 7 synthesises while
+  they read; step 8 folds the challenges in before a checkpoint's stub is replaced. Under the old
+  order a flow was published at stage 3 and corrected afterwards, so **it was wrong while it was
+  public** — an accepted cost that no longer has to be paid. What remains is the late challenge
+  arriving after a checkpoint has landed, and the rule for that is the one it always was: a claim
+  retracted before the final publish beats one that is never retracted.
+
+  **A run that waits on them has lost the whole argument.** The 0.9% holds only because the parent
+  works while they read. Spawn-then-idle turns the cheapest step in the procedure into the most
+  expensive, and it is the likeliest way this default gets reverted by someone measuring it.
+
+  Effort produces **no section, no marker, no chip and no sentence**. A reader cannot tell which
+  effort produced the page in front of them, deliberately.
+
+  Six files have to agree: `SKILL.md` step 1 parses it, step 6c owns what `high` does and step 8 owns
+  what happens to the result, `report-format.md` § *One page shape* states that this file has nothing
+  else to say about it, `page-template.html`'s header comment refuses the badge in the same breath as
+  the severity chip, `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.rb`
+  §§ 2b and 2c fail a page that advertises having been checked or narrates its own drafting, and
+  `README.md` § *How hard it works* is the public wording.
 
   **The falsifier's `model:` is a fourth thing that has to agree, and it agrees across the harness
   rather than across the page.** `agents/claim-falsifier.md` names it; `evals/run.sh` reads it out of
@@ -631,8 +602,7 @@ Editing one of these means checking the others still agree.
   group key, so an opus-falsifier row can never be averaged into a sonnet one; and `profile.sh`
   prints the model the subagent transcripts actually recorded. That last one is the only real check:
   `--agents` accepts keys it does not understand without complaining, so sending the field is not
-  proof it was honoured, and the transcript is. Like effort itself, none of this reaches the page —
-  no section, no marker, no sentence.
+  proof it was honoured, and the transcript is.
 
   **A verification badge is the same regression as a severity chip, and it will look more innocent.**
   Grading the PR is obviously forbidden; grading *the page* — "every claim verified", a count of what
@@ -649,18 +619,16 @@ Editing one of these means checking the others still agree.
   the `git grep` basic-regex caveat is exactly what a reader re-running a recorded search needs. So the
   rule is *keep the fact, drop the autobiography* — `SKILL.md` step 8's **correction replaces, never
   annotates**, which is a general-effort bullet rather than a `high`-only one, because a normal run
-  revising its own draft writes the same sentence. `report-format.md` § *Section 4* carries it for
-  recorded searches, where it concentrates.
+  revising its own draft writes the same sentence.
 
   Two things to know before editing § 2c. It **strips comments first** — `page-template.html`'s own
-  header comments are written in precisely this register ("A previous version of this template showed
-  the composition as three detached siblings") and ship verbatim inside every published page, so a
-  check reading them would fail every page for its template's documentation;
-  `golden/invariants-draft-narration.html` puts the trigger phrases in its own header comment so that
-  stays true. And the register is right *here* and wrong on the page: this file's rules deliberately
-  carry the observation that produced them, which is the habit the page must not inherit. The audience
-  is the difference — a maintainer needs to know why a rule exists, a reviewer does not need this
-  document's drafting history.
+  header comments are written in precisely this register ("What this replaced is the reason every one
+  of those rules exists") and ship verbatim inside every published page, so a check reading them would
+  fail every page for its template's documentation; `golden/invariants-draft-narration.html` puts the
+  trigger phrases in its own header comment so that stays true. And the register is right *here* and
+  wrong on the page: this file's rules deliberately carry the observation that produced them, which is
+  the habit the page must not inherit. The audience is the difference — a maintainer needs to know why
+  a rule exists, a reviewer does not need this document's drafting history.
 
   The eval axis is `--skill-effort`, not `--effort`: `evals/run.sh` already had an `--effort` meaning
   the CLI reasoning effort the reader runs at, and two knobs under one name in one script is a bug
@@ -749,49 +717,40 @@ Editing one of these means checking the others still agree.
   reassuring thing it can say and the one with the least behind it. The refs are resolved up front
   and an unresolvable one exits 4. `excerpts.rb`'s state-tag rule shipped with exactly that bug, and
   `page-invariants.rb` § 5 with its sibling.
-- **Seven sections at `--full`, four at `--brief`, and each fact has one home either way.** The format
-  is deliberately *not* one section per
+- **Five sections, and each fact has one home.** The format is deliberately *not* one section per
   architectural layer. It was, and that guaranteed restatement: one behaviour crosses persistence, the
   API, the boundary and its cohort, so it got described four times, and three further parts existed
-  only to restate — findings surfaced in *start here* and re-explained inside a cohort, cross-cutting
-  concerns retelling behaviours, a checkpoint quizzing the reader on the paragraph above. A 21-page
-  page condensed to 9 with nothing of value removed, which measures the duplication at about half the
-  document. So persistence, endpoint contracts and the backend/frontend boundary have **no sections of
-  their own** — they are covered inside the behaviour flow they serve, and only what genuinely spans
-  flows goes in § 5. `report-format.md` § *One canonical home* carries the routing table and the
-  one-sentence reference form; § *Where the old per-layer material goes* maps the old twelve parts onto
-  the seven. Reintroducing a per-layer section is how this regression comes back, and it will look like
-  an improvement when it does.
+  only to restate. A 21-page page condensed to 9 with nothing of value removed, which measures the
+  duplication at about half the document. So persistence, endpoint contracts and the backend/frontend
+  boundary have **no sections of their own** — they are covered inside the checkpoint whose judgment
+  turns on them. `report-format.md` § *One canonical home* carries the routing table and the
+  one-sentence reference form, and a paragraph mapping where each part of the old shape went.
 
-  **The merged tail section is a second way for it to come back**, and a subtler one, because merging
-  four sections is not the same as merging four *kinds of thing*. At `--brief` the routing table still
-  applies with fewer destinations, and the failure to watch for is a section carrying both a flow's
-  explanation and the pointer back to it two paragraphs apart — duplication at conversational distance,
-  which reads as thoroughness. A section eval cannot see it; `evals.json` case 6 can.
-- **The order is the reviewer's path, and the flow owns the explanation.** § 2 *Behaviour flows*
-  teaches the mechanisms; § 3 *Start here* is the moment they open the code; § 4 *What this change reaches* is a
-  second pass over the same change through one lens. Everything after § 2 therefore **points back**
-  at it — a flow never defers an explanation forward, and §§ 3 and 4 never re-explain one. The
-  earlier ordering put § 4 and a findings list before the flows, which forced both to
-  carry enough mechanism to stand alone, and that was the page's main source of duplication. § 3 is
-  **one list**: what most needs judgment and what to read first are the same question, and answering
-  it twice is the shape to watch for coming back. Where the attention goes is expressed by what is on
-  that list; every other file is accounted for by § 7's attention column.
-- **The comprehension checkpoint is capped at five questions**, and each must be answerable from the
-  page but **not by copying one sentence out of it**. A question whose verbatim answer sits in a
-  paragraph above is restatement wearing a question mark. It lives inside § 6 *Before approving*
-  alongside the author questions, validations and test gaps, not as a section of its own — the old
-  standalone part overlapped all three.
-- **Source excerpts are quotations, and the page reads complete without them.** The third page
+  Reintroducing a per-layer section is how this regression comes back, and it will look like an
+  improvement when it does. **The agenda's own version of it is a checkpoint per file**, which looks
+  like coverage: *ProjectSearcher implementation*, *Migration*, *Tests*. Five of those is the per-layer
+  format with the section shells taken off, and it is cheaper to write than four merged judgments,
+  which is exactly why a run reaches for it.
+- **The order is the reviewer's path, and the checkpoint owns the explanation.** § 02 *What needs your
+  attention* teaches the judgments; § 03 *Read the code in this order* is the moment they open the
+  code; § 04 *Impact outside the diff* is the same change seen through one lens. Everything after § 02
+  therefore **points back** at it — a checkpoint never defers an explanation forward, and §§ 03 and 04
+  never re-explain one. § 03 is **one list**: what most needs judgment and what to read first are the
+  same question, and answering it twice is the shape to watch for coming back. Where the attention
+  goes is expressed by what is on that list and in what order; every other file is accounted for in
+  the evidence foot, unranked.
+- **Source excerpts are quotations, and the page reads complete without them.** A page
   primitive: a collapsed `details.excerpt` holding verbatim code, in two variants — `--diff` for
   changed lines, `--source` for unchanged ones, which is the variant that carries the product because
   no diff view can address an unchanged line. Three things have to stay true together. The page must
   read completely with **every excerpt closed** — an excerpt confirms a claim, never carries one, and
   that is the whole difference between progressive disclosure and hidden content; the hard rule is in
   `SKILL.md`, the form and budget in `report-format.md` § *Source excerpts*, and the shape in
-  `page-template.html`. The quotation is **generated by `scripts/excerpt.sh`, never typed** — a
+  `page-template.html`. An excerpt sits **beside the claim or the *Look at* entry it confirms**, never
+  in the evidence foot: the foot is provenance a reader is not expected to open, and a quotation that
+  makes a judgment possible is not provenance. The quotation is **generated by `scripts/excerpt.sh`, never typed** — a
   mistyped ledger row fails the gate loudly, whereas a paraphrased quotation is a false quotation the
-  reader cannot catch. And **`data-path` is reserved to ledger rows**: `coverage-gate.sh` greps it
+  reader cannot catch. And **`data-path` is reserved to inventory cells**: `coverage-gate.sh` greps it
   page-wide, so an excerpt using it would register as a surplus path, most reliably when quoting
   unchanged code — the gate would fail on the page's best content. Excerpts carry `data-src`.
   `evals/check.rb` holds the mechanical half of all three; whether the prose survives with the blocks
@@ -817,12 +776,14 @@ Editing one of these means checking the others still agree.
   quotation at all. Everything about it degrades to the untinted page: no script, no network, a
   blocked CDN or an unknown language each leave the block in one ink.
 
-  A third thing, added after a run whose flows quoted only unchanged code: the `--diff` excerpt is a
-  **floor, not a ration**. Each behaviour flow shows the hunk its behaviour turns on, because § 2 is
-  read before the reviewer opens the diff in § 3; the load-bearing test rations everything on top of
-  that. The old framing ("a changed line is cheap to follow, the reviewer has the diff open anyway")
-  plus a section-wide cap of two is what suppressed it, so the cap now counts per flow inside § 2.
-  `evals/checks/behaviour-flows.rb` warns when every excerpt in the flows is `--source`.
+  **The per-flow `--diff` floor is gone with the flows, and what it was defending against is not.**
+  It said every behaviour flow showed the hunk its behaviour turned on, because that section was read before
+  the reviewer opened the diff. A checkpoint asks a question instead, and the answer is sometimes in
+  unchanged code alone — so the excerpt test applies uniformly now, including to a changed hunk. The
+  defence is that seeing the hunk is very often exactly what a judgment turns on, which makes the
+  uniform test reach the same place the floor did without a rule of its own. Watch for pages whose
+  excerpts are all `--source`: that was the failure the floor was written for, and nothing warns on it
+  any more.
 
   **The state tag is the fourth, and it is the only part of an excerpt the bytes cannot vouch for.**
   `--at` used to hard-code `Unchanged`, which is a claim about the diff the script had never looked
@@ -837,9 +798,9 @@ Editing one of these means checking the others still agree.
 
   Two things about it are easy to get backwards. **Quoting a changed file at head is right, not the
   defect** — a hunk of an 18,000-line `structure.sql` cannot show that a table has *no* `CHECK`
-  constraint, which is exactly what § 5's invariants block reads for — so the rule constrains the tag
+  constraint, which is exactly what an invariant checkpoint reads for — so the rule constrains the tag
   and never the quotation. And **a path the diff touches is never `Unchanged` even where the quoted
-  lines are untouched**, because §§ 4 and 7 split changed from affected-not-changed *by file*: one
+  lines are untouched**, because section 04 and the evidence foot split changed from affected-not-changed *by file*: one
   word in two senses on one page, with nothing to tell the reader which was meant. That precision
   belongs in the prose, where it can be stated. Four files agree — `scripts/excerpt.sh` computes it,
   `report-format.md` § *Source excerpts* owns the rule and the vocabulary, `page-template.html` says
@@ -859,10 +820,10 @@ Editing one of these means checking the others still agree.
   nothing. The budget, the permitted locations and the rung adjustment live in `report-format.md`
   **only**; `SKILL.md` points at them. An earlier version restated the cap in slightly different words
   and the two drifted apart within one run — hence the rule that this one has a single home.
-- **Impact paths are § 4's figure, and the edge is the point of them.** A path runs from changed
+- **Impact paths are section 04's figure, and the edge is the point of them.** A path runs from changed
   code, through the affected-but-unchanged code that gives the change its consequence, to an
   observable behaviour, with every hop past the first carrying its incoming relation as a causal
-  verb. 2–3 paths, 3–5 nodes each, **one path per `.ip-card`**, one `.ip-out` last, at least one
+  verb. 1–3 paths, 3–5 nodes each, **one path per `.ip-card`**, one `.ip-out` last, at least one
   `.ip-aff`, labels never sentences, no citations inside the panel.
 
   **What it replaced is the reason every one of those rules exists.** `.blast` was a four-column box
@@ -881,8 +842,8 @@ Editing one of these means checking the others still agree.
   and each path is an `.ip-card` with its own `.ip-hd` and its own `.ip-lanes`.
 
   **Nothing is lost by the two paths that no longer fit, and that is what makes the cap affordable.**
-  A consequence left out of the panel keeps its entry in *affected, not changed* and its explanation
-  in the flow that owns it, which is § *One canonical home* doing exactly its job. Loosening the cap
+  A consequence left out of the panel keeps its entry in the affected list beneath the panel and its explanation
+  in the checkpoint that turns on it, which is § *One canonical home* doing exactly its job. Loosening the cap
   back out is how the figure becomes a section to scroll, and it will arrive as thoroughness.
 
   **The lane labels repeat in every card, deliberately**, which is the one requirement the split
@@ -934,13 +895,13 @@ Editing one of these means checking the others still agree.
   carries — a consumer that does *not* account for what changed — which is causal precisely because
   nothing happens; the box grid could only put that in a clause.
 
-  Six files have to agree: `page-template.html` holds the CSS (head SKELETON range, so it is
-  emitted and a run never types geometry) and the panel assembled whole in **both** section blocks,
-  `report-format.md` § *Impact paths* owns the component, the vocabulary, the shape rules and the
-  budget **alone**, `SKILL.md` step 9 points at it, `evals/checks/impact-paths.rb` carries the rules
+  Five files have to agree: `page-template.html` holds the CSS (head SKELETON range, so it is
+  emitted and a run never types geometry) and the panel assembled whole in section 04,
+  `report-format.md` § *Impact paths* owns the panel's own rules and its budget **alone** while
+  § *Chains* owns what it shares with a checkpoint's `figure.chain`, `SKILL.md` step 9 points at both, `evals/checks/impact-paths.rb` carries the rules
   and its `CAUSAL` list, and the eight `golden/impact-*.html` fixtures plus their `self-test.rb` rows
   prove each one fires. Extend the vocabulary in the reference and in `CAUSAL` together — the rule
-  `diagram.rb` already states for its class vocabulary.
+  the deleted `diagram.rb` stated for its class vocabulary, and which outlived it.
 
   **One of those eight is clean, and it is the one that matters most for the caps.** Running the
   check over a real published page produced two WARNs, and the rules were wrong rather than the
@@ -966,120 +927,9 @@ Editing one of these means checking the others still agree.
   is worse than an unlisted verb that is true. And the thing no script settles: whether these are the
   right 2–3 paths and whether each edge is **true** — a question the tighter cap makes sharper, not
   softer, because choosing three out of six consequences is now part of the work.
-  `evals/cases/diagrams.json` is where that is
-  asked, and the panel needs eyes — `diagram-shot.rb --visual` renders `<svg>` only, so it does not
-  cover a component.
+  A page case is where that is asked, since the case that used to ask it
+  is deferred with the rest of the section scope.
 
-- **Diagram layouts come from the catalogue, not from the run — and the criterion is whose length is
-  load-bearing.** A kind is a **component when the *diff* sets its size, and a drawing when the
-  *claim* does.** Six kinds, two components: § 4's `.impact` panel, whose cards stack per PR and
-  whose lanes collapse at 780px, and a flow's **path** as a `.pipe` spine, as long as the chain it
-  follows. Neither has a canvas that survives, and a component reflows on a phone and cannot be drawn
-  wrong. The four drawings — boundary chain and guard fork in § 2, ER fragment and lifecycle in § 5 —
-  are worked out complete and to scale in `page-template.html`, with the grid stated in a comment
-  above each.
-
-  **That distinction was got wrong once, and the cost was a figure.** The boundary chain spent a
-  design generation as a `.pipe`. `734f267` argued that a chain "carries set membership and order
-  along a chain, which a component shows as well as geometry did while reflowing on a phone", and
-  `71c4391` restated it as *size is a function of the diff*. Both halves were true and the conclusion
-  was wrong: a component shows order fine and **cannot show which hop**, so real pages supplied the
-  missing relation by writing the mismatch into a node — the `.blast` footnote failure, arriving in
-  the vocabulary that had just replaced it. And the size argument was about an *unbounded* size. The
-  chain's is bounded at five stops by the canvas — `6 × 148 + 5 × 30` is 1038 against 880, so a sixth
-  box fails `diagram.rb`'s existing bounds rule and **no new check was needed to cap it.**
-
-  **The deletion also left a dangling pointer for two weeks and nothing noticed**, which is the part
-  worth remembering. `report-format.md` § 2 went on telling a flow to take "a diagram … from the
-  catalogue" while the catalogue banner said both layouts lived in § 5. No check fired, because no
-  check knew a flow could hold a figure at all: the § 2 rule had never been *wrong*, it had never
-  been **looked at**. `behaviour-flows.rb` now asks two questions of each flow for exactly that
-  reason, and its no-crossing branch is a PASS that names what it looked for rather than a SKIP.
-
-  Five files have to agree: the template holds the geometry, the SVG class vocabulary **and the two
-  § 2 kinds' placement inside the assembled flows**, `report-format.md` § *Depth rules* holds which
-  kind belongs to which section, the budget, the stop grids and the fork's trigger (and holds them
-  **only** — the template does not restate the budget), `SKILL.md` step 9 points at the catalogue and
-  says which two are components, `evals/checks/diagram.rb` carries the class vocabulary the template
-  defines plus the per-section count, and `evals/checks/behaviour-flows.rb` carries the divergence
-  and crossing rules. A class added to one and not the other is either unstyled or reported as
-  invented. `legend` and `box-json` were removed from that vocabulary deliberately, not renamed: they
-  belonged to the **panel**, and they stay gone even though the chain came back, because the panel is
-  still a component. A run drawing impact paths as SVG should be told to use the component instead,
-  and `impact-paths.rb` fails an `<svg>` found inside the panel from the other side.
-
-  **The two § 2 kinds cost no CSS, no token and no vocabulary entry**, which is why restoring them
-  was cheap: the chain is boxes and edges, and the fork gave `.lifeline` its first user. That class
-  had been styled and named in the template's own map while being used by nothing — **unreachable
-  rather than spare**, because everything above the head `SKELETON:` marker is emitted by
-  `page-skeleton.sh` and never read, so a run learns the SVG vocabulary only by example from the
-  markup half.
-
-  **A flow earns at most one drawing, and most earn none.** The chain if its field crosses a seam,
-  the fork if its behaviour is gated and the change reroutes a request class — never both, because
-  *a flow that earns both is two flows*. `diagram.rb` enforces that per `<section>`, which is already
-  per flow, and says it as a **failure** rather than the two-diagram warning § 5 gets: the "different
-  mechanisms" excuse is about an ER fragment beside a lifecycle and reads as permission anywhere else.
-
-  **"Most earn none" was true of the fork and false of the chain, and stating it of both is what
-  made § 2 draw nothing.** Two real pages at `--brief` — nine flows, a Rails monolith and a Phoenix
-  app — published **zero `<svg>`** with the layouts sitting readable in the markup half the whole
-  time. `behaviour-flows.rb` caught it on both (*"flow-a, flow-b cites both sides of the boundary and
-  draws no chain"*), and nothing read the warning, because `check.rb` only ever runs against
-  fixtures. So the prose was the whole lever, and it was pointing the wrong way: three sentences said
-  a figure is exceptional, one clause said `--brief` is not an excuse, and the chain's own comment in
-  the template gave **geometry with no trigger at all** while the fork's opened with *OMIT IT unless*.
-
-  The fork's rarity is real — its three-part conjunction genuinely fires seldom. The chain's is not:
-  its trigger is *you traced a field across the seam*, which on a PR touching both sides is the
-  ordinary case. § 2 now states it affirmatively and names the only two excuses (you could not read
-  the client; the two sides agree at every hop), § *Depth rules* says a budget is a ceiling rather
-  than a discouragement and routes the trigger to § 2, and the template's chain comment leads with
-  when to draw before how. **An SVG is the most expensive thing on the page to type, so the failure
-  mode is never a wrong chain — it is no chain**, and it costs the reviewer the one question the
-  field rows cannot answer: at which hop does the agreement stop.
-
-  `--brief` draws no § 5 figures at all — no ER fragment, no lifecycle; migration safety is a row
-  there — so its merged section holds the `.impact` panel and nothing that could compete for the
-  budget, and `diagram.rb`'s per-`<section>` count needs no level awareness. What it must not become is
-  a reason to skip the one figure a *flow* earns — which is the boundary chain or the guard fork, and
-  which a `--brief` page carries where it carries no other. Both § 2 kinds are level-independent
-  because §§ 1–3 have the same spec at both levels and the budget exempts every figure from its
-  count. **The primer was the companion example in this sentence and is no longer one** — it is
-  `--full` only now — so the two components sharing a flow's slot either side of the `.mech` are
-  governed differently, and that asymmetry is deliberate rather than an oversight to tidy up.
-
-  The reason this is an invariant rather than a nicety: a diagram is the one component with no
-  generator behind it, so a layout derived per run spends the run's attention on geometry instead of
-  on whether the edges are true — and makes two pages from this skill incomparable. What a script
-  can check is conformance; crowding, overlap and an arrowhead landing beside its box need eyes,
-  which is what `checks/diagram-shot.rb --visual` and a judged expectation are for. Both defects in
-  that sentence were found in diagrams the script had just called clean.
-
-  Two rules no check can enforce, so they live in `report-format.md` § *Depth rules*: a box grid
-  cannot express a **directed edge** (when the finding is "the code stops being produced at this
-  hop", the note under the panel has to say it), and **a diagram carries labels, not sentences** —
-  prose in an 880-wide scroller cannot reflow, so searches and caveats go in the `figcaption`.
-
-  **Both § 2 kinds are earned by a fixture; neither § 5 kind is.** `monorepo-contract` earns the
-  boundary chain exactly — a serializer emitting `archived_at` as nil against a type declaring
-  `archivedAt: string`, five stops with the mismatch on the JSON→TYPE hop, which is why the deleted
-  specimen pastes back with plausible strings: it was a drawing *of that fixture*. `monolith-guard-chain`
-  earns the fork in two flows, and between them they exercise both geometries — a redirect that
-  re-enters the chain, and an invitee who never reaches `authorize_leader!`. `rails-only-small` earns
-  neither, and is pinned as the negative case for both.
-
-  **ER fragment and lifecycle remain unearned by every fixture**, and that does not become less true
-  because two other kinds are now covered: `rails-only-small` adds one nullable column,
-  `monorepo-contract` has no state machine, `monolith-guard-chain` changes no schema. Covering them
-  needs a new fixture with a migration and a status enum; until then those two catalogue layouts are
-  checked by `diagram.rb` against the template itself and by nothing else.
-
-  One gap the caps themselves have: **nothing exercises the chain's refusal at six stops or its 3-
-  and 4-stop grids.** Closing it needs a fixture whose client has a real API-client layer — a
-  `camelCase` transform plus a runtime parse — so the honest chain is six stops and the canvas has to
-  refuse it. That is the load-bearing rule of the whole design, and it is recorded here rather than
-  hidden.
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four
   `SKELETON:` markers. Everything in the head and tail ranges — the `<head>`, the entire token
   block, the three highlight.js tags and the tint script, 54.5 KB of it — is written straight into
@@ -1089,7 +939,7 @@ Editing one of these means checking the others still agree.
   It began as a cost change and that is the least of it. 54.5 KB was resident twice from stage 1
   onward — once as the template read, once as the write's own input — which is 6-8% of a run's cache
   reads, plus ~15k output tokens and about 110s of streaming. **The real payoff is that every colour
-  on a published page now comes from a script.** Measured on the template: `--rails` ×3, `--syn-key`
+  on a published page now comes from a script.** Measured on the template: `--syn-key` ×3, `--ex-add`
   ×3, the media dark block, both `[data-theme]` blocks — all of them in the head range, none in the
   markup half. The half-declared-token defect that § *Theme tokens* below and `excerpts.rb` exist to
   catch is not merely checked now, it is unreachable.
@@ -1103,44 +953,34 @@ Editing one of these means checking the others still agree.
   the script against itself and pass for any consistent pair of bugs — which is why two of
   `self-test.sh`'s cases mutate the *script* and not the template.
 
-  Marker text is load-bearing too. `diagram-shot.rb` reads the template with
-  `range(from: /<style/, …)` and `Page#range` re-opens, so a marker containing an opening `style`,
-  `script` or `svg` tag would corrupt a check that has nothing to do with this. Each marker is also
-  **one line**: extraction is a line range over the marker line, so a marker spilling onto a second
-  line would emit half a comment into every page.
+  Marker text is load-bearing too. A marker containing an opening `style`, `script` or `svg` tag
+  would corrupt a check that scans for one — `Page#range` re-opens on its own `from` pattern, so the
+  hazard survives even though the check that made it concrete (`diagram-shot.rb`, which lifted the
+  `<style>` block out of the template) is gone. Each marker is also **one line**: extraction is a
+  line range over the marker line, so a marker spilling onto a second line would emit half a comment
+  into every page.
 
-  **`--markup` is now filtered by detail level, and the second reason is again the better one.**
-  A second marker kind, `SKELETON:ONLY:level=<brief|full>`, brackets the regions that belong to one
-  level: §§ 4–7 against the merged brief section, and the rail below 03. `--markup --level brief`
-  drops 16.3 KB and `--level full` 11.0 KB off a half that is resident for every request after
-  step 9 — the same rule as *step 2 stopped reading two files it only needed to name*, applied
-  inside one file. Bare `--markup` keeps everything and only strips the markers, which is what the
-  partition test and all five eval drivers read, so **no existing caller changed.**
+  **Two things must not appear in the markup half at all, and `tests/run.sh` counts both at zero**:
+  an `<svg` opening tag, because this page has no drawings, and a literal tint class, because the
+  tint is applied at read time and a hand-coloured quotation is a quotation someone edited. That is
+  why the template's excerpt comment describes that class rather than spelling it — the rule and the
+  prose about the rule would otherwise be the same bytes, which is the shape this repository keeps
+  writing down.
 
-  The payoff that is not tokens: **the rail is assembled at both shapes instead of derived at one.**
-  It shipped in the seven-entry `--full` form with a comment telling a `--brief` run to cut it to
+  **`--markup` takes no flag, and the machinery that made it take one is deleted.** A second marker
+  kind, `SKELETON:ONLY:level=<brief|full>`, used to bracket the regions belonging to one detail
+  level — sections 4 to 7 against the merged brief section, and the rail below 03 — with a validator
+  that failed closed on an unpaired marker, a nested pair, an unknown tag or a tag with no region.
+  All of it goes with the level. `--markup` is now the plain extraction between `HEAD:END` and
+  `TAIL:START`.
+
+  **What that machinery bought is worth recording, because a future full mode will want it back.**
+  The rail had shipped in the seven-entry form with a comment telling a `--brief` run to cut it to
   four and renumber — a transformation performed from prose that no check ever looked at, on the
-  default level. Now `--level` hands over the rail to publish.
-
-  Three rules make the filter safe, and each of them is a way a section could go missing while the
-  page still looked finished. It is **subtractive**: the only actions are print and do-not, asserted
-  as *no line was added*, which needs no oracle where a second extraction would test the script
-  against its own awk. It **fails closed**: an unpaired marker, a nested pair, an unknown tag, or a
-  tag in the vocabulary with no region at all exits non-zero. And **a marker is matched as a whole
-  one-line comment** — the first version matched any line containing the prefix and duly read the
-  maintainer note *documenting* the markers as a marker, which is this repository's recurring shape:
-  the prose quotes the thing the rule is about, and `verify-catalogue.sh` reads table rows only for
-  exactly the same reason.
-
-  **What must stay outside those pairs is anything true at both levels**, and getting that wrong
-  loses content rather than bytes. Two comments were inside the `--full` range while being
-  level-independent — the impact panel's authoring contract and the *no `Changed` list, at either
-  level* guard — and the brief tail pointed at them with "*unchanged from section 4 above*". They
-  now live above the rail as § *Section 4's two standing rules*, with both section blocks pointing
-  there, and `tests/run.sh` asserts they survive at both levels and bare. Five files agree now
-  rather than four: `tests/self-test.sh` is the fifth, and its two filter mutations are **script**
-  mutations for the reason the other two are — a template mutation cannot prove a filter fires,
-  because the filter and the thing it filters move together.
+  default level. The filter replaced that with a rail assembled at both shapes. If a level ever
+  returns, it returns that way: **emitted, not described**, and subtractive by construction, so that
+  *no line was added* is assertable without a second extraction to test the script against its own
+  awk.
 
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
@@ -1148,16 +988,17 @@ Editing one of these means checking the others still agree.
   states and `excerpts.rb` enforces it for the excerpt tints specifically, which are the newest
   colours and so the likeliest to be forgotten in two of the three.
 
-  `--rails` is the newest of these and `--syn-*` the next newest, and both are easy to half-declare for
-  the same reason: nothing on the page depends on either to be readable, so a value missing from the
-  dark blocks is invisible until someone opens a primer or an excerpt with the OS in dark mode. Each is
-  therefore counted by name — `--rails` in `page-invariants.rb` § 6, `--syn-key` in `excerpts.rb` —
-  because the three blocks *existing* is not the same as a colour being in all three.
+  The `--syn-*` tints are the ones easiest to half-declare: nothing on the page depends on them to be
+  readable, so a value missing from the dark blocks is invisible until someone opens an excerpt with
+  the OS in dark mode. They are therefore counted **by name** — `--syn-key` in `excerpts.rb`,
+  `--syn-key` and `--ex-add` in `tests/run.sh` — because the three blocks *existing* is not the same
+  as a colour being in all three. `--rails` was counted the same way in `page-invariants.rb` § 6 and
+  is gone with the primer that was its only user; the counting idiom is what outlived it.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
-  pairs that invert — `.checkpoint`, `.att-read`, `.pipe`'s terminal node, `.ip-out` — are written
-  against tokens rather than literals precisely so they keep inverting *relative to the page* rather
-  than flipping to an unreadable combination in one theme.
+  one pair that inverts — `.ip-out`, the filled node that ends a chain — is written against tokens
+  rather than literals precisely so it keeps inverting *relative to the page* rather than flipping to
+  an unreadable combination in one theme.
 
 ## Invariants the CI setup adds
 
@@ -1400,7 +1241,8 @@ the common path.
 
 ## Deliberately single-context, with one named exception
 
-The skill runs in one context and spawns exactly one kind of agent, the per-flow falsifier. That is a
+The skill runs in one context and spawns exactly one kind of agent, the falsifier that reads one
+analysis note. That is a
 choice, not an omission — an earlier iteration fanned out to `Explore` agents per layer, and it came
 out.
 
@@ -1408,15 +1250,24 @@ out.
 `Explore` agent and stalled the parent for 997 seconds — 41% of its wall clock — in a single blocked
 turn. A boundary stated only here is a boundary the skill has never been told about.
 
-**The one exception is the falsification pass** (`SKILL.md` step 8, and
+**The one exception is the falsification pass** (`SKILL.md` step 6c, folded in at step 8, and
 `agents/claim-falsifier.md`), which since 0.16.0 runs by default. It is worth understanding why it does not reopen what the paragraphs
 below closed, because the next thing that wants an exception will look similar and probably is not.
 
-The seam is per **behaviour flow**, which is the seam those paragraphs already name as the right one:
-a flow is a whole behaviour, so nothing is fragmented that the page had not already separated, and
-there is no synthesis step afterwards to reassemble what a split threw away. The agent is read-only
-and returns *challenges*, not page content — the parent still writes every word, and still opens
-every cited file before acting on one, so no comprehension moves anywhere.
+The seam is per **analysis note**, which is per flow, which is the seam those paragraphs already name
+as the right one: a flow is a whole behaviour, so nothing is fragmented that the analysis had not
+already separated. The agent is read-only and returns *challenges*, not page content — the parent
+still writes every word, and still opens every cited file before acting on one, so no comprehension
+moves anywhere.
+
+**The note is what the agent reads, and that is a change from the first version of this pass.** It
+used to be handed a published `<section id="flow-x">` — markup, excerpts, a rail — which meant two
+costs: the agent spent reads finding the claims inside a document, and a flow corrected by a
+challenge **had been wrong in public** for as long as the challenge took to arrive. A note is prose,
+every citation is a `path:line`, and it exists before anything is published. There is now a synthesis
+step after the split (step 7), which is the one thing those paragraphs warn about — but it
+reassembles the parent's own notes rather than several agents' conclusions, which is the distinction
+that made the warning necessary.
 
 **And it does not block, which is the fact that changed the default.** The agents launch async and
 return a receipt in about two seconds; the challenges arrive as notifications while the parent drafts
@@ -1437,10 +1288,11 @@ than trickling, and if a harness ever does make them block, one message stalls t
 slowest — where the same agents one at a time stall it once each. The 997 seconds were one sequential
 blocking spawn, and that number is about `Explore`, not about the falsifier.
 
-Two things it is not. It is not a licence for step 5 or step 6 to fan out — those still span the
-whole diff by nature, and splitting them is still the mistake. And it is not a second context doing
-the work: the falsifiers read, the parent writes, and the parent transcript still reads as one
-context plus a handful of receipts. That last fact is a trap as well as a reassurance: it is why
+Two things it is not. It is not a licence for step 5, step 6 or step 7 to fan out — the first two
+span the whole diff by nature, and step 7's whole job is holding the whole agenda at once in order to
+merge and rank it, which is the least splittable thing in the procedure. And it is not a second
+context doing the work: the falsifiers read, the parent writes, and the parent transcript still reads
+as one context plus a handful of receipts. That last fact is a trap as well as a reassurance: it is why
 `profile.sh` reads `<session>/subagents/` too, and why a run cost quoted from the parent alone is a
 fifth to a quarter short.
 
@@ -1467,14 +1319,16 @@ the one thing a 112-file run exposed that has not been fixed. Naming it here so 
 starts from the real question rather than rediscovering it.
 
 The run in question — 112 files, 14.8k insertions, a Rails API and a Next.js client in one diff — got
-through the goal, § 4 and five verified affected-but-unchanged findings, and would have
-needed several times that budget to finish the behaviour flows and a 112-row ledger. Nothing about it
+through the goal, the impact section and five verified affected-but-unchanged findings, and would have
+needed several times that budget to finish the flows and account for 112 paths. Nothing about it
 failed. It simply ran out of room, in a way the procedure has no policy for.
 
-**`--brief` is not the answer to this, and it will be reached for as though it were.** It reduces the
-number of sections; the 112-file run did not run out of room writing section shells, it ran out
-tracing consumers and explaining flows, and `--brief` changes neither. A strained run at `--brief` owes
-the same statement of which region it skimmed.
+**The agenda is not the answer to this, and it will be reached for as though it were.** A five-item
+agenda over a 112-file diff is not a smaller problem: the run did not run out of room writing
+sections, it ran out tracing consumers, and the synthesis step cannot rank judgments it never found.
+What the agenda does change is the *reporting* — a strained run owes a statement of which region it
+skimmed, and `$W/analysis/` now shows which flows got a trace and which got a glance, which is a
+better record than the page ever carried.
 
 What makes this hard is that the honest sampling strategy runs against the skill's own instincts:
 
@@ -1486,17 +1340,18 @@ What makes this hard is that the honest sampling strategy runs against the skill
   a matching spec, whether it is named in a commit message, whether anything outside the diff
   references it. `ledger-rows.sh` already prints the first two. A defensible sampling rule could be
   built from them without opening anything.
-- **The sections are not equally compressible.** Persistence and the API contract are small and
-  load-bearing, and skimping there is what makes a page wrong. Behaviour flows are where the volume
-  is, and a flow read at half depth still teaches the shape. So the budget should be spent
-  unevenly, and the skill currently gives no basis for that.
-- **Whatever is skipped has to be visible.** A skimmed region must say so in place, in the same voice
-  as a stated limit, not in a footnote nobody reads. The build states already carry the vocabulary for
-  this — a fifth shape alongside written, pending, not written and omitted.
+- **The work is not equally compressible.** A migration and an API contract are small and
+  load-bearing, and skimping there is what makes a page wrong. Tracing every consumer of every
+  changed thing is where the volume is, and a trace stopped one hop short still finds most of what
+  matters. So the budget should be spent unevenly, and the skill currently gives no basis for that.
+- **Whatever is skipped has to be visible.** A skimmed region must say so in *What changed*, in the
+  same voice as any other stated limit, not in a footnote nobody reads. The build states already
+  carry the vocabulary for this — a fifth shape alongside written, pending, not written and omitted.
 
 Decomposition may dissolve some of this: a per-flow agent has its own context, so the aggregate
 budget grows. It does not dissolve all of it — the orchestrator still has to decide how many flows
-are worth an agent, and that is the same question one level up.
+are worth an agent, and that is the same question one level up. And it runs into step 7, which has to
+hold every note at once to merge and rank them; more notes is a bigger synthesis, not a smaller one.
 
 ## The other unsolved half: `--review`
 
@@ -1510,22 +1365,25 @@ code-review pass produces graded findings — severity, confidence, a ranked lis
 verdict, structurally: the template has no chip that expresses one, and reintroducing a severity
 vocabulary is named above as the single easiest way to undo this iteration. So the naive
 implementation breaks the invariant the whole format is built to hold, and it will look like a feature
-while doing it.
+while doing it. **The agenda makes that sharper rather than easier**: a graded finding list is very
+nearly the shape of a ranked checkpoint list, and the difference — that one carries severities and
+the other carries questions — is one word per item wide.
 
 **`--effort high` has now built half of this**, which is the reason to read the rest of this section
 before writing the level rather than after. The routing it needs — an external challenge arriving,
-being verified against the file, and landing in the flow that owns it in the page's own voice with no
-grade attached — is the mechanism `SKILL.md` step 8 now runs at `high`. What `--review` still has to
+being verified against the file, and landing in the checkpoint that turns on it in the page's own
+voice with no grade attached — is the mechanism `SKILL.md` steps 6c and 8 now run at `high`. What `--review` still has to
 solve is where the claims come from and how a *graded* source is stripped, not what to do with one
 once it arrives.
 
 **The seam that resolves it, and the reason this level is worth building at all:** a review finding
 enters the page as a **claim to verify**, never as a finding to display. Two steps already do that
 work. Step 8 says read the file yourself before any claim reaches the page, and drop what does not
-survive. Step 5 routes a consequence to the code it reaches. So a verified finding lands in the flow
-that owns it — in *things to understand*, or *reviewer questions*, or *affected but unchanged* — in
-the page's own voice, with the review's severity label stripped. An unverified one is dropped, by a
-rule that already exists. The review pass becomes a *search strategy* feeding step 5, which is
+survive. Step 5 routes a consequence to the code it reaches. So a verified finding lands in the checkpoint whose judgment it bears on — in the explanation, in a
+*Look at* entry, or on the *Open question* line — in the page's own voice, with the review's severity
+label stripped. A finding that is a judgment of its own becomes a checkpoint and goes through step
+7's merging and ranking like any other. An unverified one is dropped, by a rule that already
+exists. The review pass becomes a *search strategy* feeding step 5, which is
 exactly where this skill is weakest, rather than a section of imported conclusions.
 
 Four things to settle before writing it:
@@ -1540,8 +1398,8 @@ Four things to settle before writing it:
   only Claude Code plus a git repo. `/code-review` ships with the CLI, but a project may have its own,
   and the boundary against assuming project layout applies here too: discover the review command,
   do not assume it. A repo with none should degrade to `--full`, saying so.
-- **Findings and flows do not line up one to one.** A review comments per hunk; this page is organised
-  per behaviour. A finding spanning two flows, or landing in a file no flow owns, needs the same
+- **Findings and checkpoints do not line up one to one.** A review comments per hunk; this page is
+  organised per judgment, and three comments on three hunks are routinely one judgment. A finding spanning two flows, or landing in a file no flow owns, needs the same
   routing decision § *One canonical home* already answers — which is encouraging, because it means the
   rule exists, and it means the mapping has to be written down rather than left to the run.
 - **The hard rule against posting anywhere is not relaxed.** A page that now contains review material

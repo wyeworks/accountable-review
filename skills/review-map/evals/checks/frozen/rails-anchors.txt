@@ -1,3 +1,17 @@
+## --fragment agenda-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page agenda-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
@@ -8,7 +22,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -23,41 +36,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-demo-outside-primer.html
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-FAIL  1 pre.demo block(s) outside a primer — a demo may show a result only because it quotes the manual, so one loose on the page is fabricated output with the rule turned off
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-demo-outside-primer.html
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-FAIL  1 pre.demo block(s) outside a primer — a demo may show a result only because it quotes the manual, so one loose on the page is fabricated output with the rule turned off
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -72,7 +50,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -87,7 +64,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -101,7 +77,6 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page anchors-hexdocs-clean.html
 exit=0
@@ -112,7 +87,6 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-unpinned.html
 exit=1
@@ -123,7 +97,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page anchors-hexdocs-unpinned.html
 exit=1
@@ -134,7 +107,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-wrong-package.html
 exit=1
@@ -145,7 +117,6 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page anchors-hexdocs-wrong-package.html
 exit=1
@@ -156,7 +127,6 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment anchors-invented-attribute.html
 exit=0
@@ -168,7 +138,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -183,7 +152,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -198,7 +166,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -213,7 +180,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -228,7 +194,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -243,7 +208,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -256,9 +220,8 @@ SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
+FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -271,9 +234,8 @@ SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
+FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -288,7 +250,6 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -303,349 +264,6 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-app-symbol.html
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-app-symbol.html
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-clean.html
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-clean.html
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-lib-rails-mark.html
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-lib-rails-mark.html
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-lib.html
-exit=0
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-lib.html
-exit=0
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-no-citation.html
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-no-citation.html
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-no-link.html
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-FAIL  1 primer(s) carry no documentation link — a primer is what a link escalates into, so one without a link is teaching with no provenance
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-no-link.html
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-FAIL  1 primer(s) carry no documentation link — a primer is what a link escalates into, so one without a link is teaching with no provenance
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-no-trademark.html
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) show the Rails mark with no trademark line — the .pr-tm row exists to say whose mark is on display, and dropping it is the one part of this component that is not ours to drop
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-no-trademark.html
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) show the Rails mark with no trademark line — the .pr-tm row exists to say whose mark is on display, and dropping it is the one part of this component that is not ours to drop
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-scaffold-receiver.html
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-scaffold-receiver.html
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-two-in-flow.html
-exit=1
-PASS  all 3 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  3 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-FAIL  1 flow(s) carry more than one primer — at most one per flow, and a flow needing two is a flow explaining Rails rather than its own change
-PASS  every primer carries the documentation link it escalated from
-PASS  2 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page anchors-primer-two-in-flow.html
-exit=1
-PASS  all 3 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  3 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-FAIL  1 flow(s) carry more than one primer — at most one per flow, and a flow needing two is a flow explaining Rails rather than its own change
-PASS  every primer carries the documentation link it escalated from
-PASS  2 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -653,7 +271,6 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-probe-legit-forms.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -661,7 +278,6 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -676,7 +292,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 FAIL  a probe writes but no 'console --sandbox' is named — bin/rails runner is not sandboxed and the change persists: bin/rails runner 'Project.first.archive!'
@@ -691,7 +306,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 FAIL  a probe writes but no 'console --sandbox' is named — bin/rails runner is not sandboxed and the change persists: bin/rails runner 'Project.first.archive!'
@@ -706,7 +320,6 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -721,7 +334,6 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -735,7 +347,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -749,954 +360,347 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment approving-brief-checkpoint.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page approving-brief-checkpoint.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment approving-brief-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page approving-brief-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment approving-brief-no-anchor.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page approving-brief-no-anchor.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment approving-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page approving-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment approving-six-questions.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page approving-six-questions.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment brief-field-stub.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page brief-field-stub.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment brief-field-verbose.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page brief-field-verbose.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment brief-flow-ba.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page brief-flow-ba.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment brief-flow-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page brief-flow-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment brief-flow-primer.html
-exit=0
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page brief-flow-primer.html
-exit=0
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment brief-page-over-ceiling.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page brief-page-over-ceiling.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment diagram-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-edge-label-collision.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-edge-label-collision.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-flow-figure-primer.html
-exit=0
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-SKIP  runtime probes: none on this input
-## --page diagram-flow-figure-primer.html
-exit=0
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-SKIP  runtime probes: none on this input
-## --fragment diagram-flow-two-figures.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-flow-two-figures.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-invented-class.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-invented-class.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-label-overflow.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-label-overflow.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-literal-colour.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-literal-colour.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-no-legend.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-no-legend.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-offcanvas.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-offcanvas.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-placeholder.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-placeholder.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment diagram-unwrapped.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page diagram-unwrapped.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-at-head.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-diff-lang.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-diff-lang.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-duplicate.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-duplicate.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-open.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-open.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-typed-highlight.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-typed-highlight.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-typed-tag.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-typed-tag.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-unchanged-changed-file.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page excerpt-unchanged-changed-file.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-crossing-chain-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-crossing-chain-clean.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-crossing-no-chain.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-crossing-no-chain.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-decisions-interleaved.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-decisions-interleaved.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-figure-linear.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-figure-linear.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-layer-grouped.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-layer-grouped.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-partial-page.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-partial-page.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-pending-page.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-pending-page.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-primer-uncited-unit.html
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --page flows-primer-uncited-unit.html
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment flows-reach-rows.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-reach-rows.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-source-only.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-source-only.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-stubs-only-page.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-stubs-only-page.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-unit-flattened.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-unit-flattened.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-unit-no-understand.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-unit-no-understand.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment flows-unit-uncited.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page flows-unit-uncited.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-card-no-lanes.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-card-no-lanes.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-entities-vocab-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-entities-vocab-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-four-paths.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-four-paths.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-no-affected.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-no-affected.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-no-outcome.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-no-outcome.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-prose-nodes.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-prose-nodes.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-shared-card.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-shared-card.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment impact-unlabelled-edge.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-unlabelled-edge.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-assurance.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-draft-narration.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-draft-narration.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-loose-data-path.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-loose-data-path.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-no-tier.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-no-tier.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-risk-score-leading.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-risk-score-leading.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-risk-score-trailing.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-risk-score-trailing.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-risk-score.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-risk-score.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-severity-chip.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-severity-chip.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment invariants-verdict.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page invariants-verdict.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment links-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page links-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment links-collapsed-anchor.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page links-collapsed-anchor.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment links-collapsed-no-excerpt.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page links-collapsed-no-excerpt.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment links-range-truncated.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page links-range-truncated.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment links-unknown-anchor.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page links-unknown-anchor.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment reach-brief-uncited.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page reach-brief-uncited.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment reach-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page reach-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment reach-no-pointer.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page reach-no-pointer.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment reach-pointer-restated.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page reach-pointer-restated.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --fragment reach-readorder.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
-SKIP  runtime probes: none on this input
-## --page reach-readorder.html
-exit=0
-SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment searches-bre-dialect.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page searches-bre-dialect.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment searches-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page searches-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment searches-git-grep.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page searches-git-grep.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment searches-unreachable.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page searches-unreachable.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment start-here-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page start-here-clean.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment start-here-no-why.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page start-here-no-why.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment start-here-two-lists.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --page start-here-two-lists.html
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment page-template.html
 exit=1
-FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
-FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
+FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  4 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-FAIL  1 flow(s) carry more than one primer — at most one per flow, and a flow needing two is a flow explaining Rails rather than its own change
-PASS  every primer carries the documentation link it escalated from
-PASS  2 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction:   {:ok, p} = MyApp.Projects.archive_project(project)
+PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
-PASS  a write-shaped probe is present and a sandboxed console is what runs it
+PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page page-template.html
 exit=1
-FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
-FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
+FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  4 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all https://github.com/varvet/pundit/tree/v{{GEM_VERSION}}#policies https://hexdocs.pm/ecto/{{ECTO_VERSION}}/Ecto.Repo.html#c:update_all/3 
+FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-FAIL  1 flow(s) carry more than one primer — at most one per flow, and a flow needing two is a flow explaining Rails rather than its own change
-PASS  every primer carries the documentation link it escalated from
-PASS  2 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-SKIP  demo receivers: needs --repo to ask whether the constants are this app's
-FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction:   {:ok, p} = MyApp.Projects.archive_project(project)
+PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
-PASS  a write-shaped probe is present and a sandboxed console is what runs it
+PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-clean.html --repo searches-repo
 exit=0
@@ -1708,7 +712,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1724,7 +727,6 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1739,7 +741,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1755,7 +756,6 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1771,7 +771,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1785,9 +784,8 @@ SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
+FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1803,7 +801,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1812,7 +809,6 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 ## --fragment anchors-probe-legit-forms.html --repo searches-repo
 exit=0
 SKIP  doc links: none on this input
-SKIP  primer callouts: none on this input
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1828,7 +824,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 FAIL  a probe writes but no 'console --sandbox' is named — bin/rails runner is not sandboxed and the change persists: bin/rails runner 'Project.first.archive!'
@@ -1843,7 +838,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1859,7 +853,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -1874,7 +867,6 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-unpinned.html --repo searches-repo
 exit=1
@@ -1885,7 +877,6 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-wrong-package.html --repo searches-repo
 exit=1
@@ -1896,7 +887,6 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 SKIP  runtime probes: none on this input
 ## --fragment anchors-clean.html
 exit=0
@@ -1908,206 +898,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
-SKIP  primer callouts: none on this input
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
-## --fragment anchors-primer-clean.html --repo searches-repo
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-app-symbol.html --repo searches-repo
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-FAIL  1 demo receiver(s) are classes from this repository — a result line on an application class is output nobody observed: Project 
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-demo-outside-primer.html --repo searches-repo
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-FAIL  1 pre.demo block(s) outside a primer — a demo may show a result only because it quotes the manual, so one loose on the page is fabricated output with the rule turned off
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-no-citation.html --repo searches-repo
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-no-link.html --repo searches-repo
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  1 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-FAIL  1 primer(s) carry no documentation link — a primer is what a link escalates into, so one without a link is teaching with no provenance
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-two-in-flow.html --repo searches-repo
-exit=1
-PASS  all 3 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  3 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-FAIL  1 flow(s) carry more than one primer — at most one per flow, and a flow needing two is a flow explaining Rails rather than its own change
-PASS  every primer carries the documentation link it escalated from
-PASS  2 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-lib.html --repo searches-repo
-exit=0
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-lib-rails-mark.html --repo searches-repo
-exit=1
-PASS  all 1 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) wear the Rails mark with no rubyonrails.org link — the artwork attributes the explanation to Rails, so a gem or a client library takes .primer--lib instead
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-no-trademark.html --repo searches-repo
-exit=1
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-FAIL  1 primer(s) show the Rails mark with no trademark line — the .pr-tm row exists to say whose mark is on display, and dropping it is the one part of this component that is not ours to drop
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository
-## --fragment anchors-primer-scaffold-receiver.html --repo searches-repo
-exit=0
-PASS  all 2 Rails doc link(s) carry a version segment
-PASS  all doc links pinned to one series (v8.0)
-SKIP  pinning: no hexdocs links on this input
-PASS  no unsubstituted {version} placeholder
-PASS  2 documentation link(s), all from the catalogue
-PASS  no doc link uses another series' override path
-PASS  every documentation link sits beside a repository citation
-PASS  no documentation link hidden inside an excerpt
-PASS  1 primer(s), at most one per flow and each inside the flow it explains
-PASS  every primer carries the documentation link it escalated from
-PASS  1 demo block(s), all inside the primer that licenses them
-PASS  the Rails mark appears only on Rails primers, each carrying its trademark line
-PASS  every demo receiver is a generic class, so its result lines quote the manual
-PASS  1 probe(s), none showing output the run did not observe
-PASS  no probe targets production
-PASS  every probe is read-only
-PASS  all 1 constant(s) named by a probe exist in the repository
-PASS  1 attribute/association name(s) in probes appear in the repository

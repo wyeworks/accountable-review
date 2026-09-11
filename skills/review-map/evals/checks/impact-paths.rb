@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# impact-paths.rb — the section 4 figure, and the only check that reads inside it.
+# impact-paths.rb — the section 04 figure, and the only check that reads inside it.
 #
-# THE DIVISION WITH reach.rb: that file asks whether the SECTION is composed right and
-# reports a missing panel. This file asks whether the FIGURE is right, and skips when there is
-# no panel — so a missing figure is one FAIL, not two.
+# IT GRADES figure.impact AND NOTHING ELSE. A checkpoint's figure.chain is built out of the
+# same ol.ip-path and the same node kinds, and every extraction below is scoped inside
+# <figure class="impact first — so a chain is invisible here, which is correct: a chain shows
+# mechanism inside the change and has no lanes, no legend and no .ip-aff to grade. The rule
+# that keeps the two apart is in report-format.md § Chains, and tests/run.sh is what asserts
+# the template obeys it.
 #
 # A path runs from changed code, through the affected-but-unchanged code that gives the change
 # its consequence, to an observable behaviour. What it replaced was a .blast box grid whose
@@ -23,14 +26,13 @@
 # reason: "too long" is a judgement, and the judged expectations in cases/diagrams.json are
 # where it is actually settled.
 #
-# What needs a reader, and no script can supply: whether these are the RIGHT 2-3 paths, and
+# What needs a reader, and no script can supply: whether these are the RIGHT 1-3 paths, and
 # whether each edge is true. A panel can satisfy every rule here and still describe a
 # consequence that does not happen.
 
 require_relative "lib/review_map/check"
 
-ANCHOR = /id="reach"/
-SUBPART = /id="crosscutting"|id="approving"/
+ANCHOR = /id="impact"/
 
 # Prefix matches throughout, never class="impact" exactly. class="impact impact--x" does not
 # match class="impact", and a rule about a component that silently skips its own variant is
@@ -113,22 +115,21 @@ check.require_input
 # A comment is not markup. page-template.html's own header comments discuss these very class
 # names and ship verbatim inside every published page.
 source = check.page.without_comments
-region =
-  if source.has?(ANCHOR)
-    source.from(ANCHOR, stop: lambda { |line|
-      (line.match?(/<section /) && !line.match?(ANCHOR)) || line.match?(SUBPART)
-    })
-  else
-    source
-  end
+region = source.has?(ANCHOR) ? source.section_from(ANCHOR) : source
 
 panels = region.regions(open: PANEL_OPEN, close: PANEL_CLOSE)
 
-# SKIP, not PASS. reach.rb is what fails a section 4 with no panel; this check has nothing to
-# read and says so, because a check that reports a pass on an input it never looked at is the
-# failure mode this whole suite is built against.
+# A fragment with no panel has nothing to read and says so — a check that reports a pass on an
+# input it never looked at is the failure mode this whole suite is built against. A PAGE with
+# no panel is different: section 04 is omitted only when nothing crosses into unchanged code,
+# which is legitimate and rare, so it warns rather than failing. Silence would let a page that
+# simply never looked for a consequence read as one that looked and found none.
 if panels.empty?
-  check.skip("no .impact panel in this input — reach.rb is what reports a section 4 missing one")
+  if check.kind == "page"
+    check.maybe("no .impact panel on this page — right only if nothing the change does reaches unchanged code")
+  else
+    check.skip("no .impact panel in this input")
+  end
   check.finish
   exit
 end
@@ -136,25 +137,26 @@ end
 if panels.size == 1
   check.ok("one impact panel")
 else
-  check.bad("#{panels.size} .impact panels in section 4 — the panel IS the section's one figure, and a second competes with it for the same reading")
+  check.bad("#{panels.size} .impact panels in section 04 — the panel IS the section's one figure, and a second competes with it for the same reading")
 end
 
 panel = panels.first
 paths = panel.regions(open: PATH_OPEN, close: PATH_CLOSE)
 
-# 2-3 paths. A single path is a chain, not a synthesis view, and the section's whole claim is
-# that separately-explained flows reach the same unchanged code. The ceiling was 5, and a real
-# page took all five: at that length the panel is a section to scroll rather than a figure to
-# hold, and the consequences that do not fit are not lost — the affected list below carries
-# their entries and the flow that owns each one carries its explanation.
+# 1-3 paths. The ceiling was 5, and a real page took all five: at that length the panel is a
+# section to scroll rather than a figure to hold, and the consequences that do not fit are not
+# lost — the affected list below carries their entries and the checkpoint that turns on each
+# one carries its explanation. The floor is 1 rather than 2 because a change with exactly one
+# consequence outside the diff has exactly one path, and padding it to two is how a figure
+# starts carrying a chain nobody needed.
 if paths.empty?
   check.bad("an .impact panel with no ol.ip-path — a panel with no paths is the box grid this component replaced")
   check.finish
   exit
-elsif paths.size.between?(2, 3)
-  check.ok("#{paths.size} impact paths, within the 2-3 budget")
+elsif paths.size.between?(1, 3)
+  check.ok("#{paths.size} impact path(s), within the 1-3 budget")
 else
-  check.bad("#{paths.size} impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job")
+  check.bad("#{paths.size} impact path(s) — the budget is 1 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job")
 end
 
 # --- One path per card, which is what makes them separate diagrams rather than one panel with
@@ -298,9 +300,8 @@ else
   check.ok("the panel is a component, not a drawing")
 end
 
-# Citations live in the affected list. Keeping them out is what stops the panel growing back
-# into a second copy of that list, and it is also why reach.rb can drop the panel before its
-# own entry census without losing anything.
+# Citations live in the affected list beside the panel. Keeping them out is what stops the panel
+# growing back into a second copy of that list.
 if panel.has?(/class="(?:path|cite)"/)
   check.bad("a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it")
 else
