@@ -8,22 +8,12 @@
 #              [--draft | --final | --stopped] [--expect S]... [--forbid S]...
 #
 #   One section, produced by a driver in drivers/ from the frozen upstream:
-#     check.rb --fragment behaviour-flows.html --scope behaviour-flows
+#     check.rb --fragment attention.html --scope attention
 #
-#   Just the diagrams, optionally rendered to PNGs for a person to look at:
-#     check.rb --page page.html --scope diagram [--visual]
-#
-#   A page or fragment produced at the skill's brief detail level, where sections 4 to 7
-#   are one merged section (report-format.md § Detail levels):
-#     check.rb --page page.html --repo DIR --base REF --level brief
-#
-# --level defaults to `full`. It is a third axis, separate from build state and from the
-# section slug, and exactly two checks read it. before_approving.rb, because a missing
-# comprehension checkpoint is correct at brief and a WARN at full. And brief_budget.rb,
-# because the word budget in report-format.md § The brief budget belongs to that level and
-# there is no cap at all at full — where it SKIPs, out loud, saying nothing was measured.
-# Everything else keeps working across the merge because the merged section keeps the section
-# anchors the region extractors read — see report-format.md § Section 4 at brief.
+# --level is still accepted and read by nothing. There is one page shape now — SKILL.md
+# refuses --full and --review and takes --brief and --light as aliases that change nothing —
+# so the flag survives only because evals/run.sh still passes it and an unknown argument
+# exits 2. Do not add a check that reads it: a second shape is what this page stopped being.
 #
 # Three grading scopes, and the difference matters. A PAGE carries invariants no fragment
 # can: completeness, one canonical home, the excerpt budget, the build state. A FRAGMENT is
@@ -39,18 +29,12 @@ require_relative "checks/lib/review_map/check"
 # Each check lives in checks/ and prints PASS / FAIL / WARN / SKIP lines. This script only
 # decides which ones apply and adds up what they printed. Exit code follows the FAILs.
 SCOPES = {
-  "all"              => %w[completeness build-state page-invariants excerpts behaviour-flows
-                           start-here reach impact-paths before-approving searches rails-anchors
-                           link-form diagram brief-budget],
-  "core"             => %w[completeness build-state page-invariants excerpts before-approving
-                           rails-anchors link-form brief-budget],
-  "behaviour-flows"  => %w[page-invariants excerpts behaviour-flows searches rails-anchors
-                           link-form diagram brief-budget],
-  "start-here"       => %w[page-invariants start-here link-form brief-budget],
-  "reach"            => %w[page-invariants excerpts reach impact-paths searches rails-anchors
-                           link-form diagram brief-budget],
-  "before-approving" => %w[page-invariants before-approving rails-anchors link-form brief-budget],
-  "diagram"          => %w[diagram],
+  "all"        => %w[completeness build-state page-invariants excerpts start-here
+                     impact-paths searches rails-anchors link-form],
+  "core"       => %w[completeness build-state page-invariants excerpts rails-anchors link-form],
+  "attention"  => %w[page-invariants excerpts rails-anchors link-form],
+  "start-here" => %w[page-invariants start-here link-form],
+  "impact"     => %w[page-invariants impact-paths searches link-form],
 }.freeze
 
 CHECKS_DIR = File.join(__dir__, "checks")
@@ -63,7 +47,7 @@ if scope.to_s.empty?
   if check.kind == "page"
     scope = "all"
   else
-    warn "a fragment needs --scope: behaviour-flows | start-here | reach | before-approving | diagram"
+    warn "a fragment needs --scope: attention | start-here | impact"
     exit 2
   end
 end
@@ -72,15 +56,14 @@ unless SCOPES.key?(scope)
   exit 2
 end
 
-run = SCOPES[scope].dup
-run << "diagram-shot" if check.visual
+run = SCOPES[scope]
 
 # Rebuild the child argument list from what was parsed, so every child sees the same input
 # and nobody re-parses the command line.
 args = ["--#{check.kind}", check.input]
 args += ["--repo", check.repo] unless check.repo.to_s.empty?
 args += ["--base", check.base] unless check.base.to_s.empty?
-args += ["--head", check.head_ref, "--#{check.mode}", "--level", check.level]
+args += ["--head", check.head_ref, "--#{check.mode}"]
 args += ["--out", check.outdir] unless check.outdir.to_s.empty?
 
 lines = []
@@ -113,8 +96,8 @@ skipped = counted.call("SKIP")
 puts
 tally = "#{passed} passed, #{failed} failed, #{warned} warning(s), #{skipped} skipped"
 if check.kind == "page"
-  puts "#{scope} / #{check.mode} / #{check.level}: #{tally}"
+  puts "#{scope} / #{check.mode}: #{tally}"
 else
-  puts "#{scope} fragment / #{check.level}: #{tally}"
+  puts "#{scope} fragment: #{tally}"
 end
 exit(failed.zero? ? 0 : 1)

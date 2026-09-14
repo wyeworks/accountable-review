@@ -192,13 +192,13 @@ C=$TMP/config
 mkdir -p "$C"
 cat > "$C/.accountable-review.yml" <<'Y'
 review_map:
-  mode: full
+  mode: light
   delivery:
     provider: github-artifact
     retention_days: 14
 Y
 "$READ_CONFIG" "$C/.accountable-review.yml" > "$TMP/cfg"
-assert_in "$TMP/cfg" "CFG_mode='full'"                 "mode is read"
+assert_in "$TMP/cfg" "CFG_mode='light'"                "mode is read, and accepted as an alias"
 assert_in "$TMP/cfg" "CFG_retention_days='14'"         "retention_days is read"
 assert_not_in "$TMP/cfg" "CFG_effort"                  "a key the file omits produces no line"
 
@@ -208,15 +208,24 @@ assert_in "$TMP/deliver-cfg" '"retention_days": "14"'  "the workflow honours ret
 
 ( cd "$C" && "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
     --head-sha a93bd21deadbeef --repo-dir "$C" ) > "$TMP/inv-cfg"
-assert_in "$TMP/inv-cfg" "--full"                      "the configured detail level reaches the run"
+# THE PAGE HAS ONE SHAPE, so no level ever reaches the run. mode is still read and still
+# validated — a workflow that has been passing it keeps working — and then goes nowhere.
+assert_not_in "$TMP/inv-cfg" "--light"                 "the configured mode does not reach the run"
+assert_not_in "$TMP/inv-cfg" "--brief"                 "and neither does its old name"
 ( cd "$C" && "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
     --head-sha a93bd21deadbeef --repo-dir "$C" --mode brief ) > "$TMP/inv-flag"
-assert_in "$TMP/inv-flag" "--brief"                    "an explicit flag beats the config file"
+assert_not_in "$TMP/inv-flag" "--brief"                "an explicit mode is accepted and passes nothing on"
 
 "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 --head-sha a93bd21deadbeef \
   --repo-dir "$TMP" > "$TMP/inv-def"
-assert_in "$TMP/inv-def" "--brief"                     "the default detail level is brief"
+assert_not_in "$TMP/inv-def" "--brief"                 "no detail level is passed by default either"
 assert_in "$TMP/inv-def" "--effort high"               "the default effort is high, as the skill's is"
+
+# `full` is refused rather than mapped: it named a seven-section page, and handing back the
+# agenda under that name is a setting that changed meaning without telling anyone.
+rc=0; printf 'review_map:\n  mode: full\n' > "$C/full.yml"
+"$READ_CONFIG" "$C/full.yml" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1"                                    "mode: full is refused, not silently downgraded"
 
 rc=0; printf 'review_map:\n  retention_day: 14\n' > "$C/bad.yml"
 "$READ_CONFIG" "$C/bad.yml" >/dev/null 2>&1 || rc=$?

@@ -1,5 +1,5 @@
 #!/bin/sh
-# ledger-rows.sh — emit the coverage-ledger rows for a diff.
+# ledger-rows.sh — emit the diff inventory the page's evidence foot holds.
 #
 #   Usage: ledger-rows.sh <BASE> [HEAD] [--pr <owner/repo#N>]
 #                                       [--compare <owner/repo@base...head>]
@@ -7,28 +7,25 @@
 #                                       [--paths-only]
 #          (run from inside the repository)
 #
-# The ledger has to list every changed path exactly, and coverage-gate.sh compares
+# The inventory has to list every changed path exactly, and coverage-gate.sh compares
 # it as a set. Typing a hundred paths by hand fails that check for boring reasons —
-# a truncation, a stale row after a rebase — so generate the rows and fill in the
-# three judgements: which part covers the file, how much attention it needs, and
-# which group it belongs to.
+# a truncation, a stale row after a rebase — so the rows are generated and pasted.
 #
-# Each row is preceded by a hint comment carrying the git status letter and the
-# line counts, which is usually enough to decide `attention` without opening the
-# file. Delete the hints when you paste, or leave them: HTML comments do not render.
+# Each row is preceded by a hint comment carrying the git status letter and the line
+# counts. Delete the hints when you paste, or leave them: HTML comments do not render.
 #
-# Placeholders left in the output are deliberate. A row that still says {{SECTION}}
-# is a row nobody classified, and it is meant to be obvious.
+# ONE CELL PER PATH, which is what --paths-only emits and what the page carries: no
+# section, no attention level, no group. The page has no classified ledger any more —
+# where a reviewer's attention goes is said by what is on the reading path, and saying
+# it again in a column beside every file was the second ledger section 04 is told not
+# to become. What survives is the accounting, and the reason the cell is still a .gt
+# grid cell rather than a list item is that data-path has to stay on a `div class="c"`:
+# that is what coverage-gate.sh compares and what page-invariants.rb checks it sits on.
 #
-# --paths-only emits ONE cell per path instead of four: no section, no attention
-# level, no group. It is what the brief detail level's merged tail section carries in
-# place of the classified ledger, and the reason it is still a .gt grid cell rather
-# than a list item is that data-path has to stay on a `div class="c"` — that is what
-# coverage-gate.sh compares and what page-invariants.sh checks it sits on. So the
-# classification goes and the completeness gate keeps running, at every level. The
-# three judgements are what --paths-only drops; accounting for the diff is not.
+# Pass --paths-only. It is the only documented mode; the four-cell form it switches off
+# is kept for a future level that classifies again, and nothing in the page reads it.
 #
-# LINKS. report-format.md § 7 wants a deep link per row, and at link rungs 1 and 2
+# LINKS. report-format.md § Section 5 wants a deep link per row, and at rungs 1 and 2
 # that link is a diff-page anchor, whose fragment is the SHA-256 of the path. Pass
 # --pr or --compare and the rows come out linked. This exists because a run without
 # the flag hand-inserted seven anchors into the very <td> that carries data-path —
@@ -40,7 +37,7 @@
 #   --blob owner/repo@sha              rung 2 with no reachable base: <blob/{sha}/{path}>
 #   neither                            rungs 3 and 4: the path as plain <code>, no href
 #
-# A ledger row names a file, so both diff-page forms link the file rather than a
+# An inventory row names a file, so both diff-page forms link the file rather than a
 # line — a diff page is where the reviewer is working, and the row is their way in.
 #
 # Which is also why nothing here consults diff-render.sh. A file-level anchor into a
@@ -124,7 +121,7 @@ git diff --numstat "$BASE...$HEAD_REF" | sort -k3 | while IFS='	' read -r add de
   status=$(git diff --name-status "$BASE...$HEAD_REF" -- "$path" | cut -f1 | head -1)
   safe=$(printf '%s' "$path" | esc)
   printf '<!-- %s +%s/-%s -->\n' "${status:-?}" "$add" "$del"
-  # Grid cells, not a <tr>: the ledger is a CSS grid so every seam is a rule at any
+  # Grid cells, not a <tr>: the inventory is a CSS grid so every seam is a rule at any
   # wrap point. data-path stays on the first cell — coverage-gate.sh greps it
   # page-wide and compares it to the diff as a set, and it is RESERVED to this cell.
   printf '<div class="c" data-path="%s">%s</div>' "$safe" "$(cell "$path")"

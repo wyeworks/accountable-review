@@ -11,7 +11,7 @@
         <a class="path" href="#">app/queries/active_projects.rb:3</a>
         <span class="why">archived projects stay selectable <span class="tier">evidenced by unchanged code</span></span>
       </span>
-      <a class="ptr" href="#flow-b">Flow B &rarr;</a>
+      <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
     </li>
   </ol>
   <ol class="begin">
@@ -21,7 +21,7 @@
         <a class="path" href="#">db/migrate/20260101000000_add_archived_at_to_projects.rb:5</a>
         <span class="why">the column before the code that reads it</span>
       </span>
-      <a class="ptr" href="#flow-a">Flow A &rarr;</a>
+      <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
     </li>
     <li>
       <span class="n">02</span>
@@ -29,7 +29,7 @@
         <a class="path" href="#">app/models/project.rb:41</a>
         <span class="why">the smallest complete example of the new behaviour</span>
       </span>
-      <a class="ptr" href="#flow-a">Flow A &rarr;</a>
+      <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
     </li>
     <li>
       <span class="n">03</span>
@@ -37,7 +37,7 @@
         <a class="path" href="#">app/queries/active_projects.rb:3</a>
         <span class="why">unchanged, and it decides what the picker still offers <span class="tier">evidenced by unchanged code</span></span>
       </span>
-      <a class="ptr" href="#flow-b">Flow B &rarr;</a>
+      <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
     </li>
   </ol>
   <p class="note">These are what this pass surfaced, not an exhaustive list.</p>

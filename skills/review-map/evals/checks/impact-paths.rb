@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# impact-paths.rb — the section 4 figure, and the only check that reads inside it.
+# impact-paths.rb — the section 04 figure, and the only check that reads inside it.
 #
-# THE DIVISION WITH reach.rb: that file asks whether the SECTION is composed right and
-# reports a missing panel. This file asks whether the FIGURE is right, and skips when there is
-# no panel — so a missing figure is one FAIL, not two.
+# IT GRADES figure.impact AND NOTHING ELSE. A checkpoint's figure.chain is built out of the
+# same ol.ip-path and the same node kinds, and every extraction below is scoped inside
+# <figure class="impact first — so a chain is invisible here, which is correct: a chain shows
+# mechanism inside the change and has no lanes, no legend and no .ip-aff to grade. The rule
+# that keeps the two apart is in report-format.md § Chains, and tests/run.sh is what asserts
+# the template obeys it.
 #
 # A path runs from changed code, through the affected-but-unchanged code that gives the change
 # its consequence, to an observable behaviour. What it replaced was a .blast box grid whose
@@ -15,6 +18,15 @@
 # no edges. Every rule below is aimed at one of those two failures returning: an edge with no
 # label, or a node with a paragraph in it.
 #
+# TWO OF THE RULES ARE ABOUT WHAT THE PANEL ADDS RATHER THAN WHAT IT MUST NOT BECOME, and both
+# came from reading a published page. Every card opens with a p.ip-why, because a card otherwise
+# opens on geometry and the reader traces four nodes before learning whether the path was worth
+# tracing. And every changed and affected node carries a locator, because a figure of identifiers
+# raises exactly one question it used to have no way of answering: which file is this in. The
+# rule against citations in the panel — which forbade the second of those outright — is gone, and
+# what replaced it is narrower and aimed at the defect that rule was actually written against: a
+# citation standing IN FOR the label, so the figure says where to look and never what is there.
+#
 # WHY THE VERDICTS SPLIT WHERE THEY DO. Shape is a FAIL: a path that never reaches a behaviour,
 # or never passes through unchanged code, is not an impact path, and no reading of it is. The
 # causal verb is a WARN, because the vocabulary in report-format.md § Impact paths cannot
@@ -23,14 +35,13 @@
 # reason: "too long" is a judgement, and the judged expectations in cases/diagrams.json are
 # where it is actually settled.
 #
-# What needs a reader, and no script can supply: whether these are the RIGHT 2-3 paths, and
+# What needs a reader, and no script can supply: whether these are the RIGHT 1-3 paths, and
 # whether each edge is true. A panel can satisfy every rule here and still describe a
 # consequence that does not happen.
 
 require_relative "lib/review_map/check"
 
-ANCHOR = /id="reach"/
-SUBPART = /id="crosscutting"|id="approving"/
+ANCHOR = /id="impact"/
 
 # Prefix matches throughout, never class="impact" exactly. class="impact impact--x" does not
 # match class="impact", and a rule about a component that silently skips its own variant is
@@ -41,6 +52,7 @@ PATH_OPEN   = /<ol class="ip-path/
 PATH_CLOSE  = %r{</ol>}
 CARD_OPEN   = /<div class="ip-card/
 CARD_LANES  = /<div class="ip-lanes/
+CARD_WHY    = /<p class="ip-why/
 NODE_OPEN   = /<li[^>]*class="ip-n/
 NODE_CLOSE  = %r{</li>}
 
@@ -67,6 +79,7 @@ CAUSAL = %w[calls reads writes passes returns defaults falls filters filtered sc
 MAX_REL_WORDS = 5
 MAX_LABEL_CHARS = 40
 MAX_DETAIL_WORDS = 10
+MAX_WHY_WORDS = 45
 
 # An entity reference is ONE character to a reader, and the label cap is about what a reader
 # sees. Found by running this check over a real page: a node labelled "submitted", and nothing
@@ -92,7 +105,9 @@ def text_of(node, pattern)
   ReviewMap.unescape(m[1].gsub(/<[^>]*>/, "")).strip
 end
 
-Node = Struct.new(:kind, :rel, :label, :detail) do
+# `body` is the node's raw markup, kept because the locator rules below are about WHERE a thing
+# sits — inside the label, or last inside the box — and the unescaped text cannot answer that.
+Node = Struct.new(:kind, :rel, :label, :detail, :body) do
   def lane = kind == :affected ? 2 : 1
 end
 
@@ -103,7 +118,8 @@ def nodes_in(path)
     Node.new(kind,
               text_of(node, /class="ip-rel"[^>]*>(.*?)<\/span>/m),
               text_of(node, /<b>(.*?)<\/b>/m),
-              text_of(node, /class="ip-d"[^>]*>(.*?)<\/span>/m))
+              text_of(node, /class="ip-d"[^>]*>(.*?)<\/span>/m),
+              body)
   end
 end
 
@@ -113,22 +129,21 @@ check.require_input
 # A comment is not markup. page-template.html's own header comments discuss these very class
 # names and ship verbatim inside every published page.
 source = check.page.without_comments
-region =
-  if source.has?(ANCHOR)
-    source.from(ANCHOR, stop: lambda { |line|
-      (line.match?(/<section /) && !line.match?(ANCHOR)) || line.match?(SUBPART)
-    })
-  else
-    source
-  end
+region = source.has?(ANCHOR) ? source.section_from(ANCHOR) : source
 
 panels = region.regions(open: PANEL_OPEN, close: PANEL_CLOSE)
 
-# SKIP, not PASS. reach.rb is what fails a section 4 with no panel; this check has nothing to
-# read and says so, because a check that reports a pass on an input it never looked at is the
-# failure mode this whole suite is built against.
+# A fragment with no panel has nothing to read and says so — a check that reports a pass on an
+# input it never looked at is the failure mode this whole suite is built against. A PAGE with
+# no panel is different: section 04 is omitted only when nothing crosses into unchanged code,
+# which is legitimate and rare, so it warns rather than failing. Silence would let a page that
+# simply never looked for a consequence read as one that looked and found none.
 if panels.empty?
-  check.skip("no .impact panel in this input — reach.rb is what reports a section 4 missing one")
+  if check.kind == "page"
+    check.maybe("no .impact panel on this page — right only if nothing the change does reaches unchanged code")
+  else
+    check.skip("no .impact panel in this input")
+  end
   check.finish
   exit
 end
@@ -136,25 +151,26 @@ end
 if panels.size == 1
   check.ok("one impact panel")
 else
-  check.bad("#{panels.size} .impact panels in section 4 — the panel IS the section's one figure, and a second competes with it for the same reading")
+  check.bad("#{panels.size} .impact panels in section 04 — the panel IS the section's one figure, and a second competes with it for the same reading")
 end
 
 panel = panels.first
 paths = panel.regions(open: PATH_OPEN, close: PATH_CLOSE)
 
-# 2-3 paths. A single path is a chain, not a synthesis view, and the section's whole claim is
-# that separately-explained flows reach the same unchanged code. The ceiling was 5, and a real
-# page took all five: at that length the panel is a section to scroll rather than a figure to
-# hold, and the consequences that do not fit are not lost — the affected list below carries
-# their entries and the flow that owns each one carries its explanation.
+# 1-3 paths. The ceiling was 5, and a real page took all five: at that length the panel is a
+# section to scroll rather than a figure to hold, and the consequences that do not fit are not
+# lost — the affected list below carries their entries and the checkpoint that turns on each
+# one carries its explanation. The floor is 1 rather than 2 because a change with exactly one
+# consequence outside the diff has exactly one path, and padding it to two is how a figure
+# starts carrying a chain nobody needed.
 if paths.empty?
   check.bad("an .impact panel with no ol.ip-path — a panel with no paths is the box grid this component replaced")
   check.finish
   exit
-elsif paths.size.between?(2, 3)
-  check.ok("#{paths.size} impact paths, within the 2-3 budget")
+elsif paths.size.between?(1, 3)
+  check.ok("#{paths.size} impact path(s), within the 1-3 budget")
 else
-  check.bad("#{paths.size} impact path(s) — the budget is 2 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job")
+  check.bad("#{paths.size} impact path(s) — the budget is 1 to 3 (report-format.md § Impact paths). Wanting a fourth is the signal that the ones you have are not doing their job")
 end
 
 # --- One path per card, which is what makes them separate diagrams rather than one panel with
@@ -187,6 +203,46 @@ if cards.positive? && bare.zero?
   check.ok("every card carries its own lane labels")
 else
   check.bad("#{bare} .ip-card(s) with no .ip-lanes of their own — a separated card is a whole figure, and a reader arriving at the third one has nothing above it saying which column is the change and which is the existing system")
+end
+
+# --- Every card opens with its paragraph.
+#
+# A card otherwise opens on geometry: the header names a behaviour and the next thing is a chain,
+# so the reader traces four nodes before learning whether the path was worth tracing — and the one
+# figure on the page that is ABOUT consequences made its consequence the last thing read.
+#
+# Interleaved rather than counted, for the reason the pairing rule above is: two paragraphs on one
+# card beside a card with none satisfies equal counts, and the card with none is the defect.
+why_seq = panel.scan(/#{CARD_OPEN}|#{CARD_WHY}/).map { |m| m.match?(CARD_OPEN) ? :card : :why }
+if cards.positive? && why_seq == ([:card, :why] * cards)
+  check.ok("every card opens with one p.ip-why")
+else
+  check.bad("#{panel.scan(CARD_WHY).size} p.ip-why for #{cards} .ip-card(s), one each and directly after the header — a card with none opens on geometry, and the reader traces the whole chain before learning whether it was worth tracing")
+end
+
+# What the paragraph must not be. A citation in it is the affected list restated; a list in it is
+# the chain walked in prose, which makes one of the figure and the paragraph redundant — the
+# footnote-supplying-the-edges failure of the box grid this component replaced.
+whys = panel.lines.join(" ").scan(%r{<p class="ip-why"[^>]*>(.*?)</p>}m).flatten
+empty = whys.count { |w| ReviewMap.unescape(w.gsub(/<[^>]*>/, "")).strip.empty? }
+walked = whys.count { |w| w.match?(/class="(?:path|cite)/) || w.match?(/<li[ >]|<ol[ >]|<ul[ >]/) }
+if empty.zero? && walked.zero?
+  check.ok("no ip-why is empty, and none carries a citation or a list")
+else
+  faults = []
+  faults << "#{empty} empty" if empty.positive?
+  faults << "#{walked} carrying a citation or a list" if walked.positive?
+  check.bad("p.ip-why: #{faults.join(', ')} — it says what goes wrong and to whom and points at a checkpoint; the file:line is on the nodes and in the affected list, and walking the hops in prose makes one of the two redundant")
+end
+
+# Length is a judgement, so it warns. A hard failure here teaches a run to drop a true clause to
+# get under a number, which is the trade report-format.md § The agenda budget refuses everywhere.
+long = whys.map { |w| ReviewMap.unescape(w.gsub(/<[^>]*>/, "")).split(/\s+/).reject(&:empty?).size }
+           .each_with_index.select { |n, _| n > MAX_WHY_WORDS }
+if long.empty?
+  check.ok("every ip-why is within #{MAX_WHY_WORDS} words")
+else
+  check.maybe("ip-why over #{MAX_WHY_WORDS} words: #{long.map { |n, i| "card #{i + 1} at #{n}" }.join(', ')} — one or two sentences and a pointer; past that it is explaining, and the checkpoint owns the explanation")
 end
 
 all = paths.map { |p| nodes_in(p) }
@@ -298,13 +354,73 @@ else
   check.ok("the panel is a component, not a drawing")
 end
 
-# Citations live in the affected list. Keeping them out is what stops the panel growing back
-# into a second copy of that list, and it is also why reach.rb can drop the panel before its
-# own entry census without losing anything.
-if panel.has?(/class="(?:path|cite)"/)
-  check.bad("a citation inside the .impact panel — the file:line belongs to the affected list below, which is the one canonical home for it")
+# --- The node locator.
+#
+# This rule used to be "no citations in the panel at all", and it was right about the defect it
+# was written against and wrong about the remedy. The panel it replaced had nodes whose labels
+# WERE file names: the address standing in for the identifier, so the figure said where to look
+# and never what was there. Banning the address banned the defect and took the reader's one way
+# of locating a node with it — every node named a symbol, and which of four hundred files that
+# symbol lived in was the question the figure most reliably raised.
+#
+# So the address is back, in one place and one shape: an a.path.ip-loc, last inside .ip-box, one
+# per node. What stays forbidden is the thing that was actually wrong — a citation standing in
+# for the label or the clause — and what stays true is that the CLAUSE explaining an affected
+# entry has one canonical home in the affected list below, which a locator is not.
+CITE_IN  = /<a class="(?:path|cite)[^"]*"/
+LOC_LAST = %r{<a class="(?:path|cite)[^"]*"[^>]*>[^<]*</a>\s*</span>\s*</li>}
+
+standing_in = []
+missing = []
+on_outcome = []
+surplus = []
+misplaced = []
+
+all.each_with_index do |ns, pi|
+  ns.each_with_index do |n, ni|
+    body = n.body.to_s
+    where = "path #{pi + 1} node #{ni + 1}"
+    label = body[%r{<b>.*?</b>}m].to_s
+    detail = body[%r{class="ip-d"[^>]*>.*?</span>}m].to_s
+    standing_in << where if label.match?(CITE_IN) || detail.match?(CITE_IN)
+
+    # Counted OUTSIDE the label and the clause, so a node whose label has been replaced by a
+    # citation is one defect and not two. Counting the whole body reported the standing-in
+    # citation again as a surplus locator — the same clamp impact-shared-card.html's lane-label
+    # rule needs, arrived at the same way: a rule that reports one defect twice sends the reader
+    # to fix the half that was already right.
+    count = body.sub(label, "").sub(detail, "").scan(CITE_IN).size
+    case n.kind
+    when :outcome
+      on_outcome << where if count.positive?
+    when :changed, :affected
+      if count.zero?
+        missing << where
+      elsif count > 1
+        surplus << where
+      elsif !body.match?(LOC_LAST)
+        misplaced << where
+      end
+    end
+  end
+end
+
+if standing_in.empty?
+  check.ok("every node's label names a thing rather than a place")
 else
-  check.ok("no citations inside the panel")
+  check.bad("a citation inside the label or the clause at #{standing_in.join(', ')} — the address goes on its own a.path.ip-loc line, so the label can still say WHAT the node is")
+end
+
+loc_faults = []
+loc_faults << "no locator on #{missing.join(', ')}" unless missing.empty?
+loc_faults << "a locator on the outcome at #{on_outcome.join(', ')}, which is a behaviour and not a file" unless on_outcome.empty?
+loc_faults << "more than one locator on #{surplus.join(', ')}" unless surplus.empty?
+loc_faults << "a locator that is not the last thing in its .ip-box at #{misplaced.join(', ')}" unless misplaced.empty?
+
+if loc_faults.empty?
+  check.ok("every changed and affected node carries exactly one locator, last in its box")
+else
+  check.bad("#{loc_faults.join('; ')} — a node naming a symbol and nothing else leaves the reader to guess which file it is in")
 end
 
 placeholders = panel.scan(/\{\{[A-Z_|]+\}\}/).uniq

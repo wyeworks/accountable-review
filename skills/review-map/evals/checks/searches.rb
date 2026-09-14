@@ -20,9 +20,9 @@
 # `current_user.steward?` — so pattern-only matching would have passed the very entry the search
 # could not have found, because the search never looked in app/controllers.
 #
-# Two things it deliberately does not do. It does not require a flow to record searches inline:
+# Two things it deliberately does not do. It does not require every claim to record a search inline:
 # § 2 has no such rule, so a fragment with affected entries and no recorded search WARNs rather
-# than fails. And it skips entries that POINT at a flow — their provenance lives in the flow that
+# than fails. And it skips entries that POINT at a checkpoint — their provenance lives where that
 # explains them, which a fragment cannot see.
 #
 # What needs a reader: whether a search was the RIGHT one to run. This only settles whether the
@@ -166,10 +166,12 @@ module Searches
     end
   end
 
-  # Scoped by the template's own markers, the way reach.rb scopes by id="reach":
-  # § 4's card carries <p class="eyebrow">Affected, not changed</p>, § 2's field carries
-  # <dt>Affected, unchanged</dt>. Sub-eyebrows inside the affected card (one per flow group) do
-  # not reset it; the Changed column, the end of the field, and <h3> do.
+  # Scoped by the template's own markers rather than by a section id, which is what lets one
+  # rule read both places the label appears: section 04 carries
+  # <p class="eyebrow">Affected, not changed</p> beside the panel and the evidence foot carries
+  # it again over the lower-priority list. That label is verbatim in both, and it has to sit
+  # directly after the class attribute for this to open on it. The Changed column, the end of a
+  # field and <h3> reset it.
   # AN ENTRY IS WHATEVER THE TEMPLATE EMITS, and it stopped being <li>. When the design system
   # moved § 4 from div.two-col > div.card > ul > li > span.cite to dl.rows > dt/dd > div.item >
   # a.path, this extractor was not moved with it — and neither were the goldens self-test.rb
@@ -195,7 +197,11 @@ module Searches
       affected = false if line.match?(%r{<dt[^>]*>[^<]*[Cc]hanged</dt>}) && !line.match?(/[Aa]ffected/)
       affected = true if line.match?(/class="eyebrow"[^>]*>[^<]*[Aa]ffected/)
       affected = true if line.match?(/<dt[^>]*>[^<]*[Aa]ffected/)
-      affected = false if line.match?(%r{</dd>|<h3|</dl>})
+      # </ul> and </section> joined the resets when the affected list stopped being a dl field.
+      # Without them the region opened in section 04 stays open through the evidence foot, and
+      # the <li> rows inside details.searched are collected as affected entries — every recorded
+      # search read as a claim that needed a recorded search.
+      affected = false if line.match?(%r{</dd>|<h3|</dl>|</ul>|</section>})
 
       if affected && line.match?(/class="item"/)
         entries << line
@@ -281,7 +287,7 @@ failures = []
 Searches.affected_entries(page).each do |entry|
   next if entry.empty?
 
-  if entry.include?('href="#flow')
+  if entry.match?(/href="#cp-/)
     pointers += 1
     next
   end
@@ -357,7 +363,7 @@ end
 if recorded.zero?
   # Nothing recorded means provenance is UNVERIFIABLE, not false. The warning above is the
   # whole verdict: failing every entry here would punish § 2, which has no rule requiring a
-  # flow to record its searches inline, for a rule only § 4 states.
+  # every claim to record its searches inline, for a rule only section 04 states.
   unless checked.zero?
     check.skip("#{checked} cited entr(ies) left unchecked: with no search recorded there is nothing to check them against")
   end
@@ -376,7 +382,7 @@ end
 
 # Coverage of the check itself, so a small number of FAILs cannot be read as a clean sweep.
 unless pointers.zero?
-  check.skip("#{pointers} entr(ies) point at a flow: their provenance lives there, not here")
+  check.skip("#{pointers} entr(ies) point at a checkpoint: their provenance lives there, not here")
 end
 unless unresolved.zero?
   check.skip("#{unresolved} entr(ies) carried no citation this check could resolve to a file in the repo")

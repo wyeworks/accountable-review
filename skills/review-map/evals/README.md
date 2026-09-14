@@ -6,13 +6,13 @@ Three grading scopes, because the thing being measured is prose and the prose ha
 |---|---|---|
 | **Page** | a whole published page, from a real run | The invariants that only exist across sections |
 | **Section** | one HTML fragment, produced from the frozen upstream | Everything internal to one section |
-| **Component** | a script's output, or an `<svg>` lifted out of either | Mechanics: excerpt shape, ledger rows, diagram conformance |
+| **Component** | a script's output, lifted out of either | Mechanics: excerpt shape, inventory cells, chain conformance |
 
 ```
 evals/
 ├── evals.json               the page cases: one whole run each
 ├── trigger-eval.json        should-trigger / should-not-trigger queries
-├── cases/                   the section cases, one file per section slug
+├── deferred/                the section cases and drivers, unrun — see deferred/README.md
 ├── drivers/                 the prompts that produce one section from frozen upstream
 ├── frozen/                  that upstream, hand-authored per fixture
 ├── fixtures/make-fixtures.sh  builds the repositories everything runs against
@@ -56,13 +56,12 @@ and neither is a reader who has read it. The first run against `monolith-guard-c
 flow-owned entry at full length, and part of why is that a standalone fragment has nothing to point
 at. Judge the form here; the page cases judge whether anything was lost.
 
-**The merged tail section is that limit one size larger, so `brief-tail` is worth reading with it in
-mind.** At the default level, § 4's material and §§ 5–7's share one section, which means the pointer
-relation and the canonical-home rule now run *inside* the fragment as well as across it — and the
-fragment still cannot settle either, for the same reason. What it also cannot see is the failure the
-merge specifically invites: a section that carries both a flow's explanation and the pointer back to
-it, two paragraphs apart. That is duplication at conversational distance, it looks like thoroughness,
-and only a page case reads far enough to catch it.
+**The section cases are deferred, and that matters for what the page cases now have to carry.** They
+graded one section of the page this design replaced; the agenda's equivalent unit is a checkpoint,
+which is a different driver rather than a rename (`deferred/README.md`). Until they return, the page
+cases are the only scope that reads a produced page — so everything a section case used to settle
+cheaply, three repetitions at a time, is settled expensively or not at all. Reinstating them is the
+highest-value thing in this directory.
 
 Freezing the upstream also removes the step whose variance the page cases measure. A section at 100%
 is therefore compatible with poor pages; it just locates the defect upstream, which is a useful
@@ -81,7 +80,7 @@ it work. So a result line written before it existed is still comparable with one
 ```sh
 bin/evals offline                        # every no-model suite. What CI checks.
 bin/evals offline frozen                 # or just one of them
-bin/evals section behaviour-flows        # -n 3 -j 3 --judge, then the report
+bin/evals page 1                         # the recipe for one whole-page case
 bin/evals page 1                         # the recipe for one whole-page case
 bin/evals catalogue elixir               # the maintenance pass. Needs network.
 bin/evals help                           # the rest
@@ -103,11 +102,7 @@ the Actions UI, but they may not drift.
 ## Running a section
 
 ```sh
-bin/evals section behaviour-flows               # the loop: three judged repetitions, then the report
-bin/evals section behaviour-flows --fast        # the same on a cheaper reader; see below
-bin/evals section reach --level brief          # the same case, other level: override the case file
-bin/evals section diagrams --fixture monorepo-contract --visual
-bin/evals section behaviour-flows -n 1 --no-judge   # one unjudged repetition, when you want it
+bin/evals section <case>                        # DEFERRED — see deferred/README.md
 ```
 
 The defaults go in front of what you pass, and `run.sh` takes the last value it sees, so any flag you
@@ -115,14 +110,8 @@ name wins. `--no-judge` is the one flag the dispatcher handles itself — `run.s
 and dropping the default is the whole of what it means. Underneath:
 
 ```sh
-./run.sh behaviour-flows -n 3
-./run.sh behaviour-flows -n 3 --judge          # and grade the judged expectations too
-./run.sh behaviour-flows -n 3 --judge --fast -j 3   # the iteration loop; see below
-./run.sh diagrams --fixture monorepo-contract --visual
-./run.sh brief-tail -n 3 --judge                # the default level's merged tail section
-./run.sh brief-flows -n 3 --judge               # section 2 written to the default level's word budget
-./run.sh reach -n 3 --level brief              # the same case, other level: override the case file
-./report.sh behaviour-flows
+./run.sh <case> -n 3 --judge                    # DEFERRED: nothing in cases/ any more
+./report.sh <case>                              # still reads whatever is in results/
 ```
 
 `run.sh` rebuilds the fixtures, substitutes the driver's placeholders, runs `claude -p` from inside the
@@ -179,28 +168,18 @@ dependency that is not there. Two graders in one group get two judged lines, nev
 Every knob has an environment variable, for a shell you keep open: `EVAL_MODEL`, `EVAL_EFFORT`,
 `EVAL_JUDGE_MODEL`, `EVAL_JUDGE_EFFORT`, plus the existing `EVAL_PERMISSION_MODE` and `EVAL_TIMEOUT`.
 
-### The detail level is the third axis, on the same argument
+### The detail level was the third axis, and it is gone
 
-The skill produces two page shapes — `--brief`, the default, merges sections 4 to 7 into one; `--full`
-writes all seven (`report-format.md` § *Detail levels*). Those are different documents from the same
-diff, so a pass rate averaged over both describes neither, exactly as with model and effort.
+The skill produced two page shapes, and a case declared which one it wanted. There is one shape now —
+`--full` and `--review` stop the run, `--brief` and `--light` change nothing — so `evals.json` carries
+no `level`, `check.rb` accepts `--level` and reads it with nothing, and `run.sh` still writes it on the
+jsonl line so old result lines stay parseable.
 
-So a case declares its level, `--level` overrides it, `run.sh` writes it on the jsonl line, and
-`report.sh` makes it part of the group key. **A case file that declares no `level` means `full`** — the
-default is the *harness's*, not the skill's, and the two differ on purpose: reading the existing corpus
-as brief because the skill's default changed would silently reinterpret every result line already on
-disk. `check.rb` takes `--level` too, and defaults it the same way.
-
-Two checks read it. `before-approving.rb`, because a missing comprehension checkpoint is correct at
-brief and worth a WARN at full. And `brief-budget.rb`, which is the whole of the level's word budget
-and therefore has nothing to measure at full — where it SKIPs, saying out loud that nothing was
-measured, because a silent pass there would report every full page as inside a cap nobody wrote for
-it. Everything else survives the merge without a flag, because the
-merged section keeps the `id="reach"` and `id="approving"` anchors the region extractors read — which
-is a property of the markup, and therefore a thing to break by accident. `golden/approving-brief-*.html`
-and the `self-test.rb` rows over them are what notice: three rows for the level's own rule, and two more
-running `reach.rb` and `page-invariants.rb` over the merged shape, whose whole job is to fail the
-day the anchors move.
+**Leaving the flag accepted rather than removing it is deliberate**, and it is the same argument that
+kept `normal` meaning `low`: `run.sh` passes `--level` to `check.rb`, an unknown argument exits 2, and
+a flag day across the harness buys nothing. What would be a mistake is a new check that reads it. Two
+checks used to, and both are deleted; a third would be the second page shape coming back through the
+grader.
 
 ### The skill effort is the fourth, and it is not the `--effort` beside it
 
@@ -209,7 +188,7 @@ effort the *producing model* runs at, and it is half of `--fast`. `--skill-effor
 *skill* is invoked with: at `high`, `SKILL.md` step 8 sends one `claim-falsifier` subagent at each
 written behaviour flow to try to break its claims, and the run adjudicates what comes back. Both land
 on the results line under their own keys and both are in `report.sh`'s group key, so a `high` row can
-never be averaged into a `normal` one — the same argument that keeps `--brief` and `--full` apart.
+never be averaged into a `normal` one.
 
 A case declares `skill_effort` and `--skill-effort` overrides it. **A case file that declares none
 means `normal`**, for the reason an absent `level` means `full`: every run recorded before the flag
@@ -230,10 +209,15 @@ and a seventh would make the grader worse at the other six — which would be me
 rather than the flag. The A/B runs the *existing* expectations at both efforts and compares:
 
 ```sh
-./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort low
-./run.sh behaviour-flows -n 3 -j 3 --judge --skill-effort high
-./report.sh behaviour-flows
+./run.sh <case> -n 3 -j 3 --judge --skill-effort low
+./run.sh <case> -n 3 -j 3 --judge --skill-effort high
+./report.sh <case>
 ```
+
+**That A/B is currently unrunnable**, because the section cases are deferred and `cases/` is empty.
+The measurement it describes is still the right one and the numbers below still stand; what is
+missing is a case to run it against. Restoring one is the first thing a checkpoint-shaped section
+case buys back.
 
 `checks/searches.rb` is the sharpest mechanical reading available here, because a recorded search
 that does not reproduce is exactly what a falsifier is told to hunt; the judged expectations about
@@ -503,36 +487,26 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 | `build-state.rb` | draft / final / stopped | page |
 | `completeness.rb` | the gate, delegated to `scripts/coverage-gate.sh` | page |
 | `excerpts.rb` | collapsed, summarised, tinted in all three themes, no range quoted twice, no syntax colouring written into the quotation, `data-lang` on unchanged blocks only, and a state tag that agrees with the diff — `Unchanged` never on a path the change touched, and no tag outside the generator's vocabulary | page and fragment |
-| `behaviour-flows.rb` | § 2: no layer grouping, and the two review-unit guards, per unit | page and fragment |
-| `start-here.rb` | § 3: one list, an order with reasons, entries that link into a flow, the cap | page and fragment |
-| `reach.rb` | § 4: the panel is present, an affected list, pointers into the flows and their shape, recorded searches, and no reading order left here | page and fragment |
-| `impact-paths.rb` | § 4's figure: 2-3 paths, one per `.ip-card` and each with its own lane labels, each starting in the diff, passing through unchanged code and ending at one observable behaviour, every edge labelled with a causal verb, labels rather than prose, no citations and no SVG inside the panel | page and fragment |
+| `start-here.rb` | § 03: one list, an order with reasons, entries that link into a checkpoint, the cap of three to seven | page and fragment |
+| `impact-paths.rb` | § 04's figure: 1-3 paths, one per `.ip-card` and each with its own lane labels, each starting in the diff, passing through unchanged code and ending at one observable behaviour, every edge labelled with a causal verb, labels rather than prose, no citations and no SVG inside the panel. It grades `figure.impact` only, so a checkpoint's `figure.chain` is invisible to it by scope | page and fragment |
 | `searches.rb` | whether a recorded search **reproduces** the entry it is offered for — re-run inside `--repo` | page and fragment |
-| `before-approving.rb` | § 6: the cap of five, questions that are questions, commands that are commands | page and fragment |
 | `rails-anchors.rb` | doc links against the catalogue and never standing alone; probes with no fabricated output, no unsandboxed write, and identifiers that exist in `--repo` | page and fragment |
 | `link-form.rb` | the href against the citation it sits on: the span its text names, a `#diff-` fragment that hashes back to a path in the diff, and no anchor into a diff GitHub withholds | page and fragment |
-| `diagram.rb` | template classes only, no literal colours, nothing off-canvas, labels that fit, a key behind every dashed node, the budget | page and fragment |
-| `diagram-shot.rb` | renders each diagram in both themes to PNG | page and fragment |
-| `brief-budget.rb` | the default level's word budget: the page ceiling, the per-component caps, the field floor, and the two concepts whose removal is structural. Reads `--level`; every count is a WARN and every shape rule a FAIL | page and fragment |
 
 All Ruby, with `lib/review_map/` as their shared library — see § *checks/ is Ruby* for how they
 got that way, and for the four defects that the byte-for-byte corpus alone could not have found.
 
-**`brief-budget.rb` is the one whose verdicts are split by design rather than by confidence.** Shape
-fails, length warns, and the floor fails. A hard failure on length would teach a run to drop a claim
-to get under a number, which is worse than the long page the rule was written to prevent — the same
-reasoning `impact-paths.rb` uses for an unlisted causal verb. Its exemptions are the other half:
-every `<svg>`, `figcaption`, `.legend`, `.pipe` label, `.impact` box, `<code>`, `<pre>` and collapsed
-`<details>` is invisible to the word count, so no figure and no quotation can ever be what a page is
-over budget by. `golden/brief-flow-clean.html` is what notices if that stops being true — it carries
-a catalogue figure, a caption, a probe and an excerpt precisely so that a broken exemption puts it
-over three caps at once, and two `self-test.rb` rows read it on different PASS lines.
+**Six checks were deleted with the page shape they graded** — `behaviour-flows.rb`, `reach.rb`,
+`before-approving.rb`, `brief-budget.rb`, `diagram.rb` and `diagram-shot.rb`. The first four keyed on
+markup the agenda does not have. The last two would have SKIPped forever, and a check that can only
+say *nothing to look at* is worse than none: it reads as verified.
 
-What it cannot settle is whether the half that came out was the half nobody needed. A page can sit
-inside every number in it and have spent its words on the wrong sentences, or have got under the
-ceiling by quietly dropping a finding — which the check reads as a short field passing its cap.
-`cases/brief-flows.json` and page case 7 in `evals.json` are where that is asked, and case 7 asks it
-as a comparison against case 2's page over the same fixture.
+**What went with `brief-budget.rb` is worth keeping in mind before writing its successor.** Its
+verdicts were split by design — shape fails, length warns, the floor fails — because a hard failure
+on length teaches a run to drop a claim to get under a number, which is worse than the long page the
+rule was written to prevent. The agenda budget is prose in `report-format.md` with no check behind it
+at all, which is the honest state until someone measures published pages rather than arguing from
+component caps. **The number a successor must never grade is the checkpoint count.**
 
 `SKIP` is load-bearing. A check that cannot run on this input says so out loud — a fragment has no
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
@@ -842,7 +816,7 @@ If you change a fixture, change `frozen/` and the expectations with it. A fixtur
 has been edited away turns a real eval into one that always passes; a frozen upstream that has drifted
 turns every section eval into a test of agreement with a stale document.
 
-## Adding a section
+## Adding a case
 
 Four files, and the fifth is optional:
 
@@ -850,77 +824,28 @@ Four files, and the fifth is optional:
    upstream that is not yet written down.
 2. `drivers/<slug>.md` — the prompt. Read `drivers/README.md` first: a driver pins inputs and must not
    restate a rule from `SKILL.md` or `report-format.md`.
-3. `cases/<slug>.json` — at most six judged expectations, plus `level` if the section belongs to one
-   detail level rather than both. Leave it out and the case runs at `full`.
-4. `check.rb` — add the slug to the `RUN` table. A case reusing an existing scope at another level, as
-   `brief-tail` reuses `reach`, needs nothing here: the level rides on `--level`, not the scope.
-5. `checks/<slug>.sh` plus a golden fragment, if the section has anything mechanically checkable.
+3. `cases/<slug>.json` — at most six judged expectations. There is no `level`: one page shape.
+4. `check.rb` — add the slug to `SCOPES`. A case reusing an existing scope needs nothing here.
+5. `checks/<slug>.rb` plus a golden fragment, if the part has anything mechanically checkable.
 
-Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a filename that repeats
-it only makes the reader look the number up. That rule earned itself when §§ 2 and 4 swapped places:
-`reach` and `behaviour-flows` kept their files and their history, and only their
-prose had to move.
+Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a filename that
+repeats it only makes the reader look the number up. That rule earned itself when two sections
+swapped places: the cases kept their files and their history, and only their prose had to move.
 
-`brief-flows` reuses the `behaviour-flows` scope the same way and carries its **own driver**, which is
-the one place it differs from `brief-tail`. The reading list is what the case is about — it adds
-§ *The brief budget* — and editing the shared driver instead would have changed `driver_sha` on every
-`behaviour-flows` line already in `results/`, making the corpus this case is meant to be compared
-against incomparable with it. A new driver costs one file; a changed one costs the baseline.
+**All six existing cases are in `deferred/` and none of them runs.** They graded sections of the page
+this design replaced, and the unit that replaced a section is a **checkpoint** — so the case to write
+is not a rename of one of them. What a checkpoint case has to grade is different in kind from what a
+section case graded: not *is this section composed correctly* but *is this a judgment rather than a
+category, did the merge in step 7c take the right three observations, did the chain earn its place,
+does the explanation walk the chain instead of stating the judgment.* Those are all judged
+expectations, and the mechanical half is thin — which is a change from every case that came before,
+and worth knowing before writing one.
 
-`rails-anchors` reuses the `behaviour-flows` scope rather than adding one, the way `brief-tail` reuses
-`reach`: the anchors live inside the review unit's fields, so what it grades is a § 2 fragment.
-It is a case about restraint more than presence — the mechanical half already settles whether an anchor
-is real, and what a reader has to settle is whether it was worth making.
-
-The remaining sections are `what-changed`, `start-here`, `cross-cutting` and `coverage-ledger`. The last
-two exist only at `--full`, which is worth knowing before writing them: a case for either has to declare
-`"level": "full"` or it will grade a fragment the default level does not produce at all.
-`start-here` is half built — `checks/start-here.rb` and its three goldens exist and run standalone
-via `check.rb --fragment <file> --scope start-here` — but it has no driver and no case, so
-`run.sh start-here` will not find one. Adding those two files is what makes it a section eval.
-
-## Next cases worth adding
-
-In rough order of value:
-
-1. **Stability of the explanation.** Run one section twice and diff the two fragments. The claim is
-   that explanation is reproducible while findings are a sample; nothing yet tests the first half, and
-   the section scope is the first time it has been cheap enough to.
-2. **A large diff.** Single-context is a deliberate choice, and the failure mode is silent skimming. A
-   60-file fixture with a planted finding in the least interesting corner would show whether the run
-   reports the strain or hides it.
-3. **A dropped file.** Feed a page with one ledger row deleted and confirm the run notices, rather than
-   trusting that the gate is wired up.
-4. **A repo with no `config/application.rb`** at the root, so Rails-root discovery has to discover
-   something.
-5. **A fixture that plants a plausible-but-wrong invitation.** Every fixture here plants findings
-   that are *true* and outside the diff, which measures recall. `--skill-effort high` exists to catch
-   the opposite thing — a claim the run would confidently make and that the code contradicts — and
-   nothing here can show it working. The shape wanted is a file that reads as a consumer of the
-   changed thing and is not one: a serializer whose field is overridden downstream, a scope shadowed
-   by a default, a caller behind a guard the change cannot reach.
-6. **A `diagrams` case for `monolith-guard-chain`.** `behaviour-flows` and `reach` now have
-   one each and have been run; `diagrams` has not. This is the fixture where *affected but unchanged*
-   carries the most weight, which makes it the one whose impact paths have the most to get
-   wrong — writers, the fact, and readers, with the readers outnumbering everything else.
-
-`monolith-guard-chain` closed what used to be item 4 here — a Rails-only monolith with
-server-rendered views, to exercise the other branch of the behaviour flows.
-
-**Rungs 1 and 2 are not reachable offline, and trying was instructive.** The fixture originally
-pushed its branch to a local bare repository and then rewrote the remote URL to
-`github.com/acme/commons`, so that `git branch -r --contains HEAD` — the ladder's reachability
-test, which reads `refs/remotes` and never contacts a server — would report the head as pushed.
-That bought a rung-2 label on paper. The first live run ignored it: it ran `gh`, got
-`Could not resolve to a Repository`, and emitted plain text, which is correct, because a permalink
-into a repository that does not exist 404s regardless of what `refs/remotes` says.
-
-Two things to take from that. A fictional remote can never reach rung 2, so a fixture claiming it
-is claiming something a good run will refuse. And the trick had punched a hole in
-`checks/page-invariants.rb` § 5: with `refs/remotes` populated, that check passes a page of dead
-permalinks — the always-passing check this file warns about two sections up. The push is reverted
-and the fixture is an honest rung 3. Reaching rung 1 or 2 needs a real repository, which means
-network, which means it is not a fixture concern.
+A second scope is worth having beside it, and cheaper: the whole of § 02, graded on the agenda rather
+than on one checkpoint. Whether three to five is the right count for this diff, whether the order is
+defensible, and whether two of them are the same question are all relations *between* checkpoints, so
+a single-checkpoint fragment cannot see any of them — the same limit a section fragment always had,
+one level down.
 
 ## On harnesses
 

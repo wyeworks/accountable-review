@@ -32,8 +32,8 @@
 #
 # --skill-effort is a DIFFERENT KNOB FROM --effort and the long name is the whole reason it is
 # spelled out: --effort is the CLI reasoning effort the reader runs at, --skill-effort is the flag
-# the skill is invoked with, and at `high` the run sends an adversarial pass at its own behaviour
-# flows. Two things called effort in one script is a bug waiting for a hurried reader, so they are
+# the skill is invoked with, and at `high` the run sends an adversarial pass at its own analysis
+# notes. Two things called effort in one script is a bug waiting for a hurried reader, so they are
 # never abbreviated to the same thing and both go on the results line under their own key.
 #
 # Needs jq, and a `claude` on PATH. Fragments and logs go under $TMPDIR, never into the repo.
@@ -69,7 +69,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$CASE" ]; then
-  echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--level brief|full]" >&2
+  echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--level LABEL]" >&2
   echo "                     [--skill-effort high|low] [--visual] [--judge]" >&2
   echo "                     [--fast] [--model M] [--effort L] [--judge-model M] [--judge-effort L]" >&2
   echo "cases:  $(ls "$HERE/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
@@ -82,15 +82,12 @@ command -v claude >/dev/null || { echo "run.sh needs claude on PATH" >&2; exit 2
 
 DRIVER=$HERE/$(jq -r .produced_by "$CASEFILE")
 SCOPE=$(jq -r .scope "$CASEFILE")
-# The detail level a case is written for. A case file that declares none means `full`, which is
-# what every case written before levels existed meant — and the reason this defaults rather than
-# being required is that a silent reinterpretation of the existing corpus would make old result
-# lines incomparable with new ones. --level on the command line overrides the case.
-[ -n "$LEVEL" ] || LEVEL=$(jq -r '.level // "full"' "$CASEFILE")
-case $LEVEL in
-  brief|full) ;;
-  *) echo "unknown level: $LEVEL (brief | full)" >&2; exit 2 ;;
-esac
+# VESTIGIAL. The skill has one page shape, so no case declares a level and nothing downstream reads
+# one: check.rb accepts --level and does nothing with it. It survives here so that every result line
+# already in results/ keeps its column and stays parseable beside a new one, which is the same
+# argument that keeps `normal` meaning `low` below. Do not give it a meaning again — a second page
+# shape is what this format stopped having.
+[ -n "$LEVEL" ] || LEVEL=$(jq -r '.level // "none"' "$CASEFILE")
 # The skill effort a case is written for, defaulted for the same reason the level is: every case
 # written before the flag existed did what `normal` now names, and reinterpreting the corpus would
 # make old result lines incomparable with new ones. --skill-effort on the command line overrides.

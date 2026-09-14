@@ -1,8 +1,16 @@
-<!-- PLANTED: the nodes carry clauses instead of labels, and one carries a citation. This is
-     image-one's defect precisely — the panel this component replaced held a sentence in every
-     box, so the figure became a word cloud and the edges were left to be inferred. The prose
-     is a WARN (length is a judgement) and the citation is a FAIL (the file:line has one
-     canonical home, the affected list below), so this row pins both verdicts at once. -->
+<!-- PLANTED: the nodes carry clauses instead of labels, and one has its label REPLACED by a
+     citation. This is image-one's defect precisely — the panel this component replaced held a
+     sentence in every box, so the figure became a word cloud and the edges were left to be
+     inferred. The prose is a WARN (length is a judgement) and the standing-in citation is a
+     FAIL, so this row pins both verdicts at once.
+
+     Note what is deliberately NOT the defect here. Every node carries a locator, that third node
+     included, because a file:line inside the panel is legal now and has its own line to sit on —
+     the rule that used to ban citations outright banned this fixture's defect and the reader's
+     only way of locating a node along with it. What is still wrong is the address standing IN FOR
+     the identifier, so the figure says where to look and never what is there. A fixture planting
+     both the standing-in citation and a missing locator would keep failing while either rule
+     regressed, and would therefore pin neither. -->
 <section id="reach">
   <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
   <h2>What this change reaches</h2>
@@ -11,12 +19,13 @@
     <span class="lbl">Impact paths</span>
     <div class="ip-card">
       <span class="ip-hd">A &middot; Archiving a project</span>
+      <p class="ip-why">Archiving sets a column the selectable-projects query has never read, so an archived project stays in every list that matters to a user. <a href="#cp-a">Checkpoint A</a></p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
         <ol class="ip-path">
-          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive replaces Project#archive! entirely</b><span class="ip-d">sets archived_at and leaves the previous guard in place, which nothing else calls now</span></span></li>
-          <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">a nullable timestamp column with no CHECK constraint behind it at all</span></span></li>
-          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b><a class="path" href="#">app/queries/active_projects.rb:3</a></b><span class="ip-d">scopes the selectable list on status and never looks at the new column</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive replaces Project#archive! entirely</b><span class="ip-d">sets archived_at and leaves the previous guard in place, which nothing else calls now</span><a class="path ip-loc" href="#">app/services/projects/archive.rb:12</a></span></li>
+          <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">a nullable timestamp column with no CHECK constraint behind it at all</span><a class="path ip-loc" href="#">db/schema.rb:118</a></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b><a class="path" href="#">app/queries/active_projects.rb:3</a></b><span class="ip-d">scopes the selectable list on status and never looks at the new column</span><a class="path ip-loc" href="#">app/queries/active_projects.rb:3</a></span></li>
           <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
         </ol>
       </div>
@@ -24,11 +33,12 @@
 
     <div class="ip-card">
       <span class="ip-hd">B &middot; Building a project in a spec</span>
+      <p class="ip-why">The model now treats the column as required, and the factory stamps it directly, so specs can build a row the application would refuse. <a href="#cp-b">Checkpoint B</a></p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
         <ol class="ip-path">
-          <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the model treats it as required</span></span></li>
-          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the model treats it as required</span><a class="path ip-loc" href="#">db/schema.rb:118</a></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span><a class="path ip-loc" href="#">spec/factories/projects.rb:12</a></span></li>
           <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Specs build a forbidden state</b><span class="ip-d">observable behaviour</span></span></li>
         </ol>
       </div>
