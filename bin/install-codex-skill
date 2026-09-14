@@ -1,0 +1,32 @@
+#!/bin/sh
+# Link this checkout's review-map skill into Codex's local skill discovery directory.
+# Usage: bin/install-codex-skill [--skills-dir DIR]
+# No copies, config changes, or CI setup. An existing installation is never replaced.
+set -eu
+
+HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+SOURCE=$(dirname "$HERE")/skills/review-map
+SKILLS_DIR=${HOME:?HOME must be set}/.agents/skills
+while [ "$#" -gt 0 ]; do
+  case $1 in
+    --skills-dir)
+      [ "$#" -ge 2 ] && [ -n "$2" ] || { echo 'install-codex-skill: --skills-dir needs a directory' >&2; exit 2; }
+      SKILLS_DIR=$2; shift 2 ;;
+    -h|--help) echo 'Usage: bin/install-codex-skill [--skills-dir DIR]'; exit 0 ;;
+    *) echo "install-codex-skill: unknown argument: $1" >&2; exit 2 ;;
+  esac
+done
+
+[ -f "$SOURCE/SKILL.md" ] || { echo "Missing skill: $SOURCE" >&2; exit 1; }
+mkdir -p "$SKILLS_DIR"
+SKILLS_DIR=$(CDPATH= cd -- "$SKILLS_DIR" && pwd -P)
+DEST=$SKILLS_DIR/review-map
+if [ -L "$DEST" ] && [ "$(readlink "$DEST")" = "$SOURCE" ]; then
+  echo "unchanged: $DEST -> $SOURCE"
+elif [ -e "$DEST" ] || [ -L "$DEST" ]; then
+  echo "install-codex-skill: refusing to replace $DEST; choose another --skills-dir or remove the old installation yourself." >&2
+  exit 1
+else
+  ln -s "$SOURCE" "$DEST"
+  echo "installed: $DEST -> $SOURCE"
+fi
