@@ -250,6 +250,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-why-citation.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment impact-why-variant-class.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-why-variant-class.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-assurance.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

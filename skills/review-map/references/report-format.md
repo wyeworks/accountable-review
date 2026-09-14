@@ -848,8 +848,9 @@ the relation.
 
 A verb outside the list is a **warning, not a failure**: a stack legitimately names relations this
 list lacks, and failing hard would teach a run to mislabel an edge to satisfy the check. Extend the
-list here and `CAUSAL` in `evals/checks/impact-paths.rb` together — the rule
-`evals/checks/diagram.rb` already states for its class vocabulary.
+list here and `CAUSAL` in `evals/checks/impact-paths.rb` together. That rule outlived the check that
+first stated it: `evals/checks/diagram.rb` said the same thing about its SVG class vocabulary, and is
+deleted with the drawings.
 
 **Shape rules. Each one is the difference between an impact path and something that merely looks
 like one.**
@@ -885,11 +886,12 @@ And a change with no nameable edge earns **no panel at all**: the affected list 
 either way, and a figure that cannot say what reaches what is the thing this component exists to
 stop.
 
-The panel **is** section 04's one figure — one `.impact` group, whatever its card count — so § 04 earns no
-second, at either level.
+The panel **is** section 04's one figure — one `.impact` group, whatever its card count — so § 04
+earns no second.
 
-Two things the panel is not. It is not a dependency graph: it is 2–3 curated paths chosen because a
-reviewer has to hold them, and completeness here would destroy the thing that makes it readable. And
+Two things the panel is not. It is not a dependency graph: it is the one to three curated paths
+chosen because a reviewer has to hold them, and completeness here would destroy the thing that makes
+it readable. And
 it is not SVG. Nothing on this page is (§ *Chains*) —
 but because *this* figure has two lanes, an elbow that draws itself from a class change, cards that
 stack as the path count varies, and a breakpoint at 780px where the lanes collapse. There is no

@@ -250,6 +250,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-why-citation.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-why-variant-class.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-why-variant-class.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

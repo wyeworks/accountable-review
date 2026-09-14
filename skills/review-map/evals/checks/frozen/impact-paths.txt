@@ -998,6 +998,56 @@ PASS  every node's label names a thing rather than a place
 PASS  every changed and affected node carries exactly one locator, last in its box
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-why-variant-class.html
+exit=1
+PASS  one impact panel
+PASS  2 impact path(s), within the 1-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every card opens with one p.ip-why
+FAIL  p.ip-why: 1 carrying a citation or a list — it says what goes wrong and to whom and points at a checkpoint; the file:line is on the nodes and in the affected list, and walking the hops in prose makes one of the two redundant
+PASS  every ip-why is within 45 words
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  every node's label names a thing rather than a place
+PASS  every changed and affected node carries exactly one locator, last in its box
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-why-variant-class.html
+exit=1
+PASS  one impact panel
+PASS  2 impact path(s), within the 1-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every card opens with one p.ip-why
+FAIL  p.ip-why: 1 carrying a citation or a list — it says what goes wrong and to whom and points at a checkpoint; the file:line is on the nodes and in the affected list, and walking the hops in prose makes one of the two redundant
+PASS  every ip-why is within 45 words
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  every node's label names a thing rather than a place
+PASS  every changed and affected node carries exactly one locator, last in its box
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  no .impact panel in this input
@@ -1506,6 +1556,31 @@ PASS  every changed and affected node carries exactly one locator, last in its b
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
 ## --fragment impact-why-citation.html
+exit=1
+PASS  one impact panel
+PASS  2 impact path(s), within the 1-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every card opens with one p.ip-why
+FAIL  p.ip-why: 1 carrying a citation or a list — it says what goes wrong and to whom and points at a checkpoint; the file:line is on the nodes and in the affected list, and walking the hops in prose makes one of the two redundant
+PASS  every ip-why is within 45 words
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  every node's label names a thing rather than a place
+PASS  every changed and affected node carries exactly one locator, last in its box
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-why-variant-class.html
 exit=1
 PASS  one impact panel
 PASS  2 impact path(s), within the 1-3 budget
