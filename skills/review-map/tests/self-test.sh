@@ -173,6 +173,13 @@ sed 's|class="path ip-loc" href="{{BLOB}}#L{{START}}"|class="path ip-loc" data-p
   "$TEMPLATE" > "$WORK/loc-datapath.html"
 case_runs_red "a locator carries the inventory's data-path attribute" "$WORK/loc-datapath.html" "$SKELETON"
 
+# 19. The chip that lost its indent reset. The page still renders, the box still lands in the
+#     right place, and only the word inside it moves — 24px left of its own border, over the
+#     entry's title. The most visible defect this suite has ever had to be taught to see, and the
+#     one a run cannot be blamed for, since the chip's markup is correct at every published page.
+sed 's|vertical-align: 1px; text-indent: 0;|vertical-align: 1px;|' "$TEMPLATE" > "$WORK/pending-indent.html"
+case_runs_red "the pending chip stops resetting the rail entry's hanging indent" "$WORK/pending-indent.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
 # All three are script mutations for the reason the first two cases above are: the repository

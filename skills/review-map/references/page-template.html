@@ -979,11 +979,20 @@ details.evidence[open] .chev { transform: rotate(90deg); }
   font-size: 14px; color: var(--ink-3);
 }
 .buildstate strong { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--warn-ink); }
+/* TEXT-INDENT: 0 IS LOAD-BEARING. text-indent inherits, and an inline-flex box
+   lays out its own line, so the rail entry's -24px hanging indent (.rail-links a)
+   reached inside this chip and pulled the word 24px left of its own border --
+   over the entry's title on one line, off the box on a wrapped one. The box sat
+   where it belonged and its contents did not, which is why a published page read
+   as broken rendering rather than as a layout rule nobody had written. .n carries
+   the same reset for being an inline-block in that line; the chip arrived later
+   and without it. It belongs on the base rule and not on the rail override,
+   because the next indented context to carry a chip will not know to reset it. */
 .pending {
   display: inline-flex; align-items: center; padding: 1px 6px;
   font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
   background: var(--warn-bg-2); border: 1px solid var(--warn-rule); color: var(--warn-ink);
-  vertical-align: 1px;
+  vertical-align: 1px; text-indent: 0;
 }
 .rail-links .pending { font-size: 8.5px; padding: 0 4px; letter-spacing: .08em; }
 

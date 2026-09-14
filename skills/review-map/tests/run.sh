@@ -166,6 +166,15 @@ assert_eq "$(count "$WORK/markup" 'data-rail=')" "7" "the rail is four entries a
 assert_eq "$(count "$WORK/markup" '04</span>')"  "1" "the rail numbers up to 04"
 assert_eq "$(count "$WORK/markup" '05</span>')"  "0" "and stops there"
 
+# AND THE ENTRY'S HANGING INDENT STOPS AT THE ENTRY. text-indent inherits and an inline-flex box
+# lays out its own line, so .rail-links a's -24px reached inside the pending chip and pulled the
+# word 24px left of its own border — over the title on one line, off the box on a wrapped one.
+# .n carried the reset from the start and .pending did not, and a published page showed it.
+# Read out of the rule itself, the way the tints are counted by name: a reset somewhere in the
+# head is not the same as THIS rule carrying one.
+assert_eq "$(awk '/^\.pending \{/,/^}/' "$WORK/head" | grep -c 'text-indent: 0')" "1" \
+  "the pending chip resets the rail entry's hanging indent"
+
 # ---------------------------------------------------------------- markers
 for m in SKELETON:HEAD:START SKELETON:HEAD:END SKELETON:TAIL:START SKELETON:TAIL:END; do
   assert_eq "$(count "$TEMPLATE" "$m")" "1" "template has exactly one $m"
