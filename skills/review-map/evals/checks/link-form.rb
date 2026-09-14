@@ -38,7 +38,13 @@ DIFF_ANCHOR = /#diff-(\h{64})(?:([RL])(\d+)(?:-([RL])(\d+))?)?/
 BLOB_LINES  = %r{/blob/\h{7,40}/[^"#]*#L(\d+)(?:-L(\d+))?}
 # a.path and a.cite are the two linked citation forms in page-template.html. The text is
 # `path:line` or `path:start-end`, or a bare path in a ledger row and in section 4's entries.
-CITATION    = %r{<a class="(?:path|cite)"[^>]*href="([^"]*)"[^>]*>([^<]*)</a>}
+#
+# The class may carry a second name — a figure node's locator is `class="path ip-loc"` — so the
+# pattern allows one. It used to close the quote straight after `path`, which meant any compound
+# class escaped this check entirely: live, well-formed, ungraded, and silent about it. Nothing in
+# the repository had a compound class at the time, so the bug cost nothing and showed nothing,
+# which is the only reason it survived to be found by adding the first one.
+CITATION    = %r{<a class="(?:path|cite)(?:\s[^"]*)?"[^>]*href="([^"]*)"[^>]*>([^<]*)</a>}
 TEXT_SPAN   = /:(\d+)(?:[-–](\d+))?\s*\z/
 
 check = ReviewMap::Check.new(ARGV)

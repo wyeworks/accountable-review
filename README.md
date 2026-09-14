@@ -160,7 +160,8 @@ Four parts, and a shut evidence block at the foot:
 What changed                    one paragraph: what is now true that was not
 What needs your attention       3-5 checkpoints, each one judgment, framed as a question
 Read the code in this order     3-7 stops, in the order that builds understanding
-Impact outside the diff         1-3 chains, from changed code into code it gives new meaning to
+Impact outside the diff         1-3 chains, from changed code into code it gives new meaning to,
+                                each node linked to the file it lives in
 ▸ Evidence & diff coverage      every changed path, the searches run, the rest of what was found
 ```
 

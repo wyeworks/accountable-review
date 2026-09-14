@@ -25,24 +25,26 @@
     <span class="lbl">Impact paths</span>
     <div class="ip-card">
       <span class="ip-hd">A &middot; An instructor previews a Summary</span>
+      <p class="ip-why">Archiving sets a column this reader has never accounted for, so the change reaches a behaviour outside the diff.</p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
               <ol class="ip-path">
-                <li class="ip-n ip-chg"><span class="ip-box"><b>preview_page_context.ex</b><span class="ip-d">precomputes the objectives payload</span></span></li>
-                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>passes a nil user to</span><span class="ip-box"><b>maybe_proficiency/6</b><span class="ip-d">nil-user clause returns %{}</span></span></li>
-                <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>render_summary/4</b><span class="ip-d">known_proficiency? rejects the default label</span></span></li>
+                <li class="ip-n ip-chg"><span class="ip-box"><b>preview_page_context.ex</b><span class="ip-d">precomputes the objectives payload</span><a class="path ip-loc" href="#">lib/oli_web/live/delivery/student/preview_page_context.ex:44</a></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>passes a nil user to</span><span class="ip-box"><b>maybe_proficiency/6</b><span class="ip-d">nil-user clause returns %{}</span><a class="path ip-loc" href="#">lib/oli/delivery/page/page_context.ex:210</a></span></li>
+                <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>render_summary/4</b><span class="ip-d">known_proficiency? rejects the default label</span><a class="path ip-loc" href="#">lib/oli_web/components/delivery/student.ex:88</a></span></li>
                 <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Preview Summary: explainer only</b><span class="ip-d">observable behaviour</span></span></li>
               </ol>
       </div>
     </div>
     <div class="ip-card">
       <span class="ip-hd">B &middot; A student&rsquo;s Explain reaches nobody</span>
+      <p class="ip-why">Archiving sets a column this reader has never accounted for, so the change reaches a behaviour outside the diff.</p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
               <ol class="ip-path">
-                <li class="ip-n ip-chg"><span class="ip-box"><b>assistant_available?</b><span class="ip-d">reads Revision.ai_enabled</span></span></li>
-                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>window_live check_page_ai/3</b><span class="ip-d">reads SectionResource.ai_enabled</span></span></li>
-                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>subscribed by</span><span class="ip-box"><b>trigger PubSub topic</b><span class="ip-d">no subscriber when that gate fails</span></span></li>
+                <li class="ip-n ip-chg"><span class="ip-box"><b>assistant_available?</b><span class="ip-d">reads Revision.ai_enabled</span><a class="path ip-loc" href="#">lib/oli_web/live/delivery/student/lesson_live.ex:133</a></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>window_live check_page_ai/3</b><span class="ip-d">reads SectionResource.ai_enabled</span><a class="path ip-loc" href="#">lib/oli_web/live/dialogue/window_live.ex:61</a></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>subscribed by</span><span class="ip-box"><b>trigger PubSub topic</b><span class="ip-d">no subscriber when that gate fails</span><a class="path ip-loc" href="#">lib/oli/conversation/triggers.ex:24</a></span></li>
                 <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>&ldquo;submitted&rdquo;, and nothing appears</b><span class="ip-d">observable behaviour</span></span></li>
               </ol>
       </div>

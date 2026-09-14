@@ -154,6 +154,24 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-four-paths.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment impact-loc-not-last.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-loc-not-last.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-loc-on-outcome.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-loc-on-outcome.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-missing-loc.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-missing-loc.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-no-affected.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -164,6 +182,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-no-outcome.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-no-why.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-no-why.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-prose-nodes.html
@@ -178,10 +202,22 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-shared-card.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment impact-two-locators.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-two-locators.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-unlabelled-edge.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-unlabelled-edge.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-why-citation.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-why-citation.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-assurance.html

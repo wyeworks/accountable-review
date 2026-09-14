@@ -154,6 +154,24 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-four-paths.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-loc-not-last.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-loc-not-last.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-loc-on-outcome.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-loc-on-outcome.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-missing-loc.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-missing-loc.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-no-affected.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -164,6 +182,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-no-outcome.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-no-why.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-no-why.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-prose-nodes.html
@@ -178,10 +202,22 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-shared-card.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-two-locators.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-two-locators.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-unlabelled-edge.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-unlabelled-edge.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-why-citation.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-why-citation.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-assurance.html

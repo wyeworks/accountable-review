@@ -314,6 +314,42 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 4 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment impact-loc-not-last.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page impact-loc-not-last.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment impact-loc-on-outcome.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page impact-loc-on-outcome.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment impact-missing-loc.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page impact-missing-loc.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-no-affected.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -333,6 +369,18 @@ FAIL  section 03 carries 2 lists — it is one list; a second is the findings/re
 SKIP  no entries to check for checkpoint links
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-no-outcome.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment impact-no-why.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page impact-no-why.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
@@ -362,6 +410,18 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment impact-two-locators.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page impact-two-locators.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-unlabelled-edge.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -369,6 +429,18 @@ FAIL  section 03 carries 2 lists — it is one list; a second is the findings/re
 SKIP  no entries to check for checkpoint links
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-unlabelled-edge.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment impact-why-citation.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page impact-why-citation.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed

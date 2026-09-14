@@ -105,6 +105,12 @@
                             relation in .ip-rel, so an edge is labelled or it is
                             missing. Lane comes from the kind: .ip-chg left,
                             .ip-aff right, .ip-out spans and ends the path
+    path preamble ......... p.ip-why — one per .ip-card, above the lanes. What goes
+                            wrong and to whom, then the checkpoint. Never the hops
+    node locator .......... a.path.ip-loc — last line of an .ip-box, in both figure
+                            vocabularies. Required on .ip-chg and .ip-aff, optional
+                            on .ip-step, never on .ip-out. Carries NO data-path:
+                            coverage-gate.sh greps that page-wide
     grid tables ........... .gt (gap:1px over --rule), .gt-meta, .gt-paths — the
                             inventory, paths with no classification. data-path stays
                             on a div.c, so the gate runs wherever the inventory sits
@@ -764,6 +770,12 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    margin on .ip-lanes, because the lanes are display:none under 780px and the head would then
    sit flat on the first node. */
 .ip-hd { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+
+/* What the path is about, in one or two sentences, before the reader traces anything. Set in the
+   body face rather than the mono the rest of the card uses, because it is prose and that contrast
+   is what stops it reading as another node. A card without it is a diagram the reader has to
+   decode in order to find out whether it was worth decoding. */
+.ip-why { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0 0 16px; }
 .ip-path { list-style: none; margin: 0; padding: 0; }
 
 /* Each node is its own row; the lane is a column inside that row. */
@@ -780,6 +792,15 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .ip-box .ip-d { font-family: var(--mono); font-size: 11px; line-height: 1.45; color: var(--muted); overflow-wrap: anywhere; }
 .ip-out > .ip-box b { color: var(--ground); }
 .ip-out > .ip-box .ip-d { color: var(--ground); opacity: .72; }
+
+/* The locator: where this node’s code lives, last line of the box and quiet enough that the label
+   still reads first. A node naming a symbol and nothing else leaves the reader to guess which file
+   it is in, which is the one question a figure of identifiers reliably raises. align-self keeps the
+   underline the width of the path rather than of the box, and wrapping is anywhere because a deep
+   Rails path offers a browser no break it will take. .ip-out never carries one — a behaviour has no
+   file — so there is deliberately no rule for it here. */
+.ip-loc { font-family: var(--mono); font-size: 10px; color: var(--faint); text-decoration: none; border-bottom: 1px solid var(--rule); align-self: start; overflow-wrap: anywhere; }
+.ip-loc:hover { color: var(--ink); border-bottom-color: var(--ink); }
 
 /* The edge: a labelled connector. <i> is the gutter that draws
    the hairline and the arrowhead, the way a numbered spine does. */
@@ -1016,7 +1037,10 @@ figcaption strong { color: var(--ink-3); }
        where it is not honoured.
 
        Sites below take {{DIFF}} or {{BLOB}} by what the line IS, not by which
-       component it sits in. A ul.lookat entry and an ol.begin stop both carry
+       component it sits in — a.path.ip-loc inside a figure included, where the node
+       kind has already said which: .ip-chg is changed code and takes {{DIFF}},
+       .ip-aff and .ip-step are not and take {{BLOB}}. A ul.lookat entry and an
+       ol.begin stop both carry
        either: they point at the code that settles a judgment, and half of what
        settles a judgment is code this PR did not touch. Anything tiered
        `from unchanged code`, and every entry under "Affected, not changed", takes
@@ -1054,9 +1078,18 @@ figcaption strong { color: var(--ink-3); }
            that shape belongs inside the checkpoint it explains, as a figure.chain
          - every node past the first carries its INCOMING relation in .ip-rel, with
            the causal verb. An unlabelled edge is a missing element, not an empty one
-         - LABELS, NEVER SENTENCES, and no citations in here. The file:line lives in
-           the affected list beside the panel. A panel full of clauses is the word
-           cloud this component replaced
+         - LABELS, NEVER SENTENCES. <b> is an identifier, .ip-d a few words. A panel
+           full of clauses is the word cloud this component replaced, and the clause
+           that explains the path belongs in the card's p.ip-why, once
+         - EVERY .ip-chg AND .ip-aff NODE CARRIES ITS LOCATOR, an a.path.ip-loc last
+           inside the box, .ip-chg to {{DIFF}} and .ip-aff to {{BLOB}}. .ip-step may;
+           .ip-out never does, because a behaviour is not in a file. This is an
+           address, not a citation: the affected list below still owns the clause and
+           the pointer, and a path put inside <b> in place of the label is the defect
+           that rule used to forbid wholesale
+         - EVERY CARD OPENS WITH ONE p.ip-why — what goes wrong and to whom, then the
+           checkpoint that judges it. It does not walk the hops: a paragraph naming
+           the chain in sequence makes one of the two redundant
 
        The lane is derived from the kind — .ip-chg left, .ip-aff right, .ip-out
        spans both — so there is no lane class to get backwards, and the boundary
@@ -1253,8 +1286,10 @@ figcaption strong { color: var(--ink-3); }
              component is most likely to produce. -->
         <figure class="chain">
           <ol class="ip-path">
-            <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span></span></li>
-            <li class="ip-n ip-step"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{HOP_INSIDE_THE_CHANGE}}</b><span class="ip-d">{{WHAT_IS_TRUE_HERE}}</span></span></li>
+            <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
+            <li class="ip-n ip-step"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{HOP_INSIDE_THE_CHANGE}}</b><span class="ip-d">{{WHAT_IS_TRUE_HERE}}</span><a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></span></li>
+            <!-- A step may be the browser, a queue, a framework layer. Those are in no file of
+                 this repository, so the locator is optional on .ip-step and only there. -->
             <li class="ip-n ip-step"><span class="ip-rel"><i></i>scopes</span><span class="ip-box"><b>{{THE_NEXT_HOP}}</b><span class="ip-d">{{WHAT_IT_CARRIES}}</span></span></li>
             <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>{{WHAT_THE_USER_SEES}}</b><span class="ip-d">observable behaviour</span></span></li>
           </ol>
@@ -1467,13 +1502,20 @@ figcaption strong { color: var(--ink-3); }
              arriving at the second must not scroll back for what its two columns mean. -->
         <div class="ip-card">
           <span class="ip-hd">A &middot; {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}</span>
+          <!-- What the path is about, before the chain. One or two sentences saying what goes
+               wrong and to whom, then a pointer at the checkpoint that judges it. It must NOT
+               walk the hops: a paragraph naming three nodes in sequence makes one of the two
+               redundant, which is the footnote-under-a-figure the panel this replaced needed. -->
+          <p class="ip-why">{{WHAT_GOES_WRONG_AND_TO_WHOM}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>
           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span></span></li>
-              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>reads</span><span class="ip-box"><b>{{CHANGED_THING_IT_READS}}</b><span class="ip-d">{{WHAT_IT_CARRIES}}</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives {{WHAT_IT_RECEIVES}} from</span><span class="ip-box"><b>{{UNCHANGED_PRODUCER}}</b><span class="ip-d">{{WHAT_IT_RETURNS}}</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls back to</span><span class="ip-box"><b>{{THE_UNCHANGED_DEFAULT}}</b></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>reads</span><span class="ip-box"><b>{{CHANGED_THING_IT_READS}}</b><span class="ip-d">{{WHAT_IT_CARRIES}}</span><a class="path ip-loc" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives {{WHAT_IT_RECEIVES}} from</span><span class="ip-box"><b>{{UNCHANGED_PRODUCER}}</b><span class="ip-d">{{WHAT_IT_RETURNS}}</span><a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></span></li>
+              <!-- No .ip-d on this one: the clause is optional, the locator is not. -->
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls back to</span><span class="ip-box"><b>{{THE_UNCHANGED_DEFAULT}}</b><a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></span></li>
+              <!-- .ip-out carries no locator, ever: a behaviour is not in a file. -->
               <li class="ip-n ip-out"><span class="ip-rel"><i></i>filtered out by</span><span class="ip-box"><b>{{WHAT_THE_USER_SEES}}</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
@@ -1481,11 +1523,12 @@ figcaption strong { color: var(--ink-3); }
 
         <div class="ip-card">
           <span class="ip-hd">B &middot; {{A_DIFFERENT_BEHAVIOUR}}</span>
+          <p class="ip-why">{{WHAT_GOES_WRONG_ON_THIS_ONE}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>
           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DIFFERENT_CHANGED_THING}}</b><span class="ip-d">{{WHAT_THAT_ONE_DOES}}</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{UNCHANGED_CONSUMER}}</b><span class="ip-d">{{WHAT_IT_STILL_ASSUMES}}</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DIFFERENT_CHANGED_THING}}</b><span class="ip-d">{{WHAT_THAT_ONE_DOES}}</span><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>{{CAUSAL_VERB}}</span><span class="ip-box"><b>{{UNCHANGED_CONSUMER}}</b><span class="ip-d">{{WHAT_IT_STILL_ASSUMES}}</span><a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></span></li>
               <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>{{WHAT_THE_OTHER_ONE_SHOWS}}</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>

@@ -1,8 +1,8 @@
 # The impact panel, which is section 4's one figure and the part of it a diff cannot produce.
 # Each fixture plants ONE defect, and between them they cover the two failures this component
 # was built to end: an edge with no label (adjacency again) and a node with a clause in it (the
-# word cloud). impact-prose-nodes.html expects exit 1 for its citation and is pinned on the
-# WARN substring instead, so it holds both verdicts at once.
+# word cloud). impact-prose-nodes.html expects exit 1 for its standing-in citation and is pinned
+# on the WARN substring instead, so it holds both verdicts at once.
 #
 # The last two are the card split: one path per .ip-card, with its own lane labels. Both defects
 # are legal markup that draws, which is why they are checked at all — impact-shared-card.html
@@ -10,13 +10,30 @@
 # pass it, and it must report exactly one failure rather than also reporting the spare labels
 # inside the shared card as surplus furniture.
  impact-paths       | reach-clean.html              | 0 | every edge carries a label
+ impact-paths       | reach-clean.html              | 0 | every card opens with one p.ip-why
+ impact-paths       | reach-clean.html              | 0 | carries exactly one locator, last in its box
  impact-paths       | impact-no-outcome.html        | 1 | does not end at exactly one
  impact-paths       | impact-no-affected.html       | 1 | contains no .ip-aff node
  impact-paths       | impact-unlabelled-edge.html   | 1 | with no .ip-rel
- impact-paths       | impact-prose-nodes.html       | 1 | a citation inside the .impact panel
+ impact-paths       | impact-prose-nodes.html       | 1 | a citation inside the label or the clause
  impact-paths       | impact-four-paths.html        | 1 | the budget is 1 to 3
  impact-paths       | impact-shared-card.html       | 1 | do not pair one-to-one
  impact-paths       | impact-card-no-lanes.html     | 1 | with no .ip-lanes of their own
+# The paragraph and the locator: what the panel ADDS, rather than what it must not become. Both
+# were added because a published page was hard to read in a way no rule here could see — a card
+# that opened on geometry, and five nodes naming symbols with no way to find one. So both get a
+# defect fixture AND a pinned PASS line on reach-clean below: a rule that only ever fires on
+# broken input is a rule nobody notices has stopped firing on good input.
+#
+# impact-loc-on-outcome.html is the one to keep. It is the locator defect that looks MORE
+# thorough than the correct markup — an address on the behaviour node, drawing correctly and
+# linking somewhere real — which is the shape every regression in this repository arrives in.
+ impact-paths       | impact-no-why.html            | 1 | p.ip-why for 2 .ip-card(s)
+ impact-paths       | impact-why-citation.html      | 1 | carrying a citation or a list
+ impact-paths       | impact-missing-loc.html       | 1 | no locator on path 1 node 3
+ impact-paths       | impact-loc-on-outcome.html    | 1 | a behaviour and not a file
+ impact-paths       | impact-two-locators.html      | 1 | more than one locator on path 1 node 3
+ impact-paths       | impact-loc-not-last.html      | 1 | not the last thing in its .ip-box
 # And one CLEAN fragment, which is the anchors-hexdocs-clean.html job: both of the things it
 # carries were WARNs on a real page and both rules were wrong rather than the page — a label cap
 # that counted entity references as characters, and a passive PubSub verb missing from CAUSAL.

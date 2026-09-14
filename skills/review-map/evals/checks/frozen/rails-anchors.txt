@@ -452,6 +452,30 @@ SKIP  runtime probes: none on this input
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
+## --fragment impact-loc-not-last.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-loc-not-last.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --fragment impact-loc-on-outcome.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-loc-on-outcome.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --fragment impact-missing-loc.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-missing-loc.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment impact-no-affected.html
 exit=0
 SKIP  doc links: none on this input
@@ -465,6 +489,14 @@ exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-no-outcome.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --fragment impact-no-why.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-no-why.html
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
@@ -484,11 +516,27 @@ SKIP  runtime probes: none on this input
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
+## --fragment impact-two-locators.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-two-locators.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment impact-unlabelled-edge.html
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
 ## --page impact-unlabelled-edge.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --fragment impact-why-citation.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-why-citation.html
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input

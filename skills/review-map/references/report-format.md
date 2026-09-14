@@ -248,8 +248,35 @@ judgment turns on and says the rest in the explanation.
 Every node past the first carries `<span class="ip-rel"><i></i>verb</span>`, from the causal
 vocabulary in § *Impact paths* — one list for both figures, extended in that section and in
 `evals/checks/impact-paths.rb`'s `CAUSAL` together. A label reads from the node above to the node
-below. `<b>` is an identifier, `.ip-d` a few words, and no `file:line` sits inside a figure: citations
-belong to the *Look at* list or to the affected entries beside the panel.
+below. `<b>` is an identifier and `.ip-d` a few words.
+
+**Every node that is code carries its locator**, and this is the one part of a node that is an
+address rather than an argument:
+
+```html
+<span class="ip-box"><b>label</b><span class="ip-d">clause</span><a class="path ip-loc" href="…">path:line</a></span>
+```
+
+| Kind | Locator | Form |
+|---|---|---|
+| `.ip-chg` | **required** | `{{DIFF}}` — changed code, and the diff page is where the reviewer is working |
+| `.ip-aff` | **required** | `{{BLOB}}` — unchanged code, which no diff view addresses |
+| `.ip-step` | optional | `{{BLOB}}` — a hop may be the browser or a queue, which are in no file here |
+| `.ip-out` | **never** | a behaviour is not in a file |
+
+It is **last inside `.ip-box`**, at most one per node, and it follows § *Deep links* like any other
+citation: the full repo-relative path, a range linking a range with both ends on the same side, the
+blob form where GitHub will not render the diff, and plain text in a `<span class="ip-loc">` at
+rung 4. It carries **no `data-path`** — `coverage-gate.sh` greps that attribute page-wide, so a
+locator using it would register as a surplus path and fail the page's one mechanical gate.
+
+**The `<b>` label is still never a path.** The rule this replaced forbade a citation anywhere in a
+figure, and it was written against a panel whose nodes had their labels *replaced* by file names —
+the address standing in for the identifier, so the figure said where to look and never what was
+there. A locator on its own line is the opposite: the label still names the thing, and the reader no
+longer has to guess which of four hundred files it is in. What did not change is that the clause
+explaining an affected entry has one canonical home — the affected list below the panel — and the
+locator is not a second one.
 
 **The canonical-home rule between the two figures.** A chain that crosses from changed code into
 unchanged code whose meaning the change altered **is an impact path**: it lives in *Impact outside the
@@ -711,7 +738,38 @@ the lines that do, and a path crossing it read as joining it. Dashes are already
 
 **One path per `.ip-card`, and the card is the frame.** `.impact` is a group, not a box: it carries
 the label, the one `.legend` for every card, and the note. Each card holds its own `.ip-hd` naming
-the behaviour, its own `.ip-lanes`, and one `ol.ip-path`.
+the behaviour, its own `p.ip-why`, its own `.ip-lanes`, and one `ol.ip-path`.
+
+### What the path is about
+
+**Every card opens with one `p.ip-why`**, between the `.ip-hd` and the lanes — one or two sentences,
+at most about 45 words, saying what goes wrong and to whom, and ending in a pointer at the checkpoint
+that judges it.
+
+```html
+<p class="ip-why">Events created before this migration can carry a null location, and the
+registration mailer interpolates it without a guard. <a href="#cp-b">Checkpoint B</a></p>
+```
+
+It exists because a card otherwise opens on geometry. The header names a behaviour and the next thing
+is a chain, so the reader has to trace four nodes before learning whether the path was worth tracing —
+and the one figure on the page that is *about* consequences made its consequence the last thing read.
+
+**It must not walk the hops.** A paragraph naming the chain in sequence makes one of the two
+redundant, and that is precisely the failure the box grid had: a figure with a footnote supplying the
+edges it could not draw. Say the consequence; let the figure say the mechanism.
+
+**It orients, it does not explain.** The checkpoint owns the explanation, and § *One canonical home*
+applies here exactly as it does to the affected entries below — this is why the paragraph ends in a
+pointer rather than in a third sentence. A card whose `p.ip-why` could be pasted into its checkpoint
+without anyone noticing has written the checkpoint twice.
+
+**It is not the panel's `p.note`.** The note is about the *pass* — what a name-based search could not
+reach — sits once under the whole group, and says nothing about any particular path. Two components,
+two subjects; a run that merges them loses the disclosure.
+
+These paragraphs **count toward the page's visible words**. Chain *labels* are exempt from that count
+because they are figure furniture; this is prose, and three cards of it is a paragraph of budget.
 
 The first version stacked every path inside one bordered panel under a run of `.ip-hd` headers, and
 on a real page that meant five chains in one frame. At that length they stop being read as diagrams:
@@ -780,9 +838,14 @@ like one.**
   for, so a path that does not pass through any is not earning its place.
 - **At most two lane crossings.** The point is the one or two interactions that carry the
   consequence, not every hop between them.
-- **Labels, never sentences, and no citations inside the panel.** `<b>` is an identifier;
-  `.ip-d` is a few words at most. The `file:line` belongs to *affected, not changed* below, which
-  keeps one canonical home and is what stops the panel becoming the grid of sentences it replaced.
+- **Labels, never sentences.** `<b>` is an identifier; `.ip-d` is a few words at most. A panel of
+  clauses is the grid of sentences this component replaced, and the sentence that explains the path
+  belongs in the card's `p.ip-why`, once.
+- **Every `.ip-chg` and `.ip-aff` node carries its locator**, per § *Chains* — `a.path.ip-loc`, last
+  inside the box, `{{DIFF}}` for changed code and `{{BLOB}}` for unchanged. `.ip-out` never carries
+  one. That is an address and not a citation: the clause saying *why* an entry is affected still has
+  one canonical home in *affected, not changed* below, and the locator is not a second one.
+- **Every card carries exactly one `p.ip-why`**, above the lanes. See § *What the path is about*.
 
 **Budget: 1–3 paths, 3–5 nodes each.** These are the paths a reviewer has to *hold*, and three is
 already the outer edge of that — wanting a fourth is the signal that the three you have are not
@@ -1256,10 +1319,11 @@ ceiling by losing a judgment has done the one thing the budget forbids. Fewer ch
 legitimate only when two merged into one question (`SKILL.md` step 7c) or when the PR is small enough
 that three would be padding (step 7e) — never because a number said so.
 
-**And the floor is a rule rather than a number.** A *Look at* entry has a clause; a checkpoint has an
-explanation of at least two sentences. A field compressed into its own label reads exactly like a
-filled one and is the compression that deletes rather than tightens. Omitting a part is honest;
-stubbing it is not.
+**And the floor is a rule rather than a number.** A *Look at* entry has a title and a clause — its
+title counts toward the checkpoint's words along with its clause, and the numbers above are unchanged
+by it; a checkpoint has an explanation of at least two sentences; an impact card has its `p.ip-why`,
+which counts too. A field compressed into its own label reads exactly like a filled one and is the
+compression that deletes rather than tightens. Omitting a part is honest; stubbing it is not.
 
 These numbers are a **first calibration**, derived from the component budgets rather than measured on
 published pages. The way to move them is three runs and a number that came out of a page, not an
@@ -1331,6 +1395,11 @@ two kinds of line this page cites constantly, and both of them are the product:
   some other commit is one the reader mis-reads without ever noticing.
 
 Pin a SHA rather than a branch in either form, so links stay correct after later pushes.
+
+**Which form a citation takes is decided by what the line is, never by which component it sits in.**
+That includes the one citation inside a figure: a node's `a.path.ip-loc` has already had the question
+answered by its kind — `.ip-chg` is changed code and takes the diff anchor, `.ip-aff` and `.ip-step`
+are not and take the blob. § *Chains* carries that table.
 
 ### When the diff will not render
 

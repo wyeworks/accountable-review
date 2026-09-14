@@ -139,6 +139,40 @@ awk '/<ul class="lookat">/ { f = 1 } f && /<\/ul>/ { f = 0; next } !f { print }'
   "$TEMPLATE" > "$WORK/no-lookat.html"
 case_runs_red "a checkpoint is assembled with no where-to-look list" "$WORK/no-lookat.html" "$SKELETON"
 
+# 14. A card with no paragraph opens on geometry: the header names a behaviour, the next thing is
+#     a chain, and the reader traces four nodes to find out whether it was worth tracing. One of
+#     the two, not both, because the assertion is a count and a template losing both would fail a
+#     rule that merely checked for presence.
+awk '/<p class="ip-why">/ && !d { d = 1; next } { print }' "$TEMPLATE" > "$WORK/no-why.html"
+case_runs_red "an impact card is assembled with no paragraph above its chain" "$WORK/no-why.html" "$SKELETON"
+
+# 15. The paragraph belongs to the panel and not to a checkpoint's chain, whose own two to four
+#     sentences already are it. A template carrying one in both places teaches a run to write the
+#     explanation twice at conversational distance, which is what the agenda exists to end.
+awk '/<figure class="chain">/ { print; print "          <p class=\"ip-why\">a second explanation</p>"; next } { print }' \
+  "$TEMPLATE" > "$WORK/chain-why.html"
+case_runs_red "a checkpoint chain is given a paragraph of its own" "$WORK/chain-why.html" "$SKELETON"
+
+# 16. The locators. A template with none teaches a run to publish a figure of identifiers with no
+#     way to open any of them, which is the defect the component was added for and the one a
+#     reader feels rather than sees.
+sed 's|class="path ip-loc"|class="path"|g' "$TEMPLATE" > "$WORK/no-loc.html"
+case_runs_red "the nodes lose the locator class the page links them by" "$WORK/no-loc.html" "$SKELETON"
+
+# 17. And a locator on the outcome, which is the version of this defect that looks MORE thorough
+#     than the correct markup: it draws, it links somewhere real, and it puts an address on the
+#     one node that is a behaviour rather than a file.
+awk '/<li class="ip-n ip-out">/ && !d { d = 1; sub(/<\/span><\/li>/, "<a class=\"path ip-loc\" href=\"#\">app/x.rb:1</a></span></li>"); print; next } { print }' \
+  "$TEMPLATE" > "$WORK/out-loc.html"
+case_runs_red "an outcome node is given a locator" "$WORK/out-loc.html" "$SKELETON"
+
+# 18. data-path is reserved to the inventory: coverage-gate.sh greps it page-wide and compares
+#     against git diff --name-only, so a locator carrying one registers as a surplus path and
+#     fails the page's one mechanical gate.
+sed 's|class="path ip-loc" href="{{BLOB}}#L{{START}}"|class="path ip-loc" data-path="x" href="{{BLOB}}#L{{START}}"|' \
+  "$TEMPLATE" > "$WORK/loc-datapath.html"
+case_runs_red "a locator carries the inventory's data-path attribute" "$WORK/loc-datapath.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
 # All three are script mutations for the reason the first two cases above are: the repository

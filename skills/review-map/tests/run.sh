@@ -129,6 +129,30 @@ fi
 chain_aff=$(awk '/<figure class="chain">/ { f = 1 } f { print } /<\/figure>/ { f = 0 }' "$WORK/markup" | grep -c 'ip-aff' || true)
 assert_eq "$chain_aff" "0" "no .ip-aff node inside the chain — that hop is an impact path"
 
+# THE PARAGRAPH AND THE LOCATOR, which are the two things a node and a card carry that a diagram
+# on its own does not. One p.ip-why per card and none in the chain: a checkpoint's own sentences
+# already are that paragraph, and a second copy beside them is the restatement the agenda exists
+# to end. The locator is in both figures, and NEVER on an outcome — a behaviour is not in a file,
+# and an address on that node is the locator defect that reads as more thorough than the correct
+# markup.
+assert_eq "$(count "$WORK/markup" '<p class="ip-why">')" "2" "each impact card opens with its own paragraph"
+why_chain=$(awk '/<figure class="chain">/ { f = 1 } f { print } /<\/figure>/ { f = 0 }' "$WORK/markup" | grep -c 'ip-why' || true)
+assert_eq "$why_chain" "0" "no p.ip-why inside a checkpoint chain — the checkpoint's own sentences are that"
+if [ "$(count "$WORK/markup" 'class="path ip-loc"')" -ge 6 ]; then
+  ok "nodes carry their locator in both figure vocabularies"
+else
+  bad "nodes carry their locator in both figure vocabularies"
+fi
+out_loc=$(grep '<li class="ip-n ip-out"' "$WORK/markup" | grep -c 'ip-loc' || true)
+assert_eq "$out_loc" "0" "no locator on an .ip-out node — a behaviour is not in a file"
+
+# data-path IS RESERVED TO THE INVENTORY. coverage-gate.sh greps it page-wide and compares the
+# result to git diff --name-only as whole strings, so a locator carrying one would register as a
+# surplus path and fail the page's one mechanical gate — most reliably when quoting unchanged
+# code, which is the page's best content.
+panel_dp=$(awk '/<figure class="impact">/ { f = 1 } f { print } /<\/figure>/ { f = 0 }' "$WORK/markup" | grep -c 'data-path' || true)
+assert_eq "$panel_dp" "0" "no data-path inside the impact panel — that attribute belongs to the inventory alone"
+
 # AND THE COMPONENTS THE AGENDA PUT DOWN STAY DOWN. Each of these was a required part of the page
 # this one replaced, so each is a thing a run with the old shape in mind would reach for.
 for gone in 'class="mech"' 'class="rows"' 'class="pipe"' 'class="primer' 'class="checkpoint"' \

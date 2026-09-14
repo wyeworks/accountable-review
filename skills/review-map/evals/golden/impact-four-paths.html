@@ -14,11 +14,12 @@
     <span class="lbl">Impact paths</span>
     <div class="ip-card">
       <span class="ip-hd">A &middot; Consequence 1</span>
+      <p class="ip-why">Archiving sets a column this reader has never accounted for, so the change reaches a behaviour outside the diff.</p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
         <ol class="ip-path">
-          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
-          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 1</b><span class="ip-d">unchanged</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span><a class="path ip-loc" href="#">app/services/projects/archive.rb:12</a></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 1</b><span class="ip-d">unchanged</span><a class="path ip-loc" href="#">app/queries/dashboard_projects.rb:5</a></span></li>
           <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 1</b><span class="ip-d">observable behaviour</span></span></li>
         </ol>
       </div>
@@ -26,11 +27,12 @@
 
     <div class="ip-card">
       <span class="ip-hd">B &middot; Consequence 2</span>
+      <p class="ip-why">Archiving sets a column this reader has never accounted for, so the change reaches a behaviour outside the diff.</p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
         <ol class="ip-path">
-          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
-          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 2</b><span class="ip-d">unchanged</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span><a class="path ip-loc" href="#">app/services/projects/archive.rb:12</a></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 2</b><span class="ip-d">unchanged</span><a class="path ip-loc" href="#">app/queries/exportable_projects.rb:5</a></span></li>
           <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 2</b><span class="ip-d">observable behaviour</span></span></li>
         </ol>
       </div>
@@ -38,11 +40,12 @@
 
     <div class="ip-card">
       <span class="ip-hd">C &middot; Consequence 3</span>
+      <p class="ip-why">Archiving sets a column this reader has never accounted for, so the change reaches a behaviour outside the diff.</p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
         <ol class="ip-path">
-          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
-          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 3</b><span class="ip-d">unchanged</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span><a class="path ip-loc" href="#">app/services/projects/archive.rb:12</a></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 3</b><span class="ip-d">unchanged</span><a class="path ip-loc" href="#">app/serializers/project_serializer.rb:19</a></span></li>
           <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 3</b><span class="ip-d">observable behaviour</span></span></li>
         </ol>
       </div>
@@ -50,11 +53,12 @@
 
     <div class="ip-card">
       <span class="ip-hd">D &middot; Consequence 4</span>
+      <p class="ip-why">Archiving sets a column this reader has never accounted for, so the change reaches a behaviour outside the diff.</p>
       <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
       <div class="ip-body">
         <ol class="ip-path">
-          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span></span></li>
-          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 4</b><span class="ip-d">unchanged</span></span></li>
+          <li class="ip-n ip-chg"><span class="ip-box"><b>Projects::Archive</b><span class="ip-d">sets archived_at</span><a class="path ip-loc" href="#">app/services/projects/archive.rb:12</a></span></li>
+          <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>reader 4</b><span class="ip-d">unchanged</span><a class="path ip-loc" href="#">app/jobs/project_digest_job.rb:31</a></span></li>
           <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Outcome 4</b><span class="ip-d">observable behaviour</span></span></li>
         </ol>
       </div>

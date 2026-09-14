@@ -36,10 +36,12 @@ does not earn omitted outright.
   three directed chains, each in a card of its own, each running from code the PR changed, through
   the code that is *affected but unchanged* — the callers, serializers, queries, factories, policies
   and TypeScript types whose meaning this diff just changed — to what someone would then observe.
-  Every hop carries the relation that makes it causal: *reads*, *falls back to*, *ignored by*.
-  Beneath the figure, each affected entry gets a citation and a clause, pointing at the checkpoint
-  that turns on it rather than explaining it twice. If nothing crosses into unchanged code, the
-  section is not there at all.
+  Every hop carries the relation that makes it causal: *reads*, *falls back to*, *ignored by*, and
+  every node that is code carries the file and line it lives at, linked. Each card opens with a
+  sentence or two on what goes wrong and to whom, so you know whether a chain is worth tracing
+  before you trace it. Beneath the figure, each affected entry gets a citation and a clause,
+  pointing at the checkpoint that turns on it rather than explaining it twice. If nothing crosses
+  into unchanged code, the section is not there at all.
 - **Evidence & diff coverage** — one shut disclosure at the foot, holding every changed path, the
   searches the run ran and what they returned, and the affected code no checkpoint turns on. It is
   provenance: the page reads complete with it closed, and nothing a reviewer has to act on lives only

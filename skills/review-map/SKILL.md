@@ -582,6 +582,12 @@ fourth keeps its entry below the figure or in the foot. **If nothing crosses int
 section 04 is omitted and the rail loses its entry** — an empty section saying nothing reaches
 unchanged code reads as a clean bill of health.
 
+For each path you keep, settle two things here rather than while typing markup. **What the path is
+about** — one or two sentences on what goes wrong and to whom, plus which checkpoint judges it; that
+is the card's `p.ip-why`, and deciding it now is what stops it becoming a retelling of the hops.
+And **where each node's code is**: every changed and every affected node needs a `path:line` for its
+locator, and a node you cannot address is a node you have not actually traced.
+
 **7j. Deduplicate.** *What changed*, a checkpoint's explanation, a chain, the reading path and the
 impact section can all mention the same scope. Each occurrence must serve a **different purpose** —
 intent, judgment, mechanism, route, consequence — and be one clause wherever it is not the canonical
@@ -734,8 +740,9 @@ foot belongs to step 10's gate. A stage has to be worth opening the tab for.
 same prose twice — once streamed, once re-edited — which is the cost step 9 exists to avoid. It also
 compresses in the wrong direction: cutting a drafted paragraph tends to take the clause a claim
 rested on, where writing to the cap takes the sentence that was never needed. Nothing there is
-negotiable against a figure: the count exempts every chain label, every `<code>` and `<pre>`, and
-everything inside a collapsed block, so a long page is never fixed by dropping a drawing.
+negotiable against a figure: the count exempts every chain label and locator, every `<code>` and
+`<pre>`, and everything inside a collapsed block, so a long page is never fixed by dropping a
+drawing. An impact card's `p.ip-why` is prose and does count.
 
 **The page fills in out of document order, and that is fine.** Step 5 produces the impact section;
 step 7 produces the checkpoints. So section 04 lands while section 02 is still stubs, and a reader
@@ -843,10 +850,16 @@ Everything else about writing holds at every stage:
   user or an operator would see, with every hop carrying its causal verb — *reads*, *falls back to*,
   *filtered out by*. A chain that stops at a function has not reached a consequence; a chain with no
   unchanged node is a call stack inside the diff, and belongs inside the checkpoint it explains. And
-  it carries **labels, not sentences**: the `file:line` and the clause belong to the affected entries
-  below it. The panel this replaced was a grid of boxes, and every real page filled the boxes with
-  prose to supply the relation the layout could not express — which is the failure to watch for
-  coming back.
+  it carries **labels, not sentences**: a node is an identifier, a few words, and its locator. The
+  panel this replaced was a grid of boxes, and every real page filled the boxes with prose to supply
+  the relation the layout could not express — which is the failure to watch for coming back.
+- **Every card opens with its `p.ip-why`, and every code node carries its locator.** The paragraph
+  says what goes wrong and to whom and points at a checkpoint; it never walks the chain, because a
+  paragraph that names the hops in sequence makes one of the two redundant. The locator is
+  `a.path.ip-loc`, last inside the box — `{{DIFF}}` on a changed node, `{{BLOB}}` on an unchanged
+  one, and never on the outcome, which is a behaviour rather than a file. Both apply to a
+  checkpoint's `figure.chain` too, except the paragraph: the checkpoint's own sentences are already
+  that. `report-format.md` § *Chains* owns the locator and § *Impact paths* owns the paragraph.
 - **Three paths, not five, and one per card.** Choosing the third-best consequence over the fifth is
   the work here: the two that do not make the panel are not dropped, their entries are in the
   affected list below it or in the evidence foot, and their explanation is in the checkpoint that

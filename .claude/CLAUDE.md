@@ -297,6 +297,24 @@ Editing one of these means checking the others still agree.
 
   Without that rule the same consequence gets drawn twice at conversational distance, which reads as
   thoroughness — the canonical-home regression arriving as a figure rather than as a paragraph.
+
+  **Both figures carry a locator on every code node**, and § *Chains* owns that rule because both do:
+  an `a.path.ip-loc`, last inside `.ip-box`, `{{DIFF}}` on `.ip-chg` and `{{BLOB}}` on `.ip-aff` and
+  `.ip-step`, and **never on `.ip-out`**, which is a behaviour rather than a file. It carries no
+  `data-path` — `coverage-gate.sh` greps that attribute page-wide, so a locator using one would
+  register as a surplus path and fail the page's one mechanical gate.
+
+  **This inverted a rule, and which half inverted is the part to keep.** § *Chains* used to say no
+  `file:line` sits inside a figure at all, and `impact-paths.rb` failed a page for any `a.path` in the
+  panel. That rule was written against a panel whose nodes had their labels *replaced* by file names,
+  so the figure said where to look and never what was there — and it ended that defect by banning the
+  reader's only way of locating a node along with it. Every node named a symbol, and which of four
+  hundred files that symbol lived in was the question the figure most reliably raised. So the address
+  is back on a line of its own, and what stays forbidden is the narrower thing that was actually
+  wrong: a citation standing **in for** the label or the clause. What did not move is the canonical
+  home of the *clause* — that is still the affected list beneath the panel, and a locator is not a
+  second one. `golden/impact-prose-nodes.html` pins the surviving half and now carries a correct
+  locator on the very node whose label is a path, so it fails for one reason rather than two.
 - **There is no `<svg>` on the page, at all.** Four SVG layouts used to be worked out to scale in the
   template — a boundary chain, a guard fork, an ER fragment, a lifecycle — so a run filled in text
   rather than deriving geometry. They are deleted, with the SVG class vocabulary, `.scroller`,
@@ -825,7 +843,23 @@ Editing one of these means checking the others still agree.
   code, through the affected-but-unchanged code that gives the change its consequence, to an
   observable behaviour, with every hop past the first carrying its incoming relation as a causal
   verb. 1–3 paths, 3–5 nodes each, **one path per `.ip-card`**, one `.ip-out` last, at least one
-  `.ip-aff`, labels never sentences, no citations inside the panel.
+  `.ip-aff`, labels never sentences, a locator on every code node (§ *Chains*), and **one `p.ip-why`
+  per card**.
+
+  **The paragraph is the card's own, and it is not the panel's `p.note`.** One or two sentences above
+  the lanes saying what goes wrong and to whom, ending in a pointer at the checkpoint that judges it;
+  the note stays once under the whole group and is about what a name-based *pass* could not reach.
+  A card otherwise opens on geometry — the header names a behaviour, the next thing is a chain, and
+  the reader traces four nodes to learn whether the path was worth tracing, which on the one figure
+  that is *about* consequences makes the consequence the last thing read.
+
+  **It must not walk the hops, and that is the rule most likely to erode.** A paragraph naming the
+  chain in sequence makes one of the two redundant, and it is the `.blast` footnote returning in a
+  component that cannot have one — the figure supplying its edges in prose because prose is easier to
+  write than a true edge. It orients and points; the checkpoint owns the explanation, which is why it
+  ends in a link rather than a third sentence. A `p.ip-why` that could be pasted into its checkpoint
+  without anyone noticing has written the checkpoint twice. Length is a WARN and shape is a FAIL, for
+  the reason every other rule in that file splits that way.
 
   **What it replaced is the reason every one of those rules exists.** `.blast` was a four-column box
   grid whose only encoding was border style, so it carried membership of two sets and nothing else —
@@ -896,15 +930,24 @@ Editing one of these means checking the others still agree.
   carries — a consumer that does *not* account for what changed — which is causal precisely because
   nothing happens; the box grid could only put that in a clause.
 
-  Five files have to agree: `page-template.html` holds the CSS (head SKELETON range, so it is
+  Six files have to agree: `page-template.html` holds the CSS (head SKELETON range, so it is
   emitted and a run never types geometry) and the panel assembled whole in section 04,
-  `report-format.md` § *Impact paths* owns the panel's own rules and its budget **alone** while
-  § *Chains* owns what it shares with a checkpoint's `figure.chain`, `SKILL.md` step 9 points at both, `evals/checks/impact-paths.rb` carries the rules
-  and its `CAUSAL` list, and the eight `golden/impact-*.html` fixtures plus their `self-test.rb` rows
-  prove each one fires. Extend the vocabulary in the reference and in `CAUSAL` together — the rule
-  the deleted `diagram.rb` stated for its class vocabulary, and which outlived it.
+  `report-format.md` § *Impact paths* owns the panel's own rules, its budget and `p.ip-why`
+  **alone** while § *Chains* owns what it shares with a checkpoint's `figure.chain` including the
+  locator, `SKILL.md` step 7i decides both and step 9 points at them,
+  `evals/checks/impact-paths.rb` carries the rules and its `CAUSAL` list, and the fourteen
+  `golden/impact-*.html` fixtures plus their `self-test.rb` rows prove each one fires. Extend the
+  vocabulary in the reference and in `CAUSAL` together — the rule the deleted `diagram.rb` stated
+  for its class vocabulary, and which outlived it.
 
-  **One of those eight is clean, and it is the one that matters most for the caps.** Running the
+  **`evals/checks/link-form.rb` is the sixth, and it joined by having a bug found.** Its `CITATION`
+  pattern closed the quote straight after `path`, so a compound `class="path ip-loc"` escaped that
+  check entirely — live, well-formed and ungraded, with nothing saying so. Nothing in the repository
+  had a compound class until the locator, which is the only reason it survived to be found by adding
+  one. Widened, every locator now inherits that check's span, fragment and routing rules for free,
+  which is why the locator needs no link rules of its own.
+
+  **One of the impact fixtures is clean, and it is the one that matters most for the caps.** Running the
   check over a real published page produced two WARNs, and the rules were wrong rather than the
   page: the label cap counted `&ldquo;` as seven characters, so a 32-character label was reported
   as 44; and `subscribed by` — the honest label for a topic reaching the process that is *not*

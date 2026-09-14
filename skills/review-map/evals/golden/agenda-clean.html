@@ -62,7 +62,7 @@
         <p>Archiving writes <code>archived_at</code> and touches nothing else. Every selectable-project list in the app goes through one query object, and that object scopes on <code>discarded_at</code> — a different column — so an archived project stays in every list it was in before. <span class="tier">from unchanged code</span> Whether that is the intended first step or an omission is the thing to decide.</p>
         <figure class="chain">
           <ol class="ip-path">
-            <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">stamps archived_at</span></span></li>
+            <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">stamps archived_at</span><a class="path ip-loc" href="#">app/models/project.rb:41</a></span></li>
             <li class="ip-n ip-step"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, indexed</span></span></li>
             <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>A project marked archived</b><span class="ip-d">observable behaviour</span></span></li>
           </ol>
@@ -174,12 +174,13 @@
         <span class="lbl">Impact paths</span>
         <div class="ip-card">
           <span class="ip-hd">A &middot; Where an archived project still shows up</span>
+          <p class="ip-why">Archiving sets a column this reader has never accounted for, so the change reaches a behaviour outside the diff.</p>
           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">new column</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on discarded_at</span></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>ProjectsController#index</b><span class="ip-d">the only list endpoint</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">new column</span><a class="path ip-loc" href="#">db/schema.rb:118</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on discarded_at</span><a class="path ip-loc" href="#">app/queries/active_projects.rb:8</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>ProjectsController#index</b><span class="ip-d">the only list endpoint</span><a class="path ip-loc" href="#">app/controllers/projects_controller.rb:22</a></span></li>
               <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived projects stay selectable</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
