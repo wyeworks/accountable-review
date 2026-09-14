@@ -78,3 +78,4 @@ jobs:
       # because a template mutation alone cannot exercise a comparison against that template.
       - run: skills/review-map/tests/run.sh
       - run: skills/review-map/tests/self-test.sh
+      - run: skills/review-map/tests/install-codex.sh
