@@ -74,6 +74,17 @@ Match the existing register when you write: direct, specific, no filler. Rules s
 several carry the observation that produced them — a rule stripped to an imperative loses the thing
 that makes a model follow it under pressure.
 
+## Working on Codex support
+
+`bin/install-codex-skill` links the shared `skills/review-map` directory into Codex discovery;
+use `--skills-dir <temporary-directory>` when testing installation. It installs only the local
+review skill, not CI support. [docs/codex.md](docs/codex.md) covers usage and a manual smoke test.
+
+`references/hosts/` owns host-specific delivery and delegation. The ten-step procedure remains
+in `SKILL.md`, and both hosts' independent readers load `references/claim-falsifier.md`.
+`agents/claim-falsifier.md` is the Claude wrapper and still owns its Claude tool/model settings.
+Keep the review rules in the shared files so an improvement applies to both hosts.
+
 ## Verifying a change
 
 Before pushing, the manifest check must pass. CI runs the same one:

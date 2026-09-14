@@ -247,8 +247,8 @@ clean bill of health.
 
 ## What it assumes
 
-Only that it is running in Claude Code, against a git repository containing a Rails or a Phoenix
-application.
+Only that it is running in Claude Code or Codex, against a git repository containing a Rails or
+a Phoenix application. Codex delivery and delegation are described in [Codex support](codex.md).
 
 **Which of the two is detected, not configured** — a `Gemfile` or `config/application.rb` for Rails, a
 `mix.exs` for Elixir — and it decides which lens file and which doc catalogue the run reads. A repo
