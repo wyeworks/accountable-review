@@ -212,7 +212,7 @@ the page shows the command and never its output. A fabricated `=> true`, or an i
 presented as what the probe printed, is the console form of an invented rake task: it reads as the
 most concrete thing on the page and it is the one part of it that is fiction.
 
-Three rules make a probe safe to paste, and they matter more than the list below:
+Two rules make a probe safe to paste, and they matter more than the list below:
 
 - **Read-only reflection under `bin/rails runner`; anything that writes under
   `bin/rails console --sandbox`**, which wraps the session in a transaction and rolls it back when
@@ -222,11 +222,14 @@ Three rules make a probe safe to paste, and they matter more than the list below
   archival or state-transition change turns on, so a sandbox session is the wrong instrument for it
   and the page should say so rather than let a reviewer conclude the callback is broken. Enqueued
   jobs, mailers and cache invalidation hanging off commit are all invisible for the same reason.
-- **Prefer a probe that answers on an empty database.** `Model.new`, `.to_sql` and class-level
-  reflection need no rows, so they work in a fresh checkout and expose no real data. A probe that
-  needs seeded records is a validation step with a setup cost: it goes inside the checkpoint it
-  settles, with the seed command beside it — there is no separate validations section to send it to —
-  and a probe that answers on an empty database is the one to prefer.
+
+**Answering on an empty database is not a safety rule, it is the earning test**, and
+`references/report-format.md` § *Framework anchors* owns it. What is Rails-specific is which
+commands pass it: `Model.new`, `.to_sql`, `validators_on`, `reflect_on_association`,
+`connection.indexes` and `connection.columns_hash` are all class-level or connection-level, so they
+answer in a fresh checkout with no rows and expose no real data. Reach for those first. A probe that
+reads rows answers only where those rows exist — so the rows have to be plausible at head, and its
+setup is a line of the same block.
 
 Never propose a snippet with `RAILS_ENV=production`, and never one whose output would print personal
 data. Substitute the project's real constants throughout — a probe naming a scope this repository does

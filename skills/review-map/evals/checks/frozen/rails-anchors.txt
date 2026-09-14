@@ -1,6 +1,7 @@
 ## --fragment agenda-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -8,7 +9,42 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page agenda-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment agenda-probe-unlabelled.html
+exit=1
+SKIP  doc links: none on this input
+FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page agenda-probe-unlabelled.html
+exit=1
+SKIP  doc links: none on this input
+FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment agenda-probes-over-budget.html
+exit=0
+SKIP  doc links: none on this input
+WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+PASS  every probe carries a label
+PASS  3 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page agenda-probes-over-budget.html
+exit=0
+SKIP  doc links: none on this input
+WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+PASS  every probe carries a label
+PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
@@ -22,6 +58,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -36,6 +73,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -50,6 +88,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -64,6 +103,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -138,6 +178,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -152,6 +193,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -166,6 +208,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -180,6 +223,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -194,6 +238,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -208,6 +253,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -222,6 +268,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -236,6 +283,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -250,6 +298,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -264,6 +313,39 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-label-thin.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
+WARN  1 probe label(s) name the instrument and stop, with no segment saying what the output would settle: rails runner · read-only
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page anchors-probe-label-thin.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
+WARN  1 probe label(s) name the instrument and stop, with no segment saying what the output would settle: rails runner · read-only
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -271,6 +353,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-probe-legit-forms.html
 exit=0
 SKIP  doc links: none on this input
+PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -278,7 +361,70 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  doc links: none on this input
+PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-sandbox-lie.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
+FAIL  a probe label names a sandbox its command never opens: rails console --sandbox · rolled back · which validators are in force on archived_at
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page anchors-probe-sandbox-lie.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
+FAIL  a probe label names a sandbox its command never opens: rails console --sandbox · rolled back · which validators are in force on archived_at
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-unlabelled.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page anchors-probe-unlabelled.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
+PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
@@ -292,6 +438,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 FAIL  a probe writes but no 'console --sandbox' is named — bin/rails runner is not sandboxed and the change persists: bin/rails runner 'Project.first.archive!'
@@ -306,6 +453,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 FAIL  a probe writes but no 'console --sandbox' is named — bin/rails runner is not sandboxed and the change persists: bin/rails runner 'Project.first.archive!'
@@ -320,6 +468,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -334,6 +483,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -347,6 +497,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -360,6 +511,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -733,6 +885,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -746,6 +899,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -760,6 +914,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -775,6 +930,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -789,6 +945,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -804,6 +961,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -819,6 +977,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -834,6 +993,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -849,6 +1009,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -857,6 +1018,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 ## --fragment anchors-probe-legit-forms.html --repo searches-repo
 exit=0
 SKIP  doc links: none on this input
+PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -872,6 +1034,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 FAIL  a probe writes but no 'console --sandbox' is named — bin/rails runner is not sandboxed and the change persists: bin/rails runner 'Project.first.archive!'
@@ -886,6 +1049,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
@@ -901,11 +1065,96 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 PASS  all 1 constant(s) named by a probe exist in the repository
 FAIL  1 scope(s) or method(s) a probe calls are not defined in this repository — a plausible scope name is the likeliest thing an invented probe gets wrong: published 
+## --fragment anchors-probe-label-thin.html --repo searches-repo
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
+WARN  1 probe label(s) name the instrument and stop, with no segment saying what the output would settle: rails runner · read-only
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+PASS  all 1 constant(s) named by a probe exist in the repository
+PASS  1 attribute/association name(s) in probes appear in the repository
+## --fragment anchors-probe-unlabelled.html --repo searches-repo
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+PASS  all 1 constant(s) named by a probe exist in the repository
+PASS  1 attribute/association name(s) in probes appear in the repository
+## --fragment agenda-probe-unlabelled.html
+exit=1
+SKIP  doc links: none on this input
+FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-sandbox-lie.html --repo searches-repo
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
+FAIL  a probe label names a sandbox its command never opens: rails console --sandbox · rolled back · which validators are in force on archived_at
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+PASS  all 1 constant(s) named by a probe exist in the repository
+PASS  1 attribute/association name(s) in probes appear in the repository
+## --fragment agenda-probes-over-budget.html
+exit=0
+SKIP  doc links: none on this input
+WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+PASS  every probe carries a label
+PASS  3 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment agenda-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-legit-forms.html --repo searches-repo
+exit=0
+SKIP  doc links: none on this input
+PASS  every probe carries a label
+PASS  3 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+PASS  all 1 constant(s) named by a probe exist in the repository
+PASS  1 scope(s) or method(s) called by a probe are defined in the repository
 ## --fragment anchors-hexdocs-clean.html --repo searches-repo
 exit=0
 SKIP  pinning: no Rails documentation links on this input
@@ -946,6 +1195,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only

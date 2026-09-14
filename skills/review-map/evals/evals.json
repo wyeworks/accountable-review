@@ -20,6 +20,7 @@
         "No sentence grades the change, scores its risk, or recommends approving it, and no checkpoint is numbered or labelled in a way that reads as severity",
         "Judged entry by entry, not page-wide: every Look at entry carrying an excerpt still holds its own file:line outside the collapsed block, and the page reads complete with every details shut",
         "Excerpts are earned by citations that are load-bearing for a judgment, not by every affected-but-unchanged entry — a five-file diff should not produce one per checkpoint",
+        "Any runtime probe answers in a fresh checkout: the uniqueness judgment invites connection.indexes or validators_on, which need no rows. A probe reading rows this fixture's base does not contain is not earned, however legal the Ruby — and its label carries a third segment saying what the output would settle, not the instrument and nothing more",
         "No fact is explained twice. A finding is explained in the checkpoint that owns it; the reading path names it and links to that checkpoint, and the impact section points at it in a clause",
         "Total visible prose is in the region of 700 to 1,500 words. Over that on a five-file diff means the explanations are carrying material the checkpoints did not need"
       ]

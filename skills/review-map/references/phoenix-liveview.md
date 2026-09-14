@@ -279,12 +279,14 @@ Three rules make a probe safe to paste, and they matter more than the list below
   that would have reacted does not. When the behaviour under review *is* what happens after the
   commit, say that this probe cannot see it and name what would — a `Phoenix.LiveViewTest` case, or
   the worker's own test.
-- **Prefer a probe that answers on an empty database.** `__schema__/1`, `to_sql/3`, a changeset built
-  from a bare struct, and `mix phx.routes` all need no rows, so they work in a fresh checkout and
-  expose no real data. A probe that needs seeded records is a validation step with a setup cost: it
-  goes inside the checkpoint it settles, with the seed command beside it — there is no separate
-  validations section to send it to — and a probe that answers on an empty database is the one to
-  prefer.
+
+**Answering on an empty database is not a safety rule, it is the earning test**, and
+`references/report-format.md` § *Framework anchors* owns it. What is Elixir-specific is which
+commands pass it: `__schema__/1`, `to_sql/3`, a changeset built from a bare struct, `mix phx.routes`
+and an `on_mount` chain read off the router all need no rows, so they answer in a fresh checkout and
+expose no real data. Reach for those first. A probe that reads rows answers only where those rows
+exist — so the rows have to be plausible at head, and its setup is a line of the same block, inside
+the rollback wrapper above.
 
 Never propose a snippet with `MIX_ENV=prod`, and never one whose output would print personal data.
 Substitute the project's real module names throughout — a probe naming a context this repository does

@@ -415,6 +415,53 @@ Editing one of these means checking the others still agree.
   proposed, never run**, so the page shows a command and never output: a fabricated `=> …` is the
   most concrete-looking thing on the page and the one part of it that is fiction.
 
+  **A probe also has to be answerable, and that is a second test the earning rule did not have.**
+  Framework-shaped and answerable are independent: a published page put
+  `Event.community_event.last` inside a checkpoint whose own second sentence read *"until this branch
+  nothing in the application could create a community event."* It named only real constants, wrote
+  nothing, sat in the checkpoint it belonged to, and passed every mechanical rule there is — and it
+  returns `nil`, then raises, in every checkout on earth. New behaviour has no rows behind it by
+  definition, so a probe for a checkpoint about new behaviour asks the **classes**, not the table.
+  Class-level reflection answers anywhere; a probe that reads rows answers only where those rows
+  exist, so the rows have to be plausible at head and the setup is a line of the same block. And a
+  probe asks what the application *does*: the `p.open` on that checkpoint was about what
+  `invite_area` was **meant** to narrow, which no query settles.
+
+  **The label is where that test gets applied, and it had no slot for it.** The template shipped
+  `rails runner · read-only` as a literal — instrument and safety, nothing saying what the output
+  would establish — so a run copied it, which is the `{{LINK}}` defect in § *Deep links* arriving on
+  the other component: a template carrying an unformed value teaches a run to publish one. The same
+  page's *other* probe invented the missing segment unprompted (`· how many rows this touches`), so
+  the three-segment form ratifies what a run already reached for rather than imposing something new.
+  **A probe whose label you cannot complete is a probe that was not earned**, and that test is cheap
+  because it is applied while the probe is written rather than while the page is read.
+
+  **What is checkable here is narrow, and the narrowness is the point.** `rails-anchors.rb` gained a
+  denominator against `section.cp` (the doc link already had one), a FAIL for a probe with no label,
+  a WARN for a two-segment one, and a FAIL for a label promising a sandbox the command never opens —
+  the quiet inverse of the write rule, which reads the body and so passes a lying label. Answerability
+  itself is **deliberately not mechanised**: telling that `Event.community_event.last` from a
+  legitimate row count needs to know whether the rows exist *at base*, and a heuristic firing on both
+  would go red on correct content, which is the failure `anchors-hexdocs-clean.html` exists to
+  prevent. It is judged, in `evals.json`, like every other "was it worth it" question here.
+
+  **The label rule needed one more thing, and it is the repository's own recurring shape.** `.lbl` is
+  the most-used device in this system — a section eyebrow, a legend and a checkpoint's own
+  *Checkpoint A* are all one — so a rule that remembered the nearest preceding label would hand an
+  **unlabelled** probe the eyebrow above it and report it as labelled. That version passes on every
+  real page and fails only on a fragment with nothing else in it, which is *a rule that passes is not
+  a rule that looked* arriving again. The label counts only where it is **adjacent**,
+  and `golden/agenda-probe-unlabelled.html` is a whole page rather than a fragment precisely so that
+  deleting the adjacency clause turns one row green: the fragment fixture beside it cannot catch the
+  bug, because with no other label present the wrong rule and the right one agree.
+
+  **And the probe's placement in a checkpoint was never argued — it is a forwarding address.** It was
+  born in the seven-field unit's *how to validate*; when that field and § 6 *Before approving* were
+  deleted, the routing cell was rewritten to point at the checkpoint, and no commit message claims a
+  checkpoint is a *better* home. The placement is right, but the rule reads as a redirect, which is
+  why it went this long without an earning test of its own. `docs/review-map.md` was still routing
+  probes to both deleted fields until this change.
+
   `report-format.md` § *Framework anchors* owns all of it — the routing (verify → the checkpoint the
   probe settles, explain → a clause in its explanation) and the budget, **and owns them alone**;
   `SKILL.md` steps 7g and 9 point at it, the § *Runtime probes* of whichever lens file the stack

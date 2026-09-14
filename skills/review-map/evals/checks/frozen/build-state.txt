@@ -4,6 +4,18 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page agenda-clean.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment agenda-probe-unlabelled.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page agenda-probe-unlabelled.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment agenda-probes-over-budget.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page agenda-probes-over-budget.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-clean.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -64,10 +76,28 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-mixed-series.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-probe-label-thin.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-probe-label-thin.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-probe-legit-forms.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-probe-legit-forms.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-probe-sandbox-lie.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-probe-sandbox-lie.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-probe-unlabelled.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-probe-unlabelled.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-runner-mutates.html

@@ -88,8 +88,9 @@
                             means +/-
     framework anchors ..... a.doc (a link from references/rails-docs.md, never a
                             constructed URL) and pre.probe (a command the reviewer
-                            runs; the page never shows its output). At most one
-                            doc link per checkpoint
+                            runs; the page never shows its output). At most one of
+                            each per checkpoint, and a probe carries a THREE-part
+                            label whose last part says what the output would settle
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
                             sentences, an optional figure.chain, ul.lookat (1-4
                             places to look, each a title, a clause and its
@@ -527,12 +528,26 @@ a.doc::after { content: "\2197"; margin-left: 2px; font-size: .9em; color: var(-
 
 /* A command the reviewer runs, not a quotation of this repo: no
    generator behind it, and NO OUTPUT BENEATH IT, because the skill
-   never ran it. Scrolls in its own box so a long one-liner cannot
-   widen the page. */
+   never ran it.
+
+   IT WRAPS, and that is the one place it parts company with an excerpt.
+   An excerpt must never be re-wrapped, because re-flowing a quotation
+   changes what the author wrote; a probe is not a quotation, so nothing
+   is lost. It was white-space:pre with overflow-x:auto, and since every
+   probe in this system runs to about ninety characters, that meant every
+   probe on every page was cut off at the right edge of the column with
+   the reviewer scrolling a box to read the thing they were being asked
+   to paste. pre-wrap breaks at the spaces the command already has and
+   leaves the text node alone, so it still copies byte for byte.
+
+   The hanging indent is what says a second line is a continuation and
+   not a second command — the idiom details.searched already uses on a
+   long grep, for exactly the same reason. overflow-x stays for the one
+   case wrapping cannot help: an unbroken token wider than the column. */
 pre.probe {
-  margin: 10px 0; padding: 12px 14px; overflow-x: auto;
+  margin: 10px 0; padding: 12px 14px 12px 32px; overflow-x: auto;
   font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
-  white-space: pre; color: var(--ink-2);
+  white-space: pre-wrap; text-indent: -18px; color: var(--ink-2);
   background: var(--surface-3); border-left: 2px solid var(--rule-strong);
 }
 
@@ -1356,10 +1371,28 @@ figcaption strong { color: var(--ink-3); }
              send it to. No output line ever follows it: the run did not boot the
              application, so a "=>" line here would be the one piece of fiction on
              the page. A probe that writes goes in a sandboxed console and the
-             label says so; a probe that needs seeded records carries the seed
-             command beside it. The Elixir form has no sandbox console at all —
-             see the lens file's § Runtime probes. -->
-        <span class="lbl">rails runner &middot; read-only</span>
+             label says so. The Elixir form has no sandbox console at all — see
+             the lens file's § Runtime probes.
+
+             THE LABEL HAS THREE SEGMENTS, AND THE THIRD IS THE ONE THAT MATTERS:
+             the instrument, the safety, and WHAT THE OUTPUT WOULD SETTLE. It
+             shipped here as the first two alone, and a published page duly
+             copied that — a 140-character one-liner scrolling out of its box
+             with nothing saying what answer to expect from it. The third segment
+             is where the earning test gets applied, because it gets applied while
+             the probe is being written: a probe whose label you cannot complete
+             is a probe that was not earned.
+
+             AND THE PROBE HAS TO ANSWER WHERE THE REVIEWER RUNS IT. Class-level
+             reflection — validators_on, to_sql, reflect_on_association — needs no
+             rows, which is why the example below is one. A probe that reads rows
+             answers only where those rows exist: the rows have to be plausible at
+             head, and its setup command is a line of the SAME block — one
+             pre.probe, because it is one thing the reviewer pastes and the cap is
+             one per checkpoint. A probe against behaviour this change INTRODUCES
+             has no rows behind it by definition and asks the classes instead. See
+             report-format.md § Framework anchors, which owns all of it. -->
+        <span class="lbl">rails runner &middot; read-only &middot; {{WHAT_THE_OUTPUT_WOULD_SETTLE}}</span>
 <pre class="probe">bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'</pre>
 
         <p class="open"><b>Open question</b>{{WHAT_THE_CODE_DOES_NOT_SETTLE_AND_ONLY_THE_AUTHOR_CAN}}?</p>

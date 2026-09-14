@@ -168,7 +168,8 @@ change the judgment, and the page carries the judgment.
 **Facets, not rows.** Tests appear inside a checkpoint when they change how the reviewer judges it —
 *"the spec at `:88` pins the admin branch and leaves the invitee branch open"* is part of the
 judgment; a list of the specs that touch the file is not. A validation command or a `pre.probe`
-appears when running it would settle the question, after the explanation, with any setup beside it.
+appears when running it would settle the question *and would answer in the reviewer's own checkout*,
+after the explanation, at most one per checkpoint; § *Framework anchors* has both tests.
 An author question appears as the open line. Anything that would have been a row with nothing in it is
 not written, and no label is left behind to say so.
 
@@ -453,9 +454,35 @@ framework's rule is the whole point and this app cannot vary it.
 **Earned by a decision the reviewer has to make.** The same test the excerpt budget uses, and for the
 same reason: a behaviour every developer in that stack already knows earns nothing, and a page that
 links each one has become a tutorial with a diff attached. **At most one doc link per checkpoint**,
-and a page carrying more links than judgments has stopped selecting. Probes are scarcer still: a
-checkpoint earns one where its judgment is framework-shaped — ActiveRecord in Rails, a changeset, a
-query, an association or an `on_mount` chain in Elixir — and a second wants a reason.
+and a page carrying more links than judgments has stopped selecting. **At most one probe per
+checkpoint** as well, and probes are scarcer than links besides: a checkpoint earns one where its
+judgment is framework-shaped — ActiveRecord in Rails, a changeset, a query, an association or an
+`on_mount` chain in Elixir — and a second wants a reason. The one exemption is the `‡ probe` row
+above, which is not rationed at all.
+
+**And answerable where the reviewer will run it.** Framework-shaped and answerable are independent
+tests, and a probe has to pass both. Class-level reflection — `validators_on`, `to_sql`,
+`reflect_on_association`, `connection.indexes` — answers in a fresh checkout with no rows in it,
+which is why both lens files reach for it first. A probe that **reads rows** answers only where
+those rows exist, so it earns its place twice: the rows have to be plausible at head, and the seed
+or setup command sits beside it. And a probe asks what the application *does* — it never settles
+what anyone **meant**, so a `p.open` about intent is not a probe's to answer.
+
+**The case this rule exists for is a probe against behaviour the change introduces.** A published
+page asked `Event.community_event.last` inside a checkpoint whose own second sentence read *"until
+this branch nothing in the application could create a community event."* The command named only
+real constants, wrote nothing, sat in the checkpoint it belonged to and passed every mechanical
+rule there is — and it returns `nil`, then raises, in every checkout on earth. New behaviour has no
+rows behind it by definition. A probe for a checkpoint about new behaviour asks the **classes**,
+not the table.
+
+**The label says what the probe would establish.** Three segments: the instrument, the safety, and
+the shape of the answer — `rails runner · read-only · how many rows this touches`. The third is not
+decoration. **A probe whose label you cannot complete is a probe that was not earned**, and that
+clause is the cheapest place the answerability test gets applied, because it is applied while the
+probe is being written rather than while the page is being read. It is also the only thing standing
+between the reader and a 140-character one-liner: they decide whether to paste it from the label,
+not from the command.
 
 **The deep-link ladder governs neither.** The four rungs are about `file:line` citations into a git
 remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is plain text —
