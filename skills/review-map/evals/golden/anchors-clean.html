@@ -33,7 +33,7 @@
         list, and a bulk write would not run the stamp &mdash;
         <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
         skips validations and callbacks. <span class="tier">from unchanged code</span></div>
-      <span class="lbl">rails runner &middot; read-only</span>
+      <span class="lbl">rails runner &middot; read-only &middot; which validators are in force on archived_at</span>
 <pre class="probe">bin/rails runner 'pp Project.validators_on(:archived_at).map { |v| [v.class, v.options] }'</pre>
       <div class="item">Names every validation on the column, including any a concern adds.</div>
     </dd>

@@ -403,6 +403,64 @@ end
 
 probe_body = RailsAnchors.body_of(page, /<pre class="probe"/)
 
+# 4b · The budget's mechanical edge, the same one the doc link gets above. At most one probe per
+#      checkpoint; a page carrying more probes than judgments has stopped selecting. maybe, not bad,
+#      because the `‡ probe` row is exempt from the ration outright and a page legitimately carrying
+#      two for that reason should not go red for it.
+cps = page.count(/<section class="cp/)
+if cps.positive? && nprobe > cps
+  check.maybe("#{nprobe} probe(s) across #{cps} checkpoint(s) — at most one each, and a page over that ratio has stopped selecting")
+end
+
+# 4c · The label, which is the only thing between the reader and a command they are being asked to
+#      paste. Three segments: the instrument, the safety, and what the output would settle. A page
+#      shipped the first two alone — copied from the template, which shipped them alone — and the
+#      third is where the earning test gets applied, because it gets applied while the probe is
+#      being written. Absent is a FAIL: nothing then names the instrument, which is a safety
+#      statement. Thin is a WARN, because failing hard on it teaches a run to write a junk third
+#      segment, which is worse than a missing one and invisible.
+#      THE LABEL HAS TO BE THE LAST THING BEFORE THE PROBE, and that is the half this rule would
+#      have got wrong. `.lbl` is the most-used device in the system — a section eyebrow, a legend
+#      and a checkpoint's own "Checkpoint A" are all one — so a rule that simply remembered the
+#      nearest preceding one would hand an UNLABELLED probe the checkpoint's eyebrow and report it
+#      as labelled. It would have passed on every real page and failed only on a fragment with
+#      nothing else in it, which is the shape of a rule that never looked. So any other non-blank
+#      line clears the candidate: a label counts only where it is adjacent.
+probe_labels = []
+pending_label = nil
+page.lines.each do |raw|
+  line = raw.chomp
+  if (m = line.match(%r{<span class="lbl[^"]*">(.*?)</span>}))
+    # The separator is `&middot;` in the markup and ReviewMap.unescape deliberately decodes only
+    # five entities — searches.rb and the doc-link rules compare against exactly what the shell
+    # produced, so that table is not ours to extend. Normalise the one character this rule needs.
+    pending_label = ReviewMap.unescape(m[1]).gsub("&middot;", "·")
+  elsif line.match?(/<pre class="probe"/)
+    probe_labels << pending_label
+    pending_label = nil
+  elsif !line.match?(/\A[[:space:]]*\z/)
+    pending_label = nil
+  end
+end
+unlabelled = probe_labels.count(&:nil?)
+if unlabelled.positive?
+  check.bad("#{unlabelled} probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it")
+else
+  check.ok("every probe carries a label")
+end
+thin = probe_labels.compact.reject { |l| l.split("·").size >= 3 }
+if thin.any?
+  check.maybe("#{thin.size} probe label(s) name the instrument and stop, with no segment saying what the output would settle: #{thin.map(&:strip).join(" | ")}")
+end
+
+# 4d · And the label may not name a runner the command does not invoke. The write check below reads
+#      the BODY, so a label saying sandbox over a bare `runner` write already fails there; this
+#      catches the quieter inverse, a label promising a sandbox the reviewer will not get.
+mislabelled = probe_labels.compact.select { |l| l.include?("sandbox") }
+if mislabelled.any? && probe_body.none? { |l| l.include?("--sandbox") }
+  check.bad("a probe label names a sandbox its command never opens: #{mislabelled.map(&:strip).join(" | ")}")
+end
+
 # 5 · No fabricated output. The skill does not run these, so anything that looks like a result
 #     is invented. `=>` is the console's own prompt for a return value; a leading SQL keyword is
 #     the other common shape; a leading `[` or `{` is one only outside a quoted runner script,

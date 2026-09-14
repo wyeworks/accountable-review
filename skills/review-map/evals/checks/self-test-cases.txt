@@ -83,6 +83,36 @@
  rails-anchors      | anchors-runner-mutates.html   | 1 | no 'console --sandbox' is named   | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
+# The label and the ration. A probe is the one thing on the page a reviewer is invited to PASTE,
+# and its label is all they have to decide from — so absent is a FAIL (nothing names the
+# instrument, which is a safety statement) and thin is a WARN (failing hard teaches a run to
+# write a junk third segment, which is worse and invisible). The thin form is pinned rather than
+# assumed gone because it is exactly what page-template.html used to ship and a published page
+# duly copied. The sandbox row is the quiet inverse of the write rule below it: that one reads
+# the body, so a label promising a rollback over a bare runner passes it and lands here.
+#
+# agenda-probe-unlabelled.html is the pair to the fragment above it, and the one that matters:
+# .lbl is this system's most-used device, so a rule remembering the NEAREST preceding label hands
+# an unlabelled probe the "Checkpoint A" eyebrow above it and passes. The fragment cannot catch
+# that — it has no other label in it, so the wrong rule and the right one agree there. Deleting
+# the adjacency clause from rails-anchors.rb turns this row green and every other row stays as it
+# was, which is the whole reason it is here.
+#
+# agenda-probes-over-budget.html is the only other one needing a whole page, because a ration needs a
+# denominator and the denominator is section.cp. It is agenda-clean with two probes added and
+# nothing else touched — every command legal, read-only, labelled and real — so the one thing
+# wrong is that the page stopped selecting, which no per-probe rule can see. Three across two,
+# one over the ratio, so the row pins THIS ratio rather than passing all the way down from a
+# looser one.
+ rails-anchors      | anchors-probe-label-thin.html  | 0 | no segment saying what the output would settle | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-probe-unlabelled.html  | 1 | carry no label                   | --repo @GOLD@/searches-repo
+ rails-anchors      | agenda-probe-unlabelled.html  | 1 | carry no label                   |
+ rails-anchors      | anchors-probe-sandbox-lie.html | 1 | names a sandbox its command never opens | --repo @GOLD@/searches-repo
+ rails-anchors      | agenda-probes-over-budget.html | 0 | probe(s) across 2 checkpoint(s)   |
+# And the clean counterparts, so the two label rules are seen NOT firing on correct input. A
+# rule that only ever fires on broken input is a rule nobody notices has stopped firing.
+ rails-anchors      | agenda-clean.html             | 0 | every probe carries a label       |
+ rails-anchors      | anchors-probe-legit-forms.html | 0 | every probe carries a label      | --repo @GOLD@/searches-repo
 # The Elixir arms of the same two rules. anchors-hexdocs-clean.html is the row nothing else
 # would have pinned: it carries TWO different package versions on purpose, so a future reader
 # who "generalizes" Rails' one-app-one-series rule to hexdocs turns this row red here instead

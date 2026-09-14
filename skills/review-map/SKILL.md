@@ -553,9 +553,14 @@ is unsure the figure landed.
 - Which citations are load-bearing for the judgment. Those get a collapsed excerpt beside the *Look
   at* entry they confirm, generated in step 9.
 - Which claims carry an evidence tier.
-- Whether a probe would settle the question — a `pre.probe`, proposed and never run, inside the
-  checkpoint after its explanation, with any setup it needs beside it. There is no separate
-  validations section to send it to.
+- Whether a probe would settle the question **and would answer where the reviewer runs it** — a
+  `pre.probe`, proposed and never run, inside the checkpoint after its explanation, at most one per
+  checkpoint. There is no separate validations section to send it to. Class-level reflection answers
+  in any checkout; a probe that reads rows answers only where those rows exist, so its setup is a
+  line of the same block, and a probe against behaviour this change *introduces* has no rows to read
+  and asks the classes instead. Label it in three parts — the instrument, the safety, and what the
+  output would settle: **a probe whose label you cannot complete is a probe that was not earned.**
+  § *Framework anchors* owns all of it.
 - Whether a doc link explains why the framework consequence follows. At most one `a.doc` per
   checkpoint, and never on a claim with no `file:line` beside it.
 

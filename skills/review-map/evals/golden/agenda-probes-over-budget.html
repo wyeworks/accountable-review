@@ -1,4 +1,13 @@
-<!-- A WHOLE AGENDA PAGE, CLEAN. The one fixture that carries every component this format
+<!-- THREE PROBES ACROSS TWO CHECKPOINTS, which is over the one-each ration. Built from
+     agenda-clean by adding two probes to its first checkpoint and changing nothing else: each
+     command is legal, read-only, correctly labelled and names constants that exist, so the only
+     thing wrong is that the page has stopped selecting. A denominator rule is the only kind of
+     rule that can see this, which is why it exists.
+
+     Three rather than four, deliberately: one over the ratio, so the row pins THIS ratio instead
+     of passing all the way down from some looser one.
+
+     What follows is agenda-clean's own header. A WHOLE AGENDA PAGE, CLEAN. The one fixture that carries every component this format
      introduced: two section.cp checkpoints, a figure.chain with no .ip-aff node, ul.lookat
      entries in their three parts (a title, a clause, then the citation), the impact panel, and
      details.evidence holding the inventory and the searches.
@@ -97,6 +106,10 @@
         </ul>
         <span class="lbl">rails runner &middot; read-only &middot; what the query compiles to</span>
 <pre class="probe">bin/rails runner 'pp ActiveProjects.new.call.to_sql'</pre>
+        <span class="lbl">rails runner &middot; read-only &middot; which validators are in force on archived_at</span>
+<pre class="probe">bin/rails runner 'pp Project.validators_on(:archived_at).map { |v| [v.class, v.options] }'</pre>
+        <span class="lbl">rails runner &middot; read-only &middot; which indexes the table actually has</span>
+<pre class="probe">bin/rails runner 'pp ActiveRecord::Base.connection.indexes(:projects).map(&amp;:columns)'</pre>
         <p class="open"><b>Open question</b> Is hiding archived projects meant to land in a later change, or was this one expected to do it?</p>
       </section>
 

@@ -36,12 +36,15 @@
     <dt>Validate</dt>
     <dd>
       <div class="item">The routes this change adds, read back from the app itself.</div>
+      <span class="lbl">rails runner &middot; read-only &middot; which project routes the app defines</span>
       <pre class="probe">bin/rails runner 'pp Rails.application.routes.routes.map { |r| r.name }.grep(/project/)'</pre>
 
       <div class="item">The values the column actually admits, which the enum generates.</div>
+      <span class="lbl">rails runner &middot; read-only &middot; which values the status enum admits</span>
       <pre class="probe">bin/rails runner 'pp Project.statuses'</pre>
 
       <div class="item">Which methods each model defines itself, per model.</div>
+      <span class="lbl">rails runner &middot; read-only &middot; which methods each model defines itself</span>
       <pre class="probe">bin/rails runner 'pp Project.instance_methods(false).sort
 [Project].each { |m| pp [m.name, m.instance_methods(false).sort] }'</pre>
     </dd>

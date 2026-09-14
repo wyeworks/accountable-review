@@ -1,4 +1,12 @@
-<!-- A WHOLE AGENDA PAGE, CLEAN. The one fixture that carries every component this format
+<!-- AN UNLABELLED PROBE ON A PAGE THAT HAS PLENTY OF OTHER LABELS. This is the fixture the
+     adjacency half of the rule exists for, and the reason it is a whole page rather than a
+     fragment: .lbl is the most-used device in this system, so a rule that remembered the nearest
+     preceding one would hand this probe the "Checkpoint A" eyebrow eleven lines above it and
+     report it as labelled. anchors-probe-unlabelled.html cannot catch that — it is a fragment
+     with nothing else in it, so the wrong rule and the right rule agree there. Built from
+     agenda-clean by deleting one line.
+
+     What follows is agenda-clean's own header. A WHOLE AGENDA PAGE, CLEAN. The one fixture that carries every component this format
      introduced: two section.cp checkpoints, a figure.chain with no .ip-aff node, ul.lookat
      entries in their three parts (a title, a clause, then the citation), the impact panel, and
      details.evidence holding the inventory and the searches.
@@ -95,7 +103,6 @@
             <span class="path">app/queries/active_projects.rb:3-5</span>
           </li>
         </ul>
-        <span class="lbl">rails runner &middot; read-only &middot; what the query compiles to</span>
 <pre class="probe">bin/rails runner 'pp ActiveProjects.new.call.to_sql'</pre>
         <p class="open"><b>Open question</b> Is hiding archived projects meant to land in a later change, or was this one expected to do it?</p>
       </section>

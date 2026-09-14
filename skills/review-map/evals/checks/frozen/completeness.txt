@@ -4,6 +4,18 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page agenda-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment agenda-probe-unlabelled.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page agenda-probe-unlabelled.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment agenda-probes-over-budget.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page agenda-probes-over-budget.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-clean.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -64,10 +76,28 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-mixed-series.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-probe-label-thin.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-probe-label-thin.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-probe-legit-forms.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-probe-legit-forms.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-probe-sandbox-lie.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-probe-sandbox-lie.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-probe-unlabelled.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-probe-unlabelled.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-runner-mutates.html

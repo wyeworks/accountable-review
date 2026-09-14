@@ -181,8 +181,21 @@ so of itself rather than letting a reader assume otherwise.
 this is usually better than a paragraph, because the behaviour is assembled from things a diff cannot
 show you together: in Rails at boot, from the class, its concerns, its parents and the schema; in
 Phoenix at compile time, from macros and from the `live_session` block your new route may or may not
-have landed inside. A probe that settles a claim goes in *how to validate*; one that makes a mechanism
-legible goes in *things to understand*.
+have landed inside. A probe goes inside the checkpoint it settles, after the explanation; where it
+would only make a mechanism legible, a clause in that explanation does the job and the probe is not
+earned.
+
+**A probe has to answer where you will run it**, which is a second test and not the same one.
+Class-level reflection answers in any checkout, with no rows in the database. A probe that reads rows
+answers only where those rows exist — so the rows have to be plausible on the branch, and whatever
+seeds them is a line of the same block. A probe against behaviour the change *introduces* has no rows
+behind it by definition, and asks the classes instead. And a probe never settles what anyone meant:
+an open question about intent is for the author, not for the console.
+
+**Its label says what the output would settle** — `rails runner · read-only · how many rows this
+touches`, rather than the instrument and nothing more. That third part is what you read before
+deciding whether to paste the command, and it is the page's own check on itself: a probe whose label
+cannot be completed is a probe that was not earned.
 
 **And a probe cannot be out of date**, which is why it is the anchor the Elixir half leans on while its
 catalogue is closed. It interrogates the installed code instead of describing it.
@@ -195,7 +208,8 @@ no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.
 Phoenix. The page says which, because a reviewer should not be able to change a database by pasting
 what it told them to.
 
-**There is at most one link per checkpoint, and many checkpoints get none.** That ceiling is the
+**There is at most one link and at most one probe per checkpoint, and many checkpoints get
+neither.** That ceiling is the
 point: the failure mode here is not a wrong link, it is a page that explains every mechanism it
 touches, becomes a Rails tutorial with a diff attached, and reads as more thorough while getting
 harder to navigate. An anchor of any kind has to be earned by a decision you have to make.
