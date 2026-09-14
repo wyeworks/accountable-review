@@ -540,6 +540,14 @@ SKIP  runtime probes: none on this input
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
+## --fragment impact-why-variant-class.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page impact-why-variant-class.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  doc links: none on this input

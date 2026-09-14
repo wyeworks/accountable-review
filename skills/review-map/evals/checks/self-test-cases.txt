@@ -30,6 +30,7 @@
 # linking somewhere real — which is the shape every regression in this repository arrives in.
  impact-paths       | impact-no-why.html            | 1 | p.ip-why for 2 .ip-card(s)
  impact-paths       | impact-why-citation.html      | 1 | carrying a citation or a list
+ impact-paths       | impact-why-variant-class.html | 1 | carrying a citation or a list
  impact-paths       | impact-missing-loc.html       | 1 | no locator on path 1 node 3
  impact-paths       | impact-loc-on-outcome.html    | 1 | a behaviour and not a file
  impact-paths       | impact-two-locators.html      | 1 | more than one locator on path 1 node 3

@@ -72,7 +72,9 @@ if [ -z "$CASE" ]; then
   echo "usage: run.sh <case> [-n N] [-j N] [--fixture NAME] [--base REF] [--level LABEL]" >&2
   echo "                     [--skill-effort high|low] [--visual] [--judge]" >&2
   echo "                     [--fast] [--model M] [--effort L] [--judge-model M] [--judge-effort L]" >&2
-  echo "cases:  $(ls "$HERE/cases" | sed 's/\.json$//' | tr '\n' ' ')" >&2
+  # ls would print its own error if the directory is absent, which it is while every section
+  # case sits under deferred/. An empty list is the honest answer; a shell error is not.
+  echo "cases:  $(ls "$HERE/cases" 2>/dev/null | sed 's/\.json$//' | tr '\n' ' ')" >&2
   exit 2
 fi
 CASEFILE=$HERE/cases/$CASE.json

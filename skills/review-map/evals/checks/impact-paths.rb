@@ -223,7 +223,11 @@ end
 # What the paragraph must not be. A citation in it is the affected list restated; a list in it is
 # the chain walked in prose, which makes one of the figure and the paragraph redundant — the
 # footnote-supplying-the-edges failure of the box grid this component replaced.
-whys = panel.lines.join(" ").scan(%r{<p class="ip-why"[^>]*>(.*?)</p>}m).flatten
+# Prefix-matched like every other pattern in this file. CARD_WHY counts a variant class toward
+# the placement rule above, so an extraction requiring the exact closing quote would report one
+# paragraph per card and then grade none of them — the rules below all passing on content they
+# never read. golden/impact-why-variant-class.html is that bypass.
+whys = panel.lines.join(" ").scan(%r{<p class="ip-why[^"]*"[^>]*>(.*?)</p>}m).flatten
 empty = whys.count { |w| ReviewMap.unescape(w.gsub(/<[^>]*>/, "")).strip.empty? }
 walked = whys.count { |w| w.match?(/class="(?:path|cite)/) || w.match?(/<li[ >]|<ol[ >]|<ul[ >]/) }
 if empty.zero? && walked.zero?

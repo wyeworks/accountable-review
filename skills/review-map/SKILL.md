@@ -997,11 +997,17 @@ URL: say where the file is, once, and nothing more.
   cell the gate reads:
 
   ```sh
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --pr owner/repo#N                 # rung 1
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --compare owner/repo@base...head  # rung 2
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --blob owner/repo@sha             # rung 2, base unpushed
-  <skill base directory>/scripts/ledger-rows.sh BASE HEAD                                   # rungs 3 and 4
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only --pr owner/repo#N                 # rung 1
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only --compare owner/repo@base...head  # rung 2
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only --blob owner/repo@sha             # rung 2, base unpushed
+  <skill base directory>/scripts/ledger-rows.sh BASE HEAD --paths-only                                   # rungs 3 and 4
   ```
+
+  **`--paths-only` is on every one of them, and dropping it is not a smaller row.** Without it the
+  script emits the four-cell classified form, three cells of which are the literal placeholders
+  `{{SECTION}}`, `{{READ|SKIM|MECHANICAL}}` and `{{PRIMARY|SUPPORTING|SECONDARY}}` — a shape the page
+  stopped carrying. Nothing catches it: `data-path` is on the first cell, so `coverage-gate.sh` still
+  passes, and the placeholders ship in the evidence foot of a page that passed its own gate.
 
   Rungs 1 and 2 both land on a diff page, whose fragment is the SHA-256 of the path — `--pr` and
   `--compare` compute it. A row names a file, so these link the file, not a line: the row is the

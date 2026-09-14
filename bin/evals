@@ -146,6 +146,16 @@ cmd_section() {
   [ $# -ge 1 ] || { echo "usage: evals section <case> [run.sh flags...]" >&2; list_cases; exit 2; }
   case=$1; shift
 
+  # Answer here rather than letting run.sh resolve a directory that no longer exists. The cases
+  # moved to deferred/, so run.sh's `$HERE/cases/$CASE.json` can only ever miss — and it reports
+  # that miss as "no such case", which is the one thing that is NOT true of a deferred case. A
+  # case that is un-deferred by being moved back reaches run.sh normally, so this stays a fact
+  # about where the file is rather than a list of names to keep in step.
+  if [ ! -r "$EVALS/cases/$case.json" ] && [ -r "$EVALS/deferred/cases/$case.json" ]; then
+    echo "deferred: $case graded a section of the page this one replaced — see $EVALS/deferred/README.md" >&2
+    exit 2
+  fi
+
   # The defaults go in FRONT of the caller's flags, because run.sh's parser takes the last
   # value it sees — so `evals section x -n 1` is one repetition, not three. --no-judge is the
   # one flag handled here rather than passed on: run.sh has no such option, and dropping the

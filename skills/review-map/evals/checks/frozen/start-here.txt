@@ -446,6 +446,18 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment impact-why-variant-class.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page impact-why-variant-class.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-assurance.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none

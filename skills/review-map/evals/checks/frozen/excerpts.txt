@@ -400,6 +400,12 @@ SKIP  no excerpts in this input
 ## --page impact-why-citation.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment impact-why-variant-class.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-why-variant-class.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  no excerpts in this input
