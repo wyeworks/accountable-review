@@ -1,7 +1,7 @@
 <!-- A WHOLE AGENDA PAGE, CLEAN. The one fixture that carries every component this format
      introduced: two section.cp checkpoints, a figure.chain with no .ip-aff node, ul.lookat
-     entries with their clauses, the impact panel, and details.evidence holding the inventory
-     and the searches.
+     entries in their three parts (a title, a clause, then the citation), the impact panel, and
+     details.evidence holding the inventory and the searches.
 
      It is the positive case, which is the half a suite of defect fixtures cannot supply: every
      rule below reports a PASS on it, so a rule that starts firing on correct markup goes red
@@ -70,8 +70,9 @@
         </figure>
         <ul class="lookat">
           <li>
+            <b>The whole write path</b>
+            <span>an update and nothing else — no scope, no callback, no other column</span>
             <span class="path">app/models/project.rb:10-12</span>
-            <span>the whole write path — an update and nothing else</span>
             <details class="excerpt excerpt--diff">
               <summary>
                 <span class="chev">&#9656;</span>
@@ -89,8 +90,9 @@
             </details>
           </li>
           <li>
-            <span class="path">app/queries/active_projects.rb:3-5</span>
+            <b>The query every list goes through</b>
             <span>not in the diff, and the reason archived projects keep appearing <span class="tier">from unchanged code</span></span>
+            <span class="path">app/queries/active_projects.rb:3-5</span>
           </li>
         </ul>
         <span class="lbl">rails runner &middot; read-only</span>
@@ -104,12 +106,14 @@
         <p>The commit adds <code>validates :slug, uniqueness: true</code>, and the schema has no unique index behind it — <code>slug</code> is a plain string column. <span class="tier">from unchanged code</span> Two concurrent requests can both pass the validation and both write. Whether that matters depends on how slugs are produced, which this diff does not say.</p>
         <ul class="lookat">
           <li>
+            <b>The new validation</b>
+            <span>and the comment beside it already acknowledging the gap</span>
             <span class="path">app/models/project.rb:6</span>
-            <span>the validation, and the comment already acknowledging the gap</span>
           </li>
           <li>
+            <b>The column, and the index that is not on it</b>
+            <span>the one index the migration did add is on archived_at</span>
             <span class="path">db/schema.rb:4-8</span>
-            <span>the column and the one index the migration did add, which is on archived_at</span>
             <details class="excerpt excerpt--source">
               <summary>
                 <span class="chev">&#9656;</span>

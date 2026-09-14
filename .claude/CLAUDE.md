@@ -248,8 +248,9 @@ Editing one of these means checking the others still agree.
   duplicates one to prove the count fires.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
   attention*, each **one judgment** the reviewer has to make: an `<h3>` question, two to four
-  sentences, an optional `figure.chain`, a `ul.lookat` of one to four deep-linked citations each with
-  a clause, and an optional `p.open` labelled *Open question*. `report-format.md` § *The review
+  sentences, an optional `figure.chain`, a `ul.lookat` of one to four entries — each a short title,
+  a clause and its deep-linked citation, in that order — and an optional `p.open` labelled *Open
+  question*. `report-format.md` § *The review
   checkpoint* owns all of it and owns it **alone**; `page-template.html` assembles one with every
   optional part, one without, and a pending stub.
 

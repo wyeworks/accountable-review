@@ -20,8 +20,9 @@ does not earn omitted outright.
 - **What needs your attention** — the page's core. Three to five **review checkpoints**, each one
   judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
   intended scope?* rather than *ProjectSearcher implementation*. A checkpoint carries the question,
-  two to four sentences on why it is one, one to four places to look with a clause each, and — when
-  the judgment turns on something prose cannot hold — a compact chain showing the mechanism. A line
+  two to four sentences on why it is one, one to four places to look — each a short title, a clause
+  and its citation — and, when the judgment turns on something prose cannot hold, a compact chain
+  showing the mechanism. A line
   labelled *Open question* names what only the author can settle.
 
   They are ordered by what a reviewer would most regret misunderstanding. **That order is not a

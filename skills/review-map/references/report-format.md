@@ -116,8 +116,9 @@ change the judgment, and the page carries the judgment.
      to decide <span class="tier">from unchanged code</span>.</p>
   <figure class="chain">…</figure>                       <!-- optional: mechanism inside the change -->
   <ul class="lookat">
-    <li><a class="path" href="…">app/models/project.rb:41-52</a>
-        <span>the guard, and the branch the filter now skips</span>
+    <li><b>The scope guard</b>
+        <span>the branch the filter now skips, and what reaches it instead</span>
+        <a class="path" href="…">app/models/project.rb:41-52</a>
         <details class="excerpt excerpt--diff">…</details></li>
   </ul>
   <p class="open"><b>Open question</b> Whether archived projects should still appear in
@@ -140,11 +141,25 @@ change the judgment, and the page carries the judgment.
   § *Chains* owns the component and the rule that sends a crossing chain to *Impact outside the
   diff*. A chain followed by a paragraph that names each node again is the defect: the figure says
   how the value gets there, the paragraph says what to judge about it.
-- **Look at, `ul.lookat`, one to four entries.** Each is a deep link and a clause saying what to see
-  there. An entry with no clause is a bare citation, and a bare citation is a location the reader has
-  to open to learn why it is on the list — the deleted-field defect wearing a link. A collapsed
-  excerpt sits beside the entry it confirms when the citation is load-bearing for the judgment;
-  § *Source excerpts* owns the budget. The entry has to read complete with the block shut.
+- **Look at, `ul.lookat`, one to four entries.** Each has **three parts, in this order**: a title
+  naming what is at that location, a clause saying what to see in it, and the citation last. An entry
+  with no clause is a bare citation, and a bare citation is a location the reader has to open to learn
+  why it is on the list — the deleted-field defect wearing a link. A collapsed excerpt sits beside the
+  entry it confirms when the citation is load-bearing for the judgment; § *Source excerpts* owns the
+  budget. The entry has to read complete with the block shut.
+
+  **The title is what makes a list of four scannable, which is the whole reason the citation moved
+  last.** Every entry used to open with a sixty-character monospace address, so finding the one you
+  wanted meant reading all four clauses: the entry carried an address and an explanation and no name.
+  A title is the line the reader's eye stops on; the address is what they act on after deciding to
+  open it. Two to six words, sentence case, no full stop.
+
+  **Two ways a title says nothing, and both look like compliance.** It is the file name again — *The
+  migration*, *The spec*, *`event.rb`* — which the citation two lines below already said. Or it is the
+  clause, shortened, and the entry says one thing twice. The title names the **thing**; the clause
+  says what to see in it and why the judgment turns on it. And a title is never a grade: *Risky*,
+  *Important*, *Check this first* are a severity vocabulary arriving four to a checkpoint, and the
+  rule against them is the page's, not this component's.
 - **Open question, `p.open`, optional.** One line, labelled **Open question** and nothing else. What
   only the author can settle, or what the run could not establish and what would settle it. The label
   is fixed: *Watch* and *Blocking* are severity by another name, and `evals/checks/page-invariants.rb`
@@ -1069,6 +1084,14 @@ The masthead plus the semantic delta. It orients; it does not teach.
 **The masthead** carries the PR title and number, the branch against its base, the author, and the
 linked ticket if the branch name or description names one.
 
+**The PR number is a link to the pull request**, in the masthead and in the rail's identity block,
+which carry the same fact and so carry the same href — `https://github.com/{owner}/{repo}/pull/{n}`.
+It is the one identifier on the page a reader is most likely to want to leave on, and every `file:line`
+around it is already clickable, so a plain-text one reads as a rendering failure rather than as a
+decision. **Rung 1 only**: the URL is the pull request page itself, so a page with no PR behind it has
+nothing to point at and names its branch or compare range as text, exactly as § *Deep links* says
+citations degrade. A number that was inferred rather than resolved is never linked.
+
 **The exact revision, as two short SHAs**: head → base, in the masthead's `Revision` cell beside the
 branch names. Not conditional on there being a PR, and not something the reader has to derive. A
 branch name goes stale the moment someone pushes, and a page describing an earlier revision while
@@ -1158,7 +1181,8 @@ is which.
 **Below the figure, the affected entries the paths run through**, under the eyebrow *Affected, not
 changed* — that label verbatim, because `evals/checks/searches.rb` opens its scope on it. One
 citation and one clause each, and a pointer at the checkpoint that turns on it rather than a second
-explanation:
+explanation. The nodes carry the address themselves now, so what this list adds is the **clause** —
+why the entry is affected — and it reaches the entries no path had room for:
 
 > `app/queries/active_projects.rb:8` — scopes on `discarded_at` and never learns about archival.
 > Checkpoint 2.

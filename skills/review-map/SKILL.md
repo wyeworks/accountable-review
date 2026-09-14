@@ -531,7 +531,10 @@ checkpoint is written, never on how many there are.
 
 **7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
 two to four sentences. Then decide whether it also earns a chain, and how many *Look at* entries it
-needs.
+needs. **Each entry is three things in order — a title, a clause, then the citation.** The title names
+what is at that location in two to six words, so four entries can be scanned rather than read; the
+file name is not a title, because the citation says that already. `report-format.md` § *The review
+checkpoint* owns the rest.
 
 **The chain is earned when the judgment turns on a mechanism the reader cannot hold from prose** — a
 guard order, a value derived across three or more hops, a request path with a branch in it. Ask it
@@ -1098,8 +1101,8 @@ per checkpoint, the impact figure's third card, and an inventory that grows with
 to anyone, because it is collapsed.
 
 **Trim only content that fails its own test** — a chain whose explanation walks its nodes, a *Look at*
-entry with no clause, an explanation that restates *What changed*, a checkpoint that turns out to be
-a category. Never trim toward an imagined length, and **never trim a checkpoint out**. A page that
+entry with no clause or with a title that only repeats its own citation, an explanation that restates
+*What changed*, a checkpoint that turns out to be a category. Never trim toward an imagined length, and **never trim a checkpoint out**. A page that
 came in under the numbers by losing a judgment has done the one thing the budget forbids; the numbers
 are what to argue with, never the agenda.
 

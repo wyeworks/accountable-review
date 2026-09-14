@@ -174,8 +174,15 @@ Is nil → cross_facility an intentional semantic default?
   read that value. On /transactions the current facility is nil, so the fallback decides
   what the page scopes to.                                    from unchanged code
 
-  Look at   BaseSearcher#initialize:14-19   where the default is applied
-            ProjectSearcher#options:31      the consumer that widens with it
+  Look at
+
+    The nil default
+    where a missing facility becomes cross_facility instead of raising
+    BaseSearcher#initialize:14-19
+
+    The consumer that widens with it
+    reads the value without checking which facility it came from
+    ProjectSearcher#options:31
 
   Open question  Whether cross-facility scope is intended there, or an artefact of the
                  constructor change.

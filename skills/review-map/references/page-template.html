@@ -92,7 +92,8 @@
                             doc link per checkpoint
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
                             sentences, an optional figure.chain, ul.lookat (1-4
-                            places to look, a clause each), an optional p.open
+                            places to look, each a title, a clause and its
+                            citation, in that order), an optional p.open
     start here ............ ol.begin — one list: the route through the code, 3-7
                             stops. Entries link into the checkpoint that owns them
     chains ................ figure.chain inside a checkpoint — mechanism INSIDE the
@@ -313,11 +314,20 @@ h1 { font-size: clamp(36px, 5vw, 58px); line-height: 1.04; letter-spacing: -.016
 h2 { font-size: clamp(27px, 3.2vw, 34px); line-height: 1.14; letter-spacing: -.012em; }
 h3 { font-size: clamp(24px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -.01em; }
 h4 { font-size: 22px; line-height: 1.24; letter-spacing: -.008em; }
-p { margin: 0; max-width: 64ch; }
+p { margin: 0; }
 strong { font-weight: 600; }
 em { font-style: italic; }
 
-/* Prose flow, and the one piece of spacing a run types rather than copies.
+/* PROSE RUNS THE FULL WIDTH OF THE COLUMN. It was capped at a 64ch measure, and
+   the cap is gone: the column is already bounded by .wrap's 1240px and main's
+   padding, so the measure was a second, narrower column drawn inside the first.
+   What it cost is visible on any published page -- a paragraph stopping a third of
+   the way short of the .lookat list, the impact card and the excerpt beneath it,
+   which all run the whole row. A paragraph that ends where nothing else does reads
+   as a different column rather than as a comfortable line length. The blocks still
+   capped are the ones inside a grid cell, where the cell is the measure.
+
+   Prose flow, and the one piece of spacing a run types rather than copies.
    p is margin:0 because inside a collapsed block and a .lookat clause the gap
    belongs to the container's own padding or flex gap, and a paragraph bringing
    its own would double it. Every BLOCK below carries a top margin instead —
@@ -338,7 +348,7 @@ em { font-style: italic; }
 section > p:not(:last-child) { margin-bottom: 18px; }
 
 .lede { margin-top: 22px; font-size: 15.5px; line-height: 1.68; color: var(--ink-3); }
-.note { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 70ch; }
+.note { font-size: 14px; line-height: 1.6; color: var(--muted); }
 
 code, .mono { font-family: var(--mono); font-variant-ligatures: none; }
 code {
@@ -381,14 +391,31 @@ main { flex: 1 1 auto; min-width: 0; padding: 0 56px 140px; }
 .rail-id { display: flex; flex-direction: column; gap: 6px; }
 .rail-id .tick { font-family: var(--display); font-weight: 400; font-size: 19px; line-height: 1.2; }
 .rail-links { display: flex; flex-direction: column; gap: 1px; }
+/* A RAIL ENTRY IS INLINE FLOW, NOT A FLEX ROW, and that is not a preference. A
+   checkpoint's short form routinely carries a code chip -- "Nil location and its
+   readers", with the middle word in code -- and under display:flex every element
+   and every run of text around it becomes its own flex item: three items, three
+   10px gaps, and with nowrap in force the text items shrink and wrap mid-phrase.
+   A published page rendered that entry as a ragged block of three fragments.
+
+   So the number is an inline-block of a fixed width and the hanging indent is
+   padding plus a negative text-indent, which also puts a wrapped second line under
+   the label rather than under the number. A sub-entry carries no number and so has
+   no indent to hang. */
 .rail-links a {
-  display: flex; gap: 10px; align-items: baseline; padding: 6px 0;
+  display: block; padding: 6px 0 6px 24px; text-indent: -24px;
   font-size: 13px; text-decoration: none; color: var(--ink-3);
 }
-.rail-links a > .n { font-family: var(--mono); font-size: 10px; color: var(--fainter); width: 14px; flex: 0 0 14px; }
-.rail-links a.sub { padding: 5px 0 5px 24px; font-size: 12.5px; color: var(--muted); }
+.rail-links a > .n {
+  display: inline-block; width: 14px; margin-right: 10px; text-indent: 0;
+  font-family: var(--mono); font-size: 10px; color: var(--fainter);
+}
+.rail-links a.sub { padding: 5px 0 5px 24px; text-indent: 0; font-size: 12.5px; color: var(--muted); }
 .rail-links a.on { color: var(--ink); font-weight: 600; }
 .rail-links a:hover { color: var(--accent); }
+/* The chip is right in running prose and wrong in a 232px rail, where a background
+   and 5px of padding make one word of a title look like a button. */
+.rail-links a code { background: none; padding: 0; font-size: .92em; color: inherit; }
 
 /* ============================================================
    Section furniture. A section announces itself with a label and
@@ -612,23 +639,43 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .cp > h3 { max-width: 38ch; }
 .cp > p { margin-top: 14px; }
 
-/* Where to look — one to four locations, a clause each. The clause is not
-   optional furniture: a bare citation is a location the reader has to open to
-   find out why it is on the list, which is the deleted-field defect wearing a
-   link. Hanging indent by flex-basis so a wrapped clause stays under its own
-   path, the device .sr-list already uses, and an excerpt takes the full row
-   beneath the pair it confirms. */
-.lookat { list-style: none; margin: 22px 0 0; padding: 0; border-top: 1px solid var(--rule); }
-.lookat > li { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--rule); }
-.lookat > li > .path { flex: 0 0 auto; }
-.lookat > li > span { flex: 1 1 28ch; min-width: 0; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
-.lookat .excerpt { flex: 1 1 100%; margin-bottom: 2px; }
+/* Where to look — one to four locations. THREE PARTS, IN THIS ORDER: a title
+   naming what is at that location, the clause saying what to see in it, and the
+   citation last. The clause is not optional furniture: a bare citation is a
+   location the reader has to open to find out why it is on the list, which is the
+   deleted-field defect wearing a link. The title is not optional either, and
+   report-format.md § The review checkpoint owns what makes one good.
+
+   THE TITLE EXISTS BECAUSE A LIST OF FOUR PATHS CANNOT BE SCANNED. Every entry
+   used to open with a 60-character monospace address, so finding the entry you
+   wanted meant reading all four clauses: the entry carried an address and an
+   explanation and no name. A title is the line a reader's eye stops on, which is
+   why it goes first and why the address — the thing they act on only after
+   deciding to open it — goes last.
+
+   Entries are separated by 26px of gap and nothing else. No hairline per entry:
+   rules between four short paragraphs draw a table around prose, and a row is what
+   this component stopped being. Inside an entry the parts sit 0 to 4px apart, so
+   the three lines group as one thing before the next gap arrives; that ratio is
+   the whole separation, and shrinking the gap towards the internal spacing is what
+   makes four entries read as one block. The list's own top rule stays — it is what
+   separates the list from the explanation above it. An excerpt sits under the
+   entry it confirms, full width. */
+.lookat { list-style: none; margin: 22px 0 24px; padding: 18px 0 0; border-top: 1px solid var(--rule); display: grid; gap: 26px; }
+.lookat > li { min-width: 0; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.lookat > li > b { display: block; font-weight: 600; color: var(--ink); }
+.lookat > li > span { display: block; }
+.lookat > li > .path { display: block; margin-top: 4px; }
+.lookat .excerpt { margin: 10px 0 0; }
 
 /* An open question. Ochre like .gap and for the same reason: a stated absence
    is evidence, never a severity. The label is fixed at "Open question" —
    "Watch" and "Blocking" are a severity vocabulary with the chip taken off,
    and page-invariants.rb warns on both. */
-.open { margin-top: 20px; padding: 14px 16px; background: var(--warn-bg-2); border-left: 2px solid var(--warn-rule); max-width: 66ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+/* Full width, like the prose and the list above it: an open line ending short of
+   both read as an aside, where it is in fact the one thing in the checkpoint the
+   code could not settle. */
+.open { margin-top: 20px; padding: 14px 16px; background: var(--warn-bg-2); border-left: 2px solid var(--warn-rule); font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
 .open > b { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--warn-ink); }
 
 
@@ -1043,7 +1090,18 @@ figcaption strong { color: var(--ink-3); }
     <div class="rail-id">
       <div class="lbl" style="letter-spacing:.18em">Review map</div>
       <div class="tick">{{TICKET_OR_BRANCH}}</div>
-      <div class="cite">PR #{{N}} &middot; {{N}} files</div>
+      <!-- THE PR NUMBER IS A LINK TO THE PULL REQUEST, here and in the masthead
+           below. It is the one identifier on the page a reader is most likely to
+           want to leave on, and every other citation is already clickable, so a
+           plain-text one reads as a rendering failure rather than as a decision.
+           Both spots carry the same href because they are the same fact.
+
+           IT IS RUNG 1 ONLY. The URL is the PR page itself, so a page with no pull
+           request behind it has nothing to point at: at rungs 2 to 4 this line
+           names the branch or the compare range as text, the way § Deep links
+           already says citations degrade. Never link a PR number that was inferred
+           rather than resolved. -->
+      <div class="cite"><a class="cite" href="https://github.com/{{ORG}}/{{REPO}}/pull/{{N}}">PR #{{N}}</a> &middot; {{N}} files</div>
     </div>
 
     <div class="rail-links">
@@ -1069,7 +1127,7 @@ figcaption strong { color: var(--ink-3); }
 
     <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
       <div class="lbl lbl-wide" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px">
-        <span>{{ORG}}</span><span style="color:var(--rule-strong)">/</span><span>{{REPO}}</span><span style="color:var(--rule-strong)">&middot;</span><span style="color:var(--accent)">PR #{{N}}</span><span style="color:var(--rule-strong)">&middot;</span><span>{{AUTHOR}}</span>
+        <span>{{ORG}}</span><span style="color:var(--rule-strong)">/</span><span>{{REPO}}</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--accent)" href="https://github.com/{{ORG}}/{{REPO}}/pull/{{N}}">PR #{{N}}</a><span style="color:var(--rule-strong)">&middot;</span><span>{{AUTHOR}}</span>
       </div>
 
       <h1>{{ONE_LINE_WHAT_THIS_DOES}}</h1>
@@ -1204,15 +1262,30 @@ figcaption strong { color: var(--ink-3); }
         </figure>
 
         <!-- WHERE TO LOOK — one to four locations, the smallest set that settles
-             the question, each with a clause saying what to see there. A bare
-             citation is a location the reader has to open to find out why it is
-             on the list. An excerpt sits BESIDE the entry it confirms, collapsed,
-             and only where seeing the exact bytes is what makes the judgment
-             possible; the entry has to read complete with the block shut. -->
+             the question. THREE PARTS PER ENTRY, IN THIS ORDER: a title naming
+             what is at that location, a clause saying what to see in it, and the
+             citation last. A bare citation is a location the reader has to open to
+             find out why it is on the list; an entry with no title is one a reader
+             can only find by reading all four clauses.
+
+             TWO WAYS A TITLE SAYS NOTHING, and both look like compliance. It is
+             the file name again — "The migration", "The spec" — which the citation
+             two lines below already said. Or it is the clause, shortened, and the
+             entry now says one thing twice. The title names the THING; the clause
+             says what to see in it and why the judgment turns on it.
+
+             And a title is never a grade. No "Risky", no "Important", no "Check
+             this first" — the rule that keeps a severity chip off this page keeps
+             it out of four titles per checkpoint.
+
+             An excerpt sits BESIDE the entry it confirms, collapsed, and only
+             where seeing the exact bytes is what makes the judgment possible; the
+             entry has to read complete with the block shut. -->
         <ul class="lookat">
           <li>
-            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <b>{{WHAT_IS_AT_THIS_LOCATION_IN_A_FEW_WORDS}}</b>
             <span>{{WHAT_TO_CHECK_THERE}}</span>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
             <!-- generated by scripts/excerpt.sh --diff — never typed -->
             <details class="excerpt excerpt--diff">
               <summary>
@@ -1232,12 +1305,14 @@ figcaption strong { color: var(--ink-3); }
             </details>
           </li>
           <li>
-            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <b>{{THE_UNCHANGED_THING_THIS_ENTRY_IS_ABOUT}}</b>
             <span>{{WHAT_THIS_UNCHANGED_CODE_STILL_ASSUMES}} <span class="tier">from unchanged code</span></span>
+            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
           </li>
           <li>
-            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{SPEC}}:{{START}}-{{END}}</a>
+            <b>{{WHAT_THE_TEST_IS_ABOUT}}</b>
             <span>{{WHICH_BRANCH_IT_PINS_AND_WHICH_IT_LEAVES_OPEN}}</span>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{SPEC}}:{{START}}-{{END}}</a>
           </li>
         </ul>
 
@@ -1281,8 +1356,9 @@ figcaption strong { color: var(--ink-3); }
 
         <ul class="lookat">
           <li>
-            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <b>{{WHAT_IS_AT_THIS_LOCATION_IN_A_FEW_WORDS}}</b>
             <span>{{WHAT_TO_CHECK_THERE}}</span>
+            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
             <!-- generated by scripts/excerpt.sh --source. This is the variant that
                  carries the product: no diff view can address an unchanged line.
                  data-lang is the generator's guess from the path, and the only
@@ -1314,8 +1390,9 @@ figcaption strong { color: var(--ink-3); }
             </details>
           </li>
           <li>
-            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+            <b>{{WHAT_IS_AT_THIS_LOCATION_IN_A_FEW_WORDS}}</b>
             <span>{{WHAT_TO_CHECK_THERE}}</span>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
           </li>
         </ul>
 
@@ -1424,10 +1501,10 @@ figcaption strong { color: var(--ink-3); }
         <p class="note" style="margin-top:16px">{{WHAT_A_NAME_BASED_PASS_COULD_NOT_REACH}}</p>
       </figure>
 
-      <!-- The entries the paths run through, with their citations — a figure
-           carries no file:line, so this is where the reader gets the address. One
-           clause each, and a pointer at the checkpoint that turns on it rather
-           than a second explanation. -->
+      <!-- The entries the paths run through. The nodes carry the address now, so
+           what this list adds is the CLAUSE — why the entry is affected — and a
+           pointer at the checkpoint that turns on it rather than a second
+           explanation. It also reaches entries no path had room for. -->
       <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
         <li><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> &mdash; {{ONE_CLAUSE}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></li>
