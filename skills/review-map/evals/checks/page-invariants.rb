@@ -136,8 +136,17 @@ end
 # 3 · Evidence tiers. Silence is the first tier, so a document with no label either had
 #     nothing to infer, which is rare, or presented inference as fact, which is the
 #     failure this catches.
-if page.has?(/class="tier"/)
-  check.ok("evidence tiers used (#{page.count(/class="tier"/)} label(s))")
+#
+#     The trailing character class is load-bearing: two of the five tiers carry a
+#     family modifier (`class="tier tier-unc"`, `class="tier tier-inf"`), and an
+#     exact-quote match counted only the unmodified ones. A page whose every tier
+#     was `from unchanged code` therefore read as a page with no tiers at all —
+#     the worst direction for this rule to be wrong in, because the message it
+#     prints then accuses a correctly-evidenced page of presenting inference as
+#     fact. Found by adding the modifier, not by reading the rule.
+TIER = /class="tier[ "]/
+if page.has?(TIER)
+  check.ok("evidence tiers used (#{page.count(TIER)} label(s))")
 else
   check.bad("no evidence tier labels — inference is being presented as fact, or none was marked")
 end

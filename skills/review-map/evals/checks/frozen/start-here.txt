@@ -634,6 +634,18 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment invariants-tier-modifier-only.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page invariants-tier-modifier-only.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-verdict.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none

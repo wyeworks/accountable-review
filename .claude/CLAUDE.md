@@ -1091,6 +1091,51 @@ Editing one of these means checking the others still agree.
   rather than literals precisely so it keeps inverting *relative to the page* rather than flipping to
   an unreadable combination in one theme.
 
+- **Four semantic colour families, one ramp shape, and a rule about what each is allowed to mean.**
+  `--nav-*` (slate 252), `--gap-*` (ochre 72), `--unchanged-*` (teal 200) and `--prov-*` (plum 318)
+  each carry the same five slots — `bg`, `bg-2`, `rule`, `rule-2`, `ink` — at fixed lightness and
+  chroma per slot, so no two families can drift apart in weight, and the dark half is the light ramp
+  reflected rather than a second hand-picked set. All of it is in `page-template.html`'s token block,
+  which is in the head `SKELETON:` range and therefore **emitted by `page-skeleton.sh`**: a run never
+  types a colour.
+
+  **The rule is the system, not the ramp.** Slate means *you can click it* and may appear on nothing
+  else. Ochre means *something is missing and the page is saying so* — `p.open`, the inferred tier,
+  the build banner — and never a severity. Teal means *this code is not in the diff*: the
+  `from unchanged code` tier, the dashed `.ip-aff` node and its legend key, the *Affected, not
+  changed* lists. Plum means *how a thing is known*: the excerpt `.tag`, `details.searched`, the
+  evidence foot, the probe label. Green and red stay what they were — added and removed lines inside
+  an excerpt, nowhere else — and are the reason no fifth semantic hue gets added.
+
+  **Teal is the one that had to be argued, and the argument is why it is safe on this page.** The
+  changed/unchanged distinction is the most load-bearing one the page draws and it was carried by a
+  dash alone: two near-identical greys in the impact panel's two lanes. A hue is the obvious fix and
+  the obvious objection is that a page with no severity vocabulary should not start colour-coding
+  claims. It does not: *not in the diff* is a fact about the repository rather than a judgment of the
+  change, so it cannot be read as a verdict — which is exactly the test any future hue has to pass.
+  Plum passes it for the same reason, being provenance rather than meaning. A hue for *risk*, for
+  *confidence*, or for *how hard the run looked* fails it, and is the severity chip arriving as a
+  palette.
+
+  **Two off-system hex values went, and that is the cheap half.** `--accent-line` and `--select` were
+  a link underline and a selection fill picked by hand in both themes — four values maintained apart
+  from everything else, doing what two slots of the slate ramp already do. `--syn-key` moved from hue
+  315 to 318 so the syntax tint's keyword colour is the provenance hue rather than a fifth position
+  nobody chose.
+
+  **`page-invariants.rb` § 3 had to widen, and the bug it had is the shape this repository keeps
+  finding.** It matched `class="tier"` against a closing quote, so the two tiers that now carry a
+  family modifier counted as zero labels — and a checkpoint resting entirely on code outside the diff
+  would have been told it was presenting inference as fact. A rule that passes is not a rule that
+  looked. `golden/invariants-tier-modifier-only.html` pins it, and deliberately does **not** quote the
+  attribute in its own header comment: § 3 reads raw bytes rather than a comment-stripped copy, so a
+  fixture describing its own defect would pass for the wrong reason.
+
+  One more thing moved with the teal. `.ev-list` was scoped `.evidence .ev-list`, and that list
+  appears **twice** — beside the impact panel in section 04 and again in the foot — so the section-04
+  copy had no rules at all. Unscoping it is what lets both carry the teal rule, and it is a bug the
+  palette found rather than one the palette caused.
+
 ## Invariants the CI setup adds
 
 Same rule as above: editing one of these means checking the others still agree.

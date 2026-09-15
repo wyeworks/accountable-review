@@ -772,6 +772,14 @@ SKIP  runtime probes: none on this input
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
+## --fragment invariants-tier-modifier-only.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
+## --page invariants-tier-modifier-only.html
+exit=0
+SKIP  doc links: none on this input
+SKIP  runtime probes: none on this input
 ## --fragment invariants-verdict.html
 exit=0
 SKIP  doc links: none on this input

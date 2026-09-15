@@ -1102,6 +1102,12 @@ SKIP  no .impact panel in this input
 ## --page invariants-severity-chip.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-tier-modifier-only.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-tier-modifier-only.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment invariants-verdict.html
 exit=0
 SKIP  no .impact panel in this input
