@@ -1162,6 +1162,14 @@ written rule rather than rediscovering them. None of them is in force.
   on the doc link it escalated from, carrying a `file:line` from this repository and a `pre.demo`
   that may show a result line only because its receiver is a class this application does not have.
 
+**And a level, if one returns, is emitted rather than described.** The rail once shipped in its
+seven-entry form with a comment telling a `--brief` run to cut it to four and renumber — a
+transformation performed from prose that no check ever looked at, on the default level. What replaced
+it was a `SKELETON:ONLY:level=` marker pair and a validator that failed closed, so `page-skeleton.sh`
+assembled the rail at both shapes; that machinery went with the level, and it is the shape to bring
+back. Subtractive by construction, so *no line was added* is assertable without a second extraction
+that would test the script against its own awk.
+
 **The invariant a full mode has to hold: it keeps the agenda and adds depth beneath it.** The
 reviewer reaches *What needs your attention* at the same point in the page either way. A mode that
 makes them read supporting evidence before the useful overview is a different product, and it is the

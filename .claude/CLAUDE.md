@@ -130,36 +130,23 @@ a version of the prose.
 When the question is where the minutes went rather than whether the page was right,
 `evals/profile.sh` reads the transcript of a run — an eval repetition or a real PR — and splits its
 wall clock into tool execution, streaming, and the wait before each request produces its first token.
-On the run it was built against, that last part was 58% of the total and tool execution was 6%. Split
-that 58% before concluding anything from it: most of it is thinking, and only about **2.5s per request
-is fixed** — 95 requests paid roughly 240s of that for nothing, while tripling the context cost 0.8s.
-So the one lever **for wall clock** is fewer requests, and context reduction is not worth prose for
-that purpose. Two `Write`s of the page accounted for 329 of the 457 seconds of streaming.
+It reads the **subagent** transcripts under `<session>/subagents/` too, so the falsification pass is
+counted rather than invisible.
 
-**For cost the ranking inverts, and the same script now prints both.** Context is billed once per
-request, so a 141-request run carrying 265k pays that 265k 141 times: on three real runs, cache
-reads were 37-39M against 160-190k of output, about **70% of the bill**, and *when* a file is loaded
-therefore matters as much as whether. The sentence above is not retired — it is true of the clock
-and false of the invoice, which are different questions about the same requests. `profile.sh` prints
-a *where the money goes* table beside the time one, and the two rank differently: read them side by
+**Two rankings, and they invert.** The lever for **wall clock** is fewer requests, because only about
+2.5s per request is fixed and context costs almost nothing in time. The lever for **cost** is context,
+because it is billed once per request and cache reads are roughly 70% of the bill — so *when* a file
+is loaded matters as much as whether. Neither sentence is retired by the other: they are different
+questions about the same requests, `profile.sh` prints a table for each, and the two are read side by
 side and never one instead of the other.
 
-It also reads the **subagent** transcripts under `<session>/subagents/`, which nothing used to. The
-falsification pass costs 0.9% of blocked wall clock and **17-23% of every cache-read token** — the
-first number is why spawning them does not slow the run, the second is what they add to the bill,
-and a profile that reported only the first is why the pass read as free. **Both numbers were measured
-against the old seam**, where the falsifier read a published flow section; it now reads an analysis
-note, which is smaller and carries no markup, so the token figure is an upper bound that has not been
-re-measured.
-
-It infers nothing the transcript does not carry:
-publish stages are mechanical, the ten steps are **not** —
-`ledger-rows.sh` fires at minute four and again at minute thirteen — and steps 4, 6 and 8 leave no
-trace at all, so they get no row. Read `evals/README.md` § *Where the time goes* and § *Profiling one
-run* before quoting one of its numbers.
+It infers nothing the transcript does not carry: publish stages are mechanical, the ten steps are
+**not** — `ledger-rows.sh` fires at minute four and again at minute thirteen — and steps 4, 6 and 8
+leave no trace at all, so they get no row. The numbers live in `evals/README.md` §§ *Where the time
+goes* and *Profiling one run*, which is the only place they are maintained; read it before quoting
+one, and § *Deliberately single-context* for what the pass costs and why that is two numbers.
 
 Read `evals/README.md` before adding a case.
-
 ## How the documents divide the work
 
 Each reference owns one axis; keep them from bleeding into each other.
@@ -400,99 +387,32 @@ Editing one of these means checking the others still agree.
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
 - **Framework anchors are provenance, not evidence, and there is still no sixth tier.** A doc link
-  explains why a Rails consequence follows; a console probe asks the reviewer's own application. The
-  claim underneath keeps resting on a repo `file:line` at the tier it already carried, which is what
-  keeps the five-tier invariant untouched. It is also the answer already written down for `--review`:
-  where a claim came from is provenance, and provenance is not evidence.
+  explains why a framework consequence follows; a console probe asks the reviewer's own application.
+  The claim underneath keeps resting on a repo `file:line` at the tier it already carried, which is
+  what keeps the five-tier invariant untouched. It is also the answer already written down for
+  `--review`: where a claim came from is provenance, and provenance is not evidence.
 
-  Two rules carry the link and the probe, and both are the kind that look like diligence when broken.
-  **A doc link may only be a row of `references/rails-docs.md`, pinned to the version this app runs**,
-  because the run cannot open a URL — no fetch step, and egress to those hosts is commonly blocked —
-  so a constructed API path is a 404 the reader finds on the page's behalf, and an unpinned one is
-  documentation for a Rails this app may not be running. Both fail while looking correct. See
-  § *Pinning, and the two things it does not fix* for why the pin is about checkability rather than
-  precision, and for the two marks that stop the page asserting a behaviour that moved. **A probe is
-  proposed, never run**, so the page shows a command and never output: a fabricated `=> …` is the
-  most concrete-looking thing on the page and the one part of it that is fiction.
+  Two rules carry them, and both are the kind that look like diligence when broken. **A doc link may
+  only be a row of the stack's catalogue, pinned to the version this app runs**, because the run
+  cannot open a URL — no fetch step, and egress to those hosts is commonly blocked — so a constructed
+  API path is a 404 the reader finds on the page's behalf, and an unpinned one documents a Rails this
+  app may not be running. **A probe is proposed, never run**, so the page shows a command and never
+  output: a fabricated `=> …` is the most concrete-looking thing on the page and the one part of it
+  that is fiction. See § *Pinning, and the two things it does not fix* for why the pin is about
+  checkability rather than precision.
 
-  **A probe also has to be answerable, and that is a second test the earning rule did not have.**
-  Framework-shaped and answerable are independent: a published page put
-  `Event.community_event.last` inside a checkpoint whose own second sentence read *"until this branch
-  nothing in the application could create a community event."* It named only real constants, wrote
-  nothing, sat in the checkpoint it belonged to, and passed every mechanical rule there is — and it
-  returns `nil`, then raises, in every checkout on earth. New behaviour has no rows behind it by
-  definition, so a probe for a checkpoint about new behaviour asks the **classes**, not the table.
-  Class-level reflection answers anywhere; a probe that reads rows answers only where those rows
-  exist, so the rows have to be plausible at head and the setup is a line of the same block. And a
-  probe asks what the application *does*: the `p.open` on that checkpoint was about what
-  `invite_area` was **meant** to narrow, which no query settles.
+  `report-format.md` § *Framework anchors* owns the rest **alone** — the routing, the budget, the
+  earning test, answerability, and the label's three segments; `SKILL.md` steps 7g and 9 point at it;
+  the § *Runtime probes* of whichever lens the stack selected holds the probes and the rule for
+  running them safely; and `evals/checks/rails-anchors.rb` derives its allowlist from **both**
+  catalogue files rather than hard-coding hosts — its name is Rails-shaped and its scope is not,
+  deliberately, since renaming it would churn several files for no behavioural gain.
 
-  **The label is where that test gets applied, and it had no slot for it.** The template shipped
-  `rails runner · read-only` as a literal — instrument and safety, nothing saying what the output
-  would establish — so a run copied it, which is the `{{LINK}}` defect in § *Deep links* arriving on
-  the other component: a template carrying an unformed value teaches a run to publish one. The same
-  page's *other* probe invented the missing segment unprompted (`· how many rows this touches`), so
-  the three-segment form ratifies what a run already reached for rather than imposing something new.
-  **A probe whose label you cannot complete is a probe that was not earned**, and that test is cheap
-  because it is applied while the probe is written rather than while the page is read.
-
-  **What is checkable here is narrow, and the narrowness is the point.** `rails-anchors.rb` gained a
-  denominator against `section.cp` (the doc link already had one), a FAIL for a probe with no label,
-  a WARN for a two-segment one, and a FAIL for a label promising a sandbox the command never opens —
-  the quiet inverse of the write rule, which reads the body and so passes a lying label. Answerability
-  itself is **deliberately not mechanised**: telling that `Event.community_event.last` from a
-  legitimate row count needs to know whether the rows exist *at base*, and a heuristic firing on both
-  would go red on correct content, which is the failure `anchors-hexdocs-clean.html` exists to
-  prevent. It is judged, in `evals.json`, like every other "was it worth it" question here.
-
-  **The label rule needed one more thing, and it is the repository's own recurring shape.** `.lbl` is
-  the most-used device in this system — a section eyebrow, a legend and a checkpoint's own
-  *Checkpoint A* are all one — so a rule that remembered the nearest preceding label would hand an
-  **unlabelled** probe the eyebrow above it and report it as labelled. That version passes on every
-  real page and fails only on a fragment with nothing else in it, which is *a rule that passes is not
-  a rule that looked* arriving again. The label counts only where it is **adjacent**,
-  and `golden/agenda-probe-unlabelled.html` is a whole page rather than a fragment precisely so that
-  deleting the adjacency clause turns one row green: the fragment fixture beside it cannot catch the
-  bug, because with no other label present the wrong rule and the right one agree.
-
-  **And the probe's placement in a checkpoint was never argued — it is a forwarding address.** It was
-  born in the seven-field unit's *how to validate*; when that field and § 6 *Before approving* were
-  deleted, the routing cell was rewritten to point at the checkpoint, and no commit message claims a
-  checkpoint is a *better* home. The placement is right, but the rule reads as a redirect, which is
-  why it went this long without an earning test of its own. `docs/review-map.md` was still routing
-  probes to both deleted fields until this change.
-
-  `report-format.md` § *Framework anchors* owns all of it — the routing (verify → the checkpoint the
-  probe settles, explain → a clause in its explanation) and the budget, **and owns them alone**;
-  `SKILL.md` steps 7g and 9 point at it, the § *Runtime probes* of whichever lens file the stack
-  selected holds the probes and the rule for running them safely — `runner`-versus-`console --sandbox`
-  in Rails, and in Elixir `mix run -e` plus the fact that there is **no sandbox console at all**, so a
-  write wraps itself in `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` — and
-  `evals/checks/rails-anchors.rb` derives its allowlist from **both** catalogue files rather than
-  hard-coding hosts. Its name is Rails-shaped and its scope is not, deliberately: renaming it would
-  churn several files for no behavioural gain.
-
-  **There was a third anchor and it is gone: the primer callout**, an `aside.primer` inside a flow,
-  one per flow at most, `--full` only, gated on the doc link it escalated from, carrying a `file:line`
-  and a `pre.demo` that could show a `# =>` line only because its receiver was a class the app under
-  review did not have. It went with the level that gated it, and `report-format.md` § *A future full
-  mode* records its rules. Three things it taught are worth keeping without it.
-
-  **`pre.demo` and `pre.probe` were different components because the receiver differed**, and merging
-  them would have opened a hole through the one rule protecting the most concrete-looking fiction the
-  page can carry. There is no `pre.demo` now, which means the page's rule is simply *no output, ever*
-  — simpler, and the simplicity is the point.
-
-  **A doc-link budget needs a denominator**, and `rails-anchors.rb` used `<dt>` count when the fields
-  were the unit. It counts checkpoints now: at most one link each, and a page carrying more links than
-  judgments has stopped selecting.
-
-  **And the failure mode the primer concentrated is still the failure mode.** It is not a wrong link.
-  It is a page that links everything, becomes a Rails tutorial with a diff attached, and reads as more
-  thorough while getting less navigable — the canonical-home regression arriving as citation instead
-  of as repetition. The rule against it is the excerpt budget's: an anchor is earned by a decision the
-  reviewer has to make. A script can check that a link is real and legally placed, never that the
-  judgment needed it.
+  **The failure mode is not a wrong link.** It is a page that links everything, becomes a Rails
+  tutorial with a diff attached, and reads as more thorough while getting less navigable — the
+  canonical-home regression arriving as citation instead of as repetition. An anchor is earned by a
+  decision the reviewer has to make, and a script can check that a link is real and legally placed,
+  never that the judgment needed it.
 - **The synthesis phase is where the agenda comes from, and it is a step of its own for a reason.**
   `SKILL.md` step 7 takes the analysis notes and produces the page's argument: name the semantic
   delta, identify the human judgments, merge the observations that share one, rank by consequence if
@@ -615,86 +535,46 @@ Editing one of these means checking the others still agree.
   knowing one. Nothing greps the count; `checks/build-state.rb` greps "absence is not a finding", which
   is why that sentence is the one that must survive editing.
 - **Effort decides whether the page is right, and it is invisible on the page.** `--effort high` (the
-  default) and `--effort low` decide how hard a run works to be right. Nothing else varies: there is
-  one page shape, and two pages of the same target at the two efforts differ in their claims and never
-  in their form.
+  default since 0.16.0) and `--effort low` decide how hard a run works to be right. Nothing else
+  varies: two pages of the same target at the two efforts differ in their claims and never in their
+  form. Effort produces **no section, no marker, no chip and no sentence**, and a reader cannot tell
+  which one produced the page in front of them, deliberately.
 
-  **The default moved to `high` in 0.16.0, on two measurements against fayron#529.** The pass costs
-  0.9% of wall clock because the falsifiers do not block (§ *Deliberately single-context*), and the
-  same PR at `normal` missed five findings the falsified run carried — including an admin who never
-  reaches the gate written to admit them, and sixteen consumers of a column the change made nullable,
-  two of which send email.
+  **The seam is ahead of the page, which is the design fact worth stating.** Step 6 writes one
+  analysis note per flow, sends one falsifier at each, and step 7 synthesises while they read; step 8
+  folds the challenges in before a checkpoint's stub is replaced. Under the old order a flow was
+  published at stage 3 and corrected afterwards, so **it was wrong while it was public** — a cost
+  that no longer has to be paid. What remains is the late challenge arriving after a checkpoint has
+  landed, and the rule for that is the one it always was: a claim retracted before the final publish
+  beats one that is never retracted. § *Deliberately single-context* owns what the pass costs and why
+  the default moved; do not restate its numbers here.
 
-  **That 0.9% is wall clock, and the pass is not cheap in tokens.** Profiling the subagent
-  transcripts put it at **17-23% of every cache-read token** across three real runs — the second
-  most expensive thing in the procedure. Both numbers are load-bearing and neither replaces the
-  other: the first is why `high` can be the default at all, the second is why
-  `agents/claim-falsifier.md` carries its own `model:` rather than inheriting the parent's. Quoting
-  the 0.9% as though it settled the cost question is the mistake this paragraph exists to prevent,
-  and it is the one the first version of it made.
-
-  **Both numbers were measured against the old seam and have not been re-measured.** The falsifier
-  used to be handed a published `<section id="flow-x">` — markup, excerpts, a rail — and is now handed
-  an analysis note, which is smaller and is prose. The token figure is an upper bound; the wall-clock
-  figure should be unchanged, since what made it 0.9% is that the parent keeps working, and it still
-  does. Re-measuring is worth a `profile.sh` run on the first real PR through this version.
-
-  **The seam moved ahead of the page, and that is the change worth stating.** Step 6 writes one
-  analysis note per flow to `$W/analysis/`, sends one falsifier at each, and step 7 synthesises while
-  they read; step 8 folds the challenges in before a checkpoint's stub is replaced. Under the old
-  order a flow was published at stage 3 and corrected afterwards, so **it was wrong while it was
-  public** — an accepted cost that no longer has to be paid. What remains is the late challenge
-  arriving after a checkpoint has landed, and the rule for that is the one it always was: a claim
-  retracted before the final publish beats one that is never retracted.
-
-  **A run that waits on them has lost the whole argument.** The 0.9% holds only because the parent
-  works while they read. Spawn-then-idle turns the cheapest step in the procedure into the most
-  expensive, and it is the likeliest way this default gets reverted by someone measuring it.
-
-  Effort produces **no section, no marker, no chip and no sentence**. A reader cannot tell which
-  effort produced the page in front of them, deliberately.
-
-  Six files have to agree: `SKILL.md` step 1 parses it, step 6c owns what `high` does and step 8 owns
-  what happens to the result, `report-format.md` § *One page shape* states that this file has nothing
-  else to say about it, `page-template.html`'s header comment refuses the badge in the same breath as
-  the severity chip, `agents/claim-falsifier.md` carries the mandate, `evals/checks/page-invariants.rb`
-  §§ 2b and 2c fail a page that advertises having been checked or narrates its own drafting, and
-  `README.md` § *How hard it works* is the public wording.
-
-  **The falsifier's `model:` is a fourth thing that has to agree, and it agrees across the harness
-  rather than across the page.** `agents/claim-falsifier.md` names it; `evals/run.sh` reads it out of
-  that file into the `--agents` JSON, so an eval arm cannot silently measure a different model from
-  the one that ships; the value lands on the result line as `falsifier_model` and in `report.sh`'s
-  group key, so an opus-falsifier row can never be averaged into a sonnet one; and `profile.sh`
-  prints the model the subagent transcripts actually recorded. That last one is the only real check:
-  `--agents` accepts keys it does not understand without complaining, so sending the field is not
-  proof it was honoured, and the transcript is.
+  Six files have to agree: `SKILL.md` step 1 parses it, step 6c owns what `high` does and step 8 what
+  happens to the result; `report-format.md` § *One page shape* states that the format has nothing to
+  say about it; `page-template.html`'s header comment refuses the badge in the same breath as the
+  severity chip; `agents/claim-falsifier.md` carries the mandate and pins its own `model:`;
+  `evals/checks/page-invariants.rb` §§ 2b and 2c fail a page that advertises having been checked or
+  narrates its own drafting; and `README.md` § *How hard it works* is the public wording. The
+  falsifier's model agrees across the **harness** rather than the page — `evals/run.sh` reads it out
+  of the agent file into `--agents`, it lands on the result line and in `report.sh`'s group key so an
+  opus row is never averaged into a sonnet one, and `profile.sh` prints what the subagent transcripts
+  actually recorded. That last one is the only real check: `--agents` accepts keys it does not
+  understand without complaining, so sending the field is not proof it was honoured.
 
   **A verification badge is the same regression as a severity chip, and it will look more innocent.**
   Grading the PR is obviously forbidden; grading *the page* — "every claim verified", a count of what
   the pass corrected, a `.verified` chip — reads as transparency while asserting exactly the assurance
-  the format exists to withhold. That is why the refusal lives beside the severity refusal in the
-  template rather than in a section of its own, and why § 2b's patterns are high-precision: a bare
-  `verified` is a real Rails column name, and the sanctioned "a pass, not an audit" contains *audit*.
+  the format exists to withhold.
 
-  **The badge is not how the leak actually arrives. This is:** *"the mistake the first version of this
-  section made"*. A correction annotated with the history that produced it — which is the falsification
-  pass, narrated, without ever naming it. It slipped every rule above because it reads as candour
-  rather than as advertising, and a real `--effort high` page against a 28-file PR carried **ten** of
-  them while the three pages beside it carried none. Every one had a true and useful fact inside it:
-  the `git grep` basic-regex caveat is exactly what a reader re-running a recorded search needs. So the
-  rule is *keep the fact, drop the autobiography* — `SKILL.md` step 8's **correction replaces, never
-  annotates**, which is a general-effort bullet rather than a `high`-only one, because a normal run
-  revising its own draft writes the same sentence.
-
-  Two things to know before editing § 2c. It **strips comments first** — `page-template.html`'s own
-  header comments are written in precisely this register ("What this replaced is the reason every one
-  of those rules exists") and ship verbatim inside every published page, so a check reading them would
-  fail every page for its template's documentation; `golden/invariants-draft-narration.html` puts the
-  trigger phrases in its own header comment so that stays true. And the register is right *here* and
-  wrong on the page: this file's rules deliberately carry the observation that produced them, which is
-  the habit the page must not inherit. The audience is the difference — a maintainer needs to know why
-  a rule exists, a reviewer does not need this document's drafting history.
+  **But the badge is not how the leak actually arrives. This is:** *"the mistake the first version of
+  this section made"*. A correction annotated with the history that produced it — the falsification
+  pass, narrated, without ever naming it. It slips every rule above because it reads as candour rather
+  than as advertising, and one real `--effort high` page carried **ten** of them while the three pages
+  beside it carried none. Every one had a true and useful fact inside it. So the rule is *keep the
+  fact, drop the autobiography* — `SKILL.md` step 8's **correction replaces, never annotates**, which
+  is a general-effort rule, because a normal run revising its own draft writes the same sentence.
+  The register is right *in this file* and wrong on the page: a maintainer needs to know why a rule
+  exists, a reviewer does not need the page's drafting history.
 
   The eval axis is `--skill-effort`, not `--effort`: `evals/run.sh` already had an `--effort` meaning
   the CLI reasoning effort the reader runs at, and two knobs under one name in one script is a bug
@@ -704,85 +584,46 @@ Editing one of these means checking the others still agree.
   is not.
 - **Deep-link mode is chosen once**, in step 1, from the four-rung ladder in `report-format.md` —
   driven by whether the head SHA is reachable on a remote. Unpushed branches are the common case, and
-  the correct behaviour there is plain text, not a permalink that 404s.
+  the correct behaviour there is plain text, not a permalink that 404s. **A git that cannot answer is
+  not the same as unpushed**: three states, not two, and the middle one refuses.
 
-  **A git that cannot answer is not the same as unpushed**, and `page-invariants.rb` § 5 used to
-  treat it as such: written with `|| true`, an unreadable `--repo` or an unresolvable head gave empty
-  output, which read as "on no remote" — a false PASS on a page with no permalinks and a false FAIL
-  on one that has them, both from an answer git never gave. Three states, not two, and the middle one
-  refuses.
+  The rung decides whether anything is clickable. It does **not** decide the form, and the form is
+  not a taste: a line inside the diff links to the diff page, because that is the page the reviewer
+  is working in and a blob at head shows the new line with no trace of what it replaced. A line
+  outside the diff links to a blob at the commit that line exists at — head for unchanged code, the
+  diff's left side for code the change removed. Neither form is the fallback; *affected but unchanged*
+  is the page's product and no diff view can address it. **A citation that names a range links a
+  range**, in either form, both ends on the same side.
 
-  The rung decides whether anything is clickable. It does **not** decide the form, and the form is not
-  a taste: a line inside the diff links to the diff page — `pull/{n}/files` at rung 1,
-  `compare/{base}...{head}` at rung 2 — because that is the page the reviewer is working in and a blob
-  at head shows the new line with no trace of what it replaced. A line outside the diff links to a
-  blob at the commit that line exists at: head for unchanged code, the diff's left side for code the
-  change removed or for behaviour cited as it was. Neither form is the fallback; *affected but
-  unchanged* is the page's product and no diff view can address it. Three files have to agree —
-  `report-format.md` § *Deep links* owns both forms and the ladder, `SKILL.md` steps 1, 9 and 10 point
-  at them and record both SHAs, and `ledger-rows.sh` takes `--pr`, `--compare` or `--blob` so a run
-  never types an href into the `<td>` the coverage gate reads.
+  **One exception, and it is a verdict rather than a judgement.** GitHub withholds some diffs behind
+  *Load diff*, so those citations take the blob form and the excerpt beside them becomes the `--diff`
+  variant. Two things make that cheap: the size rule is not the whole rule — one changed line in a
+  generated `db/structure.sql` is small by every measurement and GitHub withholds it anyway, which is
+  the case a threshold alone waves through and the one a Rails page actually cites — and being wrong
+  is asymmetric, since a blob link where the diff would have rendered still lands on the line and only
+  loses the red and the green. So the verdict leans towards the anchor.
 
-  **There is one exception to *inside the diff means a diff anchor*, and it is a verdict rather than
-  a judgement.** GitHub does not render every diff — a file marked `linguist-generated`, a lockfile,
-  a binary, or a diff past **400 lines or 20 KB** sits behind *Load diff* — and an anchor into one of
-  those lands on the stub with the cited line nowhere in the page. So those citations take the blob
-  form. The numbers are GitHub's own
-  ([repository limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits):
-  400 lines / 20 KB to auto-load, 20,000 lines / 500 KB to be shown at all, 1 MB and 300 files for
-  the whole diff), which is why they are constants in `scripts/diff-render.sh` rather than flags —
-  and why the one heuristic in that script, its lockfile-name list, carries a date and the same
-  warning the doc catalogue does: it mirrors Linguist's built-in detection, which lives in GitHub's
-  repository and not in this one. `.gitattributes` is asked through `git check-attr`, so the repo's
-  own marks need no list at all.
+  Five files have to agree: `report-format.md` § *When the diff will not render* owns the rule
+  **alone** and § *Deep links* carries the three URL forms and the ladder; `SKILL.md` step 3 runs the
+  classifier once and step 9 points at both; `scripts/diff-render.sh` holds the verdict, its
+  constants and its dated lockfile heuristic; `tests/run.sh` covers every signal it reads; and
+  `evals/checks/link-form.rb` re-asks that same script rather than keeping a second copy of the
+  thresholds — which is why `golden/links-repo.sh` is the one golden fixture that has to be a real git
+  repository, so that a rule which could only ever SKIP does not reach `self-test-cases.txt`.
 
-  Two things make that cheap. **The size rule is not the whole rule** — one changed line in a
-  generated `db/structure.sql` is small by every measurement and GitHub withholds it anyway, which
-  is the case a threshold alone waves through and the one a Rails page actually cites. And **being
-  wrong is asymmetric**: a blob link where the diff would have rendered still lands on the line and
-  only loses the red and the green, so the verdict leans towards the anchor and the excerpt beside
-  such a claim becomes the `--diff` variant, which is § *Deep links*' rung-3 rule arriving per file
-  instead of per run.
+  **A template carrying an unformed value teaches a run to publish one.** Two real runs published 73
+  ranged citations under one-line anchors *after* the range form landed in § *Deep links*, because
+  every citation in the template rendered as `href="{{LINK}}"` — one opaque placeholder over the one
+  link whose form is load-bearing. The template now spells the anchor out at every line-bearing
+  citation, with `{{DIFF}}` and `{{BLOB}}` defined once before any citation appears and `{{LINK}}`
+  surviving only where a citation names no line. This is the doc-link pinning precedent applied to the
+  other link, and it was missed for the same reason.
 
-  **A citation that names a range links a range**, in either form — `R51-R72`, `#L51-L72`, both ends
-  on the same side. A real run published `…_test.exs:51-72` under an href ending at `R51`: the text
-  promises twenty-two lines, the link selects one, and nothing on the page says which to believe.
-  The diff-anchor range form was missing from `report-format.md` entirely, so the run had nowhere to
-  put the `72` — the defect was in the spec, not in the writing.
-
-  **Fixing the spec did not fix the pages, and `page-template.html` is why.** Two real runs published
-  73 ranged citations between them under one-line anchors *after* the range form landed in
-  § *Deep links*, because every citation in the template rendered as `href="{{LINK}}"` — one opaque
-  placeholder over the one link on the page whose **form is load-bearing** (diff versus blob, `R`
-  versus `L`, line versus range). The rule was stated in a comment beside the fourth citation of
-  fourteen, by which point a run had already copied three. So the template now spells the anchor out
-  at every line-bearing citation — `{{DIFF}}R{{START}}-R{{END}}`, `{{BLOB}}#L{{START}}-L{{END}}`,
-  with the *same two placeholders* in the text — and defines `{{DIFF}}` and `{{BLOB}}` once at the
-  top of the markup half, before any citation appears. `{{LINK}}` survives only where a citation
-  names no line and so has no anchor to get wrong.
-
-  This is the doc-link precedent applied to the other link, and it was missed for the same reason
-  the doc link's was: § *Pinning* already argues that a template carrying the unpinned form teaches
-  a run to publish a page that fails its own check. A template carrying an *unformed* href does the
-  same thing, and costs 4.4 KB of the markup half to fix.
-
-  Five files have to agree on those two: `report-format.md` § *When the diff will not render* owns
-  the rule **alone** and § *Deep links* carries the three URL forms, `SKILL.md` step 3 runs the
-  classifier once and step 9 points at both, `scripts/diff-render.sh` holds the verdict,
-  `tests/run.sh` covers every signal it reads, and `evals/checks/link-form.rb` re-asks that same
-  script rather than keeping a second copy of the thresholds. That last one is why
-  `golden/links-repo.sh` exists: it is the only golden fixture that has to be a real git repository,
-  built under `TMPDIR` with fixed commit fields so its base SHA is stable for `frozen.rb`, and
-  `lib/review_map/fixture.rb` is what expands `@REPO@` in the cases file for the two graders that
-  read it. A rule that could only ever SKIP in `self-test-cases.txt` is what that file exists to
-  prevent.
-
-  `diff-render.sh` also carries the guard this repository has now paid for twice: **asked and unable
-  to answer is not an empty diff.** Every `git diff` in it feeds a pipeline, so an unresolvable ref
-  leaves the exit status at 0 and prints no rows — which reads as *no file is withheld*, the most
-  reassuring thing it can say and the one with the least behind it. The refs are resolved up front
-  and an unresolvable one exits 4. `excerpts.rb`'s state-tag rule shipped with exactly that bug, and
-  `page-invariants.rb` § 5 with its sibling.
+  And the guard this repository has now paid for three times, which `diff-render.sh` carries in its
+  refs handling: **asked and unable to answer is not an empty diff.** A `git diff` feeding a pipeline
+  leaves the exit status at 0 and prints no rows, which reads as *no file is withheld* — the most
+  reassuring thing it can say and the one with the least behind it. `excerpts.rb`'s state-tag rule
+  shipped with exactly that bug, and `page-invariants.rb` § 5 with its sibling.
 - **Five sections, and each fact has one home.** The format is deliberately *not* one section per
   architectural layer. It was, and that guaranteed restatement: one behaviour crosses persistence, the
   API, the boundary and its cohort, so it got described four times, and three further parts existed
@@ -805,274 +646,104 @@ Editing one of these means checking the others still agree.
   same question, and answering it twice is the shape to watch for coming back. Where the attention
   goes is expressed by what is on that list and in what order; every other file is accounted for in
   the evidence foot, unranked.
-- **Source excerpts are quotations, and the page reads complete without them.** A page
-  primitive: a collapsed `details.excerpt` holding verbatim code, in two variants — `--diff` for
-  changed lines, `--source` for unchanged ones, which is the variant that carries the product because
-  no diff view can address an unchanged line. Three things have to stay true together. The page must
-  read completely with **every excerpt closed** — an excerpt confirms a claim, never carries one, and
-  that is the whole difference between progressive disclosure and hidden content; the hard rule is in
-  `SKILL.md`, the form and budget in `report-format.md` § *Source excerpts*, and the shape in
-  `page-template.html`. An excerpt sits **beside the claim or the *Look at* entry it confirms**, never
-  in the evidence foot: the foot is provenance a reader is not expected to open, and a quotation that
-  makes a judgment possible is not provenance. The quotation is **generated by `scripts/excerpt.sh`, never typed** — a
-  mistyped ledger row fails the gate loudly, whereas a paraphrased quotation is a false quotation the
-  reader cannot catch. And **`data-path` is reserved to inventory cells**: `coverage-gate.sh` greps it
-  page-wide, so an excerpt using it would register as a surplus path, most reliably when quoting
-  unchanged code — the gate would fail on the page's best content. Excerpts carry `data-src`.
-  `evals/check.rb` holds the mechanical half of all three; whether the prose survives with the blocks
-  shut is a judged expectation, because no script can tell.
-  **The tint is applied, never authored.** `--source` excerpts are syntax-coloured at read time and
-  `--diff` excerpts are not, and the asymmetry is the same one that produced the two variants: a hunk
-  is not one lexical stream (a removed line and its replacement are alternate realities, and a lexer
-  fed both mis-reads everything after the first unbalanced quote), and its rows already spend colour
-  on *added* and *removed*. Four files agree: `excerpt.sh` puts a `data-lang` on the `--at` block and
-  nothing else, `page-template.html` holds the `--syn-*` tokens, the `.hljs-*` rules and the script
-  that does it, `report-format.md` § *Syntax tint* owns the rule, and `evals/checks/excerpts.rb`
-  fails a page that ships `hljs-` classes in its markup — a hand-coloured quotation is a quotation
-  someone edited.
+- **Source excerpts are quotations, and the page reads complete without them.** A page primitive: a
+  collapsed `details.excerpt` holding verbatim code, in two variants — `--diff` for changed lines,
+  `--source` for unchanged ones, which is the variant that carries the product because no diff view
+  can address an unchanged line. Four things have to stay true together.
 
-  **Two grammars are loaded beside highlight.js's common bundle, because neither is in it**: `erb` for
-  Rails views and `elixir` for Elixir modules. A language added to `excerpt.sh`'s `guess_lang` without
-  its `<script src>` in the template tints nothing, silently — the page still reads, in one ink, which
-  is why nothing catches it. **`.heex` and `.eex` deliberately emit no `data-lang`**: highlight.js
-  ships no HEEx grammar, and both near-misses are wrong invisibly — `elixir` mis-reads the markup
-  around the interpolations, `erb` tints Elixir as Ruby because `<%= %>` is the same delimiter. That
-  omission is commented in both files as intentional, because it reads exactly like a gap. The script verifies its own reconstruction character by character before touching
-  the DOM and leaves the line alone on any mismatch, which is the only reason a script may touch a
-  quotation at all. Everything about it degrades to the untinted page: no script, no network, a
-  blocked CDN or an unknown language each leave the block in one ink.
+  The page must read completely with **every excerpt closed** — an excerpt confirms a claim, never
+  carries one, and that is the whole difference between progressive disclosure and hidden content.
+  The rule is judged **field by field**: a citation elsewhere on the page does not rescue a field
+  whose only `file:line` sits inside the collapsed block, and `check.rb` cannot see that. An excerpt
+  sits **beside the claim or the *Look at* entry it confirms**, never in the evidence foot, which is
+  provenance a reader is not expected to open. The quotation is **generated by `scripts/excerpt.sh`,
+  never typed** — a mistyped ledger row fails the gate loudly, whereas a paraphrased quotation is a
+  false quotation the reader cannot catch. And **`data-path` is reserved to inventory cells**:
+  `coverage-gate.sh` greps it page-wide, so an excerpt using one would register as a surplus path and
+  fail the page on its best content. Excerpts carry `data-src`.
 
-  **The per-flow `--diff` floor is gone with the flows, and what it was defending against is not.**
-  It said every behaviour flow showed the hunk its behaviour turned on, because that section was read before
-  the reviewer opened the diff. A checkpoint asks a question instead, and the answer is sometimes in
-  unchanged code alone — so the excerpt test applies uniformly now, including to a changed hunk. The
-  defence is that seeing the hunk is very often exactly what a judgment turns on, which makes the
-  uniform test reach the same place the floor did without a rule of its own. Watch for pages whose
-  excerpts are all `--source`: that was the failure the floor was written for, and nothing warns on it
-  any more.
+  **The tint is applied, never authored**, and the state tag is computed, never copied — the two
+  places a quotation can lie about itself while the bytes stay verbatim. `--at` requires `--base` and
+  derives the tag from the diff, because hard-coding `Unchanged` published a false label on a changed
+  file and the block read as *more* trustworthy the closer you looked. Four files agree on each:
+  `scripts/excerpt.sh` computes them, `report-format.md` §§ *Source excerpts* and *Syntax tint* own
+  the rules and the closed tag vocabulary **alone**, `page-template.html` holds the `--syn-*` tokens
+  and the tinting script, and `evals/checks/excerpts.rb` fails a page shipping `hljs-` classes in its
+  markup or a tag the diff contradicts. Adding a language to `guess_lang` without its `<script src>`
+  in the template tints nothing, silently.
 
-  **The state tag is the fourth, and it is the only part of an excerpt the bytes cannot vouch for.**
-  `--at` used to hard-code `Unchanged`, which is a claim about the diff the script had never looked
-  at, and a run duly published `db/structure.sql:304-313` tagged Unchanged on a page whose own ledger
-  listed that file as changed. The quotation was verbatim; the label was false; the block read as
-  *more* trustworthy the closer you looked. So `--at` now requires `--base` and computes the tag —
-  `Unchanged`, `Added`, `Removed`, `At head`, `Before the change`, and `Changed` for a hunk — which
-  makes the vocabulary closed, and `evals/checks/excerpts.rb` checks it both ways: an `Unchanged` tag
-  against the changed set (a repo when it has one, otherwise the page's own ledger, which the
-  completeness invariant guarantees is the whole diff), and every tag against the vocabulary, for the
-  inputs where there is nothing to compare against.
+  Two things are easy to get backwards. **Quoting a changed file at head is right, not the defect** —
+  a hunk of an 18,000-line `structure.sql` cannot show that a table has *no* `CHECK` constraint,
+  which is exactly what an invariant checkpoint reads for — so the rule constrains the tag and never
+  the quotation. And the budget's test is that a citation is **load-bearing for a decision the
+  reviewer must make**; "one per field that earns one" is circular, because *affected but unchanged*
+  is by definition claims a reader would take on faith, so every such field earns one automatically
+  and the cap bounds nothing. The budget, the permitted locations and the rung adjustment live in
+  `report-format.md` **only** — an earlier version restated the cap here in slightly different words
+  and the two drifted apart within one run.
 
-  Two things about it are easy to get backwards. **Quoting a changed file at head is right, not the
-  defect** — a hunk of an 18,000-line `structure.sql` cannot show that a table has *no* `CHECK`
-  constraint, which is exactly what an invariant checkpoint reads for — so the rule constrains the tag
-  and never the quotation. And **a path the diff touches is never `Unchanged` even where the quoted
-  lines are untouched**, because section 04 and the evidence foot split changed from affected-not-changed *by file*: one
-  word in two senses on one page, with nothing to tell the reader which was meant. That precision
-  belongs in the prose, where it can be stated. Four files agree — `scripts/excerpt.sh` computes it,
-  `report-format.md` § *Source excerpts* owns the rule and the vocabulary, `page-template.html` says
-  the tag in its example is computed rather than copied, and `evals/checks/excerpts.rb` plus the three
-  `golden/excerpt-*` rows check it — plus three more for the case where git is asked and cannot
-  answer, since the relational half tested the exit status of a *pipeline* and so read a failing git
-  as an empty diff, passing the very page two rows above it — one of which is the clean counterpart:
-  a rule that fired on every
-  excerpt sitting near a ledger would be worse than the defect.
-
-  Two things the first live run changed, both worth keeping stated. The closed-page rule is judged
-  **field by field**: a citation elsewhere on the page does not rescue a field whose only `file:line`
-  sits inside the collapsed block, and `check.rb` cannot see that. And the budget's test is that the
-  citation is **load-bearing for a decision the reviewer must make** — the obvious phrasing, "one per
-  field that earns one", is circular, because *affected but unchanged* is by definition nothing but
-  claims a reader would take on faith, so every such field earns one automatically and the cap bounds
-  nothing. The budget, the permitted locations and the rung adjustment live in `report-format.md`
-  **only**; `SKILL.md` points at them. An earlier version restated the cap in slightly different words
-  and the two drifted apart within one run — hence the rule that this one has a single home.
+  Watch for pages whose excerpts are all `--source`. A per-flow `--diff` floor used to prevent that
+  and went with the flows; seeing the hunk is very often what a judgment turns on, and nothing warns
+  when it is missing any more.
 - **Impact paths are section 04's figure, and the edge is the point of them.** A path runs from changed
   code, through the affected-but-unchanged code that gives the change its consequence, to an
-  observable behaviour, with every hop past the first carrying its incoming relation as a causal
-  verb. 1–3 paths, 3–5 nodes each, **one path per `.ip-card`**, one `.ip-out` last, at least one
-  `.ip-aff`, labels never sentences, a locator on every code node (§ *Chains*), and **one `p.ip-why`
-  per card**.
+  observable behaviour, every hop past the first carrying its incoming relation as a causal verb.
+  1–3 paths, 3–5 nodes each, one path per `.ip-card`, at least one `.ip-aff`, one `.ip-out` last, and
+  one `p.ip-why` per card.
 
-  **The paragraph is the card's own, and it is not the panel's `p.note`.** One or two sentences above
-  the lanes saying what goes wrong and to whom, ending in a pointer at the checkpoint that judges it;
-  the note stays once under the whole group and is about what a name-based *pass* could not reach.
-  A card otherwise opens on geometry — the header names a behaviour, the next thing is a chain, and
-  the reader traces four nodes to learn whether the path was worth tracing, which on the one figure
-  that is *about* consequences makes the consequence the last thing read.
+  Six files have to agree: `page-template.html` holds the CSS (head SKELETON range, so a run never
+  types geometry) and the panel assembled whole, and its comments own the lane crossing —
+  `--ip-drop`, the elbow, the dotted divider — because that is where the declarations are;
+  `report-format.md` § *Impact paths* owns the panel's rules, its budget and `p.ip-why` **alone**,
+  while § *Chains* owns what it shares with a checkpoint's `figure.chain`, including the locator;
+  `SKILL.md` step 7i decides both and step 9 points at them; `evals/checks/impact-paths.rb` carries
+  the rules and its `CAUSAL` list — **extend the vocabulary there and in the reference together**;
+  and the fourteen `golden/impact-*.html` fixtures prove each rule fires.
+  `evals/checks/link-form.rb` is the sixth, since widening its `CITATION` pattern to compound classes
+  is what gives every `a.path.ip-loc` locator that check's span, fragment and routing rules for free.
 
-  **It must not walk the hops, and that is the rule most likely to erode.** A paragraph naming the
-  chain in sequence makes one of the two redundant, and it is the `.blast` footnote returning in a
-  component that cannot have one — the figure supplying its edges in prose because prose is easier to
-  write than a true edge. It orients and points; the checkpoint owns the explanation, which is why it
-  ends in a link rather than a third sentence. A `p.ip-why` that could be pasted into its checkpoint
-  without anyone noticing has written the checkpoint twice. Length is a WARN and shape is a FAIL, for
-  the reason every other rule in that file splits that way.
+  Two ways this erodes, both arriving as an improvement. **Loosening the cap back past 3** turns the
+  figure into a section to scroll, and it will arrive as thoroughness — a consequence that no longer
+  fits keeps its entry in the affected list and its explanation in the checkpoint, which is
+  § *One canonical home* doing its job. And **a `p.ip-why` that walks the hops** is the `.blast`
+  footnote returning in a component that cannot have one: the figure supplying its edges in prose
+  because prose is easier to write than a true edge. It orients and points; the checkpoint owns the
+  explanation. Shape is a FAIL and vocabulary a WARN, because a hard failure on a verb teaches a run
+  to mislabel a true edge.
 
-  **What it replaced is the reason every one of those rules exists.** `.blast` was a four-column box
-  grid whose only encoding was border style, so it carried membership of two sets and nothing else —
-  and `report-format.md` conceded the gap in prose: *"It cannot show a directed edge … put it in the
-  note under the panel, in words."* A figure with a footnote explaining what the figure could not
-  draw. Real pages then supplied the missing relation by writing a clause into every box, and the
-  panel became a grid of sentences with no edges: the layout arguing with its own content. That
-  workaround rule is **deleted**, not inherited.
+  What no script settles: whether these are the right 2–3 paths and whether each edge is **true**.
+  The tighter cap makes that sharper, not softer — choosing three consequences out of six is part of
+  the work — and a page case is where it is asked.
+- **The skeleton is emitted, never typed.** `references/page-template.html` carries four `SKELETON:`
+  markers. Everything in the head and tail ranges — the `<head>`, the entire token block, the three
+  highlight.js tags and the tint script, 54.5 KB of it — is written straight into the page by
+  `scripts/page-skeleton.sh`, once, at the top of stage 1. A run never reads those bytes and never
+  types them; what it reads is the markup between the markers, via `--markup`, which takes no flag.
 
-  **The cap is 3 and the frame is the card, and both came from reading a published page.** It shipped
-  as 2–5 paths stacked inside one bordered panel under a run of `.ip-hd` headers, and a real page
-  took all five. At that length they stop being read as diagrams: the reader on the third chain has
-  the first one's geometry behind them, a gap is the only thing saying where one path ends, and a
-  shared frame invites a sixth. So `.impact` is a group now — the label, one `.legend`, the note —
-  and each path is an `.ip-card` with its own `.ip-hd` and its own `.ip-lanes`.
-
-  **Nothing is lost by the two paths that no longer fit, and that is what makes the cap affordable.**
-  A consequence left out of the panel keeps its entry in the affected list beneath the panel and its explanation
-  in the checkpoint that turns on it, which is § *One canonical home* doing exactly its job. Loosening the cap
-  back out is how the figure becomes a section to scroll, and it will arrive as thoroughness.
-
-  **The lane labels repeat in every card, deliberately**, which is the one requirement the split
-  introduced that a run is likely to get wrong from the outside: one set of labels above one panel
-  was correct for as long as there was one panel, and the mental model outlives the markup. A card is
-  a whole figure, so a reader arriving at the third one must not scroll back for what its two columns
-  mean. `impact-paths.rb` counts them per card, clamped at zero so the rule **abstains** when the
-  card-to-path pairing has already failed — a card holding two paths carries a spare set of labels,
-  and reporting that as surplus furniture is one defect reported as two.
-
-  Two design choices carry most of the weight, and both remove a way a run can be wrong rather than
-  adding a rule about it. **The lane is derived from the node kind** — `.ip-chg` left, `.ip-aff`
-  right, `.ip-out` spanning both — so the changed/existing boundary is structurally true and there is
-  no lane class to put on the wrong node. And **the label is an element, not an attribute**, so an
-  unlabelled edge is a *missing* `.ip-rel` rather than an empty one, which is what makes the rule
-  that matters most mechanically checkable at all.
-
-  The first of those pays off twice, because **the lane crossing draws itself.** A change of lane
-  *is* `.ip-chg + .ip-aff` or its reverse, so an adjacent-sibling selector adds the elbow with no
-  extra markup and nothing for a run to place — it marks kinds, and the figure connects itself.
-  Worth knowing before editing the CSS: the elbow runs the whole way between the two connector
-  rails rather than stopping at the lane boundary. The boundary-stub version was the first attempt
-  and it left a crossing path looking like two disconnected halves, which is precisely the reading
-  the component exists to prevent. `.ip-aff + .ip-out` needs the same rule for the last hop,
-  because the spanning outcome's rail sits in lane 1.
-
-  **And it descends `--ip-drop` before it turns**, which was the third attempt: turning flush
-  against the source box made the horizontal read as a line leaving the box *sideways*, where every
-  other hop leaves a node downward. **Four rules have to agree on that one length, and the fourth
-  is the one that breaks silently** — the destination rail has to start at the corner rather than
-  at the row's top edge, or a hairline the length of the drop dangles above it in the other lane.
-  The other three are the stub, the horizontal, and the reset to `0` under 780px, where the lanes
-  collapse and there is no crossing to draw. It is a custom property on `.impact` for exactly that
-  reason: agreement by scope beats agreement by comment.
-
-  **Solid hairlines flow, dashes bound**, and the lane divider is the second thing that came out of
-  looking at a rendered card. It was a 1px solid `--rule-strong` — byte-for-byte a connector — so
-  the one line on the figure that carries no direction was drawn like the ones that do, and a path
-  crossing it read as joining it. It is dotted `--rule-dash` now, at 2 on and 9 off: dashes are
-  already how `.ip-aff` says *the existing system*, and the sparse pattern is what keeps a divider
-  running the full height of a card from carrying more ink than the chain it sits behind. The
-  colour deliberately did **not** go a step lighter — that loses the dots rather than quieting
-  them, and the density is the right knob.
-
-  **The vocabulary includes passive forms deliberately, and `ignored by` is the one to know.** A
-  label reads from the node above to the node below, and half the edges here run producer to
-  consumer, where the honest verb is *read by*. Without a passive a run inverts the pair to find an
-  active verb and quietly reverses the figure. `ignored by` labels the commonest finding the page
-  carries — a consumer that does *not* account for what changed — which is causal precisely because
-  nothing happens; the box grid could only put that in a clause.
-
-  Six files have to agree: `page-template.html` holds the CSS (head SKELETON range, so it is
-  emitted and a run never types geometry) and the panel assembled whole in section 04,
-  `report-format.md` § *Impact paths* owns the panel's own rules, its budget and `p.ip-why`
-  **alone** while § *Chains* owns what it shares with a checkpoint's `figure.chain` including the
-  locator, `SKILL.md` step 7i decides both and step 9 points at them,
-  `evals/checks/impact-paths.rb` carries the rules and its `CAUSAL` list, and the fourteen
-  `golden/impact-*.html` fixtures plus their `self-test.rb` rows prove each one fires. Extend the
-  vocabulary in the reference and in `CAUSAL` together — the rule the deleted `diagram.rb` stated
-  for its class vocabulary, and which outlived it.
-
-  **`evals/checks/link-form.rb` is the sixth, and it joined by having a bug found.** Its `CITATION`
-  pattern closed the quote straight after `path`, so a compound `class="path ip-loc"` escaped that
-  check entirely — live, well-formed and ungraded, with nothing saying so. Nothing in the repository
-  had a compound class until the locator, which is the only reason it survived to be found by adding
-  one. Widened, every locator now inherits that check's span, fragment and routing rules for free,
-  which is why the locator needs no link rules of its own.
-
-  **One of the impact fixtures is clean, and it is the one that matters most for the caps.** Running the
-  check over a real published page produced two WARNs, and the rules were wrong rather than the
-  page: the label cap counted `&ldquo;` as seven characters, so a 32-character label was reported
-  as 44; and `subscribed by` — the honest label for a topic reaching the process that is *not*
-  listening — was outside `CAUSAL`. So the cap measures glyphs now, through a `display_length`
-  local to that check rather than through `ReviewMap.unescape`, which decodes the five entities
-  the shell version did and must keep doing exactly that because `searches.rb` and
-  `rails-anchors.rb` compare against what it produced. `golden/impact-entities-vocab-clean.html`
-  carries both, with a `self-test.rb` row per rule pinned on its own PASS line — the
-  `anchors-hexdocs-clean.html` pattern, and the reason to reach for it is the same: a cap that
-  fires on correct content teaches a run to shorten a true label.
-
-  Two of those fixtures are the card split, and both plant markup that draws.
-  `impact-shared-card.html` puts two paths in one card **and pairs it with a card holding none**,
-  because that is precisely what comparing two counts would wave through — so the rule reads the
-  interleaving of card and path openings rather than the arithmetic. And `impact-four-paths.html` is
-  one over the cap rather than three: the fixture it replaced planted six against a ceiling of five,
-  which means it would have kept failing all the way down and pinned no particular cap.
-
-  Verdicts split on purpose. Shape is a FAIL; an unlisted verb and an over-long label are WARNs,
-  because a hard failure on vocabulary teaches a run to mislabel an edge to satisfy the check, which
-  is worse than an unlisted verb that is true. And the thing no script settles: whether these are the
-  right 2–3 paths and whether each edge is **true** — a question the tighter cap makes sharper, not
-  softer, because choosing three out of six consequences is now part of the work.
-  A page case is where that is asked, since the case that used to ask it
-  is deferred with the rest of the section scope.
-
-- **The skeleton is emitted, never typed.** `references/page-template.html` carries four
-  `SKELETON:` markers. Everything in the head and tail ranges — the `<head>`, the entire token
-  block, the three highlight.js tags and the tint script, 54.5 KB of it — is written straight into
-  the page by `scripts/page-skeleton.sh`, once, at the top of stage 1. A run never reads those bytes
-  and never types them; what it reads is the markup between the markers, via `--markup`.
-
-  It began as a cost change and that is the least of it. 54.5 KB was resident twice from stage 1
-  onward — once as the template read, once as the write's own input — which is 6-8% of a run's cache
-  reads, plus ~15k output tokens and about 110s of streaming. **The real payoff is that every colour
-  on a published page now comes from a script.** Measured on the template: `--syn-key` ×3, `--ex-add`
-  ×3, the media dark block, both `[data-theme]` blocks — all of them in the head range, none in the
-  markup half. The half-declared-token defect that § *Theme tokens* below and `excerpts.rb` exist to
-  catch is not merely checked now, it is unreachable.
+  It began as a cost change and that is the least of it. **The payoff is that every colour on a
+  published page now comes from a script** — all of them in the head range, none in the markup half —
+  so the half-declared-token defect that § *Theme tokens* below and `excerpts.rb` exist to catch is
+  not merely checked, it is unreachable.
 
   Four files agree: the template holds the markers and the bytes, `page-skeleton.sh` extracts them,
-  `SKILL.md` step 9 calls it once and forbids writing a `<style>`, a `:root`, a colour or a
-  `<script>` into the page, and `skills/review-map/tests/run.sh` proves the script holds no bytes of
-  its own. That last one is the load-bearing part, and it is a **partition** test rather than a
-  comparison: strip the markers and the maintainer preamble, and head + markup + tail must be the
-  template byte for byte. Extracting with awk and comparing against the script's own awk would test
-  the script against itself and pass for any consistent pair of bugs — which is why two of
-  `self-test.sh`'s cases mutate the *script* and not the template.
+  `SKILL.md` step 9 calls it once and forbids writing a `<style>`, a `:root`, a colour or a `<script>`
+  into the page, and `tests/run.sh` proves the script holds no bytes of its own. That last one is the
+  load-bearing part, and it is a **partition** test rather than a comparison: strip the markers and
+  the preamble, and head + markup + tail must be the template byte for byte. Extracting with awk and
+  comparing against the script's own awk would test the script against itself and pass for any
+  consistent pair of bugs, which is why two of `self-test.sh`'s cases mutate the *script*.
 
-  Marker text is load-bearing too. A marker containing an opening `style`, `script` or `svg` tag
-  would corrupt a check that scans for one — `Page#range` re-opens on its own `from` pattern, so the
-  hazard survives even though the check that made it concrete (`diagram-shot.rb`, which lifted the
-  `<style>` block out of the template) is gone. Each marker is also **one line**: extraction is a
-  line range over the marker line, so a marker spilling onto a second line would emit half a comment
+  Two constraints on the marker text itself, neither of them obvious from the script. A marker must
+  hold no opening `style`, `script` or `svg` tag, because `Page#range` re-opens on its own `from`
+  pattern and would corrupt any check scanning for one; and each marker is **one line**, because
+  extraction is a line range over it and a marker spilling onto a second would emit half a comment
   into every page.
 
   **Two things must not appear in the markup half at all, and `tests/run.sh` counts both at zero**:
-  an `<svg` opening tag, because this page has no drawings, and a literal tint class, because the
-  tint is applied at read time and a hand-coloured quotation is a quotation someone edited. That is
-  why the template's excerpt comment describes that class rather than spelling it — the rule and the
-  prose about the rule would otherwise be the same bytes, which is the shape this repository keeps
-  writing down.
-
-  **`--markup` takes no flag, and the machinery that made it take one is deleted.** A second marker
-  kind, `SKELETON:ONLY:level=<brief|full>`, used to bracket the regions belonging to one detail
-  level — sections 4 to 7 against the merged brief section, and the rail below 03 — with a validator
-  that failed closed on an unpaired marker, a nested pair, an unknown tag or a tag with no region.
-  All of it goes with the level. `--markup` is now the plain extraction between `HEAD:END` and
-  `TAIL:START`.
-
-  **What that machinery bought is worth recording, because a future full mode will want it back.**
-  The rail had shipped in the seven-entry form with a comment telling a `--brief` run to cut it to
-  four and renumber — a transformation performed from prose that no check ever looked at, on the
-  default level. The filter replaced that with a rail assembled at both shapes. If a level ever
-  returns, it returns that way: **emitted, not described**, and subtractive by construction, so that
-  *no line was added* is assertable without a second extraction to test the script against its own
-  awk.
-
+  an `<svg` opening tag, because this page has no drawings, and a literal tint class, because the tint
+  is applied at read time and a hand-coloured quotation is a quotation someone edited. That is why the
+  template's excerpt comment describes that class rather than spelling it — the rule and the prose
+  about the rule would otherwise be the same bytes.
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
   the classic unreadable-artifact bug. `evals/checks/page-invariants.rb` § 6 enforces the three
@@ -1362,30 +1033,33 @@ that made the warning necessary.
 
 **And it does not block, which is the fact that changed the default.** The agents launch async and
 return a receipt in about two seconds; the challenges arrive as notifications while the parent drafts
-stage 4. Measured on a 28-file PR at `--brief`: five falsifiers, **23 seconds of blocked parent, 0.9%
-of a 2607-second run**, first challenges landing 365 seconds after the last spawn.
+the next stage. Measured on a 28-file PR: five falsifiers, **23 seconds of blocked parent, 0.9% of a
+2607-second run**, first challenges landing 365 seconds after the last spawn.
 
 **The cost objection the flag was gated behind was half right, and the half that was right is the
-tokens.** It does not cost *wall clock* — that part was an artefact of how the pass was assumed to
-work. It does cost tokens: each falsifier reads in its own context, and profiling those transcripts
-put the pass at **17-23% of every cache-read token** a run spends, over 145-216 requests. Two numbers,
-two questions, and the flag is defensible on the first while remaining the second most expensive
-thing in the procedure. What follows is not that the default is wrong but that the *model* is a knob:
+tokens.** It does not cost wall clock — that was an artefact of how the pass was assumed to work. It
+does cost tokens: each falsifier reads in its own context, and profiling those transcripts put the
+pass at **17-23% of every cache-read token** a run spends. Two numbers, two questions, and the default
+is defensible on the first while the pass remains the second most expensive thing in the procedure.
+What follows is not that the default is wrong but that the *model* is a knob:
 `agents/claim-falsifier.md` pins its own, because a reader whose output the parent re-verifies before
-using is the safest place in this design to spend less.
+using is the safest place in this design to spend less. **Both numbers were measured against the old
+seam**, where the falsifier read a published flow section rather than an analysis note, so the token
+figure is an upper bound that has not been re-measured; the wall-clock one should be unchanged, since
+what made it 0.9% is that the parent keeps working.
 
-They still go out in a single message. It costs nothing, the challenges then arrive together rather
-than trickling, and if a harness ever does make them block, one message stalls the run once — for the
-slowest — where the same agents one at a time stall it once each. The 997 seconds were one sequential
-blocking spawn, and that number is about `Explore`, not about the falsifier.
+They still go out in a single message. It costs nothing, the challenges arrive together rather than
+trickling, and if a harness ever does make them block, one message stalls the run once — for the
+slowest — where the same agents one at a time stall it once each. The 997 seconds above were one
+sequential blocking spawn, and that number is about `Explore`, not about the falsifier.
 
 Two things it is not. It is not a licence for step 5, step 6 or step 7 to fan out — the first two
 span the whole diff by nature, and step 7's whole job is holding the whole agenda at once in order to
 merge and rank it, which is the least splittable thing in the procedure. And it is not a second
 context doing the work: the falsifiers read, the parent writes, and the parent transcript still reads
-as one context plus a handful of receipts. That last fact is a trap as well as a reassurance: it is why
-`profile.sh` reads `<session>/subagents/` too, and why a run cost quoted from the parent alone is a
-fifth to a quarter short.
+as one context plus a handful of receipts. That last fact is a trap as well as a reassurance: it is
+why `profile.sh` reads `<session>/subagents/` too, and why a run cost quoted from the parent alone is
+a fifth to a quarter short.
 
 **A run that waits on them has lost the whole argument.** The 0.9% holds only because the parent
 drafts while they read; spawn-then-idle turns the cheapest step in the procedure into the most
@@ -1446,7 +1120,7 @@ hold every note at once to merge and rank them; more notes is a bigger synthesis
 
 ## The other unsolved half: `--review`
 
-`--review` is declared, parsed, and stops. `SKILL.md` § *The review level is not implemented yet* has
+`--review` is declared, parsed, and stops. `SKILL.md` § *Two levels are not implemented in this version* has
 the runtime behaviour; this is the design brief, written down so the next iteration starts from the
 real question. It is meant to run the project's code-review pass as well and thread its findings
 through the map.
@@ -1537,6 +1211,22 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   same limit applies: the page follows the event and the assign, it does not review the markup.
 
 ## Editing style
+
+**This file is loaded in full at the start of every session in this repository, and nothing else
+here is.** That is what it is for — a rule that can be skipped is not a rule — and it is also the
+reason it is the one document with a standing cost. What belongs here is what **spans files**: the
+rule, the one observation that makes it stick, and the list of files that have to agree. What does
+not belong here is the detail that has a canonical home one file away — the CSS beside the
+declaration, the check's rationale beside the check, the vocabulary beside the grader.
+
+**A bullet growing past roughly 400 words is the signal that a fact moved to the wrong home**, not a
+sign the subject got more important. The growth is almost always a paragraph recording what someone
+learned while debugging the component — real, worth keeping, and belonging next to the thing it
+describes, where the next person to edit it will actually be looking. § *One canonical home* is the
+page's rule; it is this file's rule too, and this file is the one most likely to break it, because
+appending here is always easier than finding the right home. When you add a paragraph, check first
+whether the reference, the script or the check already says it: twice now the two had drifted, and
+the copy here was the stale one.
 
 The skill's prose carries its own reasoning: rules state *why*, and several include the observation
 that produced them. Preserve that when editing — a rule stripped to an imperative loses the thing
