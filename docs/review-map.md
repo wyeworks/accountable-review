@@ -222,6 +222,15 @@ intent cannot be established, the page says so instead of guessing:
 
 > It is unclear whether existing time entries stay editable after archival. No test covers it.
 
+Two of those labels are tinted, and the tint says what the claim is made of rather than how much it
+should worry you. *From unchanged code* is teal, the colour this page uses everywhere for code the
+diff does not touch — the dashed nodes on the right of an impact path, the *Affected, not changed*
+lists. The two *inferred* labels are ochre, the colour of a stated absence, which is also the open
+question and the build banner. *Uncertain* is deliberately the plainest of the four: it is the
+weakest tier, and giving the weakest claim the loudest treatment would be a severity scale assembled
+out of colour, which this page does not have. Nothing on the page depends on colour to be
+understood — every label still reads as words.
+
 ## It adapts to the PR
 
 Parts appear only when the diff earns them, and a small change gets a small agenda: three checkpoints

@@ -1,0 +1,23 @@
+<!-- Every tier here carries a family modifier and none is bare, which is ordinary: an
+     unchanged-code tier is teal and an inference is ochre, so a checkpoint resting
+     entirely on code outside the diff writes no unmodified label at all. The rule
+     matched the class attribute against a closing quote, so this fragment counted as
+     zero labels and was accused of presenting inference as fact.
+
+     The defect is NOT described here in the markup it is about: § 3 reads the raw
+     bytes rather than a comment-stripped copy, so a header comment quoting the
+     attribute would be counted as a label and the fixture would pass for the wrong
+     reason — which is the mutation test reporting a bypass as caught. -->
+<section id="attention">
+  <section class="cp" id="cp-a">
+    <h3>Does the new scope still exclude withdrawn memberships?</h3>
+    <p>The join moved to <code>community_id</code>, and the caller that filters
+      withdrawn rows was not touched
+      <span class="tier tier-unc">from unchanged code</span></p>
+    <ul class="lookat">
+      <li><b>Membership.active</b> <span>still assumes the caller narrowed by state
+        <span class="tier tier-inf">inferred</span></span>
+        <a class="cite" href="#">app/models/membership.rb:52</a></li>
+    </ul>
+  </section>
+</section>

@@ -69,6 +69,7 @@
  page-invariants    | invariants-assurance.html    | 1 | assurance language
  page-invariants    | invariants-draft-narration.html | 1 | narrates its own drafting
  page-invariants    | invariants-no-tier.html       | 1 | no evidence tier labels
+ page-invariants    | invariants-tier-modifier-only.html | 0 | evidence tiers used (2 label(s))
  page-invariants    | invariants-loose-data-path.html | 1 | outside a ledger cell
  excerpts           | excerpt-clean.html            | 0 | collapsed by default
  excerpts           | excerpt-open.html             | 1 | open by default

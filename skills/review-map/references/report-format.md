@@ -334,10 +334,18 @@ The page's second primitive, and what separates it from a plausible-sounding sum
 | Tier | Means | Rendered |
 |---|---|---|
 | Explicitly changed | The diff shows it | **No label.** Silence means this tier |
-| Evidenced by unchanged code | A file outside the diff proves it, and is cited | `<span class="tier">from unchanged code</span>` |
-| Inferred from tests | The expectation implies the intent | `<span class="tier">inferred from tests</span>` |
-| Inferred from naming or architecture | The weakest defensible inference | `<span class="tier">inferred</span>` |
+| Evidenced by unchanged code | A file outside the diff proves it, and is cited | `<span class="tier tier-unc">from unchanged code</span>` |
+| Inferred from tests | The expectation implies the intent | `<span class="tier tier-inf">inferred from tests</span>` |
+| Inferred from naming or architecture | The weakest defensible inference | `<span class="tier tier-inf">inferred</span>` |
 | Uncertain | Could not be established | `<span class="tier">uncertain</span>` + say what would settle it |
+
+**The modifier is the material, not the worry.** `tier-unc` is teal because the evidence is code
+outside the diff, and teal is what this page's palette means by *not in the diff* everywhere else —
+the dashed `.ip-aff` node, the *Affected, not changed* lists. `tier-inf` is ochre because something
+is missing and the page is saying so, which is the same thing `p.open` and the build banner say.
+Uncertain stays neutral deliberately: it is the weakest tier, and giving it the loudest treatment
+would be a severity scale assembled out of colour. **Five tiers, four labels, two hues** — and the
+hues say what a claim is made of, never how much it should alarm anyone.
 
 **Place the label against the claim, not between sentences.** A tier that lands after a full stop
 reads as a footnote marker and the reader has to work out what it refers to. Put it at the end of the
@@ -748,7 +756,7 @@ first-class part, and adjacency is not asked to imply anything.
 | Kind | Class | Reads as |
 |---|---|---|
 | Changed by this PR | `.ip-chg` | solid border, page ground |
-| Affected, not changed | `.ip-aff` | dashed border |
+| Affected, not changed | `.ip-aff` | dashed border, teal ground and teal clause |
 | Behaviour / outcome | `.ip-out` | filled, ink ground — the terminal treatment `.pipe`'s last node uses |
 
 `.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
@@ -756,6 +764,16 @@ left, *the existing system* on the right, with a **dotted** rule between them �
 the kind and never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an
 observable behaviour belongs to neither half. So the boundary the reader sees is structurally true,
 and there is no lane class for a run to put on the wrong node.
+
+**The dash is no longer carrying the distinction alone.** `.ip-aff` is teal — ground, border and
+its `.ip-d` clause — because *changed by this PR* against *the existing system* is the most
+load-bearing thing this figure draws and it was being encoded by border style over two near-identical
+greys. Teal is the page's word for **not in the diff** everywhere else too (the `tier-unc` label, the
+*Affected, not changed* lists), so a node and the entry beneath the panel that names it are visibly
+the same claim. It says nothing about consequence: *not in the diff* is a fact about the repository,
+which is why a hue is admissible on a page that carries no severity vocabulary — and it is the test
+any further hue in this figure has to pass. The dash stays: colour is never the only encoding here,
+and the panel has to survive being printed.
 
 **Solid hairlines flow, dashes bound.** The lane divider is dotted and the connectors are solid,
 and that split is load-bearing rather than decorative: the divider began as a 1px solid hairline in
