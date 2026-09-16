@@ -27,6 +27,7 @@
 #   claude_settings          .claude/settings.json, or none
 #   plugin_declared          yes | no — accountable-review named in checked-in settings
 #   anthropic_secret_used    yes | no — some workflow already reads the credential
+#   bot_prs                  the bot config files found, space separated, or none
 
 set -eu
 
@@ -114,4 +115,21 @@ if [ -d "$WF" ] && grep -rqs 'ANTHROPIC_API_KEY\|CLAUDE_CODE_OAUTH_TOKEN' "$WF" 
   echo "anthropic_secret_used=yes"
 else
   echo "anthropic_secret_used=no"
+fi
+
+# A repository with a dependency bot opens pull requests nobody writes, and
+# usually ready for review rather than as drafts — so the default author guard
+# has something concrete to point at when setup confirms it. This reports what is
+# configured; it does not decide, and a repository with none still gets the guard,
+# because a bot can be added to a repository long after this runs.
+bots=
+for f in .github/dependabot.yml .github/dependabot.yaml \
+         renovate.json renovate.json5 .renovaterc .renovaterc.json \
+         .github/renovate.json .github/renovate.json5; do
+  if [ -f "$f" ]; then bots="$bots $f"; fi
+done
+if [ -n "$bots" ]; then
+  echo "bot_prs=${bots# }"
+else
+  echo "bot_prs=none"
 fi

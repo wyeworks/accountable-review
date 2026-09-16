@@ -84,24 +84,54 @@ grep -v '^[[:space:]]*#' "$W" > "$W_CODE"
 
 assert_in "$W" "name: Accountable Review"              "it is a workflow named for the plugin"
 assert_in "$W" "  pull_request:"                       "it triggers on pull_request"
+assert_in "$W" "      - opened"                        "trigger: opened"
 assert_in "$W" "      - ready_for_review"              "trigger: ready_for_review"
-assert_in "$W" "      - synchronize"                   "trigger: synchronize"
 assert_in "$W" "      - reopened"                      "trigger: reopened"
+# Not by default: one Review Map per pull request is the shipped answer, and a
+# push regenerating it is the thing a person turns on knowing what it costs.
+assert_not_in "$W_CODE" "      - synchronize"               "pushes do not regenerate the map by default"
 assert_not_in "$W_CODE" "      - labeled"                   "no trigger on labels"
 assert_not_in "$W_CODE" "      - edited"                    "no trigger on edits to the description"
 assert_not_in "$W_CODE" "pull_request_target"               "never pull_request_target"
 
 assert_in "$W" "github.event.pull_request.draft == false"                          "draft pull requests are skipped"
 assert_in "$W" "github.event.pull_request.head.repo.full_name == github.repository" "fork pull requests are skipped"
+assert_in "$W" "github.event.pull_request.user.login != 'dependabot[bot]'"          "a bot's pull requests are skipped"
+assert_in "$W" "github.event.pull_request.changed_files > 2"                       "the size gate has a file threshold"
+assert_in "$W" "github.event.pull_request.additions > 50"                          "the size gate counts additions"
+assert_in "$W" "github.event.pull_request.deletions > 50"                          "the size gate counts deletions separately"
+
+# The two ways to write an `if:` GitHub rejects outright — no job created, and an
+# error naming neither the line nor the reason. Both shipped once.
+#
+# Expressions have no arithmetic operators, so `additions + deletions` is an
+# invalid-file error rather than a sum.
+expr=$(awk '/^    if: >-/{f=1;next} f && /^      /{print} f && !/^      /{exit}' "$W")
+case $expr in
+  *' + '*|*' - '*|*' * '*) bad "the guard expression uses no arithmetic" ;;
+  *) ok "the guard expression uses no arithmetic" ;;
+esac
+
+# And in a folded scalar a more-indented line keeps its newline, which lands
+# inside the expression string. Every line has to sit at the same indentation, so
+# the temptation to align a parenthesis is the defect.
+if [ -n "$expr" ] && [ "$(printf '%s\n' "$expr" | grep -c '^      [^ ]')" = "$(printf '%s\n' "$expr" | wc -l | tr -d ' ')" ]; then
+  ok "every line of the guard expression is at the same indentation"
+else
+  bad "every line of the guard expression is at the same indentation"
+fi
 
 assert_in "$W" "group: accountable-review-\${{ github.event.pull_request.number }}" "concurrency is scoped to the pull request"
 assert_in "$W" "cancel-in-progress: true"              "superseded runs are cancelled"
 
 assert_in "$W" "permissions:"                          "permissions are declared"
 assert_in "$W" "  contents: read"                      "permissions are read-only"
-assert_not_in "$W_CODE" "contents: write"                   "nothing asks for write access"
-assert_not_in "$W_CODE" "pull-requests: write"              "nothing asks to write on the pull request"
+assert_not_in "$W_CODE" "contents: write"                   "nothing asks to write the repository's contents"
 assert_not_in "$W_CODE" "issues: write"                     "nothing asks to write issues"
+assert_not_in "$W_CODE" "checks: write"                     "nothing asks to set a check"
+assert_not_in "$W_CODE" "statuses: write"                   "nothing asks to set a status"
+# `pull-requests: write` is asserted in the comment section below, where it is
+# paired with the step that uses it — the two are only ever right together.
 
 assert_in "$W" "fetch-depth: 0"                        "the checkout has the history the diff needs"
 assert_in "$W" "ref: \${{ github.event.pull_request.head.sha }}" "it checks out the pull request head, not a merge commit"
@@ -125,14 +155,186 @@ if cmp -s "$W" "$TMP/workflow2.yml"; then ok "rendering twice produces identical
 # workflow different tomorrow, which is exactly what idempotency cannot survive.
 assert_not_in "$W" "$(date -u +%Y-%m-%d)"              "the rendered file carries no timestamp"
 
-if command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; then
-  if python3 -c 'import sys,yaml; d=yaml.safe_load(open(sys.argv[1])); sys.exit(0 if d.get("jobs",{}).get("review-map") else 1)' "$W"; then
-    ok "it parses as YAML and defines the review-map job"
+# A real parse, which is the only thing that sees what the folded scalar actually
+# folded to. Ruby first: this repository already pins one for evals/checks, and a
+# rule that can only ever SKIP is worse than no rule — a SKIP reads as verified.
+#
+# It still cannot validate GitHub's expression grammar, which no offline tool has.
+# That is what the two structural assertions above stand in for, and why both of
+# them exist as well as this.
+yaml_check='
+require "yaml"
+d = YAML.safe_load(File.read(ARGV[0]), aliases: true)
+job = d.fetch("jobs").fetch("review-map")
+abort "no if:"            unless job["if"].is_a?(String)
+abort "newline in if:"    if job["if"].include?("\n")
+abort "no types"          unless d[true]["pull_request"]["types"].is_a?(Array)
+'
+if command -v ruby >/dev/null 2>&1; then
+  if ruby -e "$yaml_check" "$W" 2>"$TMP/yamlerr"; then
+    ok "it parses as YAML, defines the review-map job, and its guard folds to one line"
   else
-    bad "it parses as YAML and defines the review-map job"
+    bad "it parses as YAML, defines the review-map job, and its guard folds to one line ($(cat "$TMP/yamlerr"))"
+  fi
+elif command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' 2>/dev/null; then
+  if python3 -c 'import sys,yaml; d=yaml.safe_load(open(sys.argv[1])); j=d["jobs"]["review-map"]; sys.exit(0 if "\n" not in j["if"] else 1)' "$W"; then
+    ok "it parses as YAML, defines the review-map job, and its guard folds to one line"
+  else
+    bad "it parses as YAML, defines the review-map job, and its guard folds to one line"
   fi
 else
-  ok "YAML parse skipped — no pyyaml here (the shape is asserted line by line above)"
+  bad "no YAML parser available — install ruby or pyyaml; this check must not silently pass"
+fi
+
+echo
+echo "== the decisions about when it runs =="
+
+# Each of these is a default someone confirms during setup, so each has to be
+# both what ships and actually changeable. A knob that renders the same bytes
+# either way is a confirmation that means nothing.
+"$RENDER" --regenerate-on-push > "$TMP/w-push.yml"
+assert_in "$TMP/w-push.yml" "      - synchronize"      "--regenerate-on-push adds the push trigger"
+assert_in "$TMP/w-push.yml" "Review Map, regenerated"  "and the file explains that it regenerates"
+assert_not_in "$TMP/w-push.yml" "is NOT regenerated"   "without the one-map-per-PR trade beside it"
+assert_in "$W" "is NOT regenerated"                    "the default file explains that it does not regenerate"
+
+"$RENDER" --no-size-gate > "$TMP/w-nosize.yml"
+assert_not_in "$TMP/w-nosize.yml" "changed_files"      "--no-size-gate drops the size clause"
+assert_not_in "$TMP/w-nosize.yml" "a lockfile churn sails" "and drops the comment explaining it"
+assert_in "$TMP/w-nosize.yml" "!= 'dependabot[bot]'"   "leaving the author clause as the last one"
+
+"$RENDER" --no-skip-authors --no-size-gate > "$TMP/w-bare.yml"
+assert_not_in "$TMP/w-bare.yml" "user.login"           "--no-skip-authors drops the author clauses"
+assert_in "$TMP/w-bare.yml" "full_name == github.repository" "leaving the fork guard as the last one"
+
+"$RENDER" --skip-authors 'dependabot[bot],renovate[bot]' > "$TMP/w-two.yml"
+assert_in "$TMP/w-two.yml" "!= 'renovate[bot]'"        "a second bot gets its own clause"
+assert_eq "$(grep -c "user.login !=" "$TMP/w-two.yml")" "2" "one clause per author, not a merged one"
+
+# Every combination has to end the expression on a clause rather than a dangling
+# operator, which is the way an optional clause breaks the two beside it.
+combos_ok=1
+if command -v ruby >/dev/null 2>&1; then
+  for f in "$W" "$TMP/w-push.yml" "$TMP/w-nosize.yml" "$TMP/w-bare.yml" "$TMP/w-two.yml"; do
+    ruby -e "$yaml_check" "$f" >/dev/null 2>&1 || combos_ok=0
+  done
+  if [ "$combos_ok" = 1 ]; then
+    ok "every combination of the when-decisions parses and folds to one line"
+  else
+    bad "every combination of the when-decisions parses and folds to one line"
+  fi
+else
+  bad "no ruby to parse the combinations with — this check must not silently pass"
+fi
+
+"$RENDER" --min-files 7 --min-lines 300 > "$TMP/w-nums.yml"
+assert_in "$TMP/w-nums.yml" "changed_files > 7"        "the file threshold is what was asked for"
+assert_in "$TMP/w-nums.yml" "additions > 300"          "and so is the line threshold"
+
+rc=0; "$RENDER" --min-files 3.5 >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1"                                    "a threshold that is not a whole number is refused"
+rc=0; "$RENDER" --skip-authors "bad'login" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1"                                    "an author login carrying a quote is refused"
+
+# The recorded line is what makes the knobs safe to re-run, so it has to say
+# everything rather than only what differs from the defaults.
+assert_in "$W" "# Decisions: --no-regenerate-on-push --skip-authors dependabot[bot] --min-files 2 --min-lines 50 --pr-comment" \
+  "the file records every decision in the form setup takes them"
+assert_in "$TMP/w-nosize.yml" "--no-size-gate"         "and records the gate being off"
+
+echo
+echo "== the comment on the pull request =="
+
+# The one thing this job does to the repository, and the only reason it asks for
+# a write scope. Off, BOTH have to go: a repository must not carry
+# `pull-requests: write` for a step that is not there.
+assert_in "$W" "  pull-requests: write"                "commenting brings the write scope it needs"
+assert_in "$W" "Link the Review Map on the pull request" "and the step that uses it"
+assert_in "$W" "GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}" "the token is named by the comment step"
+# Against the comment-stripped copy: the permissions block explains in prose why
+# GITHUB_TOKEN reaches only this step, and a test that could not tell the
+# explanation from a second use would forbid the file from explaining itself.
+assert_eq "$(grep -c 'GH_TOKEN\|GITHUB_TOKEN' "$W_CODE")" "1" \
+  "and by no other step, so the model step never sees a write-capable credential"
+
+"$RENDER" --no-pr-comment > "$TMP/w-nocomment.yml"
+assert_not_in "$TMP/w-nocomment.yml" "pull-requests: write" "--no-pr-comment drops the write scope"
+assert_not_in "$TMP/w-nocomment.yml" "GITHUB_TOKEN"     "and the token with it"
+assert_not_in "$TMP/w-nocomment.yml" "issues/comments"  "and the step that would have posted"
+assert_in "$TMP/w-nocomment.yml" "never comments"       "and says the job is read-only, because now it is"
+assert_in "$TMP/w-nocomment.yml" "  contents: read"     "leaving the read scope it still needs"
+
+# Nothing anywhere in the job may set a check or a status. A link is not a
+# verdict, and the distance between them is one step someone adds later.
+assert_not_in "$W_CODE" "check-run"                    "it sets no check run"
+assert_not_in "$W_CODE" "statuses: write"              "it asks for no status scope"
+assert_not_in "$W_CODE" "createCommitStatus"           "it sets no commit status"
+
+# The step is the only shell in this repository that writes to someone's
+# repository, so it is run rather than read: both paths, against a stub.
+if command -v ruby >/dev/null 2>&1; then
+  ruby -ryaml -e '
+    d = YAML.safe_load(File.read(ARGV[0]), aliases: true)
+    s = d["jobs"]["review-map"]["steps"].find { |x| x["name"].to_s.include?("Link the") }
+    abort "no comment step" unless s
+    print s["run"]
+  ' "$W" > "$TMP/comment-step.sh"
+
+  mkdir -p "$TMP/stub"
+  cat > "$TMP/stub/gh" <<'STUB'
+#!/bin/sh
+# Records the call, and answers the listing from $GH_EXISTING.
+printf '%s\n' "$*" >> "$GH_CALLS"
+case $* in
+  *"issues/$PR_NUMBER/comments"*--jq*) printf '%s' "$GH_EXISTING" ;;
+  *) : ;;
+esac
+STUB
+  chmod +x "$TMP/stub/gh"
+
+  run_step() {
+    GH_CALLS=$1 GH_EXISTING=$2 \
+    ARTIFACT_URL=https://github.test/artifact/1 BROWSABLE=false STABLE_URL= \
+    HEAD_SHA=a93bd21deadbeefcafe PR_NUMBER=412 REPOSITORY=acme/app \
+    PATH="$TMP/stub:$PATH" sh "$TMP/comment-step.sh"
+  }
+
+  : > "$TMP/calls-new"
+  if run_step "$TMP/calls-new" "" 2>"$TMP/step-err"; then
+    ok "the comment step runs clean when there is no comment yet"
+  else
+    bad "the comment step runs clean when there is no comment yet ($(cat "$TMP/step-err"))"
+  fi
+  assert_in "$TMP/calls-new" "-X POST"                 "with no existing comment it posts one"
+  assert_not_in "$TMP/calls-new" "-X PATCH"            "and patches nothing"
+  assert_in "$TMP/calls-new" "accountable-review -->"  "the body carries the marker it will search for"
+  assert_in "$TMP/calls-new" "a93bd21"                 "and the short head SHA, which is how staleness is seen"
+  assert_in "$TMP/calls-new" "Download the Review Map" "an artifact is offered as a download, not as a page"
+  assert_in "$TMP/calls-new" "no verdict, no score and no approval" \
+    "and says on the pull request itself that it is not a review"
+
+  : > "$TMP/calls-upsert"
+  if run_step "$TMP/calls-upsert" "998877
+998899" 2>"$TMP/step-err2"; then
+    ok "the comment step runs clean when one is already there"
+  else
+    bad "the comment step runs clean when one is already there ($(cat "$TMP/step-err2"))"
+  fi
+  assert_in "$TMP/calls-upsert" "issues/comments/998877" "an existing comment is patched, not duplicated"
+  assert_not_in "$TMP/calls-upsert" "-X POST"          "and no second comment is posted"
+  assert_not_in "$TMP/calls-upsert" "issues/comments/998899" "only the first match is touched"
+
+  # A browsable provider gets its own URL, through the delivery seam rather than
+  # around it — the comment must not be a second thing that knows about artifacts.
+  : > "$TMP/calls-browsable"
+  GH_CALLS=$TMP/calls-browsable GH_EXISTING= \
+  ARTIFACT_URL= BROWSABLE=true STABLE_URL=https://maps.test/pr/412 \
+  HEAD_SHA=a93bd21deadbeefcafe PR_NUMBER=412 REPOSITORY=acme/app \
+  PATH="$TMP/stub:$PATH" sh "$TMP/comment-step.sh" 2>/dev/null || true
+  assert_in "$TMP/calls-browsable" "https://maps.test/pr/412" "a browsable provider's URL is what gets linked"
+  assert_in "$TMP/calls-browsable" "Open the Review Map"      "and it is offered as a page rather than a download"
+else
+  bad "no ruby to extract the comment step with — this check must not silently pass"
 fi
 
 echo
@@ -184,6 +386,62 @@ assert_eq "$(cksum < "$R/.github/workflows/accountable-review.yml")" "$edited" \
   "drift changes nothing on disk"
 "$INSTALL" --repo-dir "$R" --update > "$TMP/install4" 2>&1 || true
 assert_in "$TMP/install4" "status=updated"             "--update rewrites it, when asked"
+
+echo
+echo "== a re-run does not revert what someone confirmed =="
+
+# The knobs are only safe because of this. Upgrading the pin is the ordinary
+# reason to run setup twice, and without recovery it would report every confirmed
+# decision as drift and then revert them all under --update.
+K=$TMP/repo-knobs
+mkdir -p "$K"
+"$INSTALL" --repo-dir "$K" -- --plugin-ref v1 --regenerate-on-push --min-files 9 --min-lines 400 \
+  > "$TMP/k1" 2>&1 || true
+assert_in "$TMP/k1" "status=created"                   "a first run installs the confirmed decisions"
+assert_in "$TMP/k1" "decisions=--regenerate-on-push --skip-authors dependabot[bot] --min-files 9 --min-lines 400 --pr-comment" \
+  "and reports back what it wrote rather than what it was asked"
+
+"$INSTALL" --repo-dir "$K" -- --plugin-ref v1 > "$TMP/k2" 2>&1 || true
+assert_in "$TMP/k2" "status=unchanged"                 "a re-run passing no decisions recovers them and finds nothing to do"
+
+"$INSTALL" --repo-dir "$K" --print-diff -- --plugin-ref v2 > "$TMP/k3" 2>&1 || true
+assert_in "$TMP/k3" "status=drift"                     "upgrading the pin is drift, as any change is"
+assert_not_in "$TMP/k3" "-      - synchronize"         "but the diff does not propose reverting the push trigger"
+assert_not_in "$TMP/k3" "changed_files > 2"            "nor the thresholds someone chose"
+
+"$INSTALL" --repo-dir "$K" --update -- --plugin-ref v2 > "$TMP/k4" 2>&1 || true
+assert_in "$K/.github/workflows/accountable-review.yml" "      - synchronize" \
+  "an upgrade keeps the push trigger"
+assert_in "$K/.github/workflows/accountable-review.yml" "changed_files > 9" \
+  "an upgrade keeps the thresholds"
+assert_in "$K/.github/workflows/accountable-review.yml" "PLUGIN_REF: v2" \
+  "and does move the pin, which is what it was run for"
+
+# An explicit flag still wins over a recovered one, or the decisions could never
+# be changed again.
+"$INSTALL" --repo-dir "$K" --update -- --plugin-ref v2 --no-regenerate-on-push > "$TMP/k5" 2>&1 || true
+assert_not_in "$K/.github/workflows/accountable-review.yml" "      - synchronize" \
+  "an explicit decision overrides the recovered one"
+assert_in "$K/.github/workflows/accountable-review.yml" "changed_files > 9" \
+  "and leaves the decisions it said nothing about alone"
+
+# The comment decision is the one where a silent revert is worst in both
+# directions: re-adding a step a team removed, or dropping a scope they agreed to.
+C2=$TMP/repo-nocomment
+mkdir -p "$C2"
+"$INSTALL" --repo-dir "$C2" -- --plugin-ref v1 --no-pr-comment > /dev/null 2>&1 || true
+"$INSTALL" --repo-dir "$C2" --update -- --plugin-ref v2 > /dev/null 2>&1 || true
+assert_not_in "$C2/.github/workflows/accountable-review.yml" "pull-requests: write" \
+  "an upgrade does not re-grant a write scope the team declined"
+assert_not_in "$C2/.github/workflows/accountable-review.yml" "GITHUB_TOKEN" \
+  "nor hand back the token that goes with it"
+
+# A file with nothing recorded is compared against the defaults, which is the
+# honest answer rather than a guess at what someone meant.
+sed '/^# Decisions: /d' "$K/.github/workflows/accountable-review.yml" > "$TMP/stripped"
+cp "$TMP/stripped" "$K/.github/workflows/accountable-review.yml"
+"$INSTALL" --repo-dir "$K" -- --plugin-ref v2 > "$TMP/k6" 2>&1 || true
+assert_in "$TMP/k6" "status=drift"                     "a workflow recording no decisions is drift against the defaults"
 
 echo
 echo "== configuration =="

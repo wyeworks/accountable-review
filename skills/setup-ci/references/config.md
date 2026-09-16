@@ -57,6 +57,19 @@ out of the checkout when they run, which has two consequences worth knowing:
   `ACCOUNTABLE_REVIEW_ALLOW_COMMAND=1` is set in the environment — and the generated workflow does not
   set it. See `delivery.md`.
 
+## What does not belong here: when a Review Map is generated
+
+The triggers, the draft and fork guards, the bot authors and the size gate are **not** config keys and
+must not become them. They are the workflow's `on:` and `if:` — there is nothing for a run-time read
+to change, because by the time anything reads this file GitHub has already decided whether to create
+the job.
+
+The request arrives as "can we tune the thresholds without re-running setup", and it is reasonable;
+the answer is that those live in the workflow, where they are visible beside the reasoning for them,
+and that they are edited there or re-confirmed by re-running setup. `install-workflow.sh` recovers
+them from the file rather than reverting them, so a re-run is cheap. See
+`workflow.md` §§ *Triggers* and *The line that records the decisions*.
+
 ## An unknown key is an error
 
 `read-config.sh` fails on a key it does not recognise, rather than ignoring it. A misspelled
