@@ -180,6 +180,59 @@ case_runs_red "a locator carries the inventory's data-path attribute" "$WORK/loc
 sed 's|vertical-align: 1px; text-indent: 0;|vertical-align: 1px;|' "$TEMPLATE" > "$WORK/pending-indent.html"
 case_runs_red "the pending chip stops resetting the rail entry's hanging indent" "$WORK/pending-indent.html" "$SKELETON"
 
+# 20. The same family as 19, and it was found the same way — on a published page. .begin li is a
+#     three-column grid and a stop's excerpt is its fourth child, so with no span it auto-places
+#     into the 26px number column, where .ex-loc's overflow-wrap: anywhere renders the path one
+#     character per line down hundreds of pixels. Every other assertion still passes: the markup
+#     is correct, the excerpt is generated, the tag is right, and only the layout is unreadable.
+sed '/^\.begin li > \.excerpt {/d' "$TEMPLATE" > "$WORK/stop-excerpt-css.html"
+case_runs_red "a reading-path stop's excerpt loses the rule that spans it out of the number column" "$WORK/stop-excerpt-css.html" "$SKELETON"
+
+# 21. The other half. report-format.md permits an excerpt on a § 03 stop, and the template not
+#     showing one assembled is what left the only sanctioned location with no worked example —
+#     so a run composed it by analogy with .lookat, where the li is not a grid. The reference
+#     permitting what the template never shows is the shape to catch, not the CSS alone.
+awk '/<ol class="begin">/ { b = 1 }
+     b && /<details class="excerpt/ { f = 1 }
+     f { if ($0 ~ /<\/details>/) f = 0; next }
+     /<\/ol>/ { b = 0 }
+     { print }' "$TEMPLATE" > "$WORK/no-stop-excerpt.html"
+case_runs_red "no reading-path stop is assembled carrying an excerpt" "$WORK/no-stop-excerpt.html" "$SKELETON"
+
+# 22. The half of that rule that is not about the number column, and the one the fix for 20 was
+#     first written without. A grid item's automatic minimum is its min-content width, and the
+#     excerpt's is its pre's longest line, so the span alone widens the whole column past the
+#     viewport: measured at a 500px viewport, the document scrolled to 623. .ex-body's own
+#     overflow-x cannot contain what the grid has already grown for. .lookat > li carries the
+#     same min-width: 0 for the same reason, which is why the .lookat excerpts never showed it.
+sed 's|grid-column: 2 / -1; min-width: 0;|grid-column: 2 / -1;|' "$TEMPLATE" > "$WORK/stop-excerpt-minw.html"
+case_runs_red "a stop's excerpt cannot shrink below its pre, so the page scrolls sideways" "$WORK/stop-excerpt-minw.html" "$SKELETON"
+
+# 23. The search row's hanging indent, unscoped — the rule as it shipped. -16px on every code in
+#     the row reaches one inside the clause and drags it over the words before it; measured on a
+#     published page, a 16px overlap. Mutating it back into the descendant rule is the regression
+#     itself, not an approximation of it.
+sed 's|^\.searched \.sr-list code { min-width: 0;|.searched .sr-list code { min-width: 0; margin-left: -16px;|' \
+  "$TEMPLATE" > "$WORK/sr-indent.html"
+case_runs_red "the search row's indent pulls every code left, not only the leading command" "$WORK/sr-indent.html" "$SKELETON"
+
+# 24. And the example that makes rule 23 reachable. With no code inside a clause the template can
+#     carry the unscoped rule and look completely correct — which is how it did ship.
+sed 's|, naming <code>{{THE_SYMBOL_IT_FOUND}}</code> where the clause needs one||' \
+  "$TEMPLATE" > "$WORK/sr-nocode.html"
+case_runs_red "no search row's clause carries an inline code, so nothing exercises the indent's scope" "$WORK/sr-nocode.html" "$SKELETON"
+
+# 25. The inventory's odd last cell. .gt shows --rule through a 1px gap, so a half-empty last row
+#     paints the container's rule colour as a filled slab where a cell would be — a box that reads
+#     as a path with nothing in it. An odd number of paths is the common case.
+sed '/^\.gt-paths > \.c:last-child:nth-child(odd) {/d' "$TEMPLATE" > "$WORK/gt-odd.html"
+case_runs_red "an odd final inventory cell leaves a rule-coloured slab instead of spanning" "$WORK/gt-odd.html" "$SKELETON"
+
+# 26. And its example. Two cells is an even grid, where the rule above never fires and its absence
+#     is invisible — which is what the template had while the defect shipped.
+awk '/<div class="c" data-path="{{PATH}}">/ && !d { d = 1; next } { print }' "$TEMPLATE" > "$WORK/gt-even.html"
+case_runs_red "the assembled inventory has an even number of cells, so nothing exercises the odd-cell rule" "$WORK/gt-even.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
 # All three are script mutations for the reason the first two cases above are: the repository

@@ -619,7 +619,13 @@ details.searched[open] .chev { transform: rotate(90deg); }
 .searched .sr-body { padding: 0 14px 12px; border-top: 1px solid var(--prov-rule); }
 .searched .sr-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 11px; }
 .searched .sr-list > li { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; padding-left: 16px; }
-.searched .sr-list code { min-width: 0; margin-left: -16px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.searched .sr-list code { min-width: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+/* The hanging indent belongs to the LEADING command alone. As a descendant rule the
+   -16px reached every code in the row, including one inside the clause, and pulled it
+   16px left — over the words before it. A published page showed the overlap. Same
+   shape as .pending's text-indent: a rule about a row's first child, written as though
+   the row had only one. */
+.searched .sr-list > li > code:first-child { margin-left: -16px; }
 .searched .sr-r { flex: 1 1 24ch; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .searched .sr-limit { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 72ch; }
 
@@ -754,6 +760,15 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .begin .t > .path { display: block; margin-bottom: 5px; }
 .begin .t > .why { display: block; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); max-width: 64ch; }
 .begin .ptr { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding-top: 4px; white-space: nowrap; }
+/* A stop may carry an excerpt, so the li has a fourth child and the li is a grid.
+   With no span it auto-places into the 26px number column, where .ex-loc's
+   overflow-wrap: anywhere renders the path one character per line. 2 / -1 puts it
+   under the path it confirms, and holds under the 700px grid below where column 2
+   is the last one. min-width: 0 is the other half: a grid item cannot shrink past
+   its min-content, which here is the pre's longest line, so the span alone widens
+   the column past the viewport and the PAGE scrolls sideways instead of .ex-body.
+   .lookat > li carries the same reset, which is why its excerpts never showed it. */
+.begin li > .excerpt { grid-column: 2 / -1; min-width: 0; margin: 10px 0 0; }
 @media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
 
 /* ============================================================
@@ -1059,6 +1074,12 @@ figure.chain > figcaption { margin-top: 14px; }
    since a path is the whole cell. */
 .gt-paths  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .gt-paths > .c { padding: 9px 14px; }
+/* .gt paints its gaps by showing --rule through a 1px grid gap, which needs every row
+   full. An odd number of paths leaves the last row half empty and the container's own
+   rule colour renders there as a solid slab — a filled box that reads as a cell with
+   nothing in it. The final odd cell spans instead. Harmless in the one-column query
+   below, where 1 / -1 is that column.  */
+.gt-paths > .c:last-child:nth-child(odd) { grid-column: 1 / -1; }
 @media (max-width: 900px) {
   .gt-meta   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gt-paths  { grid-template-columns: minmax(0, 1fr); }
@@ -1629,6 +1650,12 @@ figcaption strong { color: var(--ink-3); }
           </span>
           <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
         </li>
+        <!-- A stop MAY carry an excerpt, and only where its reason is not already
+             excerpted in the checkpoint that owns it -- report-format.md
+             § Source excerpts routes it. It is a DIRECT CHILD of the li, after
+             a.ptr, and never inside span.t: the li is a three-column grid, so
+             .begin li > .excerpt is what spans it across the text column, and a
+             span is phrasing content while details is flow content. -->
         <li>
           <span class="n">02</span>
           <span class="t">
@@ -1636,6 +1663,22 @@ figcaption strong { color: var(--ink-3); }
             <span class="why">{{WHY_THIS_UNCHANGED_FILE_IS_ON_THE_ROUTE}} <span class="tier tier-unc">from unchanged code</span></span>
           </span>
           <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
+          <details class="excerpt excerpt--source">
+            <summary>
+              <span class="chev">&#9656;</span>
+              <span class="ex-loc">{{PATH}}:{{LINES}}</span>
+              <span class="tag">Unchanged</span>
+              <span class="ex-why">{{WHY_THIS_MATTERS}}</span>
+            </summary>
+            <div class="ex-body">
+<pre data-src="{{PATH}}" data-lang="ruby" style="counter-reset: exl {{START_MINUS_1}}"><span class="l">class ActiveProjects</span>
+<span class="l">  def call</span>
+<span class="l">    Project.where(archived_at: nil)</span>
+<span class="l">  end</span>
+</pre>
+              <p class="ex-src">Unchanged at <a class="cite" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
+            </div>
+          </details>
         </li>
       </ol>
     </section>
@@ -1744,7 +1787,12 @@ figcaption strong { color: var(--ink-3); }
     <details class="evidence">
       <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all {{N}} changed paths</summary>
 
+      <!-- THREE CELLS, not two, and the odd count is the point: a two-column grid with
+           an odd number of paths is the common case, and it is the one that used to
+           paint a rule-coloured slab where the missing cell would be. An even example
+           cannot show that the rule above fires. -->
       <div class="gt gt-paths">
+        <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
       </div>
@@ -1760,7 +1808,7 @@ figcaption strong { color: var(--ink-3); }
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
+            <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}, naming <code>{{THE_SYMBOL_IT_FOUND}}</code> where the clause needs one</span></li>
             <li><code>{{SEARCH_THAT_CAME_UP_EMPTY}}</code> <span class="sr-r">no hits</span></li>
           </ul>
           <p class="sr-limit"><strong>Out of reach.</strong> {{THE_LIMIT_OF_A_NAME_BASED_SEARCH}}</p>
