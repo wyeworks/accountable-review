@@ -69,6 +69,18 @@ break_and_run "the artifact is not named for the revision" \
 break_and_run "a page that still says it is being written is delivered anyway" \
   ci/generate-review-map.sh "s|if grep -q 'class=\"buildstate\"' \"\$PAGE\" |if false \&\& grep -q 'class=\"buildstate\"' \"\$PAGE\" |"
 
+# --mentor is the one setting that changes what is ON the page, so its default is the one that
+# matters most: a page built for a reviewer who is new to the stack, handed to a team that did not
+# ask for one, is a longer page nobody chose. On by default is the plausible edit — it looks
+# generous — and this is the row that catches it.
+break_and_run "mentor defaults to on, so every CI page teaches the framework" \
+  ci/generate-review-map.sh 's|MENTOR=${CFG_mentor:-off}|MENTOR=${CFG_mentor:-on}|'
+
+# And the peek that reads --mentor's optional value. Consuming ANY next argument turns
+# `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
+break_and_run "the optional stack name swallows whatever flag follows --mentor" \
+  ci/generate-review-map.sh 's|case ${2:-} in rails\|elixir\|phoenix) MENTOR=$2; shift ;; esac|case ${2:-} in ?*) MENTOR=$2; shift ;; esac|'
+
 echo
 echo "self-test: $ok ok, $bad bad"
 [ "$bad" -eq 0 ]

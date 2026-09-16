@@ -395,6 +395,39 @@ is worth doing when the diff is small enough that a second reader has nothing to
 a stamp saying how hard someone looked is the clean bill of health this page must never read as. What
 changed is reported to you in the terminal, not to whoever opens the link.
 
+### Onboarding a reviewer into the stack
+
+A third axis, and the only one that puts anything on the page:
+
+```text
+/accountable-review:review-map 412 --mentor          # add framework primers
+/accountable-review:review-map 412 --mentor rails    # the same, naming the stack
+```
+
+A Review Map normally assumes you know the framework and are meeting *this change* for the first
+time. `--mentor` is for the other case — a reviewer new to Rails or to Phoenix, on their first
+pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
+know, the page stops linking to the manual and states the rule: a short **primer** inside that
+checkpoint, with the API named, the behaviour explained, a worked example on a generic class, the
+line in *your* repository that made it relevant, and the pinned documentation link it came from.
+
+**It adds primers and it changes nothing else.** Same sections, same three to five checkpoints in
+the same order, same reading path, same impact section, same budget on every other part. Delete the
+primers from a mentor page and you have the ordinary page back — which is exactly why it is a flag
+rather than a second document, and why there is no "mentor mode" badge on the page: you can see
+which one you got.
+
+At most one primer per checkpoint and three per page. A judgment every developer in the stack
+already understands earns none, and a run that finds nothing worth teaching writes none — the flag
+is not an instruction to explain the framework. If you name a stack it is checked against the
+repository rather than believed, so `--mentor rails` in a Phoenix checkout stops the run instead of
+applying the wrong lens.
+
+> **Phoenix today:** a primer is gated on the documentation link it escalates from, and the Elixir
+> catalogue ships closed until a verification run has opened every row in it. So `--mentor` on a
+> Phoenix project currently produces no primers and says so. That is the fail-closed rule doing its
+> job — a page with no primer is narrower, a page with an invented link is wrong.
+
 ---
 
 ## Example Review Map 🖼️
@@ -504,6 +537,7 @@ What you choose per run:
 | --- | --- |
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
+| **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
 | **Output** | A published artifact by default; `--output <dir>` writes static HTML instead. |
 
 In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
@@ -512,6 +546,7 @@ optional:
 ```yaml
 review_map:
   effort: high           # high | low
+  mentor: false          # true | false | rails | elixir | phoenix
   delivery:
     provider: github-artifact
     retention_days: 14

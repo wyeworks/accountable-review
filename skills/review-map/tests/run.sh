@@ -153,9 +153,47 @@ assert_eq "$out_loc" "0" "no locator on an .ip-out node — a behaviour is not i
 panel_dp=$(awk '/<figure class="impact">/ { f = 1 } f { print } /<\/figure>/ { f = 0 }' "$WORK/markup" | grep -c 'data-path' || true)
 assert_eq "$panel_dp" "0" "no data-path inside the impact panel — that attribute belongs to the inventory alone"
 
+# THE PRIMER CALLOUT, which is the only component on this page a flag admits and therefore the
+# only one whose assembled example has to say what it is gated on. It came back from the shape the
+# agenda replaced, and it came back WITHOUT its artwork: the mark was an inlined logotype, this page
+# has no drawings, and the trademark line went with the mark because a notice disclaims something on
+# display. Both are asserted at zero, because "the primer is back" is exactly the edit that would
+# bring the svg back with it.
+assert_eq "$(count "$WORK/markup" '<aside class="primer">')" "1" "one primer callout is assembled"
+assert_eq "$(count "$WORK/markup" 'pr-mark')" "0" "the primer carries no logotype — this page has no drawings"
+assert_eq "$(count "$WORK/markup" 'pr-tm')"   "0" "and no trademark line, because there is no mark to disclaim"
+assert_eq "$(count "$WORK/markup" 'primer--lib')" "0" "and no branded/unbranded variant split, which only the mark needed"
+
+# A primer is gated on its doc link and earned by a repo citation, and BOTH live inside the aside:
+# rails-anchors.rb judges it as one block, so a primer borrowing the citation of the paragraph above
+# it is the rule working backwards. The link is pinned with the placeholder, never a literal series —
+# a template carrying one app's version teaches it to every other, which is the defect § Pinning
+# already paid for once at the citation anchor.
+PRIMER=$WORK/primer
+awk '/<aside class="primer">/ { f = 1 } f { print } /<\/aside>/ { f = 0 }' "$WORK/markup" > "$PRIMER"
+assert_eq "$(count "$PRIMER" 'class="doc"')"  "1" "the primer carries exactly one documentation link"
+assert_eq "$(count "$PRIMER" 'v{{RAILS_SERIES}}')" "1" "and it is pinned with the placeholder, not a literal series"
+assert_eq "$(count "$PRIMER" 'class="path"')" "1" "the primer cites the line in this repository that earned it"
+assert_eq "$(count "$PRIMER" 'class="probe"')" "0" "no probe inside a primer — the two anchors are adjacent, never nested"
+
+# pre.demo MAY show a result line, and pre.probe may never. The whole difference is the receiver, so
+# a demo outside a primer would be a general-purpose hole for output nobody observed — with the probe
+# rule switched off. Counting both totals is what makes "only inside a primer" an assertion rather
+# than a sentence in a comment.
+assert_eq "$(count "$PRIMER" '<pre class="demo">')" "1" "the primer quotes the manual in one pre.demo"
+assert_eq "$(count "$WORK/markup" '<pre class="demo">')" "1" "and no demo sits anywhere else in the markup"
+
+# AND IT IS INSIDE A CHECKPOINT, before that checkpoint's ul.lookat. A primer in section 04 or in the
+# evidence foot is a framework lesson with no judgment attached to it; one below the lookat list is a
+# lesson arriving after the reader has already been sent to the code.
+cp_region=$(awk '/<section class="cp" id="cp-a">/ { f = 1 } f { print } /<ul class="lookat">/ { if (f) exit }' "$WORK/markup" | grep -c 'class="primer"' || true)
+assert_eq "$cp_region" "1" "the primer sits inside a checkpoint and above its Look at list"
+
 # AND THE COMPONENTS THE AGENDA PUT DOWN STAY DOWN. Each of these was a required part of the page
-# this one replaced, so each is a thing a run with the old shape in mind would reach for.
-for gone in 'class="mech"' 'class="rows"' 'class="pipe"' 'class="primer' 'class="checkpoint"' \
+# this one replaced, so each is a thing a run with the old shape in mind would reach for. The primer
+# left this list when --mentor brought it back; every other one is still down, and the seven-field
+# unit is the one that would arrive looking most like thoroughness.
+for gone in 'class="mech"' 'class="rows"' 'class="pipe"' 'class="checkpoint"' \
             'class="decisions"' 'class="inflow"' 'class="usecases"' 'gt-ledger' 'coverage-foot'; do
   assert_eq "$(count "$WORK/markup" "$gone")" "0" "the markup half has no $gone"
 done
