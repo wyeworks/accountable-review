@@ -208,6 +208,31 @@ case_runs_red "no reading-path stop is assembled carrying an excerpt" "$WORK/no-
 sed 's|grid-column: 2 / -1; min-width: 0;|grid-column: 2 / -1;|' "$TEMPLATE" > "$WORK/stop-excerpt-minw.html"
 case_runs_red "a stop's excerpt cannot shrink below its pre, so the page scrolls sideways" "$WORK/stop-excerpt-minw.html" "$SKELETON"
 
+# 23. The search row's hanging indent, unscoped — the rule as it shipped. -16px on every code in
+#     the row reaches one inside the clause and drags it over the words before it; measured on a
+#     published page, a 16px overlap. Mutating it back into the descendant rule is the regression
+#     itself, not an approximation of it.
+sed 's|^\.searched \.sr-list code { min-width: 0;|.searched .sr-list code { min-width: 0; margin-left: -16px;|' \
+  "$TEMPLATE" > "$WORK/sr-indent.html"
+case_runs_red "the search row's indent pulls every code left, not only the leading command" "$WORK/sr-indent.html" "$SKELETON"
+
+# 24. And the example that makes rule 23 reachable. With no code inside a clause the template can
+#     carry the unscoped rule and look completely correct — which is how it did ship.
+sed 's|, naming <code>{{THE_SYMBOL_IT_FOUND}}</code> where the clause needs one||' \
+  "$TEMPLATE" > "$WORK/sr-nocode.html"
+case_runs_red "no search row's clause carries an inline code, so nothing exercises the indent's scope" "$WORK/sr-nocode.html" "$SKELETON"
+
+# 25. The inventory's odd last cell. .gt shows --rule through a 1px gap, so a half-empty last row
+#     paints the container's rule colour as a filled slab where a cell would be — a box that reads
+#     as a path with nothing in it. An odd number of paths is the common case.
+sed '/^\.gt-paths > \.c:last-child:nth-child(odd) {/d' "$TEMPLATE" > "$WORK/gt-odd.html"
+case_runs_red "an odd final inventory cell leaves a rule-coloured slab instead of spanning" "$WORK/gt-odd.html" "$SKELETON"
+
+# 26. And its example. Two cells is an even grid, where the rule above never fires and its absence
+#     is invisible — which is what the template had while the defect shipped.
+awk '/<div class="c" data-path="{{PATH}}">/ && !d { d = 1; next } { print }' "$TEMPLATE" > "$WORK/gt-even.html"
+case_runs_red "the assembled inventory has an even number of cells, so nothing exercises the odd-cell rule" "$WORK/gt-even.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
 # All three are script mutations for the reason the first two cases above are: the repository

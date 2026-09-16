@@ -1483,7 +1483,7 @@ PASS  no assurance language — the effort level is invisible on the page
 WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  evidence tiers used (7 label(s))
-PASS  data-path is only on ledger rows (2)
+PASS  data-path is only on ledger rows (3)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
 ## --page page-template.html
@@ -1495,7 +1495,7 @@ PASS  no assurance language — the effort level is invisible on the page
 WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  evidence tiers used (7 label(s))
-PASS  data-path is only on ledger rows (2)
+PASS  data-path is only on ledger rows (3)
 SKIP  link reachability: needs --repo to ask git what is pushed
 PASS  all three theme states present
 ## --fragment excerpt-at-head.html

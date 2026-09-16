@@ -185,6 +185,38 @@ assert_eq "$(awk '/^\.begin li > \.excerpt \{/,/}/' "$WORK/head" | grep -c 'grid
   "a stop's excerpt is spanned out of the 26px number column"
 assert_eq "$(awk '/^\.begin li > \.excerpt \{/,/}/' "$WORK/head" | grep -c 'min-width: 0')" "1" \
   "and shrinks below its pre's width, so the quotation scrolls instead of the page"
+
+# THE SEARCH ROW'S HANGING INDENT, which is .pending's defect in another component: a rule about a
+# row's FIRST child written as a descendant rule. The -16px then reaches a code inside the clause
+# and pulls it over the words before it. Both halves are read out of the rules themselves — the
+# scoped rule has to carry the pull, and the rule that styles every code has to NOT carry it,
+# because a template with both would render exactly the overlap.
+assert_eq "$(awk '/^\.searched \.sr-list > li > code:first-child \{/,/}/' "$WORK/head" | grep -c 'margin-left: -16px')" "1" \
+  "only a search row's leading command hangs into the indent"
+assert_eq "$(awk '/^\.searched \.sr-list code \{/,/}/' "$WORK/head" | grep -c 'margin-left')" "0" \
+  "and the rule that styles every code in a row does not pull any of them left"
+
+# THE INVENTORY'S ODD LAST CELL. .gt paints its gaps by showing --rule through a 1px grid gap,
+# which needs every row full; an odd number of paths leaves the container's own rule colour
+# rendering as a filled slab where the missing cell would be. The common case, and invisible in
+# any example with an even number of paths.
+assert_eq "$(awk '/^\.gt-paths > \.c:last-child:nth-child\(odd\) \{/,/}/' "$WORK/head" | grep -c 'grid-column: 1 / -1')" "1" \
+  "an odd final inventory cell spans its row instead of leaving a rule-coloured slab"
+
+# AND THE ASSEMBLED FOOT HAS TO EXERCISE BOTH. Neither rule is reachable from an example with an
+# even number of cells and no code inside a clause — which is what the template had while both
+# defects shipped.
+# Counted by data-path rather than by an awk range over the grid: the attribute is RESERVED to
+# inventory cells — coverage-gate.sh greps it page-wide — so it selects exactly those and nothing
+# else. The masthead's five .c cells carry none, which is why counting .c would have been wrong.
+inv_cells=$(count "$WORK/markup" '<div class="c" data-path=')
+if [ "$((inv_cells % 2))" -eq 1 ]; then
+  ok "the assembled inventory has an odd number of cells, so the odd-cell rule is exercised"
+else
+  bad "the assembled inventory has an odd number of cells, so the odd-cell rule is exercised"
+fi
+assert_eq "$(grep -c 'class="sr-r">[^<]*<code>' "$WORK/markup")" "1" \
+  "a search row's clause carries an inline code, so the indent's scope is exercised"
 begin_ex=$(awk '/<ol class="begin">/ { f = 1 } f { print } /<\/ol>/ { f = 0 }' "$WORK/markup" \
   | grep -c 'details class="excerpt excerpt--source"' || true)
 assert_eq "$begin_ex" "1" "a reading-path stop is assembled carrying its excerpt"

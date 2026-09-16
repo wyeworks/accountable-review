@@ -619,7 +619,13 @@ details.searched[open] .chev { transform: rotate(90deg); }
 .searched .sr-body { padding: 0 14px 12px; border-top: 1px solid var(--prov-rule); }
 .searched .sr-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 11px; }
 .searched .sr-list > li { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; padding-left: 16px; }
-.searched .sr-list code { min-width: 0; margin-left: -16px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.searched .sr-list code { min-width: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+/* The hanging indent belongs to the LEADING command alone. As a descendant rule the
+   -16px reached every code in the row, including one inside the clause, and pulled it
+   16px left — over the words before it. A published page showed the overlap. Same
+   shape as .pending's text-indent: a rule about a row's first child, written as though
+   the row had only one. */
+.searched .sr-list > li > code:first-child { margin-left: -16px; }
 .searched .sr-r { flex: 1 1 24ch; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .searched .sr-limit { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 72ch; }
 
@@ -1068,6 +1074,12 @@ figure.chain > figcaption { margin-top: 14px; }
    since a path is the whole cell. */
 .gt-paths  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .gt-paths > .c { padding: 9px 14px; }
+/* .gt paints its gaps by showing --rule through a 1px grid gap, which needs every row
+   full. An odd number of paths leaves the last row half empty and the container's own
+   rule colour renders there as a solid slab — a filled box that reads as a cell with
+   nothing in it. The final odd cell spans instead. Harmless in the one-column query
+   below, where 1 / -1 is that column.  */
+.gt-paths > .c:last-child:nth-child(odd) { grid-column: 1 / -1; }
 @media (max-width: 900px) {
   .gt-meta   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gt-paths  { grid-template-columns: minmax(0, 1fr); }
@@ -1775,7 +1787,12 @@ figcaption strong { color: var(--ink-3); }
     <details class="evidence">
       <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all {{N}} changed paths</summary>
 
+      <!-- THREE CELLS, not two, and the odd count is the point: a two-column grid with
+           an odd number of paths is the common case, and it is the one that used to
+           paint a rule-coloured slab where the missing cell would be. An even example
+           cannot show that the rule above fires. -->
       <div class="gt gt-paths">
+        <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
       </div>
@@ -1791,7 +1808,7 @@ figcaption strong { color: var(--ink-3); }
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
+            <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}, naming <code>{{THE_SYMBOL_IT_FOUND}}</code> where the clause needs one</span></li>
             <li><code>{{SEARCH_THAT_CAME_UP_EMPTY}}</code> <span class="sr-r">no hits</span></li>
           </ul>
           <p class="sr-limit"><strong>Out of reach.</strong> {{THE_LIMIT_OF_A_NAME_BASED_SEARCH}}</p>
