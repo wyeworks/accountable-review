@@ -1,0 +1,197 @@
+<!-- Defect: four primers. Three is a ceiling and never a quota, and a page past it has answered
+     --mentor by teaching the framework rather than by explaining this change — the tutorial with a
+     diff attached, arriving through the one door the flag opens.
+
+     Every individual primer here is correct, which is the point: the defect is the count, and a rule
+     that only ever looked at one callout at a time would pass this page. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Does the archival callback ask the predicate that is true when it runs?</h3>
+
+  <p>The new <code>after_commit</code> at <span class="path">app/models/project.rb:41</span>
+    branches on <code>archived_at_changed?</code>, which is false by the time a commit callback
+    runs. <span class="tier tier-unc">from unchanged code</span></p>
+
+  <aside class="primer">
+    <div class="pr-head">
+      <span class="pr-brand">Rails</span>
+      <i class="pr-sep"></i>
+      <span class="lbl">Primer</span>
+      <span class="pr-api">ActiveModel::Dirty</span>
+    </div>
+    <div class="pr-body">
+      <div class="pr-main">
+        <b>archived_at_changed? vs saved_change_to_archived_at?</b>
+        <p>Every attribute carries two predicates and they are true at different moments.
+          <code>archived_at_changed?</code> compares memory against the loaded row and is true
+          <em>before</em> the save; <code>saved_change_to_archived_at?</code> reports what the
+          save just wrote and is only true <em>after</em> it. Which one a callback wants
+          therefore depends on when the callback runs, and both mistakes fail silently.</p>
+        <div class="item">The callback at <span class="path">app/models/project.rb:41</span>
+          runs after the write, so it is the second form it has to ask.</div>
+        <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
+      </div>
+      <div class="pr-side">
+        <span class="lbl">In practice</span>
+<pre class="demo">post.title = "new"
+post.save
+post.title_changed?          # =&gt; false
+post.saved_change_to_title?  # =&gt; true</pre>
+        <p class="note">Both predicates are generated per attribute, so they exist for every
+          column without being written anywhere.</p>
+      </div>
+    </div>
+  </aside>
+
+  <ul class="lookat">
+    <li>
+      <b>The commit callback</b>
+      <span>which of the two predicates it branches on</span>
+      <span class="path">app/models/project.rb:41</span>
+    </li>
+  </ul>
+</section>
+
+<section class="cp" id="cp-b">
+  <span class="lbl lbl-wide">Checkpoint B</span>
+  <h3>Is slug uniqueness meant to be enforced only in Ruby?</h3>
+
+  <p>The new <code>after_commit</code> at <span class="path">app/models/project.rb:41</span>
+    branches on <code>archived_at_changed?</code>, which is false by the time a commit callback
+    runs. <span class="tier tier-unc">from unchanged code</span></p>
+
+  <aside class="primer">
+    <div class="pr-head">
+      <span class="pr-brand">Rails</span>
+      <i class="pr-sep"></i>
+      <span class="lbl">Primer</span>
+      <span class="pr-api">ActiveRecord::Validations</span>
+    </div>
+    <div class="pr-body">
+      <div class="pr-main">
+        <b>archived_at_changed? vs saved_change_to_archived_at?</b>
+        <p>Every attribute carries two predicates and they are true at different moments.
+          <code>archived_at_changed?</code> compares memory against the loaded row and is true
+          <em>before</em> the save; <code>saved_change_to_archived_at?</code> reports what the
+          save just wrote and is only true <em>after</em> it. Which one a callback wants
+          therefore depends on when the callback runs, and both mistakes fail silently.</p>
+        <div class="item">The callback at <span class="path">app/models/project.rb:41</span>
+          runs after the write, so it is the second form it has to ask.</div>
+        <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
+      </div>
+      <div class="pr-side">
+        <span class="lbl">In practice</span>
+<pre class="demo">post.title = "new"
+post.save
+post.title_changed?          # =&gt; false
+post.saved_change_to_title?  # =&gt; true</pre>
+        <p class="note">Both predicates are generated per attribute, so they exist for every
+          column without being written anywhere.</p>
+      </div>
+    </div>
+  </aside>
+
+  <ul class="lookat">
+    <li>
+      <b>The commit callback</b>
+      <span>which of the two predicates it branches on</span>
+      <span class="path">app/models/project.rb:41</span>
+    </li>
+  </ul>
+</section>
+
+<section class="cp" id="cp-c">
+  <span class="lbl lbl-wide">Checkpoint C</span>
+  <h3>Does the new scope still admit the rows the report counted?</h3>
+
+  <p>The new <code>after_commit</code> at <span class="path">app/models/project.rb:41</span>
+    branches on <code>archived_at_changed?</code>, which is false by the time a commit callback
+    runs. <span class="tier tier-unc">from unchanged code</span></p>
+
+  <aside class="primer">
+    <div class="pr-head">
+      <span class="pr-brand">Rails</span>
+      <i class="pr-sep"></i>
+      <span class="lbl">Primer</span>
+      <span class="pr-api">ActiveRecord::Relation</span>
+    </div>
+    <div class="pr-body">
+      <div class="pr-main">
+        <b>archived_at_changed? vs saved_change_to_archived_at?</b>
+        <p>Every attribute carries two predicates and they are true at different moments.
+          <code>archived_at_changed?</code> compares memory against the loaded row and is true
+          <em>before</em> the save; <code>saved_change_to_archived_at?</code> reports what the
+          save just wrote and is only true <em>after</em> it. Which one a callback wants
+          therefore depends on when the callback runs, and both mistakes fail silently.</p>
+        <div class="item">The callback at <span class="path">app/models/project.rb:41</span>
+          runs after the write, so it is the second form it has to ask.</div>
+        <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
+      </div>
+      <div class="pr-side">
+        <span class="lbl">In practice</span>
+<pre class="demo">post.title = "new"
+post.save
+post.title_changed?          # =&gt; false
+post.saved_change_to_title?  # =&gt; true</pre>
+        <p class="note">Both predicates are generated per attribute, so they exist for every
+          column without being written anywhere.</p>
+      </div>
+    </div>
+  </aside>
+
+  <ul class="lookat">
+    <li>
+      <b>The commit callback</b>
+      <span>which of the two predicates it branches on</span>
+      <span class="path">app/models/project.rb:41</span>
+    </li>
+  </ul>
+</section>
+
+<section class="cp" id="cp-d">
+  <span class="lbl lbl-wide">Checkpoint D</span>
+  <h3>Is the backfill safe to run against the rows that already exist?</h3>
+
+  <p>The new <code>after_commit</code> at <span class="path">app/models/project.rb:41</span>
+    branches on <code>archived_at_changed?</code>, which is false by the time a commit callback
+    runs. <span class="tier tier-unc">from unchanged code</span></p>
+
+  <aside class="primer">
+    <div class="pr-head">
+      <span class="pr-brand">Rails</span>
+      <i class="pr-sep"></i>
+      <span class="lbl">Primer</span>
+      <span class="pr-api">ActiveRecord::Migration</span>
+    </div>
+    <div class="pr-body">
+      <div class="pr-main">
+        <b>archived_at_changed? vs saved_change_to_archived_at?</b>
+        <p>Every attribute carries two predicates and they are true at different moments.
+          <code>archived_at_changed?</code> compares memory against the loaded row and is true
+          <em>before</em> the save; <code>saved_change_to_archived_at?</code> reports what the
+          save just wrote and is only true <em>after</em> it. Which one a callback wants
+          therefore depends on when the callback runs, and both mistakes fail silently.</p>
+        <div class="item">The callback at <span class="path">app/models/project.rb:41</span>
+          runs after the write, so it is the second form it has to ask.</div>
+        <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
+      </div>
+      <div class="pr-side">
+        <span class="lbl">In practice</span>
+<pre class="demo">post.title = "new"
+post.save
+post.title_changed?          # =&gt; false
+post.saved_change_to_title?  # =&gt; true</pre>
+        <p class="note">Both predicates are generated per attribute, so they exist for every
+          column without being written anywhere.</p>
+      </div>
+    </div>
+  </aside>
+
+  <ul class="lookat">
+    <li>
+      <b>The commit callback</b>
+      <span>which of the two predicates it branches on</span>
+      <span class="path">app/models/project.rb:41</span>
+    </li>
+  </ul>
+</section>

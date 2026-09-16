@@ -15,6 +15,7 @@
 #   review_map:
 #     mode: brief            # brief | light  (accepted, and decides nothing)
 #     effort: high           # high | low  (`normal` accepted, means `low`)
+#     mentor: rails          # true | false | rails | elixir | phoenix  (default false)
 #     delivery:
 #       provider: github-artifact
 #       retention_days: 30
@@ -105,6 +106,17 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val == "normal") val = "low"
       if (val != "high" && val != "low") fail("effort must be high or low, got `" val "`")
       emit("effort", val)
+    } else if (key == "mentor") {
+      # The one key that changes what is ON the page: it admits a framework primer inside
+      # the checkpoints that earn one, for a reviewer new to the stack. Off is the default,
+      # and `false` stays legal so turning it back off does not mean deleting the key.
+      # A stack name is a claim the run checks against the repository, never an override —
+      # so a team that moved from Rails to Elixir gets told, rather than quietly lensed.
+      if (val == "yes") val = "true"
+      if (val == "no") val = "false"
+      if (val != "true" && val != "false" && val != "rails" && val != "elixir" && val != "phoenix") \
+        fail("mentor must be true, false, or one of rails, elixir, phoenix, got `" val "`")
+      emit("mentor", val)
     } else fail("unknown key `" key "` under `review_map:`")
   }
 ' "$FILE"

@@ -22,11 +22,12 @@ the mechanism in prose, cite the repo line, and propose a probe from
 `references/phoenix-liveview.md` § *Runtime probes*.
 
 **That also costs the primer callout, which is easy to miss.** An `aside.primer` is what a doc link
-escalates into, so it cannot exist without one — `report-format.md` § *The primer callout* and
-`evals/checks/rails-anchors.rb` both say so. While this file is closed, a Phoenix page therefore
-carries **no primer at all**, not merely no inline links. When it opens, an Elixir primer is a
-`.primer--lib`: the branded variant's mark names whoever wrote the API, and that is not the Rails
-Foundation.
+escalates into, so it cannot exist without one — `report-format.md` § *Mentor mode* and
+`evals/checks/rails-anchors.rb` § 8 both say so. While this file is closed, `--mentor` on a Phoenix
+project therefore produces **no primer at all**, not merely no inline links, and the flag is worth
+saying so about in chat rather than on the page. There is nothing to design for when it opens: the
+callout has one shape now — the mark that needed a branded and an unbranded variant went with every
+other drawing on this page, and the header carries `Ecto` or `Phoenix` as text.
 
 This is the fail-closed rule of `rails-docs.md` § *Pinning* applied to a whole file rather than to a
 single row, and for the same reason. An unlinked explanation is never misleading; a link nobody opened

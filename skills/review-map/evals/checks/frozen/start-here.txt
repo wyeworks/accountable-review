@@ -58,6 +58,18 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-demo-loose.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-demo-loose.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-fabricated-output.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -161,6 +173,102 @@ PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-mixed-series.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-doubled.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-doubled.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-marked.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-marked.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-orphan.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-orphan.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-over-budget.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-over-budget.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-probe-nested.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-probe-nested.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-uncited.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-uncited.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-ungated.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-ungated.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
