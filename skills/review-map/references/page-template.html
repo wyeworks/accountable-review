@@ -754,6 +754,15 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .begin .t > .path { display: block; margin-bottom: 5px; }
 .begin .t > .why { display: block; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); max-width: 64ch; }
 .begin .ptr { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding-top: 4px; white-space: nowrap; }
+/* A stop may carry an excerpt, so the li has a fourth child and the li is a grid.
+   With no span it auto-places into the 26px number column, where .ex-loc's
+   overflow-wrap: anywhere renders the path one character per line. 2 / -1 puts it
+   under the path it confirms, and holds under the 700px grid below where column 2
+   is the last one. min-width: 0 is the other half: a grid item cannot shrink past
+   its min-content, which here is the pre's longest line, so the span alone widens
+   the column past the viewport and the PAGE scrolls sideways instead of .ex-body.
+   .lookat > li carries the same reset, which is why its excerpts never showed it. */
+.begin li > .excerpt { grid-column: 2 / -1; min-width: 0; margin: 10px 0 0; }
 @media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
 
 /* ============================================================
@@ -1629,6 +1638,12 @@ figcaption strong { color: var(--ink-3); }
           </span>
           <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
         </li>
+        <!-- A stop MAY carry an excerpt, and only where its reason is not already
+             excerpted in the checkpoint that owns it -- report-format.md
+             § Source excerpts routes it. It is a DIRECT CHILD of the li, after
+             a.ptr, and never inside span.t: the li is a three-column grid, so
+             .begin li > .excerpt is what spans it across the text column, and a
+             span is phrasing content while details is flow content. -->
         <li>
           <span class="n">02</span>
           <span class="t">
@@ -1636,6 +1651,22 @@ figcaption strong { color: var(--ink-3); }
             <span class="why">{{WHY_THIS_UNCHANGED_FILE_IS_ON_THE_ROUTE}} <span class="tier tier-unc">from unchanged code</span></span>
           </span>
           <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
+          <details class="excerpt excerpt--source">
+            <summary>
+              <span class="chev">&#9656;</span>
+              <span class="ex-loc">{{PATH}}:{{LINES}}</span>
+              <span class="tag">Unchanged</span>
+              <span class="ex-why">{{WHY_THIS_MATTERS}}</span>
+            </summary>
+            <div class="ex-body">
+<pre data-src="{{PATH}}" data-lang="ruby" style="counter-reset: exl {{START_MINUS_1}}"><span class="l">class ActiveProjects</span>
+<span class="l">  def call</span>
+<span class="l">    Project.where(archived_at: nil)</span>
+<span class="l">  end</span>
+</pre>
+              <p class="ex-src">Unchanged at <a class="cite" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
+            </div>
+          </details>
         </li>
       </ol>
     </section>

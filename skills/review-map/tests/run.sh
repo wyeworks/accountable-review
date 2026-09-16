@@ -175,6 +175,20 @@ assert_eq "$(count "$WORK/markup" '05</span>')"  "0" "and stops there"
 assert_eq "$(awk '/^\.pending \{/,/^}/' "$WORK/head" | grep -c 'text-indent: 0')" "1" \
   "the pending chip resets the rail entry's hanging indent"
 
+# AND A READING-PATH STOP SPANS ITS EXCERPT. report-format.md § Source excerpts permits an excerpt
+# on a § 03 stop, and .begin li is a three-column grid, so a details with no span auto-places into
+# the 26px number column — where .ex-loc's overflow-wrap: anywhere renders the path one character
+# per line, hundreds of pixels down. A published page did exactly that. Both halves are asserted:
+# the rule has to be in the emitted head AND the composition has to be shown assembled, because
+# either one alone is what produced the defect.
+assert_eq "$(awk '/^\.begin li > \.excerpt \{/,/}/' "$WORK/head" | grep -c 'grid-column: 2 / -1')" "1" \
+  "a stop's excerpt is spanned out of the 26px number column"
+assert_eq "$(awk '/^\.begin li > \.excerpt \{/,/}/' "$WORK/head" | grep -c 'min-width: 0')" "1" \
+  "and shrinks below its pre's width, so the quotation scrolls instead of the page"
+begin_ex=$(awk '/<ol class="begin">/ { f = 1 } f { print } /<\/ol>/ { f = 0 }' "$WORK/markup" \
+  | grep -c 'details class="excerpt excerpt--source"' || true)
+assert_eq "$begin_ex" "1" "a reading-path stop is assembled carrying its excerpt"
+
 # ---------------------------------------------------------------- markers
 for m in SKELETON:HEAD:START SKELETON:HEAD:END SKELETON:TAIL:START SKELETON:TAIL:END; do
   assert_eq "$(count "$TEMPLATE" "$m")" "1" "template has exactly one $m"

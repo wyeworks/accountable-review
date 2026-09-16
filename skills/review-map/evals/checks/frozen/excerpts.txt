@@ -654,11 +654,11 @@ exit=0
 SKIP  no excerpts in this input
 ## --fragment page-template.html
 exit=1
-PASS  2 source excerpt(s), each with a summary
+PASS  3 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
-FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}}; {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
 SKIP  excerpt tints: a fragment carries no token block
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
@@ -666,11 +666,11 @@ SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
 ## --page page-template.html
 exit=1
-PASS  2 source excerpt(s), each with a summary
+PASS  3 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
-FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}}; {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
 PASS  excerpt tints defined in all three theme blocks
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only

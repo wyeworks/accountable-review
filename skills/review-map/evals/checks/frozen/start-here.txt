@@ -831,7 +831,7 @@ exit=0
 PASS  start here: 2 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (2)
-PASS  citations present alongside the entries (2)
+PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page page-template.html
@@ -839,7 +839,7 @@ exit=0
 PASS  start here: 2 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (2)
-PASS  citations present alongside the entries (2)
+PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
 ## --fragment start-here-clean.html
