@@ -866,7 +866,7 @@ expectations, and the mechanical half is thin — which is a change from every c
 and worth knowing before writing one.
 
 A second scope is worth having beside it, and cheaper: the whole of § 02, graded on the agenda rather
-than on one checkpoint. Whether three to five is the right count for this diff, whether the order is
+than on one checkpoint. Whether the count matches the deltas § 01 names, whether the order is
 defensible, and whether two of them are the same question are all relations *between* checkpoints, so
 a single-checkpoint fragment cannot see any of them — the same limit a section fragment always had,
 one level down.
