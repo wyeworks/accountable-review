@@ -50,8 +50,8 @@ does not earn omitted outright.
 
 ## One page shape
 
-There is one page. `--brief` and `--light` are accepted and change nothing; `--full` and `--review`
-stop the run and say they are not implemented in this version.
+There is one page, and no flag chooses it. An argument the skill does not recognise is reported
+rather than guessed at.
 
 That is a deliberate narrowing. The page used to have two shapes and a word budget to tell them
 apart, and what a reader actually wants is not a length setting but an answer to one question: *what

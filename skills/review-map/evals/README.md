@@ -170,10 +170,9 @@ Every knob has an environment variable, for a shell you keep open: `EVAL_MODEL`,
 
 ### The detail level was the third axis, and it is gone
 
-The skill produced two page shapes, and a case declared which one it wanted. There is one shape now —
-`--full` and `--review` stop the run, `--brief` and `--light` change nothing — so `evals.json` carries
-no `level`, `check.rb` accepts `--level` and reads it with nothing, and `run.sh` still writes it on the
-jsonl line so old result lines stay parseable.
+The skill produced two page shapes, and a case declared which one it wanted. There is one shape now
+and no flag names another, so `evals.json` carries no `level`, `check.rb` accepts `--level` and reads
+it with nothing, and `run.sh` still writes it on the jsonl line so old result lines stay parseable.
 
 **Leaving the flag accepted rather than removing it is deliberate**, and it is the same argument that
 kept `normal` meaning `low`: `run.sh` passes `--level` to `check.rb`, an unknown argument exits 2, and

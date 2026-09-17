@@ -92,9 +92,8 @@ assert_eq "$(count "$WORK/markup" '<svg')"    "0" "the markup half carries no sv
 assert_eq "$(count "$WORK/markup" 'hljs-')"   "0" "the markup half carries no tint class — the tint is applied at read time"
 
 # ---------------------------------------------------------------- the page has one shape
-# There is one page now: --full and --review stop the run before step 9, and --brief and --light
-# are accepted aliases that change nothing. So the markup half is the whole page, and what these
-# rows assert is that every section a run has to write is assembled in front of it.
+# There is one page now, and no flag names another one. So the markup half is the whole page, and
+# what these rows assert is that every section a run has to write is assembled in front of it.
 for sec in changed attention start impact; do
   assert_eq "$(grep -c "^ *<section id=\"$sec\"" "$WORK/markup" || true)" "1" "the markup half carries <section id=\"$sec\">"
 done
