@@ -391,9 +391,9 @@ There is one page, and no flag chooses it:
 /accountable-review:review-map 412
 ```
 
-`--brief` and `--light` are accepted and change nothing — an invocation kept in a script is not a
-typo. `--full` and `--review` stop the run and say they are not implemented in this version, rather
-than quietly handing back something else under a name that used to mean seven sections.
+No argument selects a length or a depth, and an argument the skill does not recognise is reported
+rather than guessed at — a misread flag silently produces the wrong run, and the page gives you no
+way to tell.
 
 The page used to have two shapes and a word budget to tell them apart. What a reviewer wants is not a
 length setting: it is an answer to *what do I have to judge here, and where do I look?* The analysis
@@ -612,8 +612,9 @@ review_map:
     retention_days: 14
 ```
 
-`mode` is still read and still validated, and it decides nothing: `brief` and `light` are the same
-page, and `full` is rejected rather than silently downgraded.
+There is no key for the page's shape, because there is no shape to choose. A key the reader does not
+recognise is an error rather than a shrug — a misspelling that parsed as nothing would silently give
+a team the default while their file said otherwise.
 
 Precedence is `explicit flags > .accountable-review.yml > defaults`, and it is implemented rather
 than aspirational: the config reader emits a line only for a key the file actually contains, so

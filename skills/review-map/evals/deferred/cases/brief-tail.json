@@ -16,8 +16,8 @@
         "All five changed paths are present under Changed with data-path, and not one of them carries an attention level or a primary/supporting/secondary group — the level drops the ledger's three judgements and keeps its one guarantee",
         "app/queries/active_projects.rb is in the affected list with the search that found it written down, and it is a pointer to Flow B rather than an explanation: one clause, one citation, a link",
         "At least one empty search is recorded as a search — this diff has real ones (no other caller of archive!, no other reader of the archived scope), and unrecorded, absence cannot be told from omission",
-        "Nothing that belongs to --full has leaked in: no comprehension checkpoint, no ER fragment, no lifecycle diagram, and no gathered list of test gaps pulled out of the flows",
-        "The shorter shape has not become a thinner account: the entries that are here carry the same clause on why the change reaches them, with the same evidence tiers, as they would at --full. No sentence grades the change"
+        "Nothing that belongs to the long shape has leaked in: no comprehension checkpoint, no ER fragment, no lifecycle diagram, and no gathered list of test gaps pulled out of the flows",
+        "The shorter shape has not become a thinner account: the entries that are here carry the same clause on why the change reaches them, with the same evidence tiers, as they would on the long shape. No sentence grades the change"
       ]
     },
     {

@@ -4,7 +4,7 @@
 #
 #   Usage: generate-review-map.sh --output DIR --repository owner/repo
 #                                 --pr N --base-sha SHA --head-sha SHA
-#                                 [--mode brief|light] [--effort high|low]
+#                                 [--effort high|low]
 #                                 [--mentor [rails|elixir|phoenix]]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 [--plugin-dir DIR] [--claude-bin claude]
@@ -37,7 +37,7 @@ set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PLUGIN_ROOT=$(dirname "$HERE")
 
-OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; MODE=; EFFORT=; MENTOR=; CONFIG=
+OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; EFFORT=; MENTOR=; CONFIG=
 REPO_DIR=.; PLUGIN_DIR=; CLAUDE_BIN=${CLAUDE_BIN:-claude}
 STRICT_GATE=0; PRINT_INVOCATION=0; VERIFY_ONLY=0
 
@@ -48,7 +48,6 @@ while [ $# -gt 0 ]; do
     --pr)          PR=$2;         shift 2 ;;
     --base-sha)    BASE_SHA=$2;   shift 2 ;;
     --head-sha)    HEAD_SHA=$2;   shift 2 ;;
-    --mode)        MODE=$2;       shift 2 ;;
     --effort)      EFFORT=$2;     shift 2 ;;
     # --mentor takes an OPTIONAL stack name, which is how the skill spells it, and one
     # spelling in both places is worth the peek: a second flag name here would be a second
@@ -82,22 +81,13 @@ fi
 if [ -n "$CONFIG" ] && [ -f "$CONFIG" ]; then
   eval "$("$PLUGIN_ROOT/skills/setup-ci/scripts/read-config.sh" "$CONFIG" --prefix CFG_)"
 fi
-[ -n "$MODE" ]   || MODE=${CFG_mode:-brief}
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 [ -n "$MENTOR" ] || MENTOR=${CFG_mentor:-off}
 
-# THE PAGE HAS ONE SHAPE, so --mode decides nothing and is not passed to the skill at all.
-# `brief` and `light` are the same page and are taken silently, because a workflow that has
-# been passing --mode brief for months is not a workflow with a bug in it. `full` is refused
-# rather than mapped: it used to mean seven sections, and quietly handing back four under the
-# old name is how a team ends up reviewing a page they did not ask for and cannot tell apart.
-case $MODE in
-  brief|light) ;;
-  full)   die "--mode full is not implemented in this version. The Review Map has one shape now:
-what changed, what needs your attention, the order to read the code in, and what the change
-reaches outside the diff. Drop the mode, or set it to brief." ;;
-  *) die "--mode must be brief or light, got '$MODE'" ;;
-esac
+# THE PAGE HAS ONE SHAPE, and nothing here selects one. There is no flag and no config key
+# that names a length or a depth, so this script passes the skill nothing about the page's
+# form at all — the CI page and a person's page differ only in where the bytes land.
+#
 # `normal` was this value's name while it was the default; the skill still takes it and
 # means `low`, so a config file written before the rename keeps working here too.
 case $EFFORT in normal) EFFORT=low ;; esac

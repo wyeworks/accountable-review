@@ -483,13 +483,11 @@ C=$TMP/config
 mkdir -p "$C"
 cat > "$C/.accountable-review.yml" <<'Y'
 review_map:
-  mode: light
   delivery:
     provider: github-artifact
     retention_days: 14
 Y
 "$READ_CONFIG" "$C/.accountable-review.yml" > "$TMP/cfg"
-assert_in "$TMP/cfg" "CFG_mode='light'"                "mode is read, and accepted as an alias"
 assert_in "$TMP/cfg" "CFG_retention_days='14'"         "retention_days is read"
 assert_not_in "$TMP/cfg" "CFG_effort"                  "a key the file omits produces no line"
 
@@ -497,25 +495,21 @@ mkdir -p "$TMP/out-cfg" && echo '<html>x</html>' > "$TMP/out-cfg/index.html"
 ( cd "$C" && "$DELIVER" --dir "$TMP/out-cfg" --repository acme/app --pr 412 --head-sha a93bd21deadbeef ) > "$TMP/deliver-cfg"
 assert_in "$TMP/deliver-cfg" '"retention_days": "14"'  "the workflow honours retention_days from the config file"
 
-( cd "$C" && "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
-    --head-sha a93bd21deadbeef --repo-dir "$C" ) > "$TMP/inv-cfg"
-# THE PAGE HAS ONE SHAPE, so no level ever reaches the run. mode is still read and still
-# validated — a workflow that has been passing it keeps working — and then goes nowhere.
-assert_not_in "$TMP/inv-cfg" "--light"                 "the configured mode does not reach the run"
-assert_not_in "$TMP/inv-cfg" "--brief"                 "and neither does its old name"
-( cd "$C" && "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
-    --head-sha a93bd21deadbeef --repo-dir "$C" --mode brief ) > "$TMP/inv-flag"
-assert_not_in "$TMP/inv-flag" "--brief"                "an explicit mode is accepted and passes nothing on"
+# THE PAGE HAS ONE SHAPE, and nothing names one any more — not a flag on this script and not a
+# key in the config file. A page-shape argument is an unknown argument, which is the state this
+# asserts: an adapter that quietly swallowed one would be the first half of a second product.
+rc=0; "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
+  --head-sha a93bd21deadbeef --repo-dir "$TMP" --mode brief >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2"                                    "a page-shape flag is an unknown argument, not a no-op"
 
 "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 --head-sha a93bd21deadbeef \
   --repo-dir "$TMP" > "$TMP/inv-def"
-assert_not_in "$TMP/inv-def" "--brief"                 "no detail level is passed by default either"
 assert_in "$TMP/inv-def" "--effort high"               "the default effort is high, as the skill's is"
 
 # --mentor is OFF unless asked for, and off is the ABSENCE of the flag rather than a value: the
 # skill parses no `--mentor off`, and a flag whose off state is spelled out is one more thing for
-# it to get wrong. It is also the one setting that changes what is on the page, which is why the
-# default matters more here than mode's does.
+# it to get wrong. It is also the one setting that changes what is on the page, which is why its
+# default is the one that matters most here.
 assert_not_in "$TMP/inv-def" "--mentor"                "no mentor flag is passed by default"
 "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 --head-sha a93bd21deadbeef \
   --repo-dir "$TMP" --mentor > "$TMP/inv-mentor"
@@ -538,18 +532,14 @@ rc=0; printf 'review_map:\n  mentor: nope\n' > "$C/mentor-bad.yml"
 "$READ_CONFIG" "$C/mentor-bad.yml" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "1"                                    "a mentor value that is not a stack is an error"
 
-# `full` is refused rather than mapped: it named a seven-section page, and handing back the
-# agenda under that name is a setting that changed meaning without telling anyone.
-rc=0; printf 'review_map:\n  mode: full\n' > "$C/full.yml"
-"$READ_CONFIG" "$C/full.yml" >/dev/null 2>&1 || rc=$?
-assert_eq "$rc" "1"                                    "mode: full is refused, not silently downgraded"
-
 rc=0; printf 'review_map:\n  retention_day: 14\n' > "$C/bad.yml"
 "$READ_CONFIG" "$C/bad.yml" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "1"                                    "a misspelled key is an error, not a shrug"
-rc=0; printf 'review_map:\n  mode: review\n' > "$C/review.yml"
-"$READ_CONFIG" "$C/review.yml" >/dev/null 2>&1 || rc=$?
-assert_eq "$rc" "1"                                    "mode: review is rejected rather than downgraded"
+# There is no page-shape key either. `mode` is not read, not validated and not tolerated — it
+# falls through to the unknown-key rule, which is what stops it coming back as a silent no-op.
+rc=0; printf 'review_map:\n  mode: brief\n' > "$C/mode.yml"
+"$READ_CONFIG" "$C/mode.yml" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1"                                    "a page-shape key is an unknown key, not a shrug"
 
 echo
 echo "== delivery =="
