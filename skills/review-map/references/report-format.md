@@ -901,9 +901,8 @@ one line the claim rests on is doing the component's job.
 
 ### Budget
 
-Same shape as the diagram budget, and for the same reason: the constraint is what keeps the component
-meaning something. But it needs a sharper test than the diagram budget does, because the obvious
-phrasing is circular.
+A cap, for the reason every cap here exists: the constraint is what keeps the component meaning
+something. But it needs a sharper test than most, because the obvious phrasing is circular.
 
 **"One per field that earns one" is not a budget.** *Affected but unchanged* is by definition nothing
 but claims a reader would otherwise take on faith — that is the field's stated reason for existing —
@@ -1020,7 +1019,7 @@ first-class part, and adjacency is not asked to imply anything.
 |---|---|---|
 | Changed by this PR | `.ip-chg` | solid border, page ground |
 | Affected, not changed | `.ip-aff` | dashed border, teal ground and teal clause |
-| Behaviour / outcome | `.ip-out` | filled, ink ground — the terminal treatment `.pipe`'s last node uses |
+| Behaviour / outcome | `.ip-out` | filled, ink ground |
 
 `.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
 left, *the existing system* on the right, with a **dotted** rule between them — is **derived from
@@ -1158,7 +1157,7 @@ like one.**
 
 **Budget: 1–3 paths, 3–5 nodes each.** These are the paths a reviewer has to *hold*, and three is
 already the outer edge of that — wanting a fourth is the signal that the three you have are not
-doing their job, which is the same question § *Depth rules* asks about a second diagram. The fourth
+doing their job. The fourth
 consequence is not lost by being left out: *affected, not changed* below carries its entry, and the
 checkpoint that turns on it carries its explanation. It was five, and five is where a real page put them; on
 that page the panel had become a section to scroll rather than a figure to read.
@@ -1176,8 +1175,8 @@ it readable. And
 it is not SVG. Nothing on this page is (§ *Chains*) —
 but because *this* figure has two lanes, an elbow that draws itself from a class change, cards that
 stack as the path count varies, and a breakpoint at 780px where the lanes collapse. There is no
-canvas that survives all four, so a drawing would mean coordinates derived per run, which
-§ *Depth rules* rules out for making two pages from this skill incomparable.
+canvas that survives all four, so a drawing would mean coordinates derived per run — which
+`SKILL.md`'s hard rules forbid, for making two pages from this skill incomparable.
 
 ## One canonical home
 

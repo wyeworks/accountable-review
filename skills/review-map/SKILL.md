@@ -997,8 +997,7 @@ Everything else about writing holds at every stage:
 - **The template is the design system — do not load `artifact-design` to re-derive one.** That skill
   exists to choose a palette and pair typefaces; those decisions are already made here, and its own
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
-  yields nothing. Load it only if you have a deliberate reason to depart from the template, and
-  `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
+  yields nothing. Load it only if you have a deliberate reason to depart from the template.
 - **Figures are components, and there is no `<svg>` on this page.** Two figure vocabularies exist and
   the template assembles both: the vertical labelled chain — `figure.impact` in section 04,
   `figure.chain` inside a checkpoint — and the `dl.ba` before/after pair. Build them from the
