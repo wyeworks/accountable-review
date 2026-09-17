@@ -544,6 +544,12 @@ SKIP  no excerpts in this input
 ## --page invariants-draft-narration.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment invariants-flow-designator.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-flow-designator.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment invariants-loose-data-path.html
 exit=0
 PASS  1 source excerpt(s), each with a summary

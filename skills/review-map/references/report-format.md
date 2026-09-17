@@ -1205,9 +1205,24 @@ ordering buys: §§ 03 and 04 both come after § 02, so neither has to re-explai
 readable. A section that finds itself explaining a checkpoint's finding a second time is in the wrong
 section.
 
+**The page has two designators, and a flow is not one of them.** A checkpoint is *Checkpoint A*,
+the letter its `id="cp-a"` and its rail entry already carry; an impact path is *Impact path A*, the
+letter on its card's `ip-hd`. Those two are the only names one part of the page may call another by.
+The flows `SKILL.md` step 6 clusters are the run's own unit of *analysis*: each becomes a checkpoint,
+an impact path or a foot entry, each is named in `$W/analysis/`, and **no sentence on the page names
+one**. *"A leader-opened thread (Flow A) has no `connection_id`"* is a pointer to a section nobody
+wrote, and the reader has no rail entry to follow it to.
+
+**It leaks because the two vocabularies share one alphabet.** A run holds a note called Flow A while
+writing a checkpoint whose id is `cp-a` beside an impact path called A — three labels, one of them
+its own, and nothing local saying which. That is why this is a rule rather than something a careful
+run avoids: one real page carried *(Flow A)* in a checkpoint's second sentence and *Impact path A* in
+its last, mixing both namespaces inside one paragraph. `evals/checks/page-invariants.rb` § 7 greps
+for it.
+
 The reference form is one sentence, no re-explanation:
 
-> The `ActiveProjects` consequence is what checkpoint 2 turns on.
+> The `ActiveProjects` consequence is what Checkpoint B turns on.
 
 Not a summary of that consequence, not its citation again, not its tier label again.
 
@@ -1569,9 +1584,9 @@ explanation. The nodes carry the address themselves now, so what this list adds 
 why the entry is affected — and it reaches the entries no path had room for:
 
 > `app/queries/active_projects.rb:8` — scopes on `discarded_at` and never learns about archival.
-> Checkpoint 2.
+> Checkpoint B.
 
-Not a summary of checkpoint 2. Not its citation again, not its tier again.
+Not a summary of Checkpoint B. Not its citation again, not its tier again.
 
 **What stays here and what goes to the foot.** The entries a path runs through and the entries a
 checkpoint turns on stay. Everything else the pass found — real, cited, and not something the reviewer
