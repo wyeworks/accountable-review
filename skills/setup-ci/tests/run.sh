@@ -125,7 +125,7 @@ assert_in "$W" "group: accountable-review-\${{ github.event.pull_request.number 
 assert_in "$W" "cancel-in-progress: true"              "superseded runs are cancelled"
 
 assert_in "$W" "permissions:"                          "permissions are declared"
-assert_in "$W" "  contents: read"                      "permissions are read-only"
+assert_in "$W" "  contents: read"                      "the repository is read, never written"
 assert_not_in "$W_CODE" "contents: write"                   "nothing asks to write the repository's contents"
 assert_not_in "$W_CODE" "issues: write"                     "nothing asks to write issues"
 assert_not_in "$W_CODE" "checks: write"                     "nothing asks to set a check"
