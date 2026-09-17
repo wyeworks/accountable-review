@@ -41,6 +41,27 @@ counts as code — so an unusual layout costs you a map you did not need rather 
 did. The job summary lists every path it discounted and why, so a wrong call is something you can
 see.
 
+## A second run reuses the first
+
+By default a pull request gets one Review Map, at the moment it becomes reviewable. Set the workflow
+up with `--regenerate-on-push` and it gets one per push instead — and from that point the runs reuse
+each other: the workflow caches the map it produced, the next run restores it, and the skill re-reads
+only the commits since that page's revision rather than rebuilding the whole thing.
+
+**What it costs is stated on the page.** A judgment the new commits did not reach was not verified
+again, so the masthead names both revisions — `head → base · updated from <earlier head>` — and one
+sentence under *What changed* says which parts still describe the earlier one.
+
+**If you want the fuller read, ask for a map from scratch.** That is what `review_map.update: false`
+does, unconditionally, and it is the right setting before a final review pass on a branch that has
+moved a lot. A map generated in one pass describes one revision throughout.
+
+It also refuses on its own and regenerates in full, saying which reason it hit: a force-push or
+rebase, a base branch that moved underneath, a delta covering more than half the diff, a dependency
+lock file bump, a cache that expired, or one of the page's own recorded searches now finding the
+changed code. Every one of those leads to the page that has no cost, which is why a cold cache is
+not something to worry about.
+
 ## Artifacts are the default, not the contract
 
 **Review Maps are portable static HTML.** The default setup stores them as GitHub Actions artifacts

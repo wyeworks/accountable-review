@@ -748,7 +748,31 @@ Editing one of these means checking the others still agree.
   the admission removed rather than the rule — the lesson `invariants-risk-score-*` already paid
   for.
 
-  Seven files agree: `scripts/carry-plan.sh` owns the preconditions and the carry rule **alone**;
+  **The carrier is a cache, and refusing the artifact download is what keeps the seam.** Nothing
+  persisted between CI runs before this, so `--update` reached nothing there: `$RUNNER_TEMP` dies
+  with the runner. `actions/cache` restores the previous map into `--output` before generation and
+  saves it after delivery, inside the `SETUP:IF:push` block, because a pull request that gets one
+  map has no second run to restore into. Downloading the previous **artifact** was refused: it
+  needs a new standing `actions: read` scope, and it would make the workflow a second thing that
+  knows the map is an artifact — the delivery seam unpicked, broken the moment a team sets
+  `provider:` to a static host. The previous map must be restored by something that does not know
+  where the map goes.
+
+  **A cache miss is not a failure, and nothing about the carrier is load-bearing for correctness** —
+  the flag is a saving with a cost, so every way it can go wrong leads to the page that has no cost.
+  Two rules that predate it are what make restoring a page safe: a half-written one carries a
+  pending marker and P3 refuses it, and a run that dies after the restore leaves a page naming the
+  **old** head, which `ci/generate-review-map.sh` already refuses to deliver. That second one is why
+  `SKILL.md` step 9 makes the `Revision` cell the last edit — written as honesty, and load-bearing
+  once a stale page can be sitting in the output directory.
+
+  **`updated_from` is read off the finished page rather than tracked.** The masthead's `updated
+  from <sha>` segment is a fixed form, so the manifest agrees with the page by construction and a
+  run that fell back to a full generation records `null` without the adapter having to learn that
+  it did. Provenance, like the rest of that file: no count of what was re-read, because a count of
+  how much of a page was looked at again is the verification badge in numeric form.
+
+  Twelve files agree: `scripts/carry-plan.sh` owns the preconditions and the carry rule **alone**;
   `SKILL.md` § *Re-running over new commits* owns the procedure, with step 1 parsing the flag, step
   9 forbidding the skeleton and the banner, step 10 exempting the gate, and two hard rules;
   `report-format.md` § *Build state* § *An updated page* owns the wording and the refusals,
@@ -757,7 +781,10 @@ Editing one of these means checking the others still agree.
   carrying one across its file's delta; `page-template.html` refuses the carry badge beside the
   other five; `evals/checks/page-invariants.rb` §§ 2b and 2c carry the two widened patterns behind
   three `golden/invariants-update-*` fixtures; and `tests/` covers every precondition either side
-  of its boundary, with nine mutations behind it.
+  of its boundary, with nine mutations behind it. The CI half is `templates/workflow.yml`'s two
+  cache steps, `read-config.sh`'s `update` key, `ci/generate-review-map.sh`'s conditional
+  pass-through and manifest `@3`, `references/workflow.md` § *The previous map* owning the carrier's
+  reasoning **alone**, and `setup-ci/tests/` with eight more mutations.
 - **Findings are a sample, not an audit.** The page must never read as a clean bill of health. This is
   load-bearing, not hedging: the skill explains, and explanation is reproducible, but defect discovery
   is not.
@@ -1016,6 +1043,13 @@ Same rule as above: editing one of these means checking the others still agree.
   **alone**, the workflow template guards its upload step with
   `if: steps.delivery.outputs.provider == 'github-artifact'` so a different provider makes it stand
   aside, and `tests/run.sh` asserts the four canonical fields.
+
+  **The seam is also what decided how a re-run finds the previous map.** Downloading the last
+  artifact is the obvious carrier and was refused for this bullet's reason: the workflow would
+  become a second thing that knows the map is an artifact, and a team on a static host would find
+  their re-runs silently rebuilding from scratch. A cache keyed on the pull request is a side
+  channel that knows nothing about the destination. `references/workflow.md` § *The previous map*
+  owns that argument.
 
   **The failure mode is a destination threaded back into generation** — an `--artifact-name` on
   `generate-review-map.sh`, an "upload the map" step inside the skill — and it will arrive as a

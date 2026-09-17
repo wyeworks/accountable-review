@@ -229,6 +229,57 @@ break_and_run "a whole-diff file count on the job condition decides whether a ma
   's|^      && github.event.pull_request.head.repo.full_name|      \&\& github.event.pull_request.changed_files > 3\
       \&\& github.event.pull_request.head.repo.full_name|'
 
+# --- the previous map, whose failures are all silent ------------------------
+#
+# Every break below leaves a workflow that runs, generates and delivers. What
+# changes is only whether the next push can reuse anything, or whether what it
+# reuses is safe — and neither is visible from a green run.
+
+# The two keys drifting apart is the one that costs money rather than
+# correctness: the save fills a cache nobody looks in, every run rebuilds from
+# scratch, and the only symptom is the bill.
+break_and_run "the cache save writes a key the restore never looks for" \
+  skills/setup-ci/templates/workflow.yml \
+  '/actions\/cache\/save@v4/,/key:/ s|head\.sha|run_id|'
+
+# A key that varies between two renders of the same request breaks the byte
+# comparison install-workflow.sh tells "already set up" from "edited by hand" by.
+# A date is exactly what someone reaches for to expire a cache.
+break_and_run "the cache key carries a date, so every second setup run reports drift" \
+  skills/setup-ci/templates/workflow.yml \
+  "s|restore-keys: accountable-review-map-|restore-keys: accountable-review-map-$(date -u +%Y-%m-%d)-|"
+
+# Caching without the push trigger is a cache with nothing to feed it — and it
+# is how the carrier ends up rendered for every team rather than the ones who
+# asked for a map per push.
+break_and_run "the cache steps render whether or not the workflow regenerates on push" \
+  skills/setup-ci/templates/workflow.yml \
+  '/^# SETUP:IF:push$/{N;/The previous Review Map\|Kept for the next push/s/^# SETUP:IF:push/# SETUP:IF:authors/;}'
+
+# Keeping whatever was in the directory when a step died.
+break_and_run "the cache is saved even when the run did not deliver" \
+  skills/setup-ci/templates/workflow.yml \
+  "s|if: success() && steps.scope.outputs.verdict == 'generate'|if: steps.scope.outputs.verdict == 'generate'|"
+
+# Asking for an update against an empty directory. The skill would have to talk
+# its way out of a flag whose premise is false, and the honest place to decide
+# that is here, where the file either exists or does not.
+break_and_run "--update is passed whether or not a previous page is there" \
+  ci/generate-review-map.sh \
+  's|^if \[ "$UPDATE" = on \] && \[ -f "$OUTPUT_ABS/index.html" \]; then$|if [ "$UPDATE" = on ]; then|'
+
+# The config key that would let a team turn it off, silently ignored.
+break_and_run "review_map.update is parsed and then not read" \
+  ci/generate-review-map.sh \
+  's@^\[ -n "$UPDATE" \].*CFG_update.*$@UPDATE=true@'
+
+# updated_from asserted rather than read. A manifest that says a page was updated
+# from a revision the page itself does not name is provenance that disagrees with
+# the thing it is provenance for — and it disagrees in the reassuring direction.
+break_and_run "the manifest asserts what it was updated from instead of reading the page" \
+  ci/generate-review-map.sh \
+  's|^updated_from=$(sed -n .*$|updated_from=$BASE_SHA|'
+
 echo
 echo "self-test: $ok ok, $bad bad"
 [ "$bad" -eq 0 ]

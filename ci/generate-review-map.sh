@@ -6,6 +6,7 @@
 #                                 --pr N --base-sha SHA --head-sha SHA
 #                                 [--mode brief|light] [--effort high|low]
 #                                 [--mentor [rails|elixir|phoenix]]
+#                                 [--update | --no-update]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 [--plugin-dir DIR] [--claude-bin claude]
 #                                 [--strict-gate] [--print-invocation]
@@ -39,7 +40,7 @@ PLUGIN_ROOT=$(dirname "$HERE")
 
 OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; MODE=; EFFORT=; MENTOR=; CONFIG=
 REPO_DIR=.; PLUGIN_DIR=; CLAUDE_BIN=${CLAUDE_BIN:-claude}
-STRICT_GATE=0; PRINT_INVOCATION=0; VERIFY_ONLY=0
+STRICT_GATE=0; PRINT_INVOCATION=0; VERIFY_ONLY=0; UPDATE=
 
 while [ $# -gt 0 ]; do
   case $1 in
@@ -57,6 +58,8 @@ while [ $# -gt 0 ]; do
     --mentor)      MENTOR=on
                    case ${2:-} in rails|elixir|phoenix) MENTOR=$2; shift ;; esac
                    shift ;;
+    --update)      UPDATE=on;     shift ;;
+    --no-update)   UPDATE=off;    shift ;;
     --config)      CONFIG=$2;     shift 2 ;;
     --repo-dir)    REPO_DIR=$2;   shift 2 ;;
     --plugin-dir)  PLUGIN_DIR=$2; shift 2 ;;
@@ -85,6 +88,7 @@ fi
 [ -n "$MODE" ]   || MODE=${CFG_mode:-brief}
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 [ -n "$MENTOR" ] || MENTOR=${CFG_mentor:-off}
+[ -n "$UPDATE" ] || UPDATE=${CFG_update:-true}
 
 # THE PAGE HAS ONE SHAPE, so --mode decides nothing and is not passed to the skill at all.
 # `brief` and `light` are the same page and are taken silently, because a workflow that has
@@ -112,6 +116,15 @@ case $MENTOR in
   on|true|yes)  MENTOR=on ;;
   rails|elixir|phoenix) ;;
   *) die "--mentor takes no value, or one of rails, elixir, phoenix; got '$MENTOR'" ;;
+esac
+
+# Whether a second run over the same pull request re-reads only the commits since the previous
+# map. On by default, and it reaches nothing unless something put a page where this run is about
+# to write: in CI that is the workflow's cache restore, which only exists with `synchronize` on.
+case $UPDATE in
+  off|false|no) UPDATE=off ;;
+  on|true|yes)  UPDATE=on ;;
+  *) die "--update takes no value; the config key is true or false, got '$UPDATE'" ;;
 esac
 
 # The page must never land inside the repository it describes — it would become
@@ -146,6 +159,15 @@ case $MENTOR in
   on)  PROMPT="$PROMPT --mentor" ;;
   *)   PROMPT="$PROMPT --mentor $MENTOR" ;;
 esac
+# --update goes on only when something already put a page where this run writes. That check is
+# mechanical rather than editorial: the adapter reports that a previous map is present, and the
+# skill decides — via carry-plan.sh — whether any of it may be carried. Asking for an update
+# against an empty directory would be a flag the skill has to talk its way out of.
+PREVIOUS=
+if [ "$UPDATE" = on ] && [ -f "$OUTPUT_ABS/index.html" ]; then
+  PROMPT="$PROMPT --update"
+  PREVIOUS=yes
+fi
 if [ -n "$REPOSITORY" ]; then PROMPT="$PROMPT --repository $REPOSITORY"; fi
 if [ -n "$BASE_SHA" ];   then PROMPT="$PROMPT --base-sha $BASE_SHA"; fi
 PROMPT="$PROMPT --head-sha $HEAD_SHA"
@@ -234,9 +256,27 @@ fi
 version=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
   "$PLUGIN_ROOT/.claude-plugin/plugin.json" 2>/dev/null | head -n 1)
 
+# WHICH REVISION THE CARRIED PARTS DESCRIBE, READ OFF THE PAGE RATHER THAN TRACKED.
+#
+# `updated from <short sha>` is a fixed segment of the masthead's Revision cell, owned by
+# report-format.md § Build state § An updated page, and the skill writes it only on an update
+# that actually carried something. So grepping for it makes the manifest say "updated from X"
+# exactly when the page says so — and a run that asked for an update and then fell back to a
+# full generation, which is what every carry-plan.sh refusal does, produces null here without
+# the adapter having to learn that it did.
+#
+# Provenance, like everything else in this file. No count of what was re-read, because a count
+# of how much of a page was looked at again is the verification badge the format refuses.
+updated_from=$(sed -n 's/.*updated from \([0-9a-f]\{7,40\}\).*/\1/p' "$PAGE" 2>/dev/null | head -n 1)
+if [ -n "$updated_from" ]; then
+  updated_from_json="\"$updated_from\""
+else
+  updated_from_json=null
+fi
+
 cat > "$OUTPUT_ABS/manifest.json" <<JSON
 {
-  "schema": "accountable-review/review-map-manifest@2",
+  "schema": "accountable-review/review-map-manifest@3",
   "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "plugin": {
     "name": "accountable-review",
@@ -251,10 +291,18 @@ cat > "$OUTPUT_ABS/manifest.json" <<JSON
     "repository": "$REPOSITORY",
     "pull_request": ${PR:-null},
     "base_sha": "$BASE_SHA",
-    "head_sha": "$HEAD_SHA"
+    "head_sha": "$HEAD_SHA",
+    "updated_from": $updated_from_json
   },
   "coverage_gate": "$gate_result"
 }
 JSON
 
 echo "accountable-review: review map ready at $PAGE ($(( size / 1024 )) KB, coverage gate: $gate_result)"
+if [ -n "$PREVIOUS" ]; then
+  if [ -n "$updated_from" ]; then
+    echo "accountable-review: updated in place over the commits since $updated_from"
+  else
+    echo "accountable-review: a previous map was present and was rebuilt from scratch rather than updated"
+  fi
+fi

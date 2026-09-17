@@ -169,6 +169,68 @@ work under `--regenerate-on-push`, and it stays in the file either way: with pus
 covers a pull request toggled ready/draft/ready or reopened in quick succession, and it is what keeps
 the cost of turning pushes back on to one run per burst rather than one per commit.
 
+## The previous map
+
+Only with `--regenerate-on-push`, and only because that flag creates the thing this needs: a second
+run over the same pull request.
+
+```yaml
+      - name: Restore the previous Review Map
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/review-map
+          key: accountable-review-map-${{ …number }}-${{ …head.sha }}
+          restore-keys: accountable-review-map-${{ …number }}-
+```
+
+and, after delivery, an `actions/cache/save@v4` under the same key.
+
+**What it is for.** With the previous page sitting where the run is about to write,
+`ci/generate-review-map.sh` passes `--update` and the skill re-reads only the commits since that
+page's revision instead of rebuilding it — `review-map`'s § *Re-running over new commits*. Without
+the restore that flag reaches nothing in CI, because `$RUNNER_TEMP` dies with the runner and a
+second run starts from an empty directory.
+
+**A miss is not a failure, and nothing here is load-bearing for correctness.** The whole flag is a
+saving with a cost — claims nobody re-read — so every way it can go wrong has to lead to the page
+that has no cost. A cold cache, an evicted entry, a first run: all of them regenerate in full, which
+is the better page.
+
+**Two existing rules are what make restoring a page safe**, and neither was added for this:
+
+- A half-written page restored here carries a pending marker, and `carry-plan.sh`'s preconditions
+  refuse to update from one.
+- A run that dies *after* the restore leaves a page still naming the old head — because
+  `SKILL.md` step 9 makes the `Revision` cell the last edit of an update — and the generate step
+  already refuses to deliver a page that does not contain the current short head SHA. So the
+  failure mode that would matter most, shipping an old map as a current one, is caught by a check
+  that predates the cache.
+
+**Why not download the previous artifact.** It needs `actions: read`, a new standing permission on
+a workflow whose permission design is an invariant, and it would make this file a second thing that
+knows the map is an artifact — the delivery seam unpicked, and broken the moment a team sets
+`provider:` to a static host. The previous map has to be restored by something that does not know
+where the map goes. The cache API rides the default token and asks for no scope at all.
+
+**The key is a run-time expression, which is what keeps the file idempotent.** `${{ }}` is
+evaluated by Actions, not by `render-workflow.sh`, so two renders of the same request are the same
+bytes — the rule § *The line that records the decisions* draws for the `# Decisions:` line, applied
+to a value nobody would think of as configuration. A date in that key, reached for to expire an
+entry, would make every second setup run report drift.
+
+**The save carries `if: success()`.** Correctness does not depend on it, per the rules above; it
+keeps the cache holding pages that actually shipped rather than whatever was in the directory when
+a step died.
+
+**And the concurrency group above changes what this sees.** A cancelled run saves nothing, so a
+burst of pushes leaves one entry from the last completed run and the next update works over a
+bigger delta. That is the right direction: a bigger delta is a fuller re-read, and past half the
+diff `carry-plan.sh` refuses the update and the run regenerates.
+
+Whether updating happens at all is `review_map.update` in `.accountable-review.yml`, read at run
+time like every other setting about the map. It is deliberately not a flag here: it changes what
+the map is, not *when* a map is generated, which is this file's one settings axis.
+
 ## Permissions
 
 ```yaml

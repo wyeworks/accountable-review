@@ -211,6 +211,33 @@ jobs:
           # not read, and that is a failure rather than a quiet skip.
           [ "$rc" = 0 ] || [ "$rc" = 3 ] || exit "$rc"
 
+# SETUP:IF:push
+      # The previous Review Map for this pull request, so the run can update it
+      # over the new commits instead of rebuilding it. Only reachable with
+      # `synchronize` on: a first run has nothing to restore, and a pull request
+      # that gets one map has no second run to restore it into.
+      #
+      # A MISS IS NOT A FAILURE. It means a full generation, which is the better
+      # page — the whole flag is a saving with a cost, so every way it can go
+      # wrong leads to the page that has no cost. Nothing here is load-bearing
+      # for correctness, and two existing rules are why: a half-written page
+      # restored here carries a pending marker and carry-plan.sh refuses it, and
+      # a run that dies after the restore leaves a page naming the OLD head,
+      # which the generate step below refuses to deliver.
+      #
+      # The key is built from run-time expressions, so two renders of this file
+      # with the same flags are the same bytes — the idempotency rule this whole
+      # template is compared by. No date, no run id.
+      - name: Restore the previous Review Map
+        id: previous
+        if: steps.scope.outputs.verdict == 'generate'
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/review-map
+          key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          restore-keys: accountable-review-map-${{ github.event.pull_request.number }}-
+# SETUP:END:push
+
       - uses: actions/setup-node@v4
         if: steps.scope.outputs.verdict == 'generate'
         with:
@@ -275,6 +302,20 @@ jobs:
           path: ${{ runner.temp }}/review-map/
           retention-days: ${{ steps.delivery.outputs.retention_days }}
           if-no-files-found: error
+
+# SETUP:IF:push
+      # Kept for the next push, and only once this one has actually shipped.
+      # success() is what makes the cache hold delivered pages rather than
+      # whatever was in the directory when a step died — correctness does not
+      # depend on it, since a half-written page is refused on the way back in,
+      # but a cache entry nothing can use is still worth not writing.
+      - name: Keep this Review Map for the next push
+        if: success() && steps.scope.outputs.verdict == 'generate'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/review-map
+          key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+# SETUP:END:push
 
       - name: Say where it went
         if: steps.scope.outputs.verdict == 'generate'

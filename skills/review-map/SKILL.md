@@ -1299,9 +1299,18 @@ else, and on any disagreement run fully and say so in chat:
 Then the mechanical half, which is a script because by eye every checkpoint looks carryable — the
 same reason `ledger-rows.sh` and `diff-render.sh` exist:
 
+**The revision the page names** is the first seven-character hex token in its masthead `Revision`
+cell — one targeted `grep`, not a read of the page — resolved with `git rev-parse` to the full SHA
+the script wants:
+
+```sh
+PREV=$(git rev-parse "$(grep -o 'class="path"[^>]*>[0-9a-f]\{7\}' "<previous page>" \
+  | head -n 1 | grep -o '[0-9a-f]\{7\}$')")
+```
+
 ```sh
 <skill base directory>/scripts/carry-plan.sh <previous page> \
-  --prev-head <the revision the page names> --base BASE --head HEAD
+  --prev-head "$PREV" --base BASE --head HEAD
 ```
 
 It prints a plan and **exit 0**, or a reason and `verdict: full` and **exit 3**. A full verdict is

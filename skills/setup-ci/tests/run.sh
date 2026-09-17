@@ -776,5 +776,116 @@ assert_in "$TMP/inspect" "accountable_workflow=.github/workflows/accountable-rev
 assert_in "$TMP/inspect2" "git_repo=no"                "inspection says so when there is no repository"
 
 echo
+echo "== the previous map, and updating over it =="
+
+# Nothing persisted between runs before this, so a second run on a pull request
+# rebuilt the page it already had. The cache is the carrier, and it rides the
+# `synchronize` decision because a pull request that gets ONE map has no second
+# run to restore anything into.
+assert_in "$TMP/w-push.yml" "actions/cache/restore@v4" "--regenerate-on-push restores the previous map"
+assert_in "$TMP/w-push.yml" "actions/cache/save@v4"    "and keeps this one for the next push"
+assert_not_in "$W" "actions/cache"                     "the default file caches nothing — there is no second run to feed"
+
+# The two keys must be the SAME string. A save under a key the restore never
+# looks for is a cache that fills up and is never read: every run then rebuilds
+# from scratch, silently, and the only symptom is a bill.
+restore_key=$(grep -A3 'actions/cache/restore@v4' "$TMP/w-push.yml" | sed -n 's/^ *key: //p' | head -n 1)
+save_key=$(grep -A3 'actions/cache/save@v4' "$TMP/w-push.yml" | sed -n 's/^ *key: //p' | head -n 1)
+assert_eq "$restore_key" "$save_key" "the restore and the save name the same key"
+case $restore_key in
+  *'pull_request.head.sha'*) ok "the key is per head sha, so each push saves its own entry" ;;
+  *) bad "the key is per head sha, so each push saves its own entry (got '$restore_key')" ;;
+esac
+assert_in "$TMP/w-push.yml" "restore-keys: accountable-review-map-" \
+  "and a prefix restore-key, so the previous push's entry is what a new sha falls back to"
+
+# Only a page that shipped is worth keeping. Correctness does not depend on it —
+# a half-written page restored next run carries a pending marker and carry-plan.sh
+# refuses it — but a cache entry nothing can use is still worth not writing.
+assert_in "$TMP/w-push.yml" "if: success() && steps.scope.outputs.verdict == 'generate'" \
+  "the save runs only when this run actually delivered"
+
+# The fact that makes pull-requests: write acceptable, re-checked here because the
+# cache steps are two more places an env: block could appear. Comment-stripped,
+# like the assertion above that owns this rule: the permissions block explains in
+# prose why the token reaches only one step, and counting that explanation as a
+# use would forbid the file from explaining itself.
+grep -v '^[[:space:]]*#' "$TMP/w-push.yml" > "$TMP/w-push.code.yml"
+assert_eq "$(grep -c 'GH_TOKEN\|GITHUB_TOKEN' "$TMP/w-push.code.yml" || true)" "1" \
+  "exactly one step in the file with the cache steps still names GITHUB_TOKEN"
+
+# Idempotency is decided by comparing bytes, so the key may carry nothing that
+# varies between two renders of the same request. Run-time ${{ }} expressions are
+# fine; a date is not, and a date is what someone reaches for to expire a cache.
+"$RENDER" --regenerate-on-push > "$TMP/w-push2.yml"
+if cmp -s "$TMP/w-push.yml" "$TMP/w-push2.yml"; then
+  ok "two renders with the cache steps are byte identical"
+else
+  bad "two renders with the cache steps are byte identical"
+fi
+assert_not_in "$TMP/w-push.yml" "$(date -u +%Y-%m-%d)" "and the cache key carries no date"
+
+# review_map.update is RUN-TIME configuration: it is about the map, not about when
+# a map is generated, so it renders nothing and needs no setup flag.
+assert_not_in "$TMP/w-push.yml" "review_map.update" "the workflow holds no update setting of its own"
+
+printf 'review_map:\n  update: false\n' > "$TMP/cfg-update-off.yml"
+assert_eq "$("$READ_CONFIG" "$TMP/cfg-update-off.yml" --prefix CFG_ | sed -n "s/^CFG_update=//p")" "'false'" \
+  "update: false is read"
+printf 'review_map:\n  update: no\n' > "$TMP/cfg-update-no.yml"
+assert_eq "$("$READ_CONFIG" "$TMP/cfg-update-no.yml" --prefix CFG_ | sed -n "s/^CFG_update=//p")" "'false'" \
+  "and no is the same answer spelled the other way"
+printf 'review_map:\n  effort: high\n' > "$TMP/cfg-no-update.yml"
+assert_eq "$("$READ_CONFIG" "$TMP/cfg-no-update.yml" --prefix CFG_ | sed -n "s/^CFG_update=//p")" "" \
+  "an absent key emits nothing, so the config rung stays distinguishable from the default"
+printf 'review_map:\n  update: maybe\n' > "$TMP/cfg-bad-update.yml"
+rc=0; "$READ_CONFIG" "$TMP/cfg-bad-update.yml" --prefix CFG_ >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1" "and a value that is neither is an error rather than a guess"
+
+# The adapter asks for an update only when something already put a page where it
+# is about to write. Asking against an empty directory would be a flag the skill
+# has to talk its way out of.
+UREPO=$TMP/urepo; URUN=$TMP/urun
+mkdir -p "$UREPO" "$URUN"
+(
+  cd "$UREPO"
+  git init -q .; git config user.email t@e; git config user.name t
+  echo a > f.rb; git add -A; git commit -qm base
+  echo b >> f.rb; git commit -qam second
+) >/dev/null 2>&1
+UBASE=$(git -C "$UREPO" rev-parse HEAD~1); UHEAD=$(git -C "$UREPO" rev-parse HEAD)
+UHS=$(git -C "$UREPO" rev-parse --short=7 HEAD); UPS=$(git -C "$UREPO" rev-parse --short=7 HEAD~1)
+invocation() { "$GENERATE" --output "$URUN" --head-sha "$UHEAD" --base-sha "$UBASE" \
+  --repo-dir "$UREPO" --print-invocation "$@" 2>/dev/null | grep -c -- '--update' || true; }
+
+assert_eq "$(invocation)" "0" "no previous page means no --update, whatever the config says"
+printf 'x\n' > "$URUN/index.html"
+assert_eq "$(invocation)" "1" "a previous page is what turns it on"
+printf 'review_map:\n  update: false\n' > "$UREPO/.accountable-review.yml"
+assert_eq "$(invocation)" "0" "update: false turns it off with the page still there"
+assert_eq "$(invocation --update)" "1" "and an explicit flag beats the config file, like every other setting"
+rm -f "$UREPO/.accountable-review.yml"
+
+# WHICH REVISION THE CARRIED PARTS DESCRIBE IS READ OFF THE PAGE, NOT TRACKED.
+# The masthead's `updated from <sha>` segment is written only by an update that
+# carried something, so the manifest agrees with the page by construction — and a
+# run that asked for an update and fell back to a full one, which is what every
+# carry-plan.sh refusal does, records null without the adapter learning that it did.
+upage() { { printf '<html><div class="path">%s &rarr; %s %s</div>' "$UHS" "$UPS" "$1"
+            head -c 2500 /dev/zero | tr '\0' 'x'; printf '</html>\n'; } > "$URUN/index.html"; }
+manifest_field() { sed -n 's/.*"updated_from"[[:space:]]*:[[:space:]]*\(.*\)$/\1/p' "$URUN/manifest.json" | tr -d ' ,'; }
+
+upage ""
+"$GENERATE" --output "$URUN" --head-sha "$UHEAD" --base-sha "$UBASE" --repo-dir "$UREPO" \
+  --verify-only >/dev/null 2>&1 || true
+assert_in "$URUN/manifest.json" "review-map-manifest@3" "the manifest says which schema carries updated_from"
+assert_eq "$(manifest_field)" "null" "a page with no update segment records null"
+
+upage "&middot; updated from $UPS"
+"$GENERATE" --output "$URUN" --head-sha "$UHEAD" --base-sha "$UBASE" --repo-dir "$UREPO" \
+  --verify-only >/dev/null 2>&1 || true
+assert_eq "$(manifest_field)" "\"$UPS\"" "and a page that names one records exactly that revision"
+
+echo
 echo "run.sh: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]
