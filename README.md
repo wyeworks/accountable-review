@@ -166,7 +166,11 @@ Impact outside the diff         1-3 chains, from changed code into code it gives
 ```
 
 A **checkpoint** is the primitive. Not a category — *ProjectSearcher implementation* names a file —
-but a judgment you could get wrong:
+but a judgment you could get wrong. Most are about what the change now does; **at most one per page
+is about how it was built** — where a class was put, what kind of object it is, which existing
+abstraction it went around — and that one only ever appears when the page can point at the place your
+codebase already answers the same question, so it reads as *why is this one different?* rather than as
+a style guide. It asks; it does not answer.
 
 ```text
 Is nil → cross_facility an intentional semantic default?
@@ -255,6 +259,12 @@ The plugin is designed to help reviewers understand those relationships as a sys
 where the framework's own rules bite: `update_all` at a call site the diff never opened skips the
 validation this PR adds, a uniqueness validation is not a unique index, `--sandbox` rolls back so
 `after_commit` never fires there.
+
+It also reads the app for **what your team already decided**. A value object in `app/models` is
+ordinary; a value object in `app/models` when four of its kind live in `app/services` is a choice
+someone made, and the page will ask whether it was deliberate — with the four siblings cited, because
+without them there is nothing to ask. That question is never a recommendation, never appears more than
+once, and never takes a slot from a judgment about behaviour.
 
 **Elixir/Phoenix is the second stack** — a LiveView app or a JSON API — with its own lens for the same
 job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing without the index

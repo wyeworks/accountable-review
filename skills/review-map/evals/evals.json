@@ -99,6 +99,29 @@
         "Nothing claims the loop is fixed for users who already hold the column; the page says no migration touches existing rows and that the repository cannot say how many are affected",
         "No sentence grades the change, scores its risk, or recommends approving it — including in the checkpoint whose judgment is unresolved"
       ]
+    },
+    {
+      "id": 6,
+      "fixture": "rails-house-style",
+      "prompt": "add-dunning-stages is up for review and I'm new to this codebase — I don't know yet how they like things laid out or what else touches invoice status. Can you map it before I start reading?",
+      "expected_output": "A review map for a seven-file Rails-only diff with plain-text citations. Two behavioural judgments come first and a coding decision comes last. The behavioural pair is one judgment after merging: the new in_dunning status has two unchanged readers that disagree with it in opposite directions — app/jobs/invoice_reminder_job.rb matches the literal string \"overdue\" and stops reminding anyone in dunning without erroring, and app/services/refund_policy.rb has an exhaustive case whose else raises. The second is that InvoicesController#dunning is the only action of four without authorize_invoice!, which is behaviour rather than house style. The coding decision is last: app/models/dunning_stage.rb is a plain value object placed in app/models, where the two other files are records and where app/services already holds four classes of exactly its kind — and that directory listing is the citation without which the question may not be asked. app/services/dunning_scheduler.rb is the same kind of object in the same diff and sits where its siblings sit, so there is nothing to ask about it.",
+      "files": [],
+      "check": "evals/check.rb --page <page> --repo <fixture> --base HEAD~1 --expect 'invoice_reminder_job.rb' --expect 'refund_policy.rb' --expect 'app/services' --forbid 'should have been' --forbid 'N/A'",
+      "section_cases": [],
+      "expectations": [
+        "check.rb passes: coverage gate over seven paths, no severity chips, no verdict language, evidence tiers used, three theme states, and both unchanged status readers named. The --forbid catches one literal phrasing only — whether the page asked rather than answered is expectations 4 and 5",
+        "Both unchanged readers of invoices.status are found, and the page says how each fails: a silent drop from the nightly reminder, a raised ArgumentError on refund. Whether they are one checkpoint or two is not graded — they share a cause and not a decision, and 'should a dunned invoice still be chased' and 'should it be refundable' have different answers — but the page has to attribute both to the one fifth enum value rather than presenting them as unrelated discoveries",
+        "The missing authorize_invoice! on #dunning is a behavioural judgment about who can reach what, and it is ranked above the coding decision. A page that files it as a departure from what the sibling actions do has put a reachability question in the wrong kind",
+        "The coding decision about app/models/dunning_stage.rb is the last checkpoint, and it carries the citation that earns it: app/models holds two records and this one non-record, app/services holds four classes of the same kind. Without those lines on the page it is a preference, however carefully it is worded",
+        "That checkpoint asks whether the placement was deliberate and does not answer. No sentence says the class should move, belongs elsewhere, is unidiomatic, or names the Rails way — and the page does not recommend app/services as the fix, which is the same verdict with the imperative removed",
+        "app/services/dunning_scheduler.rb is never questioned. Citing it as part of the evidence is right and is the best use of it — the same branch filed two plain classes in two directories, which is the sharpest statement of the convention available. What fails is a second question: a checkpoint of its own, or a clause asking whether it too is in the right place. The page has nothing to cite against it, because it is where its four siblings are",
+        "There is exactly one coding-decision checkpoint. A second one — about the enum moving from a bare list to a hash, about the service class naming, about where the migration put the column — is the page becoming a style review, and it will read as thoroughness",
+        "The impact crossing is drawn once as a path in section 04 ending at something a person would see: a customer in dunning who stops receiving reminders. The checkpoint that turns on it points at the figure in a clause rather than drawing the same hops again",
+        "Any runtime probe answers in a fresh checkout — Invoice.statuses, or DunningStage.superclass — and needs no rows; its label carries a third segment saying what the output would settle rather than naming the instrument",
+        "The searches that established the house answer are recorded like any other: the two directory listings are provenance in the collapsed block, and the finding they support is a sentence in the open prose",
+        "Minitest is detected rather than assumed, and no expectation anywhere is written in RSpec's vocabulary",
+        "No sentence grades the change, scores its risk, or recommends approving it — including the coding-decision checkpoint, which is where the grade will try to arrive"
+      ]
     }
   ]
 }
