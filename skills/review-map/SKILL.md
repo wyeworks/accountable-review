@@ -93,7 +93,7 @@ loaded — its instructions are its own, which is the point of putting them in a
 
   **`high` is the default because it changes what the page finds, and it costs time it does not cost
   tokens.** Measured on one 28-file PR: the falsifiers cost **23 seconds of blocked
-  parent, 0.9% of a 2607-second run**, because they run while stage 4 is drafted rather than instead
+  parent, 0.9% of a 2607-second run**, because they run while the next stage is drafted rather than instead
   of it. The same target at `low` missed five findings the falsified run carried, including the two
   the reviewer most needed.
 
@@ -425,7 +425,9 @@ budget are `references/report-format.md` § *What was searched*, which owns them
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the run's backbone: step 6 splits it into flows for
 analysis, *Impact outside the diff* shows the crossings whole, and the checkpoints are the judgments
-it turns on. **Milestone 2 publishes after this step** (step 9).
+it turns on. **Nothing publishes after this step**: the crossings found here reach the page at
+milestone 3, after 7c has had its chance to merge two of them into one judgment and after there is a
+checkpoint for each card to point at (step 9).
 
 ## 6. Cluster into flows, write the analysis notes, spawn the falsifiers
 
@@ -753,7 +755,8 @@ Two rules keep this from becoming ceremony:
   factory in this repo — a command a reviewer can paste. Invented steps are worse than none, because
   they burn the reader's trust in the whole page on the first paste that fails.
 
-**Milestone 3 opens after this step** (step 9), with one pending stub per checkpoint.
+**Milestone 2 opens after this step** (step 9), with one pending stub per checkpoint. Milestone 3
+follows it once 7i's cards have checkpoints to point at.
 
 ## 8. Verify before asserting — at every publish boundary
 
@@ -852,11 +855,18 @@ someone mid-paragraph is worse than one that arrives late.
 | Stage | After step | The page holds |
 |---|---|---|
 | 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending |
-| 2 · Impact | 5 | *Impact outside the diff* — or, when nothing crosses into unchanged code, its stub and its rail entry removed |
-| 3 · Agenda | 7, then per checkpoint | Section 02's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 2 · Agenda | 7, then per checkpoint | Section 02's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 3 · Impact | 7i, after stage 2's opening publish | *Impact outside the diff*, as step 7i settled it |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
-**At `--effort high` the falsifiers were spawned at the end of step 6 and fold in during stage 3** —
+**Section 04 cannot publish before the checkpoints exist, which is why it is third and not second.**
+Every impact card's `p.ip-why` ends in a pointer at the checkpoint that judges it
+(`references/report-format.md` § *Impact paths*), and until stage 2's opening publish has landed the
+stubs there is no `#cp-x` to point at. Publishing it after step 5 meant either a dead fragment or an
+invented one. Step 5 still *finds* the crossings — it just no longer publishes them, and 7c may merge
+two of them into one judgment before the reader ever sees either.
+
+**At `--effort high` the falsifiers were spawned at the end of step 6 and fold in during stage 2** —
 see step 8. They add no milestone: they produce corrections to analysis, not an arrival worth opening
 the tab for, and the reader never learns they ran.
 
@@ -868,7 +878,7 @@ with a unique `id`, which is exactly the anchor a later stage edits. The rail al
 per-checkpoint marker — take it and the pending stub from `references/page-template.html` rather than
 inventing markup.
 
-So stage 3 **opens with a cheap publish**: the heading, its lead sentence, and one stub per checkpoint whose
+So stage 2 **opens with a cheap publish**: the heading, its lead sentence, and one stub per checkpoint whose
 line of substance is **the question**. That arrival is worth having on its own — a reader learns what
 the judgments *are* before any of them is written, which is most of what they came for. Each
 checkpoint then lands in its own republish. Two rules keep this from becoming a republish per
@@ -893,12 +903,11 @@ negotiable against a figure: the count exempts every chain label and locator, ev
 `<pre>`, and everything inside a collapsed block, so a long page is never fixed by dropping a
 drawing. An impact card's `p.ip-why` is prose and does count.
 
-**The page fills in out of document order, and that is fine.** Step 5 produces the impact section;
-step 7 produces the checkpoints. So section 04 lands while section 02 is still stubs, and a reader
-arriving at stage 2 sees a gap above written material — and once stage 3 is under way, a written
-checkpoint sits above a pending sibling. The pending marker is what makes both readable — the risk the
-build state exists to prevent is an unwritten section looking like an empty one, not a section
-arriving early.
+**The page fills in out of document order, and that is fine.** Section 02 arrives one checkpoint at a
+time, so a written checkpoint sits above a pending sibling for most of stage 2, and section 04 is
+still a stub below both of them until stage 3. The pending marker is what makes all of it readable —
+the risk the build state exists to prevent is an unwritten section looking like an empty one, not a
+section arriving out of order.
 
 Saving as each checkpoint completes has a second payoff worth stating: a crash then leaves a useful page
 rather than nothing.
@@ -1141,7 +1150,7 @@ URL: say where the file is, once, and nothing more.
 ## 10. Complete the page and gate it
 
 - **Remove the build banner and every pending marker** — including the per-checkpoint stubs and the
-  rail's checkpoint markers from stage 3. A finished page still carrying "2 parts still pending" is the worst
+  rail's checkpoint markers from stage 2. A finished page still carrying "2 parts still pending" is the worst
   outcome of staged delivery: it undersells work that is actually done, and the next reader cannot
   tell whether you stopped early or forgot the banner. If a section really was left unwritten, say so
   in prose as a stated limit — that is a different sentence from "pending".

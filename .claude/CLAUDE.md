@@ -620,8 +620,16 @@ Editing one of these means checking the others still agree.
   caveat, each checkpoint is already its own nested `<section class="cp" id="cp-x">`, and the rail
   renders a per-checkpoint marker.
 
+  **That makes section 04 the last thing to publish rather than the first, and the ordering is a
+  dependency rather than a preference.** Every impact card's `p.ip-why` ends in a pointer at the
+  checkpoint that judges it, so there is no `#cp-x` to point at until the agenda's stubs have landed.
+  It published after step 5 for two versions, which bought a card that either carried a dead fragment
+  or invented one, and spent the arrival before 7c could merge two crossings into one judgment.
+  `SKILL.md` step 9's milestone table orders it and step 5 says outright that it no longer publishes;
+  `report-format.md` § *Impact paths* owns the pointer that forces it.
+
   **And the checkpoint stub is worth more than the flow stub it replaced**, which is the part to keep.
-  A flow stub said what the flow would cover. A checkpoint stub carries **the question** — so stage 3
+  A flow stub said what the flow would cover. A checkpoint stub carries **the question** — so stage 2
   opens by publishing what the change is asking the reviewer to judge, ten minutes before any
   explanation exists. That is most of what a reader came for, arriving first.
 

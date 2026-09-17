@@ -1323,7 +1323,7 @@ anyway — *how much is still coming*, not *how far through its own plan the run
 
 One line of substance in the stub — which files, what it turns on — turns a placeholder into
 information. "Coming soon" does not. And for a checkpoint the `<h3>` is doing the real work: the
-question is legible before the explanation exists, which is why stage 3 opens with the stubs.
+question is legible before the explanation exists, which is why stage 2 opens with the stubs.
 
 Note that the stub is a whole `<section>` with its own `id`, which makes it a unique anchor a later
 stage can `Edit` in place. That is deliberate and worth keeping: it is what lets a stage write only
@@ -1350,7 +1350,7 @@ is a whole `<section class="cp" id="cp-x">` stub — assembled in `page-template
 pending section, and copied from there rather than rebuilt — and § 02's rail entry keeps a marker
 until every checkpoint under it is written. **A checkpoint stub's line of substance is its
 question**: that is what lets the agenda be read before any of it is written, and it is the reason
-opening stage 3 is worth a publish of its own. A reader who learns what the three judgments are has
+opening stage 2 is worth a publish of its own. A reader who learns what the three judgments are has
 most of what they came for, ten minutes before the explanations arrive.
 
 The second case needs **no markup of its own**: the rail already carries a per-checkpoint marker and
