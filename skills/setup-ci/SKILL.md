@@ -116,8 +116,10 @@ Review Maps will be generated when a pull request first becomes reviewable:
   opened ready for review, marked ready, or reopened  ->  a Review Map
   a push to a ready pull request                      ->  nothing; the map is not regenerated
 
-Skipped: drafts, pull requests from forks, dependabot,
-         and changes under 3 files and under 51 added and 51 deleted lines.
+Skipped: drafts, pull requests from forks, dependabot, and trivial changes
+         — 2 or fewer application files and 20 or fewer application lines, both.
+         Tests, docs, tooling and lockfiles are not counted as application code.
+         Both thresholds are yours, in .accountable-review.yml.
 
 When one is generated, the workflow comments the link on the pull request —
 one comment, updated in place, naming the revision the map describes.
@@ -246,8 +248,8 @@ Review Maps will be generated when:
   - a pull request is reopened
 
 Not generated for:
-  drafts, forks, dependabot, and changes under 3 files
-  and under 51 added and 51 deleted lines
+  drafts, forks, dependabot, and trivial changes — 2 or fewer
+  application files and 20 or fewer application lines, both
 
 Delivery:
   GitHub Actions artifact, retained 30 days

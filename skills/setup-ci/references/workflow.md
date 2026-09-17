@@ -75,9 +75,6 @@ if: >-
   github.event.pull_request.draft == false
   && github.event.pull_request.head.repo.full_name == github.repository
   && github.event.pull_request.user.login != 'dependabot[bot]'
-  && (github.event.pull_request.changed_files > 2
-  || github.event.pull_request.additions > 50
-  || github.event.pull_request.deletions > 50)
 ```
 
 **Drafts.** `opened` fires for a pull request opened as a draft, so without this clause every draft
@@ -115,14 +112,16 @@ why the template carries the warning inline.
 
 **There is no arithmetic in a GitHub Actions expression.** The grammar is `()`, `[]`, `.`, `!`, the
 comparisons, `==`, `!=`, `&&` and `||`. `(additions + deletions) > 50` is an invalid-file error, not
-a sum. Nothing in the guard needs one today — the counts moved to a step, where shell can add — but
-the rule is what makes putting them back here impossible rather than merely wrong, and
-`tests/run.sh` still asserts it against whatever the expression holds.
+a sum. That expression is no longer in the guard — the counts moved to a step, where shell can add —
+but the rule is what makes putting them back here impossible rather than merely wrong, and
+`tests/run.sh` still asserts it against whatever the expression holds. `tests/self-test.sh` injects
+the arithmetic to prove the assertion fires.
 
 **In a folded scalar (`>-`), a more-indented line is not folded.** Its newline survives into the
 expression string and invalidates the file. Every line of the expression sits at exactly six spaces,
-and the operators lead their lines partly to remove the thing anyone would be tempted to align. Do
-not align the parentheses.
+and the operators lead their lines partly to remove the thing anyone would be tempted to align. The
+guard has no parentheses to align today; the indentation rule is what keeps that true of whatever
+clause is added next.
 
 ## The line that records the decisions
 
