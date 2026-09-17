@@ -8,7 +8,7 @@ There is no application code here. The repository is the `accountable-review` Cl
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
 a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
-what changed, the three to five judgments the reviewer has to make with the lines that settle each
+what changed, the judgments the reviewer has to make with the lines that settle each
 one, the order to read the code in, and what the change reaches in code it did not touch. Two stacks
 are supported: a Rails API with a Next.js client, which came first, and Elixir/Phoenix — a LiveView
 app or a JSON API. Step 2 detects which, and the run reads that stack's lens file and its doc
@@ -28,8 +28,9 @@ page is easy to produce by looking less hard.
 
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
-command. It takes a target and an **effort** — `--effort high` (the default, sending an adversarial
-pass at the run's own analysis before any of it is written) or `--effort low`, which opts out —
+command. It takes a target, an **effort** — `--effort high` (the default, sending an adversarial
+pass at the run's own analysis before any of it is written) or `--effort low`, which opts out — and
+`--mentor`, off by default, which is the one flag that puts anything on the page. All of it is
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
 frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. **There is no
 level flag**: `--brief` and `--light` are accepted and change nothing, `--full` and `--review` stop
@@ -100,8 +101,9 @@ title, a first checkpoint described as the important one. That is the easiest wa
 iteration, and it will arrive as helpfulness.
 
 **The page has a word budget and nothing checks it.** `report-format.md` § *The agenda budget* is
-prose: 700–1,500 visible words on a small or medium PR, 80–160 for *What changed*, 50–140 a
-checkpoint. `brief-budget.rb` used to enforce its predecessor and is deleted with the level it
+prose: 80–160 for *What changed*, 50–140 a checkpoint, and a page total that is those parts summed —
+about 700–1,500 visible words at four checkpoints on a small or medium PR, derived rather than flat
+so that a wider agenda cannot be forced under its own per-checkpoint floor. `brief-budget.rb` used to enforce its predecessor and is deleted with the level it
 belonged to, so the numbers are read by a person or by nobody. That is the honest state — the numbers
 are a first calibration derived from component caps rather than measured on published pages — but it
 means a page drifting long drifts silently. The one number that must never be graded is the
@@ -154,7 +156,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing, step 7 being the synthesis that turns analysis into an agenda — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus § *Coding decisions*, the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
@@ -174,8 +176,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
 | `skills/setup-ci/references/delivery.md` | The delivery contract, the providers that exist and the ones only designed for, and why `command` is opt-in in CI |
-| `skills/setup-ci/templates/workflow.yml` | The workflow itself. Four substitutions, and nothing else is configurable by design |
-| `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically, `install-workflow.sh` writes idempotently and refuses to clobber, `read-config.sh` is the only thing that knows the config file's shape |
+| `skills/setup-ci/templates/workflow.yml` | The workflow itself. Version substitutions, the four when-decisions behind `SETUP:IF:` blocks, and nothing else configurable by design |
+| `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically and resolves the `SETUP:` blocks, `install-workflow.sh` writes idempotently, refuses to clobber, and recovers the when-decisions from the file it is about to replace, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
 | `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page — and refuses `mode: full` rather than remapping it |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
@@ -201,7 +203,8 @@ Editing one of these means checking the others still agree.
   in this version; `--brief` and `--light` are accepted and change nothing. The refusal is settled in
   `SKILL.md` step 1 beside the target and the link rung, its wording is in § *Two levels are not
   implemented in this version*, and `report-format.md` § *One page shape* states the consequence for
-  the format.
+  the format. **`--mentor` adds a component and does not choose a shape** — the bullet below it owns
+  that distinction and the subtraction rule that holds it.
 
   **Refusing `--full` rather than mapping it is the load-bearing half.** It named a seven-section
   page. Handing back a five-section agenda under that name is a flag that quietly changed meaning,
@@ -219,8 +222,9 @@ Editing one of these means checking the others still agree.
   never a second document reached by a flag.
 
   **The agenda budget survived the level that carried it, and lost its check.** `report-format.md`
-  § *The agenda budget* is prose: 700–1,500 visible words on a small or medium PR, per-part caps, a
-  floor stated as a rule rather than a number. `brief-budget.rb` enforced its predecessor and is
+  § *The agenda budget* is prose: per-part caps and a page total that is those parts summed, which
+  at four checkpoints on a small or medium PR comes to 700–1,500 visible words; plus a floor stated
+  as a rule rather than a number. `brief-budget.rb` enforced its predecessor and is
   deleted, so nothing counts words now. Two of its lessons are kept in that section deliberately.
   Length is guidance rather than a failure, because a hard failure on length teaches a run to drop a
   claim to get under a number, which is worse than the long page. And **the checkpoint count is never
@@ -233,8 +237,53 @@ Editing one of these means checking the others still agree.
   of which is deleted with the level. What replaced the filter is nothing, which is the right amount
   of machinery for a page with one shape: `tests/run.sh` counts the entries and `self-test.sh`
   duplicates one to prove the count fires.
+- **`--mentor` is the only flag that puts anything on the page, and subtraction is what keeps it from
+  being a level.** It admits one component — the primer callout, `aside.primer`, the third framework
+  anchor — inside the checkpoints that earn one, for a reviewer new to the *stack* rather than to the
+  change. **Delete every primer from a mentor page and what remains is the page the same run would
+  have written without the flag.** Nothing else moves: same sections, same checkpoints in the same
+  ranked order, same reading path, same panel, same foot, same budget on every other part.
+
+  **That subtraction is the whole distance from the `--full` this version refuses**, and it is the
+  sentence to keep. `--full` named a *different document* reached by a flag, with nothing on the page
+  to tell a reader which one they were holding; a mentor page differs by components a reader can see.
+  Which is also why it takes **no badge** — the effect announces itself, and a count of primers would
+  be the page grading its own thoroughness. `page-template.html` refuses it beside the severity chip,
+  the verification badge and the stack badge, because that fourth refusal has the best excuse of the
+  four and would otherwise come back alone.
+
+  **A primer holds its checkpoint's one doc link rather than adding a second**, so the anchor budget
+  is relocated and never raised: mentor buys explanation, never citations. It is also **gated** on
+  that link, which is what makes a closed catalogue mean no primers for that stack — Phoenix gets the
+  ordinary page today, and one verification run lifts it.
+
+  Three things about it look like generosity and are not. **A run that earns no primer writes none**,
+  because manufacturing a lesson to honour a flag is how this becomes a framework manual with a diff
+  attached. **A stack name is checked, never obeyed** — `--mentor rails` in a `mix.exs` repository
+  stops the run, since an override would reintroduce a Rails lens over something that is not Rails.
+  And the one exception to *never invent output* lives here, with its whole safety in the receiver:
+  `pre.demo` may show a result line only because it quotes the manual on a class this repository does
+  not have, so a demo goes nowhere but inside a primer and a probe never inside one.
+
+  Ten files and a fixture set have to agree. `report-format.md` § *Mentor mode* owns every rule
+  **alone**, with § *One page shape*, § *The review checkpoint*'s slot, § *Framework anchors*' third
+  row and § *The agenda budget*'s separate count pointing at it; `SKILL.md` parses it at step 1,
+  checks the stack name and the catalogue at step 2, earns one at step 7g, writes it at step 9 and
+  carries the demo exception in its hard rules; `page-template.html` holds the CSS in the head range
+  and the callout assembled inside checkpoint A; `evals/checks/rails-anchors.rb` § 8 grades it on the
+  **comment-stripped** copy, behind eight `golden/anchors-primer-*` fixtures and `anchors-demo-loose`;
+  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it six
+  ways; and the CI half is `ci/generate-review-map.sh`, `read-config.sh`, `references/config.md` and
+  `setup-ci/tests/`, where **off is the absence of the flag** rather than `--mentor off`, because the
+  skill parses no such value.
+
+  **It has no eval axis, and that is the honest gap.** An axis is a column on every result line, and
+  adding one for a feature with no case behind it makes old lines incomparable in exchange for
+  nothing measured. The mechanical half is covered; whether a primer was worth spending a callout on
+  is judged, which is the shape `evals/deferred/` holds.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
-  attention*, each **one judgment** the reviewer has to make: an `<h3>` question, two to four
+  attention* **per independent semantic delta § 01 names**, seven on the page at the outside, each
+  **one judgment** the reviewer has to make: an `<h3>` question, two to four
   sentences, an optional `figure.chain`, a `ul.lookat` of one to four entries — each a short title,
   a clause and its deep-linked citation, in that order — and an optional `p.open` labelled *Open
   question*. `report-format.md` § *The review
@@ -258,6 +307,17 @@ Editing one of these means checking the others still agree.
   makes the agenda short honestly: a constructor change, the nil default it introduces and the two
   consumers that do not handle nil are one judgment. A run that writes three has said the same thing
   three times, and will have spent its budget doing it.
+
+  **The count scales on the delta, never on the diff.** Three to five per independent semantic delta
+  § 01 names, seven on the page at the outside — so eighty files of one rename is still three to
+  five, and only a PR shipping genuinely independent changes earns a sixth. **What replaced a flat
+  ceiling of five is the observation that the ceiling contradicted a hard rule**: a sixth judgment
+  had to go to a clause or to the evidence foot, and the foot is where promotion-by-omission forbids
+  a judgment to live. Five files agree — `report-format.md` § *The review checkpoint* owns it alone
+  and § *Section 3* owns the routing that bounds it, `SKILL.md` step 7e and § *How big should the
+  page be?* carry it into the procedure, and `start-here.rb` warns on a checkpoint no stop points at.
+  Nothing grades the count; `rails-anchors.rb` pins its per-checkpoint denominators at five so a
+  wider agenda cannot quietly loosen the anchor budget.
 
   **Ordering is not grading, and the distance between them is one word.** The checkpoints are ranked by
   what a reviewer would most regret misunderstanding. A number beside a question, a *high* in a title,
@@ -416,12 +476,13 @@ Editing one of these means checking the others still agree.
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
 - **Framework anchors are provenance, not evidence, and there is still no sixth tier.** A doc link
-  explains why a framework consequence follows; a console probe asks the reviewer's own application.
-  The claim underneath keeps resting on a repo `file:line` at the tier it already carried, which is
-  what keeps the five-tier invariant untouched. It is also the answer already written down for
-  `--review`: where a claim came from is provenance, and provenance is not evidence.
+  explains why a framework consequence follows; a console probe asks the reviewer's own application;
+  a primer states the rule outright, at `--mentor` only. The claim underneath keeps resting on a repo
+  `file:line` at the tier it already carried, which is what keeps the five-tier invariant untouched
+  in all three cases. It is also the answer already written down for `--review`: where a claim came
+  from is provenance, and provenance is not evidence.
 
-  Two rules carry them, and both are the kind that look like diligence when broken. **A doc link may
+  Two rules carry the first two, and both are the kind that look like diligence when broken. **A doc link may
   only be a row of the stack's catalogue, pinned to the version this app runs**, because the run
   cannot open a URL — no fetch step, and egress to those hosts is commonly blocked — so a constructed
   API path is a 404 the reader finds on the page's behalf, and an unpinned one documents a Rails this
@@ -429,6 +490,10 @@ Editing one of these means checking the others still agree.
   output: a fabricated `=> …` is the most concrete-looking thing on the page and the one part of it
   that is fiction. See § *Pinning, and the two things it does not fix* for why the pin is about
   checkability rather than precision.
+
+  The third anchor is `--mentor`'s and § *Mentor mode* owns it; the only thing it changes here is
+  that a primer **holds** its checkpoint's one doc link rather than adding a second, so the budget
+  below is relocated and never raised.
 
   `report-format.md` § *Framework anchors* owns the rest **alone** — the routing, the budget, the
   earning test, answerability, and the label's three segments; `SKILL.md` steps 7g and 9 point at it;
@@ -445,7 +510,7 @@ Editing one of these means checking the others still agree.
 - **The synthesis phase is where the agenda comes from, and it is a step of its own for a reason.**
   `SKILL.md` step 7 takes the analysis notes and produces the page's argument: name the semantic
   delta, identify the human judgments, merge the observations that share one, rank by consequence if
-  misunderstood, select three to five, choose each one's representation, select its evidence, build
+  misunderstood, select the agenda, choose each one's representation, select its evidence, build
   the reading path, pick the impact chains, dedupe across the five places a fact can land.
 
   **A run that goes from notes straight to prose writes one section per flow**, which is the page this
@@ -784,7 +849,9 @@ Editing one of these means checking the others still agree.
   the OS in dark mode. They are therefore counted **by name** — `--syn-key` in `excerpts.rb`,
   `--syn-key` and `--ex-add` in `tests/run.sh` — because the three blocks *existing* is not the same
   as a colour being in all three. `--rails` was counted the same way in `page-invariants.rb` § 6 and
-  is gone with the primer that was its only user; the counting idiom is what outlived it.
+  is gone; the counting idiom is what outlived it. The primer that was its only user has since come
+  back and did **not** bring it — the callout is plum, off the provenance ramp, because the colour
+  existed for a logotype this page no longer draws.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
   one pair that inverts — `.ip-out`, the filled node that ends a chain — is written against tokens
@@ -881,20 +948,59 @@ Same rule as above: editing one of these means checking the others still agree.
   and a page that describes an earlier revision while looking current is the one failure a reader
   cannot detect from the inside — which is exactly what regenerating per push creates, several pages
   that differ only by revision.
-- **The workflow is a design, not a settings file.** The triggers, the draft guard, the fork guard,
-  the concurrency group and `contents: read` have no knobs, because a knob on each is a way to end up
-  generating Review Maps for draft pull requests, which is the thing the setup exists to prevent.
-  `render-workflow.sh` substitutes four values — which plugin, which ref, which Claude Code, which
-  Node — and everything a team legitimately configures is read from `.accountable-review.yml` at
-  **run** time by the scripts the workflow calls, so changing it never means regenerating the file.
+- **The workflow is a design with exactly one settings axis, and the axis is *when*.** The draft
+  guard, the fork guard, the concurrency group and `contents: read` still have no knobs, because a
+  knob on each is a way to end up generating Review Maps for draft pull requests or handing this job
+  write access — which is the thing the setup exists to prevent. Everything a team configures **about
+  the map** is still read from `.accountable-review.yml` at **run** time, so changing it never means
+  regenerating the file; that split is what makes "the workflow respects `retention_days: 14`" true
+  without a second setup run, and why `tests/run.sh` checks retention through `deliver.sh` rather
+  than by grepping YAML.
 
-  That split is what makes "the workflow respects `retention_days: 14`" true without a second setup
-  run, and it is why `tests/run.sh` checks retention through `deliver.sh` rather than by grepping
-  YAML.
+  What is rendered from flags is the decisions about **when a Review Map is generated** — the push
+  trigger, the bot authors, the size gate and its two numbers — plus **whether the link is commented
+  on the pull request**. None can be run-time settings: the first four *are* the triggers and the
+  guard, and the fifth decides what permission the job holds. The test any future knob has to pass is
+  that it decides whether a run happens or what the job may do. `SKILL.md` step 3 confirms them in
+  one block before writing, and § *What it configures* splits its table along that line.
+
+  **The defaults are the answers a real team reached by hand**, in two pull requests against a
+  generated workflow (fayron#633 and #634): `opened` in, `synchronize` out so a pull request gets one
+  map, dependabot skipped, and a change under 3 files and 51 lines skipped. A team editing the
+  generated file to reach the same place, and then living with a permanent drift report, is the
+  evidence that these were defaults rather than preferences.
+
+  **The knobs are only safe because of the read-back**, and that is the half to keep. The rendered
+  file carries a `# Decisions:` line holding the canonical, complete flag form of all of them;
+  `install-workflow.sh` recovers it and passes it ahead of the current call's flags. Without it, the
+  ordinary reason to re-run setup — moving the version pin — reports every confirmed decision as
+  drift and reverts them all under `--update`, which is setup reverting a team's decision while
+  claiming to upgrade them. The line is a pure function of the flags, which is what keeps it clear of
+  the byte-comparison rule in the bullet below.
+
+  Six files agree: `templates/workflow.yml` holds the `SETUP:IF:`/`SETUP:END:` blocks and the line,
+  `render-workflow.sh` resolves them, `install-workflow.sh` recovers them, `SKILL.md` step 3 confirms
+  them, `references/workflow.md` §§ *Triggers*, *The guard* and *The line that records the decisions*
+  own the rules **alone**, and `tests/run.sh` checks that each knob changes bytes — a knob that
+  renders the same file either way makes the confirmation theatre.
+
+  **Two ways to write the guard expression produce a workflow GitHub rejects outright**, and neither
+  is visible to a YAML parse, which is how both shipped. Actions expressions have **no arithmetic**,
+  so `(additions + deletions) > 50` is an invalid-file error rather than a sum — the two counts are
+  compared separately against the same number. And in a folded scalar a **more-indented line is not
+  folded**, so its newline survives into the expression; every line sits at six spaces and the
+  operators lead their lines to remove the thing anyone would align. `tests/run.sh` asserts both
+  structurally, because no offline tool validates the expression grammar and the only reliable signal
+  is GitHub's own validation on push.
 - **Idempotency is decided by comparing bytes, so nothing rendered may vary.** No timestamp, no run
   id, no randomness, no "generated on" comment — `install-workflow.sh` tells "already set up" from
   "edited by hand" by `cmp`, and a date would make every second run report drift. `tests/run.sh`
   asserts the rendered file contains today's date nowhere.
+
+  The `# Decisions:` line is not an exception to this and the distinction is the whole reason it
+  is allowed: it is a pure function of the flags, so two renders with the same flags produce the same
+  bytes. What is forbidden is a value that varies **between two renders of the same request**, not a
+  value that records the request.
 
   **That assertion has to run against the whole file, comments included.** It did not, briefly: the
   negative assertions run against a comment-stripped copy so the workflow may explain in a comment why
@@ -909,6 +1015,43 @@ Same rule as above: editing one of these means checking the others still agree.
   "so the map could be better" would be that decision made by the back door, with its own safety
   design skipped. The template starts no service, runs no migration, and executes no script from the
   pull request; `tests/run.sh` asserts all three against the comment-stripped file.
+- **The workflow posts one comment, and that is the entire write surface.** A link to the Review Map
+  and the revision it describes, upserted against `<!-- accountable-review -->` so a reopen or a
+  ready/draft toggle updates it rather than adding a second. It is what `pull-requests: write` is
+  for, it is the only thing that scope is used for, and `--no-pr-comment` removes the step and the
+  permission **together** — a repository carrying a write scope for a step that is not there is a
+  standing grant nobody can account for.
+
+  **This reversed the rule that the workflow posts nothing**, and the reason is the only thing that
+  justifies the reversal: the run summary already said where the map went, and nobody opens a
+  workflow run to find out whether there is something worth opening. Maps were being generated,
+  uploaded, and never read. A boundary that makes the product undiscoverable is not protecting the
+  product.
+
+  **The line that did not move is verdict.** No check run, no status, no review, no label, no
+  approval, and nothing in the comment that grades the change. The next request is the check — "so
+  the map shows up in the status list" — and a passing check is a verdict whatever it is named, which
+  is the product principle undone by the same door this comment came through. The comment is the
+  visibility; that was the whole reason to spend a scope.
+
+  **Actions has no per-step permissions, so containment is by injection rather than by scope.**
+  `GITHUB_TOKEN` reaches only the step that names it in `env:`, and the step that runs a model over a
+  contributor's branch does not. `tests/run.sh` asserts that exactly one step in the whole file names
+  the token, because that is the fact making the scope acceptable and it is one careless `env:` away
+  from gone.
+
+  **And the comment reads the DeliveryResult rather than reaching past it** — a browsable provider's
+  `stable_url` is linked as a page, the artifact provider's download URL as a zip. A comment step
+  that knew about artifacts directly would be the second thing that knows where the map goes, which
+  is the seam below being quietly unpicked.
+
+  Six files agree: `templates/workflow.yml` holds the step and the permission behind the same
+  `SETUP:IF:comment` blocks, `render-workflow.sh` renders both or neither, `SKILL.md` step 3 names
+  the write scope out loud and its hard rules bound what may be posted, `references/workflow.md`
+  § *The comment* owns the rules **alone**, `references/delivery.md` owns what it reads, and
+  `tests/run.sh` executes the step against a stubbed `gh` on both the create and the upsert path —
+  the one piece of shell in this repository that writes to someone else's repository, so it is run
+  rather than read.
 - **The product principle reaches the artifact, not just the page.** `manifest.json` is provenance —
   which revision, which plugin version, whether the coverage gate passed — and carries no severity, no
   score and no approval, for the same reason the page carries none. The job summary says what the
@@ -1260,10 +1403,16 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   never executes what it proposes: the skill does not boot the application under review, which is why
   no probe output ever appears. Changing that is a new decision with its own safety design, not an
   extension of this one.
-- It never posts to GitHub or anywhere outside the artifact. **This is unchanged by running in CI**,
-  which is the obvious next thing to want: no pull request comment, no check run, no status with a
-  verdict in it. The workflow run is where the artifact is discoverable, and `setup-ci`'s hard rules
-  say the same thing from the other side.
+- **`review-map` never posts to GitHub or anywhere outside the artifact**, and that has not changed.
+  The skill writes a page; if a link needs to reach a pull request, the thing that posts it is the
+  generated workflow's own last step, after generation has finished and in a different process.
+  Threading it into the skill would put a write token in the process that reads a contributor's
+  branch, and would make the delivery seam a fiction.
+
+  **What did change is the CI side, and it changed deliberately.** The generated workflow posts one
+  comment: a link and the revision it describes, upserted against a hidden marker. No check run, no
+  status, no review, no label, and nothing in it that grades the change. `setup-ci`'s hard rules and
+  `references/workflow.md` § *The comment* own the boundary; see also the invariant below.
 - It never writes the page into the repository under review — a work directory under `$TMPDIR` only,
   **derived** in step 1 from the repo and the target rather than chosen per run, or the directory
   `--output` names, which `ci/generate-review-map.sh` refuses to let sit inside the checkout.

@@ -3,6 +3,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -11,6 +12,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
@@ -19,6 +21,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -27,6 +30,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
@@ -35,6 +39,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -43,6 +48,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
@@ -51,738 +57,987 @@ exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-demo-loose.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-demo-loose.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-fabricated-output.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-fabricated-output.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-hexdocs-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-hexdocs-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-hexdocs-unpinned.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-hexdocs-unpinned.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-hexdocs-wrong-package.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-hexdocs-wrong-package.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-invented-attribute.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-invented-attribute.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-invented-scope.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-invented-scope.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-link-alone.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-link-alone.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-link-in-excerpt.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-link-in-excerpt.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-mixed-series.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-mixed-series.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-doubled.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-doubled.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-marked.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-marked.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-orphan.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-orphan.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-over-budget.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-over-budget.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-probe-nested.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-probe-nested.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-uncited.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-uncited.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
+## --fragment anchors-primer-ungated.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page anchors-primer-ungated.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-probe-label-thin.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-probe-label-thin.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-probe-legit-forms.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-probe-legit-forms.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-probe-sandbox-lie.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-probe-sandbox-lie.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-probe-unlabelled.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-probe-unlabelled.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-runner-mutates.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-runner-mutates.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-uncatalogued-url.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-uncatalogued-url.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment anchors-unpinned-link.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page anchors-unpinned-link.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-at-head.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-at-head.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-diff-lang.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-diff-lang.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-duplicate.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-duplicate.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-open.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-open.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-typed-highlight.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-typed-highlight.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-typed-tag.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-typed-tag.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment excerpt-unchanged-changed-file.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page excerpt-unchanged-changed-file.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-card-no-lanes.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-card-no-lanes.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-entities-vocab-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-entities-vocab-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-four-paths.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 4 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-four-paths.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 4 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-loc-not-last.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-loc-not-last.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-loc-on-outcome.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-loc-on-outcome.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-missing-loc.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-missing-loc.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-no-affected.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-no-affected.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-no-outcome.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-no-outcome.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-no-why.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-no-why.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-prose-nodes.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-prose-nodes.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-shared-card.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-shared-card.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-two-locators.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-two-locators.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-unlabelled-edge.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-unlabelled-edge.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-why-citation.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-why-citation.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment impact-why-variant-class.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page impact-why-variant-class.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-assurance.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-assurance.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 PASS  the sampling caveat is on the page
 ## --fragment invariants-draft-narration.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-draft-narration.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-loose-data-path.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-loose-data-path.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-no-tier.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-no-tier.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-risk-score-leading.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-risk-score-leading.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-risk-score-trailing.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-risk-score-trailing.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-risk-score.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-risk-score.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-severity-chip.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-severity-chip.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-tier-modifier-only.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-tier-modifier-only.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment invariants-verdict.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page invariants-verdict.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment links-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page links-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment links-collapsed-anchor.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page links-collapsed-anchor.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment links-collapsed-no-excerpt.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page links-collapsed-no-excerpt.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment links-range-truncated.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page links-range-truncated.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment links-unknown-anchor.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page links-unknown-anchor.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment reach-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page reach-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment searches-bre-dialect.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page searches-bre-dialect.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment searches-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page searches-clean.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment searches-git-grep.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page searches-git-grep.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment searches-unreachable.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page searches-unreachable.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 WARN  no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set
 ## --fragment start-here-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -791,6 +1046,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
@@ -799,6 +1055,7 @@ exit=1
 FAIL  start here has 3 entr(ies) but 0 why-clause(s) — a path list in an order is not a reading order
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -807,6 +1064,25 @@ exit=1
 FAIL  start here has 3 entr(ies) but 0 why-clause(s) — a path list in an order is not a reading order
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+PASS  the sampling caveat is on the page
+## --fragment start-here-orphan-checkpoint.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --page start-here-orphan-checkpoint.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
@@ -815,6 +1091,7 @@ exit=1
 PASS  start here: 4 entr(ies), each with a why
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 PASS  entries link into the checkpoints that explain them (4)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (4)
 PASS  4 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -823,6 +1100,7 @@ exit=1
 PASS  start here: 4 entr(ies), each with a why
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 PASS  entries link into the checkpoints that explain them (4)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (4)
 PASS  4 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
@@ -831,7 +1109,8 @@ exit=0
 PASS  start here: 2 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (2)
-PASS  citations present alongside the entries (2)
+SKIP  the reading path's checkpoint links are unsubstituted placeholders — this is the template, not a page
+PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
 ## --page page-template.html
@@ -839,7 +1118,8 @@ exit=0
 PASS  start here: 2 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (2)
-PASS  citations present alongside the entries (2)
+SKIP  the reading path's checkpoint links are unsubstituted placeholders — this is the template, not a page
+PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
 PASS  the sampling caveat is on the page
 ## --fragment start-here-clean.html
@@ -847,6 +1127,7 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -855,6 +1136,7 @@ exit=1
 FAIL  start here has 3 entr(ies) but 0 why-clause(s) — a path list in an order is not a reading order
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -863,14 +1145,16 @@ exit=1
 PASS  start here: 4 entr(ies), each with a why
 FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 PASS  entries link into the checkpoints that explain them (4)
+SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
 PASS  citations present alongside the entries (4)
 PASS  4 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
-## --fragment agenda-clean.html
+## --fragment start-here-orphan-checkpoint.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
@@ -879,6 +1163,25 @@ exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list
 PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --fragment agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it
+## --fragment agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 SKIP  the sampling caveat lives under section 02; a section 03 fragment cannot carry it

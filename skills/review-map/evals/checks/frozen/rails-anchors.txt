@@ -1,6 +1,7 @@
 ## --fragment agenda-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -9,6 +10,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page agenda-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -17,6 +19,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment agenda-probe-unlabelled.html
 exit=1
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -25,6 +28,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page agenda-probe-unlabelled.html
 exit=1
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -33,7 +37,8 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment agenda-probes-over-budget.html
 exit=0
 SKIP  doc links: none on this input
-WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+WARN  3 probe(s) against a budget of 2 — at most one per checkpoint capped at five, and a page over that ratio has stopped selecting
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -42,7 +47,8 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page agenda-probes-over-budget.html
 exit=0
 SKIP  doc links: none on this input
-WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+WARN  3 probe(s) against a budget of 2 — at most one per checkpoint capped at five, and a page over that ratio has stopped selecting
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -58,6 +64,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -73,11 +80,22 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-demo-loose.html
+exit=1
+SKIP  doc links: none on this input
+FAIL  1 pre.demo on a page carrying no primer callout — a demo may show a result line only because its receiver is a class this repository does not have, and outside a primer nothing constrains the receiver
+SKIP  runtime probes: none on this input
+## --page anchors-demo-loose.html
+exit=1
+SKIP  doc links: none on this input
+FAIL  1 pre.demo on a page carrying no primer callout — a demo may show a result line only because its receiver is a class this repository does not have, and outside a primer nothing constrains the receiver
+SKIP  runtime probes: none on this input
 ## --fragment anchors-fabricated-output.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
@@ -88,6 +106,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
@@ -103,6 +122,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
@@ -117,6 +137,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page anchors-hexdocs-clean.html
 exit=0
@@ -127,6 +148,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-unpinned.html
 exit=1
@@ -137,6 +159,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page anchors-hexdocs-unpinned.html
 exit=1
@@ -147,6 +170,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-wrong-package.html
 exit=1
@@ -157,6 +181,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page anchors-hexdocs-wrong-package.html
 exit=1
@@ -167,6 +192,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment anchors-invented-attribute.html
 exit=0
@@ -178,6 +204,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -193,6 +220,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -208,6 +236,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -223,6 +252,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -238,6 +268,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -253,6 +284,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -268,6 +300,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -283,6 +316,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -298,6 +332,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -313,11 +348,310 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --page anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-doubled.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  2 primer callout(s), each inside the checkpoint it explains
+FAIL  1 checkpoint(s) carry more than one primer: cp-a×2 — one judgment, one lesson
+PASS  2 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --page anchors-primer-doubled.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  2 primer callout(s), each inside the checkpoint it explains
+FAIL  1 checkpoint(s) carry more than one primer: cp-a×2 — one judgment, one lesson
+PASS  2 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-marked.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+SKIP  runtime probes: none on this input
+## --page anchors-primer-marked.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-orphan.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+FAIL  1 primer callout(s) outside any checkpoint — a primer with no judgment attached to it is a framework lesson, not an anchor
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --page anchors-primer-orphan.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+FAIL  1 primer callout(s) outside any checkpoint — a primer with no judgment attached to it is a framework lesson, not an anchor
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-over-budget.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  4 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+FAIL  4 primer callouts — the budget is at most 3 a page, and a page past it is teaching the framework rather than explaining this change
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --page anchors-primer-over-budget.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  4 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+FAIL  4 primer callouts — the budget is at most 3 a page, and a page past it is teaching the framework rather than explaining this change
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-probe-nested.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page anchors-primer-probe-nested.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-primer-uncited.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+FAIL  1 primer(s) carry no file:line of their own — framework prose with no stake in this repository is attached to its judgment by nothing but adjacency
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --page anchors-primer-uncited.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+FAIL  1 primer(s) carry no file:line of their own — framework prose with no stake in this repository is attached to its judgment by nothing but adjacency
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-ungated.html
+exit=1
+SKIP  doc links: none on this input
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+FAIL  1 primer(s) do not carry exactly one documentation link — a primer is what a link escalates into, and two paragraphs of framework prose with nothing to check them against is the defect the gate exists for
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --page anchors-primer-ungated.html
+exit=1
+SKIP  doc links: none on this input
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+FAIL  1 primer(s) do not carry exactly one documentation link — a primer is what a link escalates into, and two paragraphs of framework prose with nothing to check them against is the defect the gate exists for
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
 ## --fragment anchors-probe-label-thin.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
@@ -328,6 +662,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 WARN  1 probe label(s) name the instrument and stop, with no segment saying what the output would settle: rails runner · read-only
 PASS  1 probe(s), none showing output the run did not observe
@@ -344,6 +679,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 WARN  1 probe label(s) name the instrument and stop, with no segment saying what the output would settle: rails runner · read-only
 PASS  1 probe(s), none showing output the run did not observe
@@ -353,6 +689,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-probe-legit-forms.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -361,6 +698,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -376,6 +714,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 FAIL  a probe label names a sandbox its command never opens: rails console --sandbox · rolled back · which validators are in force on archived_at
 PASS  1 probe(s), none showing output the run did not observe
@@ -392,6 +731,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 FAIL  a probe label names a sandbox its command never opens: rails console --sandbox · rolled back · which validators are in force on archived_at
 PASS  1 probe(s), none showing output the run did not observe
@@ -408,6 +748,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -423,6 +764,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -438,6 +780,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -453,6 +796,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -468,6 +812,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -483,6 +828,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -497,6 +843,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -511,6 +858,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -519,388 +867,508 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-at-head.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-diff-lang.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-diff-lang.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-duplicate.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-duplicate.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-open.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-open.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-typed-highlight.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-typed-highlight.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-typed-tag.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-typed-tag.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment excerpt-unchanged-changed-file.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page excerpt-unchanged-changed-file.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-card-no-lanes.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-card-no-lanes.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-entities-vocab-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-entities-vocab-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-four-paths.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-four-paths.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-loc-not-last.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-loc-not-last.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-loc-on-outcome.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-loc-on-outcome.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-missing-loc.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-missing-loc.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-no-affected.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-no-affected.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-no-outcome.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-no-outcome.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-no-why.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-no-why.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-prose-nodes.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-prose-nodes.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-shared-card.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-shared-card.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-two-locators.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-two-locators.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-unlabelled-edge.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-unlabelled-edge.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-why-citation.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-why-citation.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment impact-why-variant-class.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page impact-why-variant-class.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-assurance.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-draft-narration.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-draft-narration.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-loose-data-path.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-loose-data-path.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-no-tier.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-no-tier.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-risk-score-leading.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-risk-score-leading.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-risk-score-trailing.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-risk-score-trailing.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-risk-score.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-risk-score.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-severity-chip.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-severity-chip.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-tier-modifier-only.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment invariants-verdict.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-verdict.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment links-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page links-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment links-collapsed-anchor.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page links-collapsed-anchor.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment links-collapsed-no-excerpt.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page links-collapsed-no-excerpt.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment links-range-truncated.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page links-range-truncated.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment links-unknown-anchor.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page links-unknown-anchor.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment reach-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page reach-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment searches-bre-dialect.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page searches-bre-dialect.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment searches-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page searches-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment searches-git-grep.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page searches-git-grep.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment searches-unreachable.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page searches-unreachable.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment start-here-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page start-here-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment start-here-no-why.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page start-here-no-why.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment start-here-orphan-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page start-here-orphan-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment start-here-two-lists.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page start-here-two-lists.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment page-template.html
 exit=1
-FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  2 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -908,13 +1376,21 @@ PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page page-template.html
 exit=1
-FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 SKIP  pinning: no hexdocs links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  2 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -930,6 +1406,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -946,6 +1423,7 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -961,6 +1439,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -977,6 +1456,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -993,6 +1473,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1009,6 +1490,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
 FAIL  a documentation link is inside a collapsed excerpt — the page has to read complete with every excerpt closed
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1025,6 +1507,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 FAIL  a probe carries what looks like its own output — the skill never ran it, so a transcript here is fiction: => [[ActiveRecord::Validations::PresenceValidator, {}]]
 PASS  no probe targets production
@@ -1034,6 +1517,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 ## --fragment anchors-probe-legit-forms.html --repo searches-repo
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1050,6 +1534,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1065,6 +1550,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1081,6 +1567,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1097,6 +1584,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 WARN  1 probe label(s) name the instrument and stop, with no segment saying what the output would settle: rails runner · read-only
 PASS  1 probe(s), none showing output the run did not observe
@@ -1114,6 +1602,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1123,6 +1612,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 ## --fragment agenda-probe-unlabelled.html
 exit=1
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 FAIL  1 probe(s) carry no label — the label is the only thing naming the instrument, and a reviewer decides whether to paste from it
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1138,6 +1628,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 FAIL  a probe label names a sandbox its command never opens: rails console --sandbox · rolled back · which validators are in force on archived_at
 PASS  1 probe(s), none showing output the run did not observe
@@ -1148,7 +1639,8 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 ## --fragment agenda-probes-over-budget.html
 exit=0
 SKIP  doc links: none on this input
-WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+WARN  3 probe(s) against a budget of 2 — at most one per checkpoint capped at five, and a page over that ratio has stopped selecting
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1157,6 +1649,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment agenda-clean.html
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1165,6 +1658,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-probe-legit-forms.html --repo searches-repo
 exit=0
 SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1180,6 +1674,7 @@ PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-unpinned.html --repo searches-repo
 exit=1
@@ -1190,6 +1685,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --fragment anchors-hexdocs-wrong-package.html --repo searches-repo
 exit=1
@@ -1200,6 +1696,227 @@ FAIL  1 documentation link(s) in neither references/rails-docs.md nor references
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-orphan.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+FAIL  1 primer callout(s) outside any checkpoint — a primer with no judgment attached to it is a framework lesson, not an anchor
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-ungated.html
+exit=1
+SKIP  doc links: none on this input
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+FAIL  1 primer(s) do not carry exactly one documentation link — a primer is what a link escalates into, and two paragraphs of framework prose with nothing to check them against is the defect the gate exists for
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-uncited.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+FAIL  1 documentation link(s) with no file:line beside them — a link to the Rails guides says nothing about this repository
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+FAIL  1 primer(s) carry no file:line of their own — framework prose with no stake in this repository is attached to its judgment by nothing but adjacency
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-doubled.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  2 primer callout(s), each inside the checkpoint it explains
+FAIL  1 checkpoint(s) carry more than one primer: cp-a×2 — one judgment, one lesson
+PASS  2 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-over-budget.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  4 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+FAIL  4 primer callouts — the budget is at most 3 a page, and a page past it is teaching the framework rather than explaining this change
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-probe-nested.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-primer-marked.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+SKIP  runtime probes: none on this input
+## --fragment agenda-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-demo-loose.html
+exit=1
+SKIP  doc links: none on this input
+FAIL  1 pre.demo on a page carrying no primer callout — a demo may show a result line only because its receiver is a class this repository does not have, and outside a primer nothing constrains the receiver
 SKIP  runtime probes: none on this input
 ## --fragment anchors-clean.html
 exit=0
@@ -1211,6 +1928,7 @@ PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production

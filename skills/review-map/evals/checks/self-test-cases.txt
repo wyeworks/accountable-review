@@ -55,6 +55,13 @@
  start-here         | start-here-clean.html         | 0 | each with a why
  start-here         | start-here-no-why.html        | 1 | is not a reading order
  start-here         | start-here-two-lists.html     | 1 | it is one list
+# Section 03 routes to EVERY checkpoint, not just to one. The orphan fixture keeps three stops,
+# three whys, three citations and three href="#cp-" links, so the rule that counts links passes
+# it — only comparing the two sets notices that cp-b is a question nobody was sent to answer.
+# It is a WARN, so the row pins the text at exit 0: a draft legitimately carries unrouted stubs
+# and failing a page for being unfinished is the build states' job.
+ start-here         | start-here-orphan-checkpoint.html | 0 | no stop pointing at them (cp-b)
+ start-here         | agenda-clean.html             | 0 | every checkpoint is reachable from the reading path
 # The inventory carrier moved to the evidence foot and data-path moved with it. This row is the
 # POSITIVE case: a page that carries the attribute on a div.c passes, which is what an assertion
 # about where it may NOT sit would otherwise never look at.
@@ -106,11 +113,16 @@
 # wrong is that the page stopped selecting, which no per-probe rule can see. Three across two,
 # one over the ratio, so the row pins THIS ratio rather than passing all the way down from a
 # looser one.
+#
+# The denominator is min(checkpoints, 5), not the checkpoint count. The agenda may run to seven
+# on a PR shipping two independent changes, and letting this threshold ride up with it would
+# have loosened the anchor budget silently — whether a link is earned does not scale with how
+# many judgments a page carries.
  rails-anchors      | anchors-probe-label-thin.html  | 0 | no segment saying what the output would settle | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-probe-unlabelled.html  | 1 | carry no label                   | --repo @GOLD@/searches-repo
  rails-anchors      | agenda-probe-unlabelled.html  | 1 | carry no label                   |
  rails-anchors      | anchors-probe-sandbox-lie.html | 1 | names a sandbox its command never opens | --repo @GOLD@/searches-repo
- rails-anchors      | agenda-probes-over-budget.html | 0 | probe(s) across 2 checkpoint(s)   |
+ rails-anchors      | agenda-probes-over-budget.html | 0 | 3 probe(s) against a budget of 2  |
 # And the clean counterparts, so the two label rules are seen NOT firing on correct input. A
 # rule that only ever fires on broken input is a rule nobody notices has stopped firing.
  rails-anchors      | agenda-clean.html             | 0 | every probe carries a label       |
@@ -123,6 +135,30 @@
  rails-anchors      | anchors-hexdocs-clean.html    | 0 | hexdocs link(s) carry a version segment | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-hexdocs-unpinned.html | 1 | unpinned hexdocs link(s)          | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-hexdocs-wrong-package.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
+# THE PRIMER CALLOUT — the third anchor, and the only component on this page a flag admits. Every
+# one of its rules guards something that can be dropped while the callout still renders beautifully,
+# which is why there are this many rows for one component.
+#
+# The clean fragment carries four pinned PASS lines, the reach-clean pattern: a rule that only ever
+# fires on broken input is a rule nobody notices has stopped firing on good input, and here that
+# would mean --mentor pages shipping unchecked.
+ rails-anchors      | anchors-primer-clean.html     | 0 | each inside the checkpoint it explains
+ rails-anchors      | anchors-primer-clean.html     | 0 | every primer carries exactly one documentation link
+ rails-anchors      | anchors-primer-clean.html     | 0 | every primer cites the line in this repository
+ rails-anchors      | anchors-primer-clean.html     | 0 | every pre.demo sits inside a primer
+ rails-anchors      | anchors-primer-orphan.html    | 1 | outside any checkpoint
+ rails-anchors      | anchors-primer-ungated.html   | 1 | do not carry exactly one documentation link
+ rails-anchors      | anchors-primer-uncited.html   | 1 | carry no file:line of their own
+ rails-anchors      | anchors-primer-doubled.html   | 1 | carry more than one primer
+ rails-anchors      | anchors-primer-over-budget.html | 1 | the budget is at most 3 a page
+ rails-anchors      | anchors-primer-probe-nested.html | 1 | runtime probe(s) inside a primer
+ rails-anchors      | anchors-primer-marked.html    | 1 | carry a mark
+# And the arm that runs on every page that took no flag at all. It ASSERTS rather than skipping,
+# because the demo rule still has something to say there — a loose demo on a page with no primer is
+# the worst version of that defect, not an inapplicable one. Two rows: the ordinary page, and the
+# page where "there is no primer here" would otherwise have excused the demo.
+ rails-anchors      | agenda-clean.html             | 0 | no primer callout and no pre.demo
+ rails-anchors      | anchors-demo-loose.html       | 1 | on a page carrying no primer callout
  rails-anchors      | anchors-clean.html            | 0 | needs --repo to ask whether
  excerpts           | excerpt-typed-highlight.html  | 1 | hljs- classes are written into the markup
  excerpts           | excerpt-diff-lang.html        | 1 | --diff excerpt carries data-lang

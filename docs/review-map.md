@@ -17,7 +17,8 @@ does not earn omitted outright.
   that was not, who is affected. Derived from tests, code and commits rather than copied from a
   possibly-stale PR description. A limit the run hit — a region it had to skim, a client it could not
   read — is stated here and nowhere else.
-- **What needs your attention** — the page's core. Three to five **review checkpoints**, each one
+- **What needs your attention** — the page's core. Three to five **review checkpoints** for each
+  independent change the PR makes — seven on the page at the outside — each one
   judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
   intended scope?* rather than *ProjectSearcher implementation*. A checkpoint carries the question,
   two to four sentences on why it is one, one to four places to look — each a short title, a clause
@@ -61,6 +62,14 @@ act on.
 
 A future full mode would keep this agenda and add supporting evidence beneath it, rather than making
 you read the evidence to reach the overview.
+
+**`--mentor` is the one flag that puts anything on the page**, and it does not make it a second
+document. It is for a reviewer new to the *stack* rather than to the change: where a judgment turns
+on a framework rule they may not know, the page states the rule in a primer inside that checkpoint
+instead of linking to it. Nothing else moves — same sections, same checkpoints in the same order,
+same reading path, same budget on every other part — so deleting the primers from a mentor page
+gives you back the ordinary page. That subtraction is the test, and it is why there is no badge
+saying which one you are holding: you can see.
 
 ## Each fact has one home
 
@@ -219,8 +228,21 @@ no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.
 Phoenix. The page says which, because a reviewer should not be able to change a database by pasting
 what it told them to.
 
-**There is at most one link and at most one probe per checkpoint, and many checkpoints get
-neither.** That ceiling is the
+**A primer, at `--mentor` only** — the rule itself, stated. It is what a link escalates into, for
+the case where you would judge better knowing the framework's behaviour than knowing where to read
+about it: the API named, a paragraph or two on what it does and when, a worked example on a class
+your repository does not have, the line in your code that made it relevant, and the same pinned link
+it came from. It sits inside the checkpoint, after the explanation and before the list of places to
+look, so you meet the unfamiliar API before you are sent to the code rather than after.
+
+Two things about it are worth knowing. **It holds that checkpoint's one documentation link rather
+than adding a second**, so the flag buys explanation and never more citations. And **it is gated on
+that link**, which is why a stack whose catalogue is closed gets no primers at all: while the Elixir
+rows are unopened, `--mentor` on a Phoenix project produces the ordinary page and tells you why. One
+per checkpoint, three per page, and a run that finds nothing worth teaching writes none.
+
+**There is at most one link and at most one probe per checkpoint, at most three primers a page, and
+many checkpoints get none of the three.** That ceiling is the
 point: the failure mode here is not a wrong link, it is a page that explains every mechanism it
 touches, becomes a Rails tutorial with a diff attached, and reads as more thorough while getting
 harder to navigate. An anchor of any kind has to be earned by a decision you have to make.

@@ -76,6 +76,12 @@ SKIP  no excerpts in this input
 ## --page anchors-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-demo-loose.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-demo-loose.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  no excerpts in this input
@@ -146,6 +152,54 @@ PASS  no excerpt quotes the same lines twice
 exit=0
 SKIP  no excerpts in this input
 ## --page anchors-mixed-series.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-doubled.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-doubled.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-marked.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-marked.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-orphan.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-orphan.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-over-budget.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-over-budget.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-probe-nested.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-probe-nested.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-ungated.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-ungated.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment anchors-probe-label-thin.html
@@ -646,6 +700,30 @@ SKIP  no excerpts in this input
 ## --page start-here-no-why.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment start-here-orphan-checkpoint.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page start-here-orphan-checkpoint.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+PASS  no excerpt labels a changed file Unchanged, against the page's own ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
 ## --fragment start-here-two-lists.html
 exit=0
 SKIP  no excerpts in this input
@@ -654,11 +732,11 @@ exit=0
 SKIP  no excerpts in this input
 ## --fragment page-template.html
 exit=1
-PASS  2 source excerpt(s), each with a summary
+PASS  3 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
-FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}}; {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
 SKIP  excerpt tints: a fragment carries no token block
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
@@ -666,11 +744,11 @@ SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
 ## --page page-template.html
 exit=1
-PASS  2 source excerpt(s), each with a summary
+PASS  3 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
-FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}}; {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
 PASS  excerpt tints defined in all three theme blocks
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only

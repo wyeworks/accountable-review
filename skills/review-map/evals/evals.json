@@ -12,7 +12,7 @@
       "section_cases": [],
       "expectations": [
         "check.rb passes: coverage gate, no severity chips, no verdict language, evidence tiers used, no dead permalinks, three theme states, and active_projects.rb is named",
-        "Three to five checkpoints, each one a judgment framed as a question rather than a category. 'ProjectSearcher implementation' and 'Tests' are the shapes to watch for: a title naming a file or a layer is a heading, not a judgment",
+        "Three to five checkpoints on this one-delta diff, each one a judgment framed as a question rather than a category. 'ProjectSearcher implementation' and 'Tests' are the shapes to watch for: a title naming a file or a layer is a heading, not a judgment",
         "The archival judgment and the uniqueness judgment are both on the agenda, and the second distinguishes the application invariant from the database one rather than asserting the validation is fine",
         "Each checkpoint's Look at list is one to four locations with a clause each, and the clause says what to see there rather than repeating the path",
         "No section, subsection or paragraph discusses a client that does not exist; the absence is stated once, in What changed, not left as a gap",
@@ -93,7 +93,7 @@
         "Affected-but-unchanged entries in the same file as a changed hunk are found and cited by line, not skipped because the file already appears in the inventory",
         "The page states that no test in the suite can observe the profile-setup interception, and attributes it to test/test_helper.rb rather than to a missing test. That is a checkpoint about the evidence, not a Tests subsection",
         "The switch_to_free! guard is explained as holding by conjunction — has_paid_subscription? requires plan_active? — and not merely asserted to be safe or unsafe",
-        "Four findings do not become four checkpoints by default: where two share one judgment they are merged, and a checkpoint that cannot be merged is named in a clause of its nearest neighbour rather than added as a sixth",
+        "Four findings do not become four checkpoints by default: where two share one judgment they are merged. This diff is one semantic delta, so a candidate that will not merge is named in a clause of its nearest neighbour rather than added as a sixth — the room for a sixth is what a second independent change buys, and this PR is not one",
         "A guard chain is a strong candidate for a figure.chain, and the one drawn carries no affected-unchanged node — the reach into the sibling guards is an impact path and belongs in section 04",
         "The absence of a separate client package is stated once, and distinguished from having no client at all — the client here is the browser and the ERB views in the same repository",
         "Nothing claims the loop is fixed for users who already hold the column; the page says no migration touches existing rows and that the repository cannot say how many are affected",

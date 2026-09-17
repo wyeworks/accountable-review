@@ -70,13 +70,21 @@
   lens file produced the page except by reading what it says about their
   repository.
 
-  AND NOTHING MARKS A CODING-DECISION CHECKPOINT AS ONE. At most one checkpoint per
-  page judges how the change was built rather than what it now does — see
-  report-format.md § Coding decisions — and it is an ordinary section.cp in the last
-  position. No label, no eyebrow, no section of its own, and no sentence announcing
-  that the page also checks conventions. Announcing it is how it turns into a style
-  review: a reader who is told a convention section exists expects it filled every
-  time, and a run that knows the reader expects it will fill it.
+  AND NO MENTOR BADGE, which is the fourth of these and the one with the best
+  excuse. --mentor DOES change what is on the page: it admits aside.primer, which
+  is visible by existing. That is exactly why it needs no chip — the reader can
+  see which page they got, which is the whole thing --full could not offer. A
+  "mentor mode" banner, a count of the primers, an "onboarding" eyebrow: each one
+  is the badge shape coming back through the one door that looks open.
+
+  AND NOTHING MARKS A CODING-DECISION CHECKPOINT AS ONE, which is the fifth and
+  the one that hides inside a component rather than beside it. At most one
+  checkpoint per page judges how the change was built rather than what it now does
+  — see report-format.md § Coding decisions — and it is an ordinary section.cp in
+  the last position. No label, no eyebrow, no section of its own, and no sentence
+  announcing that the page also checks conventions. Announcing it is how it turns
+  into a style review: a reader who is told a convention section exists expects it
+  filled every time, and a run that knows the reader expects it will fill it.
 
   The page carries no tick state and no "n of m" counter anywhere, because a
   count of cleared items reads as progress toward approval. See report-format.md.
@@ -111,6 +119,12 @@
                             runs; the page never shows its output). At most one of
                             each per checkpoint, and a probe carries a THREE-part
                             label whose last part says what the output would settle
+    primer callout ........ aside.primer — the THIRD anchor, and the only component
+                            a flag admits. --mentor only, inside a checkpoint, at
+                            most one per checkpoint and three per page. It holds the
+                            checkpoint's one a.doc and a pre.demo, which is the one
+                            block on this page that may show a result line, because
+                            its receiver is a class this repository does not have
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
                             sentences, an optional figure.chain, ul.lookat (1-4
                             places to look, each a title, a clause and its
@@ -627,7 +641,13 @@ details.searched[open] .chev { transform: rotate(90deg); }
 .searched .sr-body { padding: 0 14px 12px; border-top: 1px solid var(--prov-rule); }
 .searched .sr-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 11px; }
 .searched .sr-list > li { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; padding-left: 16px; }
-.searched .sr-list code { min-width: 0; margin-left: -16px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.searched .sr-list code { min-width: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+/* The hanging indent belongs to the LEADING command alone. As a descendant rule the
+   -16px reached every code in the row, including one inside the clause, and pulled it
+   16px left — over the words before it. A published page showed the overlap. Same
+   shape as .pending's text-indent: a rule about a row's first child, written as though
+   the row had only one. */
+.searched .sr-list > li > code:first-child { margin-left: -16px; }
 .searched .sr-r { flex: 1 1 24ch; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .searched .sr-limit { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 72ch; }
 
@@ -671,6 +691,99 @@ pre.probe {
    supported the label falls back to the ordinary .lbl ink, which is the whole
    degradation: the probe still reads and still says what it would settle. */
 .lbl:has(+ pre.probe) { color: var(--prov-ink); }
+
+/* ============================================================
+   The primer callout — THE THIRD FRAMEWORK ANCHOR, and the only
+   component on this page that a flag admits. It appears at
+   --mentor and nowhere else, only inside a section.cp, and it is
+   what a doc link escalates into when the reviewer would judge
+   better knowing the framework's rule itself rather than only
+   where it is written down. report-format.md § Mentor mode owns
+   the budget and what earns one.
+
+   IT IS PLUM, because a primer is provenance: the manual, quoted.
+   It spends NO NEW COLOUR, deliberately — a callout that
+   introduced one would be a value to declare in all three theme
+   blocks and forget in one, which is the defect the tint tokens
+   are counted by name to catch. The version of this component
+   that the agenda put down spent a Rails red on an inlined
+   logotype; the artwork is gone with every other drawing on this
+   page, and the colour went with it.
+
+   NO MARK, AND THEREFORE NO TRADEMARK LINE. With no logotype on
+   display there is nothing for a notice to disclaim, so the two
+   went together — and with them the branded/unbranded variant
+   split, which existed only to say who drew the mark. One shape
+   now serves Rails, a gem and a hex package alike, and the header
+   carries the name as text.
+
+   Three things it must not become, all of which look like
+   diligence on the way:
+     · a probe. pre.demo quotes documented framework behaviour on
+       a GENERIC receiver, so it may carry a result line: it is a
+       quotation of the manual, and the manual states results.
+       pre.probe asks THIS application and may never show output,
+       because the run did not boot it. So a demo lives only
+       inside a primer, and a probe never inside one — adjacent,
+       never nested.
+     · a tutorial. A behaviour every developer in the stack
+       already knows earns nothing, at any flag. --mentor lowers
+       the bar from "cannot decide without this" to "would decide
+       better knowing it"; it does not remove it, and a mentor run
+       that earns no primer writes none.
+     · an unevidenced claim. It cites the line in THIS repository
+       that earned it and carries the pinned link it escalated
+       from. Two paragraphs of framework prose read as
+       self-justifying, which is why both halves are checked.
+   ============================================================ */
+.primer {
+  margin: 16px 0 6px; background: var(--prov-bg);
+  border: 1px solid var(--prov-rule); border-top: 2px solid var(--prov-rule-2);
+}
+.pr-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 12px 20px; border-bottom: 1px solid var(--prov-rule);
+}
+/* The name as text. There is no artwork to carry it any more, which is why this
+   span is no longer a variant's consolation and is simply the header. */
+.pr-brand {
+  font-family: var(--display); font-weight: 400; font-size: 19px;
+  line-height: 1; letter-spacing: -.01em; color: var(--ink);
+}
+.pr-sep { align-self: center; width: 1px; height: 14px; background: var(--prov-rule-2); }
+.pr-api { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--faint); overflow-wrap: anywhere; }
+
+.pr-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+.pr-main { min-width: 0; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 11px; }
+.pr-main > b { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.pr-main > p { max-width: 56ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); text-wrap: pretty; }
+.pr-main > .item { font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.pr-main > a.doc { align-self: flex-start; margin-top: 3px; white-space: normal; }
+
+.pr-side {
+  min-width: 0; padding: 18px 20px 20px;
+  background: var(--prov-bg-2); border-left: 1px solid var(--prov-rule);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pr-side > .lbl { font-size: 9.5px; color: var(--prov-ink); }
+.pr-side > .note { font-size: 13px; line-height: 1.58; }
+
+/* The manual, quoted. It SCROLLS rather than wrapping, which is the opposite of
+   what it started as: a wrapped result line puts the answer on a line of its own,
+   where it reads as another statement instead of as the answer to the one above
+   it. Code that wraps says something different from the code that was written,
+   and a quotation may not do that. This is the same rule an excerpt follows and
+   the opposite of pre.probe's, which wraps because a command is not a quotation.
+   Keep the lines short — under about 38 characters and nothing scrolls at all. */
+pre.demo {
+  margin: 0; overflow-x: auto;
+  font-family: var(--mono); font-size: 12px; line-height: 1.75;
+  color: var(--ink-2); white-space: pre;
+}
+@media (max-width: 700px) {
+  .pr-body { grid-template-columns: minmax(0, 1fr); }
+  .pr-side { border-left: 0; border-top: 1px solid var(--prov-rule); }
+}
 
 /* ============================================================
    Source excerpts — generated by scripts/excerpt.sh, never typed.
@@ -762,6 +875,15 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .begin .t > .path { display: block; margin-bottom: 5px; }
 .begin .t > .why { display: block; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); max-width: 64ch; }
 .begin .ptr { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding-top: 4px; white-space: nowrap; }
+/* A stop may carry an excerpt, so the li has a fourth child and the li is a grid.
+   With no span it auto-places into the 26px number column, where .ex-loc's
+   overflow-wrap: anywhere renders the path one character per line. 2 / -1 puts it
+   under the path it confirms, and holds under the 700px grid below where column 2
+   is the last one. min-width: 0 is the other half: a grid item cannot shrink past
+   its min-content, which here is the pre's longest line, so the span alone widens
+   the column past the viewport and the PAGE scrolls sideways instead of .ex-body.
+   .lookat > li carries the same reset, which is why its excerpts never showed it. */
+.begin li > .excerpt { grid-column: 2 / -1; min-width: 0; margin: 10px 0 0; }
 @media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
 
 /* ============================================================
@@ -1067,6 +1189,12 @@ figure.chain > figcaption { margin-top: 14px; }
    since a path is the whole cell. */
 .gt-paths  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .gt-paths > .c { padding: 9px 14px; }
+/* .gt paints its gaps by showing --rule through a 1px grid gap, which needs every row
+   full. An odd number of paths leaves the last row half empty and the container's own
+   rule colour renders there as a solid slab — a filled box that reads as a cell with
+   nothing in it. The final odd cell spans instead. Harmless in the one-column query
+   below, where 1 / -1 is that column.  */
+.gt-paths > .c:last-child:nth-child(odd) { grid-column: 1 / -1; }
 @media (max-width: 900px) {
   .gt-meta   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gt-paths  { grid-template-columns: minmax(0, 1fr); }
@@ -1375,9 +1503,12 @@ figcaption strong { color: var(--ink-3); }
     <!-- ===== Section 02 · What needs your attention. THE PAGE'S CORE, and the one
          section a reader who has time for nothing else should read.
 
-         Three to five checkpoints, each ONE JUDGMENT the reviewer has to make.
-         Fewer for a small PR. A sixth candidate is a signal that two of them are
-         the same question — merge, or name it in a clause of the nearest one.
+         Three to five checkpoints PER INDEPENDENT DELTA SECTION 01 NAMES, each
+         ONE JUDGMENT the reviewer has to make; seven on the page at the outside.
+         Fewer for a small PR. A sixth candidate under one delta is a signal that
+         two of them are the same question — merge, or name it in a clause of the
+         nearest one. A hundred files of one rename is still one delta: the count
+         follows the change, never the diff.
 
          ORDERED BY WHAT A REVIEWER WOULD MOST REGRET MISUNDERSTANDING, and an
          order is not a scale. No number that reads as severity, no "blocking", no
@@ -1448,6 +1579,87 @@ figcaption strong { color: var(--ink-3); }
           </ol>
           <figcaption>{{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}</figcaption>
         </figure>
+
+        <!-- THE PRIMER CALLOUT — --mentor ONLY, AND THE ONLY COMPONENT ON THIS PAGE
+             A FLAG ADMITS. Delete every one of these and what is left is the page a
+             default run writes: same sections, same checkpoints, same order, same
+             reading path, same budget. That subtraction is the rule, and it is what
+             keeps --mentor from becoming the --full this version refuses — a mentor
+             page is this page with lessons hung inside it, never a second document.
+             report-format.md § Mentor mode owns all of it.
+
+             OMIT IT ENTIRELY without --mentor, and omit it at --mentor when nothing
+             earns one. A primer is what a doc link escalates INTO, for the case where
+             the reviewer would judge better knowing the framework's rule rather than
+             only where it is written down. Mentor lowers that bar from "cannot decide
+             without this"; it does not remove it, and a run that manufactures a lesson
+             to honour a flag has written the Rails manual with a diff attached.
+
+             ITS LINK IS THE CHECKPOINT'S LINK. The budget stays one a.doc per
+             checkpoint — mentor buys explanation, not citations — so this checkpoint's
+             sentences carry none of their own. Checkpoint B below is the other
+             arrangement: the link inline, no primer.
+
+             AND IT IS GATED ON THAT LINK, so a closed catalogue means no primer for
+             that stack. While elixir-docs.md § Version withholds every link, a Phoenix
+             page at --mentor carries none of these and anchors with probes and prose.
+             Narrower, not wrong.
+
+             ONE PER CHECKPOINT AND THREE PER PAGE, sits after the explanation and any
+             chain and BEFORE ul.lookat — the reader meets the unfamiliar API right
+             after the mechanism that uses it and before the places they have to look.
+
+             THE VERSION IS SUBSTITUTED PER RUN, exactly as in checkpoint B: the
+             catalogue stores the path without one. -->
+        <aside class="primer">
+          <div class="pr-head">
+            <span class="pr-brand">Rails</span>
+            <i class="pr-sep"></i>
+            <span class="lbl">Primer</span>
+            <span class="pr-api">ActiveModel::Dirty</span>
+          </div>
+
+          <div class="pr-body">
+            <div class="pr-main">
+              <b>archived_at_changed? vs saved_change_to_archived_at?</b>
+              <p>Every ActiveRecord attribute carries two questions, and they are true at
+                different moments. <code>archived_at_changed?</code> asks whether the value in
+                memory differs from the one loaded from the row &mdash; true <em>before</em> the
+                save and false after it. <code>saved_change_to_archived_at?</code> asks what the
+                save just wrote, and is only true <em>after</em> it.</p>
+              <p>Which one a callback wants therefore depends on when it runs. A
+                <code>before_save</code> that asks the second question never fires; an
+                <code>after_commit</code> that asks the first one never fires either, and both
+                failures are silent.</p>
+              <!-- THE CITATION THAT EARNED IT, like every other doc link. Without it the
+                   aside is a framework lesson with no stake in this repository, and two
+                   paragraphs of framework prose are exactly the kind that read as
+                   self-justifying. rails-anchors.rb judges the aside as one block. -->
+              <div class="item">The callback at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
+                runs after the write, so it is the second form it has to ask.</div>
+              <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
+            </div>
+
+            <div class="pr-side">
+              <span class="lbl">In practice</span>
+              <!-- pre.demo, NOT pre.probe, and the difference is the RECEIVER. Post here is
+                   deliberately a class this repository does not have: that is the whole
+                   reason a result line in this block is a quotation of the manual rather
+                   than output nobody observed. Name an application class and it becomes
+                   precisely the fiction the probe rule exists to prevent, with the rule
+                   switched off. A demo lives only inside a primer, and never anywhere else
+                   on the page. -->
+<pre class="demo">post = Post.find(1)
+post.title = "new"
+post.title_changed?          # =&gt; true
+post.save
+post.title_changed?          # =&gt; false
+post.saved_change_to_title?  # =&gt; true</pre>
+              <p class="note">Both predicates are generated per attribute, so they exist for
+                every column without being written anywhere.</p>
+            </div>
+          </div>
+        </aside>
 
         <!-- WHERE TO LOOK — one to four locations, the smallest set that settles
              the question. THREE PARTS PER ENTRY, IN THIS ORDER: a title naming
@@ -1637,6 +1849,12 @@ figcaption strong { color: var(--ink-3); }
           </span>
           <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
         </li>
+        <!-- A stop MAY carry an excerpt, and only where its reason is not already
+             excerpted in the checkpoint that owns it -- report-format.md
+             § Source excerpts routes it. It is a DIRECT CHILD of the li, after
+             a.ptr, and never inside span.t: the li is a three-column grid, so
+             .begin li > .excerpt is what spans it across the text column, and a
+             span is phrasing content while details is flow content. -->
         <li>
           <span class="n">02</span>
           <span class="t">
@@ -1644,6 +1862,22 @@ figcaption strong { color: var(--ink-3); }
             <span class="why">{{WHY_THIS_UNCHANGED_FILE_IS_ON_THE_ROUTE}} <span class="tier tier-unc">from unchanged code</span></span>
           </span>
           <a class="ptr" href="#cp-{{LETTER}}">Checkpoint {{LETTER}} &rarr;</a>
+          <details class="excerpt excerpt--source">
+            <summary>
+              <span class="chev">&#9656;</span>
+              <span class="ex-loc">{{PATH}}:{{LINES}}</span>
+              <span class="tag">Unchanged</span>
+              <span class="ex-why">{{WHY_THIS_MATTERS}}</span>
+            </summary>
+            <div class="ex-body">
+<pre data-src="{{PATH}}" data-lang="ruby" style="counter-reset: exl {{START_MINUS_1}}"><span class="l">class ActiveProjects</span>
+<span class="l">  def call</span>
+<span class="l">    Project.where(archived_at: nil)</span>
+<span class="l">  end</span>
+</pre>
+              <p class="ex-src">Unchanged at <a class="cite" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></p>
+            </div>
+          </details>
         </li>
       </ol>
     </section>
@@ -1752,7 +1986,12 @@ figcaption strong { color: var(--ink-3); }
     <details class="evidence">
       <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all {{N}} changed paths</summary>
 
+      <!-- THREE CELLS, not two, and the odd count is the point: a two-column grid with
+           an odd number of paths is the common case, and it is the one that used to
+           paint a rule-coloured slab where the missing cell would be. An even example
+           cannot show that the rule above fires. -->
       <div class="gt gt-paths">
+        <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
         <div class="c" data-path="{{PATH}}"><a class="path" href="{{LINK}}">{{PATH}}</a></div>
       </div>
@@ -1768,7 +2007,7 @@ figcaption strong { color: var(--ink-3); }
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}</span></li>
+            <li><code>{{SEARCH}}</code> <span class="sr-r">{{WHAT_IT_RETURNED_IN_A_CLAUSE}}, naming <code>{{THE_SYMBOL_IT_FOUND}}</code> where the clause needs one</span></li>
             <li><code>{{SEARCH_THAT_CAME_UP_EMPTY}}</code> <span class="sr-r">no hits</span></li>
           </ul>
           <p class="sr-limit"><strong>Out of reach.</strong> {{THE_LIMIT_OF_A_NAME_BASED_SEARCH}}</p>

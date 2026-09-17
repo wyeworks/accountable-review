@@ -22,6 +22,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-clean.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-demo-loose.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-demo-loose.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-fabricated-output.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -74,6 +80,54 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-mixed-series.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-doubled.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-doubled.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-marked.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-marked.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-orphan.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-orphan.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-over-budget.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-over-budget.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-probe-nested.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-probe-nested.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-uncited.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-uncited.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-ungated.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-ungated.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-probe-label-thin.html
@@ -392,6 +446,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page start-here-no-why.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment start-here-orphan-checkpoint.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page start-here-orphan-checkpoint.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment start-here-two-lists.html

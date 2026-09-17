@@ -1,6 +1,6 @@
 ---
 name: setup-ci
-description: Configures a repository so Accountable Review generates a Review Map automatically in CI — a GitHub Actions workflow that runs when a pull request becomes ready for review, regenerates on every push after that, skips drafts, cancels superseded runs, and uploads the resulting static HTML as a build artifact the whole team can open. Use this when someone wants review maps generated automatically rather than by hand, asks to add Accountable Review to CI or to GitHub Actions, wants the review map shared with their team instead of published from one laptop, or asks how to run this on every PR. Invoke with /accountable-review:setup-ci. It inspects the repository before writing anything, prefers a dedicated workflow, never modifies unrelated CI, and is safe to run twice. Not for generating a review map — that is review-map — and not for posting anything to GitHub.
+description: Configures a repository so Accountable Review generates a Review Map automatically in CI — a GitHub Actions workflow that runs when a pull request first becomes reviewable, skips drafts, forks, bots and changes too small to have a reading order, cancels superseded runs, uploads the resulting static HTML as a build artifact the whole team can open, and comments the link on the pull request. Use this when someone wants review maps generated automatically rather than by hand, asks to add Accountable Review to CI or to GitHub Actions, wants the review map shared with their team instead of published from one laptop, or asks how to run this on every PR. Invoke with /accountable-review:setup-ci. It inspects the repository before writing anything, confirms when maps will be generated and what the workflow may do, prefers a dedicated workflow, never modifies unrelated CI, and is safe to run twice. Not for generating a review map — that is review-map — and setup itself posts nothing to GitHub.
 ---
 
 # Set up CI
@@ -8,13 +8,15 @@ description: Configures a repository so Accountable Review generates a Review Ma
 Turns "someone runs the review map by hand, sometimes" into "every review-ready pull request has one,
 and the whole team can open it."
 
-The result is one workflow file. When a pull request leaves draft, GitHub Actions generates a Review
-Map for that exact revision and uploads it as a build artifact; a push to a ready pull request
-regenerates it and cancels the run that is now describing the wrong commit. Drafts cost nothing.
+The result is one workflow file. When a pull request first becomes reviewable, GitHub Actions
+generates a Review Map for that exact revision, uploads it as a build artifact, and comments the link
+on the pull request so the reviewer finds it where they already are. Drafts cost nothing, and so do
+forks, bots, and changes too small to have a reading order.
 
 **Everything you write here is a file in the repository the user is working in.** This skill posts
-nothing, enables nothing on GitHub, and creates no secret. Where a credential is needed it says so
-and stops short of pretending it is there.
+nothing itself, enables nothing on GitHub, and creates no secret — the one comment in the picture is
+posted by the generated workflow when it runs, not by setup. Where a credential is needed setup says
+so and stops short of pretending it is there.
 
 ## The one thing not to do
 
@@ -27,6 +29,19 @@ makes the write safe.
 The second is smaller and just as damaging: **do not turn this into a wizard.** Running it with no
 arguments must produce a good setup. The defaults in § *What it configures* are opinions, and the
 user gets them without being asked five questions first.
+
+Step 3's confirmation is not a wizard and must not become one. It shows **one block covering when a
+Review Map is generated and what the workflow does to the repository**, and the expected answer is
+yes. A user who says nothing has agreed to the defaults; a user who wants one thing different says
+which. What turns this into a wizard is asking the questions one at a time, asking about anything
+outside that block, or asking again on a re-run that changes nothing.
+
+It exists because those decisions either **spend money on the user's account** or **change what the
+job is permitted to do**, and the wrong ones are invisible. A trigger set that regenerates on every
+push costs a model run per commit. A size gate that skips a pull request produces no run at all —
+nothing appears in the Actions tab, so the team has nothing to notice. And the comment step carries
+`pull-requests: write`, which is a scope somebody should agree to rather than find. All of that is
+worth one block, and none of it is worth a question of its own.
 
 ## What is bundled
 
@@ -87,13 +102,62 @@ tests behave).
 If you integrate, everything in `references/workflow.md` still applies to the job you add — the same
 guard, the same permissions block on the job, the same steps.
 
-## 3. Write the workflow
+## 3. Confirm what the workflow will do
 
 Read `references/workflow.md` now. It explains every part of the file, and you will be asked about
 the triggers by the next person who reads it.
 
+Then show the user this, filled in from the defaults, **before writing anything**:
+
+```
+Review Maps will be generated when a pull request first becomes reviewable:
+
+  opened ready for review, marked ready, or reopened  ->  a Review Map
+  a push to a ready pull request                      ->  nothing; the map is not regenerated
+
+Skipped: drafts, pull requests from forks, dependabot,
+         and changes under 3 files and under 51 added and 51 deleted lines.
+
+When one is generated, the workflow comments the link on the pull request —
+one comment, updated in place, naming the revision the map describes.
+That is what `pull-requests: write` is for, and it is the only write the
+job can do: it cannot push, approve, or set a check.
+
+Two things these cost you, both of them quiet:
+  - the map describes the revision that made the PR reviewable, so on a branch
+    that keeps moving it goes stale without saying so
+  - a skipped pull request produces no run at all, so there is nothing to notice
+
+Use these, or change something?
+```
+
+**Name the write scope in the block, every time.** It is the one decision here that changes what the
+job is permitted to do rather than how often it runs, and a team that discovers `pull-requests: write`
+in a file they did not read is entitled to be annoyed. Do not soften it into "posts a link" — say the
+permission, and say what it cannot do, which is most of what they want to know.
+
+**Say the costs in the same breath as the decisions.** Both are the kind that is invisible when it
+bites: a stale map reads exactly like a current one, and a skipped pull request looks identical to a
+broken workflow. A user who has heard both once can live with either; a user who discovers one in
+three weeks concludes the tool is unreliable.
+
+If the repository has a dependency bot — `inspect-repo.sh` reports `bot_prs` — name the file you
+found, because the guard is otherwise an abstraction. If it has none, the guard still ships; say it
+is there for when one is added rather than pretending it is doing something today.
+
+Take their answer as flags rather than as an edit to the file:
+
+| They say | Pass |
+|---|---|
+| regenerate on every push | `--regenerate-on-push` |
+| map everything, however small | `--no-size-gate` |
+| different thresholds | `--min-files N --min-lines N` |
+| map the bot's pull requests too | `--no-skip-authors` |
+| skip another bot as well | `--skip-authors 'dependabot[bot],renovate[bot]'` |
+| don't comment on the pull request | `--no-pr-comment` — drops the write scope with it |
+
 ```sh
-<skill base directory>/scripts/install-workflow.sh --repo-dir . --print-diff
+<skill base directory>/scripts/install-workflow.sh --repo-dir . --print-diff [-- <flags>]
 ```
 
 It renders and writes, and prints one status line:
@@ -104,6 +168,16 @@ It renders and writes, and prints one status line:
 | `unchanged` | It was already exactly this | Say so. **This is a success, not a no-op to apologise for** |
 | `drift` | It exists and differs | Below |
 | `updated` | It was rewritten because you passed `--update` | Say what changed |
+
+It also prints a `when=` line: the decisions the written file actually makes, in the same flags. When
+a workflow was already there, those came from **its** `# Decisions:` line rather than from what
+you passed — the script recovers a team's confirmed decisions so that moving the version pin does not
+revert them. **Report from `when=`, not from what you asked for.** They differ exactly when it
+matters, and a setup message describing decisions the file does not make is worse than one that says
+nothing.
+
+That recovery is also why a re-run should not re-ask. A workflow already carrying its decisions has
+been confirmed once; confirm again only if the user is changing something or the line is missing.
 
 **Drift is the interesting case and it is not an error.** Someone edited the workflow — tightened a
 timeout, pinned an action by sha, changed the runner. The script prints the diff and writes nothing.
@@ -160,14 +234,20 @@ Created:
   .github/workflows/accountable-review.yml
 
 Review Maps will be generated when:
-  - a pull request becomes ready for review
-  - new commits are pushed to a non-draft pull request
+  - a pull request is opened ready for review
+  - a draft is marked ready for review
   - a pull request is reopened
+
+Not generated for:
+  drafts, forks, dependabot, and changes under 3 files
+  and under 51 added and 51 deleted lines
 
 Delivery:
   GitHub Actions artifact, retained 30 days
+  linked in one comment on the pull request (pull-requests: write)
 
-Draft pull requests are ignored. Superseded runs are cancelled automatically.
+A push to a ready pull request does not regenerate the map; check the revision
+the page names before trusting it. Superseded runs are cancelled automatically.
 
 Still to do:
   Add ANTHROPIC_API_KEY as a repository secret
@@ -186,11 +266,14 @@ Name the other limits in the same breath, briefly, where they apply:
 - **Pull requests from forks are skipped.** They get no secrets, so the job could not authenticate.
   Say so for a repository that takes outside contributions — it is the difference between a
   documented boundary and a feature that mysteriously never fires.
-- **A pull request opened directly as ready for review gets its first Review Map on its next push.**
-  The triggers are `ready_for_review`, `synchronize` and `reopened`; `opened` is not among them.
-  Say this to a team that does not start work as drafts — otherwise their first impression is that
-  the setup does not work — and tell them adding `opened` to the trigger list is a one-line change.
-  `references/workflow.md` § *Triggers* has the trade.
+- **The map is generated once and never regenerated**, so on a branch that keeps moving it describes
+  an older revision while looking current. Nothing on the page says the code changed under it; the
+  revision it names is the only way to tell, which is why that is in the masthead. Say this to any
+  team whose branches keep moving after review starts, and tell them `--regenerate-on-push` is the
+  answer. `references/workflow.md` § *Triggers* has the trade both ways.
+- **A skipped pull request produces no run at all.** Nothing appears in the Actions tab, so "too
+  small for a map" and "the workflow is broken" look identical from the outside. Say the thresholds
+  once, so the first silence is recognisable rather than alarming.
 - **The workflow pins a plugin version**, and setup cannot check that the tag exists — it has no
   network. Review Maps stay attributable to a version of this plugin, and re-running this command
   after an upgrade moves the pin. If you are running from a development checkout rather than an
@@ -206,17 +289,35 @@ files this command created.
 Defaults, chosen so that running this with no arguments is the right answer. Every one of them is
 explained in `references/workflow.md`.
 
+The first block is **when** a Review Map is generated. Those are the ones step 3 confirms, and the
+ones a flag can change.
+
+| | | |
+|---|---|---|
+| Triggers | `opened`, `ready_for_review`, `reopened` | `--regenerate-on-push` adds `synchronize` |
+| Draft pull requests | Skipped | — |
+| Fork pull requests | Skipped — no secrets are available to them | — |
+| Bot pull requests | `dependabot[bot]` skipped | `--skip-authors`, `--no-skip-authors` |
+| Small changes | Skipped under 3 files **and** under 51 added **and** 51 deleted lines | `--min-files`, `--min-lines`, `--no-size-gate` |
+
+And one decision about **what the workflow may do**, which is the only one that changes the job's
+permissions:
+
+| | | |
+|---|---|---|
+| Link on the pull request | One comment, upserted, naming the revision | `--no-pr-comment` |
+| Permissions | `contents: read`, plus `pull-requests: write` **only** for that comment | — |
+
+The rest is not confirmed and has no flag, because none of it decides what gets spent, what gets
+skipped, or what the job is allowed to do:
+
 | | |
 |---|---|
 | CI platform | GitHub Actions |
-| Triggers | `ready_for_review`, `synchronize`, `reopened` |
-| Draft pull requests | Skipped |
-| Fork pull requests | Skipped — no secrets are available to them |
 | Effort | `high` |
 | Delivery | `github-artifact` |
 | Retention | 30 days |
 | Concurrency | One run per pull request; superseded runs cancelled |
-| Permissions | `contents: read`, and nothing else |
 | Timeout | 30 minutes |
 
 ## Hard rules
@@ -227,18 +328,48 @@ explained in `references/workflow.md`.
   repository-wide permissions.
 - **Never overwrite a hand-edited Accountable Review workflow without being asked.** `drift` is
   reported and shown, never resolved silently.
+- **Never write the workflow without having shown the user when it will run.** Step 3's block is one
+  message and the expected answer is yes, but it is not optional and it does not get summarised into
+  a clause after the fact. Two of those decisions — a trigger set that costs a model run per push,
+  and a gate whose skips are invisible — spend or withhold money on someone else's account.
+- **Never move a when-decision into `.accountable-review.yml`.** That file is read at run time and
+  changing it must never mean regenerating the workflow; the triggers and the guard are the workflow.
+  The request will arrive as "can we tune the thresholds without re-running setup", and the answer is
+  that they edit the file, or re-run setup, and either way the file keeps saying what it does.
 - **Never claim a credential is configured.** You cannot see repository secrets. Say what you found
   and what you could not check.
-- **Never request permissions the job does not use.** `contents: read` is the whole of it. A Review
-  Map job that could write to the repository is a different risk profile for no benefit — and
+- **Never request permissions the job does not use.** `contents: read` always; `pull-requests: write`
+  only when the comment step is rendered, and never a scope beyond those two. The rule did not
+  loosen — it is the same rule, and the comment is now a thing the job does. A workflow carrying a
+  write scope for a step that is not there is the failure, which is why `--no-pr-comment` removes
+  both together and `tests/run.sh` checks that it does.
+
   `pull_request_target`, which would hand this job the repository's secrets on a branch a stranger
-  controls, is not an option to weigh.
+  controls, is still not an option to weigh.
 - **Never make the generated workflow run the application under review.** No `bundle exec`, no
   migrations, no database service, no `docker compose`. The Review Map is built by reading source and
   tests; that is a property of the product, not an optimisation. `review-map` proposes validation
   commands for a human to run and never runs them, and CI must not quietly become the place that
   does.
-- **Never post to GitHub.** No comments, no checks, no reviews, no labels. The workflow run is where
-  the artifact is discoverable, and that is enough for the first version.
+- **One comment, and nothing else on GitHub.** The generated workflow may post exactly one comment
+  per pull request — a link to the Review Map and the revision it describes — upserted against a
+  hidden marker so a reopen updates it rather than adding a second. No checks, no statuses, no
+  reviews, no labels, no approvals, no second comment, and nothing in the comment that grades the
+  change.
+
+  **The line is between discoverability and verdict, and it is narrower than it looks.** A link is
+  where a reviewer already is; a check run named "Review Map" with a green tick is the product
+  principle undone, because a passing check is a verdict whatever it is named. The next request will
+  be for the check, and it will arrive as "so the map is visible in the status list". The answer is
+  no: the comment is the visibility, and it was the whole reason to spend a write scope.
+
+  **This reversed an earlier rule**, which was that the workflow posts nothing at all, and the reason
+  it reversed is worth keeping. The run summary said where the map went, and nobody opens a workflow
+  run to find out whether there is something worth opening — so the map was generated, uploaded and
+  unread. A boundary that makes the product undiscoverable is not protecting the product.
+- **`review-map` itself still posts nothing**, and that has not changed. The skill writes a page; the
+  workflow's own final step is what comments. Threading a "post the link" step into generation would
+  put a write token in the process that reads a pull request's code, and would make the delivery seam
+  a lie — see § *Generation does not know where the page goes* in the repository's own notes.
 - Never write the plugin's own files into the repository being set up. The workflow clones the plugin
   at a pinned tag; it does not vendor it.

@@ -5,7 +5,7 @@ the review checkpoint, the chain, the evidence tier, the source excerpt, and the
 has one home.
 
 **Five sections, and the second one is the product.** *What changed* orients, *What needs your
-attention* carries three to five judgments the reviewer has to make, *Read the code in this order*
+attention* carries the judgments the reviewer has to make, *Read the code in this order*
 routes them into the code, *Impact outside the diff* shows what the change reaches outside the lines
 it touched, and a collapsed evidence foot accounts for the rest. A section the diff does not earn is
 **omitted**, never filled with generic content and never left as an "N/A" placeholder.
@@ -40,6 +40,14 @@ be asserting the assurance the format refuses to give — § *Evidence tiers* la
 known, never how hard someone looked, and *findings are a sample, not an audit* is the rule that
 would break first.
 
+**`--mentor` is the one flag that puts anything on the page, and the rule that keeps it from being a
+level is subtraction.** It admits one component — the primer callout, § *Mentor mode* — inside the
+checkpoints that earn one. Delete every primer from a mentor page and what is left is the page the
+same run would have written without the flag: same sections, same checkpoints, same order, same
+reading path, same budget on every other part. Nothing moves to make room. That is the whole
+difference from the `--full` this version refuses, which named a *different document* and left the
+reader nothing on the page to tell them which they had been handed.
+
 **The stack is not a level either, and it is invisible for the same reason.** Rails and Phoenix change
 which lens file and which catalogue the run reads (`SKILL.md` step 2), what a chain's nodes are
 called, and what a probe's command looks like. They change **no section, no field, no tier, no
@@ -59,6 +67,8 @@ belongs in the sentences that cite this repository, which say it by naming real 
 - *Chains* — the one figure vocabulary, in two places with two jobs
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
 - *Framework anchors* — the doc link and the runtime probe, and why neither is evidence
+- *Mentor mode* — the third anchor, admitted by `--mentor` alone, and the subtraction rule that
+  keeps a flag from choosing a document
 - *Source excerpts* — the collapsed code quotation, which is also the page's shortest way to say
   what code does, and the syntax tint that unchanged code gets and a hunk does not
 - *Impact paths* — section 04's figure: directed chains from changed code, through the unchanged code
@@ -76,7 +86,7 @@ belongs in the sentences that cite this repository, which say it by naming real 
 | | Section | Appears | Owns |
 |---|---|---|---|
 | 01 | What changed | always | The masthead, the semantic delta, intent and its tier |
-| 02 | What needs your attention | always | Three to five checkpoints, and the one sampling caveat |
+| 02 | What needs your attention | always | Three to five checkpoints per delta § 01 names, seven at the outside, and the one sampling caveat |
 | 03 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
 | 04 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
 | 05 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
@@ -97,9 +107,10 @@ selected — `references/rails-docs.md` or `references/elixir-docs.md`.
 
 ## The review checkpoint
 
-The page's primitive. Where the reviewer's attention goes is expressed as three to five of these
-under *What needs your attention*, and each is **one judgment** the reviewer has to make — framed as
-a question, explained in a few sentences, and anchored to the exact lines that let them make it.
+The page's primitive. Where the reviewer's attention goes is expressed as a handful of these under
+*What needs your attention* — three to five per independent change the PR makes, seven on the page at
+the outside — and each is **one judgment** the reviewer has to make: framed as a question, explained
+in a few sentences, and anchored to the exact lines that let them make it.
 
 **Two kinds of judgment, one component.** A **behavioural** checkpoint asks what the system now does:
 *is nil safe for every consumer?*, *does the new guard admit a class it used to refuse?* A
@@ -124,6 +135,7 @@ change the judgment, and the page carries the judgment.
   <p>Two to four sentences: what changed here, what follows from it, and what the reviewer has
      to decide <span class="tier">from unchanged code</span>.</p>
   <figure class="chain">…</figure>                       <!-- optional: mechanism inside the change -->
+  <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <ul class="lookat">
     <li><b>The scope guard</b>
         <span>the branch the filter now skips, and what reaches it instead</span>
@@ -150,6 +162,10 @@ change the judgment, and the page carries the judgment.
   § *Chains* owns the component and the rule that sends a crossing chain to *Impact outside the
   diff*. A chain followed by a paragraph that names each node again is the defect: the figure says
   how the value gets there, the paragraph says what to judge about it.
+- **The primer, `aside.primer`, optional and `--mentor` only.** The framework's rule stated rather
+  than pointed at, for a reviewer new to the stack. It sits here — after the chain, before the *Look
+  at* list — and § *Mentor mode* owns every rule about it, including that it holds this checkpoint's
+  single `a.doc`. Without the flag a checkpoint has no such slot, and the shape above is the shape.
 - **Look at, `ul.lookat`, one to four entries.** Each has **three parts, in this order**: a title
   naming what is at that location, a clause saying what to see in it, and the citation last. An entry
   with no clause is a bare citation, and a bare citation is a location the reader has to open to learn
@@ -188,10 +204,34 @@ page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. 
 reading path refer to a checkpoint by its question, and section 02's intro says in one sentence that
 the order is the order to think about them.
 
-**Three to five, fewer for a small PR.** A sixth is merged or named in a clause of the nearest
-checkpoint; `SKILL.md` step 7e has the selection rule. A finding that does not become a checkpoint
-keeps its entry in *Impact outside the diff* or in the evidence foot, so nothing found is lost — only
-its promotion to a judgment, and the caveat under the heading is what makes that honest.
+**Three to five per independent semantic delta named in § 01, and seven on the page is the stop.**
+`SKILL.md` step 7e has the selection rule. A PR with one delta carries three to five whatever its line
+count; a PR whose § 01 legitimately carries two delta bullets may carry up to seven. Fewer than three
+is right for a PR small enough that a third would be padding.
+
+**The driver is the delta, not the diff, and that is the whole point.** A rename across eighty files,
+a codemod and a regenerated lockfile are one semantic delta, so the count does not move — what a big
+diff of that kind buys is a longer inventory, which is collapsed and costs the reader nothing. One
+behaviour reaching a long way is also one delta: the reach shows up as more *Look at* entries, a
+chain, a card in *Impact outside the diff*. Only a PR that ships genuinely independent changes has
+more than one delta, and that is the only shape that earns a sixth checkpoint. Since the deltas are
+already the bullets § 01 carries, **the reader has already read the reason the agenda is longer** —
+it is not a number this page asserts about itself.
+
+**Seven is where it stops, and the reason is § 03 rather than arithmetic.** At some width the reading
+order can no longer be a route through the code — schema before the code that trusts it, the smallest
+complete example before the bulk — because every stop has been spent naming a checkpoint, and § 03
+has become an index of § 02. Seven is a first calibration of where that happens, in the sense
+§ *The agenda budget* means it; the test is whether § 03 still reads as a route.
+
+Past seven the answer is not an eighth checkpoint. It is `SKILL.md` step 7a's bundling sentence in
+§ 01, and, if the diff strained the run, the statement of which region was skimmed.
+
+A finding that does not become a checkpoint keeps its entry in *Impact outside the diff* or in the
+evidence foot, so nothing found is lost — only its promotion to a judgment, and the caveat under the
+heading is what makes that honest. **A judgment is the one thing that cannot be demoted that way**: an
+entry in the foot that the reviewer has to decide about is a checkpoint that was mis-filed, which is
+why the count has room to grow rather than a ceiling that would force one down there.
 
 **The sampling caveat lives here, once.** *These are what this pass surfaced, not an audit: repeated
 runs over the same diff surface overlapping but different sets.* Under the section heading, before the
@@ -268,12 +308,17 @@ where that goes.
 
 **Three caps, and the middle one is the product:**
 
-- **One per page.** A second is the page becoming a style review, and it will arrive looking thorough.
-  The departure that does not get the slot is not written anywhere else — an observation about shape
-  with nowhere to go is noise, not a finding, and the sampling caveat already says this is not an audit.
-- **It never displaces a behavioural judgment.** Five behavioural checkpoints means there is no slot,
-  and that is the right outcome. A page that dropped *is nil safe for every consumer?* in order to ask
-  where a class lives has traded the product for a preference.
+- **One per page — not one per delta.** Every other count in § *Section 2* scales with the number of
+  independent changes the PR ships; this one does not. Three deltas still buy one question about how
+  the code was built. A second is the page becoming a style review, and it will arrive looking
+  thorough. The departure that does not get the slot is not written anywhere else — an observation
+  about shape with nowhere to go is noise, not a finding, and the sampling caveat already says this is
+  not an audit.
+- **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
+  behavioural agenda already fills the page, there is no slot, and that is the right outcome. A page
+  that dropped *is nil safe for every consumer?* in order to ask where a class lives has traded the
+  product for a preference; a page that reached an eighth checkpoint to fit one in has bought a
+  preference with the reviewer's attention.
 - **Ranked last**, per `SKILL.md` step 7d, whatever the four ranking criteria say. Misreading where a
   class lives costs a conversation; misreading a behavioural judgment costs production.
 
@@ -432,17 +477,21 @@ The PR description is never evidence. Where the page reports intent from it, att
 
 ## Framework anchors
 
-Two ways to anchor a claim that rests on the framework behaving as the framework rather than on
-anything this diff contains. Neither is an evidence tier, and neither changes one.
+Three ways to anchor a claim that rests on the framework behaving as the framework rather than on
+anything this diff contains — two of them always available and the third only at `--mentor`. None is
+an evidence tier, and none changes one.
 
 | Anchor | Is | Renders as |
 |---|---|---|
 | **Documentation link** | Provenance: where the framework's rule is written down | `<a class="doc" href="…">` around the concept, from the catalogue |
 | **Runtime probe** | A question to the reviewer's own application, which they run | `<pre class="probe">`, one command |
+| **Primer callout** | The framework's rule itself, stated — what a link escalates into | `<aside class="primer">`, inside the checkpoint it explains. **`--mentor` only** |
 
-A third once existed — a primer callout, for the case where the reviewer could not decide without
-knowing the framework rule itself. § *A future full mode* records what it was. It is not in force,
-and a page emits none.
+**The third is the only part of this page a flag admits, and § *Mentor mode* owns it alone** — the
+gate, the budget, the earning test, the demo rule and where it sits. What belongs here is the one
+consequence for the other two: a primer holds its checkpoint's single `a.doc`, so the budget below is
+unchanged rather than raised, and a checkpoint carrying a primer carries no second link. Without
+`--mentor` a page emits none of them and this table has two rows.
 
 **A doc link is provenance, not evidence.** "`update_all` skips callbacks" is a property of Rails,
 and "`insert_all` never builds a struct, so nothing it writes is cast" is a property of Ecto; the
@@ -525,6 +574,7 @@ must exist in this repo*, and it fails the same way when broken.
 | Running something to be believed | The checkpoint it settles — `pre.probe` after the explanation, with any setup beside it | It is an action the reviewer takes, and there is no separate validations section to send it to |
 | A mechanism made legible | A clause in the checkpoint's explanation, with `a.doc` on the concept | It deepens the judgment; a link is an aside, not a step |
 | The framework's general rule | The sentence that states the consequence | Same |
+| The rule stated, not pointed at | `aside.primer` in that checkpoint, holding the same link | Only at `--mentor`, and only where knowing the rule changes how the judgment is made — § *Mentor mode* |
 
 Prefer the probe where this application's own configuration decides the answer — a real
 `dependent:`, a real scope's SQL, the indexes that actually exist. Prefer the doc link where the
@@ -533,7 +583,9 @@ framework's rule is the whole point and this app cannot vary it.
 **Earned by a decision the reviewer has to make.** The same test the excerpt budget uses, and for the
 same reason: a behaviour every developer in that stack already knows earns nothing, and a page that
 links each one has become a tutorial with a diff attached. **At most one doc link per checkpoint**,
-and a page carrying more links than judgments has stopped selecting. **At most one probe per
+and a page carrying more links than judgments has stopped selecting. `--mentor` does not move that
+number — a primer *holds* the checkpoint's link rather than adding one, which is what stops the flag
+turning into a licence to cite. **At most one probe per
 checkpoint** as well, and probes are scarcer than links besides: a checkpoint earns one where its
 judgment is framework-shaped — ActiveRecord in Rails, a changeset, a query, an association or an
 `on_mount` chain in Elixir — and a second wants a reason. The one exemption is the `‡ probe` row
@@ -563,9 +615,128 @@ probe is being written rather than while the page is being read. It is also the 
 between the reader and a 140-character one-liner: they decide whether to paste it from the label,
 not from the command.
 
-**The deep-link ladder governs neither.** The four rungs are about `file:line` citations into a git
-remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is plain text —
-exactly as an in-page `href="#cp-b"` does. A probe has no href at all.
+**The deep-link ladder governs none of them.** The four rungs are about `file:line` citations into a
+git remote, so a doc link stays clickable at rung 3 and rung 4 where every repo citation is plain
+text — exactly as an in-page `href="#cp-b"` does. A probe has no href at all, and a primer's own
+citation follows the rung like any other citation on the page.
+
+## Mentor mode
+
+`--mentor` is for a reviewer who is new to the stack rather than to the change. It admits one
+component — the **primer callout**, the third framework anchor — and changes nothing else. This
+section owns all of it: the gate, the placement, the budget, the earning test and the demo rule.
+
+**The rule that keeps it from being a level is subtraction.** Delete every `aside.primer` from a
+mentor page and what remains is the page the same run would have written without the flag: the same
+sections, the same checkpoints in the same order, the same reading path, the same impact panel, the
+same evidence foot, the same prose budget on every other part. Nothing is added elsewhere, nothing is
+reordered, and nothing is dropped to make room. State it as a check on your own draft — *if I deleted
+these, would the rest be the page I would have written anyway?* — because the answer is what says
+whether `--mentor` stayed a flag or became a second document.
+
+**That is the whole distance from the `--full` this version refuses.** `--full` named a different
+document: a different section set, reached by a flag, with nothing on the page to tell a reader which
+one they were holding. A mentor page differs from the default page by components the reader can see.
+
+**And it is why there is no mentor badge.** `page-template.html` refuses three — severity,
+verification, stack — because each asserts something the page will not say. This fourth one is
+refused for a different reason, and the difference is worth keeping: the flag's effect is already
+visible, so a chip adds nothing, and a count of primers would be the page grading its own
+thoroughness. Which flags a run took is something to say in chat. The page says it by carrying the
+callouts.
+
+### The primer callout
+
+What a doc link escalates *into*. A link says where the framework's rule is written down; a primer
+states the rule, for the case where the reviewer would judge better knowing it than knowing where to
+go and read it.
+
+```html
+<aside class="primer">
+  <div class="pr-head">
+    <span class="pr-brand">Rails</span><i class="pr-sep"></i>
+    <span class="lbl">Primer</span><span class="pr-api">ActiveModel::Dirty</span>
+  </div>
+  <div class="pr-body">
+    <div class="pr-main">
+      <b>The two predicates, named</b>
+      <p>One or two paragraphs: the rule, and what follows from it.</p>
+      <div class="item">The line in <em>this</em> repository that earned it
+        <a class="path" href="…">app/models/project.rb:41</a></div>
+      <a class="doc" href="…">the pinned link it escalated from</a>
+    </div>
+    <div class="pr-side">
+      <span class="lbl">In practice</span>
+      <pre class="demo">…</pre>
+      <p class="note">One clause the demo does not carry.</p>
+    </div>
+  </div>
+</aside>
+```
+
+**Inside a checkpoint, after the explanation and any chain, before `ul.lookat`.** The reader meets the
+unfamiliar API immediately after the mechanism that uses it and before the places they are sent to
+look — below that list the lesson arrives after they have already opened four files without the rule
+that decides what they are reading. A primer in § 03, § 04 or the evidence foot is a framework lesson
+with no judgment attached to it, and `evals/checks/rails-anchors.rb` fails one.
+
+**Gated on its doc link, and that link is the checkpoint's link.** Exactly one `a.doc`, pinned per
+§ *Framework anchors*, whose budget is unchanged: a checkpoint carrying a primer carries no other
+link, and its own sentences cite this repository alone. **Mentor buys explanation, not citations.** A
+run that answered the flag by linking more has produced the tutorial with a diff attached that the
+anchor budget exists to prevent — and it will read as thoroughness while getting less navigable,
+which is § *One canonical home*'s regression arriving through the one door the flag opens.
+
+Two things follow from that gate, and both are deliberate.
+
+- **A closed catalogue means no primers for that stack.** While `elixir-docs.md` § *Version*
+  withholds every link, a Phoenix run at `--mentor` carries none of these and anchors with probes and
+  prose. Narrower, not wrong: the same trade the withhold already makes, arriving at the heaviest
+  component rather than the lightest, and lifted by the same one command. Say so in chat rather than
+  on the page — a line explaining why the page has no primers is a mentor badge with an apology
+  attached.
+- **A `‡ probe` row may not be a primer's subject.** Those behaviours changed inside the supported
+  range, so no paragraph about them is true of every app, and a primer's whole form is a paragraph.
+  Route them to a probe and name the setting that decides it, per the catalogue's § *What the marks
+  mean*.
+
+**It carries a `file:line` from this repository, inside the aside.** Two paragraphs of framework prose
+read as self-justifying, which is why this is the rule easiest to lose here. The citation names the
+line the callout was earned by, and the check judges the whole aside as one block precisely so a
+primer can neither omit its own citation nor borrow the one in the paragraph above it.
+
+**`pre.demo` is not `pre.probe`, and the difference is the receiver.** A demo quotes documented
+framework behaviour on a class **this repository does not have**, so it may show a result line: it is a
+quotation of the manual, and the manual states results. A probe asks *this* application and may never
+show one, because the run did not boot it. Name an application class in a demo and the block becomes
+exactly the fiction the probe rule exists to prevent, with the rule switched off. So **a demo lives
+only inside a primer**, and the two anchors are adjacent, never nested — no `pre.probe` inside an
+`aside.primer`, because one states the framework's rule and the other asks what this app did with it.
+
+**The budget: one per checkpoint, three per page, 90–200 words of primer prose each.** They are
+counted **separately** from § *The agenda budget*, and that separation is the load-bearing half: a
+mentor page is that budget *plus* its primers. Folded together, a run would pay for a lesson by
+dropping a judgment, which is the one thing that budget forbids.
+
+**Earned by the judgment, never by the flag.** Without `--mentor` the test is *could the reviewer
+decide this without the rule?*; with it, *would they decide it better knowing the rule?* That is a
+lower bar and it is still a bar — a behaviour every developer in the stack already knows earns
+nothing at either setting. And **a mentor run that earns no primer writes none.** Manufacturing a
+lesson to honour a flag is how the page becomes a framework manual with a diff attached, and it will
+arrive looking generous.
+
+**Neither a tier nor evidence**, exactly like the link it escalates from. The claim underneath still
+rests on its repo `file:line` at the tier it already carried. There is no sixth tier, and a primer is
+not one: what it adds is why the framework consequence follows, which is provenance — which is also
+why the component is plum rather than a hue of its own.
+
+**No mark, and therefore no trademark line.** The version of this callout that the agenda put down
+carried an inlined logotype and a notice saying whose it was. This page has no `<svg>` anywhere, so
+the artwork went, and the notice went with it because a disclaimer disclaims something on display.
+The branded/unbranded variant split went too: it existed only to say who drew the mark, and one shape
+now serves a framework, a gem and a hex package alike with the name set as text.
+
+---
 
 ## Source excerpts
 
@@ -1237,7 +1408,8 @@ tempted to show its working.
 ## A future full mode
 
 This page put four things down, and they are recorded here so a later mode picks them up from a
-written rule rather than rediscovering them. None of them is in force.
+written rule rather than rediscovering them. Three are not in force; the fourth came back, and the
+paragraph below it is the more useful record.
 
 - **The seven-field review unit** — why this exists · implementation · relevant tests · affected but
   unchanged · things to understand · how to validate · reviewer questions, rendered as a `.mech`
@@ -1247,9 +1419,13 @@ written rule rather than rediscovering them. None of them is in force.
   a group. `scripts/ledger-rows.sh` still emits that form without `--paths-only`.
 - **The comprehension checkpoint** — at most five questions, each answerable from the page but not by
   copying one sentence out of it, rendered as inverted tiles.
-- **The framework primer** — `aside.primer`, one per flow at most and most flows earning none, gated
-  on the doc link it escalated from, carrying a `file:line` from this repository and a `pre.demo`
-  that may show a result line only because its receiver is a class this application does not have.
+
+**The framework primer** used to be the fourth entry here, and it is the one that came back: `--mentor`
+carries it, re-hung from a checkpoint instead of a flow and stripped of the logotype this page has no
+room for. § *Mentor mode* owns it now. What it demonstrates is the shape a returning component takes
+— not the old rules restored wholesale, but the half that was load-bearing (the doc-link gate, the
+repo citation, the demo's receiver) kept and the half that belonged to the old page (the per-flow
+budget, the mark, the variant split) dropped.
 
 **And a level, if one returns, is emitted rather than described.** The rail once shipped in its
 seven-entry form with a comment telling a `--brief` run to cut it to four and renumber — a
@@ -1324,7 +1500,8 @@ big should the page be?* is what decides when one is owed.
 ## Section 2 · What needs your attention — always
 
 The page's core, and the one section a reader who has time for nothing else should read. Three to
-five checkpoints; § *The review checkpoint* owns every rule about them.
+five checkpoints per independent delta § 01 names, seven at the outside; § *The review checkpoint*
+owns every rule about them, the count included.
 
 The section itself carries only a heading, one sentence saying what these turn on and that the order
 is the order to think about them, and the sampling caveat. Then the checkpoints, in ranked order.
@@ -1353,6 +1530,16 @@ sequence.
 have fifteen minutes and now understand the important questions, where do I start reading?* Every
 other file is accounted for in the evidence foot, which is the whole reason a short route here is
 honest rather than a gap.
+
+**Every checkpoint is reachable from here** — by its own stop, or by a stop whose `span.why` names it,
+since one stop routinely serves two judgments and one judgment routinely needs two stops. A checkpoint
+nothing on this list points at is a question the reader was asked and never routed to.
+
+**That rule is also what bounds the agenda, and it bounds it from the reader's side.** The stop count
+is not driven by the checkpoint count — this section is a route, ordered by conceptual dependency, not
+an index of § 02 in reading order. So when routing every checkpoint would consume the whole list and
+leave no room for the schema before the code that trusts it, the agenda has gone wider than the page
+can carry, and § *The review checkpoint* is where that is settled.
 
 Never a grade, never a severity chip. Where attention goes is expressed by what is on this list and
 in what order, which is the only form of ranking this page has.
@@ -1433,12 +1620,31 @@ outside one of them is a page to read again, not a page that is wrong.
 | A checkpoint — question, explanation, *Look at* clauses, open line | 50–140 |
 | A reading-path stop's `span.why` | ≤ 40 |
 | An affected entry's clause | ≤ 30 |
-| **The page, visible prose, on a small or medium PR** | **700–1,500** |
+| **The page, visible prose** | **the parts above, summed** |
+
+**The page total is derived, not a separate number**, because a page has as many checkpoints as the
+change has judgments and a fixed total would price them against each other:
+
+```
+≈ §01 (80–160) + n × (50–140) + §03 (stops × ≤40) + §04 (cards × p.ip-why) + section framing
+```
+
+At four checkpoints on a small or medium PR that comes to roughly **700 to 1,500 words**, which is
+the figure to carry in your head and the one a page of that shape is read against. A seven-checkpoint
+page over two independent deltas is legitimately longer, and **it does not get there by writing seven
+checkpoints at thirty words each.** That was the trap in stating the total flat: the arithmetic of a
+wide agenda under a fixed ceiling forces every checkpoint under its own floor, and the floor rule
+below is what that violates.
 
 **What is never counted:** anything inside a chain — node labels, `.ip-d` details, `.ip-rel` verbs,
 lane labels, the legend, a `figcaption`; anything inside `<code>` or `<pre>`, which includes every
 probe and every command; anything inside a collapsed `<details>`; and the masthead. A page is never
 over budget by a figure or a quotation.
+
+**And a primer is counted on its own, not against these.** At `--mentor` the page is this budget
+*plus* its primers, each 90–200 words, at most three of them — § *Mentor mode* owns those numbers.
+Folding the two together would make a run buy a lesson by dropping a judgment, which is precisely
+what the next paragraph forbids.
 
 **The one number this budget never touches is the checkpoint count.** A page that came in under the
 ceiling by losing a judgment has done the one thing the budget forbids. Fewer checkpoints is
