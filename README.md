@@ -260,7 +260,7 @@ into code the diff never opened, and it is also the honest limit on the page.
 - **It never decides anything.** A map that says nothing about a file is not telling you the file is
   fine, only that this pass surfaced no judgment there.
 
-**And it depends on the model behind it.** We develop and test with Opus most of the time, and that
+**And it depends on the model behind it.** We develop and test with Claude Opus 5 most of the time, and that
 is what the page's depth is calibrated against. Other models will trade cost for reach differently —
 try a few against your own codebase and keep the one whose maps you actually trust.
 
