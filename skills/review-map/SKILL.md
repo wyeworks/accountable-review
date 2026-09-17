@@ -207,9 +207,13 @@ loaded — its instructions are its own, which is the point of putting them in a
   re-establishing it while splicing excerpt files it had first written somewhere else and then had
   to move.
 - **Fix the deep-link mode now, not at render time.** Check whether the head SHA is even reachable
-  on a remote — `git branch -r --contains <HEAD_SHA>`, where empty output means it was never pushed
-  and every permalink to it would 404. Unpushed branches and worktrees are among the most common
-  targets for this skill, so expect this. Pick one rung from the ladder in
+  on a remote — `git branch -r --contains <HEAD_SHA>`, where **exit 0 and empty output** means it was
+  never pushed and every permalink to it would 404. Unpushed branches and worktrees are among the most
+  common targets for this skill, so expect this. **A non-zero exit is a state of its own and neither
+  of the other two**: git was asked and could not answer, so nothing is known about reachability. Do
+  not read it as unpushed — say in the masthead that reachability could not be determined and render
+  citations as plain text, rather than asserting a branch is unpushed on an answer git never gave.
+  Pick one rung from the ladder in
   `references/report-format.md` and hold it for every citation. The rung decides whether anything is
   clickable; it does not decide the form — inside a rung, a line in the diff links to the diff page
   and a line outside it links to a blob, with one exception that is settled per file in step 3 and

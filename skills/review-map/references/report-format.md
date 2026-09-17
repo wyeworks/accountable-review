@@ -1815,8 +1815,19 @@ work-in-progress are exactly the cases this skill runs on most, so this is the c
 edge case. Before choosing a link mode, confirm the head SHA actually exists on the remote:
 
 ```sh
-git branch -r --contains <HEAD_SHA>     # empty output ⇒ the commit is on no remote
+git branch -r --contains <HEAD_SHA>     # exit 0 and empty output ⇒ the commit is on no remote
 ```
+
+**Asked and unable to answer is not the same as unpushed, and the ladder has no rung for it.** There
+are three states, not two: git answers and names a remote; git is asked and cannot answer at all — an
+unreadable repository, an unresolvable head, a worktree whose remotes were never fetched; and git
+answers naming none, which is the only one of the three that means unpushed, and only when the exit
+status is zero. Read a non-zero exit as the middle state and **refuse to pick a rung on
+reachability**: say in the masthead that reachability could not be determined, and render citations as
+plain text without asserting that the branch is unpushed. The verdict would otherwise come from an
+answer git never gave, and it is the one failure a reader cannot detect from the page, because an
+unlinked citation looks the same under either cause. `evals/checks/page-invariants.rb` § 5 separates
+the same three states for the same reason and skips rather than guessing.
 
 **Degradation, in order:**
 
