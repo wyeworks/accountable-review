@@ -235,6 +235,15 @@ reads:
   umbrella — **ask which to cover** rather than picking. Same rule as several Rails roots, and for the
   same reason: covering the wrong half produces a page that is confidently about code the reviewer is
   not reading.
+
+  **Look at the diff before asking, and answer it from there when you can.** If every changed
+  application path sits under one root, that root is detected rather than chosen and there is no
+  question to put. Ask only when the diff genuinely spans more than one.
+
+  **Non-interactively (`--output`) there is nobody to ask, and picking is still forbidden.** So when
+  the diff does not settle it, **stop** and say which roots were found and that the run needs one
+  named — a missing map is reported by the caller and a confidently wrong one is not. This is the
+  case CI meets most often, which is why it is spelled out rather than left to the general rule.
 - **Neither** — say so plainly, cover the diff with the stack-independent material (the five
   sections, the checkpoints, the tiers, the impact chains, the evidence foot), and **emit no documentation link and no
   probe.** Do not default to Rails: a Rails lens applied to a Go service invents findings, and a
@@ -353,6 +362,10 @@ cannot cite is a question it may not ask.
   the part of the diff carrying the least to decide.
 - If the whole diff is trivial (a few files, no migration, no new behaviour), say so and offer to
   stop rather than generate ceremony. A page nobody needs is worse than no page.
+  **Non-interactively (`--output`), make the page.** There is nobody to offer to, and the offer has
+  already been answered upstream: `ci/application-code.sh` measures exactly this and skips the job
+  before the skill is reached, so a run that got here is one that gate judged worth a map. Say the
+  diff is slight in *What changed*, as a stated limit, and carry on.
 
 ## 4. Derive what changed
 
