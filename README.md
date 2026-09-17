@@ -538,9 +538,15 @@ approve and sets no check — and `--no-pr-comment` drops the step and the scope
 "Review Map: passed" status, and there will not be one: a passing check is a verdict, and this page
 does not carry verdicts.
 
-One thing is left for you: **the credential.** Add `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`)
-as a repository secret. Setup cannot see your secrets, so it says outright that this is outstanding
-rather than implying everything is ready.
+One thing is left for you: **the credential.** Add one of two repository secrets. `ANTHROPIC_API_KEY`
+is an API key from the Anthropic Console, billed to that API account. `CLAUDE_CODE_OAUTH_TOKEN` is
+what `claude setup-token` prints — run it once on a machine where Claude Code is already signed in,
+paste the token in under that name, and the runs bill against that account's Claude subscription
+instead of API credit. That is usually what a team already paying for Claude Code wants, and it is
+the option the workflow file cannot tell you about, since it names the variable and not where the
+value comes from. The token is personal and long-lived rather than permanent: re-run the command and
+replace the value when it expires. Setup cannot see your secrets either way, so it says outright that
+this is outstanding rather than implying everything is ready.
 
 A pull request that only touches documentation, tests, tooling or a lockfile gets no Review Map —
 there is nothing for one to explain. Neither does a trivial application change: two files **and**

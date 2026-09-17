@@ -260,6 +260,42 @@ the delivery and upload steps do not need a model.
 set. That failure is deliberately distinguishable from a failed run — nothing was generated and
 nothing was spent.
 
+### Where each one comes from
+
+The workflow names the variables and not their source, which is the half a team has to be told.
+
+**`ANTHROPIC_API_KEY`** is an API key created in the Anthropic Console. The run is billed to that
+organisation's API account.
+
+**`CLAUDE_CODE_OAUTH_TOKEN`** is what `claude setup-token` prints. Run it once, on a machine where
+Claude Code is already signed in:
+
+```bash
+claude setup-token
+```
+
+It runs the OAuth flow and prints a single token; that string is the whole value of the secret, and
+it goes into Settings → Secrets and variables → Actions → New repository secret under exactly that
+name. The run is then billed against that account's **Claude subscription** rather than API credit,
+which is the reason to choose it: a team already paying for Claude Code needs no second billing
+relationship to generate Review Maps.
+
+Three things about that token before choosing it over an API key.
+
+It is **personal**. The token carries one person's account, so every Review Map in the repository is
+generated as them, under their limits.
+
+It is **long-lived rather than permanent**. A workflow green for months can start failing on
+authentication with nothing in the repository having changed. The fix is `claude setup-token` again
+and a new value in the same secret; nothing about the workflow moves.
+
+It is **still only a secret**, so the fork rule is unchanged — a `pull_request` run from a fork gets
+neither variable, which is why that case is skipped rather than made to work.
+
+And the boundary that does not move either way: **setup writes the workflow and never the secret.**
+`claude setup-token` runs on your machine and its output goes to GitHub's secret store; nothing in
+this plugin reads it, at setup or at run time.
+
 ## The application-code gate
 
 ```yaml
