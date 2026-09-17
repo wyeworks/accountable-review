@@ -257,8 +257,13 @@ A push to a ready pull request does not regenerate the map; check the revision
 the page names before trusting it. Superseded runs are cancelled automatically.
 
 Still to do:
-  Add ANTHROPIC_API_KEY as a repository secret
-  (Settings → Secrets and variables → Actions → New repository secret).
+  Add a model credential as a repository secret
+  (Settings → Secrets and variables → Actions → New repository secret) — either:
+    ANTHROPIC_API_KEY        an API key from the Anthropic Console, billed to
+                             that API account; or
+    CLAUDE_CODE_OAUTH_TOKEN  run `claude setup-token` on a machine already
+                             signed in to Claude Code and paste what it prints,
+                             to bill the runs to that Claude subscription.
   Until then the workflow will run and fail at the generation step.
 ```
 
@@ -267,6 +272,15 @@ it is not configured. You cannot check a repository's secrets from here, so unle
 workflow already reading `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN`, list it as outstanding and
 say plainly that you could not verify it. A setup message claiming everything is ready, followed by a
 red run on someone's first pull request, spends the trust this command needs.
+
+**Name both, and name where each comes from.** The workflow file reads two variables and says nothing
+about their source, so a team that has never created one assumes an API key is the only way to pay
+for this. `claude setup-token` is the other way and usually the one they want, since it uses a Claude
+subscription they already have. Add, for the OAuth token only, that it is personal — every Review Map
+in the repository is generated as whoever ran the command — and that it expires, so re-running the
+command and replacing the secret's value is the fix for a workflow that starts failing on
+authentication with nothing else having changed. `references/workflow.md` § *The credential* has both
+sources in full.
 
 Name the other limits in the same breath, briefly, where they apply:
 

@@ -33,9 +33,8 @@ pass at the run's own analysis before any of it is written) or `--effort low`, w
 `--mentor`, off by default, which is the one flag that puts anything on the page. All of it is
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
 frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. **There is no
-level flag**: `--brief` and `--light` are accepted and change nothing, `--full` and `--review` stop
-the run as not implemented in this version. The "source" is prose that another Claude instance
-executes, so the unit of quality is instruction clarity, not compilation.
+level flag**, and an unrecognised one is reported rather than guessed at. The "source" is prose that
+another Claude instance executes, so the unit of quality is instruction clarity, not compilation.
 
 There is no build and no linter, and the **prose** has no test suite: changes to it are verified by
 running the skill against a real PR and reading the page it produces.
@@ -179,7 +178,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/templates/workflow.yml` | The workflow itself. Version substitutions, the four when-decisions behind `SETUP:IF:` blocks, and nothing else configurable by design |
 | `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically and resolves the `SETUP:` blocks, `install-workflow.sh` writes idempotently, refuses to clobber, and recovers the when-decisions from the file it is about to replace, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
-| `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page — and refuses `mode: full` rather than remapping it |
+| `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page, and a page-shape argument is an unknown argument here rather than a silent no-op |
 | `ci/application-code.sh` | The scope gate, in two rules: does this diff change application code at all, and is what it changes more than trivial? Both counted over application paths only, the trivial thresholds joined by **and**, and it fails open, so an unrecognised path is code |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
 | `README.md` | The public face — why comprehension debt is the problem, what a Review Map is, install, usage, CI setup, and the technical overview. Written for someone deciding whether to use this, so depth past that decision belongs in `docs/` |
@@ -200,27 +199,27 @@ the only place skipping is impossible.
 
 Editing one of these means checking the others still agree.
 
-- **One page shape, and no flag chooses it.** `--full` and `--review` stop the run as not implemented
-  in this version; `--brief` and `--light` are accepted and change nothing. The refusal is settled in
-  `SKILL.md` step 1 beside the target and the link rung, its wording is in § *Two levels are not
-  implemented in this version*, and `report-format.md` § *One page shape* states the consequence for
-  the format. **`--mentor` adds a component and does not choose a shape** — the bullet below it owns
-  that distinction and the subtraction rule that holds it.
+- **One page shape, and no flag chooses it.** No argument names a length, a depth or a second
+  document, anywhere in the plugin: not on the skill's command line, not on
+  `ci/generate-review-map.sh`, and not as a key in `.accountable-review.yml`. `SKILL.md` step 1
+  settles it beside the target and the link rung, and `report-format.md` § *One page shape* states
+  the consequence for the format. **`--mentor` adds a component and does not choose a shape** — the
+  bullet below it owns that distinction and the subtraction rule that holds it.
 
-  **Refusing `--full` rather than mapping it is the load-bearing half.** It named a seven-section
-  page. Handing back a five-section agenda under that name is a flag that quietly changed meaning,
-  and the reader has nothing on the page to tell them which they got. The same argument runs through
-  the CI config: `ci/generate-review-map.sh` and `read-config.sh` reject `mode: full` and accept
-  `brief` and `light` as aliases that reach nothing.
+  **The load-bearing half is that a page-shape argument is unknown rather than tolerated.** A flag
+  or a config key taken silently and mapped onto this page is a name that quietly changed meaning,
+  and the reader has nothing on the page to tell them which they got — so the skill reports it, the
+  CI adapter exits 2 on it, and `read-config.sh` falls through to its unknown-key rule. That is one
+  rule in three places rather than three aliases, and `setup-ci/tests/run.sh` pins the last two.
 
   **What the narrowing replaced is worth knowing, because the pressure to reintroduce it will come
-  back as generosity.** There were two shapes, `--brief` merging four sections into one and carrying a
-  word budget to keep it short, and `--full` writing all seven. Two products, only one of which anyone
-  developed against, and a reader choosing between them was choosing a length rather than a document.
-  What a reviewer wants is not a length setting: it is an answer to *what do I have to judge here, and
-  where do I look?* A future full mode is the same agenda with depth beneath it — `report-format.md`
-  § *A future full mode* records the four components this page put down and the rules they had —
-  never a second document reached by a flag.
+  back as generosity.** There were two shapes, a short one merging four sections into one and
+  carrying a word budget to keep it short, and a long one writing all seven. Two products, only one
+  of which anyone developed against, and a reader choosing between them was choosing a length rather
+  than a document. What a reviewer wants is not a length setting: it is an answer to *what do I have
+  to judge here, and where do I look?* A future full mode is the same agenda with depth beneath it —
+  `report-format.md` § *A future full mode* records the four components this page put down and the
+  rules they had — never a second document reached by a flag.
 
   **The agenda budget survived the level that carried it, and lost its check.** `report-format.md`
   § *The agenda budget* is prose: per-part caps and a page total that is those parts summed, which
@@ -245,9 +244,9 @@ Editing one of these means checking the others still agree.
   have written without the flag.** Nothing else moves: same sections, same checkpoints in the same
   ranked order, same reading path, same panel, same foot, same budget on every other part.
 
-  **That subtraction is the whole distance from the `--full` this version refuses**, and it is the
-  sentence to keep. `--full` named a *different document* reached by a flag, with nothing on the page
-  to tell a reader which one they were holding; a mentor page differs by components a reader can see.
+  **That subtraction is the whole distance from a second document reached by a flag**, and it is the
+  sentence to keep. Such a flag names a *different document*, with nothing on the page to tell a
+  reader which one they were holding; a mentor page differs by components a reader can see.
   Which is also why it takes **no badge** — the effect announces itself, and a count of primers would
   be the page grading its own thoroughness. `page-template.html` refuses it beside the severity chip,
   the verification badge and the stack badge, because that fourth refusal has the best excuse of the
@@ -480,8 +479,8 @@ Editing one of these means checking the others still agree.
   explains why a framework consequence follows; a console probe asks the reviewer's own application;
   a primer states the rule outright, at `--mentor` only. The claim underneath keeps resting on a repo
   `file:line` at the tier it already carried, which is what keeps the five-tier invariant untouched
-  in all three cases. It is also the answer already written down for `--review`: where a claim came
-  from is provenance, and provenance is not evidence.
+  in all three cases. It is also the answer already written down for an imported review finding:
+  where a claim came from is provenance, and provenance is not evidence.
 
   Two rules carry the first two, and both are the kind that look like diligence when broken. **A doc link may
   only be a row of the stack's catalogue, pinned to the version this app runs**, because the run
@@ -1018,8 +1017,8 @@ Same rule as above: editing one of these means checking the others still agree.
   **A cheaper CI page is the regression to watch**, and it will look like thrift — skip the excerpts
   nobody will open, skip the flows on a big diff, skip the gate because there is no reader. Take any
   of those and there are two products, only one of which is developed against, and the one the team
-  actually reads in CI is the one nobody looks at while editing the prose. `--brief` is the answer to
-  "how much page", at both levels of watching; `--output` is not a second one.
+  actually reads in CI is the one nobody looks at while editing the prose. There is one answer to
+  "how much page", at both levels of watching, and `--output` is not a second one.
 - **A Review Map names its revision, on the page.** Two short SHAs in the masthead's `Revision` cell,
   head → base, beside the branch names. Three files agree: `report-format.md` § 1 states the rule,
   `page-template.html` carries the cell, and `ci/generate-review-map.sh` refuses to deliver a page
@@ -1422,12 +1421,13 @@ budget grows. It does not dissolve all of it — the orchestrator still has to d
 are worth an agent, and that is the same question one level up. And it runs into step 7, which has to
 hold every note at once to merge and rank them; more notes is a bigger synthesis, not a smaller one.
 
-## The other unsolved half: `--review`
+## The other unsolved half: threading a review pass through the map
 
-`--review` is declared, parsed, and stops. `SKILL.md` § *Two levels are not implemented in this version* has
-the runtime behaviour; this is the design brief, written down so the next iteration starts from the
-real question. It is meant to run the project's code-review pass as well and thread its findings
-through the map.
+Running the project's code-review pass as well, and threading its findings through the map, is not
+built and has no flag. It used to have one, declared and parsed and stopping the run, and that is
+gone — a name reserved for something nobody is writing is a promise on the command line. What is
+kept is the design brief, written down so the next iteration starts from the real question rather
+than rediscovering it.
 
 **It is not "run `/code-review` and paste the output", and the reason is the product principle.** A
 code-review pass produces graded findings — severity, confidence, a ranked list. This page carries no
@@ -1439,13 +1439,13 @@ nearly the shape of a ranked checkpoint list, and the difference — that one ca
 the other carries questions — is one word per item wide.
 
 **`--effort high` has now built half of this**, which is the reason to read the rest of this section
-before writing the level rather than after. The routing it needs — an external challenge arriving,
-being verified against the file, and landing in the checkpoint that turns on it in the page's own
-voice with no grade attached — is the mechanism `SKILL.md` steps 6c and 8 now run at `high`. What `--review` still has to
-solve is where the claims come from and how a *graded* source is stripped, not what to do with one
-once it arrives.
+before writing it rather than after. The routing it needs — an external challenge arriving, being
+verified against the file, and landing in the checkpoint that turns on it in the page's own voice
+with no grade attached — is the mechanism `SKILL.md` steps 6c and 8 now run at `high`. What is still
+to solve is where the claims come from and how a *graded* source is stripped, not what to do with
+one once it arrives.
 
-**The seam that resolves it, and the reason this level is worth building at all:** a review finding
+**The seam that resolves it, and the reason this is worth building at all:** a review finding
 enters the page as a **claim to verify**, never as a finding to display. Two steps already do that
 work. Step 8 says read the file yourself before any claim reaches the page, and drop what does not
 survive. Step 5 routes a consequence to the code it reaches. So a verified finding lands in the checkpoint whose judgment it bears on — in the explanation, in a
@@ -1466,7 +1466,7 @@ Four things to settle before writing it:
 - **It is the first place the skill depends on something outside itself.** Everything else assumes
   only Claude Code plus a git repo. `/code-review` ships with the CLI, but a project may have its own,
   and the boundary against assuming project layout applies here too: discover the review command,
-  do not assume it. A repo with none should degrade to `--full`, saying so.
+  do not assume it. A repo with none should degrade to the ordinary page, saying so.
 - **Findings and checkpoints do not line up one to one.** A review comments per hunk; this page is
   organised per judgment, and three comments on three hunks are routinely one judgment. A finding spanning two flows, or landing in a file no flow owns, needs the same
   routing decision § *One canonical home* already answers — which is encouraging, because it means the
@@ -1483,8 +1483,9 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
 
 - **It helps a reviewer decide; it does not decide.** The page carries evidence, relationships,
   invariants, uncertainty and validation steps. It never carries a verdict. `/code-review` is a
-  different tool answering a different question — and `--review`, when it exists, will not change
-  that: it borrows the review's *search*, not its conclusions. See § *The other unsolved half*.
+  different tool answering a different question — and a review pass threaded through the map, if one
+  is ever built, will not change that: it borrows the review's *search*, not its conclusions. See
+  § *The other unsolved half*.
 - **It links to the manual; it does not reproduce it.** The catalogue exists so a framework
   consequence is followable, not so the page can teach Rails to a reader who does not need it. And it
   never executes what it proposes: the skill does not boot the application under review, which is why

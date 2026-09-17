@@ -391,9 +391,9 @@ There is one page, and no flag chooses it:
 /accountable-review:review-map 412
 ```
 
-`--brief` and `--light` are accepted and change nothing — an invocation kept in a script is not a
-typo. `--full` and `--review` stop the run and say they are not implemented in this version, rather
-than quietly handing back something else under a name that used to mean seven sections.
+No argument selects a length or a depth, and an argument the skill does not recognise is reported
+rather than guessed at — a misread flag silently produces the wrong run, and the page gives you no
+way to tell.
 
 The page used to have two shapes and a word budget to tell them apart. What a reviewer wants is not a
 length setting: it is an answer to *what do I have to judge here, and where do I look?* The analysis
@@ -538,9 +538,15 @@ approve and sets no check — and `--no-pr-comment` drops the step and the scope
 "Review Map: passed" status, and there will not be one: a passing check is a verdict, and this page
 does not carry verdicts.
 
-One thing is left for you: **the credential.** Add `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`)
-as a repository secret. Setup cannot see your secrets, so it says outright that this is outstanding
-rather than implying everything is ready.
+One thing is left for you: **the credential.** Add one of two repository secrets. `ANTHROPIC_API_KEY`
+is an API key from the Anthropic Console, billed to that API account. `CLAUDE_CODE_OAUTH_TOKEN` is
+what `claude setup-token` prints — run it once on a machine where Claude Code is already signed in,
+paste the token in under that name, and the runs bill against that account's Claude subscription
+instead of API credit. That is usually what a team already paying for Claude Code wants, and it is
+the option the workflow file cannot tell you about, since it names the variable and not where the
+value comes from. The token is personal and long-lived rather than permanent: re-run the command and
+replace the value when it expires. Setup cannot see your secrets either way, so it says outright that
+this is outstanding rather than implying everything is ready.
 
 A pull request that only touches documentation, tests, tooling or a lockfile gets no Review Map —
 there is nothing for one to explain. Neither does a trivial application change: two files **and**
@@ -612,8 +618,9 @@ review_map:
     retention_days: 14
 ```
 
-`mode` is still read and still validated, and it decides nothing: `brief` and `light` are the same
-page, and `full` is rejected rather than silently downgraded.
+There is no key for the page's shape, because there is no shape to choose. A key the reader does not
+recognise is an error rather than a shrug — a misspelling that parsed as nothing would silently give
+a team the default while their file said otherwise.
 
 Precedence is `explicit flags > .accountable-review.yml > defaults`, and it is implemented rather
 than aspirational: the config reader emits a line only for a key the file actually contains, so

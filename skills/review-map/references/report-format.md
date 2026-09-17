@@ -21,10 +21,8 @@ duplicate it.
 
 ## One page shape
 
-There is one page and no flag chooses it. `--full` and `--review` stop the run as not implemented in
-this version; `--brief` and `--light` are accepted and change nothing. `SKILL.md` § *Two levels are
-not implemented in this version* has the wording, and § *A future full mode* at the foot of this file
-records what a later level would pick back up.
+There is one page and no flag chooses it. No argument selects a length or a depth, and § *A future
+full mode* at the foot of this file records what a deeper page would pick back up.
 
 What the page carries is not a length setting. It is the answer to one question — *what does a
 competent reviewer have to judge before approving this, and where do they look to judge it?* — and
@@ -45,8 +43,8 @@ level is subtraction.** It admits one component — the primer callout, § *Ment
 checkpoints that earn one. Delete every primer from a mentor page and what is left is the page the
 same run would have written without the flag: same sections, same checkpoints, same order, same
 reading path, same budget on every other part. Nothing moves to make room. That is the whole
-difference from the `--full` this version refuses, which named a *different document* and left the
-reader nothing on the page to tell them which they had been handed.
+difference from a second document reached by a flag, which would leave the reader nothing on the page
+to tell them which they had been handed.
 
 **The stack is not a level either, and it is invisible for the same reason.** Rails and Phoenix change
 which lens file and which catalogue the run reads (`SKILL.md` step 2), what a chain's nodes are
@@ -642,9 +640,9 @@ reordered, and nothing is dropped to make room. State it as a check on your own 
 these, would the rest be the page I would have written anyway?* — because the answer is what says
 whether `--mentor` stayed a flag or became a second document.
 
-**That is the whole distance from the `--full` this version refuses.** `--full` named a different
-document: a different section set, reached by a flag, with nothing on the page to tell a reader which
-one they were holding. A mentor page differs from the default page by components the reader can see.
+**That is the whole distance from a second document reached by a flag.** Such a flag names a
+different section set, with nothing on the page to tell a reader which one they were holding. A
+mentor page differs from the default page by components the reader can see.
 
 **And it is why there is no mentor badge.** `page-template.html` refuses three — severity,
 verification, stack — because each asserts something the page will not say. This fourth one is
@@ -1452,11 +1450,11 @@ repo citation, the demo's receiver) kept and the half that belonged to the old p
 budget, the mark, the variant split) dropped.
 
 **And a level, if one returns, is emitted rather than described.** The rail once shipped in its
-seven-entry form with a comment telling a `--brief` run to cut it to four and renumber — a
-transformation performed from prose that no check ever looked at, on the default level. What replaced
-it was a `SKELETON:ONLY:level=` marker pair and a validator that failed closed, so `page-skeleton.sh`
-assembled the rail at both shapes; that machinery went with the level, and it is the shape to bring
-back. Subtractive by construction, so *no line was added* is assertable without a second extraction
+seven-entry form with a comment telling the shorter shape to cut it to four and renumber — a
+transformation performed from prose that no check ever looked at, on the shape most runs produced.
+What replaced it was a `SKELETON:ONLY:level=` marker pair and a validator that failed closed, so
+`page-skeleton.sh` assembled the rail at both shapes; that machinery went with the level, and it is
+the shape to bring back. Subtractive by construction, so *no line was added* is assertable without a second extraction
 that would test the script against its own awk.
 
 **The invariant a full mode has to hold: it keeps the agenda and adds depth beneath it.** The

@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no level flag: --brief and --light are accepted and change nothing, --full and --review stop the run as not implemented in this version. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -59,19 +59,11 @@ loaded — its instructions are its own, which is the point of putting them in a
 
 - Argument may be a PR number, a PR URL, a branch, or a diff range. With no argument, use the
   current branch against its base.
-- **There is one page shape, and no flag chooses it.** Three flags about the shape still arrive on
-  the command line, and each is handled explicitly rather than guessed at:
-  - `--full` and `--review` **stop the run.** Neither is implemented in this version; see § *Two
-    levels are not implemented in this version* below for what to say. Do not fall back to the
-    default page and do not write one — a reader who asked for seven sections and got five would
-    have no way to tell from the page that they had.
-  - `--brief` and `--light` are **accepted and change nothing.** `--brief` was the name of this
-    page's ancestor and an invocation someone kept in a script is not a typo; `--light` is the same
-    courtesy for a reader guessing the opposite of `--full`. Take both silently.
-  - An argument starting with `--` that is none of those, and is not one of `--effort`, `--mentor`,
-    `--output`, `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not
-    guessed at**. A misread flag silently produces the wrong run, and the reader has no way to
-    tell.
+- **There is one page shape, and no flag chooses it.** No argument selects a length, a depth or a
+  second document, and there is nothing to map one onto if someone invents one. An argument starting
+  with `--` that is not one of `--effort`, `--mentor`, `--output`, `--repository`, `--base-sha` or
+  `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
+  wrong run, and the reader has no way to tell.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
   it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
   *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about 700
@@ -111,7 +103,6 @@ loaded — its instructions are its own, which is the point of putting them in a
     produced the one in front of them.
   - An `--effort` value that is none of the three is **reported, not guessed at** — work that
     silently differs, with nothing in the output to tell the reader which they got.
-  - `--full` and `--review` stop the run at either effort. Effort implements neither.
 
   **Do not announce the effort** — nothing about the pass reaches the page, and step 8 says why.
 - **`--mentor` is the one flag that puts anything on the page, and it is off by default.** It says
@@ -134,7 +125,7 @@ loaded — its instructions are its own, which is the point of putting them in a
   reading path, same impact panel, same evidence foot, same prose budget on every other part. Delete
   the primers and you have that page back. A run that also lengthened its explanations, added a
   checkpoint or reordered anything "because the reader is new" has turned a flag into
-  the `--full` this version refuses.
+  a second document.
 
   **There is no mentor marker, chip or banner.** The flag's effect is visible by being on the page,
   which is exactly why it needs nothing announcing it — and a count of primers would be the page
@@ -1250,29 +1241,6 @@ Convert it instead into a stated limit — the same components, different words:
 
 `evals/check.rb --stopped` checks all four. This is the third legitimate state of the page, alongside
 in-progress and complete, and the only one that requires a deliberate edit rather than a deletion.
-
-## Two levels are not implemented in this version
-
-`--full` used to write seven sections, and `--review` was meant to run the project's code-review pass
-as well and thread its findings through the map. Neither exists in this version, and no effort level
-implements either: `--effort high` falsifies this run's own analysis, which is a different job from
-importing someone else's findings. **Stop, and say so** — do not fall back to the default page and do
-not write one:
-
-> `--full` and `--review` are not implemented in this version of review-map. Re-run without a level
-> flag for the review agenda: what changed, what needs your attention, the order to read the code in,
-> and what the change reaches outside the diff. Nothing was published.
-
-`--brief` and `--light` are the opposite case — accepted, silent, and without effect, because the
-default page is already the short one and a script that still passes `--brief` should keep working.
-
-Offer the project's own review command if it has one, and say plainly that it answers a different
-question — that offer is the same one step 10 makes at the end of an ordinary run.
-
-Publishing a page and labelling the missing part *pending* is the wrong answer here, for the reason
-`references/report-format.md` § *Build state* gives: pending is a promise, and nothing is coming.
-`.claude/CLAUDE.md` carries the design notes on both, and `references/report-format.md` § *A future
-full mode* records which components this page put down and where their rules would return.
 
 ## Working in a worktree
 

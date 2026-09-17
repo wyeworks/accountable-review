@@ -15,9 +15,10 @@
 # are part of the group key and nothing averages across them. A row reading `-/-` was produced
 # by whatever the ambient config was that day, which is not a fact about anything.
 #
-# The detail level is the third axis on the same argument. --brief and --full produce different
-# pages from the same case, so a pass rate averaged over both describes neither. Lines written
-# before levels existed carry none, and are reported as `full`, which is what they were.
+# The detail level is the third axis on the same argument. The two shapes the skill once had
+# produced different pages from the same case, so a pass rate averaged over both describes
+# neither. Lines written before levels existed carry none, and are reported as `full`, which is
+# what they were. Nothing produces a level now; the column survives so old lines stay readable.
 #
 # The skill's effort is the fourth, and it is a different thing from the `effort` beside `model`:
 # that one is the CLI reasoning effort the reader was run at, this one is the flag the skill was
