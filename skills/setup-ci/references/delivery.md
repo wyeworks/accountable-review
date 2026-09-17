@@ -45,6 +45,14 @@ In practice `ci/delivery/deliver.sh`, which prints a DeliveryResult as JSON:
 `browsable` is the field a caller acts on, and it is the honest expression of what the default costs:
 `false` means a reviewer downloads a zip before they can read anything.
 
+**Two steps in the generated workflow act on it**, and both read the result rather than reaching past
+it. The job summary picks its wording from `browsable`. So does the comment on the pull request: a
+provider returning `browsable: true` gets its `stable_url` linked as a page, and the artifact
+provider, which has neither, falls back to the artifact's own download URL with wording that says it
+is a zip to extract. A comment step that knew about artifacts directly would be a second thing that
+knows where the map goes, which is the seam this file exists to hold — so adding a browsable provider
+improves the comment with no change to the comment.
+
 A static host would return:
 
 ```json

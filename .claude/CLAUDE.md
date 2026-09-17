@@ -176,8 +176,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
 | `skills/setup-ci/references/delivery.md` | The delivery contract, the providers that exist and the ones only designed for, and why `command` is opt-in in CI |
-| `skills/setup-ci/templates/workflow.yml` | The workflow itself. Four substitutions, and nothing else is configurable by design |
-| `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically, `install-workflow.sh` writes idempotently and refuses to clobber, `read-config.sh` is the only thing that knows the config file's shape |
+| `skills/setup-ci/templates/workflow.yml` | The workflow itself. Version substitutions, the four when-decisions behind `SETUP:IF:` blocks, and nothing else configurable by design |
+| `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically and resolves the `SETUP:` blocks, `install-workflow.sh` writes idempotently, refuses to clobber, and recovers the when-decisions from the file it is about to replace, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
 | `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page — and refuses `mode: full` rather than remapping it |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
@@ -919,20 +919,59 @@ Same rule as above: editing one of these means checking the others still agree.
   and a page that describes an earlier revision while looking current is the one failure a reader
   cannot detect from the inside — which is exactly what regenerating per push creates, several pages
   that differ only by revision.
-- **The workflow is a design, not a settings file.** The triggers, the draft guard, the fork guard,
-  the concurrency group and `contents: read` have no knobs, because a knob on each is a way to end up
-  generating Review Maps for draft pull requests, which is the thing the setup exists to prevent.
-  `render-workflow.sh` substitutes four values — which plugin, which ref, which Claude Code, which
-  Node — and everything a team legitimately configures is read from `.accountable-review.yml` at
-  **run** time by the scripts the workflow calls, so changing it never means regenerating the file.
+- **The workflow is a design with exactly one settings axis, and the axis is *when*.** The draft
+  guard, the fork guard, the concurrency group and `contents: read` still have no knobs, because a
+  knob on each is a way to end up generating Review Maps for draft pull requests or handing this job
+  write access — which is the thing the setup exists to prevent. Everything a team configures **about
+  the map** is still read from `.accountable-review.yml` at **run** time, so changing it never means
+  regenerating the file; that split is what makes "the workflow respects `retention_days: 14`" true
+  without a second setup run, and why `tests/run.sh` checks retention through `deliver.sh` rather
+  than by grepping YAML.
 
-  That split is what makes "the workflow respects `retention_days: 14`" true without a second setup
-  run, and it is why `tests/run.sh` checks retention through `deliver.sh` rather than by grepping
-  YAML.
+  What is rendered from flags is the decisions about **when a Review Map is generated** — the push
+  trigger, the bot authors, the size gate and its two numbers — plus **whether the link is commented
+  on the pull request**. None can be run-time settings: the first four *are* the triggers and the
+  guard, and the fifth decides what permission the job holds. The test any future knob has to pass is
+  that it decides whether a run happens or what the job may do. `SKILL.md` step 3 confirms them in
+  one block before writing, and § *What it configures* splits its table along that line.
+
+  **The defaults are the answers a real team reached by hand**, in two pull requests against a
+  generated workflow (fayron#633 and #634): `opened` in, `synchronize` out so a pull request gets one
+  map, dependabot skipped, and a change under 3 files and 51 lines skipped. A team editing the
+  generated file to reach the same place, and then living with a permanent drift report, is the
+  evidence that these were defaults rather than preferences.
+
+  **The knobs are only safe because of the read-back**, and that is the half to keep. The rendered
+  file carries a `# Decisions:` line holding the canonical, complete flag form of all of them;
+  `install-workflow.sh` recovers it and passes it ahead of the current call's flags. Without it, the
+  ordinary reason to re-run setup — moving the version pin — reports every confirmed decision as
+  drift and reverts them all under `--update`, which is setup reverting a team's decision while
+  claiming to upgrade them. The line is a pure function of the flags, which is what keeps it clear of
+  the byte-comparison rule in the bullet below.
+
+  Six files agree: `templates/workflow.yml` holds the `SETUP:IF:`/`SETUP:END:` blocks and the line,
+  `render-workflow.sh` resolves them, `install-workflow.sh` recovers them, `SKILL.md` step 3 confirms
+  them, `references/workflow.md` §§ *Triggers*, *The guard* and *The line that records the decisions*
+  own the rules **alone**, and `tests/run.sh` checks that each knob changes bytes — a knob that
+  renders the same file either way makes the confirmation theatre.
+
+  **Two ways to write the guard expression produce a workflow GitHub rejects outright**, and neither
+  is visible to a YAML parse, which is how both shipped. Actions expressions have **no arithmetic**,
+  so `(additions + deletions) > 50` is an invalid-file error rather than a sum — the two counts are
+  compared separately against the same number. And in a folded scalar a **more-indented line is not
+  folded**, so its newline survives into the expression; every line sits at six spaces and the
+  operators lead their lines to remove the thing anyone would align. `tests/run.sh` asserts both
+  structurally, because no offline tool validates the expression grammar and the only reliable signal
+  is GitHub's own validation on push.
 - **Idempotency is decided by comparing bytes, so nothing rendered may vary.** No timestamp, no run
   id, no randomness, no "generated on" comment — `install-workflow.sh` tells "already set up" from
   "edited by hand" by `cmp`, and a date would make every second run report drift. `tests/run.sh`
   asserts the rendered file contains today's date nowhere.
+
+  The `# Decisions:` line is not an exception to this and the distinction is the whole reason it
+  is allowed: it is a pure function of the flags, so two renders with the same flags produce the same
+  bytes. What is forbidden is a value that varies **between two renders of the same request**, not a
+  value that records the request.
 
   **That assertion has to run against the whole file, comments included.** It did not, briefly: the
   negative assertions run against a comment-stripped copy so the workflow may explain in a comment why
@@ -947,6 +986,43 @@ Same rule as above: editing one of these means checking the others still agree.
   "so the map could be better" would be that decision made by the back door, with its own safety
   design skipped. The template starts no service, runs no migration, and executes no script from the
   pull request; `tests/run.sh` asserts all three against the comment-stripped file.
+- **The workflow posts one comment, and that is the entire write surface.** A link to the Review Map
+  and the revision it describes, upserted against `<!-- accountable-review -->` so a reopen or a
+  ready/draft toggle updates it rather than adding a second. It is what `pull-requests: write` is
+  for, it is the only thing that scope is used for, and `--no-pr-comment` removes the step and the
+  permission **together** — a repository carrying a write scope for a step that is not there is a
+  standing grant nobody can account for.
+
+  **This reversed the rule that the workflow posts nothing**, and the reason is the only thing that
+  justifies the reversal: the run summary already said where the map went, and nobody opens a
+  workflow run to find out whether there is something worth opening. Maps were being generated,
+  uploaded, and never read. A boundary that makes the product undiscoverable is not protecting the
+  product.
+
+  **The line that did not move is verdict.** No check run, no status, no review, no label, no
+  approval, and nothing in the comment that grades the change. The next request is the check — "so
+  the map shows up in the status list" — and a passing check is a verdict whatever it is named, which
+  is the product principle undone by the same door this comment came through. The comment is the
+  visibility; that was the whole reason to spend a scope.
+
+  **Actions has no per-step permissions, so containment is by injection rather than by scope.**
+  `GITHUB_TOKEN` reaches only the step that names it in `env:`, and the step that runs a model over a
+  contributor's branch does not. `tests/run.sh` asserts that exactly one step in the whole file names
+  the token, because that is the fact making the scope acceptable and it is one careless `env:` away
+  from gone.
+
+  **And the comment reads the DeliveryResult rather than reaching past it** — a browsable provider's
+  `stable_url` is linked as a page, the artifact provider's download URL as a zip. A comment step
+  that knew about artifacts directly would be the second thing that knows where the map goes, which
+  is the seam below being quietly unpicked.
+
+  Six files agree: `templates/workflow.yml` holds the step and the permission behind the same
+  `SETUP:IF:comment` blocks, `render-workflow.sh` renders both or neither, `SKILL.md` step 3 names
+  the write scope out loud and its hard rules bound what may be posted, `references/workflow.md`
+  § *The comment* owns the rules **alone**, `references/delivery.md` owns what it reads, and
+  `tests/run.sh` executes the step against a stubbed `gh` on both the create and the upsert path —
+  the one piece of shell in this repository that writes to someone else's repository, so it is run
+  rather than read.
 - **The product principle reaches the artifact, not just the page.** `manifest.json` is provenance —
   which revision, which plugin version, whether the coverage gate passed — and carries no severity, no
   score and no approval, for the same reason the page carries none. The job summary says what the
@@ -1298,10 +1374,16 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   never executes what it proposes: the skill does not boot the application under review, which is why
   no probe output ever appears. Changing that is a new decision with its own safety design, not an
   extension of this one.
-- It never posts to GitHub or anywhere outside the artifact. **This is unchanged by running in CI**,
-  which is the obvious next thing to want: no pull request comment, no check run, no status with a
-  verdict in it. The workflow run is where the artifact is discoverable, and `setup-ci`'s hard rules
-  say the same thing from the other side.
+- **`review-map` never posts to GitHub or anywhere outside the artifact**, and that has not changed.
+  The skill writes a page; if a link needs to reach a pull request, the thing that posts it is the
+  generated workflow's own last step, after generation has finished and in a different process.
+  Threading it into the skill would put a write token in the process that reads a contributor's
+  branch, and would make the delivery seam a fiction.
+
+  **What did change is the CI side, and it changed deliberately.** The generated workflow posts one
+  comment: a link and the revision it describes, upserted against a hidden marker. No check run, no
+  status, no review, no label, and nothing in it that grades the change. `setup-ci`'s hard rules and
+  `references/workflow.md` § *The comment* own the boundary; see also the invariant below.
 - It never writes the page into the repository under review — a work directory under `$TMPDIR` only,
   **derived** in step 1 from the repo and the target rather than chosen per run, or the directory
   `--output` names, which `ci/generate-review-map.sh` refuses to let sit inside the checkout.
