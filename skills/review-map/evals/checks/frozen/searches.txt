@@ -394,6 +394,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page start-here-no-why.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment start-here-orphan-checkpoint.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page start-here-orphan-checkpoint.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment start-here-two-lists.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

@@ -27,3 +27,11 @@ different package versions deliberately, because hexdocs pins per package and Ra
 rule must **not** fire on it. Generalizing that rule is the likeliest future edit, and it would pass
 every other row here while failing every correct Phoenix page — so the guard has to be a page that
 would only break if someone did.
+
+`start-here-orphan-checkpoint.html` is the same argument for a rule that sits beside an older one
+measuring nearly the same thing. Section 03 has always been checked for linking *into* the
+checkpoints, and that rule counts links: the fixture keeps three stops, three why-clauses, three
+citations and three `href="#cp-"` links, so it passes, and only comparing the set of checkpoints
+against the set the reading path routes to notices that `cp-b` is a question nobody was sent to
+answer. It plants one orphan rather than two on purpose — a fixture orphaning both checkpoints keeps
+failing while either half of the comparison regresses, and therefore pins neither.

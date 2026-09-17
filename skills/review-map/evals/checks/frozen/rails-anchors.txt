@@ -33,7 +33,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment agenda-probes-over-budget.html
 exit=0
 SKIP  doc links: none on this input
-WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+WARN  3 probe(s) against a budget of 2 — at most one per checkpoint capped at five, and a page over that ratio has stopped selecting
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -42,7 +42,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --page agenda-probes-over-budget.html
 exit=0
 SKIP  doc links: none on this input
-WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+WARN  3 probe(s) against a budget of 2 — at most one per checkpoint capped at five, and a page over that ratio has stopped selecting
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -884,6 +884,22 @@ SKIP  runtime probes: none on this input
 exit=0
 SKIP  doc links: none on this input
 SKIP  runtime probes: none on this input
+## --fragment start-here-orphan-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page start-here-orphan-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment start-here-two-lists.html
 exit=0
 SKIP  doc links: none on this input
@@ -1148,7 +1164,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 ## --fragment agenda-probes-over-budget.html
 exit=0
 SKIP  doc links: none on this input
-WARN  3 probe(s) across 2 checkpoint(s) — at most one each, and a page over that ratio has stopped selecting
+WARN  3 probe(s) against a budget of 2 — at most one per checkpoint capped at five, and a page over that ratio has stopped selecting
 PASS  every probe carries a label
 PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production

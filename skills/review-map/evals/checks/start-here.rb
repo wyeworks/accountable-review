@@ -8,10 +8,11 @@
 # list followed by a separate reading order, which is how this section used to restate the
 # rest of the page.
 #
-# Three things are checkable. The list is an order with reasons rather than a list of paths.
+# Four things are checkable. The list is an order with reasons rather than a list of paths.
 # Its entries point INTO the checkpoints, because section 02 is where a judgment is explained
-# and an entry that does not link is one that re-explained instead. And the list is short — a
-# cap that is never reached bounds nothing, so the count is reported either way.
+# and an entry that does not link is one that re-explained instead. EVERY checkpoint is pointed
+# at by something here, which is the half the link count alone misses. And the list is short —
+# a cap that is never reached bounds nothing, so the count is reported either way.
 #
 # What needs a reader: whether the order builds understanding — schema before the code that
 # trusts it, the smallest complete example before the bulk — and whether an entry names its
@@ -56,6 +57,48 @@ elsif cplinks < 1
   check.bad("no entry links into a checkpoint — an entry that does not point at section 02 has re-explained the judgment instead of naming it")
 else
   check.ok("entries link into the checkpoints that explain them (#{cplinks})")
+end
+
+# EVERY checkpoint is reachable from here, not just one of them. The rule above counts links
+# and passes on a page that routes the reader to one judgment and orphans four, which is the
+# shape a wide agenda produces: a checkpoint nothing points at is a question the reader was
+# asked and never sent anywhere to answer.
+#
+# WARN rather than FAIL, because a draft legitimately carries stubs no stop routes yet, and
+# failing a page for being unfinished is what the build states exist to say instead.
+#
+# GATED ON THE EVIDENCE, NOT ON check.kind. Requiring a whole page would have been the obvious
+# guard and would have made this rule unreachable: every golden fixture runs as --fragment, so
+# it would have SKIPped forever and self-test.rb could never prove it fires. A SKIP reads as
+# verified, which is worse than no rule at all. So the question asked here is the honest one —
+# are the checkpoints visible in this input? — and a bare section 03 still skips, saying why.
+#
+# Note what this does NOT check: that the stop count tracks the checkpoint count. It must not.
+# Section 03 is a route ordered by conceptual dependency, and one stop routinely serves two
+# judgments while one judgment routinely needs two. report-format.md § Section 3 owns that.
+defined_cps = check.page.scan(/<section class="cp[^>]*id="cp-[^"]+"/)
+                   .filter_map { |m| m[/id="(cp-[^"]+)"/, 1] }.uniq
+cp_hrefs = region.scan(/href="#cp-[^"]+"/)
+routed = cp_hrefs.filter_map { |m| m[/#(cp-[^"]+)"/, 1] }.uniq
+orphans = defined_cps - routed
+
+# An unsubstituted {{...}} is page-template.html itself, whose stops point at href="#cp-{{LETTER}}"
+# and therefore resolve to none of its three assembled checkpoints. That is a template doing its
+# job, not a page orphaning a judgment, and rails-anchors.rb draws the same distinction for
+# {version}. Warning here would put a permanent WARN on correct input, which is how a real one
+# stops being read.
+if items.zero?
+  check.skip("no entries to check for checkpoint coverage")
+elsif cp_hrefs.any? { |h| h.include?("{{") }
+  check.skip("the reading path's checkpoint links are unsubstituted placeholders — this is the template, not a page")
+elsif defined_cps.empty?
+  check.skip("no checkpoint sections in this input — coverage needs section 02 beside section 03")
+elsif check.mode != "final"
+  check.skip("checkpoint coverage is a final-page rule — a #{check.mode} page carries stubs no stop routes yet")
+elsif orphans.empty?
+  check.ok("every checkpoint is reachable from the reading path (#{defined_cps.size})")
+else
+  check.maybe("#{orphans.size} of #{defined_cps.size} checkpoint(s) have no stop pointing at them (#{orphans.join(', ')}) — a judgment the reader was asked and never routed to")
 end
 
 # Citations. Every entry names somewhere to go, and somewhere to go has a file:line.

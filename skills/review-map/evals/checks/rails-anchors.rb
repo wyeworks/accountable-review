@@ -388,9 +388,15 @@ unless external.empty?
 
   # The budget's mechanical edge. At most one per checkpoint is the rule; a page carrying more
   # links than judgments has stopped selecting, and that needs a reader.
-  cps = page.count(/<section class="cp/)
+  #
+  # PINNED AT FIVE. The denominator was the raw checkpoint count, and the agenda may now run to
+  # seven on a PR shipping two independent changes — which would have raised this threshold from
+  # five to seven silently, loosening the one rule standing between the page and the failure the
+  # anchor budget exists for: a page that links everything and reads as a framework tutorial with
+  # a diff attached. Whether a link is earned does not scale with how many judgments there are.
+  cps = [page.count(/<section class="cp/), 5].min
   if cps.positive? && external.size > cps
-    check.maybe("#{external.size} doc link(s) across #{cps} checkpoint(s) — at most one each, and a page near that ratio has stopped selecting")
+    check.maybe("#{external.size} doc link(s) against a budget of #{cps} — at most one per checkpoint capped at five, and a page near that ratio has stopped selecting")
   end
 end
 
@@ -407,9 +413,9 @@ probe_body = RailsAnchors.body_of(page, /<pre class="probe"/)
 #      checkpoint; a page carrying more probes than judgments has stopped selecting. maybe, not bad,
 #      because the `‡ probe` row is exempt from the ration outright and a page legitimately carrying
 #      two for that reason should not go red for it.
-cps = page.count(/<section class="cp/)
+cps = [page.count(/<section class="cp/), 5].min
 if cps.positive? && nprobe > cps
-  check.maybe("#{nprobe} probe(s) across #{cps} checkpoint(s) — at most one each, and a page over that ratio has stopped selecting")
+  check.maybe("#{nprobe} probe(s) against a budget of #{cps} — at most one per checkpoint capped at five, and a page over that ratio has stopped selecting")
 end
 
 # 4c · The label, which is the only thing between the reader and a command they are being asked to

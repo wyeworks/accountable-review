@@ -17,7 +17,8 @@ does not earn omitted outright.
   that was not, who is affected. Derived from tests, code and commits rather than copied from a
   possibly-stale PR description. A limit the run hit — a region it had to skim, a client it could not
   read — is stated here and nowhere else.
-- **What needs your attention** — the page's core. Three to five **review checkpoints**, each one
+- **What needs your attention** — the page's core. Three to five **review checkpoints** for each
+  independent change the PR makes — seven on the page at the outside — each one
   judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
   intended scope?* rather than *ProjectSearcher implementation*. A checkpoint carries the question,
   two to four sentences on why it is one, one to four places to look — each a short title, a clause

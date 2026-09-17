@@ -5,7 +5,7 @@ the review checkpoint, the chain, the evidence tier, the source excerpt, and the
 has one home.
 
 **Five sections, and the second one is the product.** *What changed* orients, *What needs your
-attention* carries three to five judgments the reviewer has to make, *Read the code in this order*
+attention* carries the judgments the reviewer has to make, *Read the code in this order*
 routes them into the code, *Impact outside the diff* shows what the change reaches outside the lines
 it touched, and a collapsed evidence foot accounts for the rest. A section the diff does not earn is
 **omitted**, never filled with generic content and never left as an "N/A" placeholder.
@@ -75,7 +75,7 @@ belongs in the sentences that cite this repository, which say it by naming real 
 | | Section | Appears | Owns |
 |---|---|---|---|
 | 01 | What changed | always | The masthead, the semantic delta, intent and its tier |
-| 02 | What needs your attention | always | Three to five checkpoints, and the one sampling caveat |
+| 02 | What needs your attention | always | Three to five checkpoints per delta § 01 names, seven at the outside, and the one sampling caveat |
 | 03 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
 | 04 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
 | 05 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
@@ -96,9 +96,10 @@ selected — `references/rails-docs.md` or `references/elixir-docs.md`.
 
 ## The review checkpoint
 
-The page's primitive. Where the reviewer's attention goes is expressed as three to five of these
-under *What needs your attention*, and each is **one judgment** the reviewer has to make — framed as
-a question, explained in a few sentences, and anchored to the exact lines that let them make it.
+The page's primitive. Where the reviewer's attention goes is expressed as a handful of these under
+*What needs your attention* — three to five per independent change the PR makes, seven on the page at
+the outside — and each is **one judgment** the reviewer has to make: framed as a question, explained
+in a few sentences, and anchored to the exact lines that let them make it.
 
 It replaced a seven-field review unit, and the reason is worth keeping because the unit looked
 thorough. Every meaningful change got the same grid — implementation, tests, affected code, things to
@@ -179,10 +180,34 @@ page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. 
 reading path refer to a checkpoint by its question, and section 02's intro says in one sentence that
 the order is the order to think about them.
 
-**Three to five, fewer for a small PR.** A sixth is merged or named in a clause of the nearest
-checkpoint; `SKILL.md` step 7e has the selection rule. A finding that does not become a checkpoint
-keeps its entry in *Impact outside the diff* or in the evidence foot, so nothing found is lost — only
-its promotion to a judgment, and the caveat under the heading is what makes that honest.
+**Three to five per independent semantic delta named in § 01, and seven on the page is the stop.**
+`SKILL.md` step 7e has the selection rule. A PR with one delta carries three to five whatever its line
+count; a PR whose § 01 legitimately carries two delta bullets may carry up to seven. Fewer than three
+is right for a PR small enough that a third would be padding.
+
+**The driver is the delta, not the diff, and that is the whole point.** A rename across eighty files,
+a codemod and a regenerated lockfile are one semantic delta, so the count does not move — what a big
+diff of that kind buys is a longer inventory, which is collapsed and costs the reader nothing. One
+behaviour reaching a long way is also one delta: the reach shows up as more *Look at* entries, a
+chain, a card in *Impact outside the diff*. Only a PR that ships genuinely independent changes has
+more than one delta, and that is the only shape that earns a sixth checkpoint. Since the deltas are
+already the bullets § 01 carries, **the reader has already read the reason the agenda is longer** —
+it is not a number this page asserts about itself.
+
+**Seven is where it stops, and the reason is § 03 rather than arithmetic.** At some width the reading
+order can no longer be a route through the code — schema before the code that trusts it, the smallest
+complete example before the bulk — because every stop has been spent naming a checkpoint, and § 03
+has become an index of § 02. Seven is a first calibration of where that happens, in the sense
+§ *The agenda budget* means it; the test is whether § 03 still reads as a route.
+
+Past seven the answer is not an eighth checkpoint. It is `SKILL.md` step 7a's bundling sentence in
+§ 01, and, if the diff strained the run, the statement of which region was skimmed.
+
+A finding that does not become a checkpoint keeps its entry in *Impact outside the diff* or in the
+evidence foot, so nothing found is lost — only its promotion to a judgment, and the caveat under the
+heading is what makes that honest. **A judgment is the one thing that cannot be demoted that way**: an
+entry in the foot that the reviewer has to decide about is a checkpoint that was mis-filed, which is
+why the count has room to grow rather than a ceiling that would force one down there.
 
 **The sampling caveat lives here, once.** *These are what this pass surfaced, not an audit: repeated
 runs over the same diff surface overlapping but different sets.* Under the section heading, before the
@@ -1253,7 +1278,8 @@ big should the page be?* is what decides when one is owed.
 ## Section 2 · What needs your attention — always
 
 The page's core, and the one section a reader who has time for nothing else should read. Three to
-five checkpoints; § *The review checkpoint* owns every rule about them.
+five checkpoints per independent delta § 01 names, seven at the outside; § *The review checkpoint*
+owns every rule about them, the count included.
 
 The section itself carries only a heading, one sentence saying what these turn on and that the order
 is the order to think about them, and the sampling caveat. Then the checkpoints, in ranked order.
@@ -1282,6 +1308,16 @@ sequence.
 have fifteen minutes and now understand the important questions, where do I start reading?* Every
 other file is accounted for in the evidence foot, which is the whole reason a short route here is
 honest rather than a gap.
+
+**Every checkpoint is reachable from here** — by its own stop, or by a stop whose `span.why` names it,
+since one stop routinely serves two judgments and one judgment routinely needs two stops. A checkpoint
+nothing on this list points at is a question the reader was asked and never routed to.
+
+**That rule is also what bounds the agenda, and it bounds it from the reader's side.** The stop count
+is not driven by the checkpoint count — this section is a route, ordered by conceptual dependency, not
+an index of § 02 in reading order. So when routing every checkpoint would consume the whole list and
+leave no room for the schema before the code that trusts it, the agenda has gone wider than the page
+can carry, and § *The review checkpoint* is where that is settled.
 
 Never a grade, never a severity chip. Where attention goes is expressed by what is on this list and
 in what order, which is the only form of ranking this page has.
@@ -1362,7 +1398,21 @@ outside one of them is a page to read again, not a page that is wrong.
 | A checkpoint — question, explanation, *Look at* clauses, open line | 50–140 |
 | A reading-path stop's `span.why` | ≤ 40 |
 | An affected entry's clause | ≤ 30 |
-| **The page, visible prose, on a small or medium PR** | **700–1,500** |
+| **The page, visible prose** | **the parts above, summed** |
+
+**The page total is derived, not a separate number**, because a page has as many checkpoints as the
+change has judgments and a fixed total would price them against each other:
+
+```
+≈ §01 (80–160) + n × (50–140) + §03 (stops × ≤40) + §04 (cards × p.ip-why) + section framing
+```
+
+At four checkpoints on a small or medium PR that comes to roughly **700 to 1,500 words**, which is
+the figure to carry in your head and the one a page of that shape is read against. A seven-checkpoint
+page over two independent deltas is legitimately longer, and **it does not get there by writing seven
+checkpoints at thirty words each.** That was the trap in stating the total flat: the arithmetic of a
+wide agenda under a fixed ceiling forces every checkpoint under its own floor, and the floor rule
+below is what that violates.
 
 **What is never counted:** anything inside a chain — node labels, `.ip-d` details, `.ip-rel` verbs,
 lane labels, the legend, a `figcaption`; anything inside `<code>` or `<pre>`, which includes every

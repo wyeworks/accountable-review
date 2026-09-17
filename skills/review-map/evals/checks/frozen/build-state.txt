@@ -394,6 +394,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page start-here-no-why.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment start-here-orphan-checkpoint.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page start-here-orphan-checkpoint.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment start-here-two-lists.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

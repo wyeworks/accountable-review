@@ -8,7 +8,7 @@ There is no application code here. The repository is the `accountable-review` Cl
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
 a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
-what changed, the three to five judgments the reviewer has to make with the lines that settle each
+what changed, the judgments the reviewer has to make with the lines that settle each
 one, the order to read the code in, and what the change reaches in code it did not touch. Two stacks
 are supported: a Rails API with a Next.js client, which came first, and Elixir/Phoenix — a LiveView
 app or a JSON API. Step 2 detects which, and the run reads that stack's lens file and its doc
@@ -100,8 +100,9 @@ title, a first checkpoint described as the important one. That is the easiest wa
 iteration, and it will arrive as helpfulness.
 
 **The page has a word budget and nothing checks it.** `report-format.md` § *The agenda budget* is
-prose: 700–1,500 visible words on a small or medium PR, 80–160 for *What changed*, 50–140 a
-checkpoint. `brief-budget.rb` used to enforce its predecessor and is deleted with the level it
+prose: 80–160 for *What changed*, 50–140 a checkpoint, and a page total that is those parts summed —
+about 700–1,500 visible words at four checkpoints on a small or medium PR, derived rather than flat
+so that a wider agenda cannot be forced under its own per-checkpoint floor. `brief-budget.rb` used to enforce its predecessor and is deleted with the level it
 belonged to, so the numbers are read by a person or by nobody. That is the honest state — the numbers
 are a first calibration derived from component caps rather than measured on published pages — but it
 means a page drifting long drifts silently. The one number that must never be graded is the
@@ -219,8 +220,9 @@ Editing one of these means checking the others still agree.
   never a second document reached by a flag.
 
   **The agenda budget survived the level that carried it, and lost its check.** `report-format.md`
-  § *The agenda budget* is prose: 700–1,500 visible words on a small or medium PR, per-part caps, a
-  floor stated as a rule rather than a number. `brief-budget.rb` enforced its predecessor and is
+  § *The agenda budget* is prose: per-part caps and a page total that is those parts summed, which
+  at four checkpoints on a small or medium PR comes to 700–1,500 visible words; plus a floor stated
+  as a rule rather than a number. `brief-budget.rb` enforced its predecessor and is
   deleted, so nothing counts words now. Two of its lessons are kept in that section deliberately.
   Length is guidance rather than a failure, because a hard failure on length teaches a run to drop a
   claim to get under a number, which is worse than the long page. And **the checkpoint count is never
@@ -234,7 +236,8 @@ Editing one of these means checking the others still agree.
   of machinery for a page with one shape: `tests/run.sh` counts the entries and `self-test.sh`
   duplicates one to prove the count fires.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
-  attention*, each **one judgment** the reviewer has to make: an `<h3>` question, two to four
+  attention* **per independent semantic delta § 01 names**, seven on the page at the outside, each
+  **one judgment** the reviewer has to make: an `<h3>` question, two to four
   sentences, an optional `figure.chain`, a `ul.lookat` of one to four entries — each a short title,
   a clause and its deep-linked citation, in that order — and an optional `p.open` labelled *Open
   question*. `report-format.md` § *The review
@@ -258,6 +261,17 @@ Editing one of these means checking the others still agree.
   makes the agenda short honestly: a constructor change, the nil default it introduces and the two
   consumers that do not handle nil are one judgment. A run that writes three has said the same thing
   three times, and will have spent its budget doing it.
+
+  **The count scales on the delta, never on the diff.** Three to five per independent semantic delta
+  § 01 names, seven on the page at the outside — so eighty files of one rename is still three to
+  five, and only a PR shipping genuinely independent changes earns a sixth. **What replaced a flat
+  ceiling of five is the observation that the ceiling contradicted a hard rule**: a sixth judgment
+  had to go to a clause or to the evidence foot, and the foot is where promotion-by-omission forbids
+  a judgment to live. Five files agree — `report-format.md` § *The review checkpoint* owns it alone
+  and § *Section 3* owns the routing that bounds it, `SKILL.md` step 7e and § *How big should the
+  page be?* carry it into the procedure, and `start-here.rb` warns on a checkpoint no stop points at.
+  Nothing grades the count; `rails-anchors.rb` pins its per-checkpoint denominators at five so a
+  wider agenda cannot quietly loosen the anchor budget.
 
   **Ordering is not grading, and the distance between them is one word.** The checkpoints are ranked by
   what a reviewer would most regret misunderstanding. A number beside a question, a *high* in a title,
@@ -416,7 +430,7 @@ Editing one of these means checking the others still agree.
 - **The synthesis phase is where the agenda comes from, and it is a step of its own for a reason.**
   `SKILL.md` step 7 takes the analysis notes and produces the page's argument: name the semantic
   delta, identify the human judgments, merge the observations that share one, rank by consequence if
-  misunderstood, select three to five, choose each one's representation, select its evidence, build
+  misunderstood, select the agenda, choose each one's representation, select its evidence, build
   the reading path, pick the impact chains, dedupe across the five places a fact can land.
 
   **A run that goes from notes straight to prose writes one section per flow**, which is the page this
