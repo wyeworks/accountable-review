@@ -486,6 +486,7 @@ the second run compares what it would write against what is there and says *unch
 | Draft pull requests | Ignored — pushing to a draft costs nothing |
 | Fork pull requests | Skipped: a `pull_request` run from a fork gets no secrets |
 | Pull requests changing no application code | Skipped — the run says what changed and why none of it earned a map |
+| Trivial application changes | Skipped — 2 files **and** 20 lines or fewer; both thresholds configurable |
 | Delivery | GitHub Actions artifact, kept 30 days |
 | Concurrency | One run per pull request; superseded runs cancelled |
 | Permissions | `contents: read`, and nothing else |
@@ -495,9 +496,11 @@ as a repository secret. Setup cannot see your secrets, so it says outright that 
 rather than implying everything is ready.
 
 A pull request that only touches documentation, tests, tooling or a lockfile gets no Review Map —
-there is nothing for one to explain. **Any** application file earns one, though, however few lines it
-changes: there is no minimum diff size, because what makes a change worth a map is what it reaches
-rather than how big it is. `docs/ci.md` has the rule.
+there is nothing for one to explain. Neither does a trivial application change: two files **and**
+twenty lines or fewer, both, so a change that is large by either measurement still earns one. The
+counts are over application code only, so a lockfile's five thousand lines do not make a three-line
+model change look substantial. Both numbers live in `.accountable-review.yml`, and either at `0`
+gives you a map for every change that touches code. `docs/ci.md` has the rule and the trade.
 
 One thing to know about the triggers: `opened` is not among them, so a pull request opened *directly*
 as ready for review gets its first Review Map on its next push. If your team does not start work as
@@ -529,7 +532,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
 | **Publishing** | Interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
-| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, `contents: read`, drafts and forks skipped, pull requests that change no application code skipped with a summary saying so, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact. |
+| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, `contents: read`, drafts and forks skipped, pull requests whose application change is absent or trivial skipped with a summary saying which and why, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact. |
 
 ---
 

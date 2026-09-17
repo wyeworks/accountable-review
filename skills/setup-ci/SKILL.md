@@ -191,12 +191,15 @@ Name the other limits in the same breath, briefly, where they apply:
   Say this to a team that does not start work as drafts — otherwise their first impression is that
   the setup does not work — and tell them adding `opened` to the trigger list is a one-line change.
   `references/workflow.md` § *Triggers* has the trade.
-- **A pull request that changes no application code gets no Review Map.** Only documentation,
-  only tests, only a lockfile, only CI config — the run stops after the checkout and writes a job
-  summary saying what changed and that none of it earned a map. Say this, because the first time it
-  happens it reads as the setup having quietly broken. Any application file in the diff is enough to
-  earn one, however small the change; there is no size threshold, and
-  `references/workflow.md` § *The application-code gate* has why.
+- **Two kinds of pull request get no Review Map**, and the first time either happens it reads as the
+  setup having quietly broken — so say both. One that changes **no application code**: only
+  documentation, only tests, only a lockfile, only CI config. And one whose application change is
+  **trivial**: 2 files or fewer *and* 20 lines or fewer, both, so a change that is large by either
+  measurement still earns a map. The run stops after the checkout and writes a job summary naming
+  which rule fired and the numbers behind it. Say that the thresholds are theirs —
+  `review_map.trivial_files` and `review_map.trivial_lines` in `.accountable-review.yml`, read at run
+  time, either at `0` to turn the trivial rule off — and that the defaults are a starting point
+  rather than a measurement. `references/workflow.md` § *The application-code gate* has the trade.
 - **The workflow pins a plugin version**, and setup cannot check that the tag exists — it has no
   network. Review Maps stay attributable to a version of this plugin, and re-running this command
   after an upgrade moves the pin. If you are running from a development checkout rather than an
@@ -219,6 +222,7 @@ explained in `references/workflow.md`.
 | Draft pull requests | Skipped |
 | Fork pull requests | Skipped — no secrets are available to them |
 | Pull requests changing no application code | Skipped — nothing for a map to explain |
+| Trivial application changes | Skipped — 2 files **and** 20 lines or fewer, configurable |
 | Effort | `high` |
 | Delivery | `github-artifact` |
 | Retention | 30 days |
@@ -240,11 +244,15 @@ explained in `references/workflow.md`.
   Map job that could write to the repository is a different risk profile for no benefit — and
   `pull_request_target`, which would hand this job the repository's secrets on a branch a stranger
   controls, is not an option to weigh.
-- **Never put a size threshold on whether a Review Map is generated.** Not a file count, not a line
-  count, not a diff-size condition on the job, and not in `.accountable-review.yml` either. What
-  decides is whether the pull request changes application code at all — presence, not amount —
-  because the maps worth having are as often small changes with wide reach as large ones.
-  `references/workflow.md` § *The application-code gate* owns that rule.
+- **Never measure the size of anything but application code, and never join the two thresholds with
+  `or`.** The counts that decide a skip are over application paths only — a lockfile's lines are not
+  the change's lines — and both have to be small for a pull request to be called trivial, so a
+  change that is large by either measurement earns a map. Putting a count on the job's own `if:`
+  breaks both rules at once, because the `pull_request` payload measures the whole diff and has no
+  file list. `references/workflow.md` § *The application-code gate* owns all of it.
+- **Never bake a threshold into the generated workflow.** The triggers and the guards are design and
+  have no knobs; these numbers are a team's to own, so they live in `.accountable-review.yml` and are
+  read at run time. A number in the YAML is one a team can only change by regenerating the file.
 - **Never make the generated workflow run the application under review.** No `bundle exec`, no
   migrations, no database service, no `docker compose`. The Review Map is built by reading source and
   tests; that is a property of the product, not an optimisation. `review-map` proposes validation

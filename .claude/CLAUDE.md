@@ -180,7 +180,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically, `install-workflow.sh` writes idempotently and refuses to clobber, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
 | `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page — and refuses `mode: full` rather than remapping it |
-| `ci/application-code.sh` | The scope gate: does this diff change application code at all? Presence, not amount — no count of files or lines anywhere in it — and it fails open, so an unrecognised path is code |
+| `ci/application-code.sh` | The scope gate, in two rules: does this diff change application code at all, and is what it changes more than trivial? Both counted over application paths only, the trivial thresholds joined by **and**, and it fails open, so an unrecognised path is code |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
 | `README.md` | The public face — why comprehension debt is the problem, what a Review Map is, install, usage, CI setup, and the technical overview. Written for someone deciding whether to use this, so depth past that decision belongs in `docs/` |
 | `docs/review-map.md` | The page anatomy for a reader who already wants it: the five sections, the checkpoint, staging, excerpts, the framework anchors, the evidence tiers, and what the skill assumes about a repository. It **restates** `report-format.md` for the public and owns nothing — where the two disagree, the reference wins and this file is the one that is wrong |
@@ -901,41 +901,42 @@ Same rule as above: editing one of these means checking the others still agree.
   standard upload step does the transfer. That split is fine — generation still cannot tell which
   happened — but it is why the provider emits `artifact_name` and `retention_days` as extra keys, and
   why extras are carried through to `$GITHUB_OUTPUT` at all.
-- **Whether a Review Map is generated turns on presence, never on amount.** A pull request that
-  changes no application code gets none — `ci/application-code.sh`, called from a `scope` step every
-  later step is guarded on. Any application path earns one, however few lines it changes. There is no
-  file count, no line count, and no diff-size condition anywhere in the workflow or the script, and
-  `tests/run.sh` asserts the absence of the payload fields a threshold would reach for
-  (`changed_files`, `pull_request.additions`) rather than asserting values.
+- **Two rules decide whether CI generates a Review Map, and both are measured over application
+  paths only.** `ci/application-code.sh`, called from a `scope` step every later step is guarded on.
+  Rule 1: does the diff change application code at all — tests, documentation, tooling and
+  `diff-render.sh`'s `generated`/`binary`/`lockfile` verdicts do not count. Rule 2: is it more than
+  trivial — skipped when application files ≤ `trivial_files` **and** application lines ≤
+  `trivial_lines`, defaults 2 and 20, read from `.accountable-review.yml` at run time.
 
-  **The reason is that size is the wrong axis for this product, not that a threshold is hard to
-  tune.** A map's value scales with what a change *reaches* — the unchanged code whose meaning it
-  altered — and a three-line edit to a constructor default reaches further than a thousand-line
-  rename. That change is the first thing any magnitude threshold discards, and it is the one a
-  reviewer most reliably misjudges. A threshold on *application* lines is the same mistake one level
-  further in, which is the form it will come back as.
+  **AND, and the polarity is what will get edited.** A skip needs both small, so 900 lines in one
+  file generates and so do 9 lines across six. From the generating side that reads as an OR, which
+  invites a "simplification" that would discard a change large by either measurement. The asymmetry
+  is the reason: a needless map costs a model run somebody ignores, a missing one is invisible, so
+  the suppressing predicate is the one that should be hard to satisfy. `self-test.sh` breaks the
+  `&&` into `||`; `run.sh`'s `bulky` and `spread` catch it.
 
-  **Fail open is the safety property, and it is cheap for a reason worth keeping.** A path is code
-  unless it matches a narrow exclusion list — tests, documentation, repository tooling, plus the
-  `generated`, `binary` and `lockfile` verdicts borrowed from `diff-render.sh` so that list has one
-  home. Because a skip needs *every* path excluded, one file misfiled costs nothing unless the whole
-  diff is misfiled. `config/` and Dockerfiles are deliberately not excluded: a Rails app keeps its
-  routes there.
+  **Application paths only is what makes the counts mean anything**, and it is why this cannot be a
+  job `if:`. The `pull_request` payload's counts are whole-diff, so a three-line model change beside
+  a five-thousand-line lockfile reads as enormous and rule 2 would never fire; the payload has no
+  file list either, so rule 1 could not live there. `run.sh`'s `masked` pins it, and the negative
+  assertions forbid both the payload fields and the flag names in the rendered YAML.
 
-  **Only three of `diff-render.sh`'s reasons are read.** It also collapses a file for being big, and
-  taking `over-autoload` or `over-hard-cap` as not-application is how a size rule gets back in
-  through the part of the script that looks like it is only about file types.
+  **The thresholds are configuration, not design.** Unlike the triggers and the guards these are
+  numbers a team owns, so none is rendered into the workflow and changing one never means
+  regenerating it. Either at `0` disables rule 2, because nothing containing application code has
+  zero application files or lines — the opt-out, needing no third key.
 
-  **A skip says why.** The job summary names what it counted and lists every discounted path with its
-  reason — the recorded-searches rule applied to CI, and what makes a wrong skip reportable instead
-  of invisible. It is also why the gate runs after the checkout rather than as a job `if:`: the
-  payload has counts but not paths, so a path-aware rule cannot live there.
+  **A skip says which rule fired and the counts behind it** — the recorded-searches rule applied to
+  CI, and what makes a wrong skip reportable rather than invisible. It has to be, because rule 2
+  discards the small wide-reaching edit first; § *The application-code gate* argues that trade and
+  owns the numbers.
 
-  Seven files agree: `ci/application-code.sh` holds the rule, `templates/workflow.yml` the `scope`
-  step and the guards, `references/workflow.md` § *The application-code gate* owns the reasoning
-  **alone**, `SKILL.md`'s hard rules forbid the threshold and step 6 makes setup say the limit out
-  loud, `tests/run.sh` covers nine path cases plus both size cases, `tests/self-test.sh` breaks it six
-  ways, and `docs/ci.md` restates it for the public.
+  Seven files agree: `ci/application-code.sh` holds both rules, `read-config.sh` and
+  `references/config.md` the two keys, `templates/workflow.yml` the `scope` step and the guards,
+  `references/workflow.md` § *The application-code gate* owns the reasoning **alone** including
+  fail-open and the default's trade, `SKILL.md`'s hard rules forbid counting anything but
+  application code and baking a number into the YAML, `tests/run.sh` covers both rules either side
+  of each threshold, `tests/self-test.sh` breaks them nine ways, and `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
   gate. `SKILL.md` step 1 owns the flag, step 9 says the stages become save points rather than

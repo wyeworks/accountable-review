@@ -107,15 +107,20 @@ assert_in "$W" "fetch-depth: 0"                        "the checkout has the his
 assert_in "$W" "ref: \${{ github.event.pull_request.head.sha }}" "it checks out the pull request head, not a merge commit"
 assert_in "$W" "persist-credentials: false"            "no git credentials are left beside the checkout"
 
-assert_in "$W" "ci/application-code.sh"                "the run is scoped to pull requests that change application code"
+assert_in "$W" "ci/application-code.sh"                "the run is scoped by the application-code gate"
 assert_in "$W" "id: scope"                             "the scope check is a step later steps can read"
 assert_in "$W" "if: steps.scope.outputs.verdict == 'generate'" "generation is guarded by the scope check"
 assert_in "$W" "steps.scope.outputs.verdict == 'skip'" "a skipped run says why, rather than just not happening"
-# The payload fields a size threshold would reach for. Their absence is the
-# assertion: what decides a skip is WHICH paths changed, never how many or how
-# big, and a count here would be the rule this gate replaced coming back.
-assert_not_in "$W_CODE" "changed_files"                     "no file count decides whether a map is generated"
-assert_not_in "$W_CODE" "pull_request.additions"            "no line count decides it either"
+# The size thresholds are real, and they are NOT here. Two reasons, and both
+# would be undone by the same edit. The payload's counts are over the whole diff,
+# and what decides this is application paths only — a three-line model change
+# beside a five-thousand-line lockfile is a three-line change. And a number in
+# the rendered workflow is a number a team can only change by regenerating the
+# file, which is what .accountable-review.yml exists to avoid.
+assert_not_in "$W_CODE" "changed_files"                     "the job condition counts no files — the payload counts the whole diff"
+assert_not_in "$W_CODE" "pull_request.additions"            "and no lines, for the same reason"
+assert_not_in "$W_CODE" "trivial-files"                     "no threshold is baked into the rendered workflow"
+assert_not_in "$W_CODE" "trivial-lines"                     "nor the line one — both are read from the config at run time"
 assert_in "$W" "ci/generate-review-map.sh"             "there is a Review Map generation step"
 assert_in "$W" "ci/delivery/deliver.sh"                "delivery is resolved through the provider seam"
 assert_in "$W" "uses: actions/upload-artifact@v4"      "the map is uploaded as an artifact"
@@ -367,28 +372,32 @@ fi
 echo
 echo "== the application-code gate =="
 
-# Presence, not amount: the verdict turns on WHICH paths changed. Every case
-# below is about that distinction, and the two size cases are the ones that would
-# go green again if a threshold came back.
+# Two rules, asked in order: is any of this application code, and is what it
+# changes more than trivial. Both halves are measured over application paths
+# ONLY, which is the thing the whole-diff counts of the pull_request payload
+# cannot do.
 
 A=$PLUGIN_ROOT/ci/application-code.sh
 P=$TMP/gate-repo
 mkdir -p "$P"
 ( cd "$P" && git init -q . && git config user.email t@example.com && git config user.name t )
-mkdir -p "$P/app/models" "$P/spec/models" "$P/docs" "$P/.github/workflows" "$P/config"
-( cd "$P" && echo base > app/models/order.rb && echo base > spec/models/order_spec.rb \
+mkdir -p "$P/app/models" "$P/app/services" "$P/spec/models" "$P/docs" "$P/.github/workflows" "$P/config"
+( cd "$P" && echo base > app/models/order.rb && echo base > app/models/line.rb \
+    && echo base > app/models/cart.rb && echo base > app/services/pricer.rb \
+    && echo base > spec/models/order_spec.rb \
     && echo base > README.md && echo base > yarn.lock && echo base > config/routes.rb \
     && git add -A && git commit -qm base )
 GATE_BASE=$(cd "$P" && git rev-parse HEAD)
 
-# gate <branch> <expected verdict> <what> ... then the edits on stdin
+# gate <branch> <expected verdict> <what> <edits> [extra flags]
 gate() {
   branch=$1; want=$2; what=$3
   ( cd "$P" && git checkout -q -B "$branch" "$GATE_BASE" )
-  sh -c "cd '$P' && $4" 
+  sh -c "cd '$P' && $4"
   ( cd "$P" && git add -A && git commit -qm "$branch" )
   rc=0
-  ( cd "$P" && "$A" --base "$GATE_BASE" --head HEAD ) > "$TMP/gate-$branch" 2>&1 || rc=$?
+  # shellcheck disable=SC2086
+  ( cd "$P" && "$A" --base "$GATE_BASE" --head HEAD ${5:-} ) > "$TMP/gate-$branch" 2>&1 || rc=$?
   case $rc in
     0) got=generate ;;
     3) got=skip ;;
@@ -396,6 +405,8 @@ gate() {
   esac
   assert_eq "$got" "$want" "$what"
 }
+
+# --- rule 1: is any of it application code at all? --------------------------
 
 gate docs     skip     "a documentation-only pull request gets no Review Map" \
   'echo x >> README.md && echo x > docs/guide.md'
@@ -405,24 +416,66 @@ gate specs    skip     "a tests-only pull request gets none" \
   'echo x >> spec/models/order_spec.rb'
 gate tooling  skip     "a CI or linter config change gets none" \
   'echo x > .github/workflows/tests.yml && echo x > .rubocop.yml'
-gate mixed    generate "one application file among documentation earns one" \
-  'echo x >> README.md && echo x >> app/models/order.rb'
-
-# The two that a threshold gets wrong, in both directions.
-gate tiny     generate "a one-line application change earns one — reach is not size" \
-  'printf changed > app/models/order.rb'
-gate bulky    generate "a 900-line application file earns one, though its diff will not render" \
-  'seq 1 900 > app/models/order.rb'
+assert_in "$TMP/gate-docs" "verdict: skip (no-application-code)" "rule 1 names itself in the log, not only in a step output"
 
 # Fail open: a path this script has never heard of is application code. The
 # exclusion list is narrow on purpose, and this is the assertion that keeps it so.
+# Deliberately 40 lines: rule 2 would skip a small change whatever rule 1 said,
+# so a 3-line fixture here would pass while proving nothing about fail-open.
 gate unknown  generate "an unrecognised path counts as application code" \
-  'mkdir -p odd && echo x > odd/thing.xyz'
+  'mkdir -p odd && seq 1 40 > odd/thing.xyz'
 
 # config/ is where a Rails app keeps its routes. A blanket exclusion by directory
 # name would take it, and take the routing change with it.
 gate routes   generate "config/routes.rb is application code, not configuration" \
-  'echo x >> config/routes.rb'
+  'seq 1 40 > config/routes.rb'
+
+# --- rule 2: is what it changes more than trivial? --------------------------
+
+gate tiny     skip     "a one-line application change is trivial, and gets none" \
+  'echo x >> app/models/order.rb'
+assert_in "$TMP/gate-tiny" "verdict: skip (trivial)" "rule 2 names itself too"
+assert_in "$TMP/gate-tiny" "trivial threshold" "and prints the numbers it judged against"
+
+gate bulky    generate "a 900-line change in ONE file earns one" \
+  'seq 1 900 > app/models/order.rb'
+gate spread   generate "a 4-line change across FOUR files earns one" \
+  'echo x >> app/models/order.rb && echo x >> app/models/line.rb
+   echo x >> app/models/cart.rb && echo x >> app/services/pricer.rb'
+
+# THE TWO ABOVE ARE THE WHOLE POINT OF THE AND, and each is the case the other
+# polarity gets wrong. A skip predicate joined by OR would discard both: one is
+# under the file threshold, the other under the line threshold. Only requiring
+# BOTH to be small leaves a large change on the generating side whichever way it
+# is large.
+
+gate mixed    generate "one substantial application file among documentation earns one" \
+  'echo x >> README.md && seq 1 40 > app/models/order.rb'
+
+# The counts are over application paths only. This is the case that separates
+# them from the payload's whole-diff numbers: by those, this pull request is five
+# thousand lines and obviously worth a map.
+gate masked   skip     "a one-line model change beside a 5000-line lockfile is still trivial" \
+  'echo x >> app/models/order.rb && seq 1 5000 > yarn.lock'
+assert_in "$TMP/gate-masked" "1 application line" "the lockfile's lines are not counted"
+
+# --- the thresholds are configurable, and 0 turns them off ------------------
+
+gate offcfg   generate "trivial_lines: 0 in the config file generates a map for any application change" \
+  'echo x >> app/models/order.rb
+   printf "review_map:\n  trivial_lines: 0\n" > .accountable-review.yml'
+gate upcfg    skip     "a raised threshold makes a larger change trivial" \
+  'seq 1 40 > app/models/order.rb
+   printf "review_map:\n  trivial_files: 5\n  trivial_lines: 100\n" > .accountable-review.yml'
+gate flagwins generate "an explicit flag beats the config file" \
+  'seq 1 40 > app/models/order.rb
+   printf "review_map:\n  trivial_files: 5\n  trivial_lines: 100\n" > .accountable-review.yml' \
+  '--trivial-lines 10'
+
+rc=0; "$READ_CONFIG" /dev/null >/dev/null 2>&1 || true
+printf 'review_map:\n  trivial_lines: lots\n' > "$TMP/trivial-bad.yml"
+rc=0; "$READ_CONFIG" "$TMP/trivial-bad.yml" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1"                                    "a threshold that is not a number is an error"
 
 assert_in "$TMP/gate-docs" "skip	docs	README.md"  "the gate names each discounted path and why"
 assert_in "$TMP/gate-mixed" "code	-	app/models/order.rb" "and names the application paths it found"
@@ -433,7 +486,6 @@ assert_in "$TMP/gate-mixed" "code	-	app/models/order.rb" "and names the applicat
 rc=0
 ( cd "$P" && "$A" --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904111 --head HEAD ) >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "4"                                    "a base that cannot be resolved is an error, not a skip"
-
 
 echo
 echo "== inspection =="

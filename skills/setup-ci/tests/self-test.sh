@@ -81,22 +81,21 @@ break_and_run "mentor defaults to on, so every CI page teaches the framework" \
 break_and_run "the optional stack name swallows whatever flag follows --mentor" \
   ci/generate-review-map.sh 's|case ${2:-} in rails\|elixir\|phoenix) MENTOR=$2; shift ;; esac|case ${2:-} in ?*) MENTOR=$2; shift ;; esac|'
 
-# The application-code gate. Every case here is a way of making the gate stop
-# deciding on WHICH paths changed, which is the only thing it is supposed to
-# decide on — and each of them arrives looking like a tidy-up.
+# The application-code gate. Two rules, and the cases below break each of them in
+# the way a plausible edit would — every one of these arrives looking like a
+# tidy-up or a generosity.
 
-# Fail open is the whole safety property: a path nobody anticipated is
+# Fail open is the whole safety property of rule 1: a path nobody anticipated is
 # application code, so an unusual layout costs a map that was not needed rather
 # than losing one that was. Closing it turns every unrecognised path into a
 # reason to publish nothing.
 break_and_run "the gate treats an unrecognised path as not being application code" \
-  ci/application-code.sh 's|^      printf .code.*|      printf "skip\\tunknown\\t%s\\n" "$_path" ;;|'
+  ci/application-code.sh 's|^      printf .code.*|      printf "skip\\tunknown\\t%s\\t%s\\n" "$_path" "$_lines" ;;|'
 
 # diff-render.sh also collapses a file for being BIG. Reading those reasons here
-# is how a size threshold gets back in through the part of the script that looks
-# like it is only about file types — and it would discard the large hand-written
-# change a reviewer most needs the map for.
-break_and_run "a big application file counts as generated, so size decides after all" \
+# would discard the large hand-written change a reviewer most needs the map for,
+# by calling it generated.
+break_and_run "a big application file counts as generated" \
   ci/application-code.sh 's/\$2 == "lockfile"/$2 == "lockfile" || $2 == "over-autoload"/'
 
 # ASKED AND UNABLE TO ANSWER IS NOT AN EMPTY DIFF. Every failure mode of the gate
@@ -106,6 +105,24 @@ break_and_run "a big application file counts as generated, so size decides after
 break_and_run "an unresolvable base is reported as a skip rather than an error" \
   ci/application-code.sh 's/^    exit 4$/    exit 3/'
 
+# RULE 2, AND THE ONE THAT MATTERS MOST. A skip needs BOTH measurements small.
+# Joined by OR it discards a change that is large by either — 900 lines in one
+# file, or nine lines across six — and both of those are changes worth a map.
+# This is the edit someone makes while "simplifying a condition".
+break_and_run "the trivial skip joins its two thresholds with OR instead of AND" \
+  ci/application-code.sh 's/\[ "\$application" -le "\$TRIVIAL_FILES" \] \&\& \[ "\$lines" -le "\$TRIVIAL_LINES" \]/[ "$application" -le "$TRIVIAL_FILES" ] || [ "$lines" -le "$TRIVIAL_LINES" ]/'
+
+# The counts are over APPLICATION paths only, which is what makes them mean
+# anything: summing the whole diff lets one lockfile call every pull request
+# substantial, and the trivial rule then never fires.
+break_and_run "the line count sums the whole diff rather than the application paths" \
+  ci/application-code.sh "s|\\\$1 == \"code\" { n += \\\$4 }|{ n += \$4 }|"
+
+# A threshold nobody can change without regenerating the workflow is a threshold
+# a team is stuck with. The config file is the only place these live.
+break_and_run "the gate ignores the thresholds in .accountable-review.yml" \
+  ci/application-code.sh 's|^\[ -n "\$TRIVIAL_LINES" \] .*|TRIVIAL_LINES=$TRIVIAL_LINES_DEFAULT|'
+
 break_and_run "generation is no longer guarded by the gate" \
   skills/setup-ci/templates/workflow.yml "/if: steps.scope.outputs.verdict == .generate./d"
 
@@ -114,9 +131,9 @@ break_and_run "generation is no longer guarded by the gate" \
 break_and_run "a skipped run says nothing about why there is no Review Map" \
   skills/setup-ci/templates/workflow.yml "s/verdict == 'skip'/verdict == 'never'/"
 
-# And the rule this gate replaced, coming back where it is cheapest to write: a
-# count on the job's own condition, from the event payload.
-break_and_run "a file count on the job condition decides whether a map is generated" \
+# And the threshold written where it cannot mean the right thing: the job's own
+# condition, from an event payload whose counts are over the whole diff.
+break_and_run "a whole-diff file count on the job condition decides whether a map is generated" \
   skills/setup-ci/templates/workflow.yml 's|      github.event.pull_request.draft == false \&\&|      github.event.pull_request.changed_files > 3 \&\&\n      github.event.pull_request.draft == false \&\&|'
 
 echo
