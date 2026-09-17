@@ -180,6 +180,112 @@ case_runs_red "a locator carries the inventory's data-path attribute" "$WORK/loc
 sed 's|vertical-align: 1px; text-indent: 0;|vertical-align: 1px;|' "$TEMPLATE" > "$WORK/pending-indent.html"
 case_runs_red "the pending chip stops resetting the rail entry's hanging indent" "$WORK/pending-indent.html" "$SKELETON"
 
+# 20. The same family as 19, and it was found the same way — on a published page. .begin li is a
+#     three-column grid and a stop's excerpt is its fourth child, so with no span it auto-places
+#     into the 26px number column, where .ex-loc's overflow-wrap: anywhere renders the path one
+#     character per line down hundreds of pixels. Every other assertion still passes: the markup
+#     is correct, the excerpt is generated, the tag is right, and only the layout is unreadable.
+sed '/^\.begin li > \.excerpt {/d' "$TEMPLATE" > "$WORK/stop-excerpt-css.html"
+case_runs_red "a reading-path stop's excerpt loses the rule that spans it out of the number column" "$WORK/stop-excerpt-css.html" "$SKELETON"
+
+# 21. The other half. report-format.md permits an excerpt on a § 03 stop, and the template not
+#     showing one assembled is what left the only sanctioned location with no worked example —
+#     so a run composed it by analogy with .lookat, where the li is not a grid. The reference
+#     permitting what the template never shows is the shape to catch, not the CSS alone.
+awk '/<ol class="begin">/ { b = 1 }
+     b && /<details class="excerpt/ { f = 1 }
+     f { if ($0 ~ /<\/details>/) f = 0; next }
+     /<\/ol>/ { b = 0 }
+     { print }' "$TEMPLATE" > "$WORK/no-stop-excerpt.html"
+case_runs_red "no reading-path stop is assembled carrying an excerpt" "$WORK/no-stop-excerpt.html" "$SKELETON"
+
+# 22. The half of that rule that is not about the number column, and the one the fix for 20 was
+#     first written without. A grid item's automatic minimum is its min-content width, and the
+#     excerpt's is its pre's longest line, so the span alone widens the whole column past the
+#     viewport: measured at a 500px viewport, the document scrolled to 623. .ex-body's own
+#     overflow-x cannot contain what the grid has already grown for. .lookat > li carries the
+#     same min-width: 0 for the same reason, which is why the .lookat excerpts never showed it.
+sed 's|grid-column: 2 / -1; min-width: 0;|grid-column: 2 / -1;|' "$TEMPLATE" > "$WORK/stop-excerpt-minw.html"
+case_runs_red "a stop's excerpt cannot shrink below its pre, so the page scrolls sideways" "$WORK/stop-excerpt-minw.html" "$SKELETON"
+
+# 23. The search row's hanging indent, unscoped — the rule as it shipped. -16px on every code in
+#     the row reaches one inside the clause and drags it over the words before it; measured on a
+#     published page, a 16px overlap. Mutating it back into the descendant rule is the regression
+#     itself, not an approximation of it.
+sed 's|^\.searched \.sr-list code { min-width: 0;|.searched .sr-list code { min-width: 0; margin-left: -16px;|' \
+  "$TEMPLATE" > "$WORK/sr-indent.html"
+case_runs_red "the search row's indent pulls every code left, not only the leading command" "$WORK/sr-indent.html" "$SKELETON"
+
+# 24. And the example that makes rule 23 reachable. With no code inside a clause the template can
+#     carry the unscoped rule and look completely correct — which is how it did ship.
+sed 's|, naming <code>{{THE_SYMBOL_IT_FOUND}}</code> where the clause needs one||' \
+  "$TEMPLATE" > "$WORK/sr-nocode.html"
+case_runs_red "no search row's clause carries an inline code, so nothing exercises the indent's scope" "$WORK/sr-nocode.html" "$SKELETON"
+
+# 25. The inventory's odd last cell. .gt shows --rule through a 1px gap, so a half-empty last row
+#     paints the container's rule colour as a filled slab where a cell would be — a box that reads
+#     as a path with nothing in it. An odd number of paths is the common case.
+sed '/^\.gt-paths > \.c:last-child:nth-child(odd) {/d' "$TEMPLATE" > "$WORK/gt-odd.html"
+case_runs_red "an odd final inventory cell leaves a rule-coloured slab instead of spanning" "$WORK/gt-odd.html" "$SKELETON"
+
+# 26. And its example. Two cells is an even grid, where the rule above never fires and its absence
+#     is invisible — which is what the template had while the defect shipped.
+awk '/<div class="c" data-path="{{PATH}}">/ && !d { d = 1; next } { print }' "$TEMPLATE" > "$WORK/gt-even.html"
+case_runs_red "the assembled inventory has an even number of cells, so nothing exercises the odd-cell rule" "$WORK/gt-even.html" "$SKELETON"
+
+# ---- the primer callout, which is the only component a flag admits ----
+#
+# Six rows, because a primer has more ways to be quietly wrong than any other component here: it is
+# two paragraphs of framework prose, which read as self-justifying, and every one of its guards is a
+# thing that can be dropped while the callout still renders beautifully.
+
+# 27. Gone entirely. A --mentor run then has no markup to copy and writes the callout from memory,
+#     which is where the mark, the demo-with-an-app-class and the unpinned link all come back from.
+awk '/<aside class="primer">/ { f = 1 } f { if ($0 ~ /<\/aside>/) f = 0; next } { print }' \
+  "$TEMPLATE" > "$WORK/no-primer.html"
+case_runs_red "the assembled primer is gone, so a mentor run has nothing to copy" "$WORK/no-primer.html" "$SKELETON"
+
+# 28. The logotype returns. This is the specific shape the svg ban comes back in, because the mark
+#     is the one drawing on this page that had a reason: it was an attribution. Asserted through
+#     .pr-mark rather than through the svg count, so the row goes red on the class alone — a mark
+#     smuggled in as a web font or a background image is the same defect and the same disclosure
+#     obligation, and neither one carries an opening svg tag.
+awk '/<span class="pr-brand">/ && !d { print "            <span class=\"pr-mark\"></span>"; d = 1 } { print }' \
+  "$TEMPLATE" > "$WORK/pr-mark.html"
+case_runs_red "the primer's logotype comes back, bringing the trademark obligation with it" "$WORK/pr-mark.html" "$SKELETON"
+
+# 29. A demo outside a primer. pre.demo is the one block on this page allowed to show a result line,
+#     and the only thing that makes that honest is the receiver: a class this repository does not
+#     have, so the line quotes the manual. Outside a primer it is a general-purpose hole for output
+#     nobody observed, with the probe rule switched off.
+awk '/<figcaption>{{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}<\/figcaption>/ && !d { print "<pre class=\"demo\">x # =&gt; 1</pre>"; d = 1 } { print }' \
+  "$TEMPLATE" > "$WORK/loose-demo.html"
+case_runs_red "a pre.demo sits outside a primer, where nothing constrains its receiver" "$WORK/loose-demo.html" "$SKELETON"
+
+# 30. The gate itself. A primer is what a doc link escalates INTO, so one with no link is two
+#     paragraphs of framework assertion the reader cannot check — and it is also what makes a closed
+#     catalogue mean no primers for that stack, which is the whole reason Phoenix is narrow today
+#     rather than confidently wrong.
+grep -v 'classes/ActiveRecord/AttributeMethods/Dirty.html' "$TEMPLATE" > "$WORK/primer-no-doc.html"
+case_runs_red "the primer loses the doc link it is gated on" "$WORK/primer-no-doc.html" "$SKELETON"
+
+# 31. And the other half of the same rule. Without the file:line the callout has no stake in this
+#     repository at all: it is a framework lesson attached to a judgment by nothing but adjacency.
+sed 's|<div class="item">The callback at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>|<div class="item">The callback|' \
+  "$TEMPLATE" > "$WORK/primer-no-cite.html"
+case_runs_red "the primer stops citing the line in this repository that earned it" "$WORK/primer-no-cite.html" "$SKELETON"
+
+# 32. Position. Below the Look at list the lesson arrives after the reader has already been sent to
+#     the code, which is the one ordering that makes a primer worse than no primer: they open four
+#     files without the rule that decides what they are looking at.
+awk '
+  /<aside class="primer">/ { inp = 1 }
+  inp { buf = buf $0 "\n"; if ($0 ~ /<\/aside>/) inp = 0; next }
+  { print }
+  /<\/ul>/ && buf != "" && !done { printf "%s", buf; done = 1 }
+' "$TEMPLATE" > "$WORK/primer-late.html"
+case_runs_red "the primer is assembled below the Look at list it is meant to precede" "$WORK/primer-late.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
 # All three are script mutations for the reason the first two cases above are: the repository

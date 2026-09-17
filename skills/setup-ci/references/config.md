@@ -6,6 +6,7 @@ The repository's configuration for Accountable Review. Optional, small, and mean
 review_map:
   mode: brief            # brief | light
   effort: high           # high | low
+  mentor: rails          # true | false | rails | elixir | phoenix
 
   delivery:
     provider: github-artifact
@@ -21,6 +22,7 @@ That is the whole schema. Every key is optional; a file may set one of them.
 |---|---|---|
 | `review_map.mode` | `brief` | Vestigial, and kept so an existing file keeps working. The Review Map has one shape, so `brief` and `light` mean the same page and neither reaches the run. `full` and `review` are rejected rather than silently downgraded — `full` used to mean a seven-section page, and handing back the agenda under that name is a setting that changed meaning without saying so |
 | `review_map.effort` | `high` | How hard the run works to be right. `high` sends an adversarial pass at the run's own analysis before the page is written, and changes nothing about the page's shape; `low` skips it. `normal` is accepted as the old name for `low` |
+| `review_map.mentor` | `false` | The one key that changes what is **on** the page, for a team onboarding reviewers into the stack: a framework primer inside the checkpoints that earn one, and nothing else. Everything else about the page is what a run without it writes, so a mentor page with its primers deleted is the ordinary page. A stack name is a claim the run **checks** against the repository rather than an override — the run stops if they disagree — and while a stack's documentation catalogue is closed the flag produces no primers at all and says so in the log |
 | `review_map.delivery.provider` | `github-artifact` | Where the finished map goes. See `delivery.md` |
 | `review_map.delivery.retention_days` | `30` | How long the artifact is kept, 1–90. GitHub's own repository setting still caps it |
 | `review_map.delivery.command` | — | The command the `command` provider runs. Meaningless for any other provider |

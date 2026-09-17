@@ -118,7 +118,7 @@ On Phoenix the hops are different — router, controller or LiveView, context, c
 worker, template — and the point is the same: no directory contains the behaviour.
 
 `accountable-review` traces the PR around the **behaviour being implemented**, not the order of
-files in the diff — and then publishes the part of that work you have to act on: three to five
+files in the diff — and then publishes the part of that work you have to act on: the handful of
 judgments the change asks of you, and where to look to make each one. Persistence, the endpoint
 contract and the frontend boundary get no sections of their own, on purpose: one behaviour crosses
 all three, and giving each its own section means describing that behaviour three times.
@@ -158,7 +158,8 @@ Four parts, and a shut evidence block at the foot:
 
 ```text
 What changed                    one paragraph: what is now true that was not
-What needs your attention       3-5 checkpoints, each one judgment, framed as a question
+What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the
+                                outside; each one judgment, framed as a question
 Read the code in this order     3-7 stops, in the order that builds understanding
 Impact outside the diff         1-3 chains, from changed code into code it gives new meaning to,
                                 each node linked to the file it lives in
@@ -395,6 +396,39 @@ is worth doing when the diff is small enough that a second reader has nothing to
 a stamp saying how hard someone looked is the clean bill of health this page must never read as. What
 changed is reported to you in the terminal, not to whoever opens the link.
 
+### Onboarding a reviewer into the stack
+
+A third axis, and the only one that puts anything on the page:
+
+```text
+/accountable-review:review-map 412 --mentor          # add framework primers
+/accountable-review:review-map 412 --mentor rails    # the same, naming the stack
+```
+
+A Review Map normally assumes you know the framework and are meeting *this change* for the first
+time. `--mentor` is for the other case — a reviewer new to Rails or to Phoenix, on their first
+pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
+know, the page stops linking to the manual and states the rule: a short **primer** inside that
+checkpoint, with the API named, the behaviour explained, a worked example on a generic class, the
+line in *your* repository that made it relevant, and the pinned documentation link it came from.
+
+**It adds primers and it changes nothing else.** Same sections, the same checkpoints in the same
+order, same reading path, same impact section, same budget on every other part. Delete the
+primers from a mentor page and you have the ordinary page back — which is exactly why it is a flag
+rather than a second document, and why there is no "mentor mode" badge on the page: you can see
+which one you got.
+
+At most one primer per checkpoint and three per page. A judgment every developer in the stack
+already understands earns none, and a run that finds nothing worth teaching writes none — the flag
+is not an instruction to explain the framework. If you name a stack it is checked against the
+repository rather than believed, so `--mentor rails` in a Phoenix checkout stops the run instead of
+applying the wrong lens.
+
+> **Phoenix today:** a primer is gated on the documentation link it escalates from, and the Elixir
+> catalogue ships closed until a verification run has opened every row in it. So `--mentor` on a
+> Phoenix project currently produces no primers and says so. That is the fail-closed rule doing its
+> job — a page with no primer is narrower, a page with an invented link is wrong.
+
 ---
 
 ## Example Review Map 🖼️
@@ -405,7 +439,7 @@ four-file bugfix produces a one-screen page in a couple of minutes.
 
 What a good example shows:
 
-- three to five checkpoints, each a question you could answer wrongly, in the order you would most
+- a handful of checkpoints, each a question you could answer wrongly, in the order you would most
   regret getting wrong — and nothing anywhere that reads as a severity or a verdict
 - affected-but-unchanged code, drawn as chains from the change to what someone would observe, with
   the searches that found it recorded and re-runnable
@@ -500,7 +534,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
 | **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Contract judgments need both sides in the diff; with no client, or a PR that does not touch one, none is raised rather than raised emptily. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
 | **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
-| **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into three to five checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
+| **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
 | **Publishing** | Interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
@@ -519,6 +553,7 @@ What you choose per run:
 | --- | --- |
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
+| **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
 | **Output** | A published artifact by default; `--output <dir>` writes static HTML instead. |
 
 In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
@@ -527,6 +562,7 @@ optional:
 ```yaml
 review_map:
   effort: high           # high | low
+  mentor: false          # true | false | rails | elixir | phoenix
   delivery:
     provider: github-artifact
     retention_days: 14

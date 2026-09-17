@@ -1,0 +1,27 @@
+<!-- Defect: a pre.demo on a page with no primer at all. A demo may carry a result line only because
+     it quotes the manual on a receiver this repository does not have; outside a primer nothing
+     constrains the receiver, and this one names an application model — so the block is output nobody
+     observed, with the probe rule switched off.
+
+     It is also the fixture for the ZERO-PRIMER arm of § 8, which asserts rather than skipping: the
+     ordinary page written without --mentor has no primer and no demo, and "no primer here" must not
+     be allowed to excuse the demo. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Does the archival callback ask the predicate that is true when it runs?</h3>
+
+  <p>The new <code>after_commit</code> at <span class="path">app/models/project.rb:41</span>
+    branches on <code>archived_at_changed?</code>, which is false by the time a commit callback
+    runs. <span class="tier tier-unc">from unchanged code</span></p>
+
+  <span class="lbl">In practice</span>
+<pre class="demo">project.archived_at_changed?  # =&gt; false</pre>
+
+  <ul class="lookat">
+    <li>
+      <b>The commit callback</b>
+      <span>which of the two predicates it branches on</span>
+      <span class="path">app/models/project.rb:41</span>
+    </li>
+  </ul>
+</section>
