@@ -328,6 +328,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-draft-narration.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-flow-designator.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-flow-designator.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-loose-data-path.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment

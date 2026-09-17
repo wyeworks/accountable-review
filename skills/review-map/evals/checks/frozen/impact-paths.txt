@@ -1120,6 +1120,12 @@ SKIP  no .impact panel in this input
 ## --page invariants-draft-narration.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-flow-designator.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-flow-designator.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment invariants-loose-data-path.html
 exit=0
 SKIP  no .impact panel in this input

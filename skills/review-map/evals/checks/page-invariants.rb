@@ -93,6 +93,25 @@ ASSURE = /(independently|adversarially|externally) verified|verification pass|fa
 # line needs reading rather than failing.
 DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, not an|overlapping but different/i
 
+# The flow vocabulary, which is gone from the page the way the severity vocabulary is gone from the
+# design system — and this is the § 1 rule for it. A flow is SKILL.md step 6's unit of ANALYSIS: it
+# becomes a checkpoint, an impact path or a foot entry, it is named in $W/analysis/, and the page
+# names it nowhere. So "Flow A" on a page points at a section nobody wrote, and the reader who
+# follows it finds no rail entry for it.
+#
+# FAIL rather than WARN, because unlike a graded noun there is no sentence that legitimately carries
+# one: the name has nothing on the page to mean. The letter class stops at G, seven checkpoints being
+# the page's outside, and the trailing boundary is what keeps the rule off "Flow Hooks" — a letter
+# class alone would have matched the F-word and the capital after it in any prose.
+#
+# Graded on the comment-stripped copy, for § 2's reason rather than § 3's: a published page carries
+# page-template.html's comments verbatim, so a comment there explaining why the page names no flow
+# would be written in the words this matches — which is exactly how § 2's graded noun was caught
+# failing a correct page. Its own fixture therefore must not name the label in its header comment,
+# or deleting this rule's prose half would leave the fixture failing and the mutation test would
+# report a bypass as caught.
+FLOW_LABEL = %r{\bFlows? [A-G]\b|(?:id|href)="\#?flow-}
+
 check = ReviewMap::Check.new(ARGV)
 check.require_input
 page = check.page
@@ -239,6 +258,18 @@ else
     check.bad("theme states missing: #{missing.join(" ")}")
   end
 
+end
+
+# 7 · The flow vocabulary. Step 6's analysis labels and the page's own designators share one
+#     alphabet, so a run holding a note called Flow A, writing a checkpoint whose id is cp-a,
+#     beside an impact path called A, has no local signal that one of the three labels is its own.
+#     One real page carried "(Flow A)" in a checkpoint's second sentence and "Impact path A" in its
+#     last — both namespaces in one paragraph. report-format.md § One canonical home owns the rule.
+if prose.has?(FLOW_LABEL)
+  named = prose.scan(FLOW_LABEL).sort.uniq
+  check.bad("the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: #{named.join(" ")} ")
+else
+  check.ok("no flow designator — the page refers to checkpoints and impact paths only")
 end
 
 check.finish

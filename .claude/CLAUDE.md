@@ -772,6 +772,19 @@ Editing one of these means checking the others still agree.
   same question, and answering it twice is the shape to watch for coming back. Where the attention
   goes is expressed by what is on that list and in what order; every other file is accounted for in
   the evidence foot, unranked.
+
+  **Those pointers have exactly two names, and a flow is not one of them.** *Checkpoint A* and
+  *Impact path A* are the reader's designators; the flows step 6 clusters are the run's own unit of
+  **analysis**, named in `$W/analysis/` and nowhere on the page. A checkpoint reading *"a
+  leader-opened thread (Flow A) has no `connection_id`"* has pointed at a section nobody wrote.
+
+  **It leaks because the three labels share one alphabet** — the note is A, the checkpoint id is
+  `cp-a`, the impact path is A — so nothing local tells a run which one is its own, and one real
+  page mixed both namespaces inside a single paragraph. Four files agree: `report-format.md`
+  § *One canonical home* owns the rule **alone** and carries the reference form in the letter
+  form, `SKILL.md` step 6 states it where the labels are minted, `page-invariants.rb` § 7 greps
+  the comment-stripped copy for it, and `golden/invariants-flow-designator.html` plants it beside
+  a correct *Impact path A* so the fixture fails for the collision rather than for the token.
 - **Source excerpts are quotations, and the page reads complete without them.** A page primitive: a
   collapsed `details.excerpt` holding verbatim code, in two variants — `--diff` for changed lines,
   `--source` for unchanged ones, which is the variant that carries the product because no diff view

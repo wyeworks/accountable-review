@@ -328,6 +328,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page invariants-draft-narration.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-flow-designator.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-flow-designator.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-loose-data-path.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

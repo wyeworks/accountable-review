@@ -670,6 +670,18 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment invariants-flow-designator.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page invariants-flow-designator.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-loose-data-path.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none

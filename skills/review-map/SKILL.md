@@ -443,6 +443,13 @@ checkpoint from turning out to be a directory.
 section: a flow becomes a note, the note is what gets attacked, and step 7 turns notes into the
 ranked handful of judgments the reader actually gets.
 
+**And no sentence on the page ever names one.** These letters are yours, for the notes in
+`$W/analysis/` and for your own ranking; the page's designators are *Checkpoint A* and *Impact path
+A*, which are the reader's. A checkpoint reading *"a leader-opened thread (Flow A) has no
+`connection_id`"* has pointed at a section nobody wrote. It is easy to write and hard to see, because
+the note you are holding, the checkpoint you are writing and the impact path beside it are all
+lettered — `references/report-format.md` § *One canonical home* owns the rule.
+
 Then label each flow and each leftover file, for your own ranking in step 7 — the label reaches the
 page only as what *What changed* leads with and what the agenda leaves off:
 
