@@ -24,6 +24,7 @@ RUN=$HERE/run.sh
 TEMPLATE=$SKILL_DIR/references/page-template.html
 SKELETON=$SKILL_DIR/scripts/page-skeleton.sh
 DIFF_RENDER=$SKILL_DIR/scripts/diff-render.sh
+CARRY_PLAN=$SKILL_DIR/scripts/carry-plan.sh
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
@@ -46,6 +47,16 @@ case_render_red() {
   what=$1; scr=$2
   chmod 755 "$scr"
   if REVIEW_MAP_DIFF_RENDER="$scr" "$RUN" >/dev/null 2>&1; then
+    bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
+  else
+    ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
+  fi
+}
+
+case_carry_red() {
+  what=$1; scr=$2
+  chmod 755 "$scr"
+  if REVIEW_MAP_CARRY_PLAN="$scr" "$RUN" >/dev/null 2>&1; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -346,6 +357,70 @@ case_render_red "a path outside the diff is reported as collapsed" "$WORK/unchan
 awk '/^for ref in "\$BASE" "\$HEAD_REF"; do$/ { skip = 3 } skip { skip--; next } { print }' \
   "$DIFF_RENDER" > "$WORK/no-ref-guard.sh"
 case_render_red "the ref guard is gone, so an unresolvable base reads as a diff with nothing withheld" "$WORK/no-ref-guard.sh"
+
+# ---- carry-plan.sh: every way a carried claim goes quietly false ----
+#
+# This script's failure mode is the quietest in the repository. Every mutation below leaves it
+# printing a confident, well-formed plan — the only difference is that the plan is wrong, and
+# the page that follows it says it describes a revision half of it was never read against.
+
+# 12. The polarity. A skip needs EVERY precondition to hold; flipping the delta-size rule to fire
+#     only on a small delta inverts the one number standing between a cheap update and a page
+#     most of which nobody re-read.
+sed 's|if \[ "$N_FULL" -eq 0 \] \|\| \[ $((N_DELTA \* 2)) -gt "$N_FULL" \]; then|if [ $((N_DELTA * 2)) -lt 0 ]; then|' \
+  "$CARRY_PLAN" > "$WORK/no-half-rule.sh"
+case_carry_red "the delta-size rule never fires, so a rewrite of the branch updates in place" "$WORK/no-half-rule.sh"
+
+# 13. P8, which is the rule that protects the product. Affected-but-unchanged code is what the
+#     page is for, and a new consumer landing in a file no checkpoint cites is invisible to the
+#     carry rule — the recorded searches are the only thing on the page that can see it. With the
+#     intersection stubbed out the script still runs every search and still reports them safe.
+sed 's|^  landed=$(comm -12 "$TMP/delta" "$TMP/hitpaths" \| head -n 1)$|  landed=|' \
+  "$CARRY_PLAN" > "$WORK/no-p8.sh"
+case_carry_red "a delta path among a recorded search's hits no longer refuses" "$WORK/no-p8.sh"
+
+# 14. The reason -v is not used. awk's -v processes escape sequences in the value, so a recorded
+#     `rg -n '\bProjects::Archive\b'` arrives with two backspaces where its word boundaries were.
+#     The pattern still runs and still matches things — just not the things the page recorded —
+#     and every search then reports itself clean. This is the single most deniable line here.
+sed "s|  CARRY_CMD=\$1 awk '|  awk -v s=\"\$1\" '|; s|^      s = ENVIRON\[\"CARRY_CMD\"\]$||" \
+  "$CARRY_PLAN" > "$WORK/dash-v.sh"
+case_carry_red "the recorded pattern reaches awk through -v, which eats its backslash escapes" "$WORK/dash-v.sh"
+
+# 15. An unreplayable search is not a search that found nothing. Skipping the row rather than
+#     refusing turns the one honest answer — "I cannot check this" — into the most reassuring one.
+sed 's|^    UNSAFE=$cmd$|    continue|' "$CARRY_PLAN" > "$WORK/skip-unsafe.sh"
+case_carry_red "a search that cannot be replayed is skipped instead of refusing the update" "$WORK/skip-unsafe.sh"
+
+# 16. The substring trap, which coverage-gate.sh has already paid for once. Without the token
+#     boundaries api/Gemfile matches inside api/Gemfile.lock, and a checkpoint that cites the
+#     changed file is carried because a different file's name contains it.
+sed "s|^BOUND='\[^A-Za-z0-9._/-\]'$|BOUND=''|" "$CARRY_PLAN" > "$WORK/substring.sh"
+case_carry_red "the path test is a substring match rather than a whole token" "$WORK/substring.sh"
+
+# 17. P1. A rebased branch's "delta" is a diff between two histories rather than the commits
+#     someone pushed, and every carry decision downstream is then made against the wrong set.
+awk '/^if ! git merge-base --is-ancestor/ { skip = 3 } skip { skip--; next } { print }' \
+  "$CARRY_PLAN" > "$WORK/no-ancestry.sh"
+case_carry_red "the ancestry guard is gone, so a force-pushed branch updates in place" "$WORK/no-ancestry.sh"
+
+# 18. P3. Pending is a promise; carrying one promises work that nothing is doing, and the page it
+#     produces is a draft wearing a finished page's masthead.
+sed 's|^if grep -q .class="buildstate". "$PAGE" .*$|if false; then|' "$CARRY_PLAN" > "$WORK/draft-ok.sh"
+case_carry_red "a draft page is accepted as a base to update from" "$WORK/draft-ok.sh"
+
+# 19. The excerpt rule. An excerpt is a verbatim quotation and its state tag is computed from the
+#     diff, so a file entering the delta invalidates both. Keeping it is the one way this page
+#     lies about bytes while the bytes themselves are real.
+sed "s|    printf 'excerpt\\\\t%s\\\\tregen\\\\n' \"\$p\"|    printf 'excerpt\\\\t%s\\\\tkeep\\\\n' \"\$p\"|" \
+  "$CARRY_PLAN" > "$WORK/keep-excerpts.sh"
+case_carry_red "an excerpt whose file moved in the delta is carried rather than regenerated" "$WORK/keep-excerpts.sh"
+
+# 20. A refusal that prints its plan rows anyway. Half a plan reads as a plan, and the rows that
+#     did print are exactly the ones a run would act on.
+sed 's|^  echo "verdict: full"$|  sed "s/^/delta\\t/" "$TMP/delta" 2>/dev/null; echo "verdict: full"|' \
+  "$CARRY_PLAN" > "$WORK/leaky-refusal.sh"
+case_carry_red "a refusal prints plan rows alongside its verdict" "$WORK/leaky-refusal.sh"
 
 echo ""
 echo "self-test: $ok ok, $bad bad"

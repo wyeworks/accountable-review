@@ -69,9 +69,9 @@ loaded — its instructions are its own, which is the point of putting them in a
     page's ancestor and an invocation someone kept in a script is not a typo; `--light` is the same
     courtesy for a reader guessing the opposite of `--full`. Take both silently.
   - An argument starting with `--` that is none of those, and is not one of `--effort`, `--mentor`,
-    `--output`, `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not
-    guessed at**. A misread flag silently produces the wrong run, and the reader has no way to
-    tell.
+    `--output`, `--update`, `--repository`, `--base-sha` or `--head-sha` with its value, is
+    **reported, not guessed at**. A misread flag silently produces the wrong run, and the reader
+    has no way to tell.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
   it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
   *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about 700
@@ -172,6 +172,18 @@ loaded — its instructions are its own, which is the point of putting them in a
   `ci/generate-review-map.sh`, at the plugin root, is the only caller today. It supplies all four
   flags, checks afterwards that the page names its revision and no longer says it is being written,
   and refuses to deliver one that does.
+- **`--update` re-reads only the commits since the last map.** It takes no value, and it says: a
+  page for this target already exists where this run would write, so inspect the delta since the
+  revision that page names and edit it in place rather than rebuilding it. § *Re-running over new
+  commits* below owns every rule about it; read that section before acting on the flag.
+
+  Two things about it belong here, beside the flags it sits with. **It is not a level and not an
+  effort.** It never lowers a cap, never skips the gate, never skips step 8 for anything it writes,
+  and never admits or removes a component; the moment it means "fewer excerpts" or "skip section
+  04" it has become the `--full` this version refuses, reached by a different name. And **with no
+  previous page, or when the plan below refuses, it falls back to a full run and says so in chat.**
+  That is not an error: a full run is always the better page, so every way this flag can fail leads
+  to one.
 - Find the base *ref*: the PR's base if there is one, else the default branch
   (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
   you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
