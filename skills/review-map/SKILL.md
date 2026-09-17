@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no level flag: --brief and --light are accepted and change nothing, --full and --review stop the run as not implemented in this version. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no level flag: --brief and --light are accepted and change nothing, --full and --review stop the run as not implemented in this version. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -68,9 +68,10 @@ loaded — its instructions are its own, which is the point of putting them in a
   - `--brief` and `--light` are **accepted and change nothing.** `--brief` was the name of this
     page's ancestor and an invocation someone kept in a script is not a typo; `--light` is the same
     courtesy for a reader guessing the opposite of `--full`. Take both silently.
-  - An argument starting with `--` that is none of those, and is not one of `--effort`, `--output`,
-    `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not guessed at**. A
-    misread flag silently produces the wrong run, and the reader has no way to tell.
+  - An argument starting with `--` that is none of those, and is not one of `--effort`, `--mentor`,
+    `--output`, `--repository`, `--base-sha` or `--head-sha` with its value, is **reported, not
+    guessed at**. A misread flag silently produces the wrong run, and the reader has no way to
+    tell.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
   it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
   *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about 700
@@ -113,6 +114,31 @@ loaded — its instructions are its own, which is the point of putting them in a
   - `--full` and `--review` stop the run at either effort. Effort implements neither.
 
   **Do not announce the effort** — nothing about the pass reaches the page, and step 8 says why.
+- **`--mentor` is the one flag that puts anything on the page, and it is off by default.** It says
+  the reviewer is new to the **stack** rather than to the change, so a judgment that turns on a
+  framework rule they may not know gets that rule stated rather than linked. What it admits is one
+  component and nothing else: the **primer callout**, `aside.primer`, inside the checkpoints that
+  earn one. `references/report-format.md` § *Mentor mode* owns every rule about it, and step 7g is
+  where a checkpoint earns one.
+
+  **It may carry a stack name — `--mentor rails`, `--mentor elixir`, `--mentor phoenix` — and the
+  name is checked, never used to choose.** Step 2 detects the stack from the repository; a name on
+  the command line that disagrees with what is in front of you is **reported, not obeyed**. Taking
+  it as an override would reintroduce the worst regression this skill has: a Rails lens over a
+  service that is not Rails, inventing findings confidently. A bare `--mentor` is the ordinary form
+  and the one to prefer, and a value that is none of those three names is reported like any other
+  unknown flag.
+
+  **Hold it, and hold the subtraction rule with it.** Everything else about the page is the page a
+  run without the flag writes — same sections, the same checkpoints in the same ranked order, same
+  reading path, same impact panel, same evidence foot, same prose budget on every other part. Delete
+  the primers and you have that page back. A run that also lengthened its explanations, added a
+  checkpoint or reordered anything "because the reader is new" has turned a flag into
+  the `--full` this version refuses.
+
+  **There is no mentor marker, chip or banner.** The flag's effect is visible by being on the page,
+  which is exactly why it needs nothing announcing it — and a count of primers would be the page
+  grading its own thoroughness. Say which flags you took in chat, not in the artifact.
 - **`--output <dir>` makes the run non-interactive.** It is the only flag that changes where the page
   goes rather than what is on it: the page is written to `<dir>/index.html` and **nothing is
   published** — no `Artifact` call, at any stage. Everything else is identical, and has to be. Same
@@ -211,6 +237,14 @@ reads:
   catalogue that does not describe this application is the failure both catalogues fail closed to
   avoid.
 
+**If `--mentor` named a stack, check it here and nowhere else.** The detection above is the answer;
+the name on the command line is a claim to test against it. Agreement is silent. A disagreement —
+`--mentor rails` in a repository whose only root is `mix.exs` — **stops the run**, names both
+readings and says to re-run with a bare `--mentor`. It is never correct input, which is why it is
+handled like any other flag value that cannot apply rather than resolved in the run's favour: the
+likeliest cause is the wrong checkout, and a page confidently about the wrong repository is the
+failure a one-line stop is cheap against. What it must never do is let the name pick the lens.
+
 **Detecting the stack is not reading its files.** This step decides *which* pair the rest of the run
 uses. The lens is read at step 5, where its search recipes are the work; the catalogue at step 7,
 when a claim first asks for a URL. Nothing between here and there needs either, and both are large —
@@ -251,6 +285,13 @@ step 7's. What to record differs by stack, and so does its shape:
 Each catalogue's § *Pinning* owns the emitted forms. The same versions also decide what the page may
 **claim**, because two marks in each catalogue turn a version-sensitive behaviour into a probe rather
 than a sentence.
+
+**At `--mentor`, a closed catalogue also decides whether the flag can do anything.** A primer is what
+a doc link escalates into and is gated on carrying one, so while `elixir-docs.md` § *Version*
+withholds every link a Phoenix run at `--mentor` writes no primers at all and produces the ordinary
+page. Say that to the user, in chat, when the run starts — a flag that silently did nothing is worse
+than one that says why it could not. Do **not** say it on the page: a line explaining the absence of
+primers is the mentor badge § *Mentor mode* refuses, with an apology attached.
 
 **Frontend.** If the stack is Phoenix LiveView with no separate client application, the frontend is the
 `.heex` templates and whatever sits in `assets/` — there is no second application and no generated
@@ -601,6 +642,18 @@ is unsure the figure landed.
   § *Framework anchors* owns all of it.
 - Whether a doc link explains why the framework consequence follows. At most one `a.doc` per
   checkpoint, and never on a claim with no `file:line` beside it.
+- **At `--mentor` only: whether that link should be a primer instead.** Ask it of the judgment, not
+  of the flag. Without the flag the test is *could the reviewer decide this without knowing the
+  framework's rule?*; with it, *would they decide it better knowing the rule than knowing where to
+  read it?* That is a lower bar and it is still a bar — a behaviour every developer in the stack
+  already knows earns nothing at either setting. One per checkpoint, **three per page**, and the
+  primer *holds* that checkpoint's one doc link rather than adding a second.
+
+  **A run that earns none writes none.** Three primers is a ceiling, never a quota, and the flag is
+  not an instruction to find lessons. Manufacturing one is how the page becomes a framework manual
+  with a diff attached, and it arrives looking generous. A `‡ probe` row is never a primer's
+  subject: those behaviours changed inside the supported range, so no paragraph about one is true of
+  every app. `references/report-format.md` § *Mentor mode* owns the rest.
 
 **The catalogue opens here** — `references/rails-docs.md` or `references/elixir-docs.md`, whichever
 step 2 named, and not before. It is a lookup table: you go to it with a concept a claim already
@@ -979,6 +1032,22 @@ Everything else about writing holds at every stage:
   emitting an Elixir doc link — while it is closed, the answer for every concept is *no link*, and an
   Elixir run anchors with probes and prose instead. This is the fail-closed rule at file scope, not a
   bug to work around.
+- **At `--mentor`, take the primer's markup from the template like any other component.** It is
+  assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header with the library
+  name, the two paragraphs, the `.item` citation, the pinned `a.doc` and the `pre.demo` beside them.
+  Copy the composition and replace every string — the specimen explains `ActiveModel::Dirty` about a
+  `Post`, and a specimen's prose inherited onto a different API is a false claim nothing catches.
+
+  **The demo's receiver is the one thing that makes its result line legal**, and it is the part
+  easiest to get wrong while making the block look more relevant. `pre.demo` quotes documented
+  framework behaviour on a class **this repository does not have**, so the line quotes the manual;
+  swap in one of this app's models and the block becomes output nobody observed, with the probe rule
+  switched off. A demo goes nowhere but inside a primer, and no `pre.probe` goes inside one — the two
+  anchors sit beside each other and never nest.
+
+  Everything else about the primer is `references/report-format.md` § *Mentor mode*, and lives there
+  only: the gate on the doc link, the placement above `ul.lookat`, the budget, and that a page with
+  no `--mentor` has no `aside.primer` anywhere in it.
 - **A probe is proposed, never run.** Do not boot the application under review. The page shows the
   command; it never shows output, because there is none to show — and a fabricated `=>` or
   `{:ok, %Project{}}` line is the most concrete-looking thing on the page and the one part of it that
@@ -1170,6 +1239,11 @@ at the outside. Step 7e has both conditions on going past the fifth.
 Seven is the stop because past it section 03 can no longer be a route: every stop has been spent
 naming a checkpoint, and the reading order has become an index of the agenda.
 
+**A mentor page is that budget plus its primers**, each 90–200 words and at most three of them,
+counted separately for the reason § *The agenda budget* gives: folded in, a run would buy a lesson by
+dropping a judgment. Nothing else about the length changes, and the flag is never a reason to write a
+longer explanation, a sixth checkpoint or an extra *Look at* entry.
+
 **Trim only content that fails its own test** — a chain whose explanation walks its nodes, a *Look at*
 entry with no clause or with a title that only repeats its own citation, an explanation that restates
 *What changed*, a checkpoint that turns out to be a category. Never trim toward an imagined length, and **never trim a checkpoint out**. A page that
@@ -1199,9 +1273,16 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
 - **Never invent a URL, and never invent output.** Documentation links come from the catalogue the
   stack detected in step 2 — `references/rails-docs.md` or `references/elixir-docs.md` — and from
   nowhere else, including when that catalogue is closed and the answer is no link at all. Console
-  probes are proposed unrun, with no transcript beneath them. There is no exception: the page never
-  shows a result line, because the run never booted the application, and a fabricated `=> …` is the
-  most concrete-looking thing on the page and the one part of it that is fiction.
+  probes are proposed unrun, with no transcript beneath them. The page never shows the result of
+  running anything, because the run never booted the application, and a fabricated `=> …` is the most
+  concrete-looking thing on the page and the one part of it that is fiction.
+
+  **One exception, and the whole of its safety is the receiver.** At `--mentor` a `pre.demo` inside a
+  primer may carry a result line, because it quotes documented framework behaviour on a class **this
+  repository does not have** — the manual states results, and quoting the manual is not reporting a
+  run. Name one of this application's constants in a demo and it becomes exactly the fiction above,
+  with this rule switched off. Nothing else on the page carries output, at any flag, and a `pre.demo`
+  outside an `aside.primer` is a general-purpose hole for the same lie.
 - **The page must read completely with every collapsed block closed.** Three components collapse — a
   source excerpt beside the entry it confirms, `details.searched`, and `details.evidence`, the foot
   that is section 05 — and the rule is the same for all three: they confirm a claim the prose already

@@ -204,6 +204,20 @@ It is registered on **every** run, including `normal` ones where nothing spawns 
 costs nothing, and an arm of an A/B carrying an extra CLI flag differs by something other than the
 thing under test.
 
+### `--mentor` is a fifth axis and deliberately has no flag here
+
+`--mentor` admits the primer callout into the checkpoints that earn one, and there is no
+`--skill-mentor` to match `--skill-effort`. The reason is the one that governs every axis above: an
+axis is a **column on the results line**, and a column added for a feature with no case behind it
+makes every recorded line incomparable in exchange for nothing measured.
+
+What is covered is the mechanical half — `checks/rails-anchors.rb` § 8 grades every primer on a page
+it is handed, and the eight `golden/anchors-primer-*` fixtures prove each rule fires. What is not
+covered is the half that matters most: whether a primer was the *right* thing to spend a callout on,
+and whether the judgment underneath actually needed it. That is a judged expectation about one
+checkpoint, which is precisely the shape `deferred/` holds — so the axis is worth adding at the same
+time as the case it would carry, and not before.
+
 **No case gained an expectation for it, deliberately.** Six per case is a cap this file argues for,
 and a seventh would make the grader worse at the other six — which would be measuring the judge
 rather than the flag. The A/B runs the *existing* expectations at both efforts and compares:
@@ -569,7 +583,7 @@ because what it emits looks like a measurement.
 
 ### rails-anchors.rb
 
-The two framework anchors, and the one check whose allowlist lives in another file: it derives the
+The three framework anchors, and the one check whose allowlist lives in another file: it derives the
 permitted documentation URLs from `references/rails-docs.md`, so a row added there is legal here
 without touching this directory, and a URL a run invented is not. Beyond that it settles what a script
 can settle about a probe — no fabricated output beneath a command nobody ran, no write outside a
@@ -578,7 +592,17 @@ probe names existing in the repository. That last one is `searches.rb`'s argumen
 instead of searches: a plausible identifier is the failure mode, and it stays invisible until someone
 pastes it.
 
-It says SKIP on a page with neither anchor, which is most pages produced before this existed.
+§ 8 is the primer callout `--mentor` admits, and it is the part of this script that grades a
+component rather than a URL: that every primer sits inside a checkpoint, carries exactly one
+documentation link and one repo `file:line` of its own, holds no runtime probe, brings no logotype
+back, and that the page stays inside one-per-checkpoint and three-per-page. The rule with the
+longest reach is the smallest: **a `pre.demo` may sit only inside a primer**, because a demo's
+result line is legal purely through its receiver, and outside the callout nothing constrains the
+receiver. That arm runs on every page, primer or not — a loose demo on a page with no primer at all
+is the worst version of the defect rather than an inapplicable one, so it asserts where the rest of
+this script would SKIP.
+
+It says SKIP on a page with no link and no probe, which is most pages produced before this existed.
 
 ## The mechanical / judged line
 

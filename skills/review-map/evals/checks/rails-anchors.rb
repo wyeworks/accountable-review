@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# rails_anchors.rb — the two framework anchors: documentation links and runtime probes.
+# rails_anchors.rb — the three framework anchors: documentation links, runtime probes, and the
+# primer callout --mentor admits.
 #
-# Both exist to make a claim about the framework followable. Both fail in ways that look
+# All three exist to make a claim about the framework followable. All three fail in ways that look
 # like diligence, which is why they are checked mechanically rather than trusted:
 #
 #   a URL nobody opened            reads as a citation, resolves to a 404
@@ -13,6 +14,8 @@
 #   a probe naming a missing scope reads as pasteable, fails on first paste
 #   a link on every mechanism      reads as thoroughness and is a Rails manual with a
 #                                  diff attached
+#   a primer with no link or no    reads as the most generous thing on the page, and is
+#   file:line of its own           framework prose with nothing to check it against
 #
 # The catalogue is the allowlist, and this script derives it from the files rather than
 # hard-coding hosts: references/rails-docs.md and references/elixir-docs.md are the single
@@ -31,10 +34,16 @@
 # --repo is what makes rule 7 possible, the way it makes searches.rb possible. Without it
 # the identifier check SKIPs rather than passing on evidence it does not have.
 #
-# THE PRIMER IS GONE, along with the aside it lived in and the pre.demo it licensed. It was a
-# --full-only callout on a page that no longer has levels, and a component with no markup left
-# cannot be graded: what remains is the link and the probe, which are what an agenda page
-# actually anchors with. report-format.md § A future full mode records what the rules were.
+# THE PRIMER CAME BACK, and § 8 below is what it came back with. It was a --full-only callout on a
+# page that then lost its levels; it returns at --mentor, re-hung from a checkpoint rather than a
+# flow and stripped of the logotype this page has no room for. What survived is the half that was
+# load-bearing — the doc-link gate, the repo citation, and the receiver rule that makes pre.demo the
+# one block here allowed to show a result line. report-format.md § Mentor mode owns all of it.
+#
+# The rules run on the COMMENT-STRIPPED page, unlike everything above them. A published page carries
+# page-template.html's comments verbatim, and the ones around this component name `pre.demo` and
+# `pre.probe` in prose; the patterns want opening tags, so nothing matches today, and the strip is
+# what keeps that true of the next comment somebody writes.
 
 require_relative "lib/review_map/check"
 
@@ -55,6 +64,12 @@ module RailsAnchors
   # the host and the version, so a pinned link and an unpinned one differ in their SECOND
   # segment and nowhere else.
   HEXDOCS_PINNED = %r{\Ahttps://hexdocs\.pm/[^/]+/[0-9][^/]*/}
+
+  # A repository citation with no anchor on it — the rung-3 and rung-4 form. TWO rules read it: the
+  # doc link's "not alone" test, and the primer's "earned by a line in this repo" test, which is the
+  # same question asked of a bigger block. One copy, because two would drift the first time a
+  # language was added.
+  FILE_LINE = %r{[A-Za-z0-9_./-]+\.(?:rb|rake|erb|ts|tsx|js|jsx|yml|yaml|sql|json):[0-9]+}
 
   # Constants that are the framework's own or Ruby's, so they say nothing about this repository.
   # ONE list, because two rules need it: rule 7 skips these when asking whether a constant
@@ -362,7 +377,7 @@ unless external.empty?
     next false if block.include?('class="path"') || block.include?('class="cite"')
 
     # A bare path:line with no anchor counts too — that is the rung-3 and rung-4 form.
-    !block.match?(%r{[A-Za-z0-9_./-]+\.(?:rb|rake|erb|ts|tsx|js|jsx|yml|yaml|sql|json):[0-9]+})
+    !block.match?(RailsAnchors::FILE_LINE)
   end
   if alone.zero?
     check.ok("every documentation link sits beside a repository citation")
@@ -397,6 +412,129 @@ unless external.empty?
   cps = [page.count(/<section class="cp/), 5].min
   if cps.positive? && external.size > cps
     check.maybe("#{external.size} doc link(s) against a budget of #{cps} — at most one per checkpoint capped at five, and a page near that ratio has stopped selecting")
+  end
+end
+
+# ---------------------------------------------------------------- the primer callout
+#
+# § 8 · The third framework anchor, and the only component on this page a flag admits: --mentor
+#       and nowhere else. report-format.md § Mentor mode owns the rules; these are their mechanical
+#       edges, and every one of them guards a thing that can be dropped while the callout still
+#       renders beautifully.
+#
+#       READ OFF THE COMMENT-STRIPPED COPY. A published page carries page-template.html's comments
+#       verbatim, and the ones around this component discuss `pre.demo`, `pre.probe` and the aside
+#       by name — which is the shape that once had a fixture report itself as having no impact panel
+#       at all. The patterns below want opening tags rather than prose names, so nothing matches
+#       today; stripping is what keeps that true of the next comment somebody writes.
+markup = page.without_comments
+nprimer = markup.count(/<aside class="primer/)
+loose_demo = markup.count(/<pre class="demo"/)
+
+if nprimer.zero?
+  # NOT A SKIP. A page with no primer is the ordinary page written without --mentor, and one rule
+  # still has something to say about it: a demo's result line is legal only because it sits inside a
+  # primer, on a receiver this repository does not have. A loose demo on a page with NO primer is the
+  # worst version of that defect rather than an inapplicable one, so this arm asserts rather than
+  # declines.
+  if loose_demo.zero?
+    check.ok("no primer callout and no pre.demo — the shape of a page written without --mentor")
+  else
+    check.bad("#{loose_demo} pre.demo on a page carrying no primer callout — a demo may show a result line only because its receiver is a class this repository does not have, and outside a primer nothing constrains the receiver")
+  end
+else
+  primers = markup.regions(open: /<aside class="primer/, close: %r{</aside>})
+
+  # 8a · Inside a checkpoint, and one each. A primer in § 03, § 04 or the evidence foot is a
+  #      framework lesson with no judgment attached to it. Attribution is by the nearest enclosing
+  #      <section>, which is how the rest of this directory reads nesting: a checkpoint contains no
+  #      nested section, so a </section> closes whatever was open.
+  owners = []
+  owner = nil
+  markup.lines.each do |raw|
+    line = raw.chomp
+    if (tag = line[/<section\b[^>]*>/])
+      owner = tag.include?('class="cp') ? (tag[/id="([^"]+)"/, 1] || "cp?") : nil
+    end
+    owners << owner if line.match?(/<aside class="primer/)
+    owner = nil if line.match?(%r{</section>})
+  end
+  orphans = owners.count(&:nil?)
+  if orphans.zero?
+    check.ok("#{nprimer} primer callout(s), each inside the checkpoint it explains")
+  else
+    check.bad("#{orphans} primer callout(s) outside any checkpoint — a primer with no judgment attached to it is a framework lesson, not an anchor")
+  end
+
+  doubled = owners.compact.tally.select { |_id, n| n > 1 }
+  if doubled.empty?
+    check.ok("no checkpoint carries a second primer")
+  else
+    check.bad("#{doubled.size} checkpoint(s) carry more than one primer: #{doubled.map { |id, n| "#{id}×#{n}" }.join(" ")} — one judgment, one lesson")
+  end
+
+  # 8b · The budget's hard edge. Three is a ceiling and never a quota, and a page past it has
+  #      answered the flag by teaching rather than by explaining this change — the tutorial with a
+  #      diff attached, arriving through the one door --mentor opens. FAIL rather than WARN, like the
+  #      impact panel's own cap, because this one is a shape rather than a vocabulary.
+  if nprimer > 3
+    check.bad("#{nprimer} primer callouts — the budget is at most 3 a page, and a page past it is teaching the framework rather than explaining this change")
+  else
+    check.ok("#{nprimer} primer callout(s), within the budget of 3")
+  end
+
+  # 8c · Gated on the doc link it escalates FROM, and exactly one. This is also what makes a closed
+  #      catalogue mean no primers for that stack rather than unverifiable ones: while
+  #      elixir-docs.md § Version withholds every link, a Phoenix page can carry no primer at all.
+  ungated = primers.count { |pr| pr.count(/class="doc"/) != 1 }
+  if ungated.zero?
+    check.ok("every primer carries exactly one documentation link")
+  else
+    check.bad("#{ungated} primer(s) do not carry exactly one documentation link — a primer is what a link escalates into, and two paragraphs of framework prose with nothing to check them against is the defect the gate exists for")
+  end
+
+  # 8d · And earned by a line in THIS repository, inside the aside. The whole aside is one block on
+  #      purpose: a primer may neither omit its own citation nor borrow the one in the paragraph
+  #      above it, which is the doc-link rule working backwards.
+  unearned = primers.count do |pr|
+    next false if pr.has?(/class="path"|class="cite"/)
+
+    !pr.has?(RailsAnchors::FILE_LINE)
+  end
+  if unearned.zero?
+    check.ok("every primer cites the line in this repository that earned it")
+  else
+    check.bad("#{unearned} primer(s) carry no file:line of their own — framework prose with no stake in this repository is attached to its judgment by nothing but adjacency")
+  end
+
+  # 8e · The demo and the probe are adjacent, never nested. One states the framework's rule on a
+  #      receiver this repository does not have and may therefore show a result line; the other asks
+  #      THIS application and may never show one. A probe inside a primer puts the second under the
+  #      first's licence, which is the one arrangement that makes the exception unreadable.
+  nested = primers.sum { |pr| pr.count(/<pre class="probe"/) }
+  if nested.zero?
+    check.ok("no runtime probe inside a primer — the two anchors sit beside each other")
+  else
+    check.bad("#{nested} runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one")
+  end
+
+  inside_demo = primers.sum { |pr| pr.count(/<pre class="demo"/) }
+  if loose_demo == inside_demo
+    check.ok("every pre.demo sits inside a primer")
+  else
+    check.bad("#{loose_demo - inside_demo} pre.demo outside a primer — a demo may show a result line only because its receiver is a class this repository does not have, and outside a primer nothing constrains the receiver")
+  end
+
+  # 8f · No mark. The callout the agenda put down carried an inlined logotype, which is the one
+  #      drawing on this page that had an argument behind it — it was an attribution — and it came
+  #      with a trademark notice to match. This page has no drawings, so the artwork is gone and the
+  #      notice with it; the class is checked rather than the tag, because a mark smuggled back as a
+  #      background image or a web font is the same claim and the same obligation.
+  marked = primers.count { |pr| pr.has?(/pr-mark|pr-tm|<svg/) }
+  if marked.zero?
+    check.ok("no primer carries a logotype or a trademark line")
+  else
+    check.bad("#{marked} primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it")
   end
 end
 

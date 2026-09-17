@@ -70,6 +70,13 @@
   lens file produced the page except by reading what it says about their
   repository.
 
+  AND NO MENTOR BADGE, which is the fourth of these and the one with the best
+  excuse. --mentor DOES change what is on the page: it admits aside.primer, which
+  is visible by existing. That is exactly why it needs no chip — the reader can
+  see which page they got, which is the whole thing --full could not offer. A
+  "mentor mode" banner, a count of the primers, an "onboarding" eyebrow: each one
+  is the badge shape coming back through the one door that looks open.
+
   The page carries no tick state and no "n of m" counter anywhere, because a
   count of cleared items reads as progress toward approval. See report-format.md.
 
@@ -103,6 +110,12 @@
                             runs; the page never shows its output). At most one of
                             each per checkpoint, and a probe carries a THREE-part
                             label whose last part says what the output would settle
+    primer callout ........ aside.primer — the THIRD anchor, and the only component
+                            a flag admits. --mentor only, inside a checkpoint, at
+                            most one per checkpoint and three per page. It holds the
+                            checkpoint's one a.doc and a pre.demo, which is the one
+                            block on this page that may show a result line, because
+                            its receiver is a class this repository does not have
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
                             sentences, an optional figure.chain, ul.lookat (1-4
                             places to look, each a title, a clause and its
@@ -669,6 +682,99 @@ pre.probe {
    supported the label falls back to the ordinary .lbl ink, which is the whole
    degradation: the probe still reads and still says what it would settle. */
 .lbl:has(+ pre.probe) { color: var(--prov-ink); }
+
+/* ============================================================
+   The primer callout — THE THIRD FRAMEWORK ANCHOR, and the only
+   component on this page that a flag admits. It appears at
+   --mentor and nowhere else, only inside a section.cp, and it is
+   what a doc link escalates into when the reviewer would judge
+   better knowing the framework's rule itself rather than only
+   where it is written down. report-format.md § Mentor mode owns
+   the budget and what earns one.
+
+   IT IS PLUM, because a primer is provenance: the manual, quoted.
+   It spends NO NEW COLOUR, deliberately — a callout that
+   introduced one would be a value to declare in all three theme
+   blocks and forget in one, which is the defect the tint tokens
+   are counted by name to catch. The version of this component
+   that the agenda put down spent a Rails red on an inlined
+   logotype; the artwork is gone with every other drawing on this
+   page, and the colour went with it.
+
+   NO MARK, AND THEREFORE NO TRADEMARK LINE. With no logotype on
+   display there is nothing for a notice to disclaim, so the two
+   went together — and with them the branded/unbranded variant
+   split, which existed only to say who drew the mark. One shape
+   now serves Rails, a gem and a hex package alike, and the header
+   carries the name as text.
+
+   Three things it must not become, all of which look like
+   diligence on the way:
+     · a probe. pre.demo quotes documented framework behaviour on
+       a GENERIC receiver, so it may carry a result line: it is a
+       quotation of the manual, and the manual states results.
+       pre.probe asks THIS application and may never show output,
+       because the run did not boot it. So a demo lives only
+       inside a primer, and a probe never inside one — adjacent,
+       never nested.
+     · a tutorial. A behaviour every developer in the stack
+       already knows earns nothing, at any flag. --mentor lowers
+       the bar from "cannot decide without this" to "would decide
+       better knowing it"; it does not remove it, and a mentor run
+       that earns no primer writes none.
+     · an unevidenced claim. It cites the line in THIS repository
+       that earned it and carries the pinned link it escalated
+       from. Two paragraphs of framework prose read as
+       self-justifying, which is why both halves are checked.
+   ============================================================ */
+.primer {
+  margin: 16px 0 6px; background: var(--prov-bg);
+  border: 1px solid var(--prov-rule); border-top: 2px solid var(--prov-rule-2);
+}
+.pr-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 12px 20px; border-bottom: 1px solid var(--prov-rule);
+}
+/* The name as text. There is no artwork to carry it any more, which is why this
+   span is no longer a variant's consolation and is simply the header. */
+.pr-brand {
+  font-family: var(--display); font-weight: 400; font-size: 19px;
+  line-height: 1; letter-spacing: -.01em; color: var(--ink);
+}
+.pr-sep { align-self: center; width: 1px; height: 14px; background: var(--prov-rule-2); }
+.pr-api { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--faint); overflow-wrap: anywhere; }
+
+.pr-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+.pr-main { min-width: 0; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 11px; }
+.pr-main > b { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.pr-main > p { max-width: 56ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); text-wrap: pretty; }
+.pr-main > .item { font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.pr-main > a.doc { align-self: flex-start; margin-top: 3px; white-space: normal; }
+
+.pr-side {
+  min-width: 0; padding: 18px 20px 20px;
+  background: var(--prov-bg-2); border-left: 1px solid var(--prov-rule);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pr-side > .lbl { font-size: 9.5px; color: var(--prov-ink); }
+.pr-side > .note { font-size: 13px; line-height: 1.58; }
+
+/* The manual, quoted. It SCROLLS rather than wrapping, which is the opposite of
+   what it started as: a wrapped result line puts the answer on a line of its own,
+   where it reads as another statement instead of as the answer to the one above
+   it. Code that wraps says something different from the code that was written,
+   and a quotation may not do that. This is the same rule an excerpt follows and
+   the opposite of pre.probe's, which wraps because a command is not a quotation.
+   Keep the lines short — under about 38 characters and nothing scrolls at all. */
+pre.demo {
+  margin: 0; overflow-x: auto;
+  font-family: var(--mono); font-size: 12px; line-height: 1.75;
+  color: var(--ink-2); white-space: pre;
+}
+@media (max-width: 700px) {
+  .pr-body { grid-template-columns: minmax(0, 1fr); }
+  .pr-side { border-left: 0; border-top: 1px solid var(--prov-rule); }
+}
 
 /* ============================================================
    Source excerpts — generated by scripts/excerpt.sh, never typed.
@@ -1464,6 +1570,87 @@ figcaption strong { color: var(--ink-3); }
           </ol>
           <figcaption>{{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}</figcaption>
         </figure>
+
+        <!-- THE PRIMER CALLOUT — --mentor ONLY, AND THE ONLY COMPONENT ON THIS PAGE
+             A FLAG ADMITS. Delete every one of these and what is left is the page a
+             default run writes: same sections, same checkpoints, same order, same
+             reading path, same budget. That subtraction is the rule, and it is what
+             keeps --mentor from becoming the --full this version refuses — a mentor
+             page is this page with lessons hung inside it, never a second document.
+             report-format.md § Mentor mode owns all of it.
+
+             OMIT IT ENTIRELY without --mentor, and omit it at --mentor when nothing
+             earns one. A primer is what a doc link escalates INTO, for the case where
+             the reviewer would judge better knowing the framework's rule rather than
+             only where it is written down. Mentor lowers that bar from "cannot decide
+             without this"; it does not remove it, and a run that manufactures a lesson
+             to honour a flag has written the Rails manual with a diff attached.
+
+             ITS LINK IS THE CHECKPOINT'S LINK. The budget stays one a.doc per
+             checkpoint — mentor buys explanation, not citations — so this checkpoint's
+             sentences carry none of their own. Checkpoint B below is the other
+             arrangement: the link inline, no primer.
+
+             AND IT IS GATED ON THAT LINK, so a closed catalogue means no primer for
+             that stack. While elixir-docs.md § Version withholds every link, a Phoenix
+             page at --mentor carries none of these and anchors with probes and prose.
+             Narrower, not wrong.
+
+             ONE PER CHECKPOINT AND THREE PER PAGE, sits after the explanation and any
+             chain and BEFORE ul.lookat — the reader meets the unfamiliar API right
+             after the mechanism that uses it and before the places they have to look.
+
+             THE VERSION IS SUBSTITUTED PER RUN, exactly as in checkpoint B: the
+             catalogue stores the path without one. -->
+        <aside class="primer">
+          <div class="pr-head">
+            <span class="pr-brand">Rails</span>
+            <i class="pr-sep"></i>
+            <span class="lbl">Primer</span>
+            <span class="pr-api">ActiveModel::Dirty</span>
+          </div>
+
+          <div class="pr-body">
+            <div class="pr-main">
+              <b>archived_at_changed? vs saved_change_to_archived_at?</b>
+              <p>Every ActiveRecord attribute carries two questions, and they are true at
+                different moments. <code>archived_at_changed?</code> asks whether the value in
+                memory differs from the one loaded from the row &mdash; true <em>before</em> the
+                save and false after it. <code>saved_change_to_archived_at?</code> asks what the
+                save just wrote, and is only true <em>after</em> it.</p>
+              <p>Which one a callback wants therefore depends on when it runs. A
+                <code>before_save</code> that asks the second question never fires; an
+                <code>after_commit</code> that asks the first one never fires either, and both
+                failures are silent.</p>
+              <!-- THE CITATION THAT EARNED IT, like every other doc link. Without it the
+                   aside is a framework lesson with no stake in this repository, and two
+                   paragraphs of framework prose are exactly the kind that read as
+                   self-justifying. rails-anchors.rb judges the aside as one block. -->
+              <div class="item">The callback at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>
+                runs after the write, so it is the second form it has to ask.</div>
+              <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html">api.rubyonrails.org</a>
+            </div>
+
+            <div class="pr-side">
+              <span class="lbl">In practice</span>
+              <!-- pre.demo, NOT pre.probe, and the difference is the RECEIVER. Post here is
+                   deliberately a class this repository does not have: that is the whole
+                   reason a result line in this block is a quotation of the manual rather
+                   than output nobody observed. Name an application class and it becomes
+                   precisely the fiction the probe rule exists to prevent, with the rule
+                   switched off. A demo lives only inside a primer, and never anywhere else
+                   on the page. -->
+<pre class="demo">post = Post.find(1)
+post.title = "new"
+post.title_changed?          # =&gt; true
+post.save
+post.title_changed?          # =&gt; false
+post.saved_change_to_title?  # =&gt; true</pre>
+              <p class="note">Both predicates are generated per attribute, so they exist for
+                every column without being written anywhere.</p>
+            </div>
+          </div>
+        </aside>
 
         <!-- WHERE TO LOOK — one to four locations, the smallest set that settles
              the question. THREE PARTS PER ENTRY, IN THIS ORDER: a title naming

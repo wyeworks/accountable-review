@@ -5,6 +5,7 @@
 #   Usage: generate-review-map.sh --output DIR --repository owner/repo
 #                                 --pr N --base-sha SHA --head-sha SHA
 #                                 [--mode brief|light] [--effort high|low]
+#                                 [--mentor [rails|elixir|phoenix]]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 [--plugin-dir DIR] [--claude-bin claude]
 #                                 [--strict-gate] [--print-invocation]
@@ -36,7 +37,7 @@ set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PLUGIN_ROOT=$(dirname "$HERE")
 
-OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; MODE=; EFFORT=; CONFIG=
+OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; MODE=; EFFORT=; MENTOR=; CONFIG=
 REPO_DIR=.; PLUGIN_DIR=; CLAUDE_BIN=${CLAUDE_BIN:-claude}
 STRICT_GATE=0; PRINT_INVOCATION=0; VERIFY_ONLY=0
 
@@ -49,6 +50,13 @@ while [ $# -gt 0 ]; do
     --head-sha)    HEAD_SHA=$2;   shift 2 ;;
     --mode)        MODE=$2;       shift 2 ;;
     --effort)      EFFORT=$2;     shift 2 ;;
+    # --mentor takes an OPTIONAL stack name, which is how the skill spells it, and one
+    # spelling in both places is worth the peek: a second flag name here would be a second
+    # thing to keep in step with SKILL.md. The next argument is consumed only when it is one
+    # of the three names, so `--mentor --effort low` cannot swallow the flag after it.
+    --mentor)      MENTOR=on
+                   case ${2:-} in rails|elixir|phoenix) MENTOR=$2; shift ;; esac
+                   shift ;;
     --config)      CONFIG=$2;     shift 2 ;;
     --repo-dir)    REPO_DIR=$2;   shift 2 ;;
     --plugin-dir)  PLUGIN_DIR=$2; shift 2 ;;
@@ -56,7 +64,7 @@ while [ $# -gt 0 ]; do
     --strict-gate)       STRICT_GATE=1;      shift ;;
     --print-invocation)  PRINT_INVOCATION=1; shift ;;
     --verify-only)       VERIFY_ONLY=1;      shift ;;
-    -h|--help) sed -n '2,32p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,33p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "generate-review-map.sh: unknown argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -76,6 +84,7 @@ if [ -n "$CONFIG" ] && [ -f "$CONFIG" ]; then
 fi
 [ -n "$MODE" ]   || MODE=${CFG_mode:-brief}
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
+[ -n "$MENTOR" ] || MENTOR=${CFG_mentor:-off}
 
 # THE PAGE HAS ONE SHAPE, so --mode decides nothing and is not passed to the skill at all.
 # `brief` and `light` are the same page and are taken silently, because a workflow that has
@@ -93,6 +102,17 @@ esac
 # means `low`, so a config file written before the rename keeps working here too.
 case $EFFORT in normal) EFFORT=low ;; esac
 case $EFFORT in high|low) ;; *) die "--effort must be high or low, got '$EFFORT'" ;; esac
+
+# --mentor is OFF unless asked for, here as in an interactive run. It is the one flag that puts
+# anything on the page — a framework primer inside the checkpoints that earn one — and everything
+# else about the page is what a run without it writes. `false` and `no` are taken as the config
+# file's spellings of off, because a team turning it back off should not have to delete the key.
+case $MENTOR in
+  off|false|no) MENTOR=off ;;
+  on|true|yes)  MENTOR=on ;;
+  rails|elixir|phoenix) ;;
+  *) die "--mentor takes no value, or one of rails, elixir, phoenix; got '$MENTOR'" ;;
+esac
 
 # The page must never land inside the repository it describes — it would become
 # part of the next diff, and on a PR branch it would be a file the change itself
@@ -119,6 +139,13 @@ PAGE=$OUTPUT_ABS/index.html
 # ---------------------------------------------------------------- invocation --
 
 PROMPT="/accountable-review:review-map${PR:+ $PR} --effort $EFFORT --output $OUTPUT_ABS"
+# Off is the absence of the flag rather than `--mentor off`: the skill parses no such value, and a
+# flag whose off state is spelled out is one more thing for it to get wrong.
+case $MENTOR in
+  off) ;;
+  on)  PROMPT="$PROMPT --mentor" ;;
+  *)   PROMPT="$PROMPT --mentor $MENTOR" ;;
+esac
 if [ -n "$REPOSITORY" ]; then PROMPT="$PROMPT --repository $REPOSITORY"; fi
 if [ -n "$BASE_SHA" ];   then PROMPT="$PROMPT --base-sha $BASE_SHA"; fi
 PROMPT="$PROMPT --head-sha $HEAD_SHA"
@@ -153,7 +180,11 @@ The Review Map is built from BASE...HEAD, so the base commit has to be present:
 check out with fetch-depth: 0 rather than the default shallow clone."
   fi
 
-  echo "accountable-review: generating a review map at effort $EFFORT"
+  case $MENTOR in
+    off) echo "accountable-review: generating a review map at effort $EFFORT" ;;
+    on)  echo "accountable-review: generating a review map at effort $EFFORT, with framework primers" ;;
+    *)   echo "accountable-review: generating a review map at effort $EFFORT, with framework primers ($MENTOR)" ;;
+  esac
   echo "accountable-review: ${REPOSITORY:-this repository}${PR:+ PR #$PR} ${BASE_SHA:+$(printf '%.7s' "$BASE_SHA")..}$(printf '%.7s' "$HEAD_SHA")"
   ( cd "$REPO_DIR" && exec "$@" ) || die "the review-map run failed. No Review Map was produced."
 fi
@@ -213,7 +244,8 @@ cat > "$OUTPUT_ABS/manifest.json" <<JSON
   },
   "review_map": {
     "entry": "index.html",
-    "effort": "$EFFORT"
+    "effort": "$EFFORT",
+    "mentor": "$MENTOR"
   },
   "revision": {
     "repository": "$REPOSITORY",

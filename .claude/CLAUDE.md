@@ -28,8 +28,9 @@ page is easy to produce by looking less hard.
 
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are always namespaced by
 the plugin name, so the manifest name and the skill directory name together decide the public
-command. It takes a target and an **effort** — `--effort high` (the default, sending an adversarial
-pass at the run's own analysis before any of it is written) or `--effort low`, which opts out —
+command. It takes a target, an **effort** — `--effort high` (the default, sending an adversarial
+pass at the run's own analysis before any of it is written) or `--effort low`, which opts out — and
+`--mentor`, off by default, which is the one flag that puts anything on the page. All of it is
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
 frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. **There is no
 level flag**: `--brief` and `--light` are accepted and change nothing, `--full` and `--review` stop
@@ -155,7 +156,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing, step 7 being the synthesis that turns analysis into an agenda — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint**, **chains** and the rule that decides which figure a chain is, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint**, **chains** and the rule that decides which figure a chain is, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
@@ -202,7 +203,8 @@ Editing one of these means checking the others still agree.
   in this version; `--brief` and `--light` are accepted and change nothing. The refusal is settled in
   `SKILL.md` step 1 beside the target and the link rung, its wording is in § *Two levels are not
   implemented in this version*, and `report-format.md` § *One page shape* states the consequence for
-  the format.
+  the format. **`--mentor` adds a component and does not choose a shape** — the bullet below it owns
+  that distinction and the subtraction rule that holds it.
 
   **Refusing `--full` rather than mapping it is the load-bearing half.** It named a seven-section
   page. Handing back a five-section agenda under that name is a flag that quietly changed meaning,
@@ -235,6 +237,50 @@ Editing one of these means checking the others still agree.
   of which is deleted with the level. What replaced the filter is nothing, which is the right amount
   of machinery for a page with one shape: `tests/run.sh` counts the entries and `self-test.sh`
   duplicates one to prove the count fires.
+- **`--mentor` is the only flag that puts anything on the page, and subtraction is what keeps it from
+  being a level.** It admits one component — the primer callout, `aside.primer`, the third framework
+  anchor — inside the checkpoints that earn one, for a reviewer new to the *stack* rather than to the
+  change. **Delete every primer from a mentor page and what remains is the page the same run would
+  have written without the flag.** Nothing else moves: same sections, same checkpoints in the same
+  ranked order, same reading path, same panel, same foot, same budget on every other part.
+
+  **That subtraction is the whole distance from the `--full` this version refuses**, and it is the
+  sentence to keep. `--full` named a *different document* reached by a flag, with nothing on the page
+  to tell a reader which one they were holding; a mentor page differs by components a reader can see.
+  Which is also why it takes **no badge** — the effect announces itself, and a count of primers would
+  be the page grading its own thoroughness. `page-template.html` refuses it beside the severity chip,
+  the verification badge and the stack badge, because that fourth refusal has the best excuse of the
+  four and would otherwise come back alone.
+
+  **A primer holds its checkpoint's one doc link rather than adding a second**, so the anchor budget
+  is relocated and never raised: mentor buys explanation, never citations. It is also **gated** on
+  that link, which is what makes a closed catalogue mean no primers for that stack — Phoenix gets the
+  ordinary page today, and one verification run lifts it.
+
+  Three things about it look like generosity and are not. **A run that earns no primer writes none**,
+  because manufacturing a lesson to honour a flag is how this becomes a framework manual with a diff
+  attached. **A stack name is checked, never obeyed** — `--mentor rails` in a `mix.exs` repository
+  stops the run, since an override would reintroduce a Rails lens over something that is not Rails.
+  And the one exception to *never invent output* lives here, with its whole safety in the receiver:
+  `pre.demo` may show a result line only because it quotes the manual on a class this repository does
+  not have, so a demo goes nowhere but inside a primer and a probe never inside one.
+
+  Ten files and a fixture set have to agree. `report-format.md` § *Mentor mode* owns every rule
+  **alone**, with § *One page shape*, § *The review checkpoint*'s slot, § *Framework anchors*' third
+  row and § *The agenda budget*'s separate count pointing at it; `SKILL.md` parses it at step 1,
+  checks the stack name and the catalogue at step 2, earns one at step 7g, writes it at step 9 and
+  carries the demo exception in its hard rules; `page-template.html` holds the CSS in the head range
+  and the callout assembled inside checkpoint A; `evals/checks/rails-anchors.rb` § 8 grades it on the
+  **comment-stripped** copy, behind eight `golden/anchors-primer-*` fixtures and `anchors-demo-loose`;
+  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it six
+  ways; and the CI half is `ci/generate-review-map.sh`, `read-config.sh`, `references/config.md` and
+  `setup-ci/tests/`, where **off is the absence of the flag** rather than `--mentor off`, because the
+  skill parses no such value.
+
+  **It has no eval axis, and that is the honest gap.** An axis is a column on every result line, and
+  adding one for a feature with no case behind it makes old lines incomparable in exchange for
+  nothing measured. The mechanical half is covered; whether a primer was worth spending a callout on
+  is judged, which is the shape `evals/deferred/` holds.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
   attention* **per independent semantic delta § 01 names**, seven on the page at the outside, each
   **one judgment** the reviewer has to make: an `<h3>` question, two to four
@@ -401,12 +447,13 @@ Editing one of these means checking the others still agree.
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier. That
   asymmetry is deliberate: labelling everything is noise, and noise gets skipped.
 - **Framework anchors are provenance, not evidence, and there is still no sixth tier.** A doc link
-  explains why a framework consequence follows; a console probe asks the reviewer's own application.
-  The claim underneath keeps resting on a repo `file:line` at the tier it already carried, which is
-  what keeps the five-tier invariant untouched. It is also the answer already written down for
-  `--review`: where a claim came from is provenance, and provenance is not evidence.
+  explains why a framework consequence follows; a console probe asks the reviewer's own application;
+  a primer states the rule outright, at `--mentor` only. The claim underneath keeps resting on a repo
+  `file:line` at the tier it already carried, which is what keeps the five-tier invariant untouched
+  in all three cases. It is also the answer already written down for `--review`: where a claim came
+  from is provenance, and provenance is not evidence.
 
-  Two rules carry them, and both are the kind that look like diligence when broken. **A doc link may
+  Two rules carry the first two, and both are the kind that look like diligence when broken. **A doc link may
   only be a row of the stack's catalogue, pinned to the version this app runs**, because the run
   cannot open a URL — no fetch step, and egress to those hosts is commonly blocked — so a constructed
   API path is a 404 the reader finds on the page's behalf, and an unpinned one documents a Rails this
@@ -414,6 +461,10 @@ Editing one of these means checking the others still agree.
   output: a fabricated `=> …` is the most concrete-looking thing on the page and the one part of it
   that is fiction. See § *Pinning, and the two things it does not fix* for why the pin is about
   checkability rather than precision.
+
+  The third anchor is `--mentor`'s and § *Mentor mode* owns it; the only thing it changes here is
+  that a primer **holds** its checkpoint's one doc link rather than adding a second, so the budget
+  below is relocated and never raised.
 
   `report-format.md` § *Framework anchors* owns the rest **alone** — the routing, the budget, the
   earning test, answerability, and the label's three segments; `SKILL.md` steps 7g and 9 point at it;
@@ -769,7 +820,9 @@ Editing one of these means checking the others still agree.
   the OS in dark mode. They are therefore counted **by name** — `--syn-key` in `excerpts.rb`,
   `--syn-key` and `--ex-add` in `tests/run.sh` — because the three blocks *existing* is not the same
   as a colour being in all three. `--rails` was counted the same way in `page-invariants.rb` § 6 and
-  is gone with the primer that was its only user; the counting idiom is what outlived it.
+  is gone; the counting idiom is what outlived it. The primer that was its only user has since come
+  back and did **not** bring it — the callout is plum, off the provenance ramp, because the colour
+  existed for a logotype this page no longer draws.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
   one pair that inverts — `.ip-out`, the filled node that ends a chain — is written against tokens

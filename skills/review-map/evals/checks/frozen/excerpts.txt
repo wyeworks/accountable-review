@@ -76,6 +76,12 @@ SKIP  no excerpts in this input
 ## --page anchors-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-demo-loose.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-demo-loose.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  no excerpts in this input
@@ -146,6 +152,54 @@ PASS  no excerpt quotes the same lines twice
 exit=0
 SKIP  no excerpts in this input
 ## --page anchors-mixed-series.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-doubled.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-doubled.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-marked.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-marked.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-orphan.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-orphan.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-over-budget.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-over-budget.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-probe-nested.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-probe-nested.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-ungated.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-ungated.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment anchors-probe-label-thin.html
