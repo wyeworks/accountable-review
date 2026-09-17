@@ -17,3 +17,15 @@ settle*.
 Change a fixture and these change with it. A frozen upstream that has drifted from its
 fixture is worse than none: every section eval then measures agreement with a stale
 document.
+
+**`rails-house-style` has no directory here, deliberately.** A frozen upstream is read only
+by a section eval, and the section scope is deferred; `trivial` has none for the same reason.
+Writing one now would be hand-authoring a document nothing opens, which then goes stale
+unobserved — the drift this file warns about, arriving through diligence. Write it if and when
+a section case runs against that fixture.
+
+**And when you do, follow `monolith-guard-chain`'s convention, not the other two's.** Its
+`target.md` says *"Commit SHAs are assigned when make-fixtures.sh runs, so do not cite them"*,
+which is correct: `init_repo` and `commit` fix no author or committer date, so every build
+produces different hashes. `rails-only-small/target.md` and `monorepo-contract/target.md` cite
+literal SHAs that no build reproduces. Do not copy them.

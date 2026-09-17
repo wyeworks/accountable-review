@@ -111,7 +111,7 @@ means a page drifting long drifts silently. The one number that must never be gr
 the budget forbids.
 
 `skills/review-map/evals/` is where judging happens, and it currently has **one scope rather than
-three**. `fixtures/make-fixtures.sh` builds four repositories whose interesting findings sit
+three**. `fixtures/make-fixtures.sh` builds five repositories whose interesting findings sit
 deliberately *outside* the diff, so there is a written right answer to check against. A **page** case
 is a whole run, graded on what only a whole page carries. A **component** check runs on a script's
 output. The **section** cases are deferred — they graded one section of the page this design
@@ -156,8 +156,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing, step 7 being the synthesis that turns analysis into an agenda — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint**, **chains** and the rule that decides which figure a chain is, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
-| `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
+| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus § *Coding decisions*, the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
@@ -330,6 +330,35 @@ Editing one of these means checking the others still agree.
   `rails-anchors.rb` counts them as the denominator for its doc-link budget, and `tests/run.sh` asserts
   the template assembles three. Whether a question is a judgment is a judged expectation, and
   `evals.json` is where it is asked.
+- **Two kinds of checkpoint, and the second one is capped.** A **behavioural** checkpoint judges what
+  the system now does. A **coding-decision** checkpoint judges how the change was built — where a class
+  was put, what kind of object it is, which existing abstraction it went around. They render
+  identically and nothing on the page says which is which.
+
+  **The rule is name the departure, and cite it in this repository.** The form is *the PR chose X; this
+  codebase already does Y for the same job; is X deliberate?*, and the `Y` is a path — a sibling file, a
+  populated directory, a line in the project's own convention doc — carried on the page as a *Look at*
+  entry. **No in-repo citation, no question.** That bar is the whole difference between this and a style
+  guide, and it is the one thing here a lint rule cannot do: the answer is four files away and was never
+  written down. A preference stated with nothing to cite is the page grading the author's taste.
+
+  **Three caps, and the middle one is the product.** One per page; it **never displaces a behavioural
+  judgment**, so five behavioural checkpoints means no slot; ranked last. The exception is a refactor,
+  where it may be the only judgment the diff carries and then it is the page. A departure that does not
+  get the slot is written nowhere — an observation about shape with no home is noise, not a finding.
+
+  It exists because the page was **behavioural by construction and that is only half of reviewing**.
+  The run that produced it saw the fact and had nowhere to take it: a Review Map called a class "a small
+  presentation model", put it first on the reading path, and never asked why a class like that was in
+  `app/models` when the app had an `app/services`. One sentence had blocked it — step 7a's *"in
+  behavioural terms"*.
+
+  Six files agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
+  it; `report-format.md` § *Coding decisions* owns the bar and the caps **alone** and § *Where
+  checkpoints come from* lists it last; both lens files carry the shapes and the searches that produce
+  the citation; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical checks
+  any of it — like the category test, whether a departure was real and whether the page asked rather
+  than answered are judged, and `evals.json` is where they are asked.
 - **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is
   mechanical.** `figure.impact` in section 04 and `figure.chain` inside a checkpoint are the same
   `ol.ip-path` with the same node kinds and the same causal verbs. `report-format.md` § *Chains* owns

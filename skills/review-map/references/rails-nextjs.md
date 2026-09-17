@@ -62,6 +62,35 @@ finding is reported by absence, not by a green tick.
 - Enum or status columns: is the transition legal set enforced anywhere, or can any caller write any
   value?
 
+## Coding decisions, against this codebase's own answers
+
+Every other lens here asks what the change *does*. This one asks how it was **built**, and it is the
+only lens whose evidence is a file the diff never touched: the sibling that solved the same problem a
+different way. `report-format.md` § *Coding decisions* owns when this may become a checkpoint — one per
+page, ranked last, never displacing a behavioural judgment, and **never without a path in this
+repository to cite**. What follows is what to look at; the recipes below are how you find the `Y`.
+
+- **A class under `app/models` with no `ApplicationRecord` behind it.** It has no `validates`, no
+  callbacks, no `find_by`, no `where`, no `dependent:` — and Rails autoloads the directory either way,
+  so nothing breaks and nothing says anything. The question is only worth asking where the app has
+  somewhere else it puts classes like this: `app/services`, `app/queries`, `app/values`, `app/lib`.
+- **`include ActiveModel::Model`** gives validations, `errors` and enough of the record protocol for
+  `form_with` — and **no persistence.** `save`, `update` and `find_by` do not exist. Which half the
+  calling code assumes is the judgment.
+- **The reverse**: an `ApplicationRecord` subclass with no table behind it, which raises only when
+  something first touches the database.
+- **A concern written for records mixed into a plain class** — `scope`, `before_save`, `validates`
+  raise at load, or do nothing at all if the concern guards on `respond_to?`.
+- **A mechanism the app already has.** A hand-rolled authorization check where a policy class exists,
+  a bespoke query object where a scope would compose, a second serializer shape for a resource that
+  already has one. The maintenance cost is the two diverging, and that is the consequence worth naming.
+- **A name that departs from its siblings** — a `*Manager` in an app of `*Service`s, a `Fetcher` among
+  `Repository`s. Thin on its own; worth a clause inside a question that has more behind it.
+
+**The register is the whole thing here.** *Is it deliberate that X, given Y?* is a question. *X should
+be Y* is a verdict, and this page does not carry one. The reviewer knows why their codebase is shaped
+as it is; you know only that this file is shaped differently from its neighbours.
+
 ## Controllers, routes, serialization
 
 - Strong params complete, and no `permit!`.
@@ -258,12 +287,15 @@ bin/rails runner 'pp Project.reflect_on_association(:time_entries).options'
 bin/rails runner 'pp Project.reflect_on_all_associations.map { |a| [a.macro, a.name, a.options[:dependent]] }'
 bin/rails runner 'pp Project.defined_enums'
 bin/rails runner 'pp Project._commit_callbacks.map(&:filter)'
+bin/rails runner 'pp [MembershipMark.superclass, MembershipMark.respond_to?(:find_by)]'
 ```
 
 Each of these is the answer to a question the diff makes a reviewer ask and cannot settle: which
 validations exist now, what `dependent:` is really set to across every association, which enum values
-the app admits, what runs on commit. The last reads a private-ish API and can change between Rails
-versions — offer it as an aid, not as authority.
+the app admits, what runs on commit, and — the last one — what kind of object a class in `app/models`
+turned out to be once the autoloader had it. All are class-level, so all answer in a fresh checkout.
+The `_commit_callbacks` one reads a private-ish API and can change between Rails versions; offer it as
+an aid, not as authority.
 
 **What a scope compiles to**
 
@@ -417,3 +449,20 @@ rg -n 'class ProjectPolicy|authorize|can\?' app
 
 New action added to a controller whose siblings are all gated? That is the highest-yield single check
 in this list.
+
+**What this codebase already does with a class like the one the diff added**
+
+```sh
+ls app/ lib/                                              # which kinds this app has a home for
+rg -ln 'ApplicationRecord' app/models | wc -l             # how much of app/models is actually records
+rg -Ln 'ApplicationRecord' app/models                     # and which files are not
+rg -n '^class |^module ' app/services app/queries 2>/dev/null | head -20
+rg -no '\b\w+(Service|Manager|Builder|Policy|Query|Finder)\b' app --glob '*.rb' | sort -u | head
+```
+
+The second and third are the pair that matters: `app/models` holding thirty records and one plain
+class is a departure, and `app/models` holding a dozen of each is this project's settled answer and
+therefore not a question. Run them before asking anything about where a class lives — the output is
+the citation, and `report-format.md` § *Coding decisions* does not permit the question without one.
+Record these like any other search: an empty `app/services` is the finding that the departure is not
+one.

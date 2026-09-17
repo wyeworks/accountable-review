@@ -2393,8 +2393,390 @@ commit "$F4" "Stop chapter stewards from looping between / and /steward
 # reachable repository, and are therefore out of scope for an offline fixture.
 git -C "$F4" remote add origin https://github.com/acme/commons.git
 
+# ---------------------------------------------------------------------------
+# F5 · rails-house-style
+#
+# A Rails-only invoicing app, Minitest, no client and no remote — rung 4, so
+# citations are plain text, like F1. Seven changed files adding a dunning flow.
+#
+# This is the only fixture whose planted set includes a CODING DECISION, and the
+# only one that plants something the page must NOT ask about. Both halves matter:
+# a fixture that only rewards the question cannot show the lens turning into
+# style policing, which is the failure mode this feature arrives with.
+#
+# The base establishes the house answer before the diff departs from it:
+# app/models holds two files and both are ApplicationRecord; app/services holds
+# four and none of them is. That asymmetry is the citation the page has to find,
+# and nothing states it — it is only visible by listing two directories.
+#
+# NOT STATED is load-bearing, and the first version of this fixture broke it.
+# late_fee_calculator.rb opened with "Plain class. Like everything else in this
+# directory, it is not a record", and the first run cited that comment as the
+# convention "written down" instead of listing anything. A fixture that hands
+# over the citation tests whether the page can read a comment. Removing it is
+# what makes the search recipe in rails-nextjs.md § Coding decisions the only
+# way through — which is the half of the feature actually worth grading, since
+# most repositories have not written their conventions down either.
+#
+# Planted:
+#   · THE DEPARTURE. app/models/dunning_stage.rb is a plain value object placed
+#     in app/models, where every other file is a record and where the app already
+#     has somewhere else for classes like it. One coding-decision checkpoint,
+#     ranked last, citing app/services — and the citation is unchanged code, so
+#     step 5's machinery is what has to find it.
+#   · THE CONTROL. app/services/dunning_scheduler.rb is the same kind of object,
+#     added in the same diff, sitting exactly where its four siblings sit. There
+#     is nothing to cite and therefore nothing to ask. A page that names it in
+#     What changed is right; a page that gives it a checkpoint, a Look at entry,
+#     or a trailing clause on the DunningStage question has generalised a
+#     citation into a preference.
+#   · BEHAVIOUR, and it must outrank the departure. Two unchanged readers of
+#     invoices.status disagree about the new `in_dunning` value in opposite
+#     directions: app/jobs/invoice_reminder_job.rb matches the literal string
+#     "overdue" and silently stops reminding anyone in dunning, while
+#     app/services/refund_policy.rb has an exhaustive case with an else that
+#     raises. Silent drop and loud raise from one enum value: one judgment after
+#     step 7c, not two.
+#   · BEHAVIOUR, second. InvoicesController#dunning is the only action without
+#     authorize_invoice!; its three siblings all have it. This is deliberately
+#     adjacent to a coding decision and is not one — who can reach what is
+#     behaviour, and a run that files it as a convention departure has put it in
+#     the wrong kind.
+#
+# Not planted, on purpose: no uniqueness-without-an-index and no query object
+# outside the diff. F1 owns both, and two fixtures failing together on one step-5
+# regression would read as two independent signals.
+# ---------------------------------------------------------------------------
+F5=$DEST/rails-house-style
+mkdir -p "$F5"/app/models "$F5"/app/controllers "$F5"/app/services "$F5"/app/jobs \
+         "$F5"/test/models "$F5"/db/migrate "$F5"/config
+init_repo "$F5"
+
+cat > "$F5/config/application.rb" <<'EOF'
+require "rails/all"
+
+module Ledger
+  class Application < Rails::Application
+    config.load_defaults 7.2
+    config.api_only = true
+  end
+end
+EOF
+cat > "$F5/Gemfile" <<'EOF'
+source "https://rubygems.org"
+gem "rails", "~> 7.2"
+EOF
+cat > "$F5/Gemfile.lock" <<'EOF'
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activerecord (7.2.2.1)
+    activesupport (7.2.2.1)
+    rails (7.2.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rails (~> 7.2)
+
+BUNDLED WITH
+   2.5.16
+EOF
+
+# --- the house answer, established in the base and never stated anywhere ------
+# app/models: records only. app/services: plain classes only. Four of them, so
+# the pattern is settled rather than incidental.
+cat > "$F5/app/models/invoice.rb" <<'EOF'
+class Invoice < ApplicationRecord
+  belongs_to :customer
+  has_many :payments, dependent: :destroy
+
+  enum :status, { draft: "draft", issued: "issued", paid: "paid", overdue: "overdue" }
+
+  validates :reference, presence: true
+end
+EOF
+cat > "$F5/app/models/payment.rb" <<'EOF'
+class Payment < ApplicationRecord
+  belongs_to :invoice
+
+  validates :amount_cents, numericality: { greater_than: 0 }
+end
+EOF
+cat > "$F5/app/services/late_fee_calculator.rb" <<'EOF'
+class LateFeeCalculator
+  RATE = 0.015
+
+  def initialize(invoice)
+    @invoice = invoice
+  end
+
+  def call
+    (@invoice.amount_cents * RATE * @invoice.days_late).round
+  end
+end
+EOF
+cat > "$F5/app/services/invoice_pdf_builder.rb" <<'EOF'
+class InvoicePdfBuilder
+  def initialize(invoice)
+    @invoice = invoice
+  end
+
+  def call
+    { reference: @invoice.reference, lines: @invoice.payments.map(&:amount_cents) }
+  end
+end
+EOF
+cat > "$F5/app/services/receipt_notifier.rb" <<'EOF'
+class ReceiptNotifier
+  def initialize(payment)
+    @payment = payment
+  end
+
+  def call
+    InvoiceMailer.receipt(@payment).deliver_later
+  end
+end
+EOF
+# Not in the diff. Its case is exhaustive and its else raises, so the new status
+# value turns every refund attempt on a dunning invoice into a 500.
+cat > "$F5/app/services/refund_policy.rb" <<'EOF'
+class RefundPolicy
+  def initialize(invoice)
+    @invoice = invoice
+  end
+
+  def refundable?
+    case @invoice.status
+    when "draft", "issued" then false
+    when "paid"            then true
+    when "overdue"         then false
+    else raise ArgumentError, "unknown invoice status: #{@invoice.status}"
+    end
+  end
+end
+EOF
+# Not in the diff either, and it fails the other way: no error, no reminder.
+cat > "$F5/app/jobs/invoice_reminder_job.rb" <<'EOF'
+class InvoiceReminderJob < ApplicationJob
+  queue_as :default
+
+  # Everyone we are still chasing. Runs nightly.
+  def perform
+    Invoice.where(status: "overdue").find_each do |invoice|
+      InvoiceMailer.reminder(invoice).deliver_later
+    end
+  end
+end
+EOF
+cat > "$F5/app/controllers/invoices_controller.rb" <<'EOF'
+class InvoicesController < ApplicationController
+  before_action :set_invoice, only: [:show, :issue, :void]
+
+  def show
+    authorize_invoice!
+    render json: @invoice
+  end
+
+  def issue
+    authorize_invoice!
+    @invoice.issued!
+    render json: @invoice
+  end
+
+  def void
+    authorize_invoice!
+    @invoice.update!(status: :draft)
+    render json: @invoice
+  end
+
+  private
+
+  def set_invoice
+    @invoice = Invoice.find(params[:id])
+  end
+
+  def authorize_invoice!
+    head :forbidden unless current_user.can_manage?(@invoice)
+  end
+end
+EOF
+cat > "$F5/test/models/invoice_test.rb" <<'EOF'
+require "test_helper"
+
+class InvoiceTest < ActiveSupport::TestCase
+  test "requires a reference" do
+    assert_not Invoice.new(reference: nil).valid?
+  end
+end
+EOF
+cat > "$F5/db/schema.rb" <<'EOF'
+ActiveRecord::Schema[7.2].define(version: 2026_01_05_000000) do
+  create_table "invoices", force: :cascade do |t|
+    t.string "reference", null: false
+    t.string "status", default: "draft", null: false
+    t.integer "amount_cents", default: 0, null: false
+    t.bigint "customer_id", null: false
+    t.timestamps
+    t.index ["customer_id"], name: "index_invoices_on_customer_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "invoice_id", null: false
+    t.integer "amount_cents", null: false
+    t.timestamps
+    t.index ["invoice_id"], name: "index_payments_on_invoice_id"
+  end
+end
+EOF
+commit "$F5" "base"
+
+# --- the diff -----------------------------------------------------------------
+cat > "$F5/db/migrate/20260201000000_add_dunning_to_invoices.rb" <<'EOF'
+class AddDunningToInvoices < ActiveRecord::Migration[7.2]
+  def change
+    add_column :invoices, :dunning_entered_at, :datetime
+  end
+end
+EOF
+# THE DEPARTURE: a plain value object, in app/models, where both existing files
+# are records and where app/services already holds four classes exactly like it.
+cat > "$F5/app/models/dunning_stage.rb" <<'EOF'
+# How far along the chasing process an invoice is. Not persisted — derived from
+# how long the invoice has been in dunning.
+class DunningStage
+  STAGES = [:reminder, :warning, :final_notice].freeze
+
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def self.for(days_in_dunning)
+    return new(:final_notice) if days_in_dunning >= 30
+    return new(:warning) if days_in_dunning >= 14
+
+    new(:reminder)
+  end
+
+  def covers?(other)
+    STAGES.index(name) >= STAGES.index(other.name)
+  end
+end
+EOF
+# THE CONTROL: same kind of object, same diff, and it is where its siblings are.
+cat > "$F5/app/services/dunning_scheduler.rb" <<'EOF'
+class DunningScheduler
+  def initialize(invoice)
+    @invoice = invoice
+  end
+
+  def call
+    @invoice.update!(status: :in_dunning, dunning_entered_at: Time.current)
+  end
+end
+EOF
+cat > "$F5/app/models/invoice.rb" <<'EOF'
+class Invoice < ApplicationRecord
+  belongs_to :customer
+  has_many :payments, dependent: :destroy
+
+  enum :status, {
+    draft: "draft", issued: "issued", paid: "paid", overdue: "overdue",
+    in_dunning: "in_dunning"
+  }
+
+  validates :reference, presence: true
+
+  def dunning_stage
+    return nil if dunning_entered_at.nil?
+
+    DunningStage.for((Time.current - dunning_entered_at) / 1.day)
+  end
+end
+EOF
+cat > "$F5/app/controllers/invoices_controller.rb" <<'EOF'
+class InvoicesController < ApplicationController
+  before_action :set_invoice, only: [:show, :issue, :void, :dunning]
+
+  def show
+    authorize_invoice!
+    render json: @invoice
+  end
+
+  def issue
+    authorize_invoice!
+    @invoice.issued!
+    render json: @invoice
+  end
+
+  def void
+    authorize_invoice!
+    @invoice.update!(status: :draft)
+    render json: @invoice
+  end
+
+  def dunning
+    DunningScheduler.new(@invoice).call
+    render json: { status: @invoice.status, stage: @invoice.dunning_stage&.name }
+  end
+
+  private
+
+  def set_invoice
+    @invoice = Invoice.find(params[:id])
+  end
+
+  def authorize_invoice!
+    head :forbidden unless current_user.can_manage?(@invoice)
+  end
+end
+EOF
+cat > "$F5/test/models/invoice_test.rb" <<'EOF'
+require "test_helper"
+
+class InvoiceTest < ActiveSupport::TestCase
+  test "requires a reference" do
+    assert_not Invoice.new(reference: nil).valid?
+  end
+
+  test "has no dunning stage before entering dunning" do
+    assert_nil Invoice.new.dunning_stage
+  end
+
+  test "reaches the final notice after thirty days" do
+    invoice = Invoice.new(dunning_entered_at: 31.days.ago)
+    assert_equal :final_notice, invoice.dunning_stage.name
+  end
+end
+EOF
+cat > "$F5/db/schema.rb" <<'EOF'
+ActiveRecord::Schema[7.2].define(version: 2026_02_01_000000) do
+  create_table "invoices", force: :cascade do |t|
+    t.string "reference", null: false
+    t.string "status", default: "draft", null: false
+    t.integer "amount_cents", default: 0, null: false
+    t.bigint "customer_id", null: false
+    t.datetime "dunning_entered_at"
+    t.timestamps
+    t.index ["customer_id"], name: "index_invoices_on_customer_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "invoice_id", null: false
+    t.integer "amount_cents", null: false
+    t.timestamps
+    t.index ["invoice_id"], name: "index_payments_on_invoice_id"
+  end
+end
+EOF
+git -C "$F5" checkout -q -b add-dunning-stages
+commit "$F5" "Add dunning stages to invoices"
+
 echo "fixtures built in $DEST"
-for d in "$F1" "$F2" "$F3" "$F4"; do
+for d in "$F1" "$F2" "$F3" "$F4" "$F5"; do
   printf '\n%s\n' "$(basename "$d")"
   echo "  base: $(git -C "$d" rev-parse --short HEAD~1)  head: $(git -C "$d" rev-parse --short HEAD)  branch: $(git -C "$d" rev-parse --abbrev-ref HEAD)"
   echo "  remote: $(git -C "$d" remote get-url origin 2>/dev/null || echo none)"

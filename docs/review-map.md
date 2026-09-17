@@ -118,6 +118,17 @@ another two links and three sentences; another a test that pins one branch and l
 Validation steps are real commands against your repository, not invented ceremony, and they appear
 where running one would settle the question rather than gathered into a list of their own.
 
+**Two kinds of judgment share the component.** Most checkpoints are about what the system now does.
+**At most one per page** is about how the change was built — where a class was put, what kind of
+object it is, which existing abstraction it went around, whether it is a second way to do something
+your app already does one way. That one comes last, and it exists only when the page can cite the
+place your codebase already answers the same question: the four value objects in `app/services`, the
+policy class the new guard went around, the line in your own `CLAUDE.md`. With nothing to cite there
+is no departure and no question, which is what keeps it from becoming a style guide — and even with
+something to cite it asks whether the choice was deliberate rather than telling you what it should
+have been. It never displaces a judgment about behaviour; on a five-judgment diff it simply does not
+appear.
+
 ## The code comes to you
 
 Claims about *changed* code are cheap to check — you have the diff open anyway. Claims about
