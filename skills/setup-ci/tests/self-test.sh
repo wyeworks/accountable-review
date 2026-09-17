@@ -81,6 +81,44 @@ break_and_run "mentor defaults to on, so every CI page teaches the framework" \
 break_and_run "the optional stack name swallows whatever flag follows --mentor" \
   ci/generate-review-map.sh 's|case ${2:-} in rails\|elixir\|phoenix) MENTOR=$2; shift ;; esac|case ${2:-} in ?*) MENTOR=$2; shift ;; esac|'
 
+# The application-code gate. Every case here is a way of making the gate stop
+# deciding on WHICH paths changed, which is the only thing it is supposed to
+# decide on — and each of them arrives looking like a tidy-up.
+
+# Fail open is the whole safety property: a path nobody anticipated is
+# application code, so an unusual layout costs a map that was not needed rather
+# than losing one that was. Closing it turns every unrecognised path into a
+# reason to publish nothing.
+break_and_run "the gate treats an unrecognised path as not being application code" \
+  ci/application-code.sh 's|^      printf .code.*|      printf "skip\\tunknown\\t%s\\n" "$_path" ;;|'
+
+# diff-render.sh also collapses a file for being BIG. Reading those reasons here
+# is how a size threshold gets back in through the part of the script that looks
+# like it is only about file types — and it would discard the large hand-written
+# change a reviewer most needs the map for.
+break_and_run "a big application file counts as generated, so size decides after all" \
+  ci/application-code.sh 's/\$2 == "lockfile"/$2 == "lockfile" || $2 == "over-autoload"/'
+
+# ASKED AND UNABLE TO ANSWER IS NOT AN EMPTY DIFF. Every failure mode of the gate
+# ends in zero application paths, and zero is the skip verdict — so a base that
+# is not in the checkout, downgraded from fatal to a skip, silently suppresses
+# the Review Map for every pull request in the repository.
+break_and_run "an unresolvable base is reported as a skip rather than an error" \
+  ci/application-code.sh 's/^    exit 4$/    exit 3/'
+
+break_and_run "generation is no longer guarded by the gate" \
+  skills/setup-ci/templates/workflow.yml "/if: steps.scope.outputs.verdict == .generate./d"
+
+# A skipped run and a broken one look identical from outside. The step that
+# explains the skip is what makes the difference visible.
+break_and_run "a skipped run says nothing about why there is no Review Map" \
+  skills/setup-ci/templates/workflow.yml "s/verdict == 'skip'/verdict == 'never'/"
+
+# And the rule this gate replaced, coming back where it is cheapest to write: a
+# count on the job's own condition, from the event payload.
+break_and_run "a file count on the job condition decides whether a map is generated" \
+  skills/setup-ci/templates/workflow.yml 's|      github.event.pull_request.draft == false \&\&|      github.event.pull_request.changed_files > 3 \&\&\n      github.event.pull_request.draft == false \&\&|'
+
 echo
 echo "self-test: $ok ok, $bad bad"
 [ "$bad" -eq 0 ]

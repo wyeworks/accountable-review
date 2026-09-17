@@ -107,6 +107,15 @@ assert_in "$W" "fetch-depth: 0"                        "the checkout has the his
 assert_in "$W" "ref: \${{ github.event.pull_request.head.sha }}" "it checks out the pull request head, not a merge commit"
 assert_in "$W" "persist-credentials: false"            "no git credentials are left beside the checkout"
 
+assert_in "$W" "ci/application-code.sh"                "the run is scoped to pull requests that change application code"
+assert_in "$W" "id: scope"                             "the scope check is a step later steps can read"
+assert_in "$W" "if: steps.scope.outputs.verdict == 'generate'" "generation is guarded by the scope check"
+assert_in "$W" "steps.scope.outputs.verdict == 'skip'" "a skipped run says why, rather than just not happening"
+# The payload fields a size threshold would reach for. Their absence is the
+# assertion: what decides a skip is WHICH paths changed, never how many or how
+# big, and a count here would be the rule this gate replaced coming back.
+assert_not_in "$W_CODE" "changed_files"                     "no file count decides whether a map is generated"
+assert_not_in "$W_CODE" "pull_request.additions"            "no line count decides it either"
 assert_in "$W" "ci/generate-review-map.sh"             "there is a Review Map generation step"
 assert_in "$W" "ci/delivery/deliver.sh"                "delivery is resolved through the provider seam"
 assert_in "$W" "uses: actions/upload-artifact@v4"      "the map is uploaded as an artifact"
@@ -354,6 +363,77 @@ if [ "$rc" -ne 0 ] && grep -q 'revision' "$TMP/norev.log"; then
 else
   bad "a page that never names its revision is refused"
 fi
+
+echo
+echo "== the application-code gate =="
+
+# Presence, not amount: the verdict turns on WHICH paths changed. Every case
+# below is about that distinction, and the two size cases are the ones that would
+# go green again if a threshold came back.
+
+A=$PLUGIN_ROOT/ci/application-code.sh
+P=$TMP/gate-repo
+mkdir -p "$P"
+( cd "$P" && git init -q . && git config user.email t@example.com && git config user.name t )
+mkdir -p "$P/app/models" "$P/spec/models" "$P/docs" "$P/.github/workflows" "$P/config"
+( cd "$P" && echo base > app/models/order.rb && echo base > spec/models/order_spec.rb \
+    && echo base > README.md && echo base > yarn.lock && echo base > config/routes.rb \
+    && git add -A && git commit -qm base )
+GATE_BASE=$(cd "$P" && git rev-parse HEAD)
+
+# gate <branch> <expected verdict> <what> ... then the edits on stdin
+gate() {
+  branch=$1; want=$2; what=$3
+  ( cd "$P" && git checkout -q -B "$branch" "$GATE_BASE" )
+  sh -c "cd '$P' && $4" 
+  ( cd "$P" && git add -A && git commit -qm "$branch" )
+  rc=0
+  ( cd "$P" && "$A" --base "$GATE_BASE" --head HEAD ) > "$TMP/gate-$branch" 2>&1 || rc=$?
+  case $rc in
+    0) got=generate ;;
+    3) got=skip ;;
+    *) got="error($rc)" ;;
+  esac
+  assert_eq "$got" "$want" "$what"
+}
+
+gate docs     skip     "a documentation-only pull request gets no Review Map" \
+  'echo x >> README.md && echo x > docs/guide.md'
+gate lock     skip     "a lockfile bump gets none" \
+  'echo x >> yarn.lock'
+gate specs    skip     "a tests-only pull request gets none" \
+  'echo x >> spec/models/order_spec.rb'
+gate tooling  skip     "a CI or linter config change gets none" \
+  'echo x > .github/workflows/tests.yml && echo x > .rubocop.yml'
+gate mixed    generate "one application file among documentation earns one" \
+  'echo x >> README.md && echo x >> app/models/order.rb'
+
+# The two that a threshold gets wrong, in both directions.
+gate tiny     generate "a one-line application change earns one — reach is not size" \
+  'printf changed > app/models/order.rb'
+gate bulky    generate "a 900-line application file earns one, though its diff will not render" \
+  'seq 1 900 > app/models/order.rb'
+
+# Fail open: a path this script has never heard of is application code. The
+# exclusion list is narrow on purpose, and this is the assertion that keeps it so.
+gate unknown  generate "an unrecognised path counts as application code" \
+  'mkdir -p odd && echo x > odd/thing.xyz'
+
+# config/ is where a Rails app keeps its routes. A blanket exclusion by directory
+# name would take it, and take the routing change with it.
+gate routes   generate "config/routes.rb is application code, not configuration" \
+  'echo x >> config/routes.rb'
+
+assert_in "$TMP/gate-docs" "skip	docs	README.md"  "the gate names each discounted path and why"
+assert_in "$TMP/gate-mixed" "code	-	app/models/order.rb" "and names the application paths it found"
+
+# ASKED AND UNABLE TO ANSWER IS NOT AN EMPTY DIFF. Every failure mode of this
+# script ends in zero application paths, which is the skip verdict — so a base
+# that is not in the checkout has to be fatal rather than reassuring.
+rc=0
+( cd "$P" && "$A" --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904111 --head HEAD ) >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "4"                                    "a base that cannot be resolved is an error, not a skip"
+
 
 echo
 echo "== inspection =="

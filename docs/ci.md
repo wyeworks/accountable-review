@@ -4,6 +4,24 @@
 gets a Review Map the whole team can open. The [README](../README.md#ci-integration-) covers what you
 get; this is the part underneath — where the page ends up, and how to send it somewhere else.
 
+## Only pull requests that change application code get one
+
+A Review Map explains application code — what a change means, and what it reaches in code it did not
+touch. A pull request that changes none gets no map, and the run says so in its job summary rather
+than failing or finishing silently: which paths changed, and why each one was not counted as code.
+Documentation, tests, repository tooling, lockfiles, generated files and binaries are the things that
+do not count.
+
+**Any application file is enough**, however small the change. There is no minimum diff size, and that
+is a deliberate choice rather than a missing feature: a Review Map earns its keep on what a change
+reaches, and a three-line edit to a constructor default reaches further than a thousand-line rename.
+A threshold would throw away exactly those.
+
+The list of what is not application code is deliberately narrow, and anything it does not recognise
+counts as code — so an unusual layout costs you a map you did not need rather than losing one you
+did. Since a pull request is skipped only when *every* path in it is excluded, one file classified
+wrongly changes nothing on its own.
+
 ## Artifacts are the default, not the contract
 
 **Review Maps are portable static HTML.** The default setup stores them as GitHub Actions artifacts

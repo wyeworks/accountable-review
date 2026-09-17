@@ -155,22 +155,76 @@ the delivery and upload steps do not need a model.
 set. That failure is deliberately distinguishable from a failed run — nothing was generated and
 nothing was spent.
 
+## The application-code gate
+
+```yaml
+- name: Does this pull request change application code?
+  id: scope
+```
+
+Every step after it is guarded by `if: steps.scope.outputs.verdict == 'generate'`. A pull request
+that changes no application code — a lockfile bump, a README fix, a workflow tweak, a batch of new
+specs — gets no Review Map, because there is nothing for one to explain.
+
+**The rule is presence, not amount.** Any application path in the diff and the map is generated,
+however small the change; none and it is skipped. There is no file count and no line count in this
+workflow or in `ci/application-code.sh`, and the tests assert their absence rather than their
+values.
+
+That is not a simplification of a threshold, it is a different measurement. A Review Map's value
+scales with what a change *reaches* — the unchanged code whose meaning it alters — and not with how
+big the change is. A three-line edit to a constructor default or a serializer has the widest blast
+radius per line in the diff and is the change a reviewer most reliably misjudges; it is also the
+first thing any magnitude threshold discards. A threshold on application lines is the
+files-and-lines rule committed one level further in.
+
+**It fails open.** A path is application code unless it matches something the script recognises as
+not being code: tests, documentation, repository tooling, and the generated files, binaries and
+lockfiles that `diff-render.sh` already identifies. Anything unanticipated counts as code. The
+exclusion list is deliberately narrow, and narrowness is cheap here in a way it would not be under
+a threshold — the verdict is a skip only when *every* path is excluded, so one file misfiled as a
+test changes nothing unless the whole diff is misfiled.
+
+Note what is **not** excluded. `config/` is where a Rails app keeps its routes and its
+initializers; a Dockerfile and a compose file describe how the thing runs. Those are application
+code here, and a directory-name exclusion that swept them up would take a routing change with them.
+
+**It cannot be a condition on the job**, which is where a count would naturally go. The
+`pull_request` payload carries `additions`, `deletions` and `changed_files` but not the list of
+paths, and the question is *which* files changed. So the gate runs after the checkout, which is the
+cheap half of the job — the plugin clone is moved ahead of the Node install for the same reason, so
+a pull request that turns out to need no Review Map never installs a toolchain.
+
+**A skip says why.** The run writes a job summary naming what it counted and listing every path it
+discounted with the reason, the same rule the page itself follows for a search that found nothing:
+an absence nobody can account for is indistinguishable from a broken pipeline. It is also what makes
+a wrong skip reportable rather than invisible.
+
+Two known limits, both failing towards a missing map rather than a wrong one. A repository whose
+product *is* prose has application changes under `*.md` that this counts as documentation. And a
+team with an unusual layout can keep code under a directory named in the exclusion list. There is no
+configuration key for either yet, deliberately — the schema stays small until something real needs
+it, and the job summary is what would surface the need.
+
 ## The steps, in order
 
 1. **Check out the pull request** at its head SHA, full history, no credentials persisted.
-2. **Set up Node and install Claude Code**, pinned to a major version.
-3. **Clone Accountable Review** at its release tag, outside the workspace.
-4. **Generate the Review Map** — `ci/generate-review-map.sh`, which runs the `review-map` skill
+2. **Clone Accountable Review** at its release tag, outside the workspace.
+3. **Decide whether there is anything to explain** — `ci/application-code.sh`, above. Every step
+   below is guarded on its verdict, and a skip writes a job summary instead.
+4. **Set up Node and install Claude Code**, pinned to a major version.
+5. **Generate the Review Map** — `ci/generate-review-map.sh`, which runs the `review-map` skill
    non-interactively and writes a static directory to `$RUNNER_TEMP/review-map`, outside the
    repository. It then checks the three things a person would have noticed by looking: that the page
    exists and is a page, that it no longer says it is still being written, and that it names the
    revision it describes.
-5. **Resolve delivery** — `ci/delivery/deliver.sh`, which asks the configured provider where the map
+6. **Resolve delivery** — `ci/delivery/deliver.sh`, which asks the configured provider where the map
    goes and returns a DeliveryResult. See `delivery.md`.
-6. **Upload the artifact**, guarded by `if: steps.delivery.outputs.provider == 'github-artifact'`, so
+7. **Upload the artifact**, guarded by `if: steps.delivery.outputs.provider == 'github-artifact'`, so
    a team that switches provider does not have to edit this step out. The name and the retention come
    from the provider's outputs rather than being repeated in YAML.
-7. **Write the job summary**, so the run itself says where the Review Map went and what it is for.
+8. **Write the job summary**, so the run itself says where the Review Map went and what it is for —
+   or, on a skip, what changed and why none of it earned a map.
 
 ## What the workflow must never do
 
