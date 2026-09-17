@@ -286,8 +286,9 @@ Editing one of these means checking the others still agree.
   attention* **per independent semantic delta § 01 names**, seven on the page at the outside, each
   **one judgment** the reviewer has to make: an `<h3>` question, two to four
   sentences, an optional `figure.chain`, a `ul.lookat` of one to four entries — each a short title,
-  a clause and its deep-linked citation, in that order — and an optional `p.open` labelled *Open
-  question*. `report-format.md` § *The review
+  a clause and its deep-linked citation, in that order — an optional `div.gap` labelled *GAP*, and an
+  optional `p.open` labelled *Open question*. Both labels are fixed, and for one reason: an absence
+  and an unresolved question are the two places a severity word gets in. `report-format.md` § *The review
   checkpoint* owns all of it and owns it **alone**; `page-template.html` assembles one with every
   optional part, one without, and a pending stub.
 

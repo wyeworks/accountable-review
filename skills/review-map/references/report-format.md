@@ -133,7 +133,7 @@ change the judgment, and the page carries the judgment.
 <section class="cp" id="cp-a">
   <h3>Does the new Project filter preserve the intended scope?</h3>
   <p>Two to four sentences: what changed here, what follows from it, and what the reviewer has
-     to decide <span class="tier">from unchanged code</span>.</p>
+     to decide <span class="tier tier-unc">from unchanged code</span>.</p>
   <figure class="chain">…</figure>                       <!-- optional: mechanism inside the change -->
   <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <ul class="lookat">
@@ -142,6 +142,7 @@ change the judgment, and the page carries the judgment.
         <a class="path" href="…">app/models/project.rb:41-52</a>
         <details class="excerpt excerpt--diff">…</details></li>
   </ul>
+  <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
   <p class="open"><b>Open question</b> Whether archived projects should still appear in
      historical reports; no test pins it.</p>            <!-- optional -->
 </section>
@@ -185,6 +186,18 @@ change the judgment, and the page carries the judgment.
   says what to see in it and why the judgment turns on it. And a title is never a grade: *Risky*,
   *Important*, *Check this first* are a severity vocabulary arriving four to a checkpoint, and the
   rule against them is the page's, not this component's.
+- **The gap, `div.gap`, optional.** One line, labelled **GAP** and nothing else, naming what the
+  tests leave open **where that changes the judgment**. It is earned by the same test as everything
+  else here: *"no request spec covers the archived branch"* is a gap when the reviewer's decision
+  turns on whether that branch was exercised, and is noise when it does not. At most one per
+  checkpoint, and it counts against the checkpoint's word budget like any other prose.
+
+  **It states an absence; it does not grade one.** The label is fixed for the reason `p.open`'s is —
+  *Missing*, *Untested* and *Risk* are a severity vocabulary in a component the palette already
+  marks ochre — and a gap never implies the change should not ship. Silence is not a claim of
+  coverage either: a checkpoint with nothing the tests leave open writes no `div.gap`, and the page
+  never says the tests are complete. That is the same rule as the omitted section, one component
+  down.
 - **Open question, `p.open`, optional.** One line, labelled **Open question** and nothing else. What
   only the author can settle, or what the run could not establish and what would settle it. The label
   is fixed: *Watch* and *Blocking* are severity by another name, and `evals/checks/page-invariants.rb`
