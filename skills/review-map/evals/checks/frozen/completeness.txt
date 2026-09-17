@@ -370,6 +370,24 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-tier-modifier-only.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-update-assurance.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-update-assurance.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-update-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-update-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-update-narration.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-update-narration.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-verdict.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment

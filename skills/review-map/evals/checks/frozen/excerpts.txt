@@ -604,6 +604,24 @@ SKIP  no excerpts in this input
 ## --page invariants-tier-modifier-only.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment invariants-update-assurance.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-update-assurance.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-update-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-update-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-update-narration.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-update-narration.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment invariants-verdict.html
 exit=0
 SKIP  no excerpts in this input

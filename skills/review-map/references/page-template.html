@@ -86,6 +86,15 @@
   into a style review: a reader who is told a convention section exists expects it
   filled every time, and a run that knows the reader expects it will fill it.
 
+  AND NO CARRY BADGE, which is the sixth and now the one with the best excuse of
+  all. --update re-reads only the commits since the previous map (SKILL.md
+  § Re-running over new commits), so a real difference exists between the parts of
+  the page and a marker for it feels owed. It is not. The page says WHICH REVISION
+  its content describes, once, in the masthead cell and one sentence in § 01 — and
+  never which checkpoints were re-derived. No "new" flag on a checkpoint, no
+  "carried" tag, no "3 of 5 updated" line: three ordered states beside a question
+  is the severity chip above, rebuilt out of words that sound like provenance.
+
   The page carries no tick state and no "n of m" counter anywhere, because a
   count of cleared items reads as progress toward approval. See report-format.md.
 
@@ -1462,7 +1471,24 @@ figcaption strong { color: var(--ink-3); }
              tell whether this page describes the version of the PR they are
              looking at — a branch name says nothing after the next push, and a
              page that silently describes an older revision is worse than a page
-             that arrives late. Both are recorded in step 1; neither is optional. -->
+             that arrives late. Both are recorded in step 1; neither is optional.
+
+             BASE_SHORT_SHA is the MERGE-BASE — git merge-base BASE HEAD, as step 1
+             records it — and not the base branch's tip. That is what the diff's
+             left side is, so it is what every citation and every excerpt here is
+             pinned to; the branch tip would be a SHA nothing on the page is
+             addressed against.
+
+             ON AN UPDATE, and only then, the second line gains a third segment:
+
+               {{HEAD_SHORT_SHA}} &rarr; {{BASE_SHORT_SHA}} &middot; updated from {{PREV_SHORT_SHA}}
+
+             SKILL.md § Re-running over new commits re-reads only the commits since
+             the previous map, so parts of the page describe that earlier revision.
+             This segment and one sentence in § 01 are the whole disclosure — see
+             report-format.md § Build state § An updated page, which owns the
+             wording. Do not add it on an ordinary run: a page built in one pass
+             was not updated from anything. -->
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">{{HEAD}} <span style="color:var(--fainter)">&rarr;</span> {{BASE}}</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">{{HEAD_SHORT_SHA}} <span>&rarr;</span> {{BASE_SHORT_SHA}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{FEATURE_REFACTOR_FIX}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>

@@ -439,6 +439,30 @@ applying the wrong lens.
 > Phoenix project currently produces no primers and says so. That is the fail-closed rule doing its
 > job — a page with no primer is narrower, a page with an invented link is wrong.
 
+### When the branch keeps moving
+
+```text
+/accountable-review:review-map 412 --update    # re-read only the new commits
+```
+
+A Review Map describes one revision, and a pull request that keeps gaining commits after review
+opens ends up with a map that quietly describes an older one. `--update` is the cheap way to keep
+it current: it reads the commits since the page it is updating, re-analyses the judgments those
+commits reach, and edits that page in place at the same URL. What the new commits did not touch is
+carried, which is where the saving comes from — tracing consumers across the diff is most of a
+run's cost, and an update traces only what moved.
+
+**You are trading re-reading for speed, and the page says so.** A carried judgment is one this run
+did not verify again. So an updated page names both revisions in its masthead and carries one
+sentence saying which parts still describe the earlier one. **If you want the fuller read, run it
+again without `--update`** — a map generated from scratch describes one revision throughout, and
+that is the right call before a final review pass on a branch that has moved a lot.
+
+It refuses rather than guessing. A force-push or rebase, a base branch that moved underneath, a
+delta covering more than half the diff, a lock file bump, or a recorded search that now finds the
+changed code — each of those means the previous page is not a safe thing to build on, so the run
+regenerates from scratch and tells you which one it hit.
+
 ---
 
 ## Example Review Map 🖼️
@@ -572,6 +596,7 @@ What you choose per run:
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
+| **Update** | Off by default; `--update` re-reads only the commits since the existing page and edits it in place. |
 | **Output** | A published artifact by default; `--output <dir>` writes static HTML instead. |
 
 In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key

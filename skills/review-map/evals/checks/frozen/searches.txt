@@ -370,6 +370,24 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page invariants-tier-modifier-only.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-assurance.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-assurance.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-narration.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-narration.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-verdict.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

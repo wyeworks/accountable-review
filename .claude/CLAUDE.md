@@ -168,6 +168,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the evidence foot's inventory cells and their deep links, so the gate checks the page rather than someone's typing. `--paths-only` is the only mode the page uses |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the inventory and the diff |
+| `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git rather than of a fixture |
 | `bin/evals` | One command per eval scenario — `offline`, `page`, `catalogue`, and the rest in its own header; `section` is deferred with the cases it dispatched. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | Fixtures with planted findings, the frozen upstream, `checks/`, `deferred/` (the section cases and drivers, unrun), and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
@@ -452,6 +453,13 @@ Editing one of these means checking the others still agree.
   `page-template.html` says so in its header comment. Reintroducing a severity vocabulary is the
   single easiest way to undo this iteration.
 
+  **A resolved tick is how the verdict arrives next, and `--update` is the door it comes through.**
+  When a re-run finds that new commits answered a checkpoint, the tempting thing is to strike it
+  through or label it *resolved* — showing the reviewer what has been addressed. A page with three
+  of five questions ticked is a page reporting progress toward approval, which is the one output
+  this format exists to withhold. The checkpoint is deleted instead, with its reading-path stop and
+  its rail entry, and nothing marks where it was.
+
   **A page is allowed to *refuse* a grade out loud, and the check has to know the difference.**
   `page-invariants.rb` § 2 splits its patterns in two for this. Approval language is never right in
   any form; a graded *noun* — risk score, overall risk, severity score — fails only where nothing
@@ -583,6 +591,14 @@ Editing one of these means checking the others still agree.
   never would. Collapsed is not optional and neither is the gate: a run that skipped it because the
   list is out of sight has turned a shorter page into one that may have dropped a file.
 
+  **Nothing narrows this, and `--update` is the first thing that could have.** An update re-reads
+  only the commits since the previous map, so it is narrowed almost everywhere — and the inventory
+  and the gate are exempt, in full, over the whole `BASE...HEAD` range. An update changes which
+  claims were re-read; it changes nothing about which paths must be accounted for. The failure to
+  watch for is not a skipped gate but a patched inventory: a run that adds the delta's rows to the
+  existing `div.gt.gt-paths` instead of regenerating the block has started typing in the one cell
+  `ledger-rows.sh` exists to keep untyped, and the gate passes either way.
+
   Stated in `SKILL.md` step 3, explained in `report-format.md` § *The completeness invariant*, and
   enforced in step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work:
   the script reads a `data-path` attribute, the template emits it on the inventory's grid cell
@@ -606,6 +622,16 @@ Editing one of these means checking the others still agree.
   whose consequences all stay inside it earns no impact section: the section and its rail entry go,
   and what must not appear is a stub saying nothing reaches unchanged code. That sentence is a clean
   bill of health with a marker on it.
+
+  **The `id` on `<section class="cp">` now serves two jobs, and the second one is why it is
+  unique rather than merely tidy**: it is the anchor a later *stage* edits, and the anchor a later
+  *run* edits under `--update`. One mechanism, two distances — minutes apart within a run, days
+  apart across pushes — which is why an update needed no new markup at all.
+
+  The never-re-`Write` observation below has a read-side twin that `--update` makes reachable:
+  **never re-*read* the page either.** An 80 KB page is about 25,000 tokens to read, the same order
+  as the rewrite this rule exists to stop, and an update that reads it whole has spent the saving
+  before it starts. Grep an index of ids and citations, then `Read` with `offset`/`limit`.
 
   The pending marker earns a second keep, found by profiling rather than by reading: it is the
   **anchor a later stage edits**, which is what keeps staging from costing the whole document per
@@ -674,6 +700,64 @@ Editing one of these means checking the others still agree.
   The eval axis is `--skill-effort`, not `--effort`: `evals/run.sh` already had an `--effort` meaning
   the CLI reasoning effort the reader runs at, and two knobs under one name in one script is a bug
   waiting for a hurried reader. Both are in `report.sh`'s group key.
+- **`--update` buys cheapness with claims nobody re-read, and the page says which revision it
+  describes rather than how much of it was re-read.** A re-run reads the commits since the previous
+  map, re-analyses what they reach and edits that page in place. The saving is almost entirely step
+  5; the price is that a carried claim was not re-verified.
+
+  **The page is the state, and that is the design decision the rest follows from.** Three rules
+  already put everything an update needs onto it — every claim carries a `file:line`, every excerpt
+  carries `data-src`, the masthead names the revision — so there is no sidecar schema and no new
+  attribute. `$W/analysis/` is used when present and never required, because it survives on a
+  developer's machine and never on a fresh CI runner, and a design that needed it would be two
+  designs.
+
+  **`--update` is the third kind of flag, and the taxonomy is what stops it becoming a level.**
+  `--effort` is invisible because both efforts describe one revision. `--mentor` is visible and
+  safe by subtraction. `--update` must be visible for a reason neither of those has: parts of its
+  page describe an earlier head, and *a page describing an earlier revision while looking current
+  is the one failure a reader cannot detect from the inside* — already an invariant, three bullets
+  down. So it puts one fixed sentence on the page and a segment in the masthead, and the test it
+  passes is that both say **which revision the content describes, never how hard the run worked**.
+  The second is the verification badge, refused here exactly as it is at `--effort high`.
+
+  **Carrying is about not re-tracing, not about freezing the agenda**, and confusing the two is how
+  this goes wrong in the direction that looks tidy. Step 7 still ranks the whole agenda on every
+  update — ranking is reasoning over a handful of one-line questions with no file reads, so it is
+  nearly free — and a new observation may merge into a carried checkpoint, which then stops being
+  carried. An update that appended its new checkpoints would have turned a ranked agenda into a
+  changelog of the change.
+
+  **The decision is a script because by eye every checkpoint looks carryable.** `carry-plan.sh`
+  holds eight preconditions joined by AND and failing to a *full* run, which is
+  `ci/application-code.sh`'s asymmetry: a needless full run costs minutes nobody watches, a wrongly
+  carried claim is undetectable from the inside. Its P8 is the one that protects the product —
+  affected-but-unchanged code means the dangerous change is a new consumer in a file no checkpoint
+  cites, invisible to any rule about what a checkpoint cites, so the page's own recorded searches
+  are replayed and a delta path among their hits refuses the update. Hits rather than scope,
+  because the recorded scopes are broad enough that a scope test would reach nothing.
+
+  **The disclosure had to widen two checks, and how the gaps were found is the reusable part.**
+  Running `page-invariants.rb`'s own patterns against candidate wordings — rather than reading
+  them — showed that `NARRATE` matched *"on a earlier pass"* and not *"on an earlier pass"*, so the
+  grammatical form was the one that escaped, and that `ASSURE` missed *"the findings were
+  re-checked"* because `re-` sat between the words it joined. Both are sentences an update writes
+  and neither is one an ordinary run reaches for, which is why they survived until now. The third
+  fixture is the load-bearing one: `golden/invariants-update-clean.html` holds the sanctioned
+  disclosure and must stay green, because a rule that fails a page for admitting its limits gets
+  the admission removed rather than the rule — the lesson `invariants-risk-score-*` already paid
+  for.
+
+  Seven files agree: `scripts/carry-plan.sh` owns the preconditions and the carry rule **alone**;
+  `SKILL.md` § *Re-running over new commits* owns the procedure, with step 1 parsing the flag, step
+  9 forbidding the skeleton and the banner, step 10 exempting the gate, and two hard rules;
+  `report-format.md` § *Build state* § *An updated page* owns the wording and the refusals,
+  § *Section 1* the masthead segment and the merge-base definition, § *One page shape* why a run
+  mode may say one thing, § *The review checkpoint* delete-never-tick and § *Source excerpts* never
+  carrying one across its file's delta; `page-template.html` refuses the carry badge beside the
+  other five; `evals/checks/page-invariants.rb` §§ 2b and 2c carry the two widened patterns behind
+  three `golden/invariants-update-*` fixtures; and `tests/` covers every precondition either side
+  of its boundary, with nine mutations behind it.
 - **Findings are a sample, not an audit.** The page must never read as a clean bill of health. This is
   load-bearing, not hedging: the skill explains, and explanation is reproducible, but defect discovery
   is not.

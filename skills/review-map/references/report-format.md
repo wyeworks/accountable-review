@@ -55,6 +55,21 @@ component and no marker.** There is no stack chip and no "reviewed as a Phoenix 
 equivalent changes in the two stacks differ in their content and not in their shape. What the stack is
 belongs in the sentences that cite this repository, which say it by naming real files.
 
+**`--update` is the one run mode that puts a sentence on the page, and the reason is not
+generosity.** It re-reads only the commits since the previous map, so parts of the page it leaves
+describe an earlier revision than the masthead's head. Effort can stay invisible because both
+efforts produce a page describing one revision; an updated page does not, and § 1's *a page
+describing an earlier revision while looking current is the one failure a reader cannot detect from
+the inside* is the rule that makes the disclosure mandatory rather than polite.
+
+The test that keeps it from becoming a level is the one `--mentor` passes by subtraction and
+`--effort` passes by silence: **the sentence says which revision the content describes, never how
+hard the run worked or how good the page is.** The first is a fact about the change, already owed
+by the revision invariant. The second is the verification badge, and it is forbidden here exactly
+as it is forbidden at `--effort high`. Nothing else about the page moves — same sections, same
+checkpoints, same caps, same gate — and § *Build state* § *An updated page* owns the wording and the
+refusals that hold that line.
+
 ---
 
 ## Contents
@@ -269,6 +284,19 @@ Each is a checkpoint only if it is a judgment for *this* diff. The list is a pro
 without, and a pending stub. Copy the composition rather than the description: a checkpoint is
 borderless, so one that spills its *Look at* list beside the `<section>` rather than inside it looks
 very nearly right.
+
+**A checkpoint the change has since answered is deleted, never ticked.** On an update
+(`SKILL.md` § *Re-running over new commits*) the new commits will sometimes settle a question the
+previous map asked. The question then goes, with its stop on the reading path and its rail entry,
+and nothing marks where it was. Not a strikethrough, not a *resolved* label, not a "3 of 5
+addressed" line anywhere on the page.
+
+The pressure to do otherwise is real and it wears a helpful face — *showing the reviewer what has
+been addressed* — which is why the rule is here rather than left to taste. `SKILL.md` step 10
+already refuses checkboxes, tick state and an n-of-m counter on the checkpoints, because a count of
+cleared items reads as progress toward approval. A resolved marker is that counter with the
+arithmetic left to the reader, and an update is the one thing in this design that makes it easy to
+write.
 
 ---
 
@@ -850,6 +878,13 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   syntax-coloured; `--diff` excerpts are not. See § *Syntax tint* below for why the two differ. An
   `hljs-` class in the HTML a run writes is a defect whichever variant it is on: the colouring is the
   page script's job at read time, so the bytes on the page stay the bytes `git` produced.
+- **An excerpt is never carried across a delta that touches its file.** On an update
+  (`SKILL.md` § *Re-running over new commits*) every excerpt whose `data-src` moved in the delta is
+  regenerated, in the same single `excerpt.sh` call as any other. Two things go stale at once and
+  only one of them is obvious: the lines move, and the **state tag** is computed from `BASE...HEAD`,
+  so a file entering the diff turns an `Unchanged` into an `Added` while the quoted bytes stay
+  perfectly real. That is this component's one way of lying about itself, and it is the reason
+  carrying an excerpt is cheaper than regenerating it and never worth it.
 
 ### Syntax tint
 
@@ -1359,6 +1394,48 @@ stopped early. If a section genuinely was left unwritten — the diff was too la
 — that is a sentence of prose stating the limit, not a pending marker. The two mean different things:
 pending is a promise, a stated limit is a fact.
 
+### An updated page, and why it is not a fourth state
+
+`--update` re-reads only the commits since the previous map and edits that page in place
+(`SKILL.md` § *Re-running over new commits*). The page it leaves behind has parts that were
+analysed at one revision and parts analysed at an earlier one, and the reader is owed that.
+
+**It is not a build state, and filing it as one would break both.** Written, pending, omitted — and
+the stated limit a skimmed region gets — are all statements about coverage *within one revision*.
+Carry-over is a statement about *which revision a part describes*. Different axis, and the page
+already has a home for that axis: the masthead's `Revision` cell and § 01's stated limit.
+
+So an update never re-enters the build state. **There is no banner and no marker at any point
+during one** — the page is complete at every instant, because a banner risks being left behind and
+`ci/generate-review-map.sh` refuses to deliver a page still carrying one. What the page gains is
+two things, both in § 1's territory and both fixed rather than composed per run:
+
+```
+9f8e7d6 → a1b2c3d · updated from e4d5c6b
+```
+
+> This map was updated in place: the commits between `e4d5c6b` and `9f8e7d6` were read, and the
+> parts of the page they did not reach still describe `e4d5c6b`. A map generated from scratch
+> describes one revision throughout.
+
+**Name commits and revisions; never versions, drafts, passes or runs.** That is a lexical rule and
+it is what keeps the sentence clear of `page-invariants.rb`'s narration patterns — *"the previous
+version of this page"* and *"on an earlier pass"* fail there, and they fail for a good reason: they
+are the page telling the reader about its own drafting. This sentence tells the reader which
+revision a statement is true of, which is the opposite thing. *"Every claim was re-checked against
+the new commits"* fails too, and must, for the same reason a verification badge does.
+
+**The last clause states an available action, not a comparison.** A page that recommended
+regenerating itself for a better read would be grading its own thoroughness — the verification
+badge inverted, and harder to spot because it arrives as modesty. The page carries the fact; the
+recommendation belongs in chat at the end of the run and in the public docs.
+
+**No per-checkpoint marker, no count, no badge.** A *new / updated / carried* chip is three ordered
+states beside a question, which is a severity scale in different words, and it would pull a run
+toward hoisting the new checkpoints to the top — turning the ranked agenda into a changelog of the
+change. "3 of 5 re-analysed" is the same regression with a number on it. The one sentence above is
+the whole disclosure, and it appears once.
+
 ## What was searched
 
 Where a search came up empty, say so and say what it was. Unrecorded, absence and omission look
@@ -1462,6 +1539,17 @@ branch names. Not conditional on there being a PR, and not something the reader 
 branch name goes stale the moment someone pushes, and a page describing an earlier revision while
 looking current is the one failure a reader cannot detect from the inside — which is exactly what
 regenerating per push creates, several pages that differ only by the revision they describe.
+
+**The base-side SHA is the merge-base**, `git merge-base <BASE> HEAD` as step 1 records it, and not
+the base branch's tip. That is what the diff's left side actually is, so it is what every citation
+and every excerpt on the page is pinned to; naming the branch tip instead would put a SHA in the
+masthead that nothing on the page is addressed against. It is also the value a later `--update`
+reads back to tell whether the base moved under the page, which is why this had to stop being
+ambiguous.
+
+**On an update the cell carries a third line**, `· updated from <short sha>`, and § *Build state*
+§ *An updated page* owns it along with the one sentence that goes with it here. Nothing else about
+§ 01 moves.
 
 **Change shape** — a chip naming what kind of change this is: feature · refactor · bugfix ·
 migration · dependency bump · mixed. One word, and it is a category, never a grade.

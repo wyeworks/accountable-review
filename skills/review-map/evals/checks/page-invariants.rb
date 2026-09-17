@@ -40,10 +40,15 @@ REFUSAL = /(?:\A|[^[:alpha:]])(?:not|nothing|never|no|rather than|instead of|wit
 # one leaks it while reading as candour, which is why a run writes it without noticing — one
 # --effort high page carried ten. A falsification pass does not have to be named to be on the
 # page. The fix is never to delete the fact, only the autobiography.
+# `an` is in the third alternative because it was NOT, and the grammatical form was the one that
+# escaped: "on a earlier pass" is a sentence nobody writes, "on an earlier pass" is the sentence a
+# run writes. Found by running the rule against wordings rather than by reading it, the same way
+# the negation boundaries above were — and it matters more since --update, the one mode where a
+# run has an earlier pass to narrate.
 NARRATE = Regexp.union(
   /(first|earlier|previous|initial|original) (version|draft) of (this|the) (section|page|flow|paragraph|entry|list|row|claim|map|file)/i,
   /(a|the|this) (first|earlier|previous|initial) (pass|draft|version) (got|had|reported|missed|claimed|said|read|ran|rested|came)/i,
-  /on (a|the) (first|earlier|previous) (pass|draft)/i,
+  /on (an?|the) (first|earlier|previous) (pass|draft|run|version)/i,
   /(this|the) (section|page|paragraph|entry|claim|row) (originally|initially) (said|read|claimed|reported|had)/i
 )
 
@@ -76,7 +81,13 @@ end
 # step 8, report-format.md § Detail levels). The patterns are high-precision on purpose: a bare
 # 'verified' is a real column name in real Rails apps, and 'audit' appears inside the sanctioned
 # "a pass, not an audit".
-ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (verified|checked|confirmed)|every claim (was|has been) (verified|checked)|class="(verified|checked)"|chip-verified/i
+# The `re-?` prefixes are not decoration. "every claim was re-checked against the new commits" is
+# the sentence an --update run reaches for, and without them it read as clean while saying exactly
+# what a verification badge says. The numeric alternative is that badge with the arithmetic left to
+# the reader: "3 of 5 checkpoints re-analysed" advertises how much of the page was looked at again,
+# which report-format.md § Build state § An updated page refuses for the reason a count of
+# corrected claims is refused at --effort high.
+ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (re-?)?(verified|checked|confirmed)|every claim (was|has been) (re-?)?(verified|checked|confirmed)|\d+ of \d+ (checkpoints?|judgments?|claims?|sections?) (were |have been )?(re-?)?(analysed|analyzed|verified|checked|derived|read)|class="(verified|checked)"|chip-verified/i
 
 check = ReviewMap::Check.new(ARGV)
 check.require_input
