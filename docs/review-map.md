@@ -332,6 +332,11 @@ page cites code as it was before the change. Without `gh`, or without a PR, the 
 the local branch and still links citations as long as the commit is pushed. On an unpushed branch it
 degrades to plain text rather than emitting permalinks that would 404, and says so in the page.
 
+Every citation that leaves the page opens in a new tab. A Review Map is read through, and a link
+followed from the middle of it would otherwise cost the reader their place, the rail's position and
+every excerpt they had opened. The page's own links — the rail, the pointers back to a checkpoint —
+stay in the tab they were clicked from.
+
 One file at a time, GitHub decides not to render a diff — a schema dump marked generated, a
 lockfile, a binary, anything past 400 changed lines — and an anchor into one of those arrives at a
 *Load diff* stub with the cited line nowhere on the screen. Citations into those files are sent to

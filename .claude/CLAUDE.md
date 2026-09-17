@@ -713,6 +713,19 @@ Editing one of these means checking the others still agree.
   surviving only where a citation names no line. This is the doc-link pinning precedent applied to the
   other link, and it was missed for the same reason.
 
+  **Where a link lands is a separate rule from what it addresses, and it is applied rather than
+  typed.** Every link that leaves the page carries `target="_blank"` and `rel="noopener noreferrer"`,
+  set on load by the tail script `page-skeleton.sh` emits — because a citation is followed from the
+  middle of an unfinished agenda, and replacing the page costs the reader their place in it. The
+  page's own links are exempt, tested as *same document, differing only by fragment* rather than by
+  class, so the rail and the Checkpoint pointers stay put and anything added later is covered. It is
+  the tint's precedent, for the tint's reason: an attribute a run types at every citation is an
+  attribute missing from one of them. Five files agree — `page-template.html` holds the pass and the
+  markup comment saying not to type one, `report-format.md` § *Every off-page link opens in a new
+  tab* owns the rule, `SKILL.md` step 9 forbids the attribute beside the colour and the `<script>`,
+  and `tests/run.sh` asserts the pair (the rule in the tail, zero `target=` in the markup half) with
+  four `self-test.sh` rows behind it.
+
   And the guard this repository has now paid for three times, which `diff-render.sh` carries in its
   refs handling: **asked and unable to answer is not an empty diff.** A `git diff` feeding a pipeline
   leaves the exit status at 0 and prints no rows, which reads as *no file is withheld* — the most

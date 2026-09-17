@@ -289,6 +289,21 @@ for g in 'highlight.min.js' 'languages/erb.min.js' 'languages/elixir.min.js'; do
   assert_eq "$(count "$WORK/tail" "$g")" "1" "the skeleton loads $g"
 done
 
+# ---------------------------------------------------------------- links open in a new tab
+# Applied by the tail script, never typed at a citation — so the assertion is a pair: the rule is
+# in the half nobody reads, and the half a run copies from carries no target for it to imitate.
+# A page has dozens of citations and an attribute typed dozens of times is one missing from a
+# citation nobody checks, which is the defect this split exists to make unreachable.
+assert_eq "$(count "$WORK/tail" "'target', '_blank'")"           "1" "the skeleton's script opens off-page links in a new tab"
+assert_eq "$(count "$WORK/tail" "'rel', 'noopener noreferrer'")" "1" "it sets rel with target, so the opened page gets no window.opener handle"
+assert_eq "$(count "$WORK/markup" 'target=')"                    "0" "no citation in the markup half types a target for a run to copy"
+
+# The other half of the same rule, and the one that is silently wrong rather than loudly: the rail
+# and the Checkpoint pointers are this page pointing at itself, and a new tab there is the reader's
+# place lost with a second window on top of it. The guard is a comparison against the current
+# document, so a component added later is covered without anyone editing the block.
+assert_eq "$(count "$WORK/tail" 'if (there === here) { return; }')" "1" "a link to this same page is left in this tab"
+
 # ---------------------------------------------------------------- the title
 "$SKELETON" --template "$TEMPLATE" --out "$WORK/t.html" --title 'Fix A & B <thing>' >/dev/null
 if grep -Fq '<title>Fix A &amp; B &lt;thing&gt; Review</title>' "$WORK/t.html"; then

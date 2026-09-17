@@ -1331,6 +1331,15 @@ figcaption strong { color: var(--ink-3); }
        {{LINK}}; scripts/ledger-rows.sh writes the inventory's own links from the
        rung it is given, so those are never typed either.
 
+       NO CITATION BELOW CARRIES A target, AND NONE SHOULD. Every link that leaves
+       this page opens in a new tab, applied by the emitted script at the foot of
+       the page rather than typed here — a reader follows a citation from the
+       middle of an unfinished agenda, and replacing the page with GitHub costs
+       them their place. Typing the attribute is how one citation ends up without
+       it, so the rule is the script's and the markup stays clean. The rail and the
+       Checkpoint pointers are the links that must NOT move, and the script leaves
+       them alone by testing the href rather than the class.
+
        The rung ladder that decides whether any of this is clickable at all, the
        blob's base-SHA case, and the files GitHub will not render (which take
        {{BLOB}} even for a line inside the diff — scripts/diff-render.sh) are in
@@ -2027,11 +2036,12 @@ post.saved_change_to_title?  # =&gt; true</pre>
   </main>
 </div>
 
-<!-- Scroll progress, rail scroll-spy, and the syntax tint on unchanged excerpts.
+<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, and
+     the syntax tint on unchanged excerpts.
      This is the ONLY script the page carries: no state, no localStorage, no
-     counters. All three are presentation, and the page reads correctly with the
+     counters. All four are presentation, and the page reads correctly with the
      whole block removed — the excerpts simply render in one ink, as they did
-     before the tint existed.
+     before the tint existed, and a citation lands in the tab it was clicked from.
 
      highlight.js comes from cdnjs because that is the one script host a published
      artifact may load; its stylesheets are NOT loadable, which is why the theme
@@ -2079,6 +2089,42 @@ post.saved_change_to_title?  # =&gt; true</pre>
     }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
     secs.forEach(function (s) { io.observe(s); });
   }
+
+  /* ---- Off-page links open in a new tab ---------------------------------
+     Applied, never authored, for the same reason the tint is. A run types
+     dozens of citations per page and would have to remember an attribute on
+     every one of them; here it is one rule that cannot be forgotten, cannot
+     be typed wrong, and does not have to be added to the template's every
+     anchor before a new component can carry one.
+
+     Why the page wants it: a citation is followed from the MIDDLE of an
+     agenda the reader has not finished. Replacing the page with GitHub costs
+     them their place, the rail's position, every excerpt they had opened and
+     every checkpoint they had read — and the way back is a browser Back that
+     lands at the top. The page is the thing being read; the diff is the thing
+     being consulted.
+
+     The exception is this page pointing at itself — the rail, a checkpoint
+     pointer, an impact card's back-reference — and those must NOT move,
+     because a new tab there is the same lost place with an extra window.
+     The test is therefore "same document, differing only by fragment",
+     computed from the resolved href rather than from a class list, so a
+     component added later is covered without anyone remembering this block.
+
+     rel is set WITH target and never apart from it: target="_blank" hands
+     the opened page a window.opener handle back to this one, and every link
+     this touches goes to a host the page does not control.
+
+     Presentation, like everything else in this script: with the block
+     removed the links still work, they simply land in the same tab. */
+  Array.prototype.forEach.call(document.querySelectorAll('a[href]'), function (a) {
+    var here = location.href.split('#')[0], there;
+    try { there = new URL(a.getAttribute('href'), location.href).href.split('#')[0]; }
+    catch (e) { return; }
+    if (there === here) { return; }
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+  });
 
   /* ---- Syntax tint, .excerpt--source only -------------------------------
      The rule this obeys: an excerpt is a quotation, so the script may change

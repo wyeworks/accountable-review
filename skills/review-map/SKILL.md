@@ -949,6 +949,11 @@ Everything else about writing holds at every stage:
   already there and **you have not read them** — so a token you name is a token you guessed, and a
   second declaration of a colour is a second canonical home for it. This is the same rule as the one
   below about excerpts, for the same reason: bytes a script generated are bytes you must not retype.
+
+  **And never write a `target` on a link.** Every link that leaves the page already opens in a new
+  tab — that script applies it on load, and it exempts the page's own rail and Checkpoint pointers,
+  which must stay in this tab. An attribute typed at every citation is one missing from a citation
+  nobody checks. `report-format.md` § *Every off-page link opens in a new tab* owns the rule.
 - **One fact, one home.** Before writing a section, ask what it *owns* that no other section owns. If
   the answer is "it re-explains something from earlier", write the reference instead: one sentence
   pointing at where the explanation lives. `report-format.md` § *One canonical home* has the routing
