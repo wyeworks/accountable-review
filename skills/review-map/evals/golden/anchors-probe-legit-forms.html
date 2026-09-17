@@ -1,6 +1,6 @@
-<!-- No defect. Three probe shapes that are correct and that rails-anchors.sh used to fail, kept
+<!-- No defect. Five probe shapes that are correct and that rails-anchors.sh used to fail, kept
      in ONE clean fixture on purpose: a fixture that must PASS catches a regression in any of
-     the three, where a fixture that must FAIL would keep failing while two of them broke.
+     the five, where a fixture that must FAIL would keep failing while two of them broke.
 
      1. A framework receiver. `Rails.application` is not this app's method to define, and the
         scope rule read `application` as an undefined scope. Rule 7 had a framework-constant
@@ -15,6 +15,12 @@
         literal being iterated, not a literal being printed, and the two cannot be told apart
         by the first character — so the rule tracks the quote instead. A printed array still
         fails: see anchors-fabricated-output.html, which stays failing.
+
+     4. ActiveRecord's callback registry reader. rails-nextjs.md recommends
+        `Project._commit_callbacks.map(&:filter)` explicitly.
+
+     5. ActionController's callback registry reader and Symbol in the same probe. Both are
+        framework/Ruby surface rather than app declarations.
 
      Run with --repo @GOLD@/searches-repo, which is what makes 1 and 2 real rather than
      rhetorical. -->
@@ -47,6 +53,14 @@
       <span class="lbl">rails runner &middot; read-only &middot; which methods each model defines itself</span>
       <pre class="probe">bin/rails runner 'pp Project.instance_methods(false).sort
 [Project].each { |m| pp [m.name, m.instance_methods(false).sort] }'</pre>
+
+      <div class="item">Which callbacks run for Project commits.</div>
+      <span class="lbl">rails runner &middot; read-only &middot; which callbacks run on Project commit</span>
+      <pre class="probe">bin/rails runner 'pp Project._commit_callbacks.map(&:filter)'</pre>
+
+      <div class="item">Which before_action callbacks the controller has, as Symbols.</div>
+      <span class="lbl">rails runner &middot; read-only &middot; which action callbacks ProjectsController runs</span>
+      <pre class="probe">bin/rails runner 'pp ProjectsController._process_action_callbacks.map(&:filter).grep(Symbol)'</pre>
     </dd>
   </dl>
 </section>
