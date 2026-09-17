@@ -63,6 +63,7 @@ belongs in the sentences that cite this repository, which say it by naming real 
 
 - *One page shape* — above: no level, and what effort and stack do not change
 - *The review checkpoint* — the page's primitive: one judgment, framed as a question
+- *Coding decisions* — the second kind of checkpoint, its citation bar and its three caps
 - *Chains* — the one figure vocabulary, in two places with two jobs
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
 - *Framework anchors* — the doc link and the runtime probe, and why neither is evidence
@@ -110,6 +111,14 @@ The page's primitive. Where the reviewer's attention goes is expressed as a hand
 *What needs your attention* — three to five per independent change the PR makes, seven on the page at
 the outside — and each is **one judgment** the reviewer has to make: framed as a question, explained
 in a few sentences, and anchored to the exact lines that let them make it.
+
+**Two kinds of judgment, one component.** A **behavioural** checkpoint asks what the system now does:
+*is nil safe for every consumer?*, *does the new guard admit a class it used to refuse?* A
+**coding-decision** checkpoint asks how the change was built: *the PR chose X; this codebase already
+does Y for the same job; is X deliberate?* They render identically — same `h3`, same explanation, same
+*Look at* list — and nothing on the page labels which is which, for the same reason nothing labels the
+stack or the effort. § *Coding decisions* below carries the second kind's own rules, and they are
+constraints on **when** it may be written, never on how.
 
 It replaced a seven-field review unit, and the reason is worth keeping because the unit looked
 thorough. Every meaningful change got the same grid — implementation, tests, affected code, things to
@@ -248,6 +257,11 @@ step 7b:
 - **Background jobs** — safe to run twice, in-flight jobs carrying the old argument shape. Feature
   flags and their default. An environment variable, and **what happens when it is unset**. External
   calls, and whether they block a request. Transaction boundaries, and what sits outside them.
+- **One coding decision that departs from something this repository already does** — a value object
+  under `app/models` where `app/services/` holds four of its kind, a query built in a controller where
+  `app/queries/` exists, a hand-rolled guard where a policy class was waiting. Ask it last, ask it
+  once, and only where you can cite the sibling it departs from. § *Coding decisions* owns the bar and
+  the caps.
 
 Each is a checkpoint only if it is a judgment for *this* diff. The list is a prompt, not a form.
 
@@ -255,6 +269,68 @@ Each is a checkpoint only if it is a judgment for *this* diff. The list is a pro
 without, and a pending stub. Copy the composition rather than the description: a checkpoint is
 borderless, so one that spills its *Look at* list beside the `<section>` rather than inside it looks
 very nearly right.
+
+---
+
+## Coding decisions
+
+The second kind of checkpoint. It asks whether a choice about **how the change was built** is
+deliberate — where a class was put, what kind of object it is, which existing abstraction it went
+around, what it was named, whether it is a second way to do something the app already does one way.
+`SKILL.md` step 7b is where it is found and the stack's lens file has the search recipes; this section
+owns the rule.
+
+**Name the departure, and cite it.** The form is *the PR chose X; this codebase already does Y for the
+same job; is X deliberate?* The `Y` is not optional and it is not general knowledge about the
+framework: it is a **path in this repository** — a sibling file, a populated directory, a line in the
+project's own convention doc — and it goes on the page beside the question, as a *Look at* entry like
+any other citation.
+
+> Does `MembershipMark` belong in `app/models`?
+>
+> It is a value object with no `ApplicationRecord` behind it, so it has no `validates`, no callbacks
+> and no `find_by`. The four other non-record classes in this app live in `app/services/`.
+>
+> **Look at** · Where its siblings live · four value objects, none of them under `app/models` ·
+> `app/services/trial_offer.rb:1`
+
+**No in-repo citation, no question.** This is the whole bar, and it is what makes the difference
+between a review map and a style guide. A reviewer who knows the codebase can ask *why is this one
+different?*; a linter cannot, because the answer is four files away and was never written down. If the
+repository has no settled answer to point at, the change has departed from nothing and there is no
+judgment to make — a preference stated in its absence is the page grading the author's taste, which it
+does not do.
+
+**Ask; never answer.** No *should have been*, no *unidiomatic*, no *the Rails way*, no *consider
+moving*. The reviewer knows why the codebase is shaped the way it is; the page knows only that the
+shapes differ. Where the run cannot resolve it — and it usually cannot — the *Open question* line is
+where that goes.
+
+**Three caps, and the middle one is the product:**
+
+- **One per page — not one per delta.** Every other count in § *Section 2* scales with the number of
+  independent changes the PR ships; this one does not. Three deltas still buy one question about how
+  the code was built. A second is the page becoming a style review, and it will arrive looking
+  thorough. The departure that does not get the slot is not written anywhere else — an observation
+  about shape with nowhere to go is noise, not a finding, and the sampling caveat already says this is
+  not an audit.
+- **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
+  behavioural agenda already fills the page, there is no slot, and that is the right outcome. A page
+  that dropped *is nil safe for every consumer?* in order to ask where a class lives has traded the
+  product for a preference; a page that reached an eighth checkpoint to fit one in has bought a
+  preference with the reviewer's attention.
+- **Ranked last**, per `SKILL.md` step 7d, whatever the four ranking criteria say. Misreading where a
+  class lives costs a conversation; misreading a behavioural judgment costs production.
+
+**Unless the diff is a refactor**, where the coding decision may be the only judgment there is — and
+then it is the page. Say so plainly in *What changed* rather than manufacturing a behavioural
+checkpoint to stand in front of it.
+
+**Nothing marks it as the second kind.** No label, no chip, no section of its own, no sentence
+announcing that the page also checks conventions. It is an ordinary `section.cp` in an ordinary
+position, and a reader should not be able to tell which kind they are looking at except by reading the
+question. That is the same rule the stack and the effort answer to, and it is refused in the same
+place — `page-template.html`'s header comment.
 
 ---
 

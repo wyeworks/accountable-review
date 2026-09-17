@@ -371,8 +371,15 @@ end
 # per node. What stays forbidden is the thing that was actually wrong — a citation standing in
 # for the label or the clause — and what stays true is that the CLAUSE explaining an affected
 # entry has one canonical home in the affected list below, which a locator is not.
-CITE_IN  = /<a class="(?:path|cite)[^"]*"/
-LOC_LAST = %r{<a class="(?:path|cite)[^"]*"[^>]*>[^<]*</a>\s*</span>\s*</li>}
+#
+# Both forms, because the locator is a citation and § *Deep links* decides its element: an <a> at
+# a rung that has somewhere to point, and a plain <span class="path ip-loc"> at rung 4, which
+# report-format.md § *Chains* spells out. Matching only the anchor failed a correct page on an
+# unpushed branch for having no links on it — and unpushed is the common case, so the rule was
+# wrong exactly where the product is strongest. It stayed invisible until a rung-4 fixture first
+# earned an impact panel: every fixture that drew one had a remote.
+CITE_IN  = /<(?:a|span) class="(?:path|cite)[^"]*"/
+LOC_LAST = %r{<(a|span) class="(?:path|cite)[^"]*"[^>]*>[^<]*</\1>\s*</span>\s*</li>}
 
 standing_in = []
 missing = []

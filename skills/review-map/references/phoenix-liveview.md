@@ -97,6 +97,40 @@ finding is reported by absence, not by a green tick.
 - Context boundaries: is the web layer reaching past the context into `Repo` or a schema directly?
   That is where the invariant this PR adds stops being enforced.
 
+## Coding decisions, against this codebase's own answers
+
+The Elixir half of the same lens. Every other section here asks what the change *does*; this one asks
+how it was built, and its evidence is always a module the diff never touched.
+`report-format.md` § *Coding decisions* owns when this becomes a checkpoint — one per page, ranked
+last, never displacing a behavioural judgment, and **never without a path in this repository to cite**.
+
+- **A plain `defstruct` module sitting among schemas**, or an `embedded_schema` where a persisted
+  `schema` is assumed. `Ecto.Changeset.cast/4` works on both, so the code reads the same; no `Repo`
+  function takes the first, and the failure is the first `Repo.insert/2`. The question is where this
+  app puts its non-persisted structs when it has somewhere.
+- **A module in `lib/<app>_web` that reaches past the context** into `Repo` or a schema — the boundary
+  question above, asked as a decision rather than as a consequence, and worth asking only where every
+  sibling goes through the context.
+- **A `*_service.ex` or a `*_manager.ex`** in an app whose every other operation is a context
+  function. Phoenix contexts are the settled answer in most apps, so a module that opts out is a
+  choice someone made; whether it was deliberate is the reviewer's to say.
+- **A second way to do a job the app already does one way** — a hand-rolled `Plug` where an
+  `on_mount` chain exists, a bespoke JSON shape beside a `@derive {Jason.Encoder}`, a `GenServer`
+  holding state a table already holds.
+
+**Ask; never answer**, exactly as in Rails: *is it deliberate that X, given Y?* and never *X should be
+Y*. The probe that settles what a module actually is needs no rows — `MyApp.Thing.__schema__(:source)`
+raises `UndefinedFunctionError` for a plain struct and returns the table name for a schema, so it
+answers in a fresh checkout like the other reflection commands in § *Runtime probes*.
+
+Finding the `Y` is one listing and two searches:
+
+```sh
+ls lib/myapp lib/myapp_web                                     # what kinds this app has a home for
+rg -ln 'use Ecto.Schema' lib/myapp | wc -l                     # how much of the context dir is schemas
+rg -n 'defmodule .*(Service|Manager|Worker)\b' lib             # what the siblings settled on
+```
+
 ## Controllers, plugs and JSON
 
 - The router pipeline a `scope` inherits — a new scope that omits `pipe_through` inherits **nothing**,
