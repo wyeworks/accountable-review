@@ -166,7 +166,9 @@ if [ "$VERIFY_ONLY" = 0 ]; then
      && [ -z "${CLAUDE_CODE_USE_BEDROCK:-}" ] && [ -z "${CLAUDE_CODE_USE_VERTEX:-}" ]; then
     die "no model credential in the environment.
 Set ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN as a repository secret and pass it
-into this step. Nothing was generated — this is a missing credential, not a failed run."
+into this step. An API key comes from the Anthropic Console; an OAuth token is what
+'claude setup-token' prints, and bills a Claude subscription instead.
+Nothing was generated — this is a missing credential, not a failed run."
   fi
 
   # The skill reads the diff. A shallow clone makes that quietly wrong rather
