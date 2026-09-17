@@ -75,6 +75,12 @@
  page-invariants    | invariants-clean.html        | 0 | no asserted risk or severity score
  page-invariants    | invariants-assurance.html    | 1 | assurance language
  page-invariants    | invariants-draft-narration.html | 1 | narrates its own drafting
+# The hedge. § 2d is a WARN, so this row pins the text at exit 0 rather than a failure. A row
+# can only assert that a line IS printed, and the half this rule is most likely to get wrong is
+# the other one — it matches prose, and every fixture in this directory carried the removed
+# caveat until the format dropped it, so a pattern reaching too far would fire everywhere at
+# once. That half is pinned by frozen.rb, which holds every case's whole output.
+ page-invariants    | invariants-standing-disclaimer.html | 0 | a standing disclaimer may have come back
  page-invariants    | invariants-no-tier.html       | 1 | no evidence tier labels
  page-invariants    | invariants-tier-modifier-only.html | 0 | evidence tiers used (2 label(s))
  page-invariants    | invariants-loose-data-path.html | 1 | outside a ledger cell

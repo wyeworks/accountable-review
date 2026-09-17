@@ -364,6 +364,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-severity-chip.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-standing-disclaimer.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-standing-disclaimer.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-tier-modifier-only.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment

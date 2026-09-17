@@ -298,8 +298,14 @@ never posts to GitHub.
 
 Nor does it claim to have found everything. Three independent passes over the same 109-file diff
 produced eight distinct headline findings between them, with only one appearing in all three.
-Explanation is reproducible; defect discovery is sampling. The page says so, and never reads as a
-clean bill of health.
+Explanation is reproducible; defect discovery is sampling.
+
+The page never reads as a clean bill of health — and it does not carry a standing disclaimer saying
+so either. That caveat is true of every Review Map rather than of any one of them, so it is stated
+once in `README.md` § *What a Review Map cannot do*, where someone deciding whether to trust these
+pages reads it, instead of under the heading a reviewer opens to find out what to judge. A hedge in
+that position is boilerplate by the second map, and the line a reader skips after it is the first
+checkpoint.
 
 ## What it assumes
 

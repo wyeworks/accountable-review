@@ -229,14 +229,40 @@ tool cannot establish intent, it says so:
 Every claim also carries a `file:line` into your repository, and by default a second reader attacks
 those claims before the page is finished (see [Usage](#usage-) → *effort*).
 
-Nor does the page claim to have found everything. Three independent passes over the same 109-file
-diff produced eight distinct headline findings between them, with only one appearing in all three.
-Explanation is reproducible; defect discovery is sampling. The page says so, and never reads as a
-clean bill of health.
+Nor does the page claim to have found everything — see
+[What a Review Map cannot do](#what-a-review-map-cannot-do-) below. It never reads as a clean bill of
+health, and it never carries a boilerplate disclaimer saying so either: the limits are the same on
+every Review Map, so they are written down once, here, rather than reprinted under a heading you have
+already read a dozen times.
 
 The goal is not to sound confident.
 
 The goal is to help the reviewer investigate the change.
+
+---
+
+## What a Review Map cannot do 🌫️
+
+A Review Map is written by a model reading your repository. That is what lets it trace a consequence
+into code the diff never opened, and it is also the honest limit on the page.
+
+- **It is a pass, not an audit.** Three passes over the same 109-file diff produced eight headline
+  findings between them, only one of which appeared in all three. Explanation is reproducible; defect
+  discovery is sampling.
+- **It has blind spots, and they are not random.** Behaviour living in configuration, in data, in a
+  queue, in another service or in the gap between two deploys is harder to reach from a diff than
+  behaviour living in a method — so those are the regions a map is quietest about, and quiet is not
+  the same as clear. On a very large diff it also runs out of room before it runs out of diff, and
+  says which region it skimmed.
+- **Some of it can simply be wrong** — a misread method, a framework default that does not hold for
+  your version, a consequence prevented somewhere the run never looked. Every claim is labelled by
+  how it is known and carries a `file:line`, so open the citation for anything you would act on.
+- **It never decides anything.** A map that says nothing about a file is not telling you the file is
+  fine, only that this pass surfaced no judgment there.
+
+**And it depends on the model behind it.** We develop and test with Claude Opus 5 most of the time, and that
+is what the page's depth is calibrated against. Other models will trade cost for reach differently —
+try a few against your own codebase and keep the one whose maps you actually trust.
 
 ---
 

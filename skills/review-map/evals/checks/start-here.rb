@@ -122,15 +122,11 @@ elsif items.positive?
   check.ok("#{items} entries, within the shape of a reading order")
 end
 
-# THE SAMPLING CAVEAT MOVED TO SECTION 02, where the judgments are, so it is looked for
-# page-wide rather than in this region. A fragment of section 03 alone cannot carry it and
-# must not be failed for that — the skip says which, rather than passing on nothing.
-if check.kind != "page"
-  check.skip("the sampling caveat lives under section 02; a section 03 fragment cannot carry it")
-elsif check.page.has?(/not (an|a full) (audit|exhaustive)|pass, not an audit|surfaced|exhaustive/i)
-  check.ok("the sampling caveat is on the page")
-else
-  check.maybe("no sampling caveat anywhere on the page — it lives under section 02, once, and without it the agenda reads as the complete set")
-end
+# THE SAMPLING CAVEAT IS GONE FROM THE PAGE, so this script no longer looks for one. It
+# used to require the sentence page-wide from here, which was always the wrong file for it —
+# section 03 grading a rule about section 02. The rule that replaced it is the opposite one
+# and lives where page-wide rules live: page_invariants.rb § 2d warns when a page carries a
+# standing disclaimer, because what is true of every Review Map is stated once in the README
+# rather than under a heading a reviewer opens to find out what to judge.
 
 check.finish

@@ -633,8 +633,8 @@ ran out of room, the region you skimmed is stated in *What changed* under § *Ho
 be?*, which is the rule that already covers it.
 
 **A finding that does not become a checkpoint is not lost** — affected code keeps its entry in
-*Impact outside the diff* or in the evidence foot, and the sampling caveat under the heading is what
-makes leaving a judgment off honest rather than hidden. **A judgment is the exception**: an entry in
+*Impact outside the diff* or in the evidence foot, which is what makes leaving it off the agenda
+honest rather than hidden. **A judgment is the exception**: an entry in
 the foot the reviewer has to decide about is a checkpoint that was mis-filed, per the hard rule below,
 which is why the agenda has room to grow rather than a ceiling that would push one down there. What is
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
@@ -647,7 +647,7 @@ middle one is the product:
   number of independent changes: a PR shipping three deltas still asks at most one question about how
   the code was built. A second is the page becoming a style review, and it will read as thoroughness.
   The departure that does not get the slot is not written down anywhere — an observation about shape
-  with nowhere to go is noise, and the sampling caveat already says the page is not an audit.
+  with nowhere to go is noise, and the page is not obliged to report everything it noticed.
 - **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
   behavioural agenda already fills the page, there is no slot, and that is the correct outcome rather
   than a loss. A page that dropped *is nil safe for every consumer?* to ask where a class lives has
@@ -849,7 +849,7 @@ someone mid-paragraph is worse than one that arrives late.
 |---|---|---|
 | 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending |
 | 2 · Impact | 5 | *Impact outside the diff* — or, when nothing crosses into unchanged code, its stub and its rail entry removed |
-| 3 · Agenda | 7, then per checkpoint | Section 02's heading, its one caveat sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 3 · Agenda | 7, then per checkpoint | Section 02's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
 **At `--effort high` the falsifiers were spawned at the end of step 6 and fold in during stage 3** —
@@ -859,12 +859,12 @@ the tab for, and the reader never learns they ran.
 **The checkpoint is the unit of staging, not section 02.** Section 02 is the bulk, so a stage that
 delivered it whole would put the longest wait of the run behind one arrival — which is the shape
 staging exists to avoid. Nothing new is needed to split it: `<section id="attention">` carries the
-heading and the caveat, and each checkpoint is already its own nested `<section class="cp" id="cp-x">`
+heading and its lead sentence, and each checkpoint is already its own nested `<section class="cp" id="cp-x">`
 with a unique `id`, which is exactly the anchor a later stage edits. The rail already renders a
 per-checkpoint marker — take it and the pending stub from `references/page-template.html` rather than
 inventing markup.
 
-So stage 3 **opens with a cheap publish**: the heading, the caveat, and one stub per checkpoint whose
+So stage 3 **opens with a cheap publish**: the heading, its lead sentence, and one stub per checkpoint whose
 line of substance is **the question**. That arrival is worth having on its own — a reader learns what
 the judgments *are* before any of them is written, which is most of what they came for. Each
 checkpoint then lands in its own republish. Two rules keep this from becoming a republish per
@@ -1350,12 +1350,17 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   lower-priority affected code and the recorded searches may live there because they are provenance,
   but nothing a reviewer acts on may live *only* there. If an entry in the foot is a judgment they
   have to make, it is a checkpoint that was mis-filed.
-- **Never imply the page found everything.** It did not, and measurably so: three independent
-  analyses of the same 109-file diff produced eight distinct headline findings between them, with
-  only *one* appearing in all three. Explanation is reproducible; defect discovery is sampling. Say
-  plainly that what the page surfaced is a pass, not an audit, and never let it read as a clean bill
-  of health. Say it **once**, under *What needs your attention*, and nowhere else. Where a reviewer needs assurance rather than orientation, point them at a dedicated
-  review pass.
+- **Never imply the page found everything, and never write a disclaimer saying so.** It did not find
+  everything, and measurably so: three independent analyses of the same 109-file diff produced eight
+  distinct headline findings between them, with only *one* appearing in all three. Explanation is
+  reproducible; defect discovery is sampling. That fact is true of every Review Map rather than of
+  this one, so it is stated **once for the tool** in `README.md` § *What a Review Map cannot do* and
+  **never on the page** — a standing caveat under a heading is boilerplate the second time a reviewer
+  sees it, and it teaches them to skim the line beneath it. What the page owes instead is silence
+  about its own coverage: no *no issues found*, no *the change is safe*, no *nothing else reads this*
+  that a search did not establish, no summary claiming the diff was fully covered, and nothing
+  anywhere that reads as a clean bill of health. Where a reviewer needs assurance rather than
+  orientation, point them at a dedicated review pass.
 - **Never draw an `<svg>`.** The page's figures are two components — the vertical labelled chain and
   the `dl.ba` pair — assembled from the template. A drawing derived per run spends the run's attention
   on geometry instead of on whether the edges are true, and makes two pages from this skill
