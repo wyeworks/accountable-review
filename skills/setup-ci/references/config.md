@@ -63,6 +63,26 @@ out of the checkout when they run, which has two consequences worth knowing:
   `ACCOUNTABLE_REVIEW_ALLOW_COMMAND=1` is set in the environment — and the generated workflow does not
   set it. See `delivery.md`.
 
+## What does not belong here: when a Review Map is generated
+
+The triggers, the draft and fork guards and the bot authors are **not** config keys and must not
+become them. They are the workflow's `on:` and `if:` — there is nothing for a run-time read to
+change, because by the time anything reads this file GitHub has already decided whether to create the
+job. They are edited in the workflow or re-confirmed by re-running setup, and `install-workflow.sh`
+recovers them rather than reverting them, so a re-run is cheap. See `workflow.md` §§ *Triggers* and
+*The line that records the decisions*.
+
+**`trivial_files` and `trivial_lines` are the exception, and the line between them is worth stating
+because it is not where it looks.** They decide the same thing the guard decides — whether a model
+run happens — so the instinct is that they belong beside it. They do not, because what they count is
+application paths, and `changed_files`, `additions` and `deletions` in the event payload are the
+whole diff with no file list attached. A threshold written into the `if:` could only measure the
+wrong thing. So the decision is made after the checkout, by `ci/application-code.sh`, reading the
+real diff — and once it is made there it is an ordinary run-time read like every other key here.
+
+That is also why the earlier answer to "can we tune the thresholds without re-running setup" has
+changed to yes. `workflow.md` § *The application-code gate* owns the rule.
+
 ## An unknown key is an error
 
 `read-config.sh` fails on a key it does not recognise, rather than ignoring it. A misspelled

@@ -167,7 +167,11 @@ Impact outside the diff         1-3 chains, from changed code into code it gives
 ```
 
 A **checkpoint** is the primitive. Not a category — *ProjectSearcher implementation* names a file —
-but a judgment you could get wrong:
+but a judgment you could get wrong. Most are about what the change now does; **at most one per page
+is about how it was built** — where a class was put, what kind of object it is, which existing
+abstraction it went around — and that one only ever appears when the page can point at the place your
+codebase already answers the same question, so it reads as *why is this one different?* rather than as
+a style guide. It asks; it does not answer.
 
 ```text
 Is nil → cross_facility an intentional semantic default?
@@ -256,6 +260,12 @@ The plugin is designed to help reviewers understand those relationships as a sys
 where the framework's own rules bite: `update_all` at a call site the diff never opened skips the
 validation this PR adds, a uniqueness validation is not a unique index, `--sandbox` rolls back so
 `after_commit` never fires there.
+
+It also reads the app for **what your team already decided**. A value object in `app/models` is
+ordinary; a value object in `app/models` when four of its kind live in `app/services` is a choice
+someone made, and the page will ask whether it was deliberate — with the four siblings cited, because
+without them there is nothing to ask. That question is never a recommendation, never appears more than
+once, and never takes a slot from a judgment about behaviour.
 
 **Elixir/Phoenix is the second stack** — a LiveView app or a JSON API — with its own lens for the same
 job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing without the index
@@ -469,9 +479,8 @@ uploaded as a GitHub Actions artifact
 available to everyone who can see the repository
 ```
 
-Every reviewer opens the same artifact instead of independently reconstructing the same context. A
-push to that pull request regenerates it, and cancels the run that is now describing a revision
-nobody is reviewing.
+Every reviewer opens the same artifact instead of independently reconstructing the same context, and
+it is there from the moment the pull request becomes reviewable.
 
 Setup looks at the repository first — what CI you already have, whether Claude Code already runs in
 it, what conventions your workflows follow — and then writes one file,
@@ -482,14 +491,26 @@ the second run compares what it would write against what is there and says *unch
 
 | | |
 | --- | --- |
-| Triggers | `ready_for_review`, `synchronize`, `reopened` |
+| Triggers | `opened`, `ready_for_review`, `reopened` — one map per pull request |
 | Draft pull requests | Ignored — pushing to a draft costs nothing |
 | Fork pull requests | Skipped: a `pull_request` run from a fork gets no secrets |
+| Bot pull requests | Skipped: a dependency bump has no judgments to stage |
 | Pull requests changing no application code | Skipped — the run says what changed and why none of it earned a map |
-| Trivial application changes | Skipped — 2 files **and** 20 lines or fewer; both thresholds configurable |
+| Trivial application changes | Skipped — 2 files **and** 20 lines or fewer of application code; both configurable |
 | Delivery | GitHub Actions artifact, kept 30 days |
+| The link | One comment on the pull request, updated in place, naming the revision |
 | Concurrency | One run per pull request; superseded runs cancelled |
-| Permissions | `contents: read`, and nothing else |
+| Permissions | `contents: read`, plus `pull-requests: write` for that one comment |
+
+**Setup shows you those before it writes anything**, because each decides either when a model run
+happens on your account or what the job is allowed to do, and asks once. Change any of them there and
+the workflow is rendered your way — and re-running setup later to move the version pin reads your
+answers back out of the file rather than reverting them.
+
+The comment is the whole of the write scope. The job cannot push, cannot touch your code, cannot
+approve and sets no check — and `--no-pr-comment` drops the step and the scope together. There is no
+"Review Map: passed" status, and there will not be one: a passing check is a verdict, and this page
+does not carry verdicts.
 
 One thing is left for you: **the credential.** Add `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`)
 as a repository secret. Setup cannot see your secrets, so it says outright that this is outstanding
@@ -502,14 +523,17 @@ counts are over application code only, so a lockfile's five thousand lines do no
 model change look substantial. Both numbers live in `.accountable-review.yml`, and either at `0`
 gives you a map for every change that touches code. `docs/ci.md` has the rule and the trade.
 
-One thing to know about the triggers: `opened` is not among them, so a pull request opened *directly*
-as ready for review gets its first Review Map on its next push. If your team does not start work as
-drafts, add `opened` to the list — the draft guard still holds.
+One cost worth knowing, and it is quiet: **a push does not regenerate the map**, so on a branch that
+keeps moving it describes an earlier revision while looking current — the revision in its masthead is
+how you tell, and `--regenerate-on-push` is how you change it. A skipped pull request is not the same
+kind of quiet: the run still happens and its summary says which rule skipped it and what it counted,
+so "too small for a map" never looks like a broken workflow.
 
-The workflow is read-only and analysis-only. It never pushes, comments, approves, merges, or sets a
-check with a verdict in it, and it never boots your application: no migrations, no database service,
-no scripts from the pull request. That is the same principle the page itself follows — validation
-commands are shown to a reviewer, never run on their behalf.
+The workflow is analysis-only, and its entire effect on your repository is that one comment. It never
+pushes, never approves, never merges, never labels, sets no check and no status, and it never boots
+your application: no migrations, no database service, no scripts from the pull request. That is the
+same principle the page itself follows — validation commands are shown to a reviewer, never run on
+their behalf.
 
 🚚 Artifacts are the default, not the contract: a Review Map is portable static HTML, and generation
 is separated from delivery so a team can send it somewhere browsable instead. See
@@ -532,7 +556,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
 | **Publishing** | Interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
-| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, `contents: read`, drafts and forks skipped, pull requests whose application change is absent or trivial skipped with a summary saying which and why, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact. |
+| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 
 ---
 

@@ -194,7 +194,7 @@ list_pages() {
 # the repository your live session is sitting in.
 ensure_fixture() {
   if [ -n "${REBUILD:-}" ] || [ ! -d "$FIXTURES/$1" ]; then
-    echo "building fixtures in $FIXTURES (this replaces all four)" >&2
+    echo "building fixtures in $FIXTURES (this replaces all five)" >&2
     "$EVALS/fixtures/make-fixtures.sh" "$FIXTURES" >/dev/null
   fi
 }

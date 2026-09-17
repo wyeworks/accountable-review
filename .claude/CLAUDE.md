@@ -111,7 +111,7 @@ means a page drifting long drifts silently. The one number that must never be gr
 the budget forbids.
 
 `skills/review-map/evals/` is where judging happens, and it currently has **one scope rather than
-three**. `fixtures/make-fixtures.sh` builds four repositories whose interesting findings sit
+three**. `fixtures/make-fixtures.sh` builds five repositories whose interesting findings sit
 deliberately *outside* the diff, so there is a written right answer to check against. A **page** case
 is a whole run, graded on what only a whole page carries. A **component** check runs on a script's
 output. The **section** cases are deferred — they graded one section of the page this design
@@ -156,8 +156,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing, step 7 being the synthesis that turns analysis into an agenda — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint**, **chains** and the rule that decides which figure a chain is, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
-| `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
+| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus § *Coding decisions*, the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
@@ -176,8 +176,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
 | `skills/setup-ci/references/delivery.md` | The delivery contract, the providers that exist and the ones only designed for, and why `command` is opt-in in CI |
-| `skills/setup-ci/templates/workflow.yml` | The workflow itself. Four substitutions, and nothing else is configurable by design |
-| `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically, `install-workflow.sh` writes idempotently and refuses to clobber, `read-config.sh` is the only thing that knows the config file's shape |
+| `skills/setup-ci/templates/workflow.yml` | The workflow itself. Version substitutions, the four when-decisions behind `SETUP:IF:` blocks, and nothing else configurable by design |
+| `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically and resolves the `SETUP:` blocks, `install-workflow.sh` writes idempotently, refuses to clobber, and recovers the when-decisions from the file it is about to replace, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
 | `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page — and refuses `mode: full` rather than remapping it |
 | `ci/application-code.sh` | The scope gate, in two rules: does this diff change application code at all, and is what it changes more than trivial? Both counted over application paths only, the trivial thresholds joined by **and**, and it fails open, so an unrecognised path is code |
@@ -331,6 +331,35 @@ Editing one of these means checking the others still agree.
   `rails-anchors.rb` counts them as the denominator for its doc-link budget, and `tests/run.sh` asserts
   the template assembles three. Whether a question is a judgment is a judged expectation, and
   `evals.json` is where it is asked.
+- **Two kinds of checkpoint, and the second one is capped.** A **behavioural** checkpoint judges what
+  the system now does. A **coding-decision** checkpoint judges how the change was built — where a class
+  was put, what kind of object it is, which existing abstraction it went around. They render
+  identically and nothing on the page says which is which.
+
+  **The rule is name the departure, and cite it in this repository.** The form is *the PR chose X; this
+  codebase already does Y for the same job; is X deliberate?*, and the `Y` is a path — a sibling file, a
+  populated directory, a line in the project's own convention doc — carried on the page as a *Look at*
+  entry. **No in-repo citation, no question.** That bar is the whole difference between this and a style
+  guide, and it is the one thing here a lint rule cannot do: the answer is four files away and was never
+  written down. A preference stated with nothing to cite is the page grading the author's taste.
+
+  **Three caps, and the middle one is the product.** One per page; it **never displaces a behavioural
+  judgment**, so five behavioural checkpoints means no slot; ranked last. The exception is a refactor,
+  where it may be the only judgment the diff carries and then it is the page. A departure that does not
+  get the slot is written nowhere — an observation about shape with no home is noise, not a finding.
+
+  It exists because the page was **behavioural by construction and that is only half of reviewing**.
+  The run that produced it saw the fact and had nowhere to take it: a Review Map called a class "a small
+  presentation model", put it first on the reading path, and never asked why a class like that was in
+  `app/models` when the app had an `app/services`. One sentence had blocked it — step 7a's *"in
+  behavioural terms"*.
+
+  Six files agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
+  it; `report-format.md` § *Coding decisions* owns the bar and the caps **alone** and § *Where
+  checkpoints come from* lists it last; both lens files carry the shapes and the searches that produce
+  the citation; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical checks
+  any of it — like the category test, whether a departure was real and whether the page asked rather
+  than answered are judged, and `evals.json` is where they are asked.
 - **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is
   mechanical.** `figure.impact` in section 04 and `figure.chain` inside a checkpoint are the same
   `ol.ip-path` with the same node kinds and the same causal verbs. `report-format.md` § *Chains* owns
@@ -685,6 +714,19 @@ Editing one of these means checking the others still agree.
   surviving only where a citation names no line. This is the doc-link pinning precedent applied to the
   other link, and it was missed for the same reason.
 
+  **Where a link lands is a separate rule from what it addresses, and it is applied rather than
+  typed.** Every link that leaves the page carries `target="_blank"` and `rel="noopener noreferrer"`,
+  set on load by the tail script `page-skeleton.sh` emits — because a citation is followed from the
+  middle of an unfinished agenda, and replacing the page costs the reader their place in it. The
+  page's own links are exempt, tested as *same document, differing only by fragment* rather than by
+  class, so the rail and the Checkpoint pointers stay put and anything added later is covered. It is
+  the tint's precedent, for the tint's reason: an attribute a run types at every citation is an
+  attribute missing from one of them. Five files agree — `page-template.html` holds the pass and the
+  markup comment saying not to type one, `report-format.md` § *Every off-page link opens in a new
+  tab* owns the rule, `SKILL.md` step 9 forbids the attribute beside the colour and the `<script>`,
+  and `tests/run.sh` asserts the pair (the rule in the tail, zero `target=` in the markup half) with
+  four `self-test.sh` rows behind it.
+
   And the guard this repository has now paid for three times, which `diff-render.sh` carries in its
   refs handling: **asked and unable to answer is not an empty diff.** A `git diff` feeding a pipeline
   leaves the exit status at 0 and prints no rows, which reads as *no file is withheld* — the most
@@ -956,20 +998,65 @@ Same rule as above: editing one of these means checking the others still agree.
   and a page that describes an earlier revision while looking current is the one failure a reader
   cannot detect from the inside — which is exactly what regenerating per push creates, several pages
   that differ only by revision.
-- **The workflow is a design, not a settings file.** The triggers, the draft guard, the fork guard,
-  the concurrency group and `contents: read` have no knobs, because a knob on each is a way to end up
-  generating Review Maps for draft pull requests, which is the thing the setup exists to prevent.
-  `render-workflow.sh` substitutes four values — which plugin, which ref, which Claude Code, which
-  Node — and everything a team legitimately configures is read from `.accountable-review.yml` at
-  **run** time by the scripts the workflow calls, so changing it never means regenerating the file.
+- **The workflow is a design with exactly one settings axis, and the axis is *when*.** The draft
+  guard, the fork guard, the concurrency group and `contents: read` still have no knobs, because a
+  knob on each is a way to end up generating Review Maps for draft pull requests or handing this job
+  write access — which is the thing the setup exists to prevent. Everything a team configures **about
+  the map** is still read from `.accountable-review.yml` at **run** time, so changing it never means
+  regenerating the file; that split is what makes "the workflow respects `retention_days: 14`" true
+  without a second setup run, and why `tests/run.sh` checks retention through `deliver.sh` rather
+  than by grepping YAML.
 
-  That split is what makes "the workflow respects `retention_days: 14`" true without a second setup
-  run, and it is why `tests/run.sh` checks retention through `deliver.sh` rather than by grepping
-  YAML.
+  What is rendered from flags is the decisions about **when a Review Map is generated** — the push
+  trigger and the bot authors — plus **whether the link is commented on the pull request**. None can
+  be run-time settings: the first two *are* the triggers and the guard, and the third decides what
+  permission the job holds.
+
+  **The test is whether the decision can be made *before* the job exists**, not whether it decides
+  that a run happens. How big a change has to be decides exactly that and is still run-time
+  configuration, because what it counts is application paths and the payload is whole-diff: 0.28.0
+  put it on the `if:`, where it could only measure the wrong thing. § *The application-code gate*
+  owns where it went and what happened to its four flags. `SKILL.md` step 3 confirms them in
+  one block before writing, and § *What it configures* splits its table along that line.
+
+  **The defaults are the answers a real team reached by hand**, in two pull requests against a
+  generated workflow (fayron#633 and #634): `opened` in, `synchronize` out so a pull request gets one
+  map, dependabot skipped, and small changes skipped — that last one now measured over application
+  code by the gate above rather than over the whole diff here. A team editing the
+  generated file to reach the same place, and then living with a permanent drift report, is the
+  evidence that these were defaults rather than preferences.
+
+  **The knobs are only safe because of the read-back**, and that is the half to keep. The rendered
+  file carries a `# Decisions:` line holding the canonical, complete flag form of all of them;
+  `install-workflow.sh` recovers it and passes it ahead of the current call's flags. Without it, the
+  ordinary reason to re-run setup — moving the version pin — reports every confirmed decision as
+  drift and reverts them all under `--update`, which is setup reverting a team's decision while
+  claiming to upgrade them. The line is a pure function of the flags, which is what keeps it clear of
+  the byte-comparison rule in the bullet below.
+
+  Six files agree: `templates/workflow.yml` holds the `SETUP:IF:`/`SETUP:END:` blocks and the line,
+  `render-workflow.sh` resolves them, `install-workflow.sh` recovers them, `SKILL.md` step 3 confirms
+  them, `references/workflow.md` §§ *Triggers*, *The guard* and *The line that records the decisions*
+  own the rules **alone**, and `tests/run.sh` checks that each knob changes bytes — a knob that
+  renders the same file either way makes the confirmation theatre.
+
+  **Two ways to write the guard expression produce a workflow GitHub rejects outright**, and neither
+  is visible to a YAML parse, which is how both shipped. Actions expressions have **no arithmetic**,
+  so `(additions + deletions) > 50` is an invalid-file error rather than a sum — the two counts are
+  compared separately against the same number. And in a folded scalar a **more-indented line is not
+  folded**, so its newline survives into the expression; every line sits at six spaces and the
+  operators lead their lines to remove the thing anyone would align. `tests/run.sh` asserts both
+  structurally, because no offline tool validates the expression grammar and the only reliable signal
+  is GitHub's own validation on push.
 - **Idempotency is decided by comparing bytes, so nothing rendered may vary.** No timestamp, no run
   id, no randomness, no "generated on" comment — `install-workflow.sh` tells "already set up" from
   "edited by hand" by `cmp`, and a date would make every second run report drift. `tests/run.sh`
   asserts the rendered file contains today's date nowhere.
+
+  The `# Decisions:` line is not an exception to this and the distinction is the whole reason it
+  is allowed: it is a pure function of the flags, so two renders with the same flags produce the same
+  bytes. What is forbidden is a value that varies **between two renders of the same request**, not a
+  value that records the request.
 
   **That assertion has to run against the whole file, comments included.** It did not, briefly: the
   negative assertions run against a comment-stripped copy so the workflow may explain in a comment why
@@ -984,6 +1071,43 @@ Same rule as above: editing one of these means checking the others still agree.
   "so the map could be better" would be that decision made by the back door, with its own safety
   design skipped. The template starts no service, runs no migration, and executes no script from the
   pull request; `tests/run.sh` asserts all three against the comment-stripped file.
+- **The workflow posts one comment, and that is the entire write surface.** A link to the Review Map
+  and the revision it describes, upserted against `<!-- accountable-review -->` so a reopen or a
+  ready/draft toggle updates it rather than adding a second. It is what `pull-requests: write` is
+  for, it is the only thing that scope is used for, and `--no-pr-comment` removes the step and the
+  permission **together** — a repository carrying a write scope for a step that is not there is a
+  standing grant nobody can account for.
+
+  **This reversed the rule that the workflow posts nothing**, and the reason is the only thing that
+  justifies the reversal: the run summary already said where the map went, and nobody opens a
+  workflow run to find out whether there is something worth opening. Maps were being generated,
+  uploaded, and never read. A boundary that makes the product undiscoverable is not protecting the
+  product.
+
+  **The line that did not move is verdict.** No check run, no status, no review, no label, no
+  approval, and nothing in the comment that grades the change. The next request is the check — "so
+  the map shows up in the status list" — and a passing check is a verdict whatever it is named, which
+  is the product principle undone by the same door this comment came through. The comment is the
+  visibility; that was the whole reason to spend a scope.
+
+  **Actions has no per-step permissions, so containment is by injection rather than by scope.**
+  `GITHUB_TOKEN` reaches only the step that names it in `env:`, and the step that runs a model over a
+  contributor's branch does not. `tests/run.sh` asserts that exactly one step in the whole file names
+  the token, because that is the fact making the scope acceptable and it is one careless `env:` away
+  from gone.
+
+  **And the comment reads the DeliveryResult rather than reaching past it** — a browsable provider's
+  `stable_url` is linked as a page, the artifact provider's download URL as a zip. A comment step
+  that knew about artifacts directly would be the second thing that knows where the map goes, which
+  is the seam below being quietly unpicked.
+
+  Six files agree: `templates/workflow.yml` holds the step and the permission behind the same
+  `SETUP:IF:comment` blocks, `render-workflow.sh` renders both or neither, `SKILL.md` step 3 names
+  the write scope out loud and its hard rules bound what may be posted, `references/workflow.md`
+  § *The comment* owns the rules **alone**, `references/delivery.md` owns what it reads, and
+  `tests/run.sh` executes the step against a stubbed `gh` on both the create and the upsert path —
+  the one piece of shell in this repository that writes to someone else's repository, so it is run
+  rather than read.
 - **The product principle reaches the artifact, not just the page.** `manifest.json` is provenance —
   which revision, which plugin version, whether the coverage gate passed — and carries no severity, no
   score and no approval, for the same reason the page carries none. The job summary says what the
@@ -1335,10 +1459,16 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   never executes what it proposes: the skill does not boot the application under review, which is why
   no probe output ever appears. Changing that is a new decision with its own safety design, not an
   extension of this one.
-- It never posts to GitHub or anywhere outside the artifact. **This is unchanged by running in CI**,
-  which is the obvious next thing to want: no pull request comment, no check run, no status with a
-  verdict in it. The workflow run is where the artifact is discoverable, and `setup-ci`'s hard rules
-  say the same thing from the other side.
+- **`review-map` never posts to GitHub or anywhere outside the artifact**, and that has not changed.
+  The skill writes a page; if a link needs to reach a pull request, the thing that posts it is the
+  generated workflow's own last step, after generation has finished and in a different process.
+  Threading it into the skill would put a write token in the process that reads a contributor's
+  branch, and would make the delivery seam a fiction.
+
+  **What did change is the CI side, and it changed deliberately.** The generated workflow posts one
+  comment: a link and the revision it describes, upserted against a hidden marker. No check run, no
+  status, no review, no label, and nothing in it that grades the change. `setup-ci`'s hard rules and
+  `references/workflow.md` § *The comment* own the boundary; see also the invariant below.
 - It never writes the page into the repository under review — a work directory under `$TMPDIR` only,
   **derived** in step 1 from the repo and the target rather than chosen per run, or the directory
   `--output` names, which `ci/generate-review-map.sh` refuses to let sit inside the checkout.

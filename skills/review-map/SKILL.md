@@ -310,7 +310,10 @@ find the seam between the two sides, because that is what a contract judgment is
 
 **Conventions.** Look for the project's own in `CLAUDE.md`, `AGENTS.md`, `docs/`, `README`,
 `CONTRIBUTING.md`. If found, check the PR against them. If not, infer the house style from adjacent
-unchanged code of the same kind — often more accurate than a stale document.
+unchanged code of the same kind — often more accurate than a stale document. Note which top-level
+directories under `app/` (or `lib/<app>/`) exist and what each holds: that inventory is the evidence
+step 7b needs to ask whether a coding decision in this diff departs from one, and a departure it
+cannot cite is a question it may not ask.
 
 ## 3. Inventory the diff
 
@@ -533,7 +536,13 @@ one in without re-deriving the ranking.
 not true before, in behavioural terms. Not what files moved — what a user, an operator or a
 downstream caller now experiences differently. If the notes support two unrelated sentences, the PR
 bundles two changes and *What changed* says so, neutrally. This sentence is the spine of section 01,
-and every checkpoint has to be a judgment about it.
+and almost every checkpoint has to be a judgment about it.
+
+**Almost, because there are two kinds of checkpoint and only the first answers to this sentence.**
+A **behavioural** checkpoint is a judgment about the delta — what the system now does. A
+**coding-decision** checkpoint is a judgment about how the change was built: where a class was put,
+what kind of object it is, which existing abstraction it went around. That second kind is capped at
+one and ranked last, and 7b to 7e say why and how.
 
 **7b. Identify the human judgments.** For each note, ask what a competent reviewer has to *decide*
 rather than *learn*: whether a scope is still the one that was intended, whether a nil default is
@@ -543,12 +552,30 @@ migration is safe to run against the rows that already exist. Write each as a qu
 A judgment is something the reviewer could get wrong, with consequences. A fact is something they
 read once. Facts feed the explanations; only judgments become checkpoints.
 
+**Then ask the coding-decision question once, and it has a bar in front of it: name the departure.**
+The form is *the PR chose X; this codebase already does Y for the same job; is X deliberate?* — a
+value object under `app/models` where `app/services/` already holds four of its kind, a query built in
+a controller where `app/queries/` exists, a hand-rolled guard where a policy class was waiting, a
+`*Manager` among a dozen `*Service`s. Step 2 collected the conventions; this is where they are spent.
+
+**The bar is a citation, in this repository.** The question exists only if you can point at the
+existing answer it departs from — a sibling file, a populated directory, a line in a convention doc —
+and the citation goes on the page beside the question. **No in-repo counter-example, no question.**
+That is what separates this from a style guide: a reviewer who knows the codebase can ask it, a linter
+cannot, and the difference is the sibling you had to go and find. The lens file's search recipes are
+how; `report-format.md` § *Coding decisions* owns the rest of the rule.
+
+**Ask it; never answer it.** No *should have been*, no *unidiomatic*, no *the Rails way*. The reviewer
+knows why the codebase is shaped as it is and you do not — step 6's neutrality rule is the register,
+and a decision you cannot resolve goes on the *Open question* line, not into a verdict.
+
 Some judgments hide outside any one flow, and a flow-by-flow reading is exactly what misses them.
 `references/report-format.md` § *The review checkpoint* carries the list to ask against — migration
 safety, an application invariant with no database counterpart, the authorization model, deploy
 ordering, test infrastructure, agentic tooling, jobs and flags and environment variables and
-transaction boundaries. Each is a checkpoint only if it is a judgment for *this* diff; the list is a
-prompt, not a form.
+transaction boundaries, and the one coding decision that departs from something this repository
+already does. Each is a checkpoint only if it is a judgment for *this* diff; the list is a prompt,
+not a form.
 
 **7c. Merge related observations.** A constructor change, the nil default it introduces and the two
 consumers that do not handle nil are one judgment — *is nil safe here?* — not four observations.
@@ -562,6 +589,11 @@ misunderstands it; how uncertain the notes are about it, because the reviewer's 
 most where the page's own evidence is weakest; how far it sits from the obvious reading of the diff,
 since a consequence visible in the hunk needs less help than one three files away; and how important
 the affected unchanged code is.
+
+**A coding-decision checkpoint is ranked last, whatever those four say about it.** Not because it does
+not matter — a class in the wrong place outlives the PR — but because misreading it costs the reviewer
+a conversation and misreading a behavioural one costs them production. The reader meets the
+consequences first and the shape afterwards.
 
 **The order is the order to think about them, and it is not a scale.** No number that reads as
 severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the reading path refer to a
@@ -607,6 +639,23 @@ the foot the reviewer has to decide about is a checkpoint that was mis-filed, pe
 which is why the agenda has room to grow rather than a ceiling that would push one down there. What is
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
 checkpoint is written, never on how many there are.
+
+**The coding decision gets at most one slot, and it takes the last one or none.** Three caps, and the
+middle one is the product:
+
+- **One per page — not one per delta.** This is the one count above that does **not** scale with the
+  number of independent changes: a PR shipping three deltas still asks at most one question about how
+  the code was built. A second is the page becoming a style review, and it will read as thoroughness.
+  The departure that does not get the slot is not written down anywhere — an observation about shape
+  with nowhere to go is noise, and the sampling caveat already says the page is not an audit.
+- **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
+  behavioural agenda already fills the page, there is no slot, and that is the correct outcome rather
+  than a loss. A page that dropped *is nil safe for every consumer?* to ask where a class lives has
+  traded the product for a preference — and a page that reached an eighth checkpoint to fit one in has
+  bought a preference with the reviewer's attention.
+- **Unless the diff is a refactor**, in which case the coding decision may be the only judgment there
+  is, and then it is the page. Say that plainly in *What changed* rather than manufacturing a
+  behavioural checkpoint to sit in front of it.
 
 **7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
 two to four sentences. Then decide whether it also earns a chain, and how many *Look at* entries it
@@ -900,6 +949,11 @@ Everything else about writing holds at every stage:
   already there and **you have not read them** — so a token you name is a token you guessed, and a
   second declaration of a colour is a second canonical home for it. This is the same rule as the one
   below about excerpts, for the same reason: bytes a script generated are bytes you must not retype.
+
+  **And never write a `target` on a link.** Every link that leaves the page already opens in a new
+  tab — that script applies it on load, and it exempts the page's own rail and Checkpoint pointers,
+  which must stay in this tab. An attribute typed at every citation is one missing from a citation
+  nobody checks. `report-format.md` § *Every off-page link opens in a new tab* owns the rule.
 - **One fact, one home.** Before writing a section, ask what it *owns* that no other section owns. If
   the answer is "it re-explains something from earlier", write the reference instead: one sentence
   pointing at where the explanation lives. `report-format.md` § *One canonical home* has the routing

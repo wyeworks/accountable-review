@@ -118,6 +118,17 @@ another two links and three sentences; another a test that pins one branch and l
 Validation steps are real commands against your repository, not invented ceremony, and they appear
 where running one would settle the question rather than gathered into a list of their own.
 
+**Two kinds of judgment share the component.** Most checkpoints are about what the system now does.
+**At most one per page** is about how the change was built — where a class was put, what kind of
+object it is, which existing abstraction it went around, whether it is a second way to do something
+your app already does one way. That one comes last, and it exists only when the page can cite the
+place your codebase already answers the same question: the four value objects in `app/services`, the
+policy class the new guard went around, the line in your own `CLAUDE.md`. With nothing to cite there
+is no departure and no question, which is what keeps it from becoming a style guide — and even with
+something to cite it asks whether the choice was deliberate rather than telling you what it should
+have been. It never displaces a judgment about behaviour; on a five-judgment diff it simply does not
+appear.
+
 ## The code comes to you
 
 Claims about *changed* code are cheap to check — you have the diff open anyway. Claims about
@@ -320,6 +331,11 @@ address a line outside a hunk, so those land in the file at a pinned commit, whi
 page cites code as it was before the change. Without `gh`, or without a PR, the skill falls back to
 the local branch and still links citations as long as the commit is pushed. On an unpushed branch it
 degrades to plain text rather than emitting permalinks that would 404, and says so in the page.
+
+Every citation that leaves the page opens in a new tab. A Review Map is read through, and a link
+followed from the middle of it would otherwise cost the reader their place, the rail's position and
+every excerpt they had opened. The page's own links — the rail, the pointers back to a checkpoint —
+stay in the tab they were clicked from.
 
 One file at a time, GitHub decides not to render a diff — a schema dump marked generated, a
 lockfile, a binary, anything past 400 changed lines — and an anchor into one of those arrives at a

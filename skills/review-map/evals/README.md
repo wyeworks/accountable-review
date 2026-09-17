@@ -445,13 +445,13 @@ harness cannot see" is an argument, not a measurement.
 prompt verbatim, and the check that follows:
 
 ```sh
-bin/evals page                                  # the six cases: id, fixture, level
+bin/evals page                                  # the six cases: id and fixture
 bin/evals page 1                                # the recipe for one of them
 bin/evals page-check 1 /path/to/page.html       # its check, --expect and --forbid filled in
 ```
 
-It is addressed by **case id, not fixture**, because six cases share four fixtures and two fixtures
-carry two cases each at different levels. It builds the fixtures only when the one it needs is
+It is addressed by **case id, not fixture**, because six cases share five fixtures: `monorepo-contract`
+carries two, which ask different questions of the same diff. It builds the fixtures only when the one it needs is
 missing (`--rebuild` forces it): `make-fixtures.sh` opens with an unconditional `rm -rf` of the whole
 destination, and a second `evals page` in another terminal would otherwise delete the repository your
 live session is sitting in. `page-check` refuses to parse prose — case 3 has no mechanical check and
@@ -798,6 +798,16 @@ They are the ground truth the expectations check against:
 | `monorepo-contract` | 7 files across `api/` and `web/`, **remote configured but nothing pushed** (link rung 3) | the wire key is `archived_at` and the type declares `archivedAt`, with no case transform anywhere, so the field is `undefined` for every project; the serializer also emits `null` against a non-null type; the archive endpoint can 422 and no client handles it; `web/src/queries/selectableProjects.ts` filters the list; `archive!` calls an association the model never declares |
 | `trivial` | 1 file, a README typo | nothing — the right output is a refusal to generate ceremony |
 | `monolith-guard-chain` | 7 files, server-rendered monolith, no client package, **GitHub remote, nothing pushed** (link rung 3) | the two sibling guards in the *changed* `application_controller.rb` still key on `steward?`, forty lines below the changed hunk; `steward/base_controller.rb` is the admission test the fix was aligned to, and its own profile guard is now unreachable; `matching/eligibility_filter.rb` rejects on `steward?` twice and `User.recommendable` does it again in SQL for four jobs, while `general_recommendations_eligible` excludes the free plan this same diff grants — so the two scopes disagree; `switch_to_free!`'s comment names a controller guard the new caller is not behind, and the protection survives only because `has_paid_subscription?` requires `plan_active?`; `chapters_controller.rb` skips the plan guard but not the profile-setup guard, and `chapters` is absent from `profile_setup_not_required?`, so the new redirect target bounces on the users `generate_steward_invite!` selects for; `load_management` reads approved memberships and acceptance creates none; `test/test_helper.rb` completes every test user's profile, so a green suite cannot observe any of it |
+| `rails-house-style` | 7 files, Rails-only, Minitest, **no remote** (link rung 4) | the new `in_dunning` status has two unchanged readers that disagree with it in opposite directions — `app/jobs/invoice_reminder_job.rb` matches the literal `"overdue"` and silently stops chasing anyone in dunning, `app/services/refund_policy.rb` has an exhaustive `case` whose `else` raises; `InvoicesController#dunning` is the only one of four actions without `authorize_invoice!`; and the house answer itself, which is a fact about two directories rather than about any file — `app/models` holds two records and the one non-record this diff adds, while `app/services` holds four classes of exactly that kind |
+
+**`rails-house-style` is the only fixture that plants something the page must *not* say**, and that is
+why it exists rather than being folded into `rails-only-small`. `app/services/dunning_scheduler.rb` is
+the same kind of object as `app/models/dunning_stage.rb`, added in the same diff, sitting where its four
+siblings sit — so there is nothing to cite against it and no question to ask. A fixture that only rewards
+the coding-decision question cannot show the lens turning into style policing, which is the failure this
+feature arrives with. Note also what it deliberately does **not** plant: no uniqueness-without-an-index
+and no query object outside the diff. `rails-only-small` owns both, and two fixtures failing together on
+one step-5 regression would read as two independent signals.
 
 ### Two page runs against `monolith-guard-chain`, and how not to score them
 
