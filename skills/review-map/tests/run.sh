@@ -362,6 +362,10 @@ mkdir -p "$REPO/app" "$REPO/db" "$REPO/assets"
   printf 'db/structure.sql linguist-generated=true\nassets/*.min.js -diff\n' > .gitattributes
   echo one > app/order.rb
   seq 1 100 > app/big.rb
+  # 700 lines that will be edited every 14th, far enough apart that no two hunks merge.
+  seq 1 700 > app/scattered.rb
+  # One contiguous block, sized so its rendered diff lands one line under the threshold.
+  seq 1 500 > app/boundary.rb
   seq 1 30000 > db/structure.sql
   echo 'v=1' > assets/app.min.js
   printf '\000\001\000' > app/logo.png
@@ -373,6 +377,13 @@ mkdir -p "$REPO/app" "$REPO/db" "$REPO/assets"
   # the hard cap, a binary, a -diff path, a one-line lockfile edit, and one ordinary small file.
   echo two >> app/order.rb
   seq 1 700 > app/big.rb
+  # 50 isolated one-line edits: 100 changed lines, but 50 hunks each costing a header and six
+  # context lines, so the diff GitHub renders is ~450 lines. add+del would call this renderable.
+  awk 'NR % 14 == 7 { print "scattered"; next } { print }' app/scattered.rb > app/scattered.new
+  mv app/scattered.new app/scattered.rb
+  # 196 lines replaced in one hunk: 1 header + 3 context + 196 + 196 + 3 context = 399 rendered.
+  awk 'NR >= 100 && NR < 296 { print "boundary"; next } { print }' app/boundary.rb > app/boundary.new
+  mv app/boundary.new app/boundary.rb
   seq 1 60000 > db/structure.sql
   echo 'v=2' > assets/app.min.js
   printf '\000\002\000' > app/logo.png
@@ -386,6 +397,17 @@ verdict() { (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD) | awk -v p="$1" '$3 == p
 
 assert_eq "$(verdict app/order.rb)"      "render/-"                "an ordinary small change renders, so its citation keeps the diff anchor"
 assert_eq "$(verdict app/big.rb)"        "collapse/over-autoload"  "a diff past 400 lines is behind Load diff, whatever the file is"
+# The row the changed-line measure could not see. Its add+del is 100; the diff GitHub renders is
+# ~450 lines, because context and hunk headers are most of a scattered diff. Measured on real
+# pull requests 2026-09-17: discourse#43002 reports.gjs collapsed at 342 changed / 414 rendered,
+# while discourse#43772 core_primitives.rb rendered at 349 changed / 394 — 349 rendering while
+# 342 collapses is what rules out counting the changed lines.
+assert_eq "$(verdict app/scattered.rb)"  "collapse/over-autoload"  "context pushes a diff past 400 rendered lines though its changed lines are far fewer"
+# And the other side of the same boundary, because counting more lines can only ever collapse
+# more files: a diff of 399 rendered lines must still get its anchor. Without this row the fix
+# above could be widened into over-collapsing and nothing would notice — and the anchor is what
+# the reviewer wants when it works, which is why the verdict leans towards it.
+assert_eq "$(verdict app/boundary.rb)"   "render/-"                "a diff one line under the threshold keeps its anchor"
 assert_eq "$(verdict db/structure.sql)"  "collapse/generated"      "linguist-generated collapses on one changed line, where no size rule would fire"
 assert_eq "$(verdict assets/app.min.js)" "collapse/no-diff"        "a -diff path is reported as an attribute, not as a coincidence of its bytes"
 assert_eq "$(verdict app/logo.png)"      "collapse/binary"         "a binary file has no line to anchor to"
@@ -418,7 +440,7 @@ assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/untouched.rb
   "render/not-in-diff" "a path the diff never touched is not reported as collapsed"
 
 collapsed=$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^collapse' || true)
-assert_eq "$collapsed" "5" "--collapsed-only lists every collapsed path and no renderable one"
+assert_eq "$collapsed" "6" "--collapsed-only lists every collapsed path and no renderable one"
 assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^render' || true)" \
   "0" "--collapsed-only emits no render rows"
 

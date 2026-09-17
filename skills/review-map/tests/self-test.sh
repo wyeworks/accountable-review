@@ -319,7 +319,7 @@ case_runs_red "the primer is assembled below the Look at list it is meant to pre
 
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
-# All three are script mutations for the reason the first two cases above are: the repository
+# All of them are script mutations for the reason the first two cases above are: the repository
 # these rows run against is built by run.sh, so there is no fixture to break — and each of them
 # leaves a page that looks completely correct, with an anchor that arrives at a "Load diff" stub
 # and a reader who cannot tell.
@@ -346,6 +346,15 @@ case_render_red "a path outside the diff is reported as collapsed" "$WORK/unchan
 awk '/^for ref in "\$BASE" "\$HEAD_REF"; do$/ { skip = 3 } skip { skip--; next } { print }' \
   "$DIFF_RENDER" > "$WORK/no-ref-guard.sh"
 case_render_red "the ref guard is gone, so an unresolvable base reads as a diff with nothing withheld" "$WORK/no-ref-guard.sh"
+
+# 12. The measurement this script shipped with for a year: counting the changed lines instead of
+#     the diff GitHub renders. It is the mutation that looks most like the real thing — add+del
+#     is the obvious reading of "400 lines", it agrees with the correct measure on every file
+#     whose changes are contiguous, and it disagrees exactly where the context is: a scattered
+#     diff. Only the scattered row may go red here; big.rb is over by either measure, which is
+#     what makes this a test of the quantity rather than of the threshold.
+sed 's|^    _lines=$(printf .*|    _lines=$((_add + _del))|' "$DIFF_RENDER" > "$WORK/changed-lines-only.sh"
+case_render_red "the changed lines are counted instead of the diff GitHub renders" "$WORK/changed-lines-only.sh"
 
 echo ""
 echo "self-test: $ok ok, $bad bad"

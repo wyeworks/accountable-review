@@ -40,6 +40,12 @@
 # of one path, so they are reported in the trailing summary instead of turned into per-path
 # verdicts nobody could act on.
 #
+# "LINES" MEANS THE RENDERED DIFF — context lines and hunk headers included, not the changed
+# lines alone. GitHub's wording does not say which, the two differ by ~6 lines per hunk, and the
+# difference decides real files: this script read the changed lines for its first year and
+# published a diff anchor into a withheld file because of it. classify() carries the pair of
+# observations that settled which quantity it is.
+#
 # Output is one line per path, tab-separated, plus comment lines a run can read or ignore:
 #
 #   collapse<TAB>generated<TAB>db/structure.sql
@@ -149,8 +155,23 @@ classify() {
     return
   fi
 
-  _lines=$((_add + _del))
-  _bytes=$(git diff "$BASE...$HEAD_REF" -- "$_path" | wc -c | tr -d ' ')
+  # GitHub's 400 counts the RENDERED diff — context lines and hunk headers included — not the
+  # changed lines alone. numstat's add+del undercounts by the context, ~6 lines per hunk, and a
+  # scattered diff undercounts by multiples. Verified 2026-09-17: discourse#43002 reports.gjs is
+  # 342 changed / 414 patch lines and sits behind Load diff, while discourse#43772
+  # core_primitives.rb is 349 changed / 394 patch lines and renders — 349 rendering while 342
+  # collapses is what rules out the changed-line reading. The bytes were always measured this
+  # way; the lines were not, and one function disagreeing with itself about what "the diff" is
+  # was the whole defect. Counted from the first @@ so the diff/index/---/+++ header does not
+  # inflate it, which is also what GitHub's own patch field holds.
+  _diff=$(git diff "$BASE...$HEAD_REF" -- "$_path" | sed -n '/^@@/,$p')
+  if [ -z "$_diff" ]; then
+    _lines=0
+    _bytes=0
+  else
+    _lines=$(printf '%s\n' "$_diff" | wc -l | tr -d ' ')
+    _bytes=$(printf '%s\n' "$_diff" | wc -c | tr -d ' ')
+  fi
 
   if [ "$_lines" -gt "$HARD_LINES" ] || [ "$_bytes" -gt "$HARD_BYTES" ]; then
     printf 'collapse\tover-hard-cap\t%s\n' "$_path"
