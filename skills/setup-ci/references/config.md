@@ -7,6 +7,8 @@ review_map:
   mode: brief            # brief | light
   effort: high           # high | low
   mentor: rails          # true | false | rails | elixir | phoenix
+  trivial_files: 2       # skip when application files <= this AND
+  trivial_lines: 20      #   application lines <= this; either at 0 disables it
 
   delivery:
     provider: github-artifact
@@ -23,6 +25,8 @@ That is the whole schema. Every key is optional; a file may set one of them.
 | `review_map.mode` | `brief` | Vestigial, and kept so an existing file keeps working. The Review Map has one shape, so `brief` and `light` mean the same page and neither reaches the run. `full` and `review` are rejected rather than silently downgraded — `full` used to mean a seven-section page, and handing back the agenda under that name is a setting that changed meaning without saying so |
 | `review_map.effort` | `high` | How hard the run works to be right. `high` sends an adversarial pass at the run's own analysis before the page is written, and changes nothing about the page's shape; `low` skips it. `normal` is accepted as the old name for `low` |
 | `review_map.mentor` | `false` | The one key that changes what is **on** the page, for a team onboarding reviewers into the stack: a framework primer inside the checkpoints that earn one, and nothing else. Everything else about the page is what a run without it writes, so a mentor page with its primers deleted is the ordinary page. A stack name is a claim the run **checks** against the repository rather than an override — the run stops if they disagree — and while a stack's documentation catalogue is closed the flag produces no primers at all and says so in the log |
+| `review_map.trivial_files` | `2` | With `trivial_lines`, the size below which a pull request gets no Review Map. Both are compared with **and**, so a change that is large by either measurement earns one: 900 lines in one file, or 9 lines across six. Counted over **application paths only** — a lockfile's five thousand lines are not in the total. `0` here or on `trivial_lines` switches the rule off, since nothing containing application code has zero of either |
+| `review_map.trivial_lines` | `20` | The line half of the same rule, added plus deleted. The numbers are a first calibration rather than a measurement, and the trade is stated in `workflow.md` § *The application-code gate*: what a change *reaches* predicts a map's value better than its size does, so a small edit with wide consequences is what this discards first. Lower it, or set it to 0, if a team finds it has lost one it wanted |
 | `review_map.delivery.provider` | `github-artifact` | Where the finished map goes. See `delivery.md` |
 | `review_map.delivery.retention_days` | `30` | How long the artifact is kept, 1–90. GitHub's own repository setting still caps it |
 | `review_map.delivery.command` | — | The command the `command` provider runs. Meaningless for any other provider |
@@ -61,16 +65,23 @@ out of the checkout when they run, which has two consequences worth knowing:
 
 ## What does not belong here: when a Review Map is generated
 
-The triggers, the draft and fork guards, the bot authors and the size gate are **not** config keys and
-must not become them. They are the workflow's `on:` and `if:` — there is nothing for a run-time read
-to change, because by the time anything reads this file GitHub has already decided whether to create
-the job.
+The triggers, the draft and fork guards and the bot authors are **not** config keys and must not
+become them. They are the workflow's `on:` and `if:` — there is nothing for a run-time read to
+change, because by the time anything reads this file GitHub has already decided whether to create the
+job. They are edited in the workflow or re-confirmed by re-running setup, and `install-workflow.sh`
+recovers them rather than reverting them, so a re-run is cheap. See `workflow.md` §§ *Triggers* and
+*The line that records the decisions*.
 
-The request arrives as "can we tune the thresholds without re-running setup", and it is reasonable;
-the answer is that those live in the workflow, where they are visible beside the reasoning for them,
-and that they are edited there or re-confirmed by re-running setup. `install-workflow.sh` recovers
-them from the file rather than reverting them, so a re-run is cheap. See
-`workflow.md` §§ *Triggers* and *The line that records the decisions*.
+**`trivial_files` and `trivial_lines` are the exception, and the line between them is worth stating
+because it is not where it looks.** They decide the same thing the guard decides — whether a model
+run happens — so the instinct is that they belong beside it. They do not, because what they count is
+application paths, and `changed_files`, `additions` and `deletions` in the event payload are the
+whole diff with no file list attached. A threshold written into the `if:` could only measure the
+wrong thing. So the decision is made after the checkout, by `ci/application-code.sh`, reading the
+real diff — and once it is made there it is an ordinary run-time read like every other key here.
+
+That is also why the earlier answer to "can we tune the thresholds without re-running setup" has
+changed to yes. `workflow.md` § *The application-code gate* owns the rule.
 
 ## An unknown key is an error
 

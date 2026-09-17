@@ -93,13 +93,16 @@ break_and_run "a page that still says it is being written is delivered anyway" \
 # what made them survive review. A suite that does not fail on them is a suite
 # that would have let them through again.
 
+# The plausible edit is now someone putting a size condition back on the job,
+# where it cannot count the right thing anyway — and writing it with a `+`.
 break_and_run "the guard expression adds two counts together" \
   skills/setup-ci/templates/workflow.yml \
-  's#additions > {{MIN_LINES}}#additions + github.event.pull_request.deletions > {{MIN_LINES}}#'
+  's#^      && github.event.pull_request.head.repo.full_name#      \&\& github.event.pull_request.additions + github.event.pull_request.deletions > 50\
+      \&\& github.event.pull_request.head.repo.full_name#'
 
-break_and_run "one line of the folded guard is indented to align a parenthesis" \
+break_and_run "one line of the folded guard is indented to align it" \
   skills/setup-ci/templates/workflow.yml \
-  's#^      || github.event.pull_request.deletions#       || github.event.pull_request.deletions#'
+  's#^      && github.event.pull_request.head.repo.full_name#       \&\& github.event.pull_request.head.repo.full_name#'
 
 # The decisions someone confirms at setup have to be both real and durable. A
 # knob that renders the same bytes whichever way it is set makes the confirmation
@@ -112,8 +115,13 @@ break_and_run "the template's conditional blocks are flattened, so every default
 break_and_run "--regenerate-on-push is accepted and changes nothing" \
   skills/setup-ci/scripts/render-workflow.sh 's/--regenerate-on-push)    PUSH=1;/--regenerate-on-push)    PUSH=0;/'
 
-break_and_run "--no-size-gate is accepted and changes nothing" \
-  skills/setup-ci/scripts/render-workflow.sh 's/--no-size-gate)         SIZE_GATE=0;/--no-size-gate)         SIZE_GATE=1;/'
+# The 0.28.0 size flags have to stay inert AND stay accepted: a workflow written
+# then carries them in its `# Decisions:` line, and install-workflow.sh feeds that
+# back on the next upgrade. Rejecting them turns "move the version pin" into a
+# hard failure on every repository that set a threshold.
+break_and_run "the superseded size flags are rejected rather than ignored" \
+  skills/setup-ci/scripts/render-workflow.sh \
+  's|^    --min-files\|--min-lines).*$|    --min-files\|--min-lines) echo bad >\&2; exit 2 ;;|'
 
 break_and_run "the workflow no longer records the decisions it was rendered with" \
   skills/setup-ci/templates/workflow.yml '/^# Decisions: /d'
@@ -122,8 +130,9 @@ break_and_run "a re-run stops recovering the decisions already in the file" \
   skills/setup-ci/scripts/install-workflow.sh \
   's/^if \[ "\$RECOVER" = 1 \] \&\& \[ -f "\$TARGET" \]; then$/if false; then/'
 
-break_and_run "a threshold that is not a whole number is substituted anyway" \
-  skills/setup-ci/scripts/render-workflow.sh 's/^    \*\[!0-9\]\*|.*$/    NOTHINGMATCHESTHIS)/'
+break_and_run "a threshold that is not a whole number is accepted by the config parser" \
+  skills/setup-ci/scripts/read-config.sh \
+  's|if (val !~ /\^\[0-9\]+\$/) fail("`" key "` must be a whole number, got `" val "`")||'
 
 # The comment is the only thing this job does to someone's repository, and the
 # only reason it holds a write token. Three ways that goes wrong, all of which
@@ -162,6 +171,63 @@ break_and_run "mentor defaults to on, so every CI page teaches the framework" \
 # `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
 break_and_run "the optional stack name swallows whatever flag follows --mentor" \
   ci/generate-review-map.sh 's|case ${2:-} in rails\|elixir\|phoenix) MENTOR=$2; shift ;; esac|case ${2:-} in ?*) MENTOR=$2; shift ;; esac|'
+
+# The application-code gate. Two rules, and the cases below break each of them in
+# the way a plausible edit would — every one of these arrives looking like a
+# tidy-up or a generosity.
+
+# Fail open is the whole safety property of rule 1: a path nobody anticipated is
+# application code, so an unusual layout costs a map that was not needed rather
+# than losing one that was. Closing it turns every unrecognised path into a
+# reason to publish nothing.
+break_and_run "the gate treats an unrecognised path as not being application code" \
+  ci/application-code.sh 's|^      printf .code.*|      printf "skip\\tunknown\\t%s\\t%s\\n" "$_path" "$_lines" ;;|'
+
+# diff-render.sh also collapses a file for being BIG. Reading those reasons here
+# would discard the large hand-written change a reviewer most needs the map for,
+# by calling it generated.
+break_and_run "a big application file counts as generated" \
+  ci/application-code.sh 's/\$2 == "lockfile"/$2 == "lockfile" || $2 == "over-autoload"/'
+
+# ASKED AND UNABLE TO ANSWER IS NOT AN EMPTY DIFF. Every failure mode of the gate
+# ends in zero application paths, and zero is the skip verdict — so a base that
+# is not in the checkout, downgraded from fatal to a skip, silently suppresses
+# the Review Map for every pull request in the repository.
+break_and_run "an unresolvable base is reported as a skip rather than an error" \
+  ci/application-code.sh 's/^    exit 4$/    exit 3/'
+
+# RULE 2, AND THE ONE THAT MATTERS MOST. A skip needs BOTH measurements small.
+# Joined by OR it discards a change that is large by either — 900 lines in one
+# file, or nine lines across six — and both of those are changes worth a map.
+# This is the edit someone makes while "simplifying a condition".
+break_and_run "the trivial skip joins its two thresholds with OR instead of AND" \
+  ci/application-code.sh 's/\[ "\$application" -le "\$TRIVIAL_FILES" \] \&\& \[ "\$lines" -le "\$TRIVIAL_LINES" \]/[ "$application" -le "$TRIVIAL_FILES" ] || [ "$lines" -le "$TRIVIAL_LINES" ]/'
+
+# The counts are over APPLICATION paths only, which is what makes them mean
+# anything: summing the whole diff lets one lockfile call every pull request
+# substantial, and the trivial rule then never fires.
+break_and_run "the line count sums the whole diff rather than the application paths" \
+  ci/application-code.sh "s|\\\$1 == \"code\" { n += \\\$4 }|{ n += \$4 }|"
+
+# A threshold nobody can change without regenerating the workflow is a threshold
+# a team is stuck with. The config file is the only place these live.
+break_and_run "the gate ignores the thresholds in .accountable-review.yml" \
+  ci/application-code.sh 's|^\[ -n "\$TRIVIAL_LINES" \] .*|TRIVIAL_LINES=$TRIVIAL_LINES_DEFAULT|'
+
+break_and_run "generation is no longer guarded by the gate" \
+  skills/setup-ci/templates/workflow.yml "/if: steps.scope.outputs.verdict == .generate./d"
+
+# A skipped run and a broken one look identical from outside. The step that
+# explains the skip is what makes the difference visible.
+break_and_run "a skipped run says nothing about why there is no Review Map" \
+  skills/setup-ci/templates/workflow.yml "s/verdict == 'skip'/verdict == 'never'/"
+
+# And the threshold written where it cannot mean the right thing: the job's own
+# condition, from an event payload whose counts are over the whole diff.
+break_and_run "a whole-diff file count on the job condition decides whether a map is generated" \
+  skills/setup-ci/templates/workflow.yml \
+  's|^      && github.event.pull_request.head.repo.full_name|      \&\& github.event.pull_request.changed_files > 3\
+      \&\& github.event.pull_request.head.repo.full_name|'
 
 echo
 echo "self-test: $ok ok, $bad bad"

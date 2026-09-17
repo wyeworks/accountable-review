@@ -16,6 +16,8 @@
 #     mode: brief            # brief | light  (accepted, and decides nothing)
 #     effort: high           # high | low  (`normal` accepted, means `low`)
 #     mentor: rails          # true | false | rails | elixir | phoenix  (default false)
+#     trivial_files: 2       # skip when application files <= this AND
+#     trivial_lines: 20      #   application lines <= this; either at 0 disables it
 #     delivery:
 #       provider: github-artifact
 #       retention_days: 30
@@ -117,6 +119,14 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "true" && val != "false" && val != "rails" && val != "elixir" && val != "phoenix") \
         fail("mentor must be true, false, or one of rails, elixir, phoenix, got `" val "`")
       emit("mentor", val)
+    } else if (key == "trivial_files" || key == "trivial_lines") {
+      # The size half of the CI scope gate: a pull request whose application
+      # code is small by BOTH measurements gets no Review Map. Whole numbers
+      # only, and either at 0 switches the threshold off — nothing with
+      # application code in it has zero application files or lines — which is
+      # how a team opts out without a third key to spell it.
+      if (val !~ /^[0-9]+$/) fail("`" key "` must be a whole number, got `" val "`")
+      emit(key, val)
     } else fail("unknown key `" key "` under `review_map:`")
   }
 ' "$FILE"

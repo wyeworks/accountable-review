@@ -180,6 +180,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically and resolves the `SETUP:` blocks, `install-workflow.sh` writes idempotently, refuses to clobber, and recovers the when-decisions from the file it is about to replace, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
 | `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page — and refuses `mode: full` rather than remapping it |
+| `ci/application-code.sh` | The scope gate, in two rules: does this diff change application code at all, and is what it changes more than trivial? Both counted over application paths only, the trivial thresholds joined by **and**, and it fails open, so an unrecognised path is code |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
 | `README.md` | The public face — why comprehension debt is the problem, what a Review Map is, install, usage, CI setup, and the technical overview. Written for someone deciding whether to use this, so depth past that decision belongs in `docs/` |
 | `docs/review-map.md` | The page anatomy for a reader who already wants it: the five sections, the checkpoint, staging, excerpts, the framework anchors, the evidence tiers, and what the skill assumes about a repository. It **restates** `report-format.md` for the public and owns nothing — where the two disagree, the reference wins and this file is the one that is wrong |
@@ -942,6 +943,42 @@ Same rule as above: editing one of these means checking the others still agree.
   standard upload step does the transfer. That split is fine — generation still cannot tell which
   happened — but it is why the provider emits `artifact_name` and `retention_days` as extra keys, and
   why extras are carried through to `$GITHUB_OUTPUT` at all.
+- **Two rules decide whether CI generates a Review Map, and both are measured over application
+  paths only.** `ci/application-code.sh`, called from a `scope` step every later step is guarded on.
+  Rule 1: does the diff change application code at all — tests, documentation, tooling and
+  `diff-render.sh`'s `generated`/`binary`/`lockfile` verdicts do not count. Rule 2: is it more than
+  trivial — skipped when application files ≤ `trivial_files` **and** application lines ≤
+  `trivial_lines`, defaults 2 and 20, read from `.accountable-review.yml` at run time.
+
+  **AND, and the polarity is what will get edited.** A skip needs both small, so 900 lines in one
+  file generates and so do 9 lines across six. From the generating side that reads as an OR, which
+  invites a "simplification" that would discard a change large by either measurement. The asymmetry
+  is the reason: a needless map costs a model run somebody ignores, a missing one is invisible, so
+  the suppressing predicate is the one that should be hard to satisfy. `self-test.sh` breaks the
+  `&&` into `||`; `run.sh`'s `bulky` and `spread` catch it.
+
+  **Application paths only is what makes the counts mean anything**, and it is why this cannot be a
+  job `if:`. The `pull_request` payload's counts are whole-diff, so a three-line model change beside
+  a five-thousand-line lockfile reads as enormous and rule 2 would never fire; the payload has no
+  file list either, so rule 1 could not live there. `run.sh`'s `masked` pins it, and the negative
+  assertions forbid both the payload fields and the flag names in the rendered YAML.
+
+  **The thresholds are configuration, not design.** Unlike the triggers and the guards these are
+  numbers a team owns, so none is rendered into the workflow and changing one never means
+  regenerating it. Either at `0` disables rule 2, because nothing containing application code has
+  zero application files or lines — the opt-out, needing no third key.
+
+  **A skip says which rule fired and the counts behind it** — the recorded-searches rule applied to
+  CI, and what makes a wrong skip reportable rather than invisible. It has to be, because rule 2
+  discards the small wide-reaching edit first; § *The application-code gate* argues that trade and
+  owns the numbers.
+
+  Seven files agree: `ci/application-code.sh` holds both rules, `read-config.sh` and
+  `references/config.md` the two keys, `templates/workflow.yml` the `scope` step and the guards,
+  `references/workflow.md` § *The application-code gate* owns the reasoning **alone** including
+  fail-open and the default's trade, `SKILL.md`'s hard rules forbid counting anything but
+  application code and baking a number into the YAML, `tests/run.sh` covers both rules either side
+  of each threshold, `tests/self-test.sh` breaks them nine ways, and `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
   gate. `SKILL.md` step 1 owns the flag, step 9 says the stages become save points rather than
@@ -971,15 +1008,21 @@ Same rule as above: editing one of these means checking the others still agree.
   than by grepping YAML.
 
   What is rendered from flags is the decisions about **when a Review Map is generated** — the push
-  trigger, the bot authors, the size gate and its two numbers — plus **whether the link is commented
-  on the pull request**. None can be run-time settings: the first four *are* the triggers and the
-  guard, and the fifth decides what permission the job holds. The test any future knob has to pass is
-  that it decides whether a run happens or what the job may do. `SKILL.md` step 3 confirms them in
+  trigger and the bot authors — plus **whether the link is commented on the pull request**. None can
+  be run-time settings: the first two *are* the triggers and the guard, and the third decides what
+  permission the job holds.
+
+  **The test is whether the decision can be made *before* the job exists**, not whether it decides
+  that a run happens. How big a change has to be decides exactly that and is still run-time
+  configuration, because what it counts is application paths and the payload is whole-diff: 0.28.0
+  put it on the `if:`, where it could only measure the wrong thing. § *The application-code gate*
+  owns where it went and what happened to its four flags. `SKILL.md` step 3 confirms them in
   one block before writing, and § *What it configures* splits its table along that line.
 
   **The defaults are the answers a real team reached by hand**, in two pull requests against a
   generated workflow (fayron#633 and #634): `opened` in, `synchronize` out so a pull request gets one
-  map, dependabot skipped, and a change under 3 files and 51 lines skipped. A team editing the
+  map, dependabot skipped, and small changes skipped — that last one now measured over application
+  code by the gate above rather than over the whole diff here. A team editing the
   generated file to reach the same place, and then living with a permanent drift report, is the
   evidence that these were defaults rather than preferences.
 

@@ -97,9 +97,14 @@ assert_not_in "$W_CODE" "pull_request_target"               "never pull_request_
 assert_in "$W" "github.event.pull_request.draft == false"                          "draft pull requests are skipped"
 assert_in "$W" "github.event.pull_request.head.repo.full_name == github.repository" "fork pull requests are skipped"
 assert_in "$W" "github.event.pull_request.user.login != 'dependabot[bot]'"          "a bot's pull requests are skipped"
-assert_in "$W" "github.event.pull_request.changed_files > 2"                       "the size gate has a file threshold"
-assert_in "$W" "github.event.pull_request.additions > 50"                          "the size gate counts additions"
-assert_in "$W" "github.event.pull_request.deletions > 50"                          "the size gate counts deletions separately"
+# How big a change has to be is decided after the checkout, by a script reading
+# the real diff — not here. These three fields count the WHOLE diff and come with
+# no file list, so a threshold written against them can only ever measure the
+# wrong thing: a three-line model change beside a five-thousand-line lockfile
+# reads as enormous. Their absence is the assertion.
+assert_not_in "$W_CODE" "changed_files"                     "the job condition counts no files"
+assert_not_in "$W_CODE" "pull_request.additions"            "nor added lines"
+assert_not_in "$W_CODE" "pull_request.deletions"            "nor deleted ones"
 
 # The two ways to write an `if:` GitHub rejects outright — no job created, and an
 # error naming neither the line nor the reason. Both shipped once.
@@ -137,6 +142,20 @@ assert_in "$W" "fetch-depth: 0"                        "the checkout has the his
 assert_in "$W" "ref: \${{ github.event.pull_request.head.sha }}" "it checks out the pull request head, not a merge commit"
 assert_in "$W" "persist-credentials: false"            "no git credentials are left beside the checkout"
 
+assert_in "$W" "ci/application-code.sh"                "the run is scoped by the application-code gate"
+assert_in "$W" "id: scope"                             "the scope check is a step later steps can read"
+assert_in "$W" "if: steps.scope.outputs.verdict == 'generate'" "generation is guarded by the scope check"
+assert_in "$W" "steps.scope.outputs.verdict == 'skip'" "a skipped run says why, rather than just not happening"
+# The size thresholds are real, and they are NOT here. Two reasons, and both
+# would be undone by the same edit. The payload's counts are over the whole diff,
+# and what decides this is application paths only — a three-line model change
+# beside a five-thousand-line lockfile is a three-line change. And a number in
+# the rendered workflow is a number a team can only change by regenerating the
+# file, which is what .accountable-review.yml exists to avoid.
+assert_not_in "$W_CODE" "changed_files"                     "the job condition counts no files — the payload counts the whole diff"
+assert_not_in "$W_CODE" "pull_request.additions"            "and no lines, for the same reason"
+assert_not_in "$W_CODE" "trivial-files"                     "no threshold is baked into the rendered workflow"
+assert_not_in "$W_CODE" "trivial-lines"                     "nor the line one — both are read from the config at run time"
 assert_in "$W" "ci/generate-review-map.sh"             "there is a Review Map generation step"
 assert_in "$W" "ci/delivery/deliver.sh"                "delivery is resolved through the provider seam"
 assert_in "$W" "uses: actions/upload-artifact@v4"      "the map is uploaded as an artifact"
@@ -198,12 +217,26 @@ assert_in "$TMP/w-push.yml" "Review Map, regenerated"  "and the file explains th
 assert_not_in "$TMP/w-push.yml" "is NOT regenerated"   "without the one-map-per-PR trade beside it"
 assert_in "$W" "is NOT regenerated"                    "the default file explains that it does not regenerate"
 
-"$RENDER" --no-size-gate > "$TMP/w-nosize.yml"
-assert_not_in "$TMP/w-nosize.yml" "changed_files"      "--no-size-gate drops the size clause"
+# The 0.28.0 size flags are taken and ignored: a workflow generated then carries
+# them in its `# Decisions:` line, and install-workflow.sh feeds that line back on
+# the next upgrade. An unknown-argument exit there would turn "move the version
+# pin" into a hard failure on every repository that set a threshold.
+"$RENDER" --no-size-gate > "$TMP/w-nosize.yml" 2>/dev/null
+# Comment-stripped, like every other negative assertion here: the template
+# explains in a comment why the payload's counts are the wrong measurement, and a
+# test that could not tell an explanation from a clause would forbid it.
+grep -v '^[[:space:]]*#' "$TMP/w-nosize.yml" > "$TMP/w-nosize.code.yml"
+assert_not_in "$TMP/w-nosize.code.yml" "changed_files" "--no-size-gate is accepted and renders no clause"
+"$RENDER" --min-files 7 --min-lines 300 > "$TMP/w-legacy.yml" 2>/dev/null
+if cmp -s "$TMP/w-legacy.yml" "$W"; then
+  ok "the old thresholds render the same bytes as no thresholds at all"
+else
+  bad "the old thresholds render the same bytes as no thresholds at all"
+fi
 assert_not_in "$TMP/w-nosize.yml" "a lockfile churn sails" "and drops the comment explaining it"
 assert_in "$TMP/w-nosize.yml" "!= 'dependabot[bot]'"   "leaving the author clause as the last one"
 
-"$RENDER" --no-skip-authors --no-size-gate > "$TMP/w-bare.yml"
+"$RENDER" --no-skip-authors > "$TMP/w-bare.yml"
 assert_not_in "$TMP/w-bare.yml" "user.login"           "--no-skip-authors drops the author clauses"
 assert_in "$TMP/w-bare.yml" "full_name == github.repository" "leaving the fork guard as the last one"
 
@@ -227,20 +260,19 @@ else
   bad "no ruby to parse the combinations with — this check must not silently pass"
 fi
 
-"$RENDER" --min-files 7 --min-lines 300 > "$TMP/w-nums.yml"
-assert_in "$TMP/w-nums.yml" "changed_files > 7"        "the file threshold is what was asked for"
-assert_in "$TMP/w-nums.yml" "additions > 300"          "and so is the line threshold"
-
-rc=0; "$RENDER" --min-files 3.5 >/dev/null 2>&1 || rc=$?
+rc=0; printf 'review_map:\n  trivial_files: 3.5\n' > "$TMP/frac.yml"
+"$READ_CONFIG" "$TMP/frac.yml" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "1"                                    "a threshold that is not a whole number is refused"
 rc=0; "$RENDER" --skip-authors "bad'login" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "1"                                    "an author login carrying a quote is refused"
 
 # The recorded line is what makes the knobs safe to re-run, so it has to say
 # everything rather than only what differs from the defaults.
-assert_in "$W" "# Decisions: --no-regenerate-on-push --skip-authors dependabot[bot] --min-files 2 --min-lines 50 --pr-comment" \
+assert_in "$W" "# Decisions: --no-regenerate-on-push --skip-authors dependabot[bot] --pr-comment" \
   "the file records every decision in the form setup takes them"
-assert_in "$TMP/w-nosize.yml" "--no-size-gate"         "and records the gate being off"
+# How big a change has to be is not one of them: it is not a when-decision, it is
+# a number a team changes in .accountable-review.yml without regenerating this.
+assert_not_in "$W" "--min-files"                       "the recorded decisions carry no size threshold"
 
 echo
 echo "== the comment on the pull request =="
@@ -395,10 +427,10 @@ echo "== a re-run does not revert what someone confirmed =="
 # decision as drift and then revert them all under --update.
 K=$TMP/repo-knobs
 mkdir -p "$K"
-"$INSTALL" --repo-dir "$K" -- --plugin-ref v1 --regenerate-on-push --min-files 9 --min-lines 400 \
+"$INSTALL" --repo-dir "$K" -- --plugin-ref v1 --regenerate-on-push --skip-authors 'renovate[bot]' \
   > "$TMP/k1" 2>&1 || true
 assert_in "$TMP/k1" "status=created"                   "a first run installs the confirmed decisions"
-assert_in "$TMP/k1" "decisions=--regenerate-on-push --skip-authors dependabot[bot] --min-files 9 --min-lines 400 --pr-comment" \
+assert_in "$TMP/k1" "decisions=--regenerate-on-push --skip-authors renovate[bot] --pr-comment" \
   "and reports back what it wrote rather than what it was asked"
 
 "$INSTALL" --repo-dir "$K" -- --plugin-ref v1 > "$TMP/k2" 2>&1 || true
@@ -407,13 +439,14 @@ assert_in "$TMP/k2" "status=unchanged"                 "a re-run passing no deci
 "$INSTALL" --repo-dir "$K" --print-diff -- --plugin-ref v2 > "$TMP/k3" 2>&1 || true
 assert_in "$TMP/k3" "status=drift"                     "upgrading the pin is drift, as any change is"
 assert_not_in "$TMP/k3" "-      - synchronize"         "but the diff does not propose reverting the push trigger"
-assert_not_in "$TMP/k3" "changed_files > 2"            "nor the thresholds someone chose"
+assert_not_in "$TMP/k3" "-      && github.event.pull_request.user.login != 'renovate[bot]'" \
+  "nor the author list someone chose"
 
 "$INSTALL" --repo-dir "$K" --update -- --plugin-ref v2 > "$TMP/k4" 2>&1 || true
 assert_in "$K/.github/workflows/accountable-review.yml" "      - synchronize" \
   "an upgrade keeps the push trigger"
-assert_in "$K/.github/workflows/accountable-review.yml" "changed_files > 9" \
-  "an upgrade keeps the thresholds"
+assert_in "$K/.github/workflows/accountable-review.yml" "user.login != 'renovate[bot]'" \
+  "an upgrade keeps the author list"
 assert_in "$K/.github/workflows/accountable-review.yml" "PLUGIN_REF: v2" \
   "and does move the pin, which is what it was run for"
 
@@ -422,7 +455,7 @@ assert_in "$K/.github/workflows/accountable-review.yml" "PLUGIN_REF: v2" \
 "$INSTALL" --repo-dir "$K" --update -- --plugin-ref v2 --no-regenerate-on-push > "$TMP/k5" 2>&1 || true
 assert_not_in "$K/.github/workflows/accountable-review.yml" "      - synchronize" \
   "an explicit decision overrides the recovered one"
-assert_in "$K/.github/workflows/accountable-review.yml" "changed_files > 9" \
+assert_in "$K/.github/workflows/accountable-review.yml" "user.login != 'renovate[bot]'" \
   "and leaves the decisions it said nothing about alone"
 
 # The comment decision is the one where a silent revert is worst in both
@@ -612,6 +645,124 @@ if [ "$rc" -ne 0 ] && grep -q 'revision' "$TMP/norev.log"; then
 else
   bad "a page that never names its revision is refused"
 fi
+
+echo
+echo "== the application-code gate =="
+
+# Two rules, asked in order: is any of this application code, and is what it
+# changes more than trivial. Both halves are measured over application paths
+# ONLY, which is the thing the whole-diff counts of the pull_request payload
+# cannot do.
+
+A=$PLUGIN_ROOT/ci/application-code.sh
+P=$TMP/gate-repo
+mkdir -p "$P"
+( cd "$P" && git init -q . && git config user.email t@example.com && git config user.name t )
+mkdir -p "$P/app/models" "$P/app/services" "$P/spec/models" "$P/docs" "$P/.github/workflows" "$P/config"
+( cd "$P" && echo base > app/models/order.rb && echo base > app/models/line.rb \
+    && echo base > app/models/cart.rb && echo base > app/services/pricer.rb \
+    && echo base > spec/models/order_spec.rb \
+    && echo base > README.md && echo base > yarn.lock && echo base > config/routes.rb \
+    && git add -A && git commit -qm base )
+GATE_BASE=$(cd "$P" && git rev-parse HEAD)
+
+# gate <branch> <expected verdict> <what> <edits> [extra flags]
+gate() {
+  branch=$1; want=$2; what=$3
+  ( cd "$P" && git checkout -q -B "$branch" "$GATE_BASE" )
+  sh -c "cd '$P' && $4"
+  ( cd "$P" && git add -A && git commit -qm "$branch" )
+  rc=0
+  # shellcheck disable=SC2086
+  ( cd "$P" && "$A" --base "$GATE_BASE" --head HEAD ${5:-} ) > "$TMP/gate-$branch" 2>&1 || rc=$?
+  case $rc in
+    0) got=generate ;;
+    3) got=skip ;;
+    *) got="error($rc)" ;;
+  esac
+  assert_eq "$got" "$want" "$what"
+}
+
+# --- rule 1: is any of it application code at all? --------------------------
+
+gate docs     skip     "a documentation-only pull request gets no Review Map" \
+  'echo x >> README.md && echo x > docs/guide.md'
+gate lock     skip     "a lockfile bump gets none" \
+  'echo x >> yarn.lock'
+gate specs    skip     "a tests-only pull request gets none" \
+  'echo x >> spec/models/order_spec.rb'
+gate tooling  skip     "a CI or linter config change gets none" \
+  'echo x > .github/workflows/tests.yml && echo x > .rubocop.yml'
+assert_in "$TMP/gate-docs" "verdict: skip (no-application-code)" "rule 1 names itself in the log, not only in a step output"
+
+# Fail open: a path this script has never heard of is application code. The
+# exclusion list is narrow on purpose, and this is the assertion that keeps it so.
+# Deliberately 40 lines: rule 2 would skip a small change whatever rule 1 said,
+# so a 3-line fixture here would pass while proving nothing about fail-open.
+gate unknown  generate "an unrecognised path counts as application code" \
+  'mkdir -p odd && seq 1 40 > odd/thing.xyz'
+
+# config/ is where a Rails app keeps its routes. A blanket exclusion by directory
+# name would take it, and take the routing change with it.
+gate routes   generate "config/routes.rb is application code, not configuration" \
+  'seq 1 40 > config/routes.rb'
+
+# --- rule 2: is what it changes more than trivial? --------------------------
+
+gate tiny     skip     "a one-line application change is trivial, and gets none" \
+  'echo x >> app/models/order.rb'
+assert_in "$TMP/gate-tiny" "verdict: skip (trivial)" "rule 2 names itself too"
+assert_in "$TMP/gate-tiny" "trivial threshold" "and prints the numbers it judged against"
+
+gate bulky    generate "a 900-line change in ONE file earns one" \
+  'seq 1 900 > app/models/order.rb'
+gate spread   generate "a 4-line change across FOUR files earns one" \
+  'echo x >> app/models/order.rb && echo x >> app/models/line.rb
+   echo x >> app/models/cart.rb && echo x >> app/services/pricer.rb'
+
+# THE TWO ABOVE ARE THE WHOLE POINT OF THE AND, and each is the case the other
+# polarity gets wrong. A skip predicate joined by OR would discard both: one is
+# under the file threshold, the other under the line threshold. Only requiring
+# BOTH to be small leaves a large change on the generating side whichever way it
+# is large.
+
+gate mixed    generate "one substantial application file among documentation earns one" \
+  'echo x >> README.md && seq 1 40 > app/models/order.rb'
+
+# The counts are over application paths only. This is the case that separates
+# them from the payload's whole-diff numbers: by those, this pull request is five
+# thousand lines and obviously worth a map.
+gate masked   skip     "a one-line model change beside a 5000-line lockfile is still trivial" \
+  'echo x >> app/models/order.rb && seq 1 5000 > yarn.lock'
+assert_in "$TMP/gate-masked" "1 application line" "the lockfile's lines are not counted"
+
+# --- the thresholds are configurable, and 0 turns them off ------------------
+
+gate offcfg   generate "trivial_lines: 0 in the config file generates a map for any application change" \
+  'echo x >> app/models/order.rb
+   printf "review_map:\n  trivial_lines: 0\n" > .accountable-review.yml'
+gate upcfg    skip     "a raised threshold makes a larger change trivial" \
+  'seq 1 40 > app/models/order.rb
+   printf "review_map:\n  trivial_files: 5\n  trivial_lines: 100\n" > .accountable-review.yml'
+gate flagwins generate "an explicit flag beats the config file" \
+  'seq 1 40 > app/models/order.rb
+   printf "review_map:\n  trivial_files: 5\n  trivial_lines: 100\n" > .accountable-review.yml' \
+  '--trivial-lines 10'
+
+rc=0; "$READ_CONFIG" /dev/null >/dev/null 2>&1 || true
+printf 'review_map:\n  trivial_lines: lots\n' > "$TMP/trivial-bad.yml"
+rc=0; "$READ_CONFIG" "$TMP/trivial-bad.yml" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1"                                    "a threshold that is not a number is an error"
+
+assert_in "$TMP/gate-docs" "skip	docs	README.md"  "the gate names each discounted path and why"
+assert_in "$TMP/gate-mixed" "code	-	app/models/order.rb" "and names the application paths it found"
+
+# ASKED AND UNABLE TO ANSWER IS NOT AN EMPTY DIFF. Every failure mode of this
+# script ends in zero application paths, which is the skip verdict — so a base
+# that is not in the checkout has to be fatal rather than reassuring.
+rc=0
+( cd "$P" && "$A" --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904111 --head HEAD ) >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "4"                                    "a base that cannot be resolved is an error, not a skip"
 
 echo
 echo "== inspection =="

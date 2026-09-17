@@ -1,6 +1,6 @@
 ---
 name: setup-ci
-description: Configures a repository so Accountable Review generates a Review Map automatically in CI — a GitHub Actions workflow that runs when a pull request first becomes reviewable, skips drafts, forks, bots and changes too small to have a reading order, cancels superseded runs, uploads the resulting static HTML as a build artifact the whole team can open, and comments the link on the pull request. Use this when someone wants review maps generated automatically rather than by hand, asks to add Accountable Review to CI or to GitHub Actions, wants the review map shared with their team instead of published from one laptop, or asks how to run this on every PR. Invoke with /accountable-review:setup-ci. It inspects the repository before writing anything, confirms when maps will be generated and what the workflow may do, prefers a dedicated workflow, never modifies unrelated CI, and is safe to run twice. Not for generating a review map — that is review-map — and setup itself posts nothing to GitHub.
+description: Configures a repository so Accountable Review generates a Review Map automatically in CI — a GitHub Actions workflow that runs when a pull request first becomes reviewable, skips drafts, forks, bots and changes with too little application code to have a reading order, cancels superseded runs, uploads the resulting static HTML as a build artifact the whole team can open, and comments the link on the pull request. Use this when someone wants review maps generated automatically rather than by hand, asks to add Accountable Review to CI or to GitHub Actions, wants the review map shared with their team instead of published from one laptop, or asks how to run this on every PR. Invoke with /accountable-review:setup-ci. It inspects the repository before writing anything, confirms when maps will be generated and what the workflow may do, prefers a dedicated workflow, never modifies unrelated CI, and is safe to run twice. Not for generating a review map — that is review-map — and setup itself posts nothing to GitHub.
 ---
 
 # Set up CI
@@ -11,7 +11,8 @@ and the whole team can open it."
 The result is one workflow file. When a pull request first becomes reviewable, GitHub Actions
 generates a Review Map for that exact revision, uploads it as a build artifact, and comments the link
 on the pull request so the reviewer finds it where they already are. Drafts cost nothing, and so do
-forks, bots, and changes too small to have a reading order.
+forks and bots, and so does a change with no application code in it or too
+little to have a reading order.
 
 **Everything you write here is a file in the repository the user is working in.** This skill posts
 nothing itself, enables nothing on GitHub, and creates no secret — the one comment in the picture is
@@ -38,8 +39,8 @@ outside that block, or asking again on a re-run that changes nothing.
 
 It exists because those decisions either **spend money on the user's account** or **change what the
 job is permitted to do**, and the wrong ones are invisible. A trigger set that regenerates on every
-push costs a model run per commit. A size gate that skips a pull request produces no run at all —
-nothing appears in the Actions tab, so the team has nothing to notice. And the comment step carries
+push costs a model run per commit. A bot author list that is wrong spends one on every dependency
+bump, or silently skips a contributor whose login looks like a bot's. And the comment step carries
 `pull-requests: write`, which is a scope somebody should agree to rather than find. All of that is
 worth one block, and none of it is worth a question of its own.
 
@@ -123,10 +124,13 @@ one comment, updated in place, naming the revision the map describes.
 That is what `pull-requests: write` is for, and it is the only write the
 job can do: it cannot push, approve, or set a check.
 
-Two things these cost you, both of them quiet:
+One thing this costs you, and it is quiet:
   - the map describes the revision that made the PR reviewable, so on a branch
     that keeps moving it goes stale without saying so
-  - a skipped pull request produces no run at all, so there is nothing to notice
+
+A pull request that changes no application code, or too little of it, gets no
+map — the run still happens and its summary says which rule skipped it and
+what it counted. The thresholds are yours, in .accountable-review.yml.
 
 Use these, or change something?
 ```
@@ -150,8 +154,6 @@ Take their answer as flags rather than as an edit to the file:
 | They say | Pass |
 |---|---|
 | regenerate on every push | `--regenerate-on-push` |
-| map everything, however small | `--no-size-gate` |
-| different thresholds | `--min-files N --min-lines N` |
 | map the bot's pull requests too | `--no-skip-authors` |
 | skip another bot as well | `--skip-authors 'dependabot[bot],renovate[bot]'` |
 | don't comment on the pull request | `--no-pr-comment` — drops the write scope with it |
@@ -207,6 +209,11 @@ review_map:
 defaults is a file the team has to maintain that carries no information, and worse, it reads as
 configuration someone chose. If the user asked for nothing unusual, write nothing, and say that the
 defaults are in effect rather than leaving them wondering where the settings live.
+
+**This is where a size answer lands.** A user who says *map everything, however small* or *don't
+bother under about fifty lines* is asking for `trivial_lines: 0` or `trivial_lines: 50`, not a flag —
+how big a change has to be is run-time configuration, not one of step 3's when-decisions, and
+`references/config.md` says why. Write the key, and only the one they moved.
 
 The config is read **at run time**, by the CI scripts, from the repository — so changing it later
 does not mean regenerating the workflow. That is worth telling the user in step 6.
@@ -271,9 +278,17 @@ Name the other limits in the same breath, briefly, where they apply:
   revision it names is the only way to tell, which is why that is in the masthead. Say this to any
   team whose branches keep moving after review starts, and tell them `--regenerate-on-push` is the
   answer. `references/workflow.md` § *Triggers* has the trade both ways.
-- **A skipped pull request produces no run at all.** Nothing appears in the Actions tab, so "too
-  small for a map" and "the workflow is broken" look identical from the outside. Say the thresholds
-  once, so the first silence is recognisable rather than alarming.
+- **Two kinds of pull request get no Review Map**, and the first time either happens it reads as the
+  setup having quietly broken — so say both. One that changes **no application code**: only
+  documentation, only tests, only a lockfile, only CI config. And one whose application change is
+  **trivial**: 2 files or fewer *and* 20 lines or fewer, both, so a change that is large by either
+  measurement still earns a map. The run stops after the checkout and writes a job summary naming
+  which rule fired and the numbers behind it. Say that the thresholds are theirs —
+  `review_map.trivial_files` and `review_map.trivial_lines` in `.accountable-review.yml`, read at run
+  time, either at `0` to turn the trivial rule off — and that the defaults are a starting point
+  rather than a measurement. `references/workflow.md` § *The application-code gate* has the trade.
+  The run itself is not silent about either: it happens, and its summary names the rule and the
+  counts, so a skip is never mistaken for a broken workflow.
 - **The workflow pins a plugin version**, and setup cannot check that the tag exists — it has no
   network. Review Maps stay attributable to a version of this plugin, and re-running this command
   after an upgrade moves the pin. If you are running from a development checkout rather than an
@@ -298,7 +313,16 @@ ones a flag can change.
 | Draft pull requests | Skipped | — |
 | Fork pull requests | Skipped — no secrets are available to them | — |
 | Bot pull requests | `dependabot[bot]` skipped | `--skip-authors`, `--no-skip-authors` |
-| Small changes | Skipped under 3 files **and** under 51 added **and** 51 deleted lines | `--min-files`, `--min-lines`, `--no-size-gate` |
+
+How big a change has to be is deliberately **not** in that table. It decides the same thing — whether
+a model run happens — but the counts that settle it are over application paths, which the event
+payload cannot express, so it is decided after the checkout and configured in
+`.accountable-review.yml` rather than rendered here:
+
+| | | |
+|---|---|---|
+| No application code changed | Skipped | — |
+| Trivial application change | Skipped at 2 files **and** 20 lines or fewer, both | `review_map.trivial_files`, `review_map.trivial_lines`; either at `0` turns it off |
 
 And one decision about **what the workflow may do**, which is the only one that changes the job's
 permissions:
@@ -346,6 +370,16 @@ skipped, or what the job is allowed to do:
 
   `pull_request_target`, which would hand this job the repository's secrets on a branch a stranger
   controls, is still not an option to weigh.
+- **Never measure the size of anything but application code, and never join the two thresholds with
+  `or`.** The counts that decide a skip are over application paths only — a lockfile's lines are not
+  the change's lines — and both have to be small for a pull request to be called trivial, so a
+  change that is large by either measurement earns a map. Putting a count on the job's own `if:`
+  breaks both rules at once, because the `pull_request` payload measures the whole diff and has no
+  file list. `references/workflow.md` § *The application-code gate* owns all of it.
+- **Never bake a size threshold into the generated workflow.** The when-decisions are rendered
+  because they are the triggers and the guard; how big a change has to be is not one of them. Those
+  numbers are a team's to own and change without regenerating anything, so they live in
+  `.accountable-review.yml` and are read at run time.
 - **Never make the generated workflow run the application under review.** No `bundle exec`, no
   migrations, no database service, no `docker compose`. The Review Map is built by reading source and
   tests; that is a property of the product, not an optimisation. `review-map` proposes validation

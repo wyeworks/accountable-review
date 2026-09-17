@@ -495,7 +495,8 @@ the second run compares what it would write against what is there and says *unch
 | Draft pull requests | Ignored — pushing to a draft costs nothing |
 | Fork pull requests | Skipped: a `pull_request` run from a fork gets no secrets |
 | Bot pull requests | Skipped: a dependency bump has no judgments to stage |
-| Small changes | Skipped under 3 files **and** under 51 added and 51 deleted lines |
+| Pull requests changing no application code | Skipped — the run says what changed and why none of it earned a map |
+| Trivial application changes | Skipped — 2 files **and** 20 lines or fewer of application code; both configurable |
 | Delivery | GitHub Actions artifact, kept 30 days |
 | The link | One comment on the pull request, updated in place, naming the revision |
 | Concurrency | One run per pull request; superseded runs cancelled |
@@ -515,11 +516,18 @@ One thing is left for you: **the credential.** Add `ANTHROPIC_API_KEY` (or `CLAU
 as a repository secret. Setup cannot see your secrets, so it says outright that this is outstanding
 rather than implying everything is ready.
 
-Two costs worth knowing, both of them quiet. **A push does not regenerate the map**, so on a branch
-that keeps moving it describes an earlier revision while looking current — the revision in its
-masthead is how you tell, and `--regenerate-on-push` is how you change it. And **a skipped pull
-request produces no run at all**, so "too small for a map" looks exactly like a broken workflow from
-the Actions tab.
+A pull request that only touches documentation, tests, tooling or a lockfile gets no Review Map —
+there is nothing for one to explain. Neither does a trivial application change: two files **and**
+twenty lines or fewer, both, so a change that is large by either measurement still earns one. The
+counts are over application code only, so a lockfile's five thousand lines do not make a three-line
+model change look substantial. Both numbers live in `.accountable-review.yml`, and either at `0`
+gives you a map for every change that touches code. `docs/ci.md` has the rule and the trade.
+
+One cost worth knowing, and it is quiet: **a push does not regenerate the map**, so on a branch that
+keeps moving it describes an earlier revision while looking current — the revision in its masthead is
+how you tell, and `--regenerate-on-push` is how you change it. A skipped pull request is not the same
+kind of quiet: the run still happens and its summary says which rule skipped it and what it counted,
+so "too small for a map" never looks like a broken workflow.
 
 The workflow is analysis-only, and its entire effect on your repository is that one comment. It never
 pushes, never approves, never merges, never labels, sets no check and no status, and it never boots
@@ -548,7 +556,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
 | **Publishing** | Interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
-| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. When a map is generated (the triggers, and the guard that skips drafts, forks, bots and changes too small to have a reading order) and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. |
+| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 
 ---
 

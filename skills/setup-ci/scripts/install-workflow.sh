@@ -38,8 +38,8 @@
 # passed to render-workflow.sh ahead of this call's own flags, so those flags
 # still win and everything else is preserved. That line records the decisions a
 # person confirmed during setup — whether pushes regenerate the map, which bot
-# authors are skipped, the size gate and its numbers, and whether the link is
-# commented on the pull request — and without the read-back the ordinary reason
+# authors are skipped, and whether the link is commented on the pull request —
+# and without the read-back the ordinary reason
 # to run setup again, moving the version pin, would report every one of them as
 # drift and then revert them under --update. Reverting a team's decision while
 # claiming to upgrade them is the exact failure the drift rule above exists to

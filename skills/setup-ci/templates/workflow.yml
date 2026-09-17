@@ -135,52 +135,28 @@ jobs:
     # human who reopens or marks ready a bot's pull request becomes the actor
     # while the bot stays the author.
     # SETUP:END:authors
-    # SETUP:IF:size
     #
-    # The last clause skips changes too small to have a reading order: a Review
-    # Map stages the judgments a change asks for, and a two-file, fifty-line
-    # change does not ask for enough of them to be worth a model run. It runs when
-    # the change is big on ANY axis, so a one-file rewrite and a twenty-file
-    # rename are both still covered.
+    # NOTHING HERE COUNTS FILES OR LINES, and that is deliberate rather than an
+    # omission. How big a change is decides whether it earns a Review Map, but
+    # the counts that decide it are over application paths only — a three-line
+    # model change beside a five-thousand-line lockfile is a three-line change —
+    # and the event payload carries `changed_files`, `additions` and `deletions`
+    # for the whole diff with no file list at all. A threshold written here could
+    # only ever count the wrong thing. It is a step, after the checkout: see
+    # "Does this pull request change application code?" below.
     #
-    # Be aware of what a line count cannot see: a twenty-line change to an
-    # authorization check is subtle and gets skipped, while a lockfile churn sails
-    # past the threshold. Replay the numbers against your own recent pull requests
-    # rather than trusting them, and move them if a trivial change keeps getting a
-    # map or a subtle one keeps getting skipped:
-    #
-    #   gh pr list --state merged --limit 20 \
-    #     --json number,changedFiles,additions,deletions
-    #
-    # And know what the gate costs: a skipped pull request produces no run at all,
-    # so there is nothing in the Actions tab to notice. Silence here means either
-    # "too small" or "something is broken", and the two look identical.
-    # SETUP:END:size
-    #
-    # TWO THINGS ABOUT THE EXPRESSION BELOW, both of which produce a workflow file
-    # GitHub rejects outright — no job, no run, and an error that does not say
-    # which line it means.
+    # ONE THING ABOUT THE EXPRESSION BELOW, which produces a workflow file GitHub
+    # rejects outright — no job, no run, and an error that does not say which line
+    # it means.
     #
     # Keep every line at exactly six spaces of indentation. In a YAML folded
     # scalar (>-) a more-indented line is NOT folded: its newline survives into
     # the expression string. Do not align the parentheses. The operators lead
     # their lines here partly to remove the thing anyone would want to align.
-    # SETUP:IF:size
-    #
-    # And there is no arithmetic in a GitHub Actions expression. The grammar is
-    # (), [], ., !, comparisons, ==, !=, && and || — `additions + deletions` is
-    # an invalid-file error rather than a sum, which is why the two line counts
-    # are compared separately against the same number.
-    # SETUP:END:size
     if: >-
       github.event.pull_request.draft == false
       && github.event.pull_request.head.repo.full_name == github.repository
 {{AUTHOR_CLAUSES}}
-    # SETUP:IF:size
-      && (github.event.pull_request.changed_files > {{MIN_FILES}}
-      || github.event.pull_request.additions > {{MIN_LINES}}
-      || github.event.pull_request.deletions > {{MIN_LINES}})
-    # SETUP:END:size
 
     steps:
       - name: Check out the pull request
@@ -193,17 +169,12 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '{{NODE_VERSION}}'
-
-      - name: Install Claude Code
-        run: npm install -g @anthropic-ai/claude-code@{{CLAUDE_CODE_VERSION}}
-
       # Cloned at a tag rather than installed from the marketplace, because
       # `claude plugin install` has no way to pin a version and a Review Map
       # should be attributable to one. The clone lands outside the workspace so
-      # it never appears in the diff under review.
+      # it never appears in the diff under review. It comes before Node because
+      # the scope check below runs from it, and a pull request that turns out to
+      # need no Review Map should not have installed a toolchain first.
       - name: Install Accountable Review {{PLUGIN_REF}}
         env:
           PLUGIN_REPO: {{PLUGIN_REPO}}
@@ -212,7 +183,45 @@ jobs:
           git clone --quiet --depth 1 --branch "$PLUGIN_REF" \
             "https://github.com/$PLUGIN_REPO" "$RUNNER_TEMP/accountable-review"
 
+      # A Review Map explains application code. Two ways a pull request can fail
+      # to be worth one — it changes no application code at all, or what it
+      # changes is trivial — and every step after this one stands aside for
+      # either. The thresholds live in .accountable-review.yml and are read from
+      # the checkout at run time, so changing one never means regenerating this
+      # file; there is no number in this workflow to edit.
+      #
+      # It cannot be an `if:` on the job, which is where a count would naturally
+      # go. The pull_request payload carries additions, deletions and
+      # changed_files for the WHOLE diff, and the counts that decide this are
+      # over application paths only — a three-line model change beside a
+      # five-thousand-line lockfile is a three-line change. The payload cannot
+      # express that, so the gate runs here, after the cheap half of the job.
+      - name: Does this pull request change application code?
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          rc=0
+          "$RUNNER_TEMP/accountable-review/ci/application-code.sh" \
+            --base "$BASE_SHA" --head "$HEAD_SHA" \
+            > "$RUNNER_TEMP/application-code.txt" || rc=$?
+          cat "$RUNNER_TEMP/application-code.txt"
+          # 0 is generate and 3 is skip; anything else is a diff this job could
+          # not read, and that is a failure rather than a quiet skip.
+          [ "$rc" = 0 ] || [ "$rc" = 3 ] || exit "$rc"
+
+      - uses: actions/setup-node@v4
+        if: steps.scope.outputs.verdict == 'generate'
+        with:
+          node-version: '{{NODE_VERSION}}'
+
+      - name: Install Claude Code
+        if: steps.scope.outputs.verdict == 'generate'
+        run: npm install -g @anthropic-ai/claude-code@{{CLAUDE_CODE_VERSION}}
+
       - name: Generate the Review Map
+        if: steps.scope.outputs.verdict == 'generate'
         env:
           # One of these two has to be a secret on this repository. Nothing else
           # in this job needs a credential.
@@ -239,6 +248,7 @@ jobs:
       # in .accountable-review.yml changes this step's answer and nothing else.
       - name: Resolve delivery
         id: delivery
+        if: steps.scope.outputs.verdict == 'generate'
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -258,7 +268,7 @@ jobs:
       # map itself, and this step stands aside.
       - name: Upload the Review Map
         id: upload
-        if: steps.delivery.outputs.provider == 'github-artifact'
+        if: steps.scope.outputs.verdict == 'generate' && steps.delivery.outputs.provider == 'github-artifact'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.delivery.outputs.artifact_name }}
@@ -267,6 +277,7 @@ jobs:
           if-no-files-found: error
 
       - name: Say where it went
+        if: steps.scope.outputs.verdict == 'generate'
         env:
           LOCATION: ${{ steps.delivery.outputs.location }}
           BROWSABLE: ${{ steps.delivery.outputs.browsable }}
@@ -285,6 +296,49 @@ jobs:
             echo "It explains the change and helps you review it. It does not review it:"
             echo "there is no verdict, no score and no approval in there."
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # A skipped run and a broken one look identical from the outside, so the
+      # skip says what it counted and names every path it discounted. An absence
+      # nobody can account for is the thing this whole project is against.
+      - name: Say why there is no Review Map
+        if: steps.scope.outputs.verdict == 'skip'
+        env:
+          REASON: ${{ steps.scope.outputs.reason }}
+          CHANGED: ${{ steps.scope.outputs.changed }}
+          APPLICATION: ${{ steps.scope.outputs.application }}
+          LINES: ${{ steps.scope.outputs.lines }}
+          TRIVIAL_FILES: ${{ steps.scope.outputs.trivial_files }}
+          TRIVIAL_LINES: ${{ steps.scope.outputs.trivial_lines }}
+        run: |
+          {
+            echo "## No Review Map for this pull request"
+            echo
+            if [ "$REASON" = trivial ]; then
+              echo "It changes $APPLICATION application file(s) and $LINES line(s), at or under"
+              echo "the threshold this repository treats as trivial"
+              echo "($TRIVIAL_FILES file(s) and $TRIVIAL_LINES line(s), both)."
+              echo
+              echo "Raise or lower it with \`review_map.trivial_files\` and"
+              echo "\`review_map.trivial_lines\` in \`.accountable-review.yml\`;"
+              echo "either at 0 generates a map for every change to application code."
+            else
+              echo "Nothing in it changes application code:"
+              echo "$CHANGED changed path(s), none of them code."
+              echo
+              echo "A Review Map explains what a change means and what it reaches"
+              echo "outside its own diff, so there is nothing here for it to explain."
+              echo "Push a change to application code and one is generated."
+            fi
+            echo
+            echo "<details><summary>What changed, how each path was counted, and its lines</summary>"
+            echo
+            echo '```'
+            cat "$RUNNER_TEMP/application-code.txt"
+            echo '```'
+            echo
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
 # SETUP:IF:comment
 
       # The link, where the reviewer already is. The summary above says the same
@@ -307,8 +361,16 @@ jobs:
       # against the staleness a workflow that does not regenerate on push
       # accepts: a reviewer who sees a SHA that is not the tip knows the map is
       # behind. Not a verdict, and not a status — a link and a revision.
+      #
+      # The scope guard is first and is not redundant with the two output tests.
+      # They would both be empty on a skipped run and the step would stand aside
+      # anyway, but reading "which steps run when there is no map" off the guards
+      # beats deriving it from which outputs happen to be unset.
       - name: Link the Review Map on the pull request
-        if: steps.upload.outputs.artifact-url != '' || steps.delivery.outputs.browsable == 'true'
+        if: >-
+          steps.scope.outputs.verdict == 'generate'
+          && (steps.upload.outputs.artifact-url != ''
+          || steps.delivery.outputs.browsable == 'true')
         env:
           # The only step in this job that is handed a write-capable token.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

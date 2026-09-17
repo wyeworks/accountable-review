@@ -4,6 +4,43 @@
 gets a Review Map the whole team can open. The [README](../README.md#ci-integration-) covers what you
 get; this is the part underneath — where the page ends up, and how to send it somewhere else.
 
+## Not every pull request gets one
+
+A Review Map explains application code — what a change means, and what it reaches in code it did not
+touch. Two kinds of pull request get none, and the run says which in its job summary rather than
+finishing silently.
+
+**It changes no application code.** Documentation, tests, repository tooling, lockfiles, generated
+files and binaries are the things that do not count. If that is all a pull request touches, there is
+nothing for a map to explain.
+
+**Its application change is trivial.** Two files or fewer *and* twenty lines or fewer — both, not
+either. A 900-line change in one file earns a map; so does a nine-line change across six. Only a
+change that is small by *both* measurements is skipped.
+
+Everything is counted over application paths only, which is what makes the numbers mean anything: a
+three-line model change beside a five-thousand-line lockfile is a three-line change.
+
+```yaml
+review_map:
+  trivial_files: 2
+  trivial_lines: 20
+```
+
+Both are read from `.accountable-review.yml` when the workflow runs, so changing one takes effect on
+the next pull request with no setup to re-run. **Setting either to `0` turns the trivial rule off**
+and gives you a map for every change that touches application code.
+
+The defaults are a starting point rather than a measurement, and the trade is worth knowing: a map's
+value tracks what a change *reaches* more closely than how big it is, and a three-line edit to a
+constructor default can reach further than a large rename. Those are the changes the threshold
+discards first. If you find you have lost a map you wanted, lower `trivial_lines`.
+
+The list of what is not application code is deliberately narrow, and anything it does not recognise
+counts as code — so an unusual layout costs you a map you did not need rather than losing one you
+did. The job summary lists every path it discounted and why, so a wrong call is something you can
+see.
+
 ## Artifacts are the default, not the contract
 
 **Review Maps are portable static HTML.** The default setup stores them as GitHub Actions artifacts
