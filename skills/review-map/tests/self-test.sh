@@ -233,19 +233,50 @@ case_runs_red "an odd final inventory cell leaves a rule-coloured slab instead o
 awk '/<div class="c" data-path="{{PATH}}">/ && !d { d = 1; next } { print }' "$TEMPLATE" > "$WORK/gt-even.html"
 case_runs_red "the assembled inventory has an even number of cells, so nothing exercises the odd-cell rule" "$WORK/gt-even.html" "$SKELETON"
 
+# ---- links leaving the page open in a new tab ----
+#
+# Every row here leaves a page that renders identically and reads identically. The defect is only
+# felt by a reader who followed a citation and came back — which is nobody, during development.
+
+# 27. The rule gone. Links still work, so nothing looks broken; what is lost is the reader's place
+#     in an agenda they had not finished, and they lose it on the first citation they open.
+grep -v "a.setAttribute('target', '_blank');" "$TEMPLATE" > "$WORK/no-newtab.html"
+case_runs_red "the tail script stops opening off-page links in a new tab" "$WORK/no-newtab.html" "$SKELETON"
+
+# 28. target without rel. This is the version that looks complete: the new tab opens, the citation
+#     lands, and the only thing wrong is a window.opener handle back into this page from a host it
+#     does not control. It is also the likelier mutation, because deleting the rel line is the
+#     obvious way to make the block shorter.
+grep -v "a.setAttribute('rel', 'noopener noreferrer');" "$TEMPLATE" > "$WORK/no-rel.html"
+case_runs_red "the new-tab pass sets target without rel" "$WORK/no-rel.html" "$SKELETON"
+
+# 29. The guard that keeps the page's own links in this tab. Without it the rail, the Checkpoint
+#     pointers and the impact cards' back-references all open a second copy of the page — the
+#     reader's place lost with a window on top of it, which is worse than the defect the pass
+#     exists to fix and arrives looking like the same feature.
+grep -v 'if (there === here) { return; }' "$TEMPLATE" > "$WORK/newtab-all.html"
+case_runs_red "the new-tab pass stops exempting this page's own links" "$WORK/newtab-all.html" "$SKELETON"
+
+# 30. And the other direction: a target typed at a citation. One page's markup is then correct and
+#     every later run copies an attribute it has to remember at every citation, which is how one
+#     of them ends up without it. The script is the rule; the markup half stays clean.
+sed 's|<a class="path" href="{{BLOB}}#L{{LINE}}">|<a class="path" target="_blank" href="{{BLOB}}#L{{LINE}}">|' \
+  "$TEMPLATE" > "$WORK/typed-target.html"
+case_runs_red "a citation in the markup half types a target for a run to copy" "$WORK/typed-target.html" "$SKELETON"
+
 # ---- the primer callout, which is the only component a flag admits ----
 #
 # Six rows, because a primer has more ways to be quietly wrong than any other component here: it is
 # two paragraphs of framework prose, which read as self-justifying, and every one of its guards is a
 # thing that can be dropped while the callout still renders beautifully.
 
-# 27. Gone entirely. A --mentor run then has no markup to copy and writes the callout from memory,
+# 31. Gone entirely. A --mentor run then has no markup to copy and writes the callout from memory,
 #     which is where the mark, the demo-with-an-app-class and the unpinned link all come back from.
 awk '/<aside class="primer">/ { f = 1 } f { if ($0 ~ /<\/aside>/) f = 0; next } { print }' \
   "$TEMPLATE" > "$WORK/no-primer.html"
 case_runs_red "the assembled primer is gone, so a mentor run has nothing to copy" "$WORK/no-primer.html" "$SKELETON"
 
-# 28. The logotype returns. This is the specific shape the svg ban comes back in, because the mark
+# 32. The logotype returns. This is the specific shape the svg ban comes back in, because the mark
 #     is the one drawing on this page that had a reason: it was an attribution. Asserted through
 #     .pr-mark rather than through the svg count, so the row goes red on the class alone — a mark
 #     smuggled in as a web font or a background image is the same defect and the same disclosure
@@ -254,7 +285,7 @@ awk '/<span class="pr-brand">/ && !d { print "            <span class=\"pr-mark\
   "$TEMPLATE" > "$WORK/pr-mark.html"
 case_runs_red "the primer's logotype comes back, bringing the trademark obligation with it" "$WORK/pr-mark.html" "$SKELETON"
 
-# 29. A demo outside a primer. pre.demo is the one block on this page allowed to show a result line,
+# 33. A demo outside a primer. pre.demo is the one block on this page allowed to show a result line,
 #     and the only thing that makes that honest is the receiver: a class this repository does not
 #     have, so the line quotes the manual. Outside a primer it is a general-purpose hole for output
 #     nobody observed, with the probe rule switched off.
@@ -262,20 +293,20 @@ awk '/<figcaption>{{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}<\/figcaption>/ && !d { pr
   "$TEMPLATE" > "$WORK/loose-demo.html"
 case_runs_red "a pre.demo sits outside a primer, where nothing constrains its receiver" "$WORK/loose-demo.html" "$SKELETON"
 
-# 30. The gate itself. A primer is what a doc link escalates INTO, so one with no link is two
+# 34. The gate itself. A primer is what a doc link escalates INTO, so one with no link is two
 #     paragraphs of framework assertion the reader cannot check — and it is also what makes a closed
 #     catalogue mean no primers for that stack, which is the whole reason Phoenix is narrow today
 #     rather than confidently wrong.
 grep -v 'classes/ActiveRecord/AttributeMethods/Dirty.html' "$TEMPLATE" > "$WORK/primer-no-doc.html"
 case_runs_red "the primer loses the doc link it is gated on" "$WORK/primer-no-doc.html" "$SKELETON"
 
-# 31. And the other half of the same rule. Without the file:line the callout has no stake in this
+# 35. And the other half of the same rule. Without the file:line the callout has no stake in this
 #     repository at all: it is a framework lesson attached to a judgment by nothing but adjacency.
 sed 's|<div class="item">The callback at <a class="path" href="{{DIFF}}R{{LINE}}">{{PATH}}:{{LINE}}</a>|<div class="item">The callback|' \
   "$TEMPLATE" > "$WORK/primer-no-cite.html"
 case_runs_red "the primer stops citing the line in this repository that earned it" "$WORK/primer-no-cite.html" "$SKELETON"
 
-# 32. Position. Below the Look at list the lesson arrives after the reader has already been sent to
+# 36. Position. Below the Look at list the lesson arrives after the reader has already been sent to
 #     the code, which is the one ordering that makes a primer worse than no primer: they open four
 #     files without the rule that decides what they are looking at.
 awk '

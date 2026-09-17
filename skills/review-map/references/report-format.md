@@ -1607,6 +1607,28 @@ That includes the one citation inside a figure: a node's `a.path.ip-loc` has alr
 answered by its kind — `.ip-chg` is changed code and takes the diff anchor, `.ip-aff` and `.ip-step`
 are not and take the blob. § *Chains* carries that table.
 
+### Every off-page link opens in a new tab
+
+A citation is followed from the **middle of an agenda the reader has not finished**. Replacing the
+page with GitHub costs them their place in it, the rail's position, every excerpt they had opened
+and every checkpoint they had already read — and the way back is a browser Back that lands them at
+the top. The page is the thing being read; the diff is the thing being consulted. So every link that
+leaves the page carries `target="_blank"` and `rel="noopener noreferrer"`.
+
+**It is applied, never typed**, the way the syntax tint is. `page-template.html`'s tail script sets
+both attributes on load, no citation in the markup half carries a `target`, and a run must not add
+one — a page has dozens of citations, and an attribute typed dozens of times is an attribute missing
+from one of them. It also means a component added later is covered without anyone remembering to.
+
+**The links this page points at *itself* with must not move**: the rail, a `a.ptr` Checkpoint
+pointer, an impact card's back-reference. A new tab there is the same lost place with a second
+window on top of it. The script leaves them alone by testing the resolved href — same document,
+differing only by fragment — rather than by listing classes, so the rule holds for anything added
+later too.
+
+Like the tint, it is presentation: with the script blocked the links still work and simply land in
+the tab they were clicked from.
+
 ### When the diff will not render
 
 GitHub does not render every diff, and an anchor into one it withholds lands on a *Load diff* stub
