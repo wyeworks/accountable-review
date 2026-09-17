@@ -898,6 +898,18 @@ PASS  every linked citation addresses the lines its text names (3)
 SKIP  diff anchors: this input has none
 SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
 SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment start-here-orphan-checkpoint.html
+exit=0
+PASS  every linked citation addresses the lines its text names (4)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page start-here-orphan-checkpoint.html
+exit=0
+PASS  every linked citation addresses the lines its text names (4)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
 ## --fragment start-here-two-lists.html
 exit=0
 PASS  every linked citation addresses the lines its text names (4)

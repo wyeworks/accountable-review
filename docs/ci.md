@@ -11,6 +11,16 @@ because that needs no hosting, no extra credential, no external service and no m
 them. The cost is honest and worth naming: an artifact has to be downloaded and extracted before
 anyone can read it.
 
+**The workflow comments the link on the pull request**, which is the answer to the other half of the
+problem — a map nobody can find is a map nobody reads, and nobody opens a workflow run to check
+whether there is one. One comment, updated in place rather than repeated, naming the revision the map
+describes. That is the only thing the job writes anywhere, and the only reason it holds
+`pull-requests: write`; it sets no check and no status, because a passing check is a verdict and this
+page does not carry verdicts.
+
+The comment reads the DeliveryResult below rather than knowing about artifacts, so a team that moves
+to a browsable provider gets a clickable link in the comment without changing the comment.
+
 Claude Artifacts are deliberately *not* the CI default. They are an excellent destination — it is
 where the interactive skill publishes — but automatic organisation-wide sharing is not a reliable
 zero-configuration path today, so nothing in the architecture depends on them.
