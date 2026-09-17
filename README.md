@@ -243,36 +243,26 @@ The goal is to help the reviewer investigate the change.
 
 ## What a Review Map cannot do 🌫️
 
-A Review Map is written by a model reading your repository. That is what makes it possible to trace a
-consequence into code the diff never opened — and it is also the honest limit on what the page is
-worth.
+A Review Map is written by a model reading your repository. That is what lets it trace a consequence
+into code the diff never opened, and it is also the honest limit on the page.
 
-**It is a pass, not an audit.** Three independent passes over the same 109-file diff produced eight
-distinct headline findings between them, with **only one appearing in all three**. Run the same PR
-twice and you will get overlapping but different sets. Explanation is reproducible; defect discovery
-is sampling.
+- **It is a pass, not an audit.** Three passes over the same 109-file diff produced eight headline
+  findings between them, only one of which appeared in all three. Explanation is reproducible; defect
+  discovery is sampling.
+- **It has blind spots, and they are not random.** Behaviour living in configuration, in data, in a
+  queue, in another service or in the gap between two deploys is harder to reach from a diff than
+  behaviour living in a method — so those are the regions a map is quietest about, and quiet is not
+  the same as clear. On a very large diff it also runs out of room before it runs out of diff, and
+  says which region it skimmed.
+- **Some of it can simply be wrong** — a misread method, a framework default that does not hold for
+  your version, a consequence prevented somewhere the run never looked. Every claim is labelled by
+  how it is known and carries a `file:line`, so open the citation for anything you would act on.
+- **It never decides anything.** A map that says nothing about a file is not telling you the file is
+  fine, only that this pass surfaced no judgment there.
 
-**It has blind spots, and they are not random.** What the page reaches depends on what the run
-searched for, and a consequence nobody thought to search for is a consequence the page does not
-carry. Behaviour that lives in configuration, in data, in a queue, in another service, or in the gap
-between two deploys is harder to reach from a diff than behaviour that lives in a method — so those
-are the regions a Review Map is quietest about, and quiet there is not the same as clear.
-
-**Some of it can simply be wrong.** A model can misread a method, follow a call into the wrong
-definition of an overloaded name, state a framework default that does not hold for your version, or
-describe a consequence that is real in principle and prevented somewhere it never looked. The page is
-built to make that catchable rather than invisible: every claim is labelled by how it is known, and
-every claim carries a `file:line` into your repository. Anything you would act on, open the citation
-and confirm. The excerpt beside it exists for exactly that.
-
-**On a very large diff it runs out of room before it runs out of diff.** Every changed path is
-accounted for, but a strained run traces some regions and glances at others, and it says which.
-
-**And it never decides anything.** No severity, no risk score, no approval, no verdict. A Review Map
-that says nothing about a file is not telling you the file is fine — it is telling you this pass did
-not surface a judgment there. Where you need assurance rather than orientation, that is what a
-dedicated review pass, a test suite and a human reviewer are for. This page is there to make all
-three of them cheaper.
+**And it depends on the model behind it.** We develop and test with Opus most of the time, and that
+is what the page's depth is calibrated against. Other models will trade cost for reach differently —
+try a few against your own codebase and keep the one whose maps you actually trust.
 
 ---
 
