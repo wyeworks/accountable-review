@@ -2,7 +2,8 @@
 # frozen_string_literal: true
 
 # page_invariants.rb — the rules that hold everywhere on the page, and therefore in
-# every fragment of it too: no grading, no unlabelled inference, no reserved attribute
+# every fragment of it too: no grading, no advertising that the page was checked and no
+# boilerplate hedge disclaiming it either, no unlabelled inference, no reserved attribute
 # out of place, no dead links, no colour that exists in only one theme.
 #
 # Runs on a page or on a fragment. Three of these need the whole document — themes,
@@ -74,9 +75,23 @@ end
 # easy to reintroduce while believing rule 2 still holds. A run at --effort high sends an
 # adversarial pass at its own flows; nothing about that is allowed to reach the page (SKILL.md
 # step 8, report-format.md § Detail levels). The patterns are high-precision on purpose: a bare
-# 'verified' is a real column name in real Rails apps, and 'audit' appears inside the sanctioned
-# "a pass, not an audit".
+# 'verified' is a real column name in real Rails apps.
 ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (verified|checked|confirmed)|every claim (was|has been) (verified|checked)|class="(verified|checked)"|chip-verified/i
+
+# The standing disclaimer, which is the OPPOSITE leak from ASSURE and therefore its own rule:
+# that one is the page overclaiming its coverage, this one is the page hedging it in a sentence
+# no reviewer acts on. "These are what this pass surfaced, not an audit" used to open section 02
+# and has been removed — it is true of every Review Map rather than of this one, so README.md
+# § "What a Review Map cannot do" states it once for the tool and the page states it never. A
+# disclaimer a reader has met before is a line they skip, and the next line they skip is the
+# first checkpoint.
+#
+# WARN rather than FAIL, and graded on the COMMENT-STRIPPED copy for the reason § 2's graded
+# noun is: page-template.html says in a comment why the caveat is not there, and a real page
+# carries that comment verbatim. A warning because the phrasings below also have honest uses —
+# "the grep is not exhaustive" about one search is a fact, not a hedge about the page — so the
+# line needs reading rather than failing.
+DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, not an|overlapping but different/i
 
 check = ReviewMap::Check.new(ARGV)
 check.require_input
@@ -131,6 +146,14 @@ else
 end
 if prose.has?(/got it wrong|came to rest on|invalidated (several|some) of these/i)
   check.maybe("a phrase that usually introduces draft history — read the sentence, and check it is about the code rather than about this page")
+end
+
+# 2d · The standing disclaimer. Between this and 2b the page is pinned from both sides: it may
+#      not advertise having been checked, and it may not carry a boilerplate hedge either. What
+#      it carries instead is the claims, each at the tier it earned.
+if prose.has?(DISCLAIM)
+  hedged = prose.scan(DISCLAIM).sort.uniq
+  check.maybe("a standing disclaimer may have come back — that sentence lives in README.md, not on the page: #{hedged.join(" ")} ")
 end
 
 # 3 · Evidence tiers. Silence is the first tier, so a document with no label either had

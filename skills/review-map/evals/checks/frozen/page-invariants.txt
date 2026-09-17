@@ -1342,6 +1342,30 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+## --fragment invariants-standing-disclaimer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --page invariants-standing-disclaimer.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 PASS  no severity chips
@@ -1825,6 +1849,18 @@ PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
 FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: The first pass ran first version of this section 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+## --fragment invariants-standing-disclaimer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
 PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed

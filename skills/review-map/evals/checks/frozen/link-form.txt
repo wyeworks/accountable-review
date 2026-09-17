@@ -730,6 +730,18 @@ PASS  every linked citation addresses the lines its text names (1)
 SKIP  diff anchors: this input has none
 SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
 SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment invariants-standing-disclaimer.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page invariants-standing-disclaimer.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 PASS  every linked citation addresses the lines its text names (1)

@@ -1,0 +1,23 @@
+<!-- Plants exactly one defect: the boilerplate hedge under the section heading, which was
+     removed from the format — page-invariants.rb § 2d. It is the opposite leak from § 2b's
+     assurance language and needs its own rule for that reason: one is the page overclaiming
+     its coverage, this is the page disclaiming it in a sentence nobody acts on, and a rule
+     written for the first cannot see the second.
+
+     Everything else here is correct markup, so the WARN is the only thing this fragment
+     should produce — the exit code stays 0, because a hedge is a line to read rather than a
+     structural failure, and a hard fail on wording teaches a run to drop the claim beneath it
+     as well. The defect is deliberately NOT quoted in this comment: § 2d grades the
+     comment-stripped copy, so a fixture describing itself in its own header would pin the
+     comment rather than the markup. -->
+<section id="attention">
+  <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
+  <h2>What needs your attention</h2>
+  <p>Two judgments, in the order you would most regret getting wrong.</p>
+  <p class="note">These are what this pass surfaced, not an audit. Repeated passes over the same diff turn up overlapping but different sets.</p>
+  <section class="cp" id="cp-a">
+    <span class="lbl lbl-wide">Checkpoint A</span>
+    <h3>Should archived projects still appear wherever projects are listed?</h3>
+    <p>Archiving writes <code>archived_at</code>, and the one query object behind every selectable-project list scopes on <code>discarded_at</code>. <span class="tier">from unchanged code</span></p>
+  </section>
+</section>

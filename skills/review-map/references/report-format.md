@@ -37,8 +37,8 @@ step 8 folds the challenges in. That produces no section, no marker, no chip and
 is the same *shape*, built to the same specs, at either effort, and a reader cannot tell which
 produced the page in front of them. Deliberately so. A page that announced having been checked would
 be asserting the assurance the format refuses to give — § *Evidence tiers* labels how a claim is
-known, never how hard someone looked, and *findings are a sample, not an audit* is the rule that
-would break first.
+known, never how hard someone looked, and *findings are a sample* is the rule that would break
+first — the one `README.md` states for every Review Map and the page therefore never has to restate.
 
 **`--mentor` is the one flag that puts anything on the page, and the rule that keeps it from being a
 level is subtraction.** It admits one component — the primer callout, § *Mentor mode* — inside the
@@ -86,7 +86,7 @@ belongs in the sentences that cite this repository, which say it by naming real 
 | | Section | Appears | Owns |
 |---|---|---|---|
 | 01 | What changed | always | The masthead, the semantic delta, intent and its tier |
-| 02 | What needs your attention | always | Three to five checkpoints per delta § 01 names, seven at the outside, and the one sampling caveat |
+| 02 | What needs your attention | always | Three to five checkpoints per delta § 01 names, seven at the outside. No standing caveat |
 | 03 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
 | 04 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
 | 05 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
@@ -228,14 +228,22 @@ Past seven the answer is not an eighth checkpoint. It is `SKILL.md` step 7a's bu
 § 01, and, if the diff strained the run, the statement of which region was skimmed.
 
 A finding that does not become a checkpoint keeps its entry in *Impact outside the diff* or in the
-evidence foot, so nothing found is lost — only its promotion to a judgment, and the caveat under the
-heading is what makes that honest. **A judgment is the one thing that cannot be demoted that way**: an
-entry in the foot that the reviewer has to decide about is a checkpoint that was mis-filed, which is
-why the count has room to grow rather than a ceiling that would force one down there.
+evidence foot, so nothing found is lost — only its promotion to a judgment. **A judgment is the one
+thing that cannot be demoted that way**: an entry in the foot that the reviewer has to decide about is
+a checkpoint that was mis-filed, which is why the count has room to grow rather than a ceiling that
+would force one down there.
 
-**The sampling caveat lives here, once.** *These are what this pass surfaced, not an audit: repeated
-runs over the same diff surface overlapping but different sets.* Under the section heading, before the
-first checkpoint, and nowhere else on the page.
+**No sampling caveat, and nothing else that hedges the agenda.** The page used to open this section
+with *"these are what this pass surfaced, not an audit"*. It is gone: a standing disclaimer is the one
+sentence on the page that no reviewer acts on, it reads as boilerplate by the second Review Map, and a
+page repeating it every time teaches the reader to skip the line under it too. What it said is true and
+still stated — in `README.md` § *What a Review Map cannot do*, where someone deciding whether to trust
+these pages reads it once — rather than in the section a reviewer opens to find out what to judge.
+
+**What has not changed is the rule underneath it.** The page still never asserts completeness: no *no
+issues found*, no *the change is safe*, no summary claiming the diff was fully covered, and nothing
+that reads as a clean bill of health. `SKILL.md`'s hard rules own that, and removing the caveat
+removes a sentence, never the prohibition it sat next to.
 
 **Where checkpoints come from.** Most come from the flows step 6 clustered: a scope whose population
 changed, a default a consumer does not handle, a guard whose order moved. Some hide outside any one
@@ -312,8 +320,8 @@ where that goes.
   independent changes the PR ships; this one does not. Three deltas still buy one question about how
   the code was built. A second is the page becoming a style review, and it will arrive looking
   thorough. The departure that does not get the slot is not written anywhere else — an observation
-  about shape with nowhere to go is noise, not a finding, and the sampling caveat already says this is
-  not an audit.
+  about shape with nowhere to go is noise, not a finding, and a page is not obliged to report every
+  observation it made.
 - **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
   behavioural agenda already fills the page, there is no slot, and that is the right outcome. A page
   that dropped *is nil safe for every consumer?* in order to ask where a class lives has traded the
@@ -1205,10 +1213,11 @@ The reference form is one sentence, no re-explanation:
 
 Not a summary of that consequence, not its citation again, not its tier label again.
 
-**Two consequences worth stating plainly.** A caveat belongs in the page once — *"these findings are a
-pass, not an audit"* is said under *What needs your attention* and nowhere else. And a `file:line` is not repeated every
-time its fact is mentioned; it sits with the canonical explanation, and later references point at the
-section, not the file.
+**Two consequences worth stating plainly.** A limit belongs in the page once — *"no test covers the
+archived case"* is said in the checkpoint it bears on and nowhere else, and a limit that is true of
+every Review Map rather than of this one belongs in `README.md` instead of on the page at all. And a
+`file:line` is not repeated every time its fact is mentioned; it sits with the canonical explanation,
+and later references point at the section, not the file.
 
 **Where synthesis beats deletion.** When two sections hold overlapping but non-identical facts, merge
 them into one sentence that carries both rather than keeping the better one:
@@ -1503,8 +1512,9 @@ The page's core, and the one section a reader who has time for nothing else shou
 five checkpoints per independent delta § 01 names, seven at the outside; § *The review checkpoint*
 owns every rule about them, the count included.
 
-The section itself carries only a heading, one sentence saying what these turn on and that the order
-is the order to think about them, and the sampling caveat. Then the checkpoints, in ranked order.
+The section itself carries only a heading and one sentence saying what these turn on and that the
+order is the order to think about them. Then the checkpoints, in ranked order. No caveat under the
+heading — see § *The review checkpoint* for where that sentence went and what stayed behind.
 
 ---
 

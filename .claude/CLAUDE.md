@@ -674,9 +674,27 @@ Editing one of these means checking the others still agree.
   The eval axis is `--skill-effort`, not `--effort`: `evals/run.sh` already had an `--effort` meaning
   the CLI reasoning effort the reader runs at, and two knobs under one name in one script is a bug
   waiting for a hurried reader. Both are in `report.sh`'s group key.
-- **Findings are a sample, not an audit.** The page must never read as a clean bill of health. This is
-  load-bearing, not hedging: the skill explains, and explanation is reproducible, but defect discovery
-  is not.
+- **Findings are a sample, not an audit — and the page no longer says so.** The rule is unchanged and
+  load-bearing rather than hedging: the skill explains, explanation is reproducible, defect discovery
+  is not, and the page must never read as a clean bill of health. What moved is where the sentence
+  lives. A standing caveat under *What needs your attention* is true of every Review Map rather than
+  of this one, so a reader meets it once per map and starts skipping the line under the heading —
+  which is the first checkpoint. It is stated once for the tool in `README.md` § *What a Review Map
+  cannot do*, where someone deciding whether to trust these pages reads it, and never on the page.
+
+  **The removal is a sentence, never the prohibition beside it.** The page still asserts no coverage:
+  no *no issues found*, no summary saying the diff was covered, nothing that reads as assurance.
+  Removing the hedge while leaving the overclaim reachable is how this becomes a page that sounds
+  certain, and it is the direction to watch.
+
+  Seven files agree: `SKILL.md`'s hard rules own the prohibition and the redirect, `report-format.md`
+  § *The review checkpoint* records what the caveat was and why it went while § *Section 2* and the
+  section table carry the consequence, `page-template.html` refuses it in a comment where the line
+  used to be, `README.md` and `docs/review-map.md` are the public wording, and the mechanical half
+  inverted with it — `start-here.rb` used to require the sentence page-wide and now checks nothing
+  about it, while `page-invariants.rb` § 2d warns when one comes back. That § 2d sits beside § 2b
+  deliberately: one catches the page overclaiming its coverage, the other the page hedging it, and
+  a rule written for either is blind to the other.
 - **Deep-link mode is chosen once**, in step 1, from the four-rung ladder in `report-format.md` —
   driven by whether the head SHA is reachable on a remote. Unpushed branches are the common case, and
   the correct behaviour there is plain text, not a permalink that 404s. **A git that cannot answer is

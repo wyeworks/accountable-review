@@ -229,14 +229,50 @@ tool cannot establish intent, it says so:
 Every claim also carries a `file:line` into your repository, and by default a second reader attacks
 those claims before the page is finished (see [Usage](#usage-) → *effort*).
 
-Nor does the page claim to have found everything. Three independent passes over the same 109-file
-diff produced eight distinct headline findings between them, with only one appearing in all three.
-Explanation is reproducible; defect discovery is sampling. The page says so, and never reads as a
-clean bill of health.
+Nor does the page claim to have found everything — see
+[What a Review Map cannot do](#what-a-review-map-cannot-do-) below. It never reads as a clean bill of
+health, and it never carries a boilerplate disclaimer saying so either: the limits are the same on
+every Review Map, so they are written down once, here, rather than reprinted under a heading you have
+already read a dozen times.
 
 The goal is not to sound confident.
 
 The goal is to help the reviewer investigate the change.
+
+---
+
+## What a Review Map cannot do 🌫️
+
+A Review Map is written by a model reading your repository. That is what makes it possible to trace a
+consequence into code the diff never opened — and it is also the honest limit on what the page is
+worth.
+
+**It is a pass, not an audit.** Three independent passes over the same 109-file diff produced eight
+distinct headline findings between them, with **only one appearing in all three**. Run the same PR
+twice and you will get overlapping but different sets. Explanation is reproducible; defect discovery
+is sampling.
+
+**It has blind spots, and they are not random.** What the page reaches depends on what the run
+searched for, and a consequence nobody thought to search for is a consequence the page does not
+carry. Behaviour that lives in configuration, in data, in a queue, in another service, or in the gap
+between two deploys is harder to reach from a diff than behaviour that lives in a method — so those
+are the regions a Review Map is quietest about, and quiet there is not the same as clear.
+
+**Some of it can simply be wrong.** A model can misread a method, follow a call into the wrong
+definition of an overloaded name, state a framework default that does not hold for your version, or
+describe a consequence that is real in principle and prevented somewhere it never looked. The page is
+built to make that catchable rather than invisible: every claim is labelled by how it is known, and
+every claim carries a `file:line` into your repository. Anything you would act on, open the citation
+and confirm. The excerpt beside it exists for exactly that.
+
+**On a very large diff it runs out of room before it runs out of diff.** Every changed path is
+accounted for, but a strained run traces some regions and glances at others, and it says which.
+
+**And it never decides anything.** No severity, no risk score, no approval, no verdict. A Review Map
+that says nothing about a file is not telling you the file is fine — it is telling you this pass did
+not surface a judgment there. Where you need assurance rather than orientation, that is what a
+dedicated review pass, a test suite and a human reviewer are for. This page is there to make all
+three of them cheaper.
 
 ---
 
