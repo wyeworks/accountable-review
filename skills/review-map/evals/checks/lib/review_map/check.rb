@@ -31,14 +31,20 @@ module ReviewMap
     # sections the page was supposed to have. It defaults to `full` so every existing
     # golden fragment and page case keeps meaning exactly what it meant — a check that
     # quietly reinterpreted its own corpus would be measuring the wrong thing.
+    # UPDATED is a FOURTH axis and a boolean, not a fourth value of MODE, and the distinction is
+    # the whole reason it is spelled this way. An updated page is a FINAL page — it carries no
+    # banner and no pending marker, exactly like any other finished one — so a mode value would
+    # have exempted it from the one check that matters most while looking like it added a check.
+    # What it adds is what only an updated page owes: the disclosure sentence, once.
     attr_reader :input, :kind, :repo, :base, :head_ref, :mode, :scope, :level,
-                :outdir, :visual, :expects, :forbids
+                :outdir, :visual, :expects, :forbids, :updated
 
     def initialize(argv, name: File.basename($PROGRAM_NAME))
       @name = name
       @kind = nil
       @head_ref = "HEAD"
       @mode = "final"
+      @updated = false
       @level = "full"
       @visual = false
       @expects = []
@@ -124,6 +130,7 @@ module ReviewMap
         when "--base"     then @base = argv.shift
         when "--head"     then @head_ref = argv.shift
         when "--draft", "--final", "--stopped" then @mode = flag.delete_prefix("--")
+        when "--updated"  then @updated = true
         when "--scope"    then @scope = argv.shift
         when "--level"    then @level = argv.shift
         when "--out"      then @outdir = argv.shift

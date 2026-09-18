@@ -110,6 +110,20 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "true" && val != "false" && val != "rails" && val != "elixir" && val != "phoenix") \
         fail("mentor must be true, false, or one of rails, elixir, phoenix, got `" val "`")
       emit("mentor", val)
+    } else if (key == "update") {
+      # Whether a second run over the same pull request re-reads only the commits since the
+      # previous map instead of rebuilding it. Run-time configuration like everything else
+      # under review_map: it is about the MAP, not about when a map is generated, so it needs
+      # no setup flag and changing it never means regenerating the workflow.
+      #
+      # It only reaches anything with `synchronize` on, because a pull request that gets one
+      # map has no second run to update. Default on: a team that asked for a map per push has
+      # already said what they want, and every way an update can refuse falls back to a full
+      # generation, which is the better page.
+      if (val == "yes") val = "true"
+      if (val == "no") val = "false"
+      if (val != "true" && val != "false") fail("update must be true or false, got `" val "`")
+      emit("update", val)
     } else if (key == "trivial_files" || key == "trivial_lines") {
       # The size half of the CI scope gate: a pull request whose application
       # code is small by BOTH measurements gets no Review Map. Whole numbers

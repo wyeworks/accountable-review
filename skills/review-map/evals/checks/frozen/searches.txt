@@ -172,6 +172,30 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-unpinned-link.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment build-state-updated-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page build-state-updated-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment build-state-updated-missing.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page build-state-updated-missing.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment build-state-updated-nosha.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page build-state-updated-nosha.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment build-state-updated-twice.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page build-state-updated-twice.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -380,6 +404,36 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page invariants-tier-modifier-only.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-assurance.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-assurance.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-narration.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-narration.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-recency.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-recency.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-update-resolved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-update-resolved.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-verdict.html

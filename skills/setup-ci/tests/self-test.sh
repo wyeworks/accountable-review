@@ -46,7 +46,12 @@ break_and_run() {
   fi
   rm -f "$work/$file.bak"
 
-  if "$work/skills/setup-ci/tests/run.sh" > "$work/out" 2>&1; then
+  # stdin is closed because the code under this suite is deliberately broken, and
+  # broken code reads stdin. The timestamp break below cuts `awk ... | sed ...` in
+  # half and leaves the `sed` without its input file: on /dev/null it reads EOF and
+  # run.sh reports the defect, on anything else it blocks and the whole suite is
+  # waited on instead of read.
+  if "$work/skills/setup-ci/tests/run.sh" > "$work/out" 2>&1 </dev/null; then
     bad=$((bad + 1))
     echo "bad   run.sh still passed with: $desc"
   else
@@ -228,6 +233,119 @@ break_and_run "a whole-diff file count on the job condition decides whether a ma
   skills/setup-ci/templates/workflow.yml \
   's|^      && github.event.pull_request.head.repo.full_name|      \&\& github.event.pull_request.changed_files > 3\
       \&\& github.event.pull_request.head.repo.full_name|'
+
+# --- the previous map, whose failures are all silent ------------------------
+#
+# Every break below leaves a workflow that runs, generates and delivers. What
+# changes is only whether the next push can reuse anything, or whether what it
+# reuses is safe — and neither is visible from a green run.
+
+# The two keys drifting apart is the one that costs money rather than
+# correctness: the save fills a cache nobody looks in, every run rebuilds from
+# scratch, and the only symptom is the bill.
+break_and_run "the cache save writes a key the restore never looks for" \
+  skills/setup-ci/templates/workflow.yml \
+  '/actions\/cache\/save@v4/,/key:/ s|head\.sha|run_id|'
+
+# A key that varies between two renders of the same request breaks the byte
+# comparison install-workflow.sh tells "already set up" from "edited by hand" by.
+# A date is exactly what someone reaches for to expire a cache.
+break_and_run "the cache key carries a date, so every second setup run reports drift" \
+  skills/setup-ci/templates/workflow.yml \
+  "s|restore-keys: accountable-review-map-|restore-keys: accountable-review-map-$(date -u +%Y-%m-%d)-|"
+
+# Caching without the push trigger is a cache with nothing to feed it — and it
+# is how the carrier ends up rendered for every team rather than the ones who
+# asked for a map per push.
+break_and_run "the cache steps render whether or not the workflow regenerates on push" \
+  skills/setup-ci/templates/workflow.yml \
+  '/^# SETUP:IF:push$/{N;/The previous Review Map\|Kept for the next push/s/^# SETUP:IF:push/# SETUP:IF:authors/;}'
+
+# Keeping whatever was in the directory when a step died.
+break_and_run "the cache is saved even when the run did not deliver" \
+  skills/setup-ci/templates/workflow.yml \
+  "s|if: success() && steps.scope.outputs.verdict == 'generate'|if: steps.scope.outputs.verdict == 'generate'|"
+
+# Asking for an update against an empty directory. The skill would have to talk
+# its way out of a flag whose premise is false, and the honest place to decide
+# that is here, where the file either exists or does not.
+break_and_run "--update is passed whether or not a previous page is there" \
+  ci/generate-review-map.sh \
+  's|^if \[ "$UPDATE" = on \] && \[ -f "$OUTPUT_ABS/index.html" \]; then$|if [ "$UPDATE" = on ]; then|'
+
+# The config key that would let a team turn it off, silently ignored.
+break_and_run "review_map.update is parsed and then not read" \
+  ci/generate-review-map.sh \
+  's@^\[ -n "$UPDATE" \].*CFG_update.*$@UPDATE=true@'
+
+# updated_from asserted rather than read. A manifest that says a page was updated
+# from a revision the page itself does not name is provenance that disagrees with
+# the thing it is provenance for — and it disagrees in the reassuring direction.
+break_and_run "the manifest asserts what it was updated from instead of reading the page" \
+  ci/generate-review-map.sh \
+  's|^updated_from=$(sed -n .*$|updated_from=$BASE_SHA|'
+
+# --- the second question, whose failures are all a map that quietly stops being true -----------
+
+# The halves joined by OR. Either one alone is not evidence the map is current, and this is the
+# direction that matters: a test-only push satisfies the application-code half by itself.
+break_and_run "the two halves of the still-current test are joined by OR" \
+  ci/map-still-current.sh \
+  '/^if printf .*PLAN.*grep -q/,/^fi$/d'
+
+# Trivial is the gate's answer to its own question and the wrong answer to this one: one line in a
+# file a checkpoint cites is exactly where the page has quietly stopped being true.
+break_and_run "a trivially small application change counts as no application change" \
+  ci/map-still-current.sh \
+  's|^  3:trivial).*$|  3:trivial) ;;|'
+
+# The other absence, and it is a different one: a restored directory holding a page but no manifest.
+# Which revision that page describes is then unknown, and unknown has to lead to the expensive answer.
+#
+# What this does NOT pin is the rule one line below it — that the previous head comes from the
+# manifest and never from the page — and no mutation here can. The page's own short SHA is a
+# seven-character prefix that `git rev-parse` resolves happily, so a version reading it would pass
+# every row in run.sh. The rule is carried by the comment in the script and by nothing else.
+break_and_run "a restored map with no manifest is used as though it were current" \
+  ci/map-still-current.sh \
+  's|^\[ -f "\$MANIFEST" \] |# |'
+
+# An absence treated as evidence. Every way of not knowing has to lead to the expensive answer.
+break_and_run "nothing restored is treated as a map that is still current" \
+  ci/map-still-current.sh \
+  's|^\[ -f "\$PAGE" \] .*$|true|'
+
+# The restore below the step that reads it: the second half of the decision is about the restored
+# map, so the ordering is a dependency rather than a preference.
+break_and_run "the previous map is restored after the step that decides whether to generate" \
+  skills/setup-ci/templates/workflow.yml \
+  '/^      - name: Restore the previous Review Map$/,/^# SETUP:END:push$/d'
+
+# The verdict downgraded nowhere, so the cheap path is computed and then ignored — the shape of
+# check that runs, prints, and changes nothing.
+break_and_run "the still-current answer is computed and never acted on" \
+  skills/setup-ci/templates/workflow.yml \
+  's|^                echo "verdict=skip"$|                echo "verdict=generate"|'
+
+# --- ripgrep on demand, whose every failure mode is a slower run rather than a wrong one -------
+
+# Installed unconditionally: every run that generates a map pays for a package it has no use for,
+# because there is nothing restored to replay searches against.
+break_and_run "ripgrep is installed whether or not there is a previous map to replay" \
+  skills/setup-ci/templates/workflow.yml \
+  "/^        if: steps.previous.outputs.cache-matched-key/d"
+
+# Below the step that replays the searches, which is the ordering error that leaves it doing
+# nothing at all: carry-plan has already refused by the time the package lands.
+break_and_run "ripgrep is installed after the step that replays the recorded searches" \
+  skills/setup-ci/templates/workflow.yml \
+  "/^      - name: Install ripgrep/,/rebuilds the page instead of updating it\"$/d"
+
+# A package that cannot be had turns a Review Map into a red job. The install is an optimisation,
+# so the polarity has to be that a failed one costs minutes rather than the map.
+break_and_run "a failed ripgrep install fails the whole job instead of rebuilding the page" \
+  skills/setup-ci/templates/workflow.yml \
+  "s@^            || echo \"no ripgrep.*@            ; :@"
 
 echo
 echo "self-test: $ok ok, $bad bad"

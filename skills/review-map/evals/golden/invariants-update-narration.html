@@ -1,0 +1,19 @@
+<!-- Plants exactly one defect: an --update run narrating the pass that came before it —
+     page-invariants.rb § 2c. "On an earlier pass" is the wording this fixture exists for. The
+     ungrammatical "on a earlier pass" was already caught and nobody writes it; the article is
+     what the rule was missing, and an update is the one mode with an earlier pass to describe.
+
+     This comment says "on an earlier pass" on purpose and must not fire the rule: § 2c strips
+     comments first, because page-template.html's header comments discuss their own history and
+     ship inside every published page. If this fixture starts failing for its comment rather
+     than for its prose, strip_comments is what broke.
+
+     Everything else is clean: an evidence tier is present so § 3 has something to find, and no
+     data-path appears outside a ledger cell. -->
+<section class="cp" id="cp-a">
+  <h3>Does the archive path still leave historical time entries alone?</h3>
+  <p>On an earlier pass this entry claimed nothing else read the column, and the commits since
+    then added a second reader
+    <a class="path" href="#">app/jobs/sweep.rb:14</a>
+    <span class="tier">from unchanged code</span></p>
+</section>

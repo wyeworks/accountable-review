@@ -79,7 +79,12 @@ suite() {
     return
   fi
   printf '\n== %s ==\n' "$name"
-  if ( cd "$ROOT" && "$@" ); then ok "$name"; else bad "$name"; fi
+  # stdin is closed for every suite. None of them reads it, but the self-tests run
+  # deliberately broken code, and broken code reads stdin: a mutation that leaves a
+  # `sed` without its input file blocks forever on an idle terminal and exits at once
+  # on /dev/null. A suite that hangs is worse than one that fails, because the failure
+  # is reported and the hang is waited on.
+  if ( cd "$ROOT" && "$@" </dev/null ); then ok "$name"; else bad "$name"; fi
 }
 
 run_suite() {
