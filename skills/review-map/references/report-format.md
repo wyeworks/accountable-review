@@ -131,7 +131,7 @@ change the judgment, and the page carries the judgment.
 <section class="cp" id="cp-a">
   <h3>Does the new Project filter preserve the intended scope?</h3>
   <p>Two to four sentences: what changed here, what follows from it, and what the reviewer has
-     to decide <span class="tier">from unchanged code</span>.</p>
+     to decide <span class="tier tier-unc">from unchanged code</span>.</p>
   <figure class="chain">…</figure>                       <!-- optional: mechanism inside the change -->
   <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <ul class="lookat">
@@ -140,6 +140,7 @@ change the judgment, and the page carries the judgment.
         <a class="path" href="…">app/models/project.rb:41-52</a>
         <details class="excerpt excerpt--diff">…</details></li>
   </ul>
+  <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
   <p class="open"><b>Open question</b> Whether archived projects should still appear in
      historical reports; no test pins it.</p>            <!-- optional -->
 </section>
@@ -183,6 +184,18 @@ change the judgment, and the page carries the judgment.
   says what to see in it and why the judgment turns on it. And a title is never a grade: *Risky*,
   *Important*, *Check this first* are a severity vocabulary arriving four to a checkpoint, and the
   rule against them is the page's, not this component's.
+- **The gap, `div.gap`, optional.** One line, labelled **GAP** and nothing else, naming what the
+  tests leave open **where that changes the judgment**. It is earned by the same test as everything
+  else here: *"no request spec covers the archived branch"* is a gap when the reviewer's decision
+  turns on whether that branch was exercised, and is noise when it does not. At most one per
+  checkpoint, and it counts against the checkpoint's word budget like any other prose.
+
+  **It states an absence; it does not grade one.** The label is fixed for the reason `p.open`'s is —
+  *Missing*, *Untested* and *Risk* are a severity vocabulary in a component the palette already
+  marks ochre — and a gap never implies the change should not ship. Silence is not a claim of
+  coverage either: a checkpoint with nothing the tests leave open writes no `div.gap`, and the page
+  never says the tests are complete. That is the same rule as the omitted section, one component
+  down.
 - **Open question, `p.open`, optional.** One line, labelled **Open question** and nothing else. What
   only the author can settle, or what the run could not establish and what would settle it. The label
   is fixed: *Watch* and *Blocking* are severity by another name, and `evals/checks/page-invariants.rb`
@@ -886,9 +899,8 @@ one line the claim rests on is doing the component's job.
 
 ### Budget
 
-Same shape as the diagram budget, and for the same reason: the constraint is what keeps the component
-meaning something. But it needs a sharper test than the diagram budget does, because the obvious
-phrasing is circular.
+A cap, for the reason every cap here exists: the constraint is what keeps the component meaning
+something. But it needs a sharper test than most, because the obvious phrasing is circular.
 
 **"One per field that earns one" is not a budget.** *Affected but unchanged* is by definition nothing
 but claims a reader would otherwise take on faith — that is the field's stated reason for existing —
@@ -1005,7 +1017,7 @@ first-class part, and adjacency is not asked to imply anything.
 |---|---|---|
 | Changed by this PR | `.ip-chg` | solid border, page ground |
 | Affected, not changed | `.ip-aff` | dashed border, teal ground and teal clause |
-| Behaviour / outcome | `.ip-out` | filled, ink ground — the terminal treatment `.pipe`'s last node uses |
+| Behaviour / outcome | `.ip-out` | filled, ink ground |
 
 `.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
 left, *the existing system* on the right, with a **dotted** rule between them — is **derived from
@@ -1143,7 +1155,7 @@ like one.**
 
 **Budget: 1–3 paths, 3–5 nodes each.** These are the paths a reviewer has to *hold*, and three is
 already the outer edge of that — wanting a fourth is the signal that the three you have are not
-doing their job, which is the same question § *Depth rules* asks about a second diagram. The fourth
+doing their job. The fourth
 consequence is not lost by being left out: *affected, not changed* below carries its entry, and the
 checkpoint that turns on it carries its explanation. It was five, and five is where a real page put them; on
 that page the panel had become a section to scroll rather than a figure to read.
@@ -1161,8 +1173,8 @@ it readable. And
 it is not SVG. Nothing on this page is (§ *Chains*) —
 but because *this* figure has two lanes, an elbow that draws itself from a class change, cards that
 stack as the path count varies, and a breakpoint at 780px where the lanes collapse. There is no
-canvas that survives all four, so a drawing would mean coordinates derived per run, which
-§ *Depth rules* rules out for making two pages from this skill incomparable.
+canvas that survives all four, so a drawing would mean coordinates derived per run — which
+`SKILL.md`'s hard rules forbid, for making two pages from this skill incomparable.
 
 ## One canonical home
 
@@ -1336,7 +1348,7 @@ anyway — *how much is still coming*, not *how far through its own plan the run
 
 One line of substance in the stub — which files, what it turns on — turns a placeholder into
 information. "Coming soon" does not. And for a checkpoint the `<h3>` is doing the real work: the
-question is legible before the explanation exists, which is why stage 3 opens with the stubs.
+question is legible before the explanation exists, which is why stage 2 opens with the stubs.
 
 Note that the stub is a whole `<section>` with its own `id`, which makes it a unique anchor a later
 stage can `Edit` in place. That is deliberate and worth keeping: it is what lets a stage write only
@@ -1363,7 +1375,7 @@ is a whole `<section class="cp" id="cp-x">` stub — assembled in `page-template
 pending section, and copied from there rather than rebuilt — and § 02's rail entry keeps a marker
 until every checkpoint under it is written. **A checkpoint stub's line of substance is its
 question**: that is what lets the agenda be read before any of it is written, and it is the reason
-opening stage 3 is worth a publish of its own. A reader who learns what the three judgments are has
+opening stage 2 is worth a publish of its own. A reader who learns what the three judgments are has
 most of what they came for, ten minutes before the explanations arrive.
 
 The second case needs **no markup of its own**: the rail already carries a per-checkpoint marker and
@@ -1828,8 +1840,19 @@ work-in-progress are exactly the cases this skill runs on most, so this is the c
 edge case. Before choosing a link mode, confirm the head SHA actually exists on the remote:
 
 ```sh
-git branch -r --contains <HEAD_SHA>     # empty output ⇒ the commit is on no remote
+git branch -r --contains <HEAD_SHA>     # exit 0 and empty output ⇒ the commit is on no remote
 ```
+
+**Asked and unable to answer is not the same as unpushed, and the ladder has no rung for it.** There
+are three states, not two: git answers and names a remote; git is asked and cannot answer at all — an
+unreadable repository, an unresolvable head, a worktree whose remotes were never fetched; and git
+answers naming none, which is the only one of the three that means unpushed, and only when the exit
+status is zero. Read a non-zero exit as the middle state and **refuse to pick a rung on
+reachability**: say in the masthead that reachability could not be determined, and render citations as
+plain text without asserting that the branch is unpushed. The verdict would otherwise come from an
+answer git never gave, and it is the one failure a reader cannot detect from the page, because an
+unlinked citation looks the same under either cause. `evals/checks/page-invariants.rb` § 5 separates
+the same three states for the same reason and skips rather than guessing.
 
 **Degradation, in order:**
 
