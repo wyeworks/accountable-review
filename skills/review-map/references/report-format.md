@@ -1802,8 +1802,14 @@ verdict, not per citation from an impression: by eye every path looks renderable
 It reads four signals — the repo's `.gitattributes` (`linguist-generated`, `-diff`), whether git
 calls the file binary, a short list of lockfile names, and the size of the file's own diff against
 GitHub's documented thresholds of **400 lines or 20 KB** to be loaded automatically and **20,000
-lines or 500 KB** to be shown at all. Its header carries the source and what it cannot know. Two
+lines or 500 KB** to be shown at all. Its header carries the source and what it cannot know. Three
 of those are worth understanding here rather than in the script:
+
+- **Those lines are the diff GitHub renders, context and hunk headers included** — not the changed
+  lines. GitHub's wording does not say which, and the two differ by about six lines per hunk, so a
+  diff of many small scattered edits can be half again as long as its changed-line count suggests.
+  The script counted the changed lines until 2026-09-17 and published an anchor into a withheld file
+  because of it.
 
 - **The size rule is not the whole rule.** A one-line change to a generated file is small by every
   measurement and GitHub collapses it regardless — a `db/structure.sql` under
