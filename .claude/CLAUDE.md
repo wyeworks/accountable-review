@@ -744,7 +744,7 @@ Editing one of these means checking the others still agree.
   changelog of the change.
 
   **The decision is a script because by eye every checkpoint looks carryable.** `carry-plan.sh`
-  holds eight preconditions joined by AND and failing to a *full* run, which is
+  holds six preconditions joined by AND and failing to a *full* run, which is
   `ci/application-code.sh`'s asymmetry: a needless full run costs minutes nobody watches, a wrongly
   carried claim is undetectable from the inside. Its P8 is the one that protects the product —
   affected-but-unchanged code means the dangerous change is a new consumer in a file no checkpoint
