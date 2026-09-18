@@ -1,11 +1,11 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
 
-Turns a diff into one published page a reviewer can work from: what the change is for, which
+Turns a diff into one HTML page a reviewer can work from: what the change is for, which
 judgments it asks of them and where to look to make each one, the order to read the code in, and
 what the change reaches outside the lines it touched.
 
@@ -29,8 +29,8 @@ comments on the PR. If the project has a review command, say so at the end and l
 ## Host and invocation
 
 Use `/accountable-review:review-map` in Claude Code or `$review-map` in Codex. Both accept a
-PR number, URL, branch, or diff range; `--brief` (default) or `--full`; `--effort high`
-(default) or `--effort low`; and `--output <dir>`. `--review` is not implemented.
+PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
+`--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
 
 Before step 1, read **only your host's reference**: [Codex](references/hosts/codex.md) or
 [Claude Code](references/hosts/claude-code.md). It owns delegation and delivery mechanics;
@@ -524,7 +524,7 @@ claim had been public for as long as the challenge took to arrive.
 
 **How.** One independent reader per note, launched the way **your host reference** says — Claude
 spawns the registered `accountable-review:claim-falsifier` agent, Codex spawns a session subagent —
-**all in a single message.** This is the one exception to the rule against subagents in
+**up to the host’s available concurrency.** This is the one exception to the rule against subagents in
 § *Hard rules*.
 
 **Then keep working — do not wait on them.** They come back as notifications, not as a blocked turn,
@@ -539,11 +539,9 @@ cache-read token the run spent** over 145-216 requests — the most expensive th
 after step 5, and invisible in the parent's transcript. That is the cap's real job: six agents is the
 point past which a second reader stops paying for itself.
 
-Spawn them in one message anyway. It costs nothing, it keeps the challenges arriving together rather
-than trickling, and if a future harness does make them block, one message stalls the run once — for
-the slowest — where the same agents one at a time stall it once each. That is not hypothetical: a run
-that reached for a single blocking `Explore` agent paid 997 seconds, 41% of its wall clock, for one
-sequential spawn.
+Launch the selected readers without waiting between launches, up to the host’s concurrency
+limit. Queue any remaining notes and continue drafting. A run that reached for a single blocking
+`Explore` agent paid 997 seconds, 41% of its wall clock, for one sequential spawn.
 
 Give each agent four things and no more: the absolute path of `references/claim-falsifier.md`, which
 it is asked to read first; the repository path; `BASE` and `HEAD`; and **the path of that one note**.

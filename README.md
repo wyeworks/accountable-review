@@ -367,7 +367,7 @@ updates the linked skill too. Restart Codex if the skill does not appear.
 Open the repository you want to review in Codex, then invoke:
 
 ```text
-$review-map --brief
+$review-map
 ```
 
 The result is a **local HTML file**, linked from the response, using the same template and
@@ -631,7 +631,7 @@ What you choose per run:
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
-| **Output** | A published artifact by default; `--output <dir>` writes static HTML instead. |
+| **Output** | A local HTML file in Codex or a published artifact in Claude Code; `--output <dir>` writes static HTML to a chosen directory. |
 
 In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
 optional:

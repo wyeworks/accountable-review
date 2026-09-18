@@ -50,8 +50,9 @@ outside the repository under review, and temporary files are not durable hosting
 
 High effort explicitly delegates independent readers using the session's subagent tools.
 The shared mandate is bundled inside the skill, so installation does not need a separate
-named Codex agent or a particular model. Workers inherit the configured model and effort;
-Claude's `sonnet` setting does not apply to them. Concurrency is bounded by the host, with
+named Codex agent or a particular model. Workers inherit the parent model and effort unless
+the Codex agent configuration overrides them; Claude's `sonnet` setting does not apply.
+Concurrency is bounded by the host, with
 at most six selected analysis notes across the whole run. The parent continues drafting and
 then collects the readers' results before completing the page.
 
