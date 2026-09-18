@@ -1004,12 +1004,12 @@ still "a trivially small application change still regenerates" 3 "trivially litt
 
 # LOCK FILES SPLIT TWO WAYS HERE, and the split is right rather than an oversight — the two name
 # lists exist for two different questions. diff-render.sh's, which application-code.sh borrows,
-# holds the JS ones, because what it answers is "will GitHub render this diff". carry-plan.sh's P7
+# holds the JS ones, because what it answers is "will GitHub render this diff". carry-plan.sh's P5
 # holds the Ruby and Elixir ones, because what IT answers is "did the thing every documentation
 # link on the page is pinned from move".
 #
 # So a yarn.lock bump is correctly SKIPPED: no application code, no pinned link derived from it,
-# nothing the page cites. And a Gemfile.lock bump correctly regenerates — not through P7, which
+# nothing the page cites. And a Gemfile.lock bump correctly regenerates — not through P5, which
 # never sees it, but through the fail-open half above, where a path diff-render does not recognise
 # counts as code. Both answers are right; pinning them together is what stops someone "fixing" the
 # lists into agreement and losing one.

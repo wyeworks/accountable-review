@@ -225,9 +225,9 @@ Restoring ~80 KB unconditionally is cheaper than the model run it is deciding ab
 cache it is a no-op.
 
 **ripgrep is installed on demand, and only when a previous map came back.** Both halves of
-reusing a map — `carry-plan.sh`'s P8 and, through it, `map-still-current.sh` — replay the page's
+reusing a map — `carry-plan.sh`'s P6 and, through it, `map-still-current.sh` — replay the page's
 own recorded searches, and every search recipe in the lens files is written with `rg`, which a
-GitHub-hosted runner does not have. Without the package each recorded search hits P8's
+GitHub-hosted runner does not have. Without the package each recorded search hits P6's
 tool-not-installed branch and refuses, so the run rebuilds the page: correct, and the whole saving
 gone. The guard is `steps.previous.outputs.cache-matched-key != ''` rather than `cache-hit`,
 because the key carries the head SHA and the restore-key prefix is what actually matches — a

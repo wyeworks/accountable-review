@@ -36,7 +36,7 @@
 # spec/models/project_spec.rb:12 may now point at a moved line, and a reader following that citation
 # lands somewhere else. The second half closes that by composition rather than by a new rule. It
 # also catches a case the first half waves through for a different reason: a lock file bump is not
-# application code and it re-pins every documentation link on the page, so carry-plan's P7 refuses
+# application code and it re-pins every documentation link on the page, so carry-plan's P5 refuses
 # and the run regenerates.
 #
 # POLARITY, as everywhere in this design: SKIPPING IS THE HARD-TO-SATISFY PREDICATE. Both halves

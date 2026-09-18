@@ -176,7 +176,7 @@ if [ "$N_FULL" -eq 0 ] || [ $((N_DELTA * 2)) -gt "$N_FULL" ]; then
   full "the delta covers $N_DELTA of $N_FULL changed paths — more than half, so a fresh run is the cheaper and better page"
 fi
 
-# -- P7 · no lockfile in the delta -----------------------------------------------------------
+# -- P5 · no lockfile in the delta -----------------------------------------------------------
 #
 # Gemfile.lock and mix.lock are what every documentation link on the page is pinned from, and a
 # Rails series moving re-pins all of them. There is no way to carry a pinned link across that.
@@ -184,7 +184,7 @@ if awk -F/ '{ print $NF }' "$TMP/delta" | grep -qxE 'Gemfile\.lock|mix\.lock'; t
   full "a lock file moved in the delta — every pinned documentation link is derived from it"
 fi
 
-# -- P8 · the delta did not land where the page searched --------------------------------------
+# -- P6 · the delta did not land where the page searched --------------------------------------
 #
 # This is the precondition that protects the product. Affected-but-unchanged code is what the
 # page is for, so the hazard is a new consumer appearing in a file NO checkpoint cites — which

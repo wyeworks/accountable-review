@@ -127,7 +127,7 @@
       "id": 7,
       "fixture": "two-push",
       "prompt": "can you do a review map for the archive-projects branch",
-      "expected_output": "Two runs. The first is an ordinary Review Map of the archive-projects branch at its first push. The second, with --update, must REFUSE to update: the second push adds a reader of archived_at in a file the first map could not have cited, the recorded search behind the first map's checkpoint now finds it, and carry-plan.sh's P8 says so. The run should regenerate in full and name that reason in chat. A page that updates in place here has carried a claim the new commits made false.",
+      "expected_output": "Two runs. The first is an ordinary Review Map of the archive-projects branch at its first push. The second, with --update, must REFUSE to update: the second push adds a reader of archived_at in a file the first map could not have cited, the recorded search behind the first map's checkpoint now finds it, and carry-plan.sh's P6 says so. The run should regenerate in full and name that reason in chat. A page that updates in place here has carried a claim the new commits made false.",
       "files": [
         "app/jobs/stale_project_sweeper.rb",
         "app/queries/active_projects.rb",

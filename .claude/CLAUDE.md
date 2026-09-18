@@ -746,7 +746,7 @@ Editing one of these means checking the others still agree.
   **The decision is a script because by eye every checkpoint looks carryable.** `carry-plan.sh`
   holds six preconditions joined by AND and failing to a *full* run, which is
   `ci/application-code.sh`'s asymmetry: a needless full run costs minutes nobody watches, a wrongly
-  carried claim is undetectable from the inside. Its P8 is the one that protects the product —
+  carried claim is undetectable from the inside. Its P6 is the one that protects the product —
   affected-but-unchanged code means the dangerous change is a new consumer in a file no checkpoint
   cites, invisible to any rule about what a checkpoint cites, so the page's own recorded searches
   are replayed and a delta path among their hits refuses the update. Hits rather than scope,
@@ -775,7 +775,7 @@ Editing one of these means checking the others still agree.
 
   **The carrier needs ripgrep, which a GitHub runner does not have, and that was invisible until
   CI went red.** Both halves of reusing a map replay the page's recorded searches, and the lens
-  files write those with `rg`, so without the package P8 refuses every one and a re-run rebuilds
+  files write those with `rg`, so without the package P6 refuses every one and a re-run rebuilds
   the page — the feature inert in the environment the cache was built for. The workflow installs
   it **on demand**, guarded on the restore having matched, and **cannot fail the job**, because
   the install is an optimisation and a failed one costs minutes rather than the map. The same

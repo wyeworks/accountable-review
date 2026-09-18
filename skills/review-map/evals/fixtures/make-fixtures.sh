@@ -2780,7 +2780,7 @@ commit "$F5" "Add dunning stages to invoices"
 #
 # The only fixture with THREE commits, and the only one built for a re-run rather
 # than a run. A pull request that was reviewed at one revision and then pushed to
-# again — which is what --update exists for, and what carry-plan.sh's P8 exists to
+# again — which is what --update exists for, and what carry-plan.sh's P6 exists to
 # refuse.
 #
 #   base            main, before the pull request
@@ -2803,7 +2803,7 @@ commit "$F5" "Add dunning stages to invoices"
 #     no checkpoint of A cites and could not have cited — it did not exist. The
 #     carry rule alone cannot see it: nothing in any checkpoint's own markup
 #     mentions this path. What sees it is the recorded search, replayed at the new
-#     head, now returning a delta path. That is P8, and refusing the update here is
+#     head, now returning a delta path. That is P6, and refusing the update here is
 #     the correct answer rather than a conservative one: the sweeper makes the
 #     first map's claim about who reads the column false.
 #   · B also touches README.md, so the delta is not purely application code and a

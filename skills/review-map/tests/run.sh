@@ -551,7 +551,7 @@ plan() {
 
 # EVERY RECORDED SEARCH IN THIS SUITE IS A grep, AND NONE MAY BE AN rg. A page records whatever
 # the run searched with, and both lens files write their recipes with rg — so on a machine without
-# ripgrep P8 refuses every one of them and the update falls back to a full run. That is the
+# ripgrep P6 refuses every one of them and the update falls back to a full run. That is the
 # fail-closed answer and it is the right one, but it means a fixture recording an rg search is a
 # row asserting that ripgrep is installed: thirteen of these passed here and failed on a GitHub
 # runner, which has no rg, and two of them had been passing for the wrong reason because the
@@ -596,7 +596,7 @@ plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^excerpt	app/queries/active.rb	regen$')" "1" "an excerpt whose file moved in the delta is regenerated"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^excerpt	app/models/project.rb	keep$')" "1" "an excerpt whose file did not is left alone"
 
-# -- P8 · the delta landed where the page searched ---------------------------------------------
+# -- P6 · the delta landed where the page searched ---------------------------------------------
 # The rule that protects the product. A new consumer in a file NO checkpoint cites is invisible
 # to the carry rule, and the recorded searches are the only thing on the page that can see it.
 cpage "grep -rn &#39;second push&#39; app"
@@ -614,7 +614,7 @@ cpage "grep -rn &#39;\bsecondpush\b&#39; app"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "0" "and a boundary that genuinely does not match does not refuse"
 
-# -- P8 · the replay is argv, and the gate is quote-aware ---------------------------------------
+# -- P6 · the replay is argv, and the gate is quote-aware ---------------------------------------
 # Every alternation in both lens files sits inside quotes, so a blanket refusal of | and < would
 # reject the real searches and send every re-run to a full one. Outside quotes the same
 # characters are a shell doing something.
@@ -684,7 +684,7 @@ plan --prev-head "$CHEAD" --base "$CBASE" --head "$CWIDE"
 assert_eq "$cprc" "3" "a delta covering more than half the diff refuses"
 assert_eq "$(printf '%s\n' "$out" | grep -c 'more than half')" "1" "and says so rather than reporting a git failure"
 
-# -- P7 · a lock file moved ----------------------------------------------------------------------
+# -- P5 · a lock file moved ----------------------------------------------------------------------
 # Every pinned documentation link on the page is derived from it, and there is no way to carry a
 # pinned link across a series change.
 (cd "$CREPO" && git checkout -q -B locked "$CHEAD" && echo 'GEM2' > api/Gemfile.lock && git add -A && git commit -qm lock && git rev-parse HEAD > "$WORK/clock") >/dev/null 2>&1

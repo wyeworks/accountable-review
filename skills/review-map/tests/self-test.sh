@@ -395,7 +395,7 @@ sed 's|if \[ "$N_FULL" -eq 0 \] \|\| \[ $((N_DELTA \* 2)) -gt "$N_FULL" \]; then
   "$CARRY_PLAN" > "$WORK/no-half-rule.sh"
 case_carry_red "the delta-size rule never fires, so a rewrite of the branch updates in place" "$WORK/no-half-rule.sh"
 
-# 14. P8, which is the rule that protects the product. Affected-but-unchanged code is what the
+# 14. P6, which is the rule that protects the product. Affected-but-unchanged code is what the
 #     page is for, and a new consumer landing in a file no checkpoint cites is invisible to the
 #     carry rule — the recorded searches are the only thing on the page that can see it. With the
 #     intersection stubbed out the script still runs every search and still reports them safe.
