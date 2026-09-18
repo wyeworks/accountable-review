@@ -244,6 +244,30 @@ SKIP  no excerpts in this input
 ## --page anchors-unpinned-link.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment build-state-updated-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page build-state-updated-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment build-state-updated-missing.html
+exit=0
+SKIP  no excerpts in this input
+## --page build-state-updated-missing.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment build-state-updated-nosha.html
+exit=0
+SKIP  no excerpts in this input
+## --page build-state-updated-nosha.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment build-state-updated-twice.html
+exit=0
+SKIP  no excerpts in this input
+## --page build-state-updated-twice.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -632,6 +656,18 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page invariants-update-narration.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-update-recency.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-update-recency.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-update-resolved.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-update-resolved.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment invariants-verdict.html

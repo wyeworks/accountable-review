@@ -358,6 +358,54 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment build-state-updated-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page build-state-updated-clean.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment build-state-updated-missing.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page build-state-updated-missing.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment build-state-updated-nosha.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page build-state-updated-nosha.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment build-state-updated-twice.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page build-state-updated-twice.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-at-head.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -809,6 +857,30 @@ PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-update-narration.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment invariants-update-recency.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page invariants-update-recency.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment invariants-update-resolved.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page invariants-update-resolved.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list

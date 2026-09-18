@@ -304,6 +304,30 @@ SKIP  no .impact panel in this input
 ## --page anchors-unpinned-link.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment build-state-updated-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page build-state-updated-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment build-state-updated-missing.html
+exit=0
+SKIP  no .impact panel in this input
+## --page build-state-updated-missing.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment build-state-updated-nosha.html
+exit=0
+SKIP  no .impact panel in this input
+## --page build-state-updated-nosha.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment build-state-updated-twice.html
+exit=0
+SKIP  no .impact panel in this input
+## --page build-state-updated-twice.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  no .impact panel in this input
@@ -1190,6 +1214,18 @@ WARN  no .impact panel on this page — right only if nothing the change does re
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-update-narration.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-update-recency.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-update-recency.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-update-resolved.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-update-resolved.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment invariants-verdict.html

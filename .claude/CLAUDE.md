@@ -793,6 +793,27 @@ Editing one of these means checking the others still agree.
   cache steps, `read-config.sh`'s `update` key, `ci/generate-review-map.sh`'s conditional
   pass-through and manifest `@3`, `references/workflow.md` § *The previous map* owning the carrier's
   reasoning **alone**, and `setup-ci/tests/` with eight more mutations.
+
+  **The graded half splits along conditional versus unconditional, and that split is the design
+  rather than a convenience.** *No recency marker, no resolved tick* holds on **every** page — an
+  ordinary run must not write one either — so it is `page-invariants.rb` § 2e, unconditional, where
+  no flag has to be remembered. Only *the disclosure is present, once* is conditional, so it is
+  `build-state.rb` behind `--updated`, which is a **boolean beside the mode and never a fourth mode
+  value**: an updated page is a *final* page, and a mode value would have exempted it from the
+  no-banner check while looking like it added one. § 2e's class alternative matches a whole
+  space-delimited class because the marker arrives as `class="cp updated"` — § 3's tier-modifier
+  bug, in the direction where the rule passes a page carrying the defect — and the disclosure is
+  counted on the comment-stripped copy, because the template's own comment beside the `Revision`
+  cell explains that segment and a raw count read it as a second one.
+
+  **The eval case is a recipe, and that is why it needed no harness change.** `bin/evals page`
+  prints fixture, prompt and check for a person to follow, and case 4 already held two commands with
+  a snapshot instruction in front of them — so case 7's two runs are prose in the same field.
+  `evals/run.sh` and `report.sh` are untouched, and there is no new axis: a page case produces no
+  result line to carry one. The `two-push` fixture is **new rather than a third commit on an
+  existing one**, because adding one would move `HEAD~1` under every case already pointing there.
+  Its planted finding is the only one in the corpus whose pass condition is a run **declining** to
+  take a shortcut.
 - **Findings are a sample, not an audit — and the page no longer says so.** The rule is unchanged and
   load-bearing rather than hedging: the skill explains, explanation is reproducible, defect discovery
   is not, and the page must never read as a clean bill of health. What moved is where the sentence

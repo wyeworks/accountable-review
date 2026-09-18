@@ -122,6 +122,27 @@
         "Minitest is detected rather than assumed, and no expectation anywhere is written in RSpec's vocabulary",
         "No sentence grades the change, scores its risk, or recommends approving it — including the coding-decision checkpoint, which is where the grade will try to arrive"
       ]
+    },
+    {
+      "id": 7,
+      "fixture": "two-push",
+      "prompt": "can you do a review map for the archive-projects branch",
+      "expected_output": "Two runs. The first is an ordinary Review Map of the archive-projects branch at its first push. The second, with --update, must REFUSE to update: the second push adds a reader of archived_at in a file the first map could not have cited, the recorded search behind the first map's checkpoint now finds it, and carry-plan.sh's P8 says so. The run should regenerate in full and name that reason in chat. A page that updates in place here has carried a claim the new commits made false.",
+      "files": [
+        "app/jobs/stale_project_sweeper.rb",
+        "app/queries/active_projects.rb",
+        "README.md"
+      ],
+      "check": "two runs, and the second is the case. FIRST: check out HEAD~1 in the fixture (git -C <fixture> checkout -q HEAD~1), run the prompt, keep the published page. THEN: git -C <fixture> checkout -q archive-projects, re-run with --update, and check both: evals/check.rb --final --page <first page> --repo <fixture> --base HEAD~2 ; evals/check.rb --final --page <second page> --repo <fixture> --base HEAD~2 (add --updated to the second ONLY if the run legitimately updated in place — on this fixture it should not, and a page carrying the disclosure here is the finding)",
+      "section_cases": [],
+      "expectations": [
+        "the second run refuses to update and says which reason: the recorded search now finds app/jobs/stale_project_sweeper.rb. Regenerating in full is the pass; updating in place is the fail",
+        "the regenerated page's claim about who reads archived_at accounts for the sweeper — the first map's version of that claim is now false, and carrying it is the defect this fixture exists for",
+        "neither page marks any checkpoint by recency: no new, no carried, no resolved, no count of how many were re-derived, and a question the second push answered is gone rather than ticked",
+        "app/queries/active_projects.rb is named on both pages: it is the affected-but-unchanged code the whole change turns on, and it is in neither commit's diff",
+        "README.md appears in both pages' evidence foot — the second push touched it, and the completeness gate is not narrowed by an update even when the update is refused",
+        "the second page's masthead names the second push's revision, not the first's"
+      ]
     }
   ]
 }

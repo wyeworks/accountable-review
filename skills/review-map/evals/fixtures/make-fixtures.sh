@@ -2775,8 +2775,118 @@ EOF
 git -C "$F5" checkout -q -b add-dunning-stages
 commit "$F5" "Add dunning stages to invoices"
 
+# ---------------------------------------------------------------------------
+# F6 · two-push
+#
+# The only fixture with THREE commits, and the only one built for a re-run rather
+# than a run. A pull request that was reviewed at one revision and then pushed to
+# again — which is what --update exists for, and what carry-plan.sh's P8 exists to
+# refuse.
+#
+#   base            main, before the pull request
+#   A  (HEAD~1)     the first push — what the first Review Map describes
+#   B  (HEAD)       the second push
+#
+# A NEW FIXTURE RATHER THAN A COMMIT ON AN EXISTING ONE. Adding a third commit to
+# F1 would move HEAD~1 under every case already pointing at it, and old result
+# lines would stop being comparable with new ones for a reason nobody would see in
+# the diff.
+#
+# Planted in A, and none of it in A's diff:
+#   · app/queries/active_projects.rb scopes the collection archival changes the
+#     meaning of, and does not filter the new column. The first map's checkpoint
+#     turns on it, and the recorded search behind that checkpoint is a pattern
+#     over `archived_at` in app/.
+#
+# Planted in B, and this is the one the whole design turns on:
+#   · app/jobs/stale_project_sweeper.rb is a NEW READER of archived_at, in a file
+#     no checkpoint of A cites and could not have cited — it did not exist. The
+#     carry rule alone cannot see it: nothing in any checkpoint's own markup
+#     mentions this path. What sees it is the recorded search, replayed at the new
+#     head, now returning a delta path. That is P8, and refusing the update here is
+#     the correct answer rather than a conservative one: the sweeper makes the
+#     first map's claim about who reads the column false.
+#   · B also touches README.md, so the delta is not purely application code and a
+#     run has to notice that only one of its two paths matters.
+# ---------------------------------------------------------------------------
+F6=$DEST/two-push
+mkdir -p "$F6"/app/models "$F6"/app/queries "$F6"/app/jobs "$F6"/db/migrate "$F6"/config
+init_repo "$F6"
+cp "$F1/config/application.rb" "$F6/config/application.rb"
+cp "$F1/Gemfile" "$F6/Gemfile"
+cp "$F1/Gemfile.lock" "$F6/Gemfile.lock"
+
+cat > "$F6/app/models/project.rb" <<'EOF'
+class Project < ApplicationRecord
+  belongs_to :workspace
+  has_many :time_entries
+
+  scope :for_workspace, ->(ws) { where(workspace: ws) }
+end
+EOF
+
+cat > "$F6/app/queries/active_projects.rb" <<'EOF'
+# Every picker in the app that offers "a project to log time against" comes
+# through here. It does NOT know about archival.
+class ActiveProjects
+  def initialize(workspace) = @workspace = workspace
+
+  def call
+    Project.for_workspace(@workspace).order(:name)
+  end
+end
+EOF
+
+printf '# Timesheet\n\nTime tracking.\n' > "$F6/README.md"
+commit "$F6" "base"
+
+git -C "$F6" checkout -q -b archive-projects
+
+cat > "$F6/db/migrate/20260101000000_add_archived_at_to_projects.rb" <<'EOF'
+class AddArchivedAtToProjects < ActiveRecord::Migration[7.1]
+  def change
+    add_column :projects, :archived_at, :datetime
+    add_index :projects, :archived_at
+  end
+end
+EOF
+
+cat > "$F6/app/models/project.rb" <<'EOF'
+class Project < ApplicationRecord
+  belongs_to :workspace
+  has_many :time_entries
+
+  scope :for_workspace, ->(ws) { where(workspace: ws) }
+  scope :archived, -> { where.not(archived_at: nil) }
+
+  def archive!
+    update!(archived_at: Time.current)
+  end
+
+  def archived? = archived_at.present?
+end
+EOF
+commit "$F6" "Archive projects instead of deleting them"
+
+# --- the second push ---------------------------------------------------------
+cat > "$F6/app/jobs/stale_project_sweeper.rb" <<'EOF'
+# Added by the second push. A new reader of archived_at, in a file the first
+# Review Map could not have cited — and the reason its claim about who reads
+# this column is no longer true.
+class StaleProjectSweeper < ApplicationJob
+  def perform
+    Project.where.not(archived_at: nil).find_each do |project|
+      project.time_entries.where(billed_at: nil).destroy_all
+    end
+  end
+end
+EOF
+printf '# Timesheet\n\nTime tracking. Projects can be archived.\n' > "$F6/README.md"
+commit "$F6" "Sweep unbilled entries off archived projects"
+
+
 echo "fixtures built in $DEST"
-for d in "$F1" "$F2" "$F3" "$F4" "$F5"; do
+for d in "$F1" "$F2" "$F3" "$F4" "$F5" "$F6"; do
   printf '\n%s\n' "$(basename "$d")"
   echo "  base: $(git -C "$d" rev-parse --short HEAD~1)  head: $(git -C "$d" rev-parse --short HEAD)  branch: $(git -C "$d" rev-parse --abbrev-ref HEAD)"
   echo "  remote: $(git -C "$d" remote get-url origin 2>/dev/null || echo none)"

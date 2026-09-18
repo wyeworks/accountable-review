@@ -172,6 +172,30 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-unpinned-link.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment build-state-updated-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page build-state-updated-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment build-state-updated-missing.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page build-state-updated-missing.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment build-state-updated-nosha.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page build-state-updated-nosha.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment build-state-updated-twice.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page build-state-updated-twice.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-at-head.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -398,6 +422,18 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-update-narration.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-update-recency.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-update-recency.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-update-resolved.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-update-resolved.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-verdict.html

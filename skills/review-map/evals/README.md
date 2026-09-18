@@ -444,12 +444,12 @@ harness cannot see" is an argument, not a measurement.
 prompt verbatim, and the check that follows:
 
 ```sh
-bin/evals page                                  # the six cases: id and fixture
+bin/evals page                                  # the seven cases: id and fixture
 bin/evals page 1                                # the recipe for one of them
 bin/evals page-check 1 /path/to/page.html       # its check, --expect and --forbid filled in
 ```
 
-It is addressed by **case id, not fixture**, because six cases share five fixtures: `monorepo-contract`
+It is addressed by **case id, not fixture**, because seven cases share six fixtures: `monorepo-contract`
 carries two, which ask different questions of the same diff. It builds the fixtures only when the one it needs is
 missing (`--rebuild` forces it): `make-fixtures.sh` opens with an unconditional `rm -rf` of the whole
 destination, and a second `evals page` in another terminal would otherwise delete the repository your
@@ -798,6 +798,7 @@ They are the ground truth the expectations check against:
 | `trivial` | 1 file, a README typo | nothing — the right output is a refusal to generate ceremony |
 | `monolith-guard-chain` | 7 files, server-rendered monolith, no client package, **GitHub remote, nothing pushed** (link rung 3) | the two sibling guards in the *changed* `application_controller.rb` still key on `steward?`, forty lines below the changed hunk; `steward/base_controller.rb` is the admission test the fix was aligned to, and its own profile guard is now unreachable; `matching/eligibility_filter.rb` rejects on `steward?` twice and `User.recommendable` does it again in SQL for four jobs, while `general_recommendations_eligible` excludes the free plan this same diff grants — so the two scopes disagree; `switch_to_free!`'s comment names a controller guard the new caller is not behind, and the protection survives only because `has_paid_subscription?` requires `plan_active?`; `chapters_controller.rb` skips the plan guard but not the profile-setup guard, and `chapters` is absent from `profile_setup_not_required?`, so the new redirect target bounces on the users `generate_steward_invite!` selects for; `load_management` reads approved memberships and acceptance creates none; `test/test_helper.rb` completes every test user's profile, so a green suite cannot observe any of it |
 | `rails-house-style` | 7 files, Rails-only, Minitest, **no remote** (link rung 4) | the new `in_dunning` status has two unchanged readers that disagree with it in opposite directions — `app/jobs/invoice_reminder_job.rb` matches the literal `"overdue"` and silently stops chasing anyone in dunning, `app/services/refund_policy.rb` has an exhaustive `case` whose `else` raises; `InvoicesController#dunning` is the only one of four actions without `authorize_invoice!`; and the house answer itself, which is a fact about two directories rather than about any file — `app/models` holds two records and the one non-record this diff adds, while `app/services` holds four classes of exactly that kind |
+| `two-push` | 3 commits, Rails-only, no remote — the only fixture built for a **re-run** rather than a run | the second push adds `app/jobs/stale_project_sweeper.rb`, a new reader of `archived_at` in a file the first map could not have cited. The carry rule cannot see it — no checkpoint's markup mentions that path — and what does see it is the first map's own recorded search, replayed at the new head. So the right answer is that the update is **refused** and the run regenerates: this is the fixture for `carry-plan.sh`'s P8, and the only planted finding whose pass condition is a run declining to take a shortcut |
 
 **`rails-house-style` is the only fixture that plants something the page must *not* say**, and that is
 why it exists rather than being folded into `rails-only-small`. `app/services/dunning_scheduler.rb` is
