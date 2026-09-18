@@ -224,7 +224,9 @@ jobs:
         if: steps.scope.outputs.verdict == 'generate'
         env:
           # One of these two has to be a secret on this repository. Nothing else
-          # in this job needs a credential.
+          # in this job needs a credential. The first is an API key from the
+          # Anthropic Console; the second is what `claude setup-token` prints,
+          # and bills a Claude subscription instead of API credit.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # Everything from the event goes through the environment rather than

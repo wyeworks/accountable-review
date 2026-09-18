@@ -10,10 +10,10 @@
 #   One section, produced by a driver in drivers/ from the frozen upstream:
 #     check.rb --fragment attention.html --scope attention
 #
-# --level is still accepted and read by nothing. There is one page shape now — SKILL.md
-# refuses --full and --review and takes --brief and --light as aliases that change nothing —
-# so the flag survives only because evals/run.sh still passes it and an unknown argument
-# exits 2. Do not add a check that reads it: a second shape is what this page stopped being.
+# --level is still accepted and read by nothing. There is one page shape now and no flag
+# names another, so this flag survives only because evals/run.sh still passes it and an
+# unknown argument exits 2. Do not add a check that reads it: a second shape is what this
+# page stopped being.
 #
 # Three grading scopes, and the difference matters. A PAGE carries invariants no fragment
 # can: completeness, one canonical home, the excerpt budget, the build state. A FRAGMENT is

@@ -14,13 +14,15 @@
 # comparison is the only version that catches that, and set comparison needs the
 # ledger's paths extracted exactly, which needs the markup to cooperate.
 #
-# It does, by contract: every ledger row carries the path in a data-path attribute
+# It does, by contract: every inventory cell carries the path in a data-path attribute
 #
-#     <td data-path="app/models/project.rb">…</td>
+#     <div class="c" data-path="app/models/project.rb">…</div>
 #
-# so extraction is one grep regardless of whether the cell renders as a permalink,
-# a diff anchor, or plain text. If you are looking at this because the gate says it
-# found no paths, that attribute is what is missing.
+# as ledger-rows.sh --paths-only emits it. (A <td> is still accepted: pages built
+# before the grid inventory carry one.) So extraction is one grep regardless of
+# whether the cell renders as a permalink, a diff anchor, or plain text. If you are
+# looking at this because the gate says it found no paths, that attribute is what
+# is missing.
 #
 # data-path is RESERVED to ledger rows. The grep below is not scoped to the ledger
 # table — it reads the whole page — so any other component emitting the attribute
@@ -63,8 +65,9 @@ ledger_n=$(wc -l < "$TMP/ledger" | tr -d ' ')
 
 if [ "$ledger_n" -eq 0 ]; then
   echo "gate: FAIL — no data-path attributes in the page."
-  echo "  The ledger rows must carry the path as <td data-path=\"...\">, or this"
-  echo "  check cannot run. It does not fall back to searching the page text:"
+  echo "  Generate the inventory with ledger-rows.sh --paths-only, which emits the"
+  echo "  cells this reads; do not type them. Without them this check cannot run,"
+  echo "  and it does not fall back to searching the page text:"
   echo "  that check passes on wrong paths, which is worse than no check."
   exit 1
 fi
