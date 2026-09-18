@@ -299,9 +299,14 @@ break_and_run "a trivially small application change counts as no application cha
   ci/map-still-current.sh \
   's|^  3:trivial).*$|  3:trivial) ;;|'
 
-# The previous head read from the page rather than the manifest. The page carries a seven-character
-# prefix, not a commit, and the manifest exists to carry what the HTML cannot.
-break_and_run "the previous head is guessed from the page instead of read from the manifest" \
+# The other absence, and it is a different one: a restored directory holding a page but no manifest.
+# Which revision that page describes is then unknown, and unknown has to lead to the expensive answer.
+#
+# What this does NOT pin is the rule one line below it — that the previous head comes from the
+# manifest and never from the page — and no mutation here can. The page's own short SHA is a
+# seven-character prefix that `git rev-parse` resolves happily, so a version reading it would pass
+# every row in run.sh. The rule is carried by the comment in the script and by nothing else.
+break_and_run "a restored map with no manifest is used as though it were current" \
   ci/map-still-current.sh \
   's|^\[ -f "\$MANIFEST" \] |# |'
 
