@@ -281,7 +281,7 @@ case_runs_red "the assembled primer is gone, so a mentor run has nothing to copy
 #     .pr-mark rather than through the svg count, so the row goes red on the class alone — a mark
 #     smuggled in as a web font or a background image is the same defect and the same disclosure
 #     obligation, and neither one carries an opening svg tag.
-awk '/<span class="pr-brand">/ && !d { print "            <span class=\"pr-mark\"></span>"; d = 1 } { print }' \
+awk '/<span class="pr-title">/ && !d { print "            <span class=\"pr-mark\"></span>"; d = 1 } { print }' \
   "$TEMPLATE" > "$WORK/pr-mark.html"
 case_runs_red "the primer's logotype comes back, bringing the trademark obligation with it" "$WORK/pr-mark.html" "$SKELETON"
 
@@ -316,6 +316,21 @@ awk '
   /<\/ul>/ && buf != "" && !done { printf "%s", buf; done = 1 }
 ' "$TEMPLATE" > "$WORK/primer-late.html"
 case_runs_red "the primer is assembled below the Look at list it is meant to precede" "$WORK/primer-late.html" "$SKELETON"
+
+# 37. The header goes back to naming the component. "Rails | Primer" spends the widest line in the
+#     block on a fact the reader can see — that this is a callout — and says nothing about what it
+#     teaches. The eyebrow is reinstated here together with the separator it needs, because that is
+#     how the old shape actually returns: not as one stray span, but as the pair.
+sed 's|<span class="pr-title">Understanding Ruby on Rails</span>|<span class="pr-title">Rails</span><i class="pr-sep"></i><span class="lbl">Primer</span>|' \
+  "$TEMPLATE" > "$WORK/primer-eyebrow.html"
+case_runs_red "the primer header names the component again instead of the stack" "$WORK/primer-eyebrow.html" "$SKELETON"
+
+# 38. And the ramp that frames it, half-declared. --primer-* is the newest colour on this page and
+#     the one nothing depends on to be readable, which is exactly the profile of a token that gets
+#     forgotten in one of the three theme blocks and is invisible until someone opens a mentor page
+#     with the OS in dark mode. Counted by name for the reason --syn-key is.
+sed '/^  --primer-ink:        oklch(0.80  0.09  28);$/d' "$TEMPLATE" > "$WORK/primer-ink-dark.html"
+case_runs_red "the primer frame's ink is missing from a dark theme block" "$WORK/primer-ink-dark.html" "$SKELETON"
 
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #

@@ -673,8 +673,8 @@ go and read it.
 ```html
 <aside class="primer">
   <div class="pr-head">
-    <span class="pr-brand">Rails</span><i class="pr-sep"></i>
-    <span class="lbl">Primer</span><span class="pr-api">ActiveModel::Dirty</span>
+    <span class="pr-title">Understanding Ruby on Rails</span>
+    <span class="pr-api">ActiveModel::Dirty</span>
   </div>
   <div class="pr-body">
     <div class="pr-main">
@@ -746,14 +746,35 @@ arrive looking generous.
 
 **Neither a tier nor evidence**, exactly like the link it escalates from. The claim underneath still
 rests on its repo `file:line` at the tier it already carried. There is no sixth tier, and a primer is
-not one: what it adds is why the framework consequence follows, which is provenance — which is also
-why the component is plum rather than a hue of its own.
+not one: what it adds is why the framework consequence follows, which is provenance.
+
+**The header names the stack, and the frame is that stack's red.** `Understanding Ruby on Rails`, in
+the display serif at the page's own near-black ink, with the API the primer is about on the right; the
+panel around it is `--primer-*`, a ramp that exists for this component and reaches nothing else.
+Both halves answer the same reader. Someone new to the stack has to find the block written for them
+inside a page written for someone who already knows it, and a hue finds it faster than a heading
+does — while the header spends its line saying what the block will teach rather than naming a kind of
+component the reader can already see, which is what `Rails | Primer` did.
+
+**That red is the one on this page that carries no meaning, and the rule holding it there is that it
+frames a quotation of the manual.** It is attached to no claim, so it cannot be read as a verdict —
+the test teal had to pass. Red on anything the page *asserts* about this change is the severity chip
+arriving as a palette, and `page-template.html`'s token block owns the rest of the argument,
+including why the ramp is named for its component rather than for a meaning. The green and red inside
+an excerpt are untouched and still mean added and removed there and nowhere else.
+
+**Rails is the only stack that earns a primer today**, because `elixir-docs.md` withholds every link
+and a primer is gated on one. If that catalogue opens, a Phoenix primer in Rails red is wrong; the
+answer then is a variant class on the aside, never a colour a run types and never a second component.
 
 **No mark, and therefore no trademark line.** The version of this callout that the agenda put down
 carried an inlined logotype and a notice saying whose it was. This page has no `<svg>` anywhere, so
 the artwork went, and the notice went with it because a disclaimer disclaims something on display.
 The branded/unbranded variant split went too: it existed only to say who drew the mark, and one shape
-now serves a framework, a gem and a hex package alike with the name set as text.
+still serves a framework, a gem and a hex package alike; only the words in the header change with
+them. The near-black serif of that header is as close to a logotype as this page gets, and that is
+the ceiling: `rails-anchors.rb` fails a primer carrying `<svg>`, `pr-mark` or `pr-tm`, so a logo is
+refused by the check rather than by preference.
 
 ---
 
