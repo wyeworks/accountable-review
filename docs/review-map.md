@@ -252,7 +252,8 @@ what it told them to.
 
 **A primer, at `--mentor` only** — the rule itself, stated. It is what a link escalates into, for
 the case where you would judge better knowing the framework's behaviour than knowing where to read
-about it: the API named, a paragraph or two on what it does and when, a worked example on a class
+about it: a header saying what it is going to teach you — *Understanding Ruby on Rails* — and the
+API named beside it, a paragraph or two on what it does and when, a worked example on a class
 your repository does not have, the line in your code that made it relevant, and the same pinned link
 it came from. It sits inside the checkpoint, after the explanation and before the list of places to
 look, so you meet the unfamiliar API before you are sent to the code rather than after.

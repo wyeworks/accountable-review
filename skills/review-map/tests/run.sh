@@ -164,6 +164,15 @@ assert_eq "$(count "$WORK/markup" 'pr-mark')" "0" "the primer carries no logotyp
 assert_eq "$(count "$WORK/markup" 'pr-tm')"   "0" "and no trademark line, because there is no mark to disclaim"
 assert_eq "$(count "$WORK/markup" 'primer--lib')" "0" "and no branded/unbranded variant split, which only the mark needed"
 
+# ITS HEADER NAMES THE STACK, NOT THE COMPONENT. "Rails | Primer" spent the widest line in the block
+# saying what kind of block it is, which the reader can see; the words a reader new to the stack needs
+# are what it is going to teach them. The separator went with the eyebrow — it existed to divide two
+# things and there is one thing now — so it is asserted at zero the way pr-mark is: a header that
+# grows a second element back is the old shape returning one span at a time.
+assert_eq "$(count "$WORK/markup" 'class="pr-title"')" "1" "the primer header is one title naming the stack"
+assert_eq "$(count "$WORK/markup" 'Understanding Ruby on Rails')" "1" "and it says what the block teaches, in words"
+assert_eq "$(count "$WORK/markup" 'pr-sep')" "0" "no separator survives — there is nothing left to divide"
+
 # A primer is gated on its doc link and earned by a repo citation, and BOTH live inside the aside:
 # rails-anchors.rb judges it as one block, so a primer borrowing the citation of the paragraph above
 # it is the rule working backwards. The link is pinned with the placeholder, never a literal series —
@@ -276,6 +285,7 @@ assert_eq "$(count "$WORK/page.html" 'SKELETON:BODY')" "1" "the emitted page car
 # opens an excerpt with the OS in dark mode.
 assert_eq "$(count "$WORK/head" '--syn-key:')"              "3" "--syn-key is declared in all three theme states, in the skeleton"
 assert_eq "$(count "$WORK/head" '--ex-add:')"               "3" "--ex-add is declared in all three theme states, in the skeleton"
+assert_eq "$(count "$WORK/head" '--primer-ink:')"           "3" "--primer-ink is declared in all three theme states, in the skeleton"
 assert_eq "$(count "$WORK/head" 'prefers-color-scheme: dark')" "1" "the media dark block is in the skeleton"
 assert_eq "$(count "$WORK/head" '[data-theme="dark"]')"     "2" "the explicit dark block is in the skeleton"
 assert_eq "$(count "$WORK/head" '[data-theme="light"]')"    "1" "the explicit light block is in the skeleton"
@@ -362,6 +372,10 @@ mkdir -p "$REPO/app" "$REPO/db" "$REPO/assets"
   printf 'db/structure.sql linguist-generated=true\nassets/*.min.js -diff\n' > .gitattributes
   echo one > app/order.rb
   seq 1 100 > app/big.rb
+  # 700 lines that will be edited every 14th, far enough apart that no two hunks merge.
+  seq 1 700 > app/scattered.rb
+  # One contiguous block, sized so its rendered diff lands one line under the threshold.
+  seq 1 500 > app/boundary.rb
   seq 1 30000 > db/structure.sql
   echo 'v=1' > assets/app.min.js
   printf '\000\001\000' > app/logo.png
@@ -373,6 +387,13 @@ mkdir -p "$REPO/app" "$REPO/db" "$REPO/assets"
   # the hard cap, a binary, a -diff path, a one-line lockfile edit, and one ordinary small file.
   echo two >> app/order.rb
   seq 1 700 > app/big.rb
+  # 50 isolated one-line edits: 100 changed lines, but 50 hunks each costing a header and six
+  # context lines, so the diff GitHub renders is ~450 lines. add+del would call this renderable.
+  awk 'NR % 14 == 7 { print "scattered"; next } { print }' app/scattered.rb > app/scattered.new
+  mv app/scattered.new app/scattered.rb
+  # 196 lines replaced in one hunk: 1 header + 3 context + 196 + 196 + 3 context = 399 rendered.
+  awk 'NR >= 100 && NR < 296 { print "boundary"; next } { print }' app/boundary.rb > app/boundary.new
+  mv app/boundary.new app/boundary.rb
   seq 1 60000 > db/structure.sql
   echo 'v=2' > assets/app.min.js
   printf '\000\002\000' > app/logo.png
@@ -386,6 +407,17 @@ verdict() { (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD) | awk -v p="$1" '$3 == p
 
 assert_eq "$(verdict app/order.rb)"      "render/-"                "an ordinary small change renders, so its citation keeps the diff anchor"
 assert_eq "$(verdict app/big.rb)"        "collapse/over-autoload"  "a diff past 400 lines is behind Load diff, whatever the file is"
+# The row the changed-line measure could not see. Its add+del is 100; the diff GitHub renders is
+# ~450 lines, because context and hunk headers are most of a scattered diff. Measured on real
+# pull requests 2026-09-17: discourse#43002 reports.gjs collapsed at 342 changed / 414 rendered,
+# while discourse#43772 core_primitives.rb rendered at 349 changed / 394 — 349 rendering while
+# 342 collapses is what rules out counting the changed lines.
+assert_eq "$(verdict app/scattered.rb)"  "collapse/over-autoload"  "context pushes a diff past 400 rendered lines though its changed lines are far fewer"
+# And the other side of the same boundary, because counting more lines can only ever collapse
+# more files: a diff of 399 rendered lines must still get its anchor. Without this row the fix
+# above could be widened into over-collapsing and nothing would notice — and the anchor is what
+# the reviewer wants when it works, which is why the verdict leans towards it.
+assert_eq "$(verdict app/boundary.rb)"   "render/-"                "a diff one line under the threshold keeps its anchor"
 assert_eq "$(verdict db/structure.sql)"  "collapse/generated"      "linguist-generated collapses on one changed line, where no size rule would fire"
 assert_eq "$(verdict assets/app.min.js)" "collapse/no-diff"        "a -diff path is reported as an attribute, not as a coincidence of its bytes"
 assert_eq "$(verdict app/logo.png)"      "collapse/binary"         "a binary file has no line to anchor to"
@@ -418,7 +450,7 @@ assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/untouched.rb
   "render/not-in-diff" "a path the diff never touched is not reported as collapsed"
 
 collapsed=$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^collapse' || true)
-assert_eq "$collapsed" "5" "--collapsed-only lists every collapsed path and no renderable one"
+assert_eq "$collapsed" "6" "--collapsed-only lists every collapsed path and no renderable one"
 assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^render' || true)" \
   "0" "--collapsed-only emits no render rows"
 

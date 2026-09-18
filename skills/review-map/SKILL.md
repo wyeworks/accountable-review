@@ -1128,8 +1128,10 @@ Everything else about writing holds at every stage:
   Elixir run anchors with probes and prose instead. This is the fail-closed rule at file scope, not a
   bug to work around.
 - **At `--mentor`, take the primer's markup from the template like any other component.** It is
-  assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header with the library
-  name, the two paragraphs, the `.item` citation, the pinned `a.doc` and the `pre.demo` beside them.
+  assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header, which names the
+  stack in words and not the component — *Understanding Ruby on Rails*, *Understanding Phoenix*, or
+  the library a gem-level primer is about — with the API on the right; then the two paragraphs, the
+  `.item` citation, the pinned `a.doc` and the `pre.demo` beside them.
   Copy the composition and replace every string — the specimen explains `ActiveModel::Dirty` about a
   `Post`, and a specimen's prose inherited onto a different API is a false claim nothing catches.
 
