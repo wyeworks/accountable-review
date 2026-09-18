@@ -46,7 +46,12 @@ break_and_run() {
   fi
   rm -f "$work/$file.bak"
 
-  if "$work/skills/setup-ci/tests/run.sh" > "$work/out" 2>&1; then
+  # stdin is closed because the code under this suite is deliberately broken, and
+  # broken code reads stdin. The timestamp break below cuts `awk ... | sed ...` in
+  # half and leaves the `sed` without its input file: on /dev/null it reads EOF and
+  # run.sh reports the defect, on anything else it blocks and the whole suite is
+  # waited on instead of read.
+  if "$work/skills/setup-ci/tests/run.sh" > "$work/out" 2>&1 </dev/null; then
     bad=$((bad + 1))
     echo "bad   run.sh still passed with: $desc"
   else
@@ -279,6 +284,43 @@ break_and_run "review_map.update is parsed and then not read" \
 break_and_run "the manifest asserts what it was updated from instead of reading the page" \
   ci/generate-review-map.sh \
   's|^updated_from=$(sed -n .*$|updated_from=$BASE_SHA|'
+
+# --- the second question, whose failures are all a map that quietly stops being true -----------
+
+# The halves joined by OR. Either one alone is not evidence the map is current, and this is the
+# direction that matters: a test-only push satisfies the application-code half by itself.
+break_and_run "the two halves of the still-current test are joined by OR" \
+  ci/map-still-current.sh \
+  '/^if printf .*PLAN.*grep -q/,/^fi$/d'
+
+# Trivial is the gate's answer to its own question and the wrong answer to this one: one line in a
+# file a checkpoint cites is exactly where the page has quietly stopped being true.
+break_and_run "a trivially small application change counts as no application change" \
+  ci/map-still-current.sh \
+  's|^  3:trivial).*$|  3:trivial) ;;|'
+
+# The previous head read from the page rather than the manifest. The page carries a seven-character
+# prefix, not a commit, and the manifest exists to carry what the HTML cannot.
+break_and_run "the previous head is guessed from the page instead of read from the manifest" \
+  ci/map-still-current.sh \
+  's|^\[ -f "\$MANIFEST" \] |# |'
+
+# An absence treated as evidence. Every way of not knowing has to lead to the expensive answer.
+break_and_run "nothing restored is treated as a map that is still current" \
+  ci/map-still-current.sh \
+  's|^\[ -f "\$PAGE" \] .*$|true|'
+
+# The restore below the step that reads it: the second half of the decision is about the restored
+# map, so the ordering is a dependency rather than a preference.
+break_and_run "the previous map is restored after the step that decides whether to generate" \
+  skills/setup-ci/templates/workflow.yml \
+  '/^      - name: Restore the previous Review Map$/,/^# SETUP:END:push$/d'
+
+# The verdict downgraded nowhere, so the cheap path is computed and then ignored — the shape of
+# check that runs, prints, and changes nothing.
+break_and_run "the still-current answer is computed and never acted on" \
+  skills/setup-ci/templates/workflow.yml \
+  's|^                echo "verdict=skip"$|                echo "verdict=generate"|'
 
 echo
 echo "self-test: $ok ok, $bad bad"

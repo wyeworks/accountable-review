@@ -180,6 +180,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically and resolves the `SETUP:` blocks, `install-workflow.sh` writes idempotently, refuses to clobber, and recovers the when-decisions from the file it is about to replace, `read-config.sh` is the only thing that knows the config file's shape |
 | `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
 | `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page, and a page-shape argument is an unknown argument here rather than a silent no-op |
+| `ci/map-still-current.sh` | The second range — does the map we already have still describe this head? Composes `application-code.sh` over the delta with `carry-plan.sh` over the restored page, and adds no rule of its own |
 | `ci/application-code.sh` | The scope gate, in two rules: does this diff change application code at all, and is what it changes more than trivial? Both counted over application paths only, the trivial thresholds joined by **and**, and it fails open, so an unrecognised path is code |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
 | `README.md` | The public face — why comprehension debt is the problem, what a Review Map is, install, usage, CI setup, and the technical overview. Written for someone deciding whether to use this, so depth past that decision belongs in `docs/` |
@@ -1151,12 +1152,38 @@ Same rule as above: editing one of these means checking the others still agree.
   discards the small wide-reaching edit first; § *The application-code gate* argues that trade and
   owns the numbers.
 
-  Seven files agree: `ci/application-code.sh` holds both rules, `read-config.sh` and
+  **The same question is asked a second time, over a second range, and that is where the cheap path
+  lives.** With a map per push the gate's range is wrong for every run after the first: a
+  README-only push to a branch that changed application code earlier still answers `generate`,
+  because the pull request contains application code and `BASE...HEAD` cannot see that this push did
+  not. `ci/map-still-current.sh` asks it over `<previous head>..<head>` and **downgrades the scope
+  step's own verdict**, which is why no guard moved — every later step already stands aside on
+  `verdict != 'generate'` and the skip-explaining step already exists. The cache restore moved above
+  the scope step and lost its guard, because the second half of the decision is about the restored
+  map.
+
+  It adds **no rule of its own**: `application-code.sh` over the delta, `carry-plan.sh` over the
+  restored page. Two things about that composition are load-bearing. **Only `no-application-code`
+  counts, never `trivial`** — those are one answer to the gate's question and two answers to this
+  one, and one line in a file a checkpoint cites is exactly where a page quietly stops being true.
+  And **the second half closes a hole the first cannot see**: tests are not application code, so a
+  test-only push satisfies half one alone while the spec line a checkpoint links to has moved.
+
+  **It stands the job down rather than rewriting the page**, and the refusal is the point. A
+  docs-only push changes the diff's file count and its inventory, not just the head SHA, so
+  refreshing the masthead means a script editing model-authored HTML where a missed pattern leaves a
+  stale number on a page that still looks current — this product's one intolerable failure, bought
+  with a cosmetic gain. The map stands at the revision it names, which is honest because the
+  application code at that revision is the application code now.
+
+  Eight files agree: `ci/application-code.sh` holds both rules, `ci/map-still-current.sh` asks them
+  over the second range and holds the composition **alone**, `read-config.sh` and
   `references/config.md` the two keys, `templates/workflow.yml` the `scope` step and the guards,
   `references/workflow.md` § *The application-code gate* owns the reasoning **alone** including
-  fail-open and the default's trade, `SKILL.md`'s hard rules forbid counting anything but
-  application code and baking a number into the YAML, `tests/run.sh` covers both rules either side
-  of each threshold, `tests/self-test.sh` breaks them nine ways, and `docs/ci.md` restates it.
+  fail-open, the default's trade and the second range, `SKILL.md`'s hard rules forbid counting
+  anything but application code and baking a number into the YAML, `tests/run.sh` covers both rules
+  either side of each threshold and both halves of the second question, `tests/self-test.sh` breaks
+  them fifteen ways, and `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
   gate. `SKILL.md` step 1 owns the flag, step 9 says the stages become save points rather than

@@ -196,26 +196,18 @@ jobs:
       # over application paths only — a three-line model change beside a
       # five-thousand-line lockfile is a three-line change. The payload cannot
       # express that, so the gate runs here, after the cheap half of the job.
-      - name: Does this pull request change application code?
-        id: scope
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          rc=0
-          "$RUNNER_TEMP/accountable-review/ci/application-code.sh" \
-            --base "$BASE_SHA" --head "$HEAD_SHA" \
-            > "$RUNNER_TEMP/application-code.txt" || rc=$?
-          cat "$RUNNER_TEMP/application-code.txt"
-          # 0 is generate and 3 is skip; anything else is a diff this job could
-          # not read, and that is a failure rather than a quiet skip.
-          [ "$rc" = 0 ] || [ "$rc" = 3 ] || exit "$rc"
-
 # SETUP:IF:push
       # The previous Review Map for this pull request, so the run can update it
-      # over the new commits instead of rebuilding it. Only reachable with
-      # `synchronize` on: a first run has nothing to restore, and a pull request
-      # that gets one map has no second run to restore it into.
+      # over the new commits instead of rebuilding it — and, before that, so the
+      # scope step below can ask whether these commits reach anything the map
+      # says at all. Only reachable with `synchronize` on: a first run has
+      # nothing to restore, and a pull request that gets one map has no second
+      # run to restore it into.
+      #
+      # IT CARRIES NO VERDICT GUARD, and it sits above the step that decides the
+      # verdict for exactly that reason: the second half of that decision is
+      # about the restored map. Restoring ~80 KB unconditionally is cheaper than
+      # the model run it is deciding about, and on a miss it is a no-op.
       #
       # A MISS IS NOT A FAILURE. It means a full generation, which is the better
       # page — the whole flag is a saving with a cost, so every way it can go
@@ -230,12 +222,56 @@ jobs:
       # template is compared by. No date, no run id.
       - name: Restore the previous Review Map
         id: previous
-        if: steps.scope.outputs.verdict == 'generate'
         uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/review-map
           key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
           restore-keys: accountable-review-map-${{ github.event.pull_request.number }}-
+# SETUP:END:push
+
+      - name: Does this pull request change application code?
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          rc=0
+          "$RUNNER_TEMP/accountable-review/ci/application-code.sh" \
+            --base "$BASE_SHA" --head "$HEAD_SHA" \
+            > "$RUNNER_TEMP/application-code.txt" || rc=$?
+          cat "$RUNNER_TEMP/application-code.txt"
+          # 0 is generate and 3 is skip; anything else is a diff this job could
+          # not read, and that is a failure rather than a quiet skip.
+          [ "$rc" = 0 ] || [ "$rc" = 3 ] || exit "$rc"
+# SETUP:IF:push
+
+          # THE SAME QUESTION, ASKED AGAIN OVER THE COMMITS SINCE THE MAP WE
+          # ALREADY HAVE. The gate above measures BASE...HEAD, so a README-only
+          # push to a branch that changed application code earlier still answers
+          # `generate` — the pull request contains application code, and nothing
+          # up there can see that THIS push did not. The result is a model run
+          # whose page says what the last page said.
+          #
+          # It downgrades this step's own verdict rather than adding a second
+          # one, which is why no guard below moves: every later step already
+          # stands aside on `verdict != 'generate'`, and the step that explains
+          # a skip already fires on `verdict == 'skip'`.
+          if [ "$rc" = 0 ]; then
+            cur=0
+            "$RUNNER_TEMP/accountable-review/ci/map-still-current.sh" \
+              --dir "$RUNNER_TEMP/review-map" --head "$HEAD_SHA" \
+              --plugin-dir "$RUNNER_TEMP/accountable-review" \
+              > "$RUNNER_TEMP/still-current.txt" || cur=$?
+            cat "$RUNNER_TEMP/still-current.txt"
+            [ "$cur" = 0 ] || [ "$cur" = 3 ] || exit "$cur"
+            if [ "$cur" = 0 ]; then
+              {
+                echo "verdict=skip"
+                echo "reason=map-still-current"
+                sed -n 's/^reason: /detail=/p' "$RUNNER_TEMP/still-current.txt" | head -n 1
+              } >> "$GITHUB_OUTPUT"
+            fi
+          fi
 # SETUP:END:push
 
       - uses: actions/setup-node@v4

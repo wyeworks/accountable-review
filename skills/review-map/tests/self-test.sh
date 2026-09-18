@@ -34,7 +34,7 @@ ok=0; bad=0
 # case <what> <template> <script>
 case_runs_red() {
   what=$1; tpl=$2; scr=$3
-  if REVIEW_MAP_TEMPLATE="$tpl" REVIEW_MAP_SKELETON="$scr" "$RUN" >/dev/null 2>&1; then
+  if REVIEW_MAP_TEMPLATE="$tpl" REVIEW_MAP_SKELETON="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -46,7 +46,7 @@ case_runs_red() {
 case_render_red() {
   what=$1; scr=$2
   chmod 755 "$scr"
-  if REVIEW_MAP_DIFF_RENDER="$scr" "$RUN" >/dev/null 2>&1; then
+  if REVIEW_MAP_DIFF_RENDER="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -56,7 +56,7 @@ case_render_red() {
 case_carry_red() {
   what=$1; scr=$2
   chmod 755 "$scr"
-  if REVIEW_MAP_CARRY_PLAN="$scr" "$RUN" >/dev/null 2>&1; then
+  if REVIEW_MAP_CARRY_PLAN="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -64,7 +64,7 @@ case_carry_red() {
 }
 
 # A sanity row first. If the unmutated pair does not pass, every row below is meaningless.
-if REVIEW_MAP_TEMPLATE="$TEMPLATE" REVIEW_MAP_SKELETON="$SKELETON" "$RUN" >/dev/null 2>&1; then
+if REVIEW_MAP_TEMPLATE="$TEMPLATE" REVIEW_MAP_SKELETON="$SKELETON" "$RUN" >/dev/null 2>&1 </dev/null; then
   ok=$((ok + 1)); echo "ok    run.sh passes on the real template and the real script"
 else
   bad=$((bad + 1)); echo "BAD   run.sh FAILS unmutated — fix that before reading anything below"

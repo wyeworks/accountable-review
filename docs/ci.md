@@ -62,6 +62,26 @@ lock file bump, a cache that expired, or one of the page's own recorded searches
 changed code. Every one of those leads to the page that has no cost, which is why a cold cache is
 not something to worry about.
 
+### A push that reaches nothing the map says costs nothing
+
+With a map per push, most pushes late in a review change nothing the map explains: a README line, a
+changelog entry, a formatting pass. Those cost a model run each, because the question "does this
+pull request change application code" is asked over the whole pull request — which contains
+application code, whatever this push did.
+
+It is now asked a second time, over the commits since the map you already have, and the job stands
+down when the answer is no. The existing map stays where it is, the pull request comment keeps
+pointing at it, and the run summary says which rule fired and the counts behind it.
+
+**The map is not rewritten to look current, and that is deliberate.** It stands at the revision it
+names — which is honest, because the application code at that revision is the application code now,
+and you can hold the two SHAs against each other. Making the masthead say otherwise would mean a
+script editing the page, where a missed edit leaves a stale number on a page that looks current.
+
+The bar for standing down is deliberately high: the commits must change no application code **and**
+touch nothing the page cites or quotes. A test-only push that moves a line a checkpoint links to
+regenerates, and so does a dependency bump that re-pins the page's documentation links.
+
 ## Artifacts are the default, not the contract
 
 **Review Maps are portable static HTML.** The default setup stores them as GitHub Actions artifacts

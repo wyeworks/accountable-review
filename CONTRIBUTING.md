@@ -28,6 +28,8 @@ the unit of quality is instruction clarity, not compilation.
 agents/claim-falsifier.md          adversarial verifier, one per analysis note at --effort high
 ci/                                what runs in CI, not what a skill reads
 ├── generate-review-map.sh         runs review-map non-interactively into a static directory
+├── application-code.sh            the scope gate: is this diff worth a Review Map at all
+├── map-still-current.sh           and, on a re-run, does the map we have still describe this head
 └── delivery/
     ├── deliver.sh                 the delivery seam: dispatch, and the DeliveryResult
     ├── github-artifact.sh         the default provider

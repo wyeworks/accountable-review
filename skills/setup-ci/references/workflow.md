@@ -217,6 +217,13 @@ bytes — the rule § *The line that records the decisions* draws for the `# Dec
 to a value nobody would think of as configuration. A date in that key, reached for to expire an
 entry, would make every second setup run report drift.
 
+**The restore sits ABOVE the step that decides the verdict, and carries no guard.** It used to sit
+below, guarded on `verdict == 'generate'`, which was right while the only thing it fed was
+generation. It now also feeds the second half of the decision itself — see § *The application-code
+gate* — so it has to run first, and a guard on the verdict it is consulted for would be circular.
+Restoring ~80 KB unconditionally is cheaper than the model run it is deciding about, and on a cold
+cache it is a no-op.
+
 **The save carries `if: success()`.** Correctness does not depend on it, per the rules above; it
 keeps the cache holding pages that actually shipped rather than whatever was in the directory when
 a step died.
@@ -443,27 +450,68 @@ application changes under `*.md` that this counts as documentation. And a team w
 can keep code under a directory named in the exclusion list. The job summary is what surfaces either:
 it lists every discounted path with its reason.
 
+### Asked again, over the commits since the map we already have
+
+The gate above measures `BASE...HEAD`. With `--regenerate-on-push` that is the wrong range for the
+second and every later run: a README-only push to a branch that changed application code earlier
+still answers `generate`, because the pull request contains application code and nothing in that
+range can see that *this push* did not. The map that comes out says what the last one said.
+
+So the question is asked a second time, over `<previous head>..<head>`, by
+`ci/map-still-current.sh`. It adds no rule of its own — it composes `application-code.sh` over the
+delta with `carry-plan.sh` over the restored page — and it **downgrades the scope step's own
+verdict** rather than introducing a second one. That is why no guard below it moved: every later
+step already stands aside on `verdict != 'generate'`, and § *The steps, in order*'s skip-explaining
+step already fires on `verdict == 'skip'`.
+
+**Only `no-application-code` counts, never `trivial`.** Those are one answer to the gate's own
+question — is this worth a model run — and two different answers to this one. A trivially small
+application change is still a change to the code the map describes, and one line in a file a
+checkpoint cites is exactly where a page has quietly stopped being true.
+
+**The second half is not belt and braces.** `application-code.sh` classifies tests as not
+application code, so a test-only push satisfies the first half alone — while a checkpoint citing
+`spec/models/project_spec.rb:12` may now point at a moved line, and a reader following that citation
+lands somewhere else. `carry-plan.sh` already answers *did the delta touch anything this page
+cites*, so the hole closes by composition rather than by a new rule.
+
+**What it does not do is rewrite the page**, and that is a decision rather than an omission. A
+docs-only push changes the diff's file count and its inventory, not just the head SHA, so refreshing
+the masthead means editing model-authored HTML — the metric cells, the foot's `all N changed paths`,
+the inventory block — where a pattern that misses leaves a stale number on a page that still looks
+current. That is the one failure this product cannot tolerate, bought with a cosmetic gain. The map
+stands at the revision it names, the PR comment already names that revision, and the reader can hold
+the two SHAs against each other.
+
+The skip says which rule fired and the counts behind it, like every other skip here, because a
+wrong one has to be reportable rather than invisible.
+
 ## The steps, in order
 
 1. **Check out the pull request** at its head SHA, full history, no credentials persisted.
 2. **Clone Accountable Review** at its release tag, outside the workspace.
-3. **Decide whether there is anything worth explaining** — `ci/application-code.sh`, above: no
-   application code, or too little of it. Every step below is guarded on its verdict, and a skip
-   writes a job summary naming which rule fired and the numbers it judged against.
-4. **Set up Node and install Claude Code**, pinned to a major version.
-5. **Generate the Review Map** — `ci/generate-review-map.sh`, which runs the `review-map` skill
+3. **Restore the previous Review Map**, when the workflow regenerates on push. It is unguarded and
+   sits above the verdict it helps decide, because the step below consults it; see § *The previous
+   map*.
+4. **Decide whether there is anything worth explaining** — `ci/application-code.sh`, above: no
+   application code, or too little of it. On a re-run `ci/map-still-current.sh` asks the same
+   question again over the commits since the restored map, and may downgrade the same verdict. Every
+   step below is guarded on it, and a skip writes a job summary naming which rule fired and the
+   numbers it judged against.
+5. **Set up Node and install Claude Code**, pinned to a major version.
+6. **Generate the Review Map** — `ci/generate-review-map.sh`, which runs the `review-map` skill
    non-interactively and writes a static directory to `$RUNNER_TEMP/review-map`, outside the
    repository. It then checks the three things a person would have noticed by looking: that the page
    exists and is a page, that it no longer says it is still being written, and that it names the
    revision it describes.
-6. **Resolve delivery** — `ci/delivery/deliver.sh`, which asks the configured provider where the map
+7. **Resolve delivery** — `ci/delivery/deliver.sh`, which asks the configured provider where the map
    goes and returns a DeliveryResult. See `delivery.md`.
-7. **Upload the artifact**, guarded by `if: steps.delivery.outputs.provider == 'github-artifact'`, so
+8. **Upload the artifact**, guarded by `if: steps.delivery.outputs.provider == 'github-artifact'`, so
    a team that switches provider does not have to edit this step out. The name and the retention come
    from the provider's outputs rather than being repeated in YAML.
-8. **Write the job summary**, so the run itself says where the Review Map went and what it is for —
+9. **Write the job summary**, so the run itself says where the Review Map went and what it is for —
    or, on a skip, which rule skipped it and what it counted.
-9. **Comment the link on the pull request**, when that decision is on. Below.
+10. **Comment the link on the pull request**, when that decision is on. Below.
 
 ## The comment
 

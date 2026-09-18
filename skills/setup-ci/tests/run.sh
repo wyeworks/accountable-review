@@ -877,5 +877,139 @@ upage "&middot; updated from $UPS"
 assert_eq "$(manifest_field)" "\"$UPS\"" "and a page that names one records exactly that revision"
 
 echo
+echo "== a push that reaches nothing the map says =="
+
+# The gate above asks its question over BASE...HEAD, so a README-only push to a branch that changed
+# application code earlier still answers `generate`. Asking it again over the commits since the map
+# we already have is what makes that push cost nothing.
+
+# The restore has to sit ABOVE the step that decides the verdict, because the second half of that
+# decision is about the restored map — and it therefore carries no verdict guard, while every later
+# step still does. An ordering assertion rather than a presence one: presence was already pinned.
+restore_line=$(grep -n 'actions/cache/restore@v4' "$TMP/w-push.yml" | cut -d: -f1)
+scope_line=$(grep -n 'id: scope' "$TMP/w-push.yml" | cut -d: -f1)
+if [ "$restore_line" -lt "$scope_line" ]; then
+  ok "the previous map is restored before the step that decides whether to generate"
+else
+  bad "the previous map is restored before the step that decides whether to generate"
+fi
+guard=$(sed -n "$((restore_line - 6)),${restore_line}p" "$TMP/w-push.yml" | grep -c "verdict == 'generate'" || true)
+assert_eq "$guard" "0" "and the restore carries no verdict guard — it is what the verdict is decided from"
+assert_in "$TMP/w-push.yml" "map-still-current.sh" "the scope step asks the second question"
+assert_in "$TMP/w-push.yml" "reason=map-still-current" "and downgrades its own verdict rather than adding a second one"
+# WHICH verdict it writes, not merely that it writes a reason. A downgrade to anything but `skip`
+# computes the cheap answer, prints it, and generates anyway — the shape of check that runs and
+# changes nothing, which is the one this repository refuses to ship.
+still_block=$(awk '/map-still-current.sh/,/SETUP:END:push/' "$TMP/w-push.yml")
+assert_eq "$(printf '%s\n' "$still_block" | grep -c 'echo "verdict=skip"' || true)" "1" \
+  "and the verdict it writes is skip — anything else computes the answer and ignores it"
+assert_not_in "$W" "map-still-current.sh" "the default file asks it nowhere — there is no second run to ask about"
+
+# No guard below the scope step moved, which is the whole reason this change is small: the steps
+# that stand aside and the step that explains a skip are the ones that already existed.
+assert_in "$TMP/w-push.yml" "if: steps.scope.outputs.verdict == 'skip'" \
+  "the existing skip-reporting step is what explains it"
+# One home for the decision: no step reads a second verdict, and nothing outside the scope step
+# writes one. Counting guards across the two renders would compare files that legitimately differ
+# by the cache save step.
+assert_eq "$(grep -c "steps.previous.outputs\|steps.current" "$TMP/w-push.yml" || true)" "0" \
+  "and no step reads a second verdict — the scope step is still the only one that decides"
+
+# ---- ci/map-still-current.sh, against a real repository -------------------------------------
+STILL=$PLUGIN_ROOT/ci/map-still-current.sh
+SREPO=$TMP/srepo; SMAP=$TMP/smap
+mkdir -p "$SREPO"/app/models "$SREPO"/spec/models "$SMAP"
+(
+  cd "$SREPO"
+  git init -q .; git config user.email t@e; git config user.name t
+  echo 'class Project; end'      > app/models/project.rb
+  echo 'describe Project do; end' > spec/models/project_spec.rb
+  echo '# Timesheet'             > README.md
+  git add -A; git commit -qm base
+  git checkout -q -b feat
+  echo '# archived_at' >> app/models/project.rb; git commit -qam push1
+) >/dev/null 2>&1
+SBASE=$(git -C "$SREPO" rev-parse feat~1)
+SPREV=$(git -C "$SREPO" rev-parse feat)
+sps=$(git -C "$SREPO" rev-parse --short=7 "$SPREV"); sbs=$(git -C "$SREPO" rev-parse --short=7 "$SBASE")
+
+# $1 the path the page's one checkpoint cites
+smap() {
+  cat > "$SMAP/index.html" <<PAGE
+<div class="path">$sps &rarr; $sbs</div>
+<section class="cp" id="cp-a"><a class="path" href="#">$1</a></section>
+<details class="searched"><ul class="sr-list">
+<li><code>rg -n &#39;nothing_matches_this&#39; app</code> <span class="sr-r">no hits</span></li>
+</ul></details>
+PAGE
+  cat > "$SMAP/manifest.json" <<JSON
+{ "schema": "accountable-review/review-map-manifest@3",
+  "revision": { "base_sha": "$SBASE", "head_sha": "$SPREV" } }
+JSON
+}
+
+# $1 label, $2 expected exit, $3 substring of the reason, then the branch to run against
+still() {
+  label=$1; want=$2; want_text=$3; ref=$4
+  rc=0
+  out=$("$STILL" --dir "$SMAP" --head "$(git -C "$SREPO" rev-parse "$ref")" --repo-dir "$SREPO" 2>&1) || rc=$?
+  problem=
+  [ "$rc" = "$want" ] || problem="exit $rc, wanted $want"
+  case $out in *"$want_text"*) ;; *) problem="${problem:+$problem; }no reason matching '$want_text'" ;; esac
+  if [ -z "$problem" ]; then ok "$label"; else bad "$label ($problem)"; fi
+}
+
+(cd "$SREPO" && git checkout -q -B docsonly feat && echo 'more' >> README.md && git commit -qam docs) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a docs-only push leaves the existing map standing" 0 "change no application code" docsonly
+
+# THE HOLE THIS COMPOSITION EXISTS TO CLOSE, and the row to write first. application-code.sh
+# classifies tests as not application code, so the first half says yes on its own — while the line
+# the page cites has moved and a reader following that citation lands somewhere else.
+(cd "$SREPO" && git checkout -q -B testonly feat && printf 'x\ny\n' >> spec/models/project_spec.rb && git commit -qam spec) >/dev/null 2>&1
+smap 'spec/models/project_spec.rb:1'
+still "a test-only push that moves a cited line regenerates" 3 "reach something the page cites" testonly
+
+# Trivial is the gate's answer to ITS question and the wrong answer to this one: one line in a file
+# a checkpoint cites is exactly where the page has quietly stopped being true.
+(cd "$SREPO" && git checkout -q -B tiny feat && echo '# one more' >> app/models/project.rb && git commit -qam tiny) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a trivially small application change still regenerates" 3 "trivially little of it but not none" tiny
+
+# LOCK FILES SPLIT TWO WAYS HERE, and the split is right rather than an oversight — the two name
+# lists exist for two different questions. diff-render.sh's, which application-code.sh borrows,
+# holds the JS ones, because what it answers is "will GitHub render this diff". carry-plan.sh's P7
+# holds the Ruby and Elixir ones, because what IT answers is "did the thing every documentation
+# link on the page is pinned from move".
+#
+# So a yarn.lock bump is correctly SKIPPED: no application code, no pinned link derived from it,
+# nothing the page cites. And a Gemfile.lock bump correctly regenerates — not through P7, which
+# never sees it, but through the fail-open half above, where a path diff-render does not recognise
+# counts as code. Both answers are right; pinning them together is what stops someone "fixing" the
+# lists into agreement and losing one.
+(cd "$SREPO" && git checkout -q -B jslock feat && echo '# yarn' > yarn.lock && git add -A && git commit -qm lock) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a JS lock file bump changes nothing the map says, so it is skipped" 0 "change no application code" jslock
+
+(cd "$SREPO" && git checkout -q -B rubylock feat && echo 'GEM' > Gemfile.lock && git add -A && git commit -qm lock) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a Gemfile.lock bump regenerates — it re-pins every doc link on the page" 3 "application code" rubylock
+
+still "an unmoved head needs nothing" 0 "has not moved" feat
+
+# Every way of NOT KNOWING leads to the expensive answer. An absence is not evidence that the map
+# is current, and treating it as one is how a stale page ships.
+smap 'app/models/project.rb:1'
+rm -f "$SMAP/manifest.json"
+still "a restored map with no manifest regenerates" 3 "no manifest" docsonly
+smap 'app/models/project.rb:1'; rm -f "$SMAP/index.html"
+still "nothing restored at all regenerates" 3 "no previous Review Map" docsonly
+smap 'app/models/project.rb:1'
+rc=0; "$STILL" --dir "$SMAP" --head 0000000000000000000000000000000000000000 --repo-dir "$SREPO" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "3" "an unresolvable head regenerates rather than failing the job"
+rc=0; "$STILL" --dir "$SMAP" --repo-dir "$SREPO" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2" "and being called wrongly is a usage error, not a verdict"
+
+echo
 echo "run.sh: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]
