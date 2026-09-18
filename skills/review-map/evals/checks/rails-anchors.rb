@@ -34,11 +34,12 @@
 # --repo is what makes rule 7 possible, the way it makes searches.rb possible. Without it
 # the identifier check SKIPs rather than passing on evidence it does not have.
 #
-# THE PRIMER CAME BACK, and § 8 below is what it came back with. It was a --full-only callout on a
-# page that then lost its levels; it returns at --mentor, re-hung from a checkpoint rather than a
-# flow and stripped of the logotype this page has no room for. What survived is the half that was
-# load-bearing — the doc-link gate, the repo citation, and the receiver rule that makes pre.demo the
-# one block here allowed to show a result line. report-format.md § Mentor mode owns all of it.
+# THE PRIMER CAME BACK, and § 8 below is what it came back with. It belonged to the longest of the
+# page's old shapes, which then lost its levels; it returns at --mentor, re-hung from a checkpoint
+# rather than a flow and stripped of the logotype this page has no room for. What survived is the
+# half that was load-bearing — the doc-link gate, the repo citation, and the receiver rule that
+# makes pre.demo the one block here allowed to show a result line. report-format.md § Mentor mode
+# owns all of it.
 #
 # The rules run on the COMMENT-STRIPPED page, unlike everything above them. A published page carries
 # page-template.html's comments verbatim, and the ones around this component name `pre.demo` and

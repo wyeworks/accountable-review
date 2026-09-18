@@ -1,6 +1,6 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no level flag: --brief and --light are accepted and change nothing, --full and --review stop the run as not implemented in this version. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -59,19 +59,11 @@ loaded — its instructions are its own, which is the point of putting them in a
 
 - Argument may be a PR number, a PR URL, a branch, or a diff range. With no argument, use the
   current branch against its base.
-- **There is one page shape, and no flag chooses it.** Three flags about the shape still arrive on
-  the command line, and each is handled explicitly rather than guessed at:
-  - `--full` and `--review` **stop the run.** Neither is implemented in this version; see § *Two
-    levels are not implemented in this version* below for what to say. Do not fall back to the
-    default page and do not write one — a reader who asked for seven sections and got five would
-    have no way to tell from the page that they had.
-  - `--brief` and `--light` are **accepted and change nothing.** `--brief` was the name of this
-    page's ancestor and an invocation someone kept in a script is not a typo; `--light` is the same
-    courtesy for a reader guessing the opposite of `--full`. Take both silently.
-  - An argument starting with `--` that is none of those, and is not one of `--effort`, `--mentor`,
-    `--output`, `--update`, `--repository`, `--base-sha` or `--head-sha` with its value, is
-    **reported, not guessed at**. A misread flag silently produces the wrong run, and the reader
-    has no way to tell.
+- **There is one page shape, and no flag chooses it.** No argument selects a length, a depth or a
+  second document, and there is nothing to map one onto if someone invents one. An argument starting
+  with `--` that is not one of `--effort`, `--mentor`, `--output`, `--update`, `--repository`,
+  `--base-sha` or `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
+  wrong run, and the reader has no way to tell.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
   it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
   *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about 700
@@ -93,7 +85,7 @@ loaded — its instructions are its own, which is the point of putting them in a
 
   **`high` is the default because it changes what the page finds, and it costs time it does not cost
   tokens.** Measured on one 28-file PR: the falsifiers cost **23 seconds of blocked
-  parent, 0.9% of a 2607-second run**, because they run while stage 4 is drafted rather than instead
+  parent, 0.9% of a 2607-second run**, because they run while the next stage is drafted rather than instead
   of it. The same target at `low` missed five findings the falsified run carried, including the two
   the reviewer most needed.
 
@@ -111,7 +103,6 @@ loaded — its instructions are its own, which is the point of putting them in a
     produced the one in front of them.
   - An `--effort` value that is none of the three is **reported, not guessed at** — work that
     silently differs, with nothing in the output to tell the reader which they got.
-  - `--full` and `--review` stop the run at either effort. Effort implements neither.
 
   **Do not announce the effort** — nothing about the pass reaches the page, and step 8 says why.
 - **`--mentor` is the one flag that puts anything on the page, and it is off by default.** It says
@@ -134,7 +125,7 @@ loaded — its instructions are its own, which is the point of putting them in a
   reading path, same impact panel, same evidence foot, same prose budget on every other part. Delete
   the primers and you have that page back. A run that also lengthened its explanations, added a
   checkpoint or reordered anything "because the reader is new" has turned a flag into
-  the `--full` this version refuses.
+  a second document.
 
   **There is no mentor marker, chip or banner.** The flag's effect is visible by being on the page,
   which is exactly why it needs nothing announcing it — and a count of primers would be the page
@@ -180,7 +171,8 @@ loaded — its instructions are its own, which is the point of putting them in a
   Two things about it belong here, beside the flags it sits with. **It is not a level and not an
   effort.** It never lowers a cap, never skips the gate, never skips step 8 for anything it writes,
   and never admits or removes a component; the moment it means "fewer excerpts" or "skip section
-  04" it has become the `--full` this version refuses, reached by a different name. And **with no
+  04" it has become a second document reached by a flag, which is the thing this page has no
+  shapes for. And **with no
   previous page, or when the plan below refuses, it falls back to a full run and says so in chat.**
   That is not an error: a full run is always the better page, so every way this flag can fail leads
   to one.
@@ -219,9 +211,13 @@ loaded — its instructions are its own, which is the point of putting them in a
   re-establishing it while splicing excerpt files it had first written somewhere else and then had
   to move.
 - **Fix the deep-link mode now, not at render time.** Check whether the head SHA is even reachable
-  on a remote — `git branch -r --contains <HEAD_SHA>`, where empty output means it was never pushed
-  and every permalink to it would 404. Unpushed branches and worktrees are among the most common
-  targets for this skill, so expect this. Pick one rung from the ladder in
+  on a remote — `git branch -r --contains <HEAD_SHA>`, where **exit 0 and empty output** means it was
+  never pushed and every permalink to it would 404. Unpushed branches and worktrees are among the most
+  common targets for this skill, so expect this. **A non-zero exit is a state of its own and neither
+  of the other two**: git was asked and could not answer, so nothing is known about reachability. Do
+  not read it as unpushed — say in the masthead that reachability could not be determined and render
+  citations as plain text, rather than asserting a branch is unpushed on an answer git never gave.
+  Pick one rung from the ladder in
   `references/report-format.md` and hold it for every citation. The rung decides whether anything is
   clickable; it does not decide the form — inside a rung, a line in the diff links to the diff page
   and a line outside it links to a blob, with one exception that is settled per file in step 3 and
@@ -243,6 +239,15 @@ reads:
   umbrella — **ask which to cover** rather than picking. Same rule as several Rails roots, and for the
   same reason: covering the wrong half produces a page that is confidently about code the reviewer is
   not reading.
+
+  **Look at the diff before asking, and answer it from there when you can.** If every changed
+  application path sits under one root, that root is detected rather than chosen and there is no
+  question to put. Ask only when the diff genuinely spans more than one.
+
+  **Non-interactively (`--output`) there is nobody to ask, and picking is still forbidden.** So when
+  the diff does not settle it, **stop** and say which roots were found and that the run needs one
+  named — a missing map is reported by the caller and a confidently wrong one is not. This is the
+  case CI meets most often, which is why it is spelled out rather than left to the general rule.
 - **Neither** — say so plainly, cover the diff with the stack-independent material (the five
   sections, the checkpoints, the tiers, the impact chains, the evidence foot), and **emit no documentation link and no
   probe.** Do not default to Rails: a Rails lens applied to a Go service invents findings, and a
@@ -361,6 +366,10 @@ cannot cite is a question it may not ask.
   the part of the diff carrying the least to decide.
 - If the whole diff is trivial (a few files, no migration, no new behaviour), say so and offer to
   stop rather than generate ceremony. A page nobody needs is worse than no page.
+  **Non-interactively (`--output`), make the page.** There is nobody to offer to, and the offer has
+  already been answered upstream: `ci/application-code.sh` measures exactly this and skips the job
+  before the skill is reached, so a run that got here is one that gate judged worth a map. Say the
+  diff is slight in *What changed*, as a stated limit, and carry on.
 
 ## 4. Derive what changed
 
@@ -433,7 +442,9 @@ budget are `references/report-format.md` § *What was searched*, which owns them
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the run's backbone: step 6 splits it into flows for
 analysis, *Impact outside the diff* shows the crossings whole, and the checkpoints are the judgments
-it turns on. **Milestone 2 publishes after this step** (step 9).
+it turns on. **Nothing publishes after this step**: the crossings found here reach the page at
+milestone 3, after 7c has had its chance to merge two of them into one judgment and after there is a
+checkpoint for each card to point at (step 9).
 
 ## 6. Cluster into flows, write the analysis notes, spawn the falsifiers
 
@@ -454,6 +465,13 @@ checkpoint from turning out to be a directory.
 **The flow is the unit of ANALYSIS and no longer a unit of the page.** Nothing below writes a flow
 section: a flow becomes a note, the note is what gets attacked, and step 7 turns notes into the
 ranked handful of judgments the reader actually gets.
+
+**And no sentence on the page ever names one.** These letters are yours, for the notes in
+`$W/analysis/` and for your own ranking; the page's designators are *Checkpoint A* and *Impact path
+A*, which are the reader's. A checkpoint reading *"a leader-opened thread (Flow A) has no
+`connection_id`"* has pointed at a section nobody wrote. It is easy to write and hard to see, because
+the note you are holding, the checkpoint you are writing and the impact path beside it are all
+lettered — `references/report-format.md` § *One canonical home* owns the rule.
 
 Then label each flow and each leftover file, for your own ranking in step 7 — the label reaches the
 page only as what *What changed* leads with and what the agenda leaves off:
@@ -645,8 +663,8 @@ ran out of room, the region you skimmed is stated in *What changed* under § *Ho
 be?*, which is the rule that already covers it.
 
 **A finding that does not become a checkpoint is not lost** — affected code keeps its entry in
-*Impact outside the diff* or in the evidence foot, and the sampling caveat under the heading is what
-makes leaving a judgment off honest rather than hidden. **A judgment is the exception**: an entry in
+*Impact outside the diff* or in the evidence foot, which is what makes leaving it off the agenda
+honest rather than hidden. **A judgment is the exception**: an entry in
 the foot the reviewer has to decide about is a checkpoint that was mis-filed, per the hard rule below,
 which is why the agenda has room to grow rather than a ceiling that would push one down there. What is
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
@@ -659,7 +677,7 @@ middle one is the product:
   number of independent changes: a PR shipping three deltas still asks at most one question about how
   the code was built. A second is the page becoming a style review, and it will read as thoroughness.
   The departure that does not get the slot is not written down anywhere — an observation about shape
-  with nowhere to go is noise, and the sampling caveat already says the page is not an audit.
+  with nowhere to go is noise, and the page is not obliged to report everything it noticed.
 - **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
   behavioural agenda already fills the page, there is no slot, and that is the correct outcome rather
   than a loss. A page that dropped *is nil safe for every consumer?* to ask where a class lives has
@@ -761,7 +779,8 @@ Two rules keep this from becoming ceremony:
   factory in this repo — a command a reviewer can paste. Invented steps are worse than none, because
   they burn the reader's trust in the whole page on the first paste that fails.
 
-**Milestone 3 opens after this step** (step 9), with one pending stub per checkpoint.
+**Milestone 2 opens after this step** (step 9), with one pending stub per checkpoint. Milestone 3
+follows it once 7i's cards have checkpoints to point at.
 
 ## 8. Verify before asserting — at every publish boundary
 
@@ -860,23 +879,30 @@ someone mid-paragraph is worse than one that arrives late.
 | Stage | After step | The page holds |
 |---|---|---|
 | 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending |
-| 2 · Impact | 5 | *Impact outside the diff* — or, when nothing crosses into unchanged code, its stub and its rail entry removed |
-| 3 · Agenda | 7, then per checkpoint | Section 02's heading, its one caveat sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 2 · Agenda | 7, then per checkpoint | Section 02's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 3 · Impact | 7i, after stage 2's opening publish | *Impact outside the diff*, as step 7i settled it |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
-**At `--effort high` the falsifiers were spawned at the end of step 6 and fold in during stage 3** —
+**Section 04 cannot publish before the checkpoints exist, which is why it is third and not second.**
+Every impact card's `p.ip-why` ends in a pointer at the checkpoint that judges it
+(`references/report-format.md` § *Impact paths*), and until stage 2's opening publish has landed the
+stubs there is no `#cp-x` to point at. Publishing it after step 5 meant either a dead fragment or an
+invented one. Step 5 still *finds* the crossings — it just no longer publishes them, and 7c may merge
+two of them into one judgment before the reader ever sees either.
+
+**At `--effort high` the falsifiers were spawned at the end of step 6 and fold in during stage 2** —
 see step 8. They add no milestone: they produce corrections to analysis, not an arrival worth opening
 the tab for, and the reader never learns they ran.
 
 **The checkpoint is the unit of staging, not section 02.** Section 02 is the bulk, so a stage that
 delivered it whole would put the longest wait of the run behind one arrival — which is the shape
 staging exists to avoid. Nothing new is needed to split it: `<section id="attention">` carries the
-heading and the caveat, and each checkpoint is already its own nested `<section class="cp" id="cp-x">`
+heading and its lead sentence, and each checkpoint is already its own nested `<section class="cp" id="cp-x">`
 with a unique `id`, which is exactly the anchor a later stage edits. The rail already renders a
 per-checkpoint marker — take it and the pending stub from `references/page-template.html` rather than
 inventing markup.
 
-So stage 3 **opens with a cheap publish**: the heading, the caveat, and one stub per checkpoint whose
+So stage 2 **opens with a cheap publish**: the heading, its lead sentence, and one stub per checkpoint whose
 line of substance is **the question**. That arrival is worth having on its own — a reader learns what
 the judgments *are* before any of them is written, which is most of what they came for. Each
 checkpoint then lands in its own republish. Two rules keep this from becoming a republish per
@@ -901,12 +927,11 @@ negotiable against a figure: the count exempts every chain label and locator, ev
 `<pre>`, and everything inside a collapsed block, so a long page is never fixed by dropping a
 drawing. An impact card's `p.ip-why` is prose and does count.
 
-**The page fills in out of document order, and that is fine.** Step 5 produces the impact section;
-step 7 produces the checkpoints. So section 04 lands while section 02 is still stubs, and a reader
-arriving at stage 2 sees a gap above written material — and once stage 3 is under way, a written
-checkpoint sits above a pending sibling. The pending marker is what makes both readable — the risk the
-build state exists to prevent is an unwritten section looking like an empty one, not a section
-arriving early.
+**The page fills in out of document order, and that is fine.** Section 02 arrives one checkpoint at a
+time, so a written checkpoint sits above a pending sibling for most of stage 2, and section 04 is
+still a stub below both of them until stage 3. The pending marker is what makes all of it readable —
+the risk the build state exists to prevent is an unwritten section looking like an empty one, not a
+section arriving out of order.
 
 Saving as each checkpoint completes has a second payoff worth stating: a crash then leaves a useful page
 rather than nothing.
@@ -988,8 +1013,7 @@ Everything else about writing holds at every stage:
 - **The template is the design system — do not load `artifact-design` to re-derive one.** That skill
   exists to choose a palette and pair typefaces; those decisions are already made here, and its own
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
-  yields nothing. Load it only if you have a deliberate reason to depart from the template, and
-  `artifact-diagramming` only for a diagram the template's vocabulary cannot express.
+  yields nothing. Load it only if you have a deliberate reason to depart from the template.
 - **Figures are components, and there is no `<svg>` on this page.** Two figure vocabularies exist and
   the template assembles both: the vertical labelled chain — `figure.impact` in section 04,
   `figure.chain` inside a checkpoint — and the `dl.ba` before/after pair. Build them from the
@@ -1154,7 +1178,7 @@ URL: say where the file is, once, and nothing more.
 ## 10. Complete the page and gate it
 
 - **Remove the build banner and every pending marker** — including the per-checkpoint stubs and the
-  rail's checkpoint markers from stage 3. A finished page still carrying "2 parts still pending" is the worst
+  rail's checkpoint markers from stage 2. A finished page still carrying "2 parts still pending" is the worst
   outcome of staged delivery: it undersells work that is actually done, and the next reader cannot
   tell whether you stopped early or forgot the banner. If a section really was left unwritten, say so
   in prose as a stated limit — that is a different sentence from "pending".
@@ -1401,29 +1425,6 @@ Then say in chat what the update did: the delta, how many checkpoints were re-de
 run without `--update` re-reads the whole diff. That belongs in chat and not on the page, for the
 reason § *Build state* gives.
 
-## Two levels are not implemented in this version
-
-`--full` used to write seven sections, and `--review` was meant to run the project's code-review pass
-as well and thread its findings through the map. Neither exists in this version, and no effort level
-implements either: `--effort high` falsifies this run's own analysis, which is a different job from
-importing someone else's findings. **Stop, and say so** — do not fall back to the default page and do
-not write one:
-
-> `--full` and `--review` are not implemented in this version of review-map. Re-run without a level
-> flag for the review agenda: what changed, what needs your attention, the order to read the code in,
-> and what the change reaches outside the diff. Nothing was published.
-
-`--brief` and `--light` are the opposite case — accepted, silent, and without effect, because the
-default page is already the short one and a script that still passes `--brief` should keep working.
-
-Offer the project's own review command if it has one, and say plainly that it answers a different
-question — that offer is the same one step 10 makes at the end of an ordinary run.
-
-Publishing a page and labelling the missing part *pending* is the wrong answer here, for the reason
-`references/report-format.md` § *Build state* gives: pending is a promise, and nothing is coming.
-`.claude/CLAUDE.md` carries the design notes on both, and `references/report-format.md` § *A future
-full mode* records which components this page put down and where their rules would return.
-
 ## Working in a worktree
 
 Worktrees are among this skill's most common targets, and a worktree-isolated session sandboxes shell
@@ -1516,12 +1517,17 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   lower-priority affected code and the recorded searches may live there because they are provenance,
   but nothing a reviewer acts on may live *only* there. If an entry in the foot is a judgment they
   have to make, it is a checkpoint that was mis-filed.
-- **Never imply the page found everything.** It did not, and measurably so: three independent
-  analyses of the same 109-file diff produced eight distinct headline findings between them, with
-  only *one* appearing in all three. Explanation is reproducible; defect discovery is sampling. Say
-  plainly that what the page surfaced is a pass, not an audit, and never let it read as a clean bill
-  of health. Say it **once**, under *What needs your attention*, and nowhere else. Where a reviewer needs assurance rather than orientation, point them at a dedicated
-  review pass.
+- **Never imply the page found everything, and never write a disclaimer saying so.** It did not find
+  everything, and measurably so: three independent analyses of the same 109-file diff produced eight
+  distinct headline findings between them, with only *one* appearing in all three. Explanation is
+  reproducible; defect discovery is sampling. That fact is true of every Review Map rather than of
+  this one, so it is stated **once for the tool** in `README.md` § *What a Review Map cannot do* and
+  **never on the page** — a standing caveat under a heading is boilerplate the second time a reviewer
+  sees it, and it teaches them to skim the line beneath it. What the page owes instead is silence
+  about its own coverage: no *no issues found*, no *the change is safe*, no *nothing else reads this*
+  that a search did not establish, no summary claiming the diff was fully covered, and nothing
+  anywhere that reads as a clean bill of health. Where a reviewer needs assurance rather than
+  orientation, point them at a dedicated review pass.
 - **Never draw an `<svg>`.** The page's figures are two components — the vertical labelled chain and
   the `dl.ba` pair — assembled from the template. A drawing derived per run spends the run's attention
   on geometry instead of on whether the edges are true, and makes two pages from this skill

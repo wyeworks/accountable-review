@@ -229,14 +229,40 @@ tool cannot establish intent, it says so:
 Every claim also carries a `file:line` into your repository, and by default a second reader attacks
 those claims before the page is finished (see [Usage](#usage-) → *effort*).
 
-Nor does the page claim to have found everything. Three independent passes over the same 109-file
-diff produced eight distinct headline findings between them, with only one appearing in all three.
-Explanation is reproducible; defect discovery is sampling. The page says so, and never reads as a
-clean bill of health.
+Nor does the page claim to have found everything — see
+[What a Review Map cannot do](#what-a-review-map-cannot-do-) below. It never reads as a clean bill of
+health, and it never carries a boilerplate disclaimer saying so either: the limits are the same on
+every Review Map, so they are written down once, here, rather than reprinted under a heading you have
+already read a dozen times.
 
 The goal is not to sound confident.
 
 The goal is to help the reviewer investigate the change.
+
+---
+
+## What a Review Map cannot do 🌫️
+
+A Review Map is written by a model reading your repository. That is what lets it trace a consequence
+into code the diff never opened, and it is also the honest limit on the page.
+
+- **It is a pass, not an audit.** Three passes over the same 109-file diff produced eight headline
+  findings between them, only one of which appeared in all three. Explanation is reproducible; defect
+  discovery is sampling.
+- **It has blind spots, and they are not random.** Behaviour living in configuration, in data, in a
+  queue, in another service or in the gap between two deploys is harder to reach from a diff than
+  behaviour living in a method — so those are the regions a map is quietest about, and quiet is not
+  the same as clear. On a very large diff it also runs out of room before it runs out of diff, and
+  says which region it skimmed.
+- **Some of it can simply be wrong** — a misread method, a framework default that does not hold for
+  your version, a consequence prevented somewhere the run never looked. Every claim is labelled by
+  how it is known and carries a `file:line`, so open the citation for anything you would act on.
+- **It never decides anything.** A map that says nothing about a file is not telling you the file is
+  fine, only that this pass surfaced no judgment there.
+
+**And it depends on the model behind it.** We develop and test with Claude Opus 5 most of the time, and that
+is what the page's depth is calibrated against. Other models will trade cost for reach differently —
+try a few against your own codebase and keep the one whose maps you actually trust.
 
 ---
 
@@ -365,9 +391,9 @@ There is one page, and no flag chooses it:
 /accountable-review:review-map 412
 ```
 
-`--brief` and `--light` are accepted and change nothing — an invocation kept in a script is not a
-typo. `--full` and `--review` stop the run and say they are not implemented in this version, rather
-than quietly handing back something else under a name that used to mean seven sections.
+No argument selects a length or a depth, and an argument the skill does not recognise is reported
+rather than guessed at — a misread flag silently produces the wrong run, and the page gives you no
+way to tell.
 
 The page used to have two shapes and a word budget to tell them apart. What a reviewer wants is not a
 length setting: it is an answer to *what do I have to judge here, and where do I look?* The analysis
@@ -536,9 +562,15 @@ approve and sets no check — and `--no-pr-comment` drops the step and the scope
 "Review Map: passed" status, and there will not be one: a passing check is a verdict, and this page
 does not carry verdicts.
 
-One thing is left for you: **the credential.** Add `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`)
-as a repository secret. Setup cannot see your secrets, so it says outright that this is outstanding
-rather than implying everything is ready.
+One thing is left for you: **the credential.** Add one of two repository secrets. `ANTHROPIC_API_KEY`
+is an API key from the Anthropic Console, billed to that API account. `CLAUDE_CODE_OAUTH_TOKEN` is
+what `claude setup-token` prints — run it once on a machine where Claude Code is already signed in,
+paste the token in under that name, and the runs bill against that account's Claude subscription
+instead of API credit. That is usually what a team already paying for Claude Code wants, and it is
+the option the workflow file cannot tell you about, since it names the variable and not where the
+value comes from. The token is personal and long-lived rather than permanent: re-run the command and
+replace the value when it expires. Setup cannot see your secrets either way, so it says outright that
+this is outstanding rather than implying everything is ready.
 
 A pull request that only touches documentation, tests, tooling or a lockfile gets no Review Map —
 there is nothing for one to explain. Neither does a trivial application change: two files **and**
@@ -611,8 +643,9 @@ review_map:
     retention_days: 14
 ```
 
-`mode` is still read and still validated, and it decides nothing: `brief` and `light` are the same
-page, and `full` is rejected rather than silently downgraded.
+There is no key for the page's shape, because there is no shape to choose. A key the reader does not
+recognise is an error rather than a shrug — a misspelling that parsed as nothing would silently give
+a team the default while their file said otherwise.
 
 Precedence is `explicit flags > .accountable-review.yml > defaults`, and it is implemented rather
 than aspirational: the config reader emits a line only for a key the file actually contains, so

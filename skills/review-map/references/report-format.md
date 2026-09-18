@@ -21,10 +21,8 @@ duplicate it.
 
 ## One page shape
 
-There is one page and no flag chooses it. `--full` and `--review` stop the run as not implemented in
-this version; `--brief` and `--light` are accepted and change nothing. `SKILL.md` § *Two levels are
-not implemented in this version* has the wording, and § *A future full mode* at the foot of this file
-records what a later level would pick back up.
+There is one page and no flag chooses it. No argument selects a length or a depth, and § *A future
+full mode* at the foot of this file records what a deeper page would pick back up.
 
 What the page carries is not a length setting. It is the answer to one question — *what does a
 competent reviewer have to judge before approving this, and where do they look to judge it?* — and
@@ -37,16 +35,16 @@ step 8 folds the challenges in. That produces no section, no marker, no chip and
 is the same *shape*, built to the same specs, at either effort, and a reader cannot tell which
 produced the page in front of them. Deliberately so. A page that announced having been checked would
 be asserting the assurance the format refuses to give — § *Evidence tiers* labels how a claim is
-known, never how hard someone looked, and *findings are a sample, not an audit* is the rule that
-would break first.
+known, never how hard someone looked, and *findings are a sample* is the rule that would break
+first — the one `README.md` states for every Review Map and the page therefore never has to restate.
 
 **`--mentor` is the one flag that puts anything on the page, and the rule that keeps it from being a
 level is subtraction.** It admits one component — the primer callout, § *Mentor mode* — inside the
 checkpoints that earn one. Delete every primer from a mentor page and what is left is the page the
 same run would have written without the flag: same sections, same checkpoints, same order, same
 reading path, same budget on every other part. Nothing moves to make room. That is the whole
-difference from the `--full` this version refuses, which named a *different document* and left the
-reader nothing on the page to tell them which they had been handed.
+difference from a second document reached by a flag, which would leave the reader nothing on the page
+to tell them which they had been handed.
 
 **The stack is not a level either, and it is invisible for the same reason.** Rails and Phoenix change
 which lens file and which catalogue the run reads (`SKILL.md` step 2), what a chain's nodes are
@@ -101,7 +99,7 @@ refusals that hold that line.
 | | Section | Appears | Owns |
 |---|---|---|---|
 | 01 | What changed | always | The masthead, the semantic delta, intent and its tier |
-| 02 | What needs your attention | always | Three to five checkpoints per delta § 01 names, seven at the outside, and the one sampling caveat |
+| 02 | What needs your attention | always | Three to five checkpoints per delta § 01 names, seven at the outside. No standing caveat |
 | 03 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
 | 04 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
 | 05 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
@@ -148,7 +146,7 @@ change the judgment, and the page carries the judgment.
 <section class="cp" id="cp-a">
   <h3>Does the new Project filter preserve the intended scope?</h3>
   <p>Two to four sentences: what changed here, what follows from it, and what the reviewer has
-     to decide <span class="tier">from unchanged code</span>.</p>
+     to decide <span class="tier tier-unc">from unchanged code</span>.</p>
   <figure class="chain">…</figure>                       <!-- optional: mechanism inside the change -->
   <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <ul class="lookat">
@@ -157,6 +155,7 @@ change the judgment, and the page carries the judgment.
         <a class="path" href="…">app/models/project.rb:41-52</a>
         <details class="excerpt excerpt--diff">…</details></li>
   </ul>
+  <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
   <p class="open"><b>Open question</b> Whether archived projects should still appear in
      historical reports; no test pins it.</p>            <!-- optional -->
 </section>
@@ -200,6 +199,18 @@ change the judgment, and the page carries the judgment.
   says what to see in it and why the judgment turns on it. And a title is never a grade: *Risky*,
   *Important*, *Check this first* are a severity vocabulary arriving four to a checkpoint, and the
   rule against them is the page's, not this component's.
+- **The gap, `div.gap`, optional.** One line, labelled **GAP** and nothing else, naming what the
+  tests leave open **where that changes the judgment**. It is earned by the same test as everything
+  else here: *"no request spec covers the archived branch"* is a gap when the reviewer's decision
+  turns on whether that branch was exercised, and is noise when it does not. At most one per
+  checkpoint, and it counts against the checkpoint's word budget like any other prose.
+
+  **It states an absence; it does not grade one.** The label is fixed for the reason `p.open`'s is —
+  *Missing*, *Untested* and *Risk* are a severity vocabulary in a component the palette already
+  marks ochre — and a gap never implies the change should not ship. Silence is not a claim of
+  coverage either: a checkpoint with nothing the tests leave open writes no `div.gap`, and the page
+  never says the tests are complete. That is the same rule as the omitted section, one component
+  down.
 - **Open question, `p.open`, optional.** One line, labelled **Open question** and nothing else. What
   only the author can settle, or what the run could not establish and what would settle it. The label
   is fixed: *Watch* and *Blocking* are severity by another name, and `evals/checks/page-invariants.rb`
@@ -243,14 +254,22 @@ Past seven the answer is not an eighth checkpoint. It is `SKILL.md` step 7a's bu
 § 01, and, if the diff strained the run, the statement of which region was skimmed.
 
 A finding that does not become a checkpoint keeps its entry in *Impact outside the diff* or in the
-evidence foot, so nothing found is lost — only its promotion to a judgment, and the caveat under the
-heading is what makes that honest. **A judgment is the one thing that cannot be demoted that way**: an
-entry in the foot that the reviewer has to decide about is a checkpoint that was mis-filed, which is
-why the count has room to grow rather than a ceiling that would force one down there.
+evidence foot, so nothing found is lost — only its promotion to a judgment. **A judgment is the one
+thing that cannot be demoted that way**: an entry in the foot that the reviewer has to decide about is
+a checkpoint that was mis-filed, which is why the count has room to grow rather than a ceiling that
+would force one down there.
 
-**The sampling caveat lives here, once.** *These are what this pass surfaced, not an audit: repeated
-runs over the same diff surface overlapping but different sets.* Under the section heading, before the
-first checkpoint, and nowhere else on the page.
+**No sampling caveat, and nothing else that hedges the agenda.** The page used to open this section
+with *"these are what this pass surfaced, not an audit"*. It is gone: a standing disclaimer is the one
+sentence on the page that no reviewer acts on, it reads as boilerplate by the second Review Map, and a
+page repeating it every time teaches the reader to skip the line under it too. What it said is true and
+still stated — in `README.md` § *What a Review Map cannot do*, where someone deciding whether to trust
+these pages reads it once — rather than in the section a reviewer opens to find out what to judge.
+
+**What has not changed is the rule underneath it.** The page still never asserts completeness: no *no
+issues found*, no *the change is safe*, no summary claiming the diff was fully covered, and nothing
+that reads as a clean bill of health. `SKILL.md`'s hard rules own that, and removing the caveat
+removes a sentence, never the prohibition it sat next to.
 
 **Where checkpoints come from.** Most come from the flows step 6 clustered: a scope whose population
 changed, a default a consumer does not handle, a guard whose order moved. Some hide outside any one
@@ -340,8 +359,8 @@ where that goes.
   independent changes the PR ships; this one does not. Three deltas still buy one question about how
   the code was built. A second is the page becoming a style review, and it will arrive looking
   thorough. The departure that does not get the slot is not written anywhere else — an observation
-  about shape with nowhere to go is noise, not a finding, and the sampling caveat already says this is
-  not an audit.
+  about shape with nowhere to go is noise, not a finding, and a page is not obliged to report every
+  observation it made.
 - **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
   behavioural agenda already fills the page, there is no slot, and that is the right outcome. A page
   that dropped *is nil safe for every consumer?* in order to ask where a class lives has traded the
@@ -662,9 +681,9 @@ reordered, and nothing is dropped to make room. State it as a check on your own 
 these, would the rest be the page I would have written anyway?* — because the answer is what says
 whether `--mentor` stayed a flag or became a second document.
 
-**That is the whole distance from the `--full` this version refuses.** `--full` named a different
-document: a different section set, reached by a flag, with nothing on the page to tell a reader which
-one they were holding. A mentor page differs from the default page by components the reader can see.
+**That is the whole distance from a second document reached by a flag.** Such a flag names a
+different section set, with nothing on the page to tell a reader which one they were holding. A
+mentor page differs from the default page by components the reader can see.
 
 **And it is why there is no mentor badge.** `page-template.html` refuses three — severity,
 verification, stack — because each asserts something the page will not say. This fourth one is
@@ -915,9 +934,8 @@ one line the claim rests on is doing the component's job.
 
 ### Budget
 
-Same shape as the diagram budget, and for the same reason: the constraint is what keeps the component
-meaning something. But it needs a sharper test than the diagram budget does, because the obvious
-phrasing is circular.
+A cap, for the reason every cap here exists: the constraint is what keeps the component meaning
+something. But it needs a sharper test than most, because the obvious phrasing is circular.
 
 **"One per field that earns one" is not a budget.** *Affected but unchanged* is by definition nothing
 but claims a reader would otherwise take on faith — that is the field's stated reason for existing —
@@ -1034,7 +1052,7 @@ first-class part, and adjacency is not asked to imply anything.
 |---|---|---|
 | Changed by this PR | `.ip-chg` | solid border, page ground |
 | Affected, not changed | `.ip-aff` | dashed border, teal ground and teal clause |
-| Behaviour / outcome | `.ip-out` | filled, ink ground — the terminal treatment `.pipe`'s last node uses |
+| Behaviour / outcome | `.ip-out` | filled, ink ground |
 
 `.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
 left, *the existing system* on the right, with a **dotted** rule between them — is **derived from
@@ -1172,7 +1190,7 @@ like one.**
 
 **Budget: 1–3 paths, 3–5 nodes each.** These are the paths a reviewer has to *hold*, and three is
 already the outer edge of that — wanting a fourth is the signal that the three you have are not
-doing their job, which is the same question § *Depth rules* asks about a second diagram. The fourth
+doing their job. The fourth
 consequence is not lost by being left out: *affected, not changed* below carries its entry, and the
 checkpoint that turns on it carries its explanation. It was five, and five is where a real page put them; on
 that page the panel had become a section to scroll rather than a figure to read.
@@ -1190,8 +1208,8 @@ it readable. And
 it is not SVG. Nothing on this page is (§ *Chains*) —
 but because *this* figure has two lanes, an elbow that draws itself from a class change, cards that
 stack as the path count varies, and a breakpoint at 780px where the lanes collapse. There is no
-canvas that survives all four, so a drawing would mean coordinates derived per run, which
-§ *Depth rules* rules out for making two pages from this skill incomparable.
+canvas that survives all four, so a drawing would mean coordinates derived per run — which
+`SKILL.md`'s hard rules forbid, for making two pages from this skill incomparable.
 
 ## One canonical home
 
@@ -1234,16 +1252,32 @@ ordering buys: §§ 03 and 04 both come after § 02, so neither has to re-explai
 readable. A section that finds itself explaining a checkpoint's finding a second time is in the wrong
 section.
 
+**The page has two designators, and a flow is not one of them.** A checkpoint is *Checkpoint A*,
+the letter its `id="cp-a"` and its rail entry already carry; an impact path is *Impact path A*, the
+letter on its card's `ip-hd`. Those two are the only names one part of the page may call another by.
+The flows `SKILL.md` step 6 clusters are the run's own unit of *analysis*: each becomes a checkpoint,
+an impact path or a foot entry, each is named in `$W/analysis/`, and **no sentence on the page names
+one**. *"A leader-opened thread (Flow A) has no `connection_id`"* is a pointer to a section nobody
+wrote, and the reader has no rail entry to follow it to.
+
+**It leaks because the two vocabularies share one alphabet.** A run holds a note called Flow A while
+writing a checkpoint whose id is `cp-a` beside an impact path called A — three labels, one of them
+its own, and nothing local saying which. That is why this is a rule rather than something a careful
+run avoids: one real page carried *(Flow A)* in a checkpoint's second sentence and *Impact path A* in
+its last, mixing both namespaces inside one paragraph. `evals/checks/page-invariants.rb` § 7 greps
+for it.
+
 The reference form is one sentence, no re-explanation:
 
-> The `ActiveProjects` consequence is what checkpoint 2 turns on.
+> The `ActiveProjects` consequence is what Checkpoint B turns on.
 
 Not a summary of that consequence, not its citation again, not its tier label again.
 
-**Two consequences worth stating plainly.** A caveat belongs in the page once — *"these findings are a
-pass, not an audit"* is said under *What needs your attention* and nowhere else. And a `file:line` is not repeated every
-time its fact is mentioned; it sits with the canonical explanation, and later references point at the
-section, not the file.
+**Two consequences worth stating plainly.** A limit belongs in the page once — *"no test covers the
+archived case"* is said in the checkpoint it bears on and nowhere else, and a limit that is true of
+every Review Map rather than of this one belongs in `README.md` instead of on the page at all. And a
+`file:line` is not repeated every time its fact is mentioned; it sits with the canonical explanation,
+and later references point at the section, not the file.
 
 **Where synthesis beats deletion.** When two sections hold overlapping but non-identical facts, merge
 them into one sentence that carries both rather than keeping the better one:
@@ -1349,7 +1383,7 @@ anyway — *how much is still coming*, not *how far through its own plan the run
 
 One line of substance in the stub — which files, what it turns on — turns a placeholder into
 information. "Coming soon" does not. And for a checkpoint the `<h3>` is doing the real work: the
-question is legible before the explanation exists, which is why stage 3 opens with the stubs.
+question is legible before the explanation exists, which is why stage 2 opens with the stubs.
 
 Note that the stub is a whole `<section>` with its own `id`, which makes it a unique anchor a later
 stage can `Edit` in place. That is deliberate and worth keeping: it is what lets a stage write only
@@ -1376,7 +1410,7 @@ is a whole `<section class="cp" id="cp-x">` stub — assembled in `page-template
 pending section, and copied from there rather than rebuilt — and § 02's rail entry keeps a marker
 until every checkpoint under it is written. **A checkpoint stub's line of substance is its
 question**: that is what lets the agenda be read before any of it is written, and it is the reason
-opening stage 3 is worth a publish of its own. A reader who learns what the three judgments are has
+opening stage 2 is worth a publish of its own. A reader who learns what the three judgments are has
 most of what they came for, ten minutes before the explanations arrive.
 
 The second case needs **no markup of its own**: the rail already carries a per-checkpoint marker and
@@ -1505,11 +1539,11 @@ repo citation, the demo's receiver) kept and the half that belonged to the old p
 budget, the mark, the variant split) dropped.
 
 **And a level, if one returns, is emitted rather than described.** The rail once shipped in its
-seven-entry form with a comment telling a `--brief` run to cut it to four and renumber — a
-transformation performed from prose that no check ever looked at, on the default level. What replaced
-it was a `SKELETON:ONLY:level=` marker pair and a validator that failed closed, so `page-skeleton.sh`
-assembled the rail at both shapes; that machinery went with the level, and it is the shape to bring
-back. Subtractive by construction, so *no line was added* is assertable without a second extraction
+seven-entry form with a comment telling the shorter shape to cut it to four and renumber — a
+transformation performed from prose that no check ever looked at, on the shape most runs produced.
+What replaced it was a `SKELETON:ONLY:level=` marker pair and a validator that failed closed, so
+`page-skeleton.sh` assembled the rail at both shapes; that machinery went with the level, and it is
+the shape to bring back. Subtractive by construction, so *no line was added* is assertable without a second extraction
 that would test the script against its own awk.
 
 **The invariant a full mode has to hold: it keeps the agenda and adds depth beneath it.** The
@@ -1591,8 +1625,9 @@ The page's core, and the one section a reader who has time for nothing else shou
 five checkpoints per independent delta § 01 names, seven at the outside; § *The review checkpoint*
 owns every rule about them, the count included.
 
-The section itself carries only a heading, one sentence saying what these turn on and that the order
-is the order to think about them, and the sampling caveat. Then the checkpoints, in ranked order.
+The section itself carries only a heading and one sentence saying what these turn on and that the
+order is the order to think about them. Then the checkpoints, in ranked order. No caveat under the
+heading — see § *The review checkpoint* for where that sentence went and what stayed behind.
 
 ---
 
@@ -1649,9 +1684,9 @@ explanation. The nodes carry the address themselves now, so what this list adds 
 why the entry is affected — and it reaches the entries no path had room for:
 
 > `app/queries/active_projects.rb:8` — scopes on `discarded_at` and never learns about archival.
-> Checkpoint 2.
+> Checkpoint B.
 
-Not a summary of checkpoint 2. Not its citation again, not its tier again.
+Not a summary of Checkpoint B. Not its citation again, not its tier again.
 
 **What stays here and what goes to the foot.** The entries a path runs through and the entries a
 checkpoint turns on stay. Everything else the pass found — real, cited, and not something the reviewer
@@ -1893,8 +1928,19 @@ work-in-progress are exactly the cases this skill runs on most, so this is the c
 edge case. Before choosing a link mode, confirm the head SHA actually exists on the remote:
 
 ```sh
-git branch -r --contains <HEAD_SHA>     # empty output ⇒ the commit is on no remote
+git branch -r --contains <HEAD_SHA>     # exit 0 and empty output ⇒ the commit is on no remote
 ```
+
+**Asked and unable to answer is not the same as unpushed, and the ladder has no rung for it.** There
+are three states, not two: git answers and names a remote; git is asked and cannot answer at all — an
+unreadable repository, an unresolvable head, a worktree whose remotes were never fetched; and git
+answers naming none, which is the only one of the three that means unpushed, and only when the exit
+status is zero. Read a non-zero exit as the middle state and **refuse to pick a rung on
+reachability**: say in the masthead that reachability could not be determined, and render citations as
+plain text without asserting that the branch is unpushed. The verdict would otherwise come from an
+answer git never gave, and it is the one failure a reader cannot detect from the page, because an
+unlinked citation looks the same under either cause. `evals/checks/page-invariants.rb` § 5 separates
+the same three states for the same reason and skips rather than guessing.
 
 **Degradation, in order:**
 

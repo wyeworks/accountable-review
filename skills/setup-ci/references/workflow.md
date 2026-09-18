@@ -75,9 +75,6 @@ if: >-
   github.event.pull_request.draft == false
   && github.event.pull_request.head.repo.full_name == github.repository
   && github.event.pull_request.user.login != 'dependabot[bot]'
-  && (github.event.pull_request.changed_files > 2
-  || github.event.pull_request.additions > 50
-  || github.event.pull_request.deletions > 50)
 ```
 
 **Drafts.** `opened` fires for a pull request opened as a draft, so without this clause every draft
@@ -115,14 +112,16 @@ why the template carries the warning inline.
 
 **There is no arithmetic in a GitHub Actions expression.** The grammar is `()`, `[]`, `.`, `!`, the
 comparisons, `==`, `!=`, `&&` and `||`. `(additions + deletions) > 50` is an invalid-file error, not
-a sum. Nothing in the guard needs one today — the counts moved to a step, where shell can add — but
-the rule is what makes putting them back here impossible rather than merely wrong, and
-`tests/run.sh` still asserts it against whatever the expression holds.
+a sum. That expression is no longer in the guard — the counts moved to a step, where shell can add —
+but the rule is what makes putting them back here impossible rather than merely wrong, and
+`tests/run.sh` still asserts it against whatever the expression holds. `tests/self-test.sh` injects
+the arithmetic to prove the assertion fires.
 
 **In a folded scalar (`>-`), a more-indented line is not folded.** Its newline survives into the
 expression string and invalidates the file. Every line of the expression sits at exactly six spaces,
-and the operators lead their lines partly to remove the thing anyone would be tempted to align. Do
-not align the parentheses.
+and the operators lead their lines partly to remove the thing anyone would be tempted to align. The
+guard has no parentheses to align today; the indentation rule is what keeps that true of whatever
+clause is added next.
 
 ## The line that records the decisions
 
@@ -321,6 +320,42 @@ the delivery and upload steps do not need a model.
 `generate-review-map.sh` fails immediately, with a message naming the two variables, when neither is
 set. That failure is deliberately distinguishable from a failed run — nothing was generated and
 nothing was spent.
+
+### Where each one comes from
+
+The workflow names the variables and not their source, which is the half a team has to be told.
+
+**`ANTHROPIC_API_KEY`** is an API key created in the Anthropic Console. The run is billed to that
+organisation's API account.
+
+**`CLAUDE_CODE_OAUTH_TOKEN`** is what `claude setup-token` prints. Run it once, on a machine where
+Claude Code is already signed in:
+
+```bash
+claude setup-token
+```
+
+It runs the OAuth flow and prints a single token; that string is the whole value of the secret, and
+it goes into Settings → Secrets and variables → Actions → New repository secret under exactly that
+name. The run is then billed against that account's **Claude subscription** rather than API credit,
+which is the reason to choose it: a team already paying for Claude Code needs no second billing
+relationship to generate Review Maps.
+
+Three things about that token before choosing it over an API key.
+
+It is **personal**. The token carries one person's account, so every Review Map in the repository is
+generated as them, under their limits.
+
+It is **long-lived rather than permanent**. A workflow green for months can start failing on
+authentication with nothing in the repository having changed. The fix is `claude setup-token` again
+and a new value in the same secret; nothing about the workflow moves.
+
+It is **still only a secret**, so the fork rule is unchanged — a `pull_request` run from a fork gets
+neither variable, which is why that case is skipped rather than made to work.
+
+And the boundary that does not move either way: **setup writes the workflow and never the secret.**
+`claude setup-token` runs on your machine and its output goes to GitHub's secret store; nothing in
+this plugin reads it, at setup or at run time.
 
 ## The application-code gate
 

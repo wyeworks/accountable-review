@@ -9,6 +9,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page agenda-clean.html
 exit=1
 PASS  no severity chips
@@ -20,6 +21,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment agenda-probe-unlabelled.html
 exit=0
 PASS  no severity chips
@@ -31,6 +33,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page agenda-probe-unlabelled.html
 exit=1
 PASS  no severity chips
@@ -42,6 +45,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment agenda-probes-over-budget.html
 exit=0
 PASS  no severity chips
@@ -53,6 +57,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page agenda-probes-over-budget.html
 exit=1
 PASS  no severity chips
@@ -64,6 +69,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-clean.html
 exit=0
 PASS  no severity chips
@@ -75,6 +81,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-clean.html
 exit=1
 PASS  no severity chips
@@ -86,6 +93,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-demo-loose.html
 exit=0
 PASS  no severity chips
@@ -97,6 +105,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-demo-loose.html
 exit=1
 PASS  no severity chips
@@ -108,6 +117,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-fabricated-output.html
 exit=0
 PASS  no severity chips
@@ -119,6 +129,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-fabricated-output.html
 exit=1
 PASS  no severity chips
@@ -130,6 +141,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-hexdocs-clean.html
 exit=0
 PASS  no severity chips
@@ -141,6 +153,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-hexdocs-clean.html
 exit=1
 PASS  no severity chips
@@ -152,6 +165,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-hexdocs-unpinned.html
 exit=0
 PASS  no severity chips
@@ -163,6 +177,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-hexdocs-unpinned.html
 exit=1
 PASS  no severity chips
@@ -174,6 +189,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-hexdocs-wrong-package.html
 exit=0
 PASS  no severity chips
@@ -185,6 +201,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-hexdocs-wrong-package.html
 exit=1
 PASS  no severity chips
@@ -196,6 +213,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-invented-attribute.html
 exit=0
 PASS  no severity chips
@@ -207,6 +225,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-invented-attribute.html
 exit=1
 PASS  no severity chips
@@ -218,6 +237,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-invented-scope.html
 exit=0
 PASS  no severity chips
@@ -229,6 +249,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-invented-scope.html
 exit=1
 PASS  no severity chips
@@ -240,6 +261,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-link-alone.html
 exit=0
 PASS  no severity chips
@@ -251,6 +273,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-link-alone.html
 exit=1
 PASS  no severity chips
@@ -262,6 +285,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-link-in-excerpt.html
 exit=0
 PASS  no severity chips
@@ -273,6 +297,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-link-in-excerpt.html
 exit=1
 PASS  no severity chips
@@ -284,6 +309,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-mixed-series.html
 exit=0
 PASS  no severity chips
@@ -295,6 +321,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-mixed-series.html
 exit=1
 PASS  no severity chips
@@ -306,6 +333,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-clean.html
 exit=0
 PASS  no severity chips
@@ -317,6 +345,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-clean.html
 exit=1
 PASS  no severity chips
@@ -328,6 +357,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-doubled.html
 exit=0
 PASS  no severity chips
@@ -339,6 +369,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-doubled.html
 exit=1
 PASS  no severity chips
@@ -350,6 +381,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-marked.html
 exit=0
 PASS  no severity chips
@@ -361,6 +393,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-marked.html
 exit=1
 PASS  no severity chips
@@ -372,6 +405,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-orphan.html
 exit=1
 PASS  no severity chips
@@ -383,6 +417,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-orphan.html
 exit=1
 PASS  no severity chips
@@ -394,6 +429,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-over-budget.html
 exit=0
 PASS  no severity chips
@@ -405,6 +441,7 @@ PASS  evidence tiers used (4 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-over-budget.html
 exit=1
 PASS  no severity chips
@@ -416,6 +453,7 @@ PASS  evidence tiers used (4 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-probe-nested.html
 exit=0
 PASS  no severity chips
@@ -427,6 +465,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-probe-nested.html
 exit=1
 PASS  no severity chips
@@ -438,6 +477,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-uncited.html
 exit=0
 PASS  no severity chips
@@ -449,6 +489,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-uncited.html
 exit=1
 PASS  no severity chips
@@ -460,6 +501,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-primer-ungated.html
 exit=0
 PASS  no severity chips
@@ -471,6 +513,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-primer-ungated.html
 exit=1
 PASS  no severity chips
@@ -482,6 +525,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-probe-label-thin.html
 exit=0
 PASS  no severity chips
@@ -493,6 +537,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-probe-label-thin.html
 exit=1
 PASS  no severity chips
@@ -504,6 +549,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-probe-legit-forms.html
 exit=1
 PASS  no severity chips
@@ -515,6 +561,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-probe-legit-forms.html
 exit=1
 PASS  no severity chips
@@ -526,6 +573,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-probe-sandbox-lie.html
 exit=0
 PASS  no severity chips
@@ -537,6 +585,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-probe-sandbox-lie.html
 exit=1
 PASS  no severity chips
@@ -548,6 +597,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-probe-unlabelled.html
 exit=0
 PASS  no severity chips
@@ -559,6 +609,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-probe-unlabelled.html
 exit=1
 PASS  no severity chips
@@ -570,6 +621,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-runner-mutates.html
 exit=0
 PASS  no severity chips
@@ -581,6 +633,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-runner-mutates.html
 exit=1
 PASS  no severity chips
@@ -592,6 +645,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-uncatalogued-url.html
 exit=0
 PASS  no severity chips
@@ -603,6 +657,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-uncatalogued-url.html
 exit=1
 PASS  no severity chips
@@ -614,6 +669,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-unpinned-link.html
 exit=0
 PASS  no severity chips
@@ -625,6 +681,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page anchors-unpinned-link.html
 exit=1
 PASS  no severity chips
@@ -636,6 +693,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  no severity chips
@@ -647,6 +705,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-at-head.html
 exit=1
 PASS  no severity chips
@@ -658,6 +717,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-clean.html
 exit=0
 PASS  no severity chips
@@ -669,6 +729,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-clean.html
 exit=1
 PASS  no severity chips
@@ -680,6 +741,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-diff-lang.html
 exit=0
 PASS  no severity chips
@@ -691,6 +753,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-diff-lang.html
 exit=1
 PASS  no severity chips
@@ -702,6 +765,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-duplicate.html
 exit=0
 PASS  no severity chips
@@ -713,6 +777,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-duplicate.html
 exit=1
 PASS  no severity chips
@@ -724,6 +789,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-open.html
 exit=0
 PASS  no severity chips
@@ -735,6 +801,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-open.html
 exit=1
 PASS  no severity chips
@@ -746,6 +813,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-typed-highlight.html
 exit=0
 PASS  no severity chips
@@ -757,6 +825,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-typed-highlight.html
 exit=1
 PASS  no severity chips
@@ -768,6 +837,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-typed-tag.html
 exit=0
 PASS  no severity chips
@@ -779,6 +849,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-typed-tag.html
 exit=1
 PASS  no severity chips
@@ -790,6 +861,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-unchanged-changed-file.html
 exit=0
 PASS  no severity chips
@@ -801,6 +873,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page excerpt-unchanged-changed-file.html
 exit=1
 PASS  no severity chips
@@ -812,6 +885,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-card-no-lanes.html
 exit=0
 PASS  no severity chips
@@ -823,6 +897,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-card-no-lanes.html
 exit=1
 PASS  no severity chips
@@ -834,6 +909,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-entities-vocab-clean.html
 exit=1
 PASS  no severity chips
@@ -845,6 +921,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-entities-vocab-clean.html
 exit=1
 PASS  no severity chips
@@ -856,6 +933,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-four-paths.html
 exit=1
 PASS  no severity chips
@@ -867,6 +945,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-four-paths.html
 exit=1
 PASS  no severity chips
@@ -878,6 +957,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-loc-not-last.html
 exit=0
 PASS  no severity chips
@@ -889,6 +969,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-loc-not-last.html
 exit=1
 PASS  no severity chips
@@ -900,6 +981,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-loc-on-outcome.html
 exit=0
 PASS  no severity chips
@@ -911,6 +993,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-loc-on-outcome.html
 exit=1
 PASS  no severity chips
@@ -922,6 +1005,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-missing-loc.html
 exit=0
 PASS  no severity chips
@@ -933,6 +1017,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-missing-loc.html
 exit=1
 PASS  no severity chips
@@ -944,6 +1029,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-no-affected.html
 exit=1
 PASS  no severity chips
@@ -955,6 +1041,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-no-affected.html
 exit=1
 PASS  no severity chips
@@ -966,6 +1053,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-no-outcome.html
 exit=1
 PASS  no severity chips
@@ -977,6 +1065,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-no-outcome.html
 exit=1
 PASS  no severity chips
@@ -988,6 +1077,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-no-why.html
 exit=0
 PASS  no severity chips
@@ -999,6 +1089,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-no-why.html
 exit=1
 PASS  no severity chips
@@ -1010,6 +1101,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-prose-nodes.html
 exit=1
 PASS  no severity chips
@@ -1021,6 +1113,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-prose-nodes.html
 exit=1
 PASS  no severity chips
@@ -1032,6 +1125,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-shared-card.html
 exit=1
 PASS  no severity chips
@@ -1043,6 +1137,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-shared-card.html
 exit=1
 PASS  no severity chips
@@ -1054,6 +1149,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-two-locators.html
 exit=0
 PASS  no severity chips
@@ -1065,6 +1161,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-two-locators.html
 exit=1
 PASS  no severity chips
@@ -1076,6 +1173,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-unlabelled-edge.html
 exit=1
 PASS  no severity chips
@@ -1087,6 +1185,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-unlabelled-edge.html
 exit=1
 PASS  no severity chips
@@ -1098,6 +1197,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-why-citation.html
 exit=0
 PASS  no severity chips
@@ -1109,6 +1209,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-why-citation.html
 exit=1
 PASS  no severity chips
@@ -1120,6 +1221,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment impact-why-variant-class.html
 exit=0
 PASS  no severity chips
@@ -1131,6 +1233,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page impact-why-variant-class.html
 exit=1
 PASS  no severity chips
@@ -1142,6 +1245,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-assurance.html
 exit=1
 PASS  no severity chips
@@ -1153,6 +1257,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-assurance.html
 exit=1
 PASS  no severity chips
@@ -1164,6 +1269,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-clean.html
 exit=0
 PASS  no severity chips
@@ -1175,6 +1281,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-clean.html
 exit=1
 PASS  no severity chips
@@ -1186,6 +1293,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-draft-narration.html
 exit=1
 PASS  no severity chips
@@ -1197,6 +1305,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-draft-narration.html
 exit=1
 PASS  no severity chips
@@ -1208,6 +1317,31 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --fragment invariants-flow-designator.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+FAIL  the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: Flow A 
+## --page invariants-flow-designator.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+FAIL  the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: Flow A 
 ## --fragment invariants-loose-data-path.html
 exit=1
 PASS  no severity chips
@@ -1219,6 +1353,7 @@ PASS  evidence tiers used (1 label(s))
 FAIL  1 data-path attribute(s) outside a ledger cell — the coverage gate reads them as ledger paths; excerpts must use data-src
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-loose-data-path.html
 exit=1
 PASS  no severity chips
@@ -1230,6 +1365,7 @@ PASS  evidence tiers used (1 label(s))
 FAIL  1 data-path attribute(s) outside a ledger cell — the coverage gate reads them as ledger paths; excerpts must use data-src
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-no-tier.html
 exit=1
 PASS  no severity chips
@@ -1241,6 +1377,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-no-tier.html
 exit=1
 PASS  no severity chips
@@ -1252,6 +1389,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-risk-score-leading.html
 exit=1
 PASS  no severity chips
@@ -1263,6 +1401,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-risk-score-leading.html
 exit=1
 PASS  no severity chips
@@ -1274,6 +1413,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-risk-score-trailing.html
 exit=1
 PASS  no severity chips
@@ -1285,6 +1425,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-risk-score-trailing.html
 exit=1
 PASS  no severity chips
@@ -1296,6 +1437,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-risk-score.html
 exit=1
 PASS  no severity chips
@@ -1307,6 +1449,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-risk-score.html
 exit=1
 PASS  no severity chips
@@ -1318,6 +1461,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-severity-chip.html
 exit=1
 FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
@@ -1330,6 +1474,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-severity-chip.html
 exit=1
 FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
@@ -1342,6 +1487,33 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --fragment invariants-standing-disclaimer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --page invariants-standing-disclaimer.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 PASS  no severity chips
@@ -1353,6 +1525,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-tier-modifier-only.html
 exit=1
 PASS  no severity chips
@@ -1364,6 +1537,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-update-assurance.html
 exit=1
 PASS  no severity chips
@@ -1375,6 +1549,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-update-assurance.html
 exit=1
 PASS  no severity chips
@@ -1386,6 +1561,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-update-clean.html
 exit=0
 PASS  no severity chips
@@ -1397,6 +1573,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-update-clean.html
 exit=1
 PASS  no severity chips
@@ -1408,6 +1585,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-update-narration.html
 exit=1
 PASS  no severity chips
@@ -1419,6 +1597,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-update-narration.html
 exit=1
 PASS  no severity chips
@@ -1430,6 +1609,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-verdict.html
 exit=1
 PASS  no severity chips
@@ -1441,6 +1621,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page invariants-verdict.html
 exit=1
 PASS  no severity chips
@@ -1452,6 +1633,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment links-clean.html
 exit=1
 PASS  no severity chips
@@ -1463,6 +1645,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page links-clean.html
 exit=1
 PASS  no severity chips
@@ -1474,6 +1657,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment links-collapsed-anchor.html
 exit=1
 PASS  no severity chips
@@ -1485,6 +1669,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page links-collapsed-anchor.html
 exit=1
 PASS  no severity chips
@@ -1496,6 +1681,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment links-collapsed-no-excerpt.html
 exit=1
 PASS  no severity chips
@@ -1507,6 +1693,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page links-collapsed-no-excerpt.html
 exit=1
 PASS  no severity chips
@@ -1518,6 +1705,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment links-range-truncated.html
 exit=1
 PASS  no severity chips
@@ -1529,6 +1717,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page links-range-truncated.html
 exit=1
 PASS  no severity chips
@@ -1540,6 +1729,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment links-unknown-anchor.html
 exit=1
 PASS  no severity chips
@@ -1551,6 +1741,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page links-unknown-anchor.html
 exit=1
 PASS  no severity chips
@@ -1562,6 +1753,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment reach-clean.html
 exit=0
 PASS  no severity chips
@@ -1573,6 +1765,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page reach-clean.html
 exit=1
 PASS  no severity chips
@@ -1584,6 +1777,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment searches-bre-dialect.html
 exit=0
 PASS  no severity chips
@@ -1595,6 +1789,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page searches-bre-dialect.html
 exit=1
 PASS  no severity chips
@@ -1606,6 +1801,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment searches-clean.html
 exit=0
 PASS  no severity chips
@@ -1617,6 +1813,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page searches-clean.html
 exit=1
 PASS  no severity chips
@@ -1628,6 +1825,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment searches-git-grep.html
 exit=0
 PASS  no severity chips
@@ -1639,6 +1837,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page searches-git-grep.html
 exit=1
 PASS  no severity chips
@@ -1650,6 +1849,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment searches-unreachable.html
 exit=0
 PASS  no severity chips
@@ -1661,6 +1861,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page searches-unreachable.html
 exit=1
 PASS  no severity chips
@@ -1672,6 +1873,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment start-here-clean.html
 exit=0
 PASS  no severity chips
@@ -1683,6 +1885,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page start-here-clean.html
 exit=1
 PASS  no severity chips
@@ -1694,6 +1897,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment start-here-no-why.html
 exit=1
 PASS  no severity chips
@@ -1705,6 +1909,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page start-here-no-why.html
 exit=1
 PASS  no severity chips
@@ -1716,6 +1921,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment start-here-orphan-checkpoint.html
 exit=0
 PASS  no severity chips
@@ -1727,6 +1933,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page start-here-orphan-checkpoint.html
 exit=1
 PASS  no severity chips
@@ -1738,6 +1945,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment start-here-two-lists.html
 exit=0
 PASS  no severity chips
@@ -1749,6 +1957,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page start-here-two-lists.html
 exit=1
 PASS  no severity chips
@@ -1760,6 +1969,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment page-template.html
 exit=0
 PASS  no severity chips
@@ -1772,6 +1982,7 @@ PASS  evidence tiers used (7 label(s))
 PASS  data-path is only on ledger rows (3)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page page-template.html
 exit=0
 PASS  no severity chips
@@ -1784,6 +1995,7 @@ PASS  evidence tiers used (7 label(s))
 PASS  data-path is only on ledger rows (3)
 SKIP  link reachability: needs --repo to ask git what is pushed
 PASS  all three theme states present
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  no severity chips
@@ -1795,6 +2007,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-clean.html
 exit=0
 PASS  no severity chips
@@ -1806,6 +2019,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-severity-chip.html
 exit=1
 FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
@@ -1818,6 +2032,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-verdict.html
 exit=1
 PASS  no severity chips
@@ -1829,6 +2044,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-risk-score.html
 exit=1
 PASS  no severity chips
@@ -1840,6 +2056,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-risk-score-leading.html
 exit=1
 PASS  no severity chips
@@ -1851,6 +2068,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-risk-score-trailing.html
 exit=1
 PASS  no severity chips
@@ -1862,6 +2080,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-clean.html
 exit=0
 PASS  no severity chips
@@ -1873,6 +2092,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-assurance.html
 exit=1
 PASS  no severity chips
@@ -1884,6 +2104,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-draft-narration.html
 exit=1
 PASS  no severity chips
@@ -1895,6 +2116,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-update-narration.html
 exit=1
 PASS  no severity chips
@@ -1906,6 +2128,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-update-assurance.html
 exit=1
 PASS  no severity chips
@@ -1917,6 +2140,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-update-clean.html
 exit=0
 PASS  no severity chips
@@ -1928,6 +2152,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-update-clean.html
 exit=0
 PASS  no severity chips
@@ -1939,6 +2164,20 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --fragment invariants-standing-disclaimer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-no-tier.html
 exit=1
 PASS  no severity chips
@@ -1950,6 +2189,7 @@ FAIL  no evidence tier labels — inference is being presented as fact, or none 
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 PASS  no severity chips
@@ -1961,6 +2201,7 @@ PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-loose-data-path.html
 exit=1
 PASS  no severity chips
@@ -1972,6 +2213,31 @@ PASS  evidence tiers used (1 label(s))
 FAIL  1 data-path attribute(s) outside a ledger cell — the coverage gate reads them as ledger paths; excerpts must use data-src
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --fragment invariants-flow-designator.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+FAIL  the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: Flow A 
+## --fragment invariants-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment invariants-clean.html --repo searches-repo --head 0000000000000000000000000000000000000000
 exit=0
 PASS  no severity chips
@@ -1983,6 +2249,7 @@ PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: git cannot say whether 0000000000000000000000000000000000000000 is pushed in golden/searches-repo — with no answer this rule has nothing to check the citation form against
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -1994,6 +2261,7 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -2005,3 +2273,4 @@ PASS  evidence tiers used (5 label(s))
 PASS  data-path is only on ledger rows (5)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only

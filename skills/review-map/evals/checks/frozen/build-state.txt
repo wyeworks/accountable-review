@@ -328,6 +328,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-draft-narration.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-flow-designator.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-flow-designator.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-loose-data-path.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -362,6 +368,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-severity-chip.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-standing-disclaimer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-standing-disclaimer.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-tier-modifier-only.html

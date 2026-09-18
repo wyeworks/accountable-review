@@ -50,8 +50,8 @@ does not earn omitted outright.
 
 ## One page shape
 
-There is one page. `--brief` and `--light` are accepted and change nothing; `--full` and `--review`
-stop the run and say they are not implemented in this version.
+There is one page, and no flag chooses it. An argument the skill does not recognise is reported
+rather than guessed at.
 
 That is a deliberate narrowing. The page used to have two shapes and a word budget to tell them
 apart, and what a reader actually wants is not a length setting but an answer to one question: *what
@@ -320,8 +320,14 @@ never posts to GitHub.
 
 Nor does it claim to have found everything. Three independent passes over the same 109-file diff
 produced eight distinct headline findings between them, with only one appearing in all three.
-Explanation is reproducible; defect discovery is sampling. The page says so, and never reads as a
-clean bill of health.
+Explanation is reproducible; defect discovery is sampling.
+
+The page never reads as a clean bill of health — and it does not carry a standing disclaimer saying
+so either. That caveat is true of every Review Map rather than of any one of them, so it is stated
+once in `README.md` § *What a Review Map cannot do*, where someone deciding whether to trust these
+pages reads it, instead of under the heading a reviewer opens to find out what to judge. A hedge in
+that position is boilerplate by the second map, and the line a reader skips after it is the first
+checkpoint.
 
 ## What it assumes
 

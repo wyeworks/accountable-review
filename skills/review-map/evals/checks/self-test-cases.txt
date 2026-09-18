@@ -79,9 +79,22 @@
  page-invariants    | invariants-update-assurance.html | 1 | assurance language
  page-invariants    | invariants-update-clean.html  | 0 | no draft narration
  page-invariants    | invariants-update-clean.html  | 0 | no assurance language
+# The hedge. § 2d is a WARN, so this row pins the text at exit 0 rather than a failure. A row
+# can only assert that a line IS printed, and the half this rule is most likely to get wrong is
+# the other one — it matches prose, and every fixture in this directory carried the removed
+# caveat until the format dropped it, so a pattern reaching too far would fire everywhere at
+# once. That half is pinned by frozen.rb, which holds every case's whole output.
+ page-invariants    | invariants-standing-disclaimer.html | 0 | a standing disclaimer may have come back
  page-invariants    | invariants-no-tier.html       | 1 | no evidence tier labels
  page-invariants    | invariants-tier-modifier-only.html | 0 | evidence tiers used (2 label(s))
  page-invariants    | invariants-loose-data-path.html | 1 | outside a ledger cell
+# The flow designator, § 7 — the rule that guards a deleted vocabulary, the way § 1's severity
+# chips do. Two rows, because the corpus itself carried the old vocabulary until this rule
+# landed: the FAIL row proves it fires, and the PASS row on a clean fixture proves the pattern
+# stops at the label rather than at every capitalised word near a letter. The renamed corpus is
+# the wider pass half, pinned by frozen.rb.
+ page-invariants    | invariants-flow-designator.html | 1 | the page names a flow
+ page-invariants    | invariants-clean.html         | 0 | no flow designator
  excerpts           | excerpt-clean.html            | 0 | collapsed by default
  excerpts           | excerpt-open.html             | 1 | open by default
  excerpts           | excerpt-duplicate.html        | 1 | same range is excerpted more than once

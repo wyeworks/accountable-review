@@ -4,7 +4,6 @@ The repository's configuration for Accountable Review. Optional, small, and mean
 
 ```yaml
 review_map:
-  mode: brief            # brief | light
   effort: high           # high | low
   mentor: rails          # true | false | rails | elixir | phoenix
   update: true           # re-read only the new commits on a second run
@@ -23,7 +22,6 @@ That is the whole schema. Every key is optional; a file may set one of them.
 
 | Key | Default | Meaning |
 |---|---|---|
-| `review_map.mode` | `brief` | Vestigial, and kept so an existing file keeps working. The Review Map has one shape, so `brief` and `light` mean the same page and neither reaches the run. `full` and `review` are rejected rather than silently downgraded — `full` used to mean a seven-section page, and handing back the agenda under that name is a setting that changed meaning without saying so |
 | `review_map.effort` | `high` | How hard the run works to be right. `high` sends an adversarial pass at the run's own analysis before the page is written, and changes nothing about the page's shape; `low` skips it. `normal` is accepted as the old name for `low` |
 | `review_map.mentor` | `false` | The one key that changes what is **on** the page, for a team onboarding reviewers into the stack: a framework primer inside the checkpoints that earn one, and nothing else. Everything else about the page is what a run without it writes, so a mentor page with its primers deleted is the ordinary page. A stack name is a claim the run **checks** against the repository rather than an override — the run stops if they disagree — and while a stack's documentation catalogue is closed the flag produces no primers at all and says so in the log |
 | `review_map.trivial_files` | `2` | With `trivial_lines`, the size below which a pull request gets no Review Map. Both are compared with **and**, so a change that is large by either measurement earns one: 900 lines in one file, or 9 lines across six. Counted over **application paths only** — a lockfile's five thousand lines are not in the total. `0` here or on `trivial_lines` switches the rule off, since nothing containing application code has zero of either |
@@ -60,7 +58,7 @@ out of the checkout when they run, which has two consequences worth knowing:
 - **Changing the config does not mean regenerating the workflow.** Edit the file, and the next run
   respects it.
 - **The file comes from the pull request's checkout**, so on a pull request it is whatever that branch
-  says. That is harmless for a detail level or a retention period. It is not harmless for
+  says. That is harmless for an effort level or a retention period. It is not harmless for
   `provider: command`, which is why that provider refuses to run unless
   `ACCOUNTABLE_REVIEW_ALLOW_COMMAND=1` is set in the environment — and the generated workflow does not
   set it. See `delivery.md`.
