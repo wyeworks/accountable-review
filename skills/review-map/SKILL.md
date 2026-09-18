@@ -39,15 +39,17 @@ not the repository being reviewed. User instructions take precedence over skill 
 
 ## What is bundled
 
-The procedure below relies on nine bundled files. Read each at the step that needs it rather than up
+The procedure below relies on ten bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
-Two of the nine come in a pair, and **step 2's stack detection picks one of each pair, never both.**
-A Rails run reads the Rails lens file and the Rails catalogue; a Phoenix run reads the Phoenix pair.
-Reading the other stack's file costs context and teaches the wrong searches.
+Three of the ten come in pairs, and **you read one of each pair, never both.** Step 2's stack
+detection picks the lens file and the catalogue: a Rails run reads the Rails pair, a Phoenix run the
+Phoenix pair, and reading the other stack's file costs context and teaches the wrong searches. The
+host reference is the same rule one level up — yours, not the other host's.
 
 | File | Read at | For |
 |---|---|---|
+| `references/hosts/claude-code.md` *or* `references/hosts/codex.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
 | `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
