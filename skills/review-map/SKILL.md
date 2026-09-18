@@ -73,8 +73,8 @@ point of putting them in a separate context. The host reference owns how the rea
   current branch against its base.
 - **There is one page shape, and no flag chooses it.** No argument selects a length, a depth or a
   second document, and there is nothing to map one onto if someone invents one. An argument starting
-  with `--` that is not one of `--effort`, `--mentor`, `--output`, `--repository`, `--base-sha` or
-  `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
+  with `--` that is not one of `--effort`, `--mentor`, `--output`, `--update`, `--repository`,
+  `--base-sha` or `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
   wrong run, and the reader has no way to tell.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
   it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
@@ -176,6 +176,19 @@ point of putting them in a separate context. The host reference owns how the rea
   `ci/generate-review-map.sh`, at the plugin root, uses this path for Claude CI. It supplies all four
   flags, checks afterwards that the page names its revision and no longer says it is being written,
   and refuses to deliver one that does.
+- **`--update` re-reads only the commits since the last map.** It takes no value, and it says: a
+  page for this target already exists where this run would write, so inspect the delta since the
+  revision that page names and edit it in place rather than rebuilding it. § *Re-running over new
+  commits* below owns every rule about it; read that section before acting on the flag.
+
+  Two things about it belong here, beside the flags it sits with. **It is not a level and not an
+  effort.** It never lowers a cap, never skips the gate, never skips step 8 for anything it writes,
+  and never admits or removes a component; the moment it means "fewer excerpts" or "skip section
+  04" it has become a second document reached by a flag, which is the thing this page has no
+  shapes for. And **with no
+  previous page, or when the plan below refuses, it falls back to a full run and says so in chat.**
+  That is not an error: a full run is always the better page, so every way this flag can fail leads
+  to one.
 - Find the base *ref*: the PR's base if there is one, else the default branch
   (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
   you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
@@ -961,6 +974,11 @@ its finished 82 KB version as one 35,000-token `Write` that re-emitted the first
 call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
 anchor you already have.
 
+**With `--update` there are no stages and no banner at all** — the page is finished before this run
+started and is finished at every instant of it. The skeleton is not called, the `Revision` cell is
+the last edit, and § *Re-running over new commits* owns the rest. The same `Edit` rule holds for the
+same reason, and so does its read-side twin: do not read the whole page either.
+
 **Write *Read the code in this order* last of the prose sections** — which is why it sits in stage 4
 above. It is a route through the checkpoints and an index into them, so it cannot be written before
 they exist without being guessed at.
@@ -1138,8 +1156,10 @@ Everything else about writing holds at every stage:
   Elixir run anchors with probes and prose instead. This is the fail-closed rule at file scope, not a
   bug to work around.
 - **At `--mentor`, take the primer's markup from the template like any other component.** It is
-  assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header with the library
-  name, the two paragraphs, the `.item` citation, the pinned `a.doc` and the `pre.demo` beside them.
+  assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header, which names the
+  stack in words and not the component — *Understanding Ruby on Rails*, *Understanding Phoenix*, or
+  the library a gem-level primer is about — with the API on the right; then the two paragraphs, the
+  `.item` citation, the pinned `a.doc` and the `pre.demo` beside them.
   Copy the composition and replace every string — the specimen explains `ActiveModel::Dirty` about a
   `Post`, and a specimen's prose inherited onto a different API is a false claim nothing catches.
 
@@ -1274,6 +1294,12 @@ URL: say where the file is, once, and nothing more.
 - On a re-run for the same PR, the path is the **same one step 1 derives** — that derivation is what
   makes the URL survive across pushes as well as across stages. One PR, one link, however many times
   this runs, without having to remember where the last run put it.
+- **The inventory and this gate are in full on an update too.** `--update` narrows which claims got
+  re-read and narrows nothing about which paths must be accounted for, so the inventory is
+  regenerated whole and the gate runs over `BASE...HEAD` exactly as above. See § *Re-running over
+  new commits*. The failure to watch for is a run that patches the existing `div.gt.gt-paths` with
+  the delta's rows rather than replacing the block: that is typing in the one cell this script
+  exists to keep untyped, and the gate cannot tell the difference.
 
 ## When a run stops early
 
@@ -1294,6 +1320,140 @@ Convert it instead into a stated limit — the same components, different words:
 
 `evals/check.rb --stopped` checks all four. This is the third legitimate state of the page, alongside
 in-progress and complete, and the only one that requires a deliberate edit rather than a deletion.
+
+## Re-running over new commits
+
+`--update` says a page for this target already exists where this run would write, so read the
+commits since the revision that page names and edit it in place. A pull request that keeps moving
+through review then keeps a map that describes it, without a full run per push.
+
+**What is bought, and what it is paid for with.** The saving is almost entirely step 5 — tracing
+consumers across the diff is where the minutes and the tokens go, and an update traces only what
+the new commits reach. The price is that every carried claim is a claim nobody re-read. That is the
+whole trade, it is the only one, and § *Build state* § *An updated page* is how the reader is told
+about it.
+
+**Read `references/report-format.md` § *Build state* § *An updated page* before writing anything.**
+It owns the masthead line, the one disclosure sentence and the three refusals that keep an update
+from becoming a level.
+
+### First, decide whether this can be an update at all
+
+Four checks are yours, because none of them can be recovered from a page. Do them before anything
+else, and on any disagreement run fully and say so in chat:
+
+- **The flags match the previous run.** `--effort` and `--mentor` are invisible on the page by
+  design, so nothing can read them back off it. An update under different flags would produce a
+  page half of which was written to different rules.
+- **The stack is the one the page was written for**, per step 2.
+- **The rung is the one step 1 just resolved.** The rung decides whether anything on the page is
+  clickable, so a change in it rewrites every citation and there is nothing to carry.
+- **The repository and the target are the same ones.**
+
+Then the mechanical half, which is a script because by eye every checkpoint looks carryable — the
+same reason `ledger-rows.sh` and `diff-render.sh` exist:
+
+**The revision the page names** is the first seven-character hex token in its masthead `Revision`
+cell — one targeted `grep`, not a read of the page — resolved with `git rev-parse` to the full SHA
+the script wants:
+
+```sh
+PREV=$(git rev-parse "$(grep -o 'class="path"[^>]*>[0-9a-f]\{7\}' "<previous page>" \
+  | head -n 1 | grep -o '[0-9a-f]\{7\}$')")
+```
+
+```sh
+<skill base directory>/scripts/carry-plan.sh <previous page> \
+  --prev-head "$PREV" --base BASE --head HEAD
+```
+
+It prints a plan and **exit 0**, or a reason and `verdict: full` and **exit 3**. A full verdict is
+not an error and not something to argue with: run the whole procedure from step 2, and say in one
+line which reason it gave. The reasons are the preconditions the script owns — the branch was
+rebased or force-pushed, the base moved under the page, the page is a draft or a stopped run, the
+delta is more than half the diff, a lock file moved, or a recorded search now finds a delta path.
+
+**That last one is the one to understand rather than just obey.** Affected-but-unchanged code is
+what this page is for, so the dangerous change is a new consumer appearing in a file *no checkpoint
+cites* — invisible to any rule about what a checkpoint cites. The searches the previous page
+recorded are the only thing that can see it, so the script replays them; a delta path among their
+hits means these commits reached code the page reasoned about, and that is step 7's work rather
+than an update's.
+
+### The plan, and what each row means
+
+```
+delta     app/queries/active.rb          the paths the new commits touched
+cp        cp-a   carry   -               no delta path appears inside that checkpoint
+cp        cp-b   redo    cites app/...   it does, so the judgment is re-derived
+excerpt   app/queries/active.rb  regen   quoted from a file the delta moved
+excerpt   app/models/project.rb  keep    quoted from one it did not
+```
+
+**Carrying is about not re-tracing. It is not about freezing the agenda**, and confusing the two is
+how an update goes wrong in the direction that looks tidy. A `carry` row means you do not re-open
+that checkpoint's files. It does not mean the checkpoint survives untouched: step 7 still ranks the
+whole agenda, and a new observation may merge into a carried checkpoint — at which point it is no
+longer carried and goes through step 8 like anything else.
+
+### The steps
+
+| Step | On an update |
+|---|---|
+| 2 · Discover the project | **In full.** A few existence checks and two lock-file reads; a push can bump Rails |
+| 3 · Inventory the diff | **In full**, over `BASE...HEAD`. The gate depends on it |
+| 4 · Derive what changed | **Narrowed**: ask only whether the delta moves the semantic delta or a stated limit. The metric strip is recomputed from step 3 |
+| 5 · Trace | **Narrowed to the delta.** No re-tracing of carried flows. This is the whole saving |
+| 6 · Notes and falsifiers | **Narrowed**: notes for delta-touched flows only, falsifiers only at those notes, cap of six unchanged |
+| 7 · Synthesise | 7a re-asked cheaply; 7b and 7c over delta candidates only; **7d re-ranks the whole agenda** and **7e enforces the caps over the whole agenda**; 7f–7j for touched checkpoints only. § 03 is rewritten whole if the agenda moved at all |
+| 8 · Verify | **In full and unconditionally, for everything written or re-derived.** Never for carried material |
+| 9 · Write | `Edit`s only. No skeleton, no banner, `Revision` cell last |
+| 10 · Complete and gate | **In full, always** |
+
+Step 7d is cheap and is never skipped: ranking is reasoning over a handful of one-line questions
+with no file reads. An update that appended its new checkpoints to the end instead would have
+turned a ranked agenda into a changelog, which is the failure this table exists to prevent.
+
+Step 5's narrowing is the one place to be honest with yourself. The delta is the set of files the
+new commits touched, and tracing what *those* reach is the work — not re-confirming what the
+previous map already traced.
+
+### Writing it
+
+- **`page-skeleton.sh` is not called.** There is a page already. It refuses with exit 3 on a page
+  that has content, and **a run that hits that refusal during an update has lost the page it meant
+  to edit — stop and regenerate deliberately, never `--force`.**
+- **No build banner and no pending markers, at any point.** The page is complete at every instant
+  of an update. There is no state for *being updated*: a banner would risk being left behind, and
+  `ci/generate-review-map.sh` refuses to deliver a page still carrying one.
+- **The `Revision` cell is the last edit of the run.** Until it changes, the page honestly names
+  the revision it still mostly describes — and if the update dies halfway, the page fails the CI
+  adapter's check that it names its head rather than being delivered as a current map of an old
+  revision. Add the disclosure sentence to § 01 in the same edit.
+- **A checkpoint the new commits answered is deleted**, with its reading-path stop and its rail
+  entry, and nothing marks where it was. § *The review checkpoint* owns that rule.
+- **Section 04 may need adding rather than filling.** If the previous page omitted it and the delta
+  now crosses into unchanged code, the section and its rail entry are new — omitted is not pending,
+  so there is no stub to replace. This is the one place an update writes where the page does not
+  already carry a marker.
+- **Every excerpt the plan marks `regen` is regenerated**, in one `excerpt.sh` call with any new
+  ones. § *Source excerpts* says why a carried one is the component's single way of lying.
+- **Do not read the whole page.** `grep -n` for the checkpoint ids, the questions and the citations
+  to build an index, then `Read` with `offset` and `limit` only the ranges you are re-deriving. An
+  80 KB page is about 25,000 tokens, and reading it whole is the same defect as re-`Write`ing it,
+  pointed the other way.
+
+### Finishing
+
+Step 10 is unchanged and none of it is narrowed. The inventory is regenerated whole with
+`ledger-rows.sh --paths-only` and the block replaced — never hand-edited, never patched with the
+new rows — and `coverage-gate.sh` runs against the finished page over the full `BASE...HEAD` range.
+An update changes which claims were re-read; it changes nothing about which paths must be
+accounted for.
+
+Then say in chat what the update did: the delta, how many checkpoints were re-derived, and that a
+run without `--update` re-reads the whole diff. That belongs in chat and not on the page, for the
+reason § *Build state* gives.
 
 ## Working in a worktree
 
@@ -1352,6 +1512,15 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   and an order is not a scale**: no number beside a question, no *blocking*, no *watch*. The line that
   names an unresolved thing is labelled *Open question* and nothing else.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
+- **Never carry a claim across revisions without saying so on the page.** An update
+  (§ *Re-running over new commits*) leaves parts that were analysed at an earlier head, and a page
+  describing an earlier revision while looking current is the one failure a reader cannot detect
+  from the inside. The masthead names both revisions and § 01 carries one sentence; the wording is
+  `report-format.md` § *Build state* § *An updated page* and it is not composed per run.
+- **Never mark a checkpoint by its recency.** No *new*, no *updated*, no *carried*, no count of how
+  many were re-derived, and a checkpoint the change has since answered is deleted rather than
+  ticked. Three ordered states beside a question is a severity scale wearing different words, and
+  an update is the one thing in this procedure that makes writing one feel like helpfulness.
 - **Never invent a URL, and never invent output.** Documentation links come from the catalogue the
   stack detected in step 2 — `references/rails-docs.md` or `references/elixir-docs.md` — and from
   nowhere else, including when that catalogue is closed and the answer is no link at all. Console

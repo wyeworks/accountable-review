@@ -196,6 +196,63 @@ jobs:
       # over application paths only — a three-line model change beside a
       # five-thousand-line lockfile is a three-line change. The payload cannot
       # express that, so the gate runs here, after the cheap half of the job.
+# SETUP:IF:push
+      # The previous Review Map for this pull request, so the run can update it
+      # over the new commits instead of rebuilding it — and, before that, so the
+      # scope step below can ask whether these commits reach anything the map
+      # says at all. Only reachable with `synchronize` on: a first run has
+      # nothing to restore, and a pull request that gets one map has no second
+      # run to restore it into.
+      #
+      # IT CARRIES NO VERDICT GUARD, and it sits above the step that decides the
+      # verdict for exactly that reason: the second half of that decision is
+      # about the restored map. Restoring ~80 KB unconditionally is cheaper than
+      # the model run it is deciding about, and on a miss it is a no-op.
+      #
+      # A MISS IS NOT A FAILURE. It means a full generation, which is the better
+      # page — the whole flag is a saving with a cost, so every way it can go
+      # wrong leads to the page that has no cost. Nothing here is load-bearing
+      # for correctness, and two existing rules are why: a half-written page
+      # restored here carries a pending marker and carry-plan.sh refuses it, and
+      # a run that dies after the restore leaves a page naming the OLD head,
+      # which the generate step below refuses to deliver.
+      #
+      # The key is built from run-time expressions, so two renders of this file
+      # with the same flags are the same bytes — the idempotency rule this whole
+      # template is compared by. No date, no run id.
+      - name: Restore the previous Review Map
+        id: previous
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/review-map
+          key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          restore-keys: accountable-review-map-${{ github.event.pull_request.number }}-
+
+      # ONLY WHEN THERE IS A PREVIOUS MAP TO REUSE, which is what the guard says:
+      # `cache-matched-key` is empty on a cold cache, and a run with nothing
+      # restored has nothing to carry and no searches to replay.
+      #
+      # Both halves of reusing a map replay the page's own recorded searches, and
+      # every search recipe in the lens files is written with rg — so on a runner
+      # without ripgrep every one of them refuses and the run rebuilds the page
+      # from scratch. Correct, and the whole saving gone.
+      #
+      # IT CANNOT FAIL THE JOB, and that is deliberate rather than defensive. The
+      # install is an optimisation; if it does not work the page is rebuilt, which
+      # is the answer that costs more and is never wrong. A step that could turn a
+      # Review Map into a red job to save a few minutes has the polarity backwards.
+      - name: Install ripgrep, so the previous map's searches can be replayed
+        if: steps.previous.outputs.cache-matched-key != ''
+        run: |
+          if command -v rg >/dev/null 2>&1; then
+            echo "ripgrep is already here"
+            exit 0
+          fi
+          sudo apt-get install -y ripgrep \
+            || { sudo apt-get update && sudo apt-get install -y ripgrep; } \
+            || echo "no ripgrep: this run rebuilds the page instead of updating it"
+# SETUP:END:push
+
       - name: Does this pull request change application code?
         id: scope
         env:
@@ -210,6 +267,36 @@ jobs:
           # 0 is generate and 3 is skip; anything else is a diff this job could
           # not read, and that is a failure rather than a quiet skip.
           [ "$rc" = 0 ] || [ "$rc" = 3 ] || exit "$rc"
+# SETUP:IF:push
+
+          # THE SAME QUESTION, ASKED AGAIN OVER THE COMMITS SINCE THE MAP WE
+          # ALREADY HAVE. The gate above measures BASE...HEAD, so a README-only
+          # push to a branch that changed application code earlier still answers
+          # `generate` — the pull request contains application code, and nothing
+          # up there can see that THIS push did not. The result is a model run
+          # whose page says what the last page said.
+          #
+          # It downgrades this step's own verdict rather than adding a second
+          # one, which is why no guard below moves: every later step already
+          # stands aside on `verdict != 'generate'`, and the step that explains
+          # a skip already fires on `verdict == 'skip'`.
+          if [ "$rc" = 0 ]; then
+            cur=0
+            "$RUNNER_TEMP/accountable-review/ci/map-still-current.sh" \
+              --dir "$RUNNER_TEMP/review-map" --head "$HEAD_SHA" \
+              --plugin-dir "$RUNNER_TEMP/accountable-review" \
+              > "$RUNNER_TEMP/still-current.txt" || cur=$?
+            cat "$RUNNER_TEMP/still-current.txt"
+            [ "$cur" = 0 ] || [ "$cur" = 3 ] || exit "$cur"
+            if [ "$cur" = 0 ]; then
+              {
+                echo "verdict=skip"
+                echo "reason=map-still-current"
+                sed -n 's/^reason: /detail=/p' "$RUNNER_TEMP/still-current.txt" | head -n 1
+              } >> "$GITHUB_OUTPUT"
+            fi
+          fi
+# SETUP:END:push
 
       - uses: actions/setup-node@v4
         if: steps.scope.outputs.verdict == 'generate'
@@ -277,6 +364,20 @@ jobs:
           path: ${{ runner.temp }}/review-map/
           retention-days: ${{ steps.delivery.outputs.retention_days }}
           if-no-files-found: error
+
+# SETUP:IF:push
+      # Kept for the next push, and only once this one has actually shipped.
+      # success() is what makes the cache hold delivered pages rather than
+      # whatever was in the directory when a step died — correctness does not
+      # depend on it, since a half-written page is refused on the way back in,
+      # but a cache entry nothing can use is still worth not writing.
+      - name: Keep this Review Map for the next push
+        if: success() && steps.scope.outputs.verdict == 'generate'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/review-map
+          key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+# SETUP:END:push
 
       - name: Say where it went
         if: steps.scope.outputs.verdict == 'generate'

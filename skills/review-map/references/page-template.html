@@ -31,7 +31,10 @@
   five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
   the diff does not touch, plum for provenance. Each one means one thing and the
   token block says which; a family used outside its rule stops carrying meaning
-  everywhere else. The structural idea is that a checkpoint is NOT a card — it
+  everywhere else. A fifth ramp, --primer-*, is the exception that proves that
+  rule: it means nothing at all. It frames aside.primer and nothing else, in
+  Rails red, and the token block says why a page with no severity vocabulary can
+  afford one. The structural idea is that a checkpoint is NOT a card — it
   is a question, the two or three sentences that make it one, and where to look;
   a hairline separates one from the next. Cards are reserved for the few things
   that genuinely are objects: a chain figure, the impact panel.
@@ -86,6 +89,15 @@
   into a style review: a reader who is told a convention section exists expects it
   filled every time, and a run that knows the reader expects it will fill it.
 
+  AND NO CARRY BADGE, which is the sixth and now the one with the best excuse of
+  all. --update re-reads only the commits since the previous map (SKILL.md
+  § Re-running over new commits), so a real difference exists between the parts of
+  the page and a marker for it feels owed. It is not. The page says WHICH REVISION
+  its content describes, once, in the masthead cell and one sentence in § 01 — and
+  never which checkpoints were re-derived. No "new" flag on a checkpoint, no
+  "carried" tag, no "3 of 5 updated" line: three ordered states beside a question
+  is the severity chip above, rebuilt out of words that sound like provenance.
+
   The page carries no tick state and no "n of m" counter anywhere, because a
   count of cleared items reads as progress toward approval. See report-format.md.
 
@@ -97,7 +109,9 @@
                             prefers-color-scheme dark, [data-theme="dark"].
                             --nav-* / --gap-* / --unchanged-* / --prov-* are the
                             four semantic families; the rule for each is in the
-                            block itself and it is the design, not a convention
+                            block itself and it is the design, not a convention.
+                            --primer-* is the fifth ramp and the only one that
+                            means nothing: it is one component's frame
     shell, rail ........... .wrap, main, .progress, and the sticky numbered rail
     type .................. headings, .lede, .note, .lbl, .path, .cite, code
     section furniture ..... .eyebrow — a label and a rule that fills the row
@@ -124,7 +138,9 @@
                             most one per checkpoint and three per page. It holds the
                             checkpoint's one a.doc and a pre.demo, which is the one
                             block on this page that may show a result line, because
-                            its receiver is a class this repository does not have
+                            its receiver is a class this repository does not have.
+                            Its header names the stack in words — "Understanding
+                            Ruby on Rails" — and its frame is --primer-*
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
                             sentences, an optional figure.chain, ul.lookat (1-4
                             places to look, each a title, a clause and its
@@ -212,9 +228,39 @@
                                 — a border and an ink, never a fill
                                 you notice before the prose.
 
-   Green and red stay exactly what they were: added and removed
-   lines, inside an excerpt and nowhere else. They are the reason
-   no fifth semantic hue gets added.
+   AND ONE RAMP THAT IS NOT A FAMILY, because it has no meaning to
+   spend:
+
+     --primer-*     red    28   The frame of aside.primer, and of
+                                nothing else on this page. Not a
+                                fifth meaning — a reminder of which
+                                framework is speaking, in the red
+                                that framework uses, so a reader new
+                                to the stack recognises the block
+                                that exists for them before reading
+                                a word of it.
+
+   THAT IS THE ONLY THING RED DOES OUTSIDE AN EXCERPT, and the test
+   it passes is the one teal passed: it cannot be read as a verdict,
+   because it is not attached to a claim at all. It frames a
+   quotation of the manual. A red for risk, for confidence, or on
+   anything the page asserts about THIS change is the severity chip
+   arriving as a palette — which is why this ramp is named for its
+   component and not for a meaning. A token called --primer-* has
+   nowhere else to go.
+
+   Green and red inside an excerpt stay exactly what they were:
+   added and removed lines, there and nowhere else. What keeps them
+   apart from the frame is not the hue, it is the container — one is
+   a panel border around a lesson, the other a row stripe inside
+   quoted code, and the two never abut.
+
+   ONE OPEN QUESTION, WRITTEN DOWN RATHER THAN GUESSED AT. Rails is
+   the only stack that earns a primer today, because elixir-docs.md
+   withholds every link and a primer is gated on one. If that
+   catalogue opens, a Phoenix primer in Rails red is wrong, and the
+   answer is a variant class on the aside — never a colour a run
+   types, and never a second component.
    ============================================================ */
 :root {
   --ground:      #f6f5f1;
@@ -263,6 +309,12 @@
   --prov-rule:         oklch(0.885 0.045 318);
   --prov-rule-2:       oklch(0.79  0.065 318);
   --prov-ink:          oklch(0.45  0.105 318);
+
+  --primer-bg:         oklch(0.975 0.014 28);
+  --primer-bg-2:       oklch(0.955 0.028 28);
+  --primer-rule:       oklch(0.885 0.045 28);
+  --primer-rule-2:     oklch(0.79  0.065 28);
+  --primer-ink:        oklch(0.45  0.105 28);
 
   --ex-add:      #e6efe6;
   --add-sig:     #3f6b45;
@@ -336,6 +388,12 @@
     --prov-rule-2:       oklch(0.52  0.075 318);
     --prov-ink:          oklch(0.80  0.09  318);
 
+    --primer-bg:         oklch(0.235 0.028 28);
+    --primer-bg-2:       oklch(0.275 0.045 28);
+    --primer-rule:       oklch(0.42  0.055 28);
+    --primer-rule-2:     oklch(0.52  0.075 28);
+    --primer-ink:        oklch(0.80  0.09  28);
+
     --ex-add:      #1b2a1d;
     --add-sig:     #7fbf8c;
     --ex-del:      #33201d;
@@ -397,6 +455,12 @@
   --prov-rule:         oklch(0.42  0.055 318);
   --prov-rule-2:       oklch(0.52  0.075 318);
   --prov-ink:          oklch(0.80  0.09  318);
+
+  --primer-bg:         oklch(0.235 0.028 28);
+  --primer-bg-2:       oklch(0.275 0.045 28);
+  --primer-rule:       oklch(0.42  0.055 28);
+  --primer-rule-2:     oklch(0.52  0.075 28);
+  --primer-ink:        oklch(0.80  0.09  28);
 
   --ex-add:      #1b2a1d;
   --add-sig:     #7fbf8c;
@@ -701,21 +765,37 @@ pre.probe {
    where it is written down. report-format.md § Mentor mode owns
    the budget and what earns one.
 
-   IT IS PLUM, because a primer is provenance: the manual, quoted.
-   It spends NO NEW COLOUR, deliberately — a callout that
-   introduced one would be a value to declare in all three theme
-   blocks and forget in one, which is the defect the tint tokens
-   are counted by name to catch. The version of this component
-   that the agenda put down spent a Rails red on an inlined
-   logotype; the artwork is gone with every other drawing on this
-   page, and the colour went with it.
+   IT IS FRAMED IN RAILS RED, on --primer-*, and that ramp exists
+   for this component alone. The reason is the reader it is for:
+   someone new to the stack, who needs to recognise the block that
+   was written for them before reading a word of it. A hue does
+   that and a heading does not. The token block owns why a page
+   with no severity vocabulary can afford a red — it is attached to
+   no claim, so it cannot be read as a verdict — and the rule that
+   keeps it honest is that the frame may never spread. Red on
+   anything this page ASSERTS is the severity chip arriving as a
+   palette.
+
+   The ramp is declared in all three theme states like every other
+   colour here, which is the defect the tint tokens are counted by
+   name to catch, and tests/run.sh counts --primer-ink the same way
+   for the same reason.
+
+   THE HEADER IS THE STACK, IN WORDS — "Understanding Ruby on
+   Rails". It replaced "Rails | Primer", which spent its widest
+   line saying what kind of component this is; a reader can see
+   that. What they cannot see is what the block is going to teach
+   them, and the header now says it. It is set in the display serif
+   at the page's own ink, near black, which is as close to a
+   logotype as this page gets: there is no <svg> here, and
+   rails-anchors.rb fails a primer that grows one.
 
    NO MARK, AND THEREFORE NO TRADEMARK LINE. With no logotype on
    display there is nothing for a notice to disclaim, so the two
    went together — and with them the branded/unbranded variant
    split, which existed only to say who drew the mark. One shape
-   now serves Rails, a gem and a hex package alike, and the header
-   carries the name as text.
+   still serves a framework, a gem and a hex package alike; only
+   the words in the header change with them.
 
    Three things it must not become, all of which look like
    diligence on the way:
@@ -737,20 +817,24 @@ pre.probe {
        self-justifying, which is why both halves are checked.
    ============================================================ */
 .primer {
-  margin: 16px 0 6px; background: var(--prov-bg);
-  border: 1px solid var(--prov-rule); border-top: 2px solid var(--prov-rule-2);
+  margin: 16px 0 6px; background: var(--primer-bg);
+  border: 1px solid var(--primer-rule); border-top: 2px solid var(--primer-rule-2);
 }
 .pr-head {
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
-  padding: 12px 20px; border-bottom: 1px solid var(--prov-rule);
+  padding: 12px 20px; border-bottom: 1px solid var(--primer-rule);
 }
-/* The name as text. There is no artwork to carry it any more, which is why this
-   span is no longer a variant's consolation and is simply the header. */
-.pr-brand {
+/* What the block teaches, said in words, in the display serif at the page's own
+   ink, and never in the frame ink. The frame is the reminder of which framework is
+   speaking, and a red title as well would make the header the loudest thing in a
+   checkpoint whose h3 is the question the reader is actually there to answer.
+   Near-black is also the closest this page comes to a logotype, which is on
+   purpose — there is no <svg> anywhere here, and a primer that grows one fails
+   rails-anchors.rb. */
+.pr-title {
   font-family: var(--display); font-weight: 400; font-size: 19px;
   line-height: 1; letter-spacing: -.01em; color: var(--ink);
 }
-.pr-sep { align-self: center; width: 1px; height: 14px; background: var(--prov-rule-2); }
 .pr-api { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--faint); overflow-wrap: anywhere; }
 
 .pr-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
@@ -762,10 +846,10 @@ pre.probe {
 
 .pr-side {
   min-width: 0; padding: 18px 20px 20px;
-  background: var(--prov-bg-2); border-left: 1px solid var(--prov-rule);
+  background: var(--primer-bg-2); border-left: 1px solid var(--primer-rule);
   display: flex; flex-direction: column; gap: 10px;
 }
-.pr-side > .lbl { font-size: 9.5px; color: var(--prov-ink); }
+.pr-side > .lbl { font-size: 9.5px; color: var(--primer-ink); }
 .pr-side > .note { font-size: 13px; line-height: 1.58; }
 
 /* The manual, quoted. It SCROLLS rather than wrapping, which is the opposite of
@@ -782,7 +866,7 @@ pre.demo {
 }
 @media (max-width: 700px) {
   .pr-body { grid-template-columns: minmax(0, 1fr); }
-  .pr-side { border-left: 0; border-top: 1px solid var(--prov-rule); }
+  .pr-side { border-left: 0; border-top: 1px solid var(--primer-rule); }
 }
 
 /* ============================================================
@@ -1461,7 +1545,24 @@ figcaption strong { color: var(--ink-3); }
              tell whether this page describes the version of the PR they are
              looking at — a branch name says nothing after the next push, and a
              page that silently describes an older revision is worse than a page
-             that arrives late. Both are recorded in step 1; neither is optional. -->
+             that arrives late. Both are recorded in step 1; neither is optional.
+
+             BASE_SHORT_SHA is the MERGE-BASE — git merge-base BASE HEAD, as step 1
+             records it — and not the base branch's tip. That is what the diff's
+             left side is, so it is what every citation and every excerpt here is
+             pinned to; the branch tip would be a SHA nothing on the page is
+             addressed against.
+
+             ON AN UPDATE, and only then, the second line gains a third segment:
+
+               {{HEAD_SHORT_SHA}} &rarr; {{BASE_SHORT_SHA}} &middot; updated from {{PREV_SHORT_SHA}}
+
+             SKILL.md § Re-running over new commits re-reads only the commits since
+             the previous map, so parts of the page describe that earlier revision.
+             This segment and one sentence in § 01 are the whole disclosure — see
+             report-format.md § Build state § An updated page, which owns the
+             wording. Do not add it on an ordinary run: a page built in one pass
+             was not updated from anything. -->
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">{{HEAD}} <span style="color:var(--fainter)">&rarr;</span> {{BASE}}</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">{{HEAD_SHORT_SHA}} <span>&rarr;</span> {{BASE_SHORT_SHA}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{FEATURE_REFACTOR_FIX}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
@@ -1624,10 +1725,18 @@ figcaption strong { color: var(--ink-3); }
              THE VERSION IS SUBSTITUTED PER RUN, exactly as in checkpoint B: the
              catalogue stores the path without one. -->
         <aside class="primer">
+          <!-- THE HEADER IS THE STACK, NOT THE COMPONENT — the words a reader new
+               to that stack needs, rather than the eyebrow it replaced, which
+               spent the widest line in the block naming a kind of component the
+               reader can already see. The title is not quoted again in this
+               comment on purpose: tests/run.sh counts it at exactly one, and a
+               comment repeating it would satisfy that count while the header
+               itself was missing. The subject stays on the right, in mono, where
+               the API is scannable without competing with the title. Phoenix,
+               Ecto or a gem swap the words and nothing else: no variant class,
+               no second component. -->
           <div class="pr-head">
-            <span class="pr-brand">Rails</span>
-            <i class="pr-sep"></i>
-            <span class="lbl">Primer</span>
+            <span class="pr-title">Understanding Ruby on Rails</span>
             <span class="pr-api">ActiveModel::Dirty</span>
           </div>
 

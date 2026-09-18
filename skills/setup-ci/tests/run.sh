@@ -766,5 +766,276 @@ assert_in "$TMP/inspect" "accountable_workflow=.github/workflows/accountable-rev
 assert_in "$TMP/inspect2" "git_repo=no"                "inspection says so when there is no repository"
 
 echo
+echo "== the previous map, and updating over it =="
+
+# Nothing persisted between runs before this, so a second run on a pull request
+# rebuilt the page it already had. The cache is the carrier, and it rides the
+# `synchronize` decision because a pull request that gets ONE map has no second
+# run to restore anything into.
+assert_in "$TMP/w-push.yml" "actions/cache/restore@v4" "--regenerate-on-push restores the previous map"
+assert_in "$TMP/w-push.yml" "actions/cache/save@v4"    "and keeps this one for the next push"
+assert_not_in "$W" "actions/cache"                     "the default file caches nothing — there is no second run to feed"
+
+# The two keys must be the SAME string. A save under a key the restore never
+# looks for is a cache that fills up and is never read: every run then rebuilds
+# from scratch, silently, and the only symptom is a bill.
+restore_key=$(grep -A3 'actions/cache/restore@v4' "$TMP/w-push.yml" | sed -n 's/^ *key: //p' | head -n 1)
+save_key=$(grep -A3 'actions/cache/save@v4' "$TMP/w-push.yml" | sed -n 's/^ *key: //p' | head -n 1)
+assert_eq "$restore_key" "$save_key" "the restore and the save name the same key"
+case $restore_key in
+  *'pull_request.head.sha'*) ok "the key is per head sha, so each push saves its own entry" ;;
+  *) bad "the key is per head sha, so each push saves its own entry (got '$restore_key')" ;;
+esac
+assert_in "$TMP/w-push.yml" "restore-keys: accountable-review-map-" \
+  "and a prefix restore-key, so the previous push's entry is what a new sha falls back to"
+
+# Only a page that shipped is worth keeping. Correctness does not depend on it —
+# a half-written page restored next run carries a pending marker and carry-plan.sh
+# refuses it — but a cache entry nothing can use is still worth not writing.
+assert_in "$TMP/w-push.yml" "if: success() && steps.scope.outputs.verdict == 'generate'" \
+  "the save runs only when this run actually delivered"
+
+# The fact that makes pull-requests: write acceptable, re-checked here because the
+# cache steps are two more places an env: block could appear. Comment-stripped,
+# like the assertion above that owns this rule: the permissions block explains in
+# prose why the token reaches only one step, and counting that explanation as a
+# use would forbid the file from explaining itself.
+grep -v '^[[:space:]]*#' "$TMP/w-push.yml" > "$TMP/w-push.code.yml"
+assert_eq "$(grep -c 'GH_TOKEN\|GITHUB_TOKEN' "$TMP/w-push.code.yml" || true)" "1" \
+  "exactly one step in the file with the cache steps still names GITHUB_TOKEN"
+
+# Idempotency is decided by comparing bytes, so the key may carry nothing that
+# varies between two renders of the same request. Run-time ${{ }} expressions are
+# fine; a date is not, and a date is what someone reaches for to expire a cache.
+"$RENDER" --regenerate-on-push > "$TMP/w-push2.yml"
+if cmp -s "$TMP/w-push.yml" "$TMP/w-push2.yml"; then
+  ok "two renders with the cache steps are byte identical"
+else
+  bad "two renders with the cache steps are byte identical"
+fi
+assert_not_in "$TMP/w-push.yml" "$(date -u +%Y-%m-%d)" "and the cache key carries no date"
+
+# review_map.update is RUN-TIME configuration: it is about the map, not about when
+# a map is generated, so it renders nothing and needs no setup flag.
+assert_not_in "$TMP/w-push.yml" "review_map.update" "the workflow holds no update setting of its own"
+
+printf 'review_map:\n  update: false\n' > "$TMP/cfg-update-off.yml"
+assert_eq "$("$READ_CONFIG" "$TMP/cfg-update-off.yml" --prefix CFG_ | sed -n "s/^CFG_update=//p")" "'false'" \
+  "update: false is read"
+printf 'review_map:\n  update: no\n' > "$TMP/cfg-update-no.yml"
+assert_eq "$("$READ_CONFIG" "$TMP/cfg-update-no.yml" --prefix CFG_ | sed -n "s/^CFG_update=//p")" "'false'" \
+  "and no is the same answer spelled the other way"
+printf 'review_map:\n  effort: high\n' > "$TMP/cfg-no-update.yml"
+assert_eq "$("$READ_CONFIG" "$TMP/cfg-no-update.yml" --prefix CFG_ | sed -n "s/^CFG_update=//p")" "" \
+  "an absent key emits nothing, so the config rung stays distinguishable from the default"
+printf 'review_map:\n  update: maybe\n' > "$TMP/cfg-bad-update.yml"
+rc=0; "$READ_CONFIG" "$TMP/cfg-bad-update.yml" --prefix CFG_ >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1" "and a value that is neither is an error rather than a guess"
+
+# The adapter asks for an update only when something already put a page where it
+# is about to write. Asking against an empty directory would be a flag the skill
+# has to talk its way out of.
+UREPO=$TMP/urepo; URUN=$TMP/urun
+mkdir -p "$UREPO" "$URUN"
+(
+  cd "$UREPO"
+  git init -q .; git config user.email t@e; git config user.name t
+  echo a > f.rb; git add -A; git commit -qm base
+  echo b >> f.rb; git commit -qam second
+) >/dev/null 2>&1
+UBASE=$(git -C "$UREPO" rev-parse HEAD~1); UHEAD=$(git -C "$UREPO" rev-parse HEAD)
+UHS=$(git -C "$UREPO" rev-parse --short=7 HEAD); UPS=$(git -C "$UREPO" rev-parse --short=7 HEAD~1)
+invocation() { "$GENERATE" --output "$URUN" --head-sha "$UHEAD" --base-sha "$UBASE" \
+  --repo-dir "$UREPO" --print-invocation "$@" 2>/dev/null | grep -c -- '--update' || true; }
+
+assert_eq "$(invocation)" "0" "no previous page means no --update, whatever the config says"
+printf 'x\n' > "$URUN/index.html"
+assert_eq "$(invocation)" "1" "a previous page is what turns it on"
+printf 'review_map:\n  update: false\n' > "$UREPO/.accountable-review.yml"
+assert_eq "$(invocation)" "0" "update: false turns it off with the page still there"
+assert_eq "$(invocation --update)" "1" "and an explicit flag beats the config file, like every other setting"
+rm -f "$UREPO/.accountable-review.yml"
+
+# WHICH REVISION THE CARRIED PARTS DESCRIBE IS READ OFF THE PAGE, NOT TRACKED.
+# The masthead's `updated from <sha>` segment is written only by an update that
+# carried something, so the manifest agrees with the page by construction — and a
+# run that asked for an update and fell back to a full one, which is what every
+# carry-plan.sh refusal does, records null without the adapter learning that it did.
+upage() { { printf '<html><div class="path">%s &rarr; %s %s</div>' "$UHS" "$UPS" "$1"
+            head -c 2500 /dev/zero | tr '\0' 'x'; printf '</html>\n'; } > "$URUN/index.html"; }
+manifest_field() { sed -n 's/.*"updated_from"[[:space:]]*:[[:space:]]*\(.*\)$/\1/p' "$URUN/manifest.json" | tr -d ' ,'; }
+
+upage ""
+"$GENERATE" --output "$URUN" --head-sha "$UHEAD" --base-sha "$UBASE" --repo-dir "$UREPO" \
+  --verify-only >/dev/null 2>&1 || true
+assert_in "$URUN/manifest.json" "review-map-manifest@3" "the manifest says which schema carries updated_from"
+assert_eq "$(manifest_field)" "null" "a page with no update segment records null"
+
+upage "&middot; updated from $UPS"
+"$GENERATE" --output "$URUN" --head-sha "$UHEAD" --base-sha "$UBASE" --repo-dir "$UREPO" \
+  --verify-only >/dev/null 2>&1 || true
+assert_eq "$(manifest_field)" "\"$UPS\"" "and a page that names one records exactly that revision"
+
+echo
+echo "== a push that reaches nothing the map says =="
+
+# The gate above asks its question over BASE...HEAD, so a README-only push to a branch that changed
+# application code earlier still answers `generate`. Asking it again over the commits since the map
+# we already have is what makes that push cost nothing.
+
+# The restore has to sit ABOVE the step that decides the verdict, because the second half of that
+# decision is about the restored map — and it therefore carries no verdict guard, while every later
+# step still does. An ordering assertion rather than a presence one: presence was already pinned.
+restore_line=$(grep -n 'actions/cache/restore@v4' "$TMP/w-push.yml" | cut -d: -f1)
+scope_line=$(grep -n 'id: scope' "$TMP/w-push.yml" | cut -d: -f1)
+if [ "$restore_line" -lt "$scope_line" ]; then
+  ok "the previous map is restored before the step that decides whether to generate"
+else
+  bad "the previous map is restored before the step that decides whether to generate"
+fi
+guard=$(sed -n "$((restore_line - 6)),${restore_line}p" "$TMP/w-push.yml" | grep -c "verdict == 'generate'" || true)
+assert_eq "$guard" "0" "and the restore carries no verdict guard — it is what the verdict is decided from"
+# -- ripgrep, installed only when there is a previous map to replay searches against ----------
+# Both halves of reusing a map replay the page's own recorded searches, and the lens files write
+# those with rg, which a GitHub runner does not have. Without this step every recorded search
+# refuses and a re-run rebuilds the page — correct, and the whole saving gone.
+rg_line=$(grep -n 'Install ripgrep' "$TMP/w-push.yml" | cut -d: -f1)
+if [ -n "$rg_line" ] && [ "$restore_line" -lt "$rg_line" ] && [ "$rg_line" -lt "$scope_line" ]; then
+  ok "ripgrep is installed after the restore and before the step that replays the searches"
+else
+  bad "ripgrep is installed after the restore and before the step that replays the searches"
+fi
+# ON DEMAND, and the guard is the whole point: a run with nothing restored has nothing to carry,
+# so it pays for no install. `cache-matched-key` is empty on a cold cache, where `cache-hit` is
+# also false on a restore-key hit — which is the case this step most needs to fire for.
+rg_guard=$(sed -n "$((rg_line + 1))p" "$TMP/w-push.yml")
+assert_eq "$(printf '%s\n' "$rg_guard" | grep -c "cache-matched-key != ''")" "1" \
+  "and only when a previous map was actually restored"
+# It is an optimisation, so it must never be the reason a Review Map does not get made. The last
+# command in the block has to succeed even when the package cannot be had.
+rg_block=$(awk "NR > $rg_line && /^      - /{exit} NR > $rg_line" "$TMP/w-push.yml")
+assert_eq "$(printf '%s\n' "$rg_block" | grep -c '|| echo')" "1" \
+  "and a failed install leaves the run to rebuild the page rather than failing the job"
+assert_not_in "$W" "ripgrep" "the default file installs nothing — there is no previous map to replay"
+
+assert_in "$TMP/w-push.yml" "map-still-current.sh" "the scope step asks the second question"
+assert_in "$TMP/w-push.yml" "reason=map-still-current" "and downgrades its own verdict rather than adding a second one"
+# WHICH verdict it writes, not merely that it writes a reason. A downgrade to anything but `skip`
+# computes the cheap answer, prints it, and generates anyway — the shape of check that runs and
+# changes nothing, which is the one this repository refuses to ship.
+still_block=$(awk '/map-still-current.sh/,/SETUP:END:push/' "$TMP/w-push.yml")
+assert_eq "$(printf '%s\n' "$still_block" | grep -c 'echo "verdict=skip"' || true)" "1" \
+  "and the verdict it writes is skip — anything else computes the answer and ignores it"
+assert_not_in "$W" "map-still-current.sh" "the default file asks it nowhere — there is no second run to ask about"
+
+# No guard below the scope step moved, which is the whole reason this change is small: the steps
+# that stand aside and the step that explains a skip are the ones that already existed.
+assert_in "$TMP/w-push.yml" "if: steps.scope.outputs.verdict == 'skip'" \
+  "the existing skip-reporting step is what explains it"
+# One home for the DECISION: a verdict is read from the scope step and from nowhere else.
+# Counting guards across the two renders would compare files that legitimately differ by the
+# cache save step, and forbidding every `steps.<id>.outputs` reference would forbid the ripgrep
+# step's cache-matched-key — which is the cache reporting what it restored, not a second opinion
+# about whether to generate.
+assert_eq "$(grep -o 'steps\.[a-z_-]*\.outputs\.verdict' "$TMP/w-push.yml" \
+  | grep -cv '^steps\.scope\.outputs\.verdict$' || true)" "0" \
+  "and no step reads a verdict from anywhere but the scope step — it is still the only one that decides"
+
+# ---- ci/map-still-current.sh, against a real repository -------------------------------------
+STILL=$PLUGIN_ROOT/ci/map-still-current.sh
+SREPO=$TMP/srepo; SMAP=$TMP/smap
+mkdir -p "$SREPO"/app/models "$SREPO"/spec/models "$SMAP"
+(
+  cd "$SREPO"
+  git init -q .; git config user.email t@e; git config user.name t
+  echo 'class Project; end'      > app/models/project.rb
+  echo 'describe Project do; end' > spec/models/project_spec.rb
+  echo '# Timesheet'             > README.md
+  git add -A; git commit -qm base
+  git checkout -q -b feat
+  echo '# archived_at' >> app/models/project.rb; git commit -qam push1
+) >/dev/null 2>&1
+SBASE=$(git -C "$SREPO" rev-parse feat~1)
+SPREV=$(git -C "$SREPO" rev-parse feat)
+sps=$(git -C "$SREPO" rev-parse --short=7 "$SPREV"); sbs=$(git -C "$SREPO" rev-parse --short=7 "$SBASE")
+
+# $1 the path the page's one checkpoint cites
+smap() {
+  cat > "$SMAP/index.html" <<PAGE
+<div class="path">$sps &rarr; $sbs</div>
+<section class="cp" id="cp-a"><a class="path" href="#">$1</a></section>
+<details class="searched"><ul class="sr-list">
+<li><code>grep -rn &#39;nothing_matches_this&#39; app</code> <span class="sr-r">no hits</span></li>
+</ul></details>
+PAGE
+  cat > "$SMAP/manifest.json" <<JSON
+{ "schema": "accountable-review/review-map-manifest@3",
+  "revision": { "base_sha": "$SBASE", "head_sha": "$SPREV" } }
+JSON
+}
+
+# $1 label, $2 expected exit, $3 substring of the reason, then the branch to run against
+still() {
+  label=$1; want=$2; want_text=$3; ref=$4
+  rc=0
+  out=$("$STILL" --dir "$SMAP" --head "$(git -C "$SREPO" rev-parse "$ref")" --repo-dir "$SREPO" 2>&1) || rc=$?
+  problem=
+  [ "$rc" = "$want" ] || problem="exit $rc, wanted $want"
+  case $out in *"$want_text"*) ;; *) problem="${problem:+$problem; }no reason matching '$want_text'" ;; esac
+  if [ -z "$problem" ]; then ok "$label"; else bad "$label ($problem)"; fi
+}
+
+(cd "$SREPO" && git checkout -q -B docsonly feat && echo 'more' >> README.md && git commit -qam docs) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a docs-only push leaves the existing map standing" 0 "change no application code" docsonly
+
+# THE HOLE THIS COMPOSITION EXISTS TO CLOSE, and the row to write first. application-code.sh
+# classifies tests as not application code, so the first half says yes on its own — while the line
+# the page cites has moved and a reader following that citation lands somewhere else.
+(cd "$SREPO" && git checkout -q -B testonly feat && printf 'x\ny\n' >> spec/models/project_spec.rb && git commit -qam spec) >/dev/null 2>&1
+smap 'spec/models/project_spec.rb:1'
+still "a test-only push that moves a cited line regenerates" 3 "reach something the page cites" testonly
+
+# Trivial is the gate's answer to ITS question and the wrong answer to this one: one line in a file
+# a checkpoint cites is exactly where the page has quietly stopped being true.
+(cd "$SREPO" && git checkout -q -B tiny feat && echo '# one more' >> app/models/project.rb && git commit -qam tiny) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a trivially small application change still regenerates" 3 "trivially little of it but not none" tiny
+
+# LOCK FILES SPLIT TWO WAYS HERE, and the split is right rather than an oversight — the two name
+# lists exist for two different questions. diff-render.sh's, which application-code.sh borrows,
+# holds the JS ones, because what it answers is "will GitHub render this diff". carry-plan.sh's P5
+# holds the Ruby and Elixir ones, because what IT answers is "did the thing every documentation
+# link on the page is pinned from move".
+#
+# So a yarn.lock bump is correctly SKIPPED: no application code, no pinned link derived from it,
+# nothing the page cites. And a Gemfile.lock bump correctly regenerates — not through P5, which
+# never sees it, but through the fail-open half above, where a path diff-render does not recognise
+# counts as code. Both answers are right; pinning them together is what stops someone "fixing" the
+# lists into agreement and losing one.
+(cd "$SREPO" && git checkout -q -B jslock feat && echo '# yarn' > yarn.lock && git add -A && git commit -qm lock) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a JS lock file bump changes nothing the map says, so it is skipped" 0 "change no application code" jslock
+
+(cd "$SREPO" && git checkout -q -B rubylock feat && echo 'GEM' > Gemfile.lock && git add -A && git commit -qm lock) >/dev/null 2>&1
+smap 'app/models/project.rb:1'
+still "a Gemfile.lock bump regenerates — it re-pins every doc link on the page" 3 "application code" rubylock
+
+still "an unmoved head needs nothing" 0 "has not moved" feat
+
+# Every way of NOT KNOWING leads to the expensive answer. An absence is not evidence that the map
+# is current, and treating it as one is how a stale page ships.
+smap 'app/models/project.rb:1'
+rm -f "$SMAP/manifest.json"
+still "a restored map with no manifest regenerates" 3 "no manifest" docsonly
+smap 'app/models/project.rb:1'; rm -f "$SMAP/index.html"
+still "nothing restored at all regenerates" 3 "no previous Review Map" docsonly
+smap 'app/models/project.rb:1'
+rc=0; "$STILL" --dir "$SMAP" --head 0000000000000000000000000000000000000000 --repo-dir "$SREPO" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "3" "an unresolvable head regenerates rather than failing the job"
+rc=0; "$STILL" --dir "$SMAP" --repo-dir "$SREPO" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2" "and being called wrongly is a usage error, not a verdict"
+
+echo
 echo "run.sh: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

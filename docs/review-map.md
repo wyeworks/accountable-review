@@ -106,6 +106,28 @@ banner and the markers are removed, and the coverage gate runs.
 A run that dies halfway therefore leaves a page that is honest about being half a page, rather than
 leaving nothing at all.
 
+## It can be updated over new commits
+
+A map describes one revision, so a branch that keeps moving after review opens leaves its map behind.
+`--update` re-reads only the commits since the existing page, re-derives the judgments those commits
+reach, and edits the page in place at the same URL. Everything they did not touch is carried, which
+is what makes it cheap — tracing consumers across the diff is most of what a run costs.
+
+The trade is explicit on the page. A carried judgment was not verified again, so the masthead names
+both revisions — `head → base · updated from <earlier head>` — and one sentence under *What changed*
+says which parts still describe the earlier one. Nothing marks individual checkpoints as new or
+carried, and nothing counts how many were re-derived: that would be a progress meter, and a page
+that reports progress toward approval is grading the change.
+
+**Regenerating from scratch is the better read, and it is your call to ask for it.** Run without
+`--update` before a final pass on a branch that has moved a lot.
+
+An update refuses rather than guessing, and regenerates instead: a force-push or rebase, a base
+branch that moved underneath, a delta covering more than half the diff, a dependency lock file
+bump, a page that was never finished, or one of the page's own recorded searches now finding the
+changed code — that last one being how it notices that the new commits reached something the page
+had reasoned about from a distance.
+
 ## The review checkpoint
 
 The page's primitive, and what replaced a fixed seven-field block on every meaningful change. That
@@ -230,7 +252,8 @@ what it told them to.
 
 **A primer, at `--mentor` only** — the rule itself, stated. It is what a link escalates into, for
 the case where you would judge better knowing the framework's behaviour than knowing where to read
-about it: the API named, a paragraph or two on what it does and when, a worked example on a class
+about it: a header saying what it is going to teach you — *Understanding Ruby on Rails* — and the
+API named beside it, a paragraph or two on what it does and when, a worked example on a class
 your repository does not have, the line in your code that made it relevant, and the same pinned link
 it came from. It sits inside the checkpoint, after the explanation and before the list of places to
 look, so you meet the unfamiliar API before you are sent to the code rather than after.

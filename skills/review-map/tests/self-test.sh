@@ -24,6 +24,7 @@ RUN=$HERE/run.sh
 TEMPLATE=$SKILL_DIR/references/page-template.html
 SKELETON=$SKILL_DIR/scripts/page-skeleton.sh
 DIFF_RENDER=$SKILL_DIR/scripts/diff-render.sh
+CARRY_PLAN=$SKILL_DIR/scripts/carry-plan.sh
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
@@ -33,7 +34,7 @@ ok=0; bad=0
 # case <what> <template> <script>
 case_runs_red() {
   what=$1; tpl=$2; scr=$3
-  if REVIEW_MAP_TEMPLATE="$tpl" REVIEW_MAP_SKELETON="$scr" "$RUN" >/dev/null 2>&1; then
+  if REVIEW_MAP_TEMPLATE="$tpl" REVIEW_MAP_SKELETON="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -45,7 +46,17 @@ case_runs_red() {
 case_render_red() {
   what=$1; scr=$2
   chmod 755 "$scr"
-  if REVIEW_MAP_DIFF_RENDER="$scr" "$RUN" >/dev/null 2>&1; then
+  if REVIEW_MAP_DIFF_RENDER="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
+    bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
+  else
+    ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
+  fi
+}
+
+case_carry_red() {
+  what=$1; scr=$2
+  chmod 755 "$scr"
+  if REVIEW_MAP_CARRY_PLAN="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -53,7 +64,7 @@ case_render_red() {
 }
 
 # A sanity row first. If the unmutated pair does not pass, every row below is meaningless.
-if REVIEW_MAP_TEMPLATE="$TEMPLATE" REVIEW_MAP_SKELETON="$SKELETON" "$RUN" >/dev/null 2>&1; then
+if REVIEW_MAP_TEMPLATE="$TEMPLATE" REVIEW_MAP_SKELETON="$SKELETON" "$RUN" >/dev/null 2>&1 </dev/null; then
   ok=$((ok + 1)); echo "ok    run.sh passes on the real template and the real script"
 else
   bad=$((bad + 1)); echo "BAD   run.sh FAILS unmutated — fix that before reading anything below"
@@ -281,7 +292,7 @@ case_runs_red "the assembled primer is gone, so a mentor run has nothing to copy
 #     .pr-mark rather than through the svg count, so the row goes red on the class alone — a mark
 #     smuggled in as a web font or a background image is the same defect and the same disclosure
 #     obligation, and neither one carries an opening svg tag.
-awk '/<span class="pr-brand">/ && !d { print "            <span class=\"pr-mark\"></span>"; d = 1 } { print }' \
+awk '/<span class="pr-title">/ && !d { print "            <span class=\"pr-mark\"></span>"; d = 1 } { print }' \
   "$TEMPLATE" > "$WORK/pr-mark.html"
 case_runs_red "the primer's logotype comes back, bringing the trademark obligation with it" "$WORK/pr-mark.html" "$SKELETON"
 
@@ -317,9 +328,24 @@ awk '
 ' "$TEMPLATE" > "$WORK/primer-late.html"
 case_runs_red "the primer is assembled below the Look at list it is meant to precede" "$WORK/primer-late.html" "$SKELETON"
 
+# 37. The header goes back to naming the component. "Rails | Primer" spends the widest line in the
+#     block on a fact the reader can see — that this is a callout — and says nothing about what it
+#     teaches. The eyebrow is reinstated here together with the separator it needs, because that is
+#     how the old shape actually returns: not as one stray span, but as the pair.
+sed 's|<span class="pr-title">Understanding Ruby on Rails</span>|<span class="pr-title">Rails</span><i class="pr-sep"></i><span class="lbl">Primer</span>|' \
+  "$TEMPLATE" > "$WORK/primer-eyebrow.html"
+case_runs_red "the primer header names the component again instead of the stack" "$WORK/primer-eyebrow.html" "$SKELETON"
+
+# 38. And the ramp that frames it, half-declared. --primer-* is the newest colour on this page and
+#     the one nothing depends on to be readable, which is exactly the profile of a token that gets
+#     forgotten in one of the three theme blocks and is invisible until someone opens a mentor page
+#     with the OS in dark mode. Counted by name for the reason --syn-key is.
+sed '/^  --primer-ink:        oklch(0.80  0.09  28);$/d' "$TEMPLATE" > "$WORK/primer-ink-dark.html"
+case_runs_red "the primer frame's ink is missing from a dark theme block" "$WORK/primer-ink-dark.html" "$SKELETON"
+
 # ---- diff-render.sh: every mutation here publishes a link that lands on nothing ----
 #
-# All three are script mutations for the reason the first two cases above are: the repository
+# All of them are script mutations for the reason the first two cases above are: the repository
 # these rows run against is built by run.sh, so there is no fixture to break — and each of them
 # leaves a page that looks completely correct, with an anchor that arrives at a "Load diff" stub
 # and a reader who cannot tell.
@@ -346,6 +372,79 @@ case_render_red "a path outside the diff is reported as collapsed" "$WORK/unchan
 awk '/^for ref in "\$BASE" "\$HEAD_REF"; do$/ { skip = 3 } skip { skip--; next } { print }' \
   "$DIFF_RENDER" > "$WORK/no-ref-guard.sh"
 case_render_red "the ref guard is gone, so an unresolvable base reads as a diff with nothing withheld" "$WORK/no-ref-guard.sh"
+
+# 12. The measurement this script shipped with for a year: counting the changed lines instead of
+#     the diff GitHub renders. It is the mutation that looks most like the real thing — add+del
+#     is the obvious reading of "400 lines", it agrees with the correct measure on every file
+#     whose changes are contiguous, and it disagrees exactly where the context is: a scattered
+#     diff. Only the scattered row may go red here; big.rb is over by either measure, which is
+#     what makes this a test of the quantity rather than of the threshold.
+sed 's|^    _lines=$(printf .*|    _lines=$((_add + _del))|' "$DIFF_RENDER" > "$WORK/changed-lines-only.sh"
+case_render_red "the changed lines are counted instead of the diff GitHub renders" "$WORK/changed-lines-only.sh"
+
+# ---- carry-plan.sh: every way a carried claim goes quietly false ----
+#
+# This script's failure mode is the quietest in the repository. Every mutation below leaves it
+# printing a confident, well-formed plan — the only difference is that the plan is wrong, and
+# the page that follows it says it describes a revision half of it was never read against.
+
+# 13. The polarity. A skip needs EVERY precondition to hold; flipping the delta-size rule to fire
+#     only on a small delta inverts the one number standing between a cheap update and a page
+#     most of which nobody re-read.
+sed 's|if \[ "$N_FULL" -eq 0 \] \|\| \[ $((N_DELTA \* 2)) -gt "$N_FULL" \]; then|if [ $((N_DELTA * 2)) -lt 0 ]; then|' \
+  "$CARRY_PLAN" > "$WORK/no-half-rule.sh"
+case_carry_red "the delta-size rule never fires, so a rewrite of the branch updates in place" "$WORK/no-half-rule.sh"
+
+# 14. P6, which is the rule that protects the product. Affected-but-unchanged code is what the
+#     page is for, and a new consumer landing in a file no checkpoint cites is invisible to the
+#     carry rule — the recorded searches are the only thing on the page that can see it. With the
+#     intersection stubbed out the script still runs every search and still reports them safe.
+sed 's|^  landed=$(comm -12 "$TMP/delta" "$TMP/hitpaths" \| head -n 1)$|  landed=|' \
+  "$CARRY_PLAN" > "$WORK/no-p8.sh"
+case_carry_red "a delta path among a recorded search's hits no longer refuses" "$WORK/no-p8.sh"
+
+# 15. The reason -v is not used. awk's -v processes escape sequences in the value, so a recorded
+#     `rg -n '\bProjects::Archive\b'` arrives with two backspaces where its word boundaries were.
+#     The pattern still runs and still matches things — just not the things the page recorded —
+#     and every search then reports itself clean. This is the single most deniable line here.
+sed "s|  CARRY_CMD=\$1 awk '|  awk -v s=\"\$1\" '|; s|^      s = ENVIRON\[\"CARRY_CMD\"\]$||" \
+  "$CARRY_PLAN" > "$WORK/dash-v.sh"
+case_carry_red "the recorded pattern reaches awk through -v, which eats its backslash escapes" "$WORK/dash-v.sh"
+
+# 16. An unreplayable search is not a search that found nothing. Skipping the row rather than
+#     refusing turns the one honest answer — "I cannot check this" — into the most reassuring one.
+sed 's|^    UNSAFE=$cmd$|    continue|' "$CARRY_PLAN" > "$WORK/skip-unsafe.sh"
+case_carry_red "a search that cannot be replayed is skipped instead of refusing the update" "$WORK/skip-unsafe.sh"
+
+# 17. The substring trap, which coverage-gate.sh has already paid for once. Without the token
+#     boundaries api/Gemfile matches inside api/Gemfile.lock, and a checkpoint that cites the
+#     changed file is carried because a different file's name contains it.
+sed "s|^BOUND='\[^A-Za-z0-9._/-\]'$|BOUND=''|" "$CARRY_PLAN" > "$WORK/substring.sh"
+case_carry_red "the path test is a substring match rather than a whole token" "$WORK/substring.sh"
+
+# 18. P1. A rebased branch's "delta" is a diff between two histories rather than the commits
+#     someone pushed, and every carry decision downstream is then made against the wrong set.
+awk '/^if ! git merge-base --is-ancestor/ { skip = 3 } skip { skip--; next } { print }' \
+  "$CARRY_PLAN" > "$WORK/no-ancestry.sh"
+case_carry_red "the ancestry guard is gone, so a force-pushed branch updates in place" "$WORK/no-ancestry.sh"
+
+# 19. P3. Pending is a promise; carrying one promises work that nothing is doing, and the page it
+#     produces is a draft wearing a finished page's masthead.
+sed 's|^if grep -q .class="buildstate". "$PAGE" .*$|if false; then|' "$CARRY_PLAN" > "$WORK/draft-ok.sh"
+case_carry_red "a draft page is accepted as a base to update from" "$WORK/draft-ok.sh"
+
+# 20. The excerpt rule. An excerpt is a verbatim quotation and its state tag is computed from the
+#     diff, so a file entering the delta invalidates both. Keeping it is the one way this page
+#     lies about bytes while the bytes themselves are real.
+sed "s|    printf 'excerpt\\\\t%s\\\\tregen\\\\n' \"\$p\"|    printf 'excerpt\\\\t%s\\\\tkeep\\\\n' \"\$p\"|" \
+  "$CARRY_PLAN" > "$WORK/keep-excerpts.sh"
+case_carry_red "an excerpt whose file moved in the delta is carried rather than regenerated" "$WORK/keep-excerpts.sh"
+
+# 21. A refusal that prints its plan rows anyway. Half a plan reads as a plan, and the rows that
+#     did print are exactly the ones a run would act on.
+sed 's|^  echo "verdict: full"$|  sed "s/^/delta\\t/" "$TMP/delta" 2>/dev/null; echo "verdict: full"|' \
+  "$CARRY_PLAN" > "$WORK/leaky-refusal.sh"
+case_carry_red "a refusal prints plan rows alongside its verdict" "$WORK/leaky-refusal.sh"
 
 echo ""
 echo "self-test: $ok ok, $bad bad"

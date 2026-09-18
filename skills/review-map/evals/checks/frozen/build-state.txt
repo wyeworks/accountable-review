@@ -172,6 +172,30 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-unpinned-link.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment build-state-updated-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page build-state-updated-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment build-state-updated-missing.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page build-state-updated-missing.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment build-state-updated-nosha.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page build-state-updated-nosha.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment build-state-updated-twice.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page build-state-updated-twice.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment excerpt-at-head.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -380,6 +404,36 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-tier-modifier-only.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-update-assurance.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-update-assurance.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-update-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-update-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-update-narration.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-update-narration.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-update-recency.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-update-recency.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-update-resolved.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-update-resolved.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-verdict.html

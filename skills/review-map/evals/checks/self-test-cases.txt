@@ -75,12 +75,23 @@
  page-invariants    | invariants-clean.html        | 0 | no asserted risk or severity score
  page-invariants    | invariants-assurance.html    | 1 | assurance language
  page-invariants    | invariants-draft-narration.html | 1 | narrates its own drafting
+ page-invariants    | invariants-update-narration.html | 1 | narrates its own drafting
+ page-invariants    | invariants-update-assurance.html | 1 | assurance language
+ page-invariants    | invariants-update-clean.html  | 0 | no draft narration
+ page-invariants    | invariants-update-clean.html  | 0 | no assurance language
 # The hedge. § 2d is a WARN, so this row pins the text at exit 0 rather than a failure. A row
 # can only assert that a line IS printed, and the half this rule is most likely to get wrong is
 # the other one — it matches prose, and every fixture in this directory carried the removed
 # caveat until the format dropped it, so a pattern reaching too far would fire everywhere at
 # once. That half is pinned by frozen.rb, which holds every case's whole output.
  page-invariants    | invariants-standing-disclaimer.html | 0 | a standing disclaimer may have come back
+# Recency, § 2e. Two shapes because they are two different mistakes: a class on the checkpoint,
+# which is the severity chip with provenance words on it, and a count of cleared questions, which
+# is the same thing with the arithmetic left to the reader. The clean row is the load-bearing one —
+# a rule that fires on the sanctioned disclosure would teach a run to stop disclosing.
+ page-invariants    | invariants-update-recency.html | 1 | marked by its recency
+ page-invariants    | invariants-update-resolved.html | 1 | marked by its recency
+ page-invariants    | invariants-update-clean.html  | 0 | no recency markers
  page-invariants    | invariants-no-tier.html       | 1 | no evidence tier labels
  page-invariants    | invariants-tier-modifier-only.html | 0 | evidence tiers used (2 label(s))
  page-invariants    | invariants-loose-data-path.html | 1 | outside a ledger cell

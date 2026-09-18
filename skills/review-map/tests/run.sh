@@ -38,6 +38,7 @@ SKILL_DIR=$(dirname "$HERE")
 SKELETON=${REVIEW_MAP_SKELETON:-$SKILL_DIR/scripts/page-skeleton.sh}
 TEMPLATE=${REVIEW_MAP_TEMPLATE:-$SKILL_DIR/references/page-template.html}
 DIFF_RENDER=${REVIEW_MAP_DIFF_RENDER:-$SKILL_DIR/scripts/diff-render.sh}
+CARRY_PLAN=${REVIEW_MAP_CARRY_PLAN:-$SKILL_DIR/scripts/carry-plan.sh}
 
 pass=0; fail=0
 ok()  { pass=$((pass + 1)); echo "PASS  $1"; }
@@ -163,6 +164,15 @@ assert_eq "$(count "$WORK/markup" 'pr-mark')" "0" "the primer carries no logotyp
 assert_eq "$(count "$WORK/markup" 'pr-tm')"   "0" "and no trademark line, because there is no mark to disclaim"
 assert_eq "$(count "$WORK/markup" 'primer--lib')" "0" "and no branded/unbranded variant split, which only the mark needed"
 
+# ITS HEADER NAMES THE STACK, NOT THE COMPONENT. "Rails | Primer" spent the widest line in the block
+# saying what kind of block it is, which the reader can see; the words a reader new to the stack needs
+# are what it is going to teach them. The separator went with the eyebrow — it existed to divide two
+# things and there is one thing now — so it is asserted at zero the way pr-mark is: a header that
+# grows a second element back is the old shape returning one span at a time.
+assert_eq "$(count "$WORK/markup" 'class="pr-title"')" "1" "the primer header is one title naming the stack"
+assert_eq "$(count "$WORK/markup" 'Understanding Ruby on Rails')" "1" "and it says what the block teaches, in words"
+assert_eq "$(count "$WORK/markup" 'pr-sep')" "0" "no separator survives — there is nothing left to divide"
+
 # A primer is gated on its doc link and earned by a repo citation, and BOTH live inside the aside:
 # rails-anchors.rb judges it as one block, so a primer borrowing the citation of the paragraph above
 # it is the rule working backwards. The link is pinned with the placeholder, never a literal series —
@@ -275,6 +285,7 @@ assert_eq "$(count "$WORK/page.html" 'SKELETON:BODY')" "1" "the emitted page car
 # opens an excerpt with the OS in dark mode.
 assert_eq "$(count "$WORK/head" '--syn-key:')"              "3" "--syn-key is declared in all three theme states, in the skeleton"
 assert_eq "$(count "$WORK/head" '--ex-add:')"               "3" "--ex-add is declared in all three theme states, in the skeleton"
+assert_eq "$(count "$WORK/head" '--primer-ink:')"           "3" "--primer-ink is declared in all three theme states, in the skeleton"
 assert_eq "$(count "$WORK/head" 'prefers-color-scheme: dark')" "1" "the media dark block is in the skeleton"
 assert_eq "$(count "$WORK/head" '[data-theme="dark"]')"     "2" "the explicit dark block is in the skeleton"
 assert_eq "$(count "$WORK/head" '[data-theme="light"]')"    "1" "the explicit light block is in the skeleton"
@@ -361,6 +372,10 @@ mkdir -p "$REPO/app" "$REPO/db" "$REPO/assets"
   printf 'db/structure.sql linguist-generated=true\nassets/*.min.js -diff\n' > .gitattributes
   echo one > app/order.rb
   seq 1 100 > app/big.rb
+  # 700 lines that will be edited every 14th, far enough apart that no two hunks merge.
+  seq 1 700 > app/scattered.rb
+  # One contiguous block, sized so its rendered diff lands one line under the threshold.
+  seq 1 500 > app/boundary.rb
   seq 1 30000 > db/structure.sql
   echo 'v=1' > assets/app.min.js
   printf '\000\001\000' > app/logo.png
@@ -372,6 +387,13 @@ mkdir -p "$REPO/app" "$REPO/db" "$REPO/assets"
   # the hard cap, a binary, a -diff path, a one-line lockfile edit, and one ordinary small file.
   echo two >> app/order.rb
   seq 1 700 > app/big.rb
+  # 50 isolated one-line edits: 100 changed lines, but 50 hunks each costing a header and six
+  # context lines, so the diff GitHub renders is ~450 lines. add+del would call this renderable.
+  awk 'NR % 14 == 7 { print "scattered"; next } { print }' app/scattered.rb > app/scattered.new
+  mv app/scattered.new app/scattered.rb
+  # 196 lines replaced in one hunk: 1 header + 3 context + 196 + 196 + 3 context = 399 rendered.
+  awk 'NR >= 100 && NR < 296 { print "boundary"; next } { print }' app/boundary.rb > app/boundary.new
+  mv app/boundary.new app/boundary.rb
   seq 1 60000 > db/structure.sql
   echo 'v=2' > assets/app.min.js
   printf '\000\002\000' > app/logo.png
@@ -385,6 +407,17 @@ verdict() { (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD) | awk -v p="$1" '$3 == p
 
 assert_eq "$(verdict app/order.rb)"      "render/-"                "an ordinary small change renders, so its citation keeps the diff anchor"
 assert_eq "$(verdict app/big.rb)"        "collapse/over-autoload"  "a diff past 400 lines is behind Load diff, whatever the file is"
+# The row the changed-line measure could not see. Its add+del is 100; the diff GitHub renders is
+# ~450 lines, because context and hunk headers are most of a scattered diff. Measured on real
+# pull requests 2026-09-17: discourse#43002 reports.gjs collapsed at 342 changed / 414 rendered,
+# while discourse#43772 core_primitives.rb rendered at 349 changed / 394 — 349 rendering while
+# 342 collapses is what rules out counting the changed lines.
+assert_eq "$(verdict app/scattered.rb)"  "collapse/over-autoload"  "context pushes a diff past 400 rendered lines though its changed lines are far fewer"
+# And the other side of the same boundary, because counting more lines can only ever collapse
+# more files: a diff of 399 rendered lines must still get its anchor. Without this row the fix
+# above could be widened into over-collapsing and nothing would notice — and the anchor is what
+# the reviewer wants when it works, which is why the verdict leans towards it.
+assert_eq "$(verdict app/boundary.rb)"   "render/-"                "a diff one line under the threshold keeps its anchor"
 assert_eq "$(verdict db/structure.sql)"  "collapse/generated"      "linguist-generated collapses on one changed line, where no size rule would fire"
 assert_eq "$(verdict assets/app.min.js)" "collapse/no-diff"        "a -diff path is reported as an attribute, not as a coincidence of its bytes"
 assert_eq "$(verdict app/logo.png)"      "collapse/binary"         "a binary file has no line to anchor to"
@@ -417,7 +450,7 @@ assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --path app/untouched.rb
   "render/not-in-diff" "a path the diff never touched is not reported as collapsed"
 
 collapsed=$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^collapse' || true)
-assert_eq "$collapsed" "5" "--collapsed-only lists every collapsed path and no renderable one"
+assert_eq "$collapsed" "6" "--collapsed-only lists every collapsed path and no renderable one"
 assert_eq "$( (cd "$REPO" && "$DIFF_RENDER" "$BASE" HEAD --collapsed-only) | grep -c '^render' || true)" \
   "0" "--collapsed-only emits no render rows"
 
@@ -438,6 +471,243 @@ assert_eq "$rc" "2" "a missing BASE is refused rather than diffed against nothin
 rc=0; out=$( (cd "$REPO" && "$DIFF_RENDER" 0000000000000000000000000000000000000000 HEAD) 2>/dev/null ) || rc=$?
 assert_eq "$rc" "4" "an unresolvable BASE exits 4 rather than reporting an empty diff"
 assert_eq "$(printf '%s' "$out" | grep -c . || true)" "0" "and prints nothing that could be read as a verdict"
+
+# ================================================================ carry-plan.sh
+# The carry decision is the one place in this repository where being wrong is SILENT: a
+# checkpoint wrongly carried is a claim nobody re-read, sitting on a page whose masthead says it
+# describes the current head. Every row below is a way that happens. The repository is built
+# here rather than on a fixture for diff-render.sh's reason — the answer is a function of git.
+echo ""
+echo "carry-plan  $CARRY_PLAN"
+echo ""
+
+CREPO=$WORK/cprepo
+mkdir -p "$CREPO/app/models" "$CREPO/app/queries" "$CREPO/api"
+(
+  cd "$CREPO"
+  git init -q .
+  git config user.email test@example.com
+  git config user.name test
+  echo 'class Project; end'  > app/models/project.rb
+  echo 'class Active; end'   > app/queries/active.rb
+  # Two paths where one is a prefix of the other, because that is the substring trap
+  # coverage-gate.sh already paid for and it is worse here: there it fails a page loudly, here
+  # it would CARRY a checkpoint that cites the changed file.
+  echo 'source "x"'          > api/Gemfile
+  echo 'GEM'                 > api/Gemfile.lock
+  echo 'readme'              > README.md
+  git add -A && git commit -qm base
+  git rev-parse HEAD > "$WORK/cbase"
+  # The first push: what the previous map described.
+  echo '# one' >> app/models/project.rb
+  echo '# one' >> app/queries/active.rb
+  git add -A && git commit -qm push1
+  git rev-parse HEAD > "$WORK/cprev"
+  # The second push: the delta. One file, so the delta is half the diff and P4 admits it.
+  echo '# second push' >> app/queries/active.rb
+  git add -A && git commit -qm push2
+  git rev-parse HEAD > "$WORK/chead"
+) >/dev/null 2>&1
+CBASE=$(cat "$WORK/cbase"); CPREV=$(cat "$WORK/cprev"); CHEAD=$(cat "$WORK/chead")
+sh_prev=$( (cd "$CREPO" && git rev-parse --short=7 "$CPREV") )
+sh_base=$( (cd "$CREPO" && git rev-parse --short=7 "$CBASE") )
+
+# $1 the recorded search, already HTML-escaped as a real page carries it; $2 extra body.
+# The two short SHAs are what P2 reads, by the same page-wide grep ci/generate-review-map.sh
+# already uses rather than a parse of the Revision cell's markup.
+# $3 is the revision the page claims to describe, defaulting to the first push. The rows that
+# update from a later commit have to pass it: a page naming the wrong revision refuses at P2,
+# which would make them pass for a reason that has nothing to do with their subject.
+cpage() {
+  _sh=${3:-$sh_prev}
+  cat > "$WORK/cpage.html" <<PAGE
+<div class="c"><div class="path">$_sh &rarr; $sh_base</div></div>
+<section id="attention">
+<section class="cp" id="cp-a"><h3>Q1</h3>
+  <a class="path" href="#">app/models/project.rb:1-2</a>
+  <pre data-src="app/models/project.rb">x</pre></section>
+<section class="cp" id="cp-b"><h3>Q2</h3>
+  <a class="path" href="#">app/queries/active.rb:1</a>
+  <pre data-src="app/queries/active.rb">x</pre></section>
+<section class="cp" id="cp-c"><h3>Q3</h3>
+  <a class="path" href="#">api/Gemfile.lock:1</a></section>
+</section>
+<details class="searched"><ul class="sr-list">
+<li><code>$1</code> <span class="sr-r">a clause</span></li>
+</ul></details>
+${2:-}
+PAGE
+}
+
+# $1..$n forwarded to the script. The output lands in a file and the status in cprc, rather
+# than the obvious out=$(plan ...): a command substitution is a subshell, so a status set inside
+# one never reaches the assertion that reads it — and every exit-code row here would have
+# compared an unset variable.
+plan() {
+  cprc=0
+  (cd "$CREPO" && "$CARRY_PLAN" "$WORK/cpage.html" "$@") > "$WORK/cpout" 2>/dev/null || cprc=$?
+  out=$(cat "$WORK/cpout")
+}
+
+# EVERY RECORDED SEARCH IN THIS SUITE IS A grep, AND NONE MAY BE AN rg. A page records whatever
+# the run searched with, and both lens files write their recipes with rg — so on a machine without
+# ripgrep P6 refuses every one of them and the update falls back to a full run. That is the
+# fail-closed answer and it is the right one, but it means a fixture recording an rg search is a
+# row asserting that ripgrep is installed: thirteen of these passed here and failed on a GitHub
+# runner, which has no rg, and two of them had been passing for the wrong reason because the
+# refusal they expect is the refusal a missing tool produces anyway. grep is in the same allowlist
+# and is on every machine this suite can run on.
+NOHIT="grep -rn &#39;nothing_matches_this&#39; app"
+
+# -- the plan itself --------------------------------------------------------------------------
+cpage "$NOHIT"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "0" "a clean delta produces a plan rather than a refusal"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^verdict: update')" "1" "and says so in one verdict line"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^delta	app/queries/active.rb$')" "1" "the delta is the second push's paths, not the whole diff"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^delta	')" "1" "and nothing the first push changed is in it"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-a	carry	-$')" "1" "a checkpoint citing nothing in the delta is carried"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-b	redo	cites app/queries/active.rb$')" "1" "a checkpoint citing a delta path is re-derived, and the row says which path"
+
+# The substring trap, both directions. cp-c cites api/Gemfile.lock and the delta below is
+# api/Gemfile: a substring test carries neither and a reversed one carries both.
+assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-c	carry	-$')" "1" "a checkpoint citing a path unrelated to the delta is carried"
+
+# And the trap itself, which needs a delta that is a PREFIX of a cited path rather than merely
+# unrelated to it: api/Gemfile changed, and cp-c cites api/Gemfile.lock. A substring test marks
+# cp-c redo here, which is the cheap direction of the error; the same missing boundary in the
+# other direction carries a checkpoint that cites the file the delta changed.
+(cd "$CREPO" && git checkout -q -B gem "$CHEAD" && echo 'gem "x"' >> api/Gemfile && git add -A && git commit -qm gem && git rev-parse HEAD > "$WORK/cgem") >/dev/null 2>&1
+CGEM=$(cat "$WORK/cgem")
+sh_head=$( (cd "$CREPO" && git rev-parse --short=7 "$CHEAD") )
+cpage "$NOHIT" "" "$sh_head"
+plan --prev-head "$CHEAD" --base "$CBASE" --head "$CGEM"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^delta	api/Gemfile$')" "1" "the prefix case reaches the carry rule at all"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-c	carry	-$')" "1" "api/Gemfile in the delta does not match api/Gemfile.lock on the page"
+
+# Back to the first scenario, because the rows below read the plan in $out.
+cpage "$NOHIT"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+
+# -- excerpts ----------------------------------------------------------------------------------
+# An excerpt is a verbatim quotation AND its state tag is computed from base...head, so a file
+# entering the diff in the delta invalidates both. Carrying one is the only way this page can
+# lie about bytes while the bytes themselves are real.
+assert_eq "$(printf '%s\n' "$out" | grep -c '^excerpt	app/queries/active.rb	regen$')" "1" "an excerpt whose file moved in the delta is regenerated"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^excerpt	app/models/project.rb	keep$')" "1" "an excerpt whose file did not is left alone"
+
+# -- P6 · the delta landed where the page searched ---------------------------------------------
+# The rule that protects the product. A new consumer in a file NO checkpoint cites is invisible
+# to the carry rule, and the recorded searches are the only thing on the page that can see it.
+cpage "grep -rn &#39;second push&#39; app"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a delta path among a recorded search's hits refuses the update"
+assert_eq "$(printf '%s\n' "$out" | grep -c 'recorded search')" "1" "and names the search that found it"
+
+# -v would have eaten the word boundaries and the pattern would have matched something else
+# while still looking like it ran. Only an escape-bearing pattern can tell the two apart.
+cpage "grep -rn &#39;\bsecond push\b&#39; app"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a pattern's backslash escapes reach the tool intact"
+
+cpage "grep -rn &#39;\bsecondpush\b&#39; app"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "0" "and a boundary that genuinely does not match does not refuse"
+
+# -- P6 · the replay is argv, and the gate is quote-aware ---------------------------------------
+# Every alternation in both lens files sits inside quotes, so a blanket refusal of | and < would
+# reject the real searches and send every re-run to a full one. Outside quotes the same
+# characters are a shell doing something.
+cpage "grep -Ern &#39;include Archivable|&lt; Project&#39; app"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "0" "a quoted alternation is replayed rather than refused"
+
+cpage "grep -rn &#39;x&#39; app ; echo pwned"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a shell metacharacter outside quotes refuses the whole update"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^pwned$')" "0" "and the command it would have run was never executed"
+
+cpage "grep -rn &#39;x&#39; app \`id\`"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a command substitution refuses too"
+
+# A tool this cannot replay is not a search that found nothing. Fail closed.
+cpage "ag -n &#39;x&#39; app"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a search whose tool is not installed refuses rather than counting as empty"
+
+# -- P1 · the branch was rebased or force-pushed ------------------------------------------------
+(cd "$CREPO" && git checkout -q --detach "$CPREV" && git commit -q --allow-empty -m sibling && git rev-parse HEAD > "$WORK/csib" && git checkout -q -) >/dev/null 2>&1
+CSIB=$(cat "$WORK/csib")
+cpage "$NOHIT"
+plan --prev-head "$CHEAD" --base "$CBASE" --head "$CSIB"
+assert_eq "$cprc" "3" "a head that is not a descendant of the previous one refuses the update"
+assert_eq "$(printf '%s\n' "$out" | grep -c 'force-pushed')" "1" "and says the branch moved rather than reporting an empty delta"
+
+# A refusal prints the reason and the verdict and nothing else: half a plan reads as a plan.
+assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	\|^delta	\|^excerpt	')" "0" "a refusal prints no plan rows at all"
+assert_eq "$(printf '%s\n' "$out" | grep -c .)" "2" "only the reason and the verdict"
+
+# -- P2 · the page is not the page we think it is -----------------------------------------------
+cpage "$NOHIT"
+sed "s/$sh_prev/0000000/" "$WORK/cpage.html" > "$WORK/cpage.tmp" && mv "$WORK/cpage.tmp" "$WORK/cpage.html"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a page that does not name the revision it is said to describe refuses"
+
+cpage "$NOHIT"
+sed "s/$sh_base/0000000/" "$WORK/cpage.html" > "$WORK/cpage.tmp" && mv "$WORK/cpage.tmp" "$WORK/cpage.html"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a page that does not name the merge-base refuses — the diff's left side moved"
+
+# -- P3 · the previous page is not finished -----------------------------------------------------
+# Pending is a promise. An update that carried one would be promising work nothing is doing, and
+# a stopped page is one someone has to finish deliberately (SKILL.md § When a run stops early).
+cpage "$NOHIT" '<div class="buildstate">Still being written</div>'
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a page still carrying a build banner is a draft, not a base to update"
+
+cpage "$NOHIT" '<span class="pending">pending</span>'
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a pending marker refuses for the same reason"
+
+cpage "$NOHIT" '<p>Section 4 was not written.</p>'
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "and a stopped run is finished deliberately, never updated"
+
+# -- P4 · the delta is more than half the diff ---------------------------------------------------
+# Past half, an update costs more than a fresh run and produces a worse page, because the run
+# pays to read the old page as well and carries fewer of its claims for it.
+(cd "$CREPO" && git checkout -q -B wide "$CHEAD" && echo '# wide' >> app/models/project.rb && echo '# wide' >> app/queries/active.rb && git add -A && git commit -qm wide && git rev-parse HEAD > "$WORK/cwide") >/dev/null 2>&1
+CWIDE=$(cat "$WORK/cwide")
+cpage "$NOHIT" "" "$sh_head"
+plan --prev-head "$CHEAD" --base "$CBASE" --head "$CWIDE"
+assert_eq "$cprc" "3" "a delta covering more than half the diff refuses"
+assert_eq "$(printf '%s\n' "$out" | grep -c 'more than half')" "1" "and says so rather than reporting a git failure"
+
+# -- P5 · a lock file moved ----------------------------------------------------------------------
+# Every pinned documentation link on the page is derived from it, and there is no way to carry a
+# pinned link across a series change.
+(cd "$CREPO" && git checkout -q -B locked "$CHEAD" && echo 'GEM2' > api/Gemfile.lock && git add -A && git commit -qm lock && git rev-parse HEAD > "$WORK/clock") >/dev/null 2>&1
+CLOCK=$(cat "$WORK/clock")
+cpage "$NOHIT" "" "$sh_head"
+plan --prev-head "$CHEAD" --base "$CBASE" --head "$CLOCK"
+assert_eq "$cprc" "3" "a lock file in the delta refuses the update"
+assert_eq "$(printf '%s\n' "$out" | grep -c 'lock file')" "1" "and names that as the reason"
+
+# -- called wrongly, and asked-but-unable ---------------------------------------------------------
+cpage "$NOHIT"
+rc=0; (cd "$CREPO" && "$CARRY_PLAN" "$WORK/cpage.html" --prev-head "$CPREV" --base "$CBASE" >/dev/null 2>&1) || rc=$?
+assert_eq "$rc" "2" "a missing --head is refused rather than guessed at"
+
+rc=0; (cd "$CREPO" && "$CARRY_PLAN" "$WORK/nope.html" --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD" >/dev/null 2>&1) || rc=$?
+assert_eq "$rc" "2" "an unreadable page is refused"
+
+# Asked and unable to answer is not an empty delta — diff-render.sh's guard, and the same
+# failure shape: a pipeline whose git failed prints no rows and exits 0, which reads as
+# "nothing changed", the most reassuring answer this script has.
+rc=0; out=$( (cd "$CREPO" && "$CARRY_PLAN" "$WORK/cpage.html" --prev-head 0000000000000000000000000000000000000000 --base "$CBASE" --head "$CHEAD") 2>/dev/null ) || rc=$?
+assert_eq "$rc" "4" "an unresolvable ref exits 4 rather than reporting an empty delta"
+assert_eq "$(printf '%s' "$out" | grep -c . || true)" "0" "and prints nothing that could be read as a plan"
 
 echo ""
 echo "run.sh: $pass passed, $fail failed"

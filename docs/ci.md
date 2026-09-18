@@ -41,6 +41,51 @@ counts as code — so an unusual layout costs you a map you did not need rather 
 did. The job summary lists every path it discounted and why, so a wrong call is something you can
 see.
 
+## A second run reuses the first
+
+By default a pull request gets one Review Map, at the moment it becomes reviewable. Set the workflow
+up with `--regenerate-on-push` and it gets one per push instead — and from that point the runs reuse
+each other: the workflow caches the map it produced, the next run restores it, and the skill re-reads
+only the commits since that page's revision rather than rebuilding the whole thing.
+
+**What it costs is stated on the page.** A judgment the new commits did not reach was not verified
+again, so the masthead names both revisions — `head → base · updated from <earlier head>` — and one
+sentence under *What changed* says which parts still describe the earlier one.
+
+**If you want the fuller read, ask for a map from scratch.** That is what `review_map.update: false`
+does, unconditionally, and it is the right setting before a final review pass on a branch that has
+moved a lot. A map generated in one pass describes one revision throughout.
+
+It also refuses on its own and regenerates in full, saying which reason it hit: a force-push or
+rebase, a base branch that moved underneath, a delta covering more than half the diff, a dependency
+lock file bump, a cache that expired, or one of the page's own recorded searches now finding the
+changed code. Every one of those leads to the page that has no cost, which is why a cold cache is
+not something to worry about.
+
+Reusing a map replays the searches the page recorded, which are written with `rg`, so the workflow
+installs ripgrep — but only on a run that actually restored a previous map, and never in a way that
+can fail the job. Without it the run simply rebuilds the page.
+
+### A push that reaches nothing the map says costs nothing
+
+With a map per push, most pushes late in a review change nothing the map explains: a README line, a
+changelog entry, a formatting pass. Those cost a model run each, because the question "does this
+pull request change application code" is asked over the whole pull request — which contains
+application code, whatever this push did.
+
+It is now asked a second time, over the commits since the map you already have, and the job stands
+down when the answer is no. The existing map stays where it is, the pull request comment keeps
+pointing at it, and the run summary says which rule fired and the counts behind it.
+
+**The map is not rewritten to look current, and that is deliberate.** It stands at the revision it
+names — which is honest, because the application code at that revision is the application code now,
+and you can hold the two SHAs against each other. Making the masthead say otherwise would mean a
+script editing the page, where a missed edit leaves a stale number on a page that looks current.
+
+The bar for standing down is deliberately high: the commits must change no application code **and**
+touch nothing the page cites or quotes. A test-only push that moves a line a checkpoint links to
+regenerates, and so does a dependency bump that re-pins the page's documentation links.
+
 ## Artifacts are the default, not the contract
 
 **Review Maps are portable static HTML.** The default setup stores them as GitHub Actions artifacts

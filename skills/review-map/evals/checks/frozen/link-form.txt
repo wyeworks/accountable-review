@@ -346,6 +346,54 @@ SKIP  citation spans: no linked file:line citations in this input
 SKIP  diff anchors: this input has none
 SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
 SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment build-state-updated-clean.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page build-state-updated-clean.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment build-state-updated-missing.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page build-state-updated-missing.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment build-state-updated-nosha.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page build-state-updated-nosha.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment build-state-updated-twice.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page build-state-updated-twice.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  every linked citation addresses the lines its text names (2)
@@ -761,6 +809,66 @@ SKIP  diff anchors: this input has none
 SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
 SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
 ## --page invariants-tier-modifier-only.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment invariants-update-assurance.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page invariants-update-assurance.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment invariants-update-clean.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page invariants-update-clean.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment invariants-update-narration.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page invariants-update-narration.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment invariants-update-recency.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page invariants-update-recency.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment invariants-update-resolved.html
+exit=0
+PASS  every linked citation addresses the lines its text names (1)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page invariants-update-resolved.html
 exit=0
 PASS  every linked citation addresses the lines its text names (1)
 SKIP  diff anchors: this input has none

@@ -1,0 +1,23 @@
+<!-- Plants exactly one defect: assurance language in the form an --update run reaches for —
+     page-invariants.rb § 2b. The page is not allowed to say it was checked, and "re-checked"
+     is the same sentence with two characters in front of it. Without the re-? prefix in ASSURE
+     this read as clean while advertising exactly what a verification badge advertises.
+
+     The plural form is deliberate. ASSURE is high-precision on purpose, so its "every claim"
+     branch does not span an interposed phrase — "every claim ON THIS PAGE was re-checked" is
+     not caught, and widening it to reach that would start matching ordinary sentences about
+     claims. The "(claims|findings) were" branch is the one that carries the realistic wording.
+
+     A page IS required to say which revision its parts describe; that is a different sentence
+     and invariants-update-clean.html holds it. This one says how much was looked at again,
+     which is the thing the format withholds.
+
+     Everything else is clean: an evidence tier is present so § 3 has something to find, and no
+     data-path appears outside a ledger cell. -->
+<section class="cp" id="cp-a">
+  <h3>Does the archive path still leave historical time entries alone?</h3>
+  <p>The guard runs before the write
+    <a class="path" href="#">app/models/project.rb:41</a>
+    <span class="tier">from unchanged code</span></p>
+  <p class="note">The findings were re-checked against the new commits.</p>
+</section>

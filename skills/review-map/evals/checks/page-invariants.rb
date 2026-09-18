@@ -41,10 +41,15 @@ REFUSAL = /(?:\A|[^[:alpha:]])(?:not|nothing|never|no|rather than|instead of|wit
 # one leaks it while reading as candour, which is why a run writes it without noticing — one
 # --effort high page carried ten. A falsification pass does not have to be named to be on the
 # page. The fix is never to delete the fact, only the autobiography.
+# `an` is in the third alternative because it was NOT, and the grammatical form was the one that
+# escaped: "on a earlier pass" is a sentence nobody writes, "on an earlier pass" is the sentence a
+# run writes. Found by running the rule against wordings rather than by reading it, the same way
+# the negation boundaries above were — and it matters more since --update, the one mode where a
+# run has an earlier pass to narrate.
 NARRATE = Regexp.union(
   /(first|earlier|previous|initial|original) (version|draft) of (this|the) (section|page|flow|paragraph|entry|list|row|claim|map|file)/i,
   /(a|the|this) (first|earlier|previous|initial) (pass|draft|version) (got|had|reported|missed|claimed|said|read|ran|rested|came)/i,
-  /on (a|the) (first|earlier|previous) (pass|draft)/i,
+  /on (an?|the) (first|earlier|previous) (pass|draft|run|version)/i,
   /(this|the) (section|page|paragraph|entry|claim|row) (originally|initially) (said|read|claimed|reported|had)/i
 )
 
@@ -76,7 +81,13 @@ end
 # adversarial pass at its own flows; nothing about that is allowed to reach the page (SKILL.md
 # step 8, report-format.md § Detail levels). The patterns are high-precision on purpose: a bare
 # 'verified' is a real column name in real Rails apps.
-ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (verified|checked|confirmed)|every claim (was|has been) (verified|checked)|class="(verified|checked)"|chip-verified/i
+# The `re-?` prefixes are not decoration. "every claim was re-checked against the new commits" is
+# the sentence an --update run reaches for, and without them it read as clean while saying exactly
+# what a verification badge says. The numeric alternative is that badge with the arithmetic left to
+# the reader: "3 of 5 checkpoints re-analysed" advertises how much of the page was looked at again,
+# which report-format.md § Build state § An updated page refuses for the reason a count of
+# corrected claims is refused at --effort high.
+ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (re-?)?(verified|checked|confirmed)|every claim (was|has been) (re-?)?(verified|checked|confirmed)|\d+ of \d+ (checkpoints?|judgments?|claims?|sections?) (were |have been )?(re-?)?(analysed|analyzed|verified|checked|derived|read)|class="(verified|checked)"|chip-verified/i
 
 # The standing disclaimer, which is the OPPOSITE leak from ASSURE and therefore its own rule:
 # that one is the page overclaiming its coverage, this one is the page hedging it in a sentence
@@ -111,6 +122,36 @@ DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, 
 # or deleting this rule's prose half would leave the fixture failing and the mutation test would
 # report a bypass as caught.
 FLOW_LABEL = %r{\bFlows? [A-G]\b|(?:id|href)="\#?flow-}
+
+# Recency, which is the severity chip arriving as provenance and --update is the door it comes
+# through. When a re-run finds that the new commits answered a checkpoint, the tempting thing is to
+# strike it through or label it resolved — showing the reviewer what has been addressed. A page
+# with three of five questions ticked reports progress toward approval, which is the one output
+# this format exists to withhold, so the checkpoint is deleted instead and nothing marks where it
+# was. New / updated / carried is the same regression a step earlier: three ordered states beside a
+# question is a scale in different words, and it would pull a run toward hoisting the new ones to
+# the top, turning a ranked agenda into a changelog of the change.
+#
+# UNCONDITIONAL, and that is the point of it living here rather than behind --updated in
+# build-state.rb: an ordinary run must not write these either, so there is no flag to forget. What
+# IS conditional — the disclosure sentence being present — is the other file's, because only an
+# updated page owes it.
+#
+# FAIL rather than WARN, for FLOW_LABEL's reason: there is no sentence that legitimately carries
+# one. Graded on the comment-stripped copy, because page-template.html refuses the carry badge in a
+# comment written in exactly these words and a real page carries that comment verbatim — which is
+# how § 2's graded noun was caught failing a correct page. Its fixture therefore must not name the
+# marker in its own header comment, or deleting this rule would leave the fixture failing and the
+# mutation test would report a bypass as caught.
+RECENCY = Regexp.union(
+  # A WHOLE space-delimited class, not an exact attribute: the marker arrives as
+  # class="cp updated", so an exact-quote match would have counted zero of the real ones — § 3's
+  # tier-modifier bug, in the direction where the rule passes a page that carries the defect.
+  /class="(?:[^"]* )?(?:new|carried|updated|resolved|addressed)(?: [^"]*)?"/i,
+  /\b(?:new|updated|carried|unchanged) since (?:the )?(?:last|previous) (?:map|review|run|push)\b/i,
+  /\b\d+ of \d+ (?:checkpoints?|judgments?|questions?) (?:were |have been )?(?:addressed|resolved|answered|re-?analysed|re-?analyzed|re-?derived)\b/i,
+  /<(?:s|del|strike)>/i
+)
 
 check = ReviewMap::Check.new(ARGV)
 check.require_input
@@ -173,6 +214,17 @@ end
 if prose.has?(DISCLAIM)
   hedged = prose.scan(DISCLAIM).sort.uniq
   check.maybe("a standing disclaimer may have come back — that sentence lives in README.md, not on the page: #{hedged.join(" ")} ")
+end
+
+# 2e · Recency as a marker. The checkpoints are ranked and an order is not a scale; a marker saying
+#      which of them are new since the last map is that scale rebuilt out of words that sound like
+#      provenance. The page says WHICH REVISION its content describes, once, and never which parts
+#      of it were re-read.
+if prose.has?(RECENCY)
+  marked = prose.scan(RECENCY).sort.uniq
+  check.bad("a checkpoint is marked by its recency — the page says which revision it describes, never which parts were re-read: #{marked.join(" ")} ")
+else
+  check.ok("no recency markers — an answered checkpoint is deleted rather than ticked")
 end
 
 # 3 · Evidence tiers. Silence is the first tier, so a document with no label either had

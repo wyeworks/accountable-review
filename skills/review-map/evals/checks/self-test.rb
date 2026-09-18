@@ -107,6 +107,41 @@ end
   end
 end
 
+# The --updated half of build-state, which the rows above cannot reach: they always pass
+# --fragment, and this check refuses one. Its own axis, so the rows are (fixture, exit) pairs
+# driven here — and the first of them is the one that matters, because a rule that failed a page
+# for disclosing its limits would get the disclosure removed rather than the rule.
+[
+  ["build-state-updated-clean.html",   0, "discloses which revision"],
+  ["build-state-updated-missing.html", 1, "no disclosure"],
+  ["build-state-updated-twice.html",   1, "appears 2 times"],
+  ["build-state-updated-nosha.html",   1, "names one revision while describing two"]
+].each do |fixture, want_exit, want_text|
+  out, err, status = ReviewMap.capture({ "CHECK_TALLY" => "0" }, "ruby",
+                                    File.join(HERE, "build-state.rb"),
+                                    "--page", File.join(GOLD, fixture), "--updated")
+  output = out + err
+  problem = []
+  problem << "exit #{status.exitstatus}, wanted #{want_exit}" unless status.exitstatus == want_exit
+  problem << %(no line matching "#{want_text}") unless output.include?(want_text)
+  problem.empty? ? pass += 1 : fail += 1
+  report("build-state --updated  #{fixture}", problem, output)
+end
+
+# And the composition: --updated ADDS to final, it does not replace it. A page that is updated and
+# still carries a pending marker is a draft, and making --updated a fourth mode value would have
+# exempted it from the check that says so.
+out, err, status = ReviewMap.capture({ "CHECK_TALLY" => "0" }, "ruby",
+                                  File.join(HERE, "build-state.rb"),
+                                  "--page", File.join(GOLD, "build-state-updated-clean.html"))
+if status.exitstatus.zero?
+  pass += 1
+  puts "ok    build-state  an updated page is an ordinary final page without the flag"
+else
+  fail += 1
+  puts "BAD   build-state  an updated page should pass as final without the flag: #{out + err}"
+end
+
 puts
 puts "self-test: #{pass} ok, #{fail} bad"
 exit(fail.zero? ? 0 : 1)

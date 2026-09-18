@@ -28,6 +28,8 @@ the unit of quality is instruction clarity, not compilation.
 agents/claim-falsifier.md          adversarial verifier, one per analysis note at --effort high
 ci/                                what runs in CI, not what a skill reads
 ├── generate-review-map.sh         runs review-map non-interactively into a static directory
+├── application-code.sh            the scope gate: is this diff worth a Review Map at all
+├── map-still-current.sh           and, on a re-run, does the map we have still describe this head
 └── delivery/
     ├── deliver.sh                 the delivery seam: dispatch, and the DeliveryResult
     ├── github-artifact.sh         the default provider
@@ -49,7 +51,8 @@ skills/review-map/
 │   ├── diff-render.sh             says which files GitHub will not render, which decides the link form
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
 │   ├── ledger-rows.sh             generates the evidence foot's inventory from the diff
-│   └── coverage-gate.sh           asserts the inventory accounts for every changed path
+│   ├── coverage-gate.sh           asserts the inventory accounts for every changed path
+│   └── carry-plan.sh              on --update, what the previous page may keep and what it may not
 ├── tests/                         the deterministic tests for those scripts, and the proof they fire
 └── evals/                         fixtures, page and section cases, and the mechanical checks
 skills/setup-ci/
@@ -126,7 +129,7 @@ regression suites, which run in CI and take a few seconds:
 ruby skills/review-map/evals/checks/self-test.rb        # every golden fragment's asserted verdict
 ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner, directly
 skills/review-map/evals/checks/frozen.rb                # ~1000 cases against their recorded output
-skills/review-map/tests/run.sh                          # page-skeleton.sh and diff-render.sh
+skills/review-map/tests/run.sh                          # page-skeleton.sh, diff-render.sh, carry-plan.sh
 skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
 skills/setup-ci/tests/run.sh                            # what the generated workflow contains
 skills/setup-ci/tests/self-test.sh                      # ten deliberate breaks, each must fail it
