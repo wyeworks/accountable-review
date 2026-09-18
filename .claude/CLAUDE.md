@@ -767,6 +767,18 @@ Editing one of these means checking the others still agree.
   `provider:` to a static host. The previous map must be restored by something that does not know
   where the map goes.
 
+  **The carrier needs ripgrep, which a GitHub runner does not have, and that was invisible until
+  CI went red.** Both halves of reusing a map replay the page's recorded searches, and the lens
+  files write those with `rg`, so without the package P8 refuses every one and a re-run rebuilds
+  the page — the feature inert in the environment the cache was built for. The workflow installs
+  it **on demand**, guarded on the restore having matched, and **cannot fail the job**, because
+  the install is an optimisation and a failed one costs minutes rather than the map. The same
+  dependency is why no fixture in `review-map/tests/` or `setup-ci/tests/` may record an `rg`
+  search: thirteen rows passed locally and failed on a runner, two of them having been green for
+  the wrong reason. `evals/checks/searches.rb` solved it differently, falling back to ERE at line
+  151, which is right for a grader and wrong here — a dialect mismatch yields fewer hits, and
+  fewer hits is a checkpoint carried that should have refused.
+
   **A cache miss is not a failure, and nothing about the carrier is load-bearing for correctness** —
   the flag is a saving with a cost, so every way it can go wrong leads to the page that has no cost.
   Two rules that predate it are what make restoring a page safe: a half-written one carries a

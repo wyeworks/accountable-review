@@ -895,6 +895,29 @@ else
 fi
 guard=$(sed -n "$((restore_line - 6)),${restore_line}p" "$TMP/w-push.yml" | grep -c "verdict == 'generate'" || true)
 assert_eq "$guard" "0" "and the restore carries no verdict guard — it is what the verdict is decided from"
+# -- ripgrep, installed only when there is a previous map to replay searches against ----------
+# Both halves of reusing a map replay the page's own recorded searches, and the lens files write
+# those with rg, which a GitHub runner does not have. Without this step every recorded search
+# refuses and a re-run rebuilds the page — correct, and the whole saving gone.
+rg_line=$(grep -n 'Install ripgrep' "$TMP/w-push.yml" | cut -d: -f1)
+if [ -n "$rg_line" ] && [ "$restore_line" -lt "$rg_line" ] && [ "$rg_line" -lt "$scope_line" ]; then
+  ok "ripgrep is installed after the restore and before the step that replays the searches"
+else
+  bad "ripgrep is installed after the restore and before the step that replays the searches"
+fi
+# ON DEMAND, and the guard is the whole point: a run with nothing restored has nothing to carry,
+# so it pays for no install. `cache-matched-key` is empty on a cold cache, where `cache-hit` is
+# also false on a restore-key hit — which is the case this step most needs to fire for.
+rg_guard=$(sed -n "$((rg_line + 1))p" "$TMP/w-push.yml")
+assert_eq "$(printf '%s\n' "$rg_guard" | grep -c "cache-matched-key != ''")" "1" \
+  "and only when a previous map was actually restored"
+# It is an optimisation, so it must never be the reason a Review Map does not get made. The last
+# command in the block has to succeed even when the package cannot be had.
+rg_block=$(awk "NR > $rg_line && /^      - /{exit} NR > $rg_line" "$TMP/w-push.yml")
+assert_eq "$(printf '%s\n' "$rg_block" | grep -c '|| echo')" "1" \
+  "and a failed install leaves the run to rebuild the page rather than failing the job"
+assert_not_in "$W" "ripgrep" "the default file installs nothing — there is no previous map to replay"
+
 assert_in "$TMP/w-push.yml" "map-still-current.sh" "the scope step asks the second question"
 assert_in "$TMP/w-push.yml" "reason=map-still-current" "and downgrades its own verdict rather than adding a second one"
 # WHICH verdict it writes, not merely that it writes a reason. A downgrade to anything but `skip`
@@ -909,11 +932,14 @@ assert_not_in "$W" "map-still-current.sh" "the default file asks it nowhere — 
 # that stand aside and the step that explains a skip are the ones that already existed.
 assert_in "$TMP/w-push.yml" "if: steps.scope.outputs.verdict == 'skip'" \
   "the existing skip-reporting step is what explains it"
-# One home for the decision: no step reads a second verdict, and nothing outside the scope step
-# writes one. Counting guards across the two renders would compare files that legitimately differ
-# by the cache save step.
-assert_eq "$(grep -c "steps.previous.outputs\|steps.current" "$TMP/w-push.yml" || true)" "0" \
-  "and no step reads a second verdict — the scope step is still the only one that decides"
+# One home for the DECISION: a verdict is read from the scope step and from nowhere else.
+# Counting guards across the two renders would compare files that legitimately differ by the
+# cache save step, and forbidding every `steps.<id>.outputs` reference would forbid the ripgrep
+# step's cache-matched-key — which is the cache reporting what it restored, not a second opinion
+# about whether to generate.
+assert_eq "$(grep -o 'steps\.[a-z_-]*\.outputs\.verdict' "$TMP/w-push.yml" \
+  | grep -cv '^steps\.scope\.outputs\.verdict$' || true)" "0" \
+  "and no step reads a verdict from anywhere but the scope step — it is still the only one that decides"
 
 # ---- ci/map-still-current.sh, against a real repository -------------------------------------
 STILL=$PLUGIN_ROOT/ci/map-still-current.sh

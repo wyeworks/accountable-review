@@ -224,6 +224,20 @@ gate* — so it has to run first, and a guard on the verdict it is consulted for
 Restoring ~80 KB unconditionally is cheaper than the model run it is deciding about, and on a cold
 cache it is a no-op.
 
+**ripgrep is installed on demand, and only when a previous map came back.** Both halves of
+reusing a map — `carry-plan.sh`'s P8 and, through it, `map-still-current.sh` — replay the page's
+own recorded searches, and every search recipe in the lens files is written with `rg`, which a
+GitHub-hosted runner does not have. Without the package each recorded search hits P8's
+tool-not-installed branch and refuses, so the run rebuilds the page: correct, and the whole saving
+gone. The guard is `steps.previous.outputs.cache-matched-key != ''` rather than `cache-hit`,
+because the key carries the head SHA and the restore-key prefix is what actually matches — a
+`cache-hit` guard would be false on exactly the runs this step exists for.
+
+**It cannot fail the job, and that is the polarity rather than defensiveness.** The install is an
+optimisation; when it does not work the page is rebuilt, which is the answer that costs more and
+is never wrong. A step that could turn a Review Map into a red job to save a few minutes has this
+backwards, so the block ends in an `|| echo` and a run with no ripgrep says so in its log.
+
 **The save carries `if: success()`.** Correctness does not depend on it, per the rules above; it
 keeps the cache holding pages that actually shipped rather than whatever was in the directory when
 a step died.
@@ -490,9 +504,10 @@ wrong one has to be reportable rather than invisible.
 
 1. **Check out the pull request** at its head SHA, full history, no credentials persisted.
 2. **Clone Accountable Review** at its release tag, outside the workspace.
-3. **Restore the previous Review Map**, when the workflow regenerates on push. It is unguarded and
-   sits above the verdict it helps decide, because the step below consults it; see § *The previous
-   map*.
+3. **Restore the previous Review Map**, when the workflow regenerates on push, and install ripgrep
+   if something came back. The restore is unguarded and sits above the verdict it helps decide,
+   because the step below consults it; the install is guarded on the restore having matched, and
+   cannot fail the job. Both in § *The previous map*.
 4. **Decide whether there is anything worth explaining** — `ci/application-code.sh`, above: no
    application code, or too little of it. On a re-run `ci/map-still-current.sh` asks the same
    question again over the commits since the restored map, and may downgrade the same verdict. Every

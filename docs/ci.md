@@ -62,6 +62,10 @@ lock file bump, a cache that expired, or one of the page's own recorded searches
 changed code. Every one of those leads to the page that has no cost, which is why a cold cache is
 not something to worry about.
 
+Reusing a map replays the searches the page recorded, which are written with `rg`, so the workflow
+installs ripgrep — but only on a run that actually restored a previous map, and never in a way that
+can fail the job. Without it the run simply rebuilds the page.
+
 ### A push that reaches nothing the map says costs nothing
 
 With a map per push, most pushes late in a review change nothing the map explains: a README line, a

@@ -227,6 +227,30 @@ jobs:
           path: ${{ runner.temp }}/review-map
           key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
           restore-keys: accountable-review-map-${{ github.event.pull_request.number }}-
+
+      # ONLY WHEN THERE IS A PREVIOUS MAP TO REUSE, which is what the guard says:
+      # `cache-matched-key` is empty on a cold cache, and a run with nothing
+      # restored has nothing to carry and no searches to replay.
+      #
+      # Both halves of reusing a map replay the page's own recorded searches, and
+      # every search recipe in the lens files is written with rg — so on a runner
+      # without ripgrep every one of them refuses and the run rebuilds the page
+      # from scratch. Correct, and the whole saving gone.
+      #
+      # IT CANNOT FAIL THE JOB, and that is deliberate rather than defensive. The
+      # install is an optimisation; if it does not work the page is rebuilt, which
+      # is the answer that costs more and is never wrong. A step that could turn a
+      # Review Map into a red job to save a few minutes has the polarity backwards.
+      - name: Install ripgrep, so the previous map's searches can be replayed
+        if: steps.previous.outputs.cache-matched-key != ''
+        run: |
+          if command -v rg >/dev/null 2>&1; then
+            echo "ripgrep is already here"
+            exit 0
+          fi
+          sudo apt-get install -y ripgrep \
+            || { sudo apt-get update && sudo apt-get install -y ripgrep; } \
+            || echo "no ripgrep: this run rebuilds the page instead of updating it"
 # SETUP:END:push
 
       - name: Does this pull request change application code?

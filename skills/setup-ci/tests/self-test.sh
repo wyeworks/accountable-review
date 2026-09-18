@@ -327,6 +327,26 @@ break_and_run "the still-current answer is computed and never acted on" \
   skills/setup-ci/templates/workflow.yml \
   's|^                echo "verdict=skip"$|                echo "verdict=generate"|'
 
+# --- ripgrep on demand, whose every failure mode is a slower run rather than a wrong one -------
+
+# Installed unconditionally: every run that generates a map pays for a package it has no use for,
+# because there is nothing restored to replay searches against.
+break_and_run "ripgrep is installed whether or not there is a previous map to replay" \
+  skills/setup-ci/templates/workflow.yml \
+  "/^        if: steps.previous.outputs.cache-matched-key/d"
+
+# Below the step that replays the searches, which is the ordering error that leaves it doing
+# nothing at all: carry-plan has already refused by the time the package lands.
+break_and_run "ripgrep is installed after the step that replays the recorded searches" \
+  skills/setup-ci/templates/workflow.yml \
+  "/^      - name: Install ripgrep/,/rebuilds the page instead of updating it\"$/d"
+
+# A package that cannot be had turns a Review Map into a red job. The install is an optimisation,
+# so the polarity has to be that a failed one costs minutes rather than the map.
+break_and_run "a failed ripgrep install fails the whole job instead of rebuilding the page" \
+  skills/setup-ci/templates/workflow.yml \
+  "s@^            || echo \"no ripgrep.*@            ; :@"
+
 echo
 echo "self-test: $ok ok, $bad bad"
 [ "$bad" -eq 0 ]
