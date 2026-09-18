@@ -939,7 +939,7 @@ smap() {
 <div class="path">$sps &rarr; $sbs</div>
 <section class="cp" id="cp-a"><a class="path" href="#">$1</a></section>
 <details class="searched"><ul class="sr-list">
-<li><code>rg -n &#39;nothing_matches_this&#39; app</code> <span class="sr-r">no hits</span></li>
+<li><code>grep -rn &#39;nothing_matches_this&#39; app</code> <span class="sr-r">no hits</span></li>
 </ul></details>
 PAGE
   cat > "$SMAP/manifest.json" <<JSON

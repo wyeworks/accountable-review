@@ -517,7 +517,15 @@ plan() {
   out=$(cat "$WORK/cpout")
 }
 
-NOHIT="rg -n &#39;nothing_matches_this&#39; app"
+# EVERY RECORDED SEARCH IN THIS SUITE IS A grep, AND NONE MAY BE AN rg. A page records whatever
+# the run searched with, and both lens files write their recipes with rg — so on a machine without
+# ripgrep P8 refuses every one of them and the update falls back to a full run. That is the
+# fail-closed answer and it is the right one, but it means a fixture recording an rg search is a
+# row asserting that ripgrep is installed: thirteen of these passed here and failed on a GitHub
+# runner, which has no rg, and two of them had been passing for the wrong reason because the
+# refusal they expect is the refusal a missing tool produces anyway. grep is in the same allowlist
+# and is on every machine this suite can run on.
+NOHIT="grep -rn &#39;nothing_matches_this&#39; app"
 
 # -- the plan itself --------------------------------------------------------------------------
 cpage "$NOHIT"
@@ -559,18 +567,18 @@ assert_eq "$(printf '%s\n' "$out" | grep -c '^excerpt	app/models/project.rb	keep
 # -- P8 · the delta landed where the page searched ---------------------------------------------
 # The rule that protects the product. A new consumer in a file NO checkpoint cites is invisible
 # to the carry rule, and the recorded searches are the only thing on the page that can see it.
-cpage "rg -n &#39;second push&#39; app"
+cpage "grep -rn &#39;second push&#39; app"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "a delta path among a recorded search's hits refuses the update"
 assert_eq "$(printf '%s\n' "$out" | grep -c 'recorded search')" "1" "and names the search that found it"
 
 # -v would have eaten the word boundaries and the pattern would have matched something else
 # while still looking like it ran. Only an escape-bearing pattern can tell the two apart.
-cpage "rg -n &#39;\bsecond push\b&#39; app"
+cpage "grep -rn &#39;\bsecond push\b&#39; app"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "a pattern's backslash escapes reach the tool intact"
 
-cpage "rg -n &#39;\bsecondpush\b&#39; app"
+cpage "grep -rn &#39;\bsecondpush\b&#39; app"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "0" "and a boundary that genuinely does not match does not refuse"
 
@@ -578,16 +586,16 @@ assert_eq "$cprc" "0" "and a boundary that genuinely does not match does not ref
 # Every alternation in both lens files sits inside quotes, so a blanket refusal of | and < would
 # reject the real searches and send every re-run to a full one. Outside quotes the same
 # characters are a shell doing something.
-cpage "rg -n &#39;include Archivable|&lt; Project&#39; app"
+cpage "grep -Ern &#39;include Archivable|&lt; Project&#39; app"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "0" "a quoted alternation is replayed rather than refused"
 
-cpage "rg -n &#39;x&#39; app ; echo pwned"
+cpage "grep -rn &#39;x&#39; app ; echo pwned"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "a shell metacharacter outside quotes refuses the whole update"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^pwned$')" "0" "and the command it would have run was never executed"
 
-cpage "rg -n &#39;x&#39; app \`id\`"
+cpage "grep -rn &#39;x&#39; app \`id\`"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "a command substitution refuses too"
 
