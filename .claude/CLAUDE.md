@@ -252,6 +252,12 @@ Editing one of these means checking the others still agree.
   the verification badge and the stack badge, because that fourth refusal has the best excuse of the
   four and would otherwise come back alone.
 
+  **Its header names the stack, not the component** — *Understanding Ruby on Rails*, not
+  *Rails | Primer* — because a reader can see what kind of block it is and cannot see what it is
+  about to teach them, and its frame is Rails red on `--primer-*`. A logotype is still refused:
+  there is no `<svg>` on this page, `rails-anchors.rb` fails a primer carrying `pr-mark`, `pr-tm` or
+  one, and the near-black display serif of the header is the ceiling.
+
   **A primer holds its checkpoint's one doc link rather than adding a second**, so the anchor budget
   is relocated and never raised: mentor buys explanation, never citations. It is also **gated** on
   that link, which is what makes a closed catalogue mean no primers for that stack — Phoenix gets the
@@ -900,32 +906,46 @@ Editing one of these means checking the others still agree.
   The `--syn-*` tints are the ones easiest to half-declare: nothing on the page depends on them to be
   readable, so a value missing from the dark blocks is invisible until someone opens an excerpt with
   the OS in dark mode. They are therefore counted **by name** — `--syn-key` in `excerpts.rb`,
-  `--syn-key` and `--ex-add` in `tests/run.sh` — because the three blocks *existing* is not the same
-  as a colour being in all three. `--rails` was counted the same way in `page-invariants.rb` § 6 and
-  is gone; the counting idiom is what outlived it. The primer that was its only user has since come
-  back and did **not** bring it — the callout is plum, off the provenance ramp, because the colour
-  existed for a logotype this page no longer draws.
+  `--syn-key`, `--ex-add` and `--primer-ink` in `tests/run.sh` — because the three blocks *existing*
+  is not the same as a colour being in all three. `--rails` was counted the same way in
+  `page-invariants.rb` § 6 and is gone; the counting idiom is what outlived it, and `--primer-*` is
+  what it now guards — a red brought back for the primer's frame, never for the logotype the old
+  token was spent on.
 
   Worth knowing when editing: the source design is **light-only**, and the dark half is ours. So the
   one pair that inverts — `.ip-out`, the filled node that ends a chain — is written against tokens
   rather than literals precisely so it keeps inverting *relative to the page* rather than flipping to
   an unreadable combination in one theme.
 
-- **Four semantic colour families, one ramp shape, and a rule about what each is allowed to mean.**
-  `--nav-*` (slate 252), `--gap-*` (ochre 72), `--unchanged-*` (teal 200) and `--prov-*` (plum 318)
-  each carry the same five slots — `bg`, `bg-2`, `rule`, `rule-2`, `ink` — at fixed lightness and
-  chroma per slot, so no two families can drift apart in weight, and the dark half is the light ramp
-  reflected rather than a second hand-picked set. All of it is in `page-template.html`'s token block,
-  which is in the head `SKELETON:` range and therefore **emitted by `page-skeleton.sh`**: a run never
-  types a colour.
+- **Four semantic colour families, a fifth ramp that means nothing, one ramp shape, and a rule about
+  what each is allowed to mean.** `--nav-*` (slate 252), `--gap-*` (ochre 72), `--unchanged-*`
+  (teal 200), `--prov-*` (plum 318) and `--primer-*` (red 28) each carry the same five slots — `bg`,
+  `bg-2`, `rule`, `rule-2`, `ink` — at fixed lightness and chroma per slot, so no two can drift apart
+  in weight, and the dark half is the light ramp reflected rather than a second hand-picked set. All
+  of it is in `page-template.html`'s token block, which is in the head `SKELETON:` range and
+  therefore **emitted by `page-skeleton.sh`**: a run never types a colour.
 
   **The rule is the system, not the ramp.** Slate means *you can click it* and may appear on nothing
   else. Ochre means *something is missing and the page is saying so* — `p.open`, the inferred tier,
   the build banner — and never a severity. Teal means *this code is not in the diff*: the
   `from unchanged code` tier, the dashed `.ip-aff` node and its legend key, the *Affected, not
   changed* lists. Plum means *how a thing is known*: the excerpt `.tag`, `details.searched`, the
-  evidence foot, the probe label. Green and red stay what they were — added and removed lines inside
-  an excerpt, nowhere else — and are the reason no fifth semantic hue gets added.
+  evidence foot, the probe label. Green and red inside an excerpt stay what they were — added and
+  removed lines, there and nowhere else — and are still the reason no fifth semantic *meaning* gets a
+  hue.
+
+  **`--primer-*` is the exception, and it is safe because it is not a meaning.** It frames
+  `aside.primer` and reaches nothing else: Rails red, so a reviewer new to the stack recognises the
+  block written for them before reading a word of it. It passes teal's test in the strongest form
+  available — it is attached to no claim at all, since what it frames is a quotation of the manual —
+  and the ramp is named for its component rather than for a meaning precisely so it has nowhere to
+  spread. **Red on anything the page asserts about the change is the severity chip arriving as a
+  palette**, and that is the direction to watch. One open question is recorded rather than guessed at:
+  Rails is the only stack that earns a primer today, because `elixir-docs.md` withholds every link
+  and a primer is gated on one, so if that catalogue opens the answer is a variant class on the aside
+  — never a colour a run types, and never the branded/unbranded split already deleted once.
+  `tests/run.sh` counts `--primer-ink` by name in all three theme states, and `report-format.md`
+  § *Mentor mode* owns the page-level rule.
 
   **Teal is the one that had to be argued, and the argument is why it is safe on this page.** The
   changed/unchanged distinction is the most load-bearing one the page draws and it was carried by a

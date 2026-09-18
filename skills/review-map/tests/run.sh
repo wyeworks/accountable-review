@@ -163,6 +163,15 @@ assert_eq "$(count "$WORK/markup" 'pr-mark')" "0" "the primer carries no logotyp
 assert_eq "$(count "$WORK/markup" 'pr-tm')"   "0" "and no trademark line, because there is no mark to disclaim"
 assert_eq "$(count "$WORK/markup" 'primer--lib')" "0" "and no branded/unbranded variant split, which only the mark needed"
 
+# ITS HEADER NAMES THE STACK, NOT THE COMPONENT. "Rails | Primer" spent the widest line in the block
+# saying what kind of block it is, which the reader can see; the words a reader new to the stack needs
+# are what it is going to teach them. The separator went with the eyebrow — it existed to divide two
+# things and there is one thing now — so it is asserted at zero the way pr-mark is: a header that
+# grows a second element back is the old shape returning one span at a time.
+assert_eq "$(count "$WORK/markup" 'class="pr-title"')" "1" "the primer header is one title naming the stack"
+assert_eq "$(count "$WORK/markup" 'Understanding Ruby on Rails')" "1" "and it says what the block teaches, in words"
+assert_eq "$(count "$WORK/markup" 'pr-sep')" "0" "no separator survives — there is nothing left to divide"
+
 # A primer is gated on its doc link and earned by a repo citation, and BOTH live inside the aside:
 # rails-anchors.rb judges it as one block, so a primer borrowing the citation of the paragraph above
 # it is the rule working backwards. The link is pinned with the placeholder, never a literal series —
@@ -275,6 +284,7 @@ assert_eq "$(count "$WORK/page.html" 'SKELETON:BODY')" "1" "the emitted page car
 # opens an excerpt with the OS in dark mode.
 assert_eq "$(count "$WORK/head" '--syn-key:')"              "3" "--syn-key is declared in all three theme states, in the skeleton"
 assert_eq "$(count "$WORK/head" '--ex-add:')"               "3" "--ex-add is declared in all three theme states, in the skeleton"
+assert_eq "$(count "$WORK/head" '--primer-ink:')"           "3" "--primer-ink is declared in all three theme states, in the skeleton"
 assert_eq "$(count "$WORK/head" 'prefers-color-scheme: dark')" "1" "the media dark block is in the skeleton"
 assert_eq "$(count "$WORK/head" '[data-theme="dark"]')"     "2" "the explicit dark block is in the skeleton"
 assert_eq "$(count "$WORK/head" '[data-theme="light"]')"    "1" "the explicit light block is in the skeleton"
