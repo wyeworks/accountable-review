@@ -964,10 +964,6 @@ rather than nothing.
 
 **Fill the page in; do not rewrite it.** After the first `Write`, every later stage replaces that
 section's *pending* marker with the written section, using `Edit` on the block the marker sits in.
-Keep the template's readable multiline markup: section opening and closing tags on their own
-lines, and separate lines for fields and components. Do not minify the HTML. The bundled page
-checks scan by line, so putting several sections on one line makes them read the wrong region;
-separate lines also give later edits an unambiguous block to replace.
 The file is already on disk and the earlier sections have not changed, so re-emitting them buys
 nothing and costs the whole page again in generated tokens. This is not a small saving and it is the
 single largest cost a profile of this skill finds: one run wrote a 23 KB staged page, then produced
@@ -975,6 +971,17 @@ its finished 82 KB version as one 35,000-token `Write` that re-emitted the first
 — 258 seconds, 56% of everything that run spent streaming output. An intermediate save is one tool
 call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
 anchor you already have.
+
+**Write the markup the way the template writes it, prose included.** Copy its line discipline
+rather than only its classes: opening and closing tags on their own lines, one component per
+block, and **paragraph text wrapped at the width the template wraps it at** — around a hundred
+characters — not run out to one long line per element. Never minify. Two things depend on it.
+A later stage edits a block it has to be able to name, and a paragraph that is one 800-character
+line is one indivisible block. And the page checks scan by line, so markup packed onto fewer
+lines makes them read the wrong region. *Separate lines for fields and components* was the
+earlier wording here and it produced the opposite of what it asked for: read as one line per
+component, it gives every paragraph on a single line, which is the densest legal form of the
+thing the rule is against.
 
 **With `--update` there are no stages and no banner at all** — the page is finished before this run
 started and is finished at every instant of it. The skeleton is not called, the `Revision` cell is
