@@ -77,20 +77,22 @@ module RailsAnchors
   # exists, and the scope rule skips them as RECEIVERS. When only the constant rule had it,
   # `Rails.application` sailed past rule 7 and then failed the scope rule for calling an
   # "undefined method" named `application`.
-  FW = "ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|I18n|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP"
+  FW = "ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|I18n|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Symbol|Object|Kernel|GC|ENV|PP"
   FRAMEWORK = /\A(#{FW})/
   FRAMEWORK_RECEIVER = /\A(#{FW})\./
   FRAMEWORK_NS = /\A(ActiveRecord|ActiveJob|ActiveSupport)::/
   CONSTANT = /\b[A-Z][A-Za-z0-9]*(?:::[A-Z][A-Za-z0-9]*)*\b/
 
-  # ActiveRecord's own surface: real methods on every model, and so no evidence about this app.
-  AR_API = %w[to_sql all new first last count where order limit select pluck find find_by
-              find_each in_batches explain connection columns_hash column_names attribute_names
-              defined_enums validators_on validators reflect_on_association
-              reflect_on_all_associations nested_attributes_options queue_name serialize
-              instance_methods primary_key table_name create! create update! update destroy
-              delete_all update_all insert_all upsert_all save save! unscoped default_scoped
-              reload attributes as_json to_json].freeze
+  # Framework methods that are not this app's surface. Most are ActiveRecord class methods that every
+  # model gets; callback registry readers are included too because the references recommend them.
+  FRAMEWORK_API = %w[to_sql all new first last count where order limit select pluck find find_by
+                     find_each in_batches explain connection columns_hash column_names attribute_names
+                     defined_enums validators_on validators reflect_on_association
+                     reflect_on_all_associations nested_attributes_options queue_name serialize
+                     instance_methods primary_key table_name create! create update! update destroy
+                     delete_all update_all insert_all upsert_all save save! unscoped default_scoped
+                     reload attributes as_json to_json _commit_callbacks
+                     _process_action_callbacks].freeze
 
   MUTATING = /create!?\(|update!?\(|update_all|update_column|destroy|delete_all|save!?\b|insert_all|upsert_all|touch\(|archive!/
   FABRICATED = /\A[[:space:]]*(?:=>|#[[:space:]]*=>)/
@@ -666,7 +668,7 @@ else
                      .reject { |call| call.match?(RailsAnchors::FRAMEWORK_RECEIVER) }
                      .map { |call| call.sub(/\A[^.]*\./, "") }
                      .sort.uniq
-                     .reject { |m| RailsAnchors::AR_API.include?(m) }
+                     .reject { |m| RailsAnchors::FRAMEWORK_API.include?(m) }
   if scopes.any?
     # A scope, a class method, or an instance method — a probe may reasonably call any.
     #
