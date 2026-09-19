@@ -1783,3 +1783,12 @@ less to forget. A catalogue entry may pin `ref` or `sha` instead if a release ne
 Two things do not belong at the plugin root: a `CLAUDE.md` (it ships to every install but is never
 loaded as project context, which is why this file lives in `.claude/`), and any component directory
 inside `.claude-plugin/` — only the manifest goes there.
+
+**`AGENTS.md` is at the root and is not an exception to the first half, because the reason does not
+reach it.** A root `CLAUDE.md` is excluded for being dead weight: Claude Code reads `.claude/CLAUDE.md`
+instead, so the root copy ships everywhere and is loaded nowhere. The root is the only place Codex
+looks, so `AGENTS.md` there is the one that gets read rather than the one that does not. It is a
+pointer at this file and holds only the three facts this file cannot state, being written for the
+host that has the `claude` CLI. Keep it a pointer: a second copy of these rules is
+§ *One canonical home* broken in the file that owns the rule, and this repository has already
+watched that happen once, with the stale copy winning.
