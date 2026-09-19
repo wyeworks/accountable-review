@@ -58,6 +58,7 @@ skills/review-map/evals/checks/lib/test/test_page.rb
 skills/review-map/evals/checks/frozen.rb
 skills/review-map/tests/run.sh
 skills/review-map/tests/self-test.sh
+skills/review-map/tests/install-codex.sh
 skills/setup-ci/tests/run.sh
 skills/setup-ci/tests/self-test.sh"
 
@@ -93,7 +94,8 @@ run_suite() {
     unit)      suite unit      ruby ruby "$EVALS/checks/lib/test/test_page.rb" ;;
     frozen)    suite frozen    ruby ruby "$EVALS/checks/frozen.rb" ;;
     review-map) suite review-map sh sh "$SKILL/tests/run.sh"
-               suite review-map-self sh sh "$SKILL/tests/self-test.sh" ;;
+               suite review-map-self sh sh "$SKILL/tests/self-test.sh"
+               suite codex-install sh sh "$SKILL/tests/install-codex.sh" ;;
     setup-ci)  suite setup-ci  sh   sh "$SETUP/tests/run.sh"
                suite setup-ci-self sh sh "$SETUP/tests/self-test.sh" ;;
     manifest)  suite manifest  claude claude plugin validate . --strict ;;

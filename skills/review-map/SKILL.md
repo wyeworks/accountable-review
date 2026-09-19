@@ -1,11 +1,11 @@
 ---
 name: review-map
-description: Builds a published HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
 
-Turns a diff into one published page a reviewer can work from: what the change is for, which
+Turns a diff into one HTML page a reviewer can work from: what the change is for, which
 judgments it asks of them and where to look to make each one, the order to read the code in, and
 what the change reaches outside the lines it touched.
 
@@ -26,17 +26,30 @@ important decisions live?* Not: *can a model summarize this diff?*
 You are not a code reviewer here. Do not grade the change, do not recommend approval, do not post
 comments on the PR. If the project has a review command, say so at the end and let it do that job.
 
+## Host and invocation
+
+Use `/accountable-review:review-map` in Claude Code or `$review-map` in Codex. Both accept a
+PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
+`--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
+
+Before step 1, read **only your host's reference**: [Codex](references/hosts/codex.md) or
+[Claude Code](references/hosts/claude-code.md). It owns delegation and delivery mechanics;
+the ten steps below own the review. Resolve bundled paths relative to this `SKILL.md`,
+not the repository being reviewed. User instructions take precedence over skill guidance.
+
 ## What is bundled
 
-The procedure below relies on nine bundled files. Read each at the step that needs it rather than up
+The procedure below relies on ten bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
-Two of the nine come in a pair, and **step 2's stack detection picks one of each pair, never both.**
-A Rails run reads the Rails lens file and the Rails catalogue; a Phoenix run reads the Phoenix pair.
-Reading the other stack's file costs context and teaches the wrong searches.
+Three of the ten come in pairs, and **you read one of each pair, never both.** Step 2's stack
+detection picks the lens file and the catalogue: a Rails run reads the Rails pair, a Phoenix run the
+Phoenix pair, and reading the other stack's file costs context and teaches the wrong searches. The
+host reference is the same rule one level up — yours, not the other host's.
 
 | File | Read at | For |
 |---|---|---|
+| `references/hosts/claude-code.md` *or* `references/hosts/codex.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
 | `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
@@ -47,13 +60,14 @@ Reading the other stack's file costs context and teaches the wrong searches.
 | `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
 
-Paths are relative to the base directory named at the top of this skill when it loads. That value is
-how you reach the script — `$CLAUDE_PLUGIN_ROOT` is not set in the shell.
+Paths are relative to this skill's base directory; do not rely on a plugin-root environment
+variable such as `$CLAUDE_PLUGIN_ROOT`, which is not set in the shell.
 
-One thing bundled with the plugin is not a file you read: the `accountable-review:claim-falsifier`
-subagent, spawned by name at the end of step 6 at `--effort high`, which is the default, and handed
-one analysis note this run wrote. Its challenges are folded in at step 8. It is addressed, never
-loaded — its instructions are its own, which is the point of putting them in a separate context.
+One bundled file is not one you read: `references/claim-falsifier.md`, the independent reader's
+mandate. At `--effort high`, which is the default, a reader is sent at each analysis note this run
+wrote at the end of step 6, and its challenges are folded in at step 8. You hand that reader the
+mandate's absolute path; you never load it yourself — its instructions are its own, which is the
+point of putting them in a separate context. The host reference owns how the reader is launched.
 
 ## 1. Resolve the target and the effort
 
@@ -93,9 +107,10 @@ loaded — its instructions are its own, which is the point of putting them in a
   context, and those tokens are the run's tokens: measured across three real runs, the pass was
   **17-23% of every cache-read token the run spent**, on 145-216 requests. Both numbers are true and
   they answer different questions — the first is why spawning them does not slow the run down, the
-  second is what they add to the bill. `evals/profile.sh` prints them side by side, and the falsifier
+  second is what they add to the bill. `evals/profile.sh` prints them side by side, and Claude's falsifier
   runs on its own model (`agents/claim-falsifier.md`) so the second number can be bought down without
-  touching the first. **Effort is what decides whether the page is right, and nothing makes a run
+  touching the first. Codex inherits its configured model, and both measurements are from Claude
+  runs. **Effort is what decides whether the page is right, and nothing makes a run
   faster by making the page shorter** — the time goes into tracing consumers at step 5, not into
   writing sections. Three rules:
   - **It produces no section, no marker, no chip and no sentence.** Two pages of the same target at
@@ -160,7 +175,7 @@ loaded — its instructions are its own, which is the point of putting them in a
   going to look for one — and leave `<dir>` holding nothing else, because whatever is in it is what
   gets delivered.
 
-  `ci/generate-review-map.sh`, at the plugin root, is the only caller today. It supplies all four
+  `ci/generate-review-map.sh`, at the plugin root, uses this path for Claude CI. It supplies all four
   flags, checks afterwards that the page names its revision and no longer says it is being written,
   and refuses to deliver one that does.
 - **`--update` re-reads only the commits since the last map.** It takes no value, and it says: a
@@ -522,8 +537,10 @@ second reader whose only job is to break them.
 the whole reason this moved: the pass used to run after the flows were published, so a corrected
 claim had been public for as long as the challenge took to arrive.
 
-**How.** One `accountable-review:claim-falsifier` per note, **all spawned in a single message.**
-This is the one exception to the rule against subagents in § *Hard rules*.
+**How.** One independent reader per note, launched the way **your host reference** says — Claude
+spawns the registered `accountable-review:claim-falsifier` agent, Codex spawns a session subagent —
+**up to the host’s available concurrency.** This is the one exception to the rule against subagents in
+§ *Hard rules*.
 
 **Then keep working — do not wait on them.** They come back as notifications, not as a blocked turn,
 and the parent's job in the meantime is step 7. Measured on a real run: five falsifiers launched over
@@ -537,15 +554,14 @@ cache-read token the run spent** over 145-216 requests — the most expensive th
 after step 5, and invisible in the parent's transcript. That is the cap's real job: six agents is the
 point past which a second reader stops paying for itself.
 
-Spawn them in one message anyway. It costs nothing, it keeps the challenges arriving together rather
-than trickling, and if a future harness does make them block, one message stalls the run once — for
-the slowest — where the same agents one at a time stall it once each. That is not hypothetical: a run
-that reached for a single blocking `Explore` agent paid 997 seconds, 41% of its wall clock, for one
-sequential spawn.
+Launch the selected readers without waiting between launches, up to the host’s concurrency
+limit. Queue any remaining notes and continue drafting. A run that reached for a single blocking
+`Explore` agent paid 997 seconds, 41% of its wall clock, for one sequential spawn.
 
-Give each agent three things and no more: the repository path, `BASE` and `HEAD`, and **the path of
-that one note**. Not the whole set — a falsifier holding every note is one long blocked turn again,
-and it has no way to tell which claims are its to attack.
+Give each agent four things and no more: the absolute path of `references/claim-falsifier.md`, which
+it is asked to read first; the repository path; `BASE` and `HEAD`; and **the path of that one note**.
+Not the whole set — a falsifier holding every note is one long blocked turn again, and it has no way
+to tell which claims are its to attack.
 
 **Cap it at six.** Past that, take the notes carrying the most *affected, not changed* entries and
 the most `inferred` and `uncertain` tiers. Those are the claims a reader cannot check cheaply, which
@@ -832,6 +848,13 @@ draft the one after it. If every checkpoint is drafted and one agent is still ou
 above ran on your own reading of the files — and fold the late challenge in as an `Edit`. **Never
 idle waiting**: the 0.9% holds only because the parent works while they read.
 
+**A launch receipt is not a result.** Before the final publish, account for every reader you sent: a
+challenge folded in, or nothing found, or a reader that failed. If one failed, or delegation was
+unavailable when step 6c ran, follow your host reference's incomplete-pass rule — say in chat which
+note went unchecked, and never treat a partial pass as a completed one. Nothing about that reaches
+the page, which carries no account of how hard it was checked.
+
+
 **A challenge is a claim to verify, not a finding to accept.** This step's first rule applies to the
 falsifier exactly as it applies to you: open the cited file yourself. Then correct the note and the
 checkpoint that draws on it, downgrade the evidence tier, or drop the claim — and do not backfill a
@@ -863,7 +886,10 @@ all of them. Publish early and republish as parts complete: **the same file path
 URL never changes.** The reader can open it at minute two, watch it fill in, and start reading the
 moment the part they need lands.
 
-The mechanics are simply the `Artifact` tool's: republishing the same file path redeploys in place.
+The host reference supplies the delivery mechanics. Claude publishes an Artifact; Codex saves
+portable HTML locally. In Codex, every later “publish” means saving that same local file,
+not calling a publishing tool. `Write` and `Edit` below mean file creation and targeted edits
+with the host’s available tools, not required tool names.
 
 **Non-interactively (`--output`, step 1) there is nothing to publish, and no reader waiting.** The
 stages stop being arrivals and become save points: write each one to `<dir>/index.html` as it
@@ -945,6 +971,17 @@ its finished 82 KB version as one 35,000-token `Write` that re-emitted the first
 — 258 seconds, 56% of everything that run spent streaming output. An intermediate save is one tool
 call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
 anchor you already have.
+
+**Write the markup the way the template writes it, prose included.** Copy its line discipline
+rather than only its classes: opening and closing tags on their own lines, one component per
+block, and **paragraph text wrapped at the width the template wraps it at** — around a hundred
+characters — not run out to one long line per element. Never minify. Two things depend on it.
+A later stage edits a block it has to be able to name, and a paragraph that is one 800-character
+line is one indivisible block. And the page checks scan by line, so markup packed onto fewer
+lines makes them read the wrong region. *Separate lines for fields and components* was the
+earlier wording here and it produced the opposite of what it asked for: read as one line per
+component, it gives every paragraph on a single line, which is the densest legal form of the
+thing the rule is against.
 
 **With `--update` there are no stages and no banner at all** — the page is finished before this run
 started and is finished at every instant of it. The skeleton is not called, the `Revision` cell is
@@ -1173,8 +1210,8 @@ Everything else about writing holds at every stage:
   `<dir>/index.html` instead; the fragments still go in `$W`, and nothing but the page belongs in
   `<dir>`.
 
-Tell the user the URL when stage 1 goes out, say it will fill in, and do not repeat it on every
-republish — one link, mentioned once, then a note when it is complete. With `--output` there is no
+Tell the user the URL (or local file link in Codex) when stage 1 goes out, say it will fill in,
+and do not repeat it on every republish — one link, mentioned once, then a note when it is complete. With `--output` there is no
 URL: say where the file is, once, and nothing more.
 
 ## 10. Complete the page and gate it
@@ -1553,6 +1590,7 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   *analysis note*, which is per flow, and a flow is already a whole behaviour rather than a layer of
   one, so nothing is fragmented that was not already separate. It reads a note this run wrote, never
   the page. It is read-only, it returns challenges rather than page content — you still write every
-  word — and its agents go out in a single message and are not waited on, so the run keeps drafting
-  while they read. Nothing else spawns anything, at any effort level, and a run that reaches for an
+  word — and its agents go out in a single message, up to the host's concurrency limit, and are not
+  waited on, so the run keeps drafting while they read; their results are collected before the final
+  publish. Nothing else spawns anything, at any effort level, and a run that reaches for an
   `Explore` agent to help with step 5 has broken this rule whatever flag it was given.
