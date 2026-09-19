@@ -142,6 +142,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-probe-legit-forms.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-probe-lens-forms.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-probe-lens-forms.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-probe-sandbox-lie.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -518,6 +524,12 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page start-here-orphan-checkpoint.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment start-here-style-comment.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page start-here-style-comment.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment start-here-two-lists.html

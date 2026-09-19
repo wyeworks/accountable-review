@@ -62,6 +62,12 @@
 # and failing a page for being unfinished is the build states' job.
  start-here         | start-here-orphan-checkpoint.html | 0 | no stop pointing at them (cp-b)
  start-here         | agenda-clean.html             | 0 | every checkpoint is reachable from the reading path
+# And the same rule against a page with a HEAD on it. Every other golden here is a bare
+# fragment, which is why this defect lived through the whole corpus: page-skeleton.sh emits a
+# token block whose CSS comment quotes the checkpoint element, marker id included, and the
+# coverage rule counted that sentence as a checkpoint nothing routes to. Every published page
+# carried the warning, which is the state a real warning cannot survive.
+ start-here         | start-here-style-comment.html | 0 | every checkpoint is reachable from the reading path
 # The inventory carrier moved to the evidence foot and data-path moved with it. This row is the
 # POSITIVE case: a page that carries the attribute on a div.c passes, which is what an assertion
 # about where it may NOT sit would otherwise never look at.
@@ -116,6 +122,11 @@
  rails-anchors      | anchors-runner-mutates.html   | 1 | no 'console --sandbox' is named   | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-invented-attribute.html | 1 | absent from the repository      | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-invented-scope.html   | 1 | are not defined in this repository | --repo @GOLD@/searches-repo
+# Its pair, and the one that says where the allowlist's floor is. anchors-invented-scope.html
+# above proves the rule still fires; this proves it does not fire on the probes the lens file
+# tells a run to write. Both are needed: widening an allowlist to stop false accusations is one
+# edit away from widening it until nothing is caught.
+ rails-anchors      | anchors-probe-lens-forms.html | 0 | called by a probe are defined in the repository | --repo @GOLD@/searches-repo
 # The label and the ration. A probe is the one thing on the page a reviewer is invited to PASTE,
 # and its label is all they have to decide from — so absent is a FAIL (nothing names the
 # instrument, which is a safety statement) and thin is a WARN (failing hard teaches a run to

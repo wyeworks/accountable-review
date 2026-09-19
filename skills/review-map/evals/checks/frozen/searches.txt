@@ -142,6 +142,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-probe-legit-forms.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-probe-lens-forms.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-probe-lens-forms.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-probe-sandbox-lie.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -518,6 +524,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page start-here-orphan-checkpoint.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment start-here-style-comment.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page start-here-style-comment.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment start-here-two-lists.html

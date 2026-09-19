@@ -298,6 +298,18 @@ FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
 PASS  section 03 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment anchors-probe-lens-forms.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page anchors-probe-lens-forms.html
+exit=1
+FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
+PASS  section 03 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-probe-sandbox-lie.html
 exit=1
 FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
@@ -1066,6 +1078,22 @@ PASS  entries link into the checkpoints that explain them (3)
 WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+## --fragment start-here-style-comment.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page start-here-style-comment.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-two-lists.html
 exit=1
 PASS  start here: 4 entr(ies), each with a why
@@ -1131,6 +1159,14 @@ WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment t
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --fragment agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 03 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --fragment start-here-style-comment.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
 PASS  section 03 is a single list

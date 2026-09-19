@@ -622,6 +622,32 @@ PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --fragment anchors-probe-lens-forms.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --page anchors-probe-lens-forms.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --fragment anchors-probe-sandbox-lie.html
 exit=0
 PASS  no severity chips
@@ -2252,6 +2278,32 @@ SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 ## --page start-here-orphan-checkpoint.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (5 label(s))
+PASS  data-path is only on ledger rows (5)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --fragment start-here-style-comment.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (5 label(s))
+PASS  data-path is only on ledger rows (5)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+## --page start-here-style-comment.html
 exit=1
 PASS  no severity chips
 PASS  no verdict or approval language
