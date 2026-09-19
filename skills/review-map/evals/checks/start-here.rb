@@ -76,7 +76,16 @@ end
 # Note what this does NOT check: that the stop count tracks the checkpoint count. It must not.
 # Section 03 is a route ordered by conceptual dependency, and one stop routinely serves two
 # judgments while one judgment routinely needs two. report-format.md § Section 3 owns that.
-defined_cps = check.page.scan(/<section class="cp[^>]*id="cp-[^"]+"/)
+# The style block comes off first, and it is not a nicety. page-skeleton.sh emits the whole
+# token block into every page, and one of its CSS comments explains the pending marker with the
+# words `<section class="cp" id="cp-x">` in it. That is a CSS comment rather than an HTML one,
+# so `without_comments` does not reach it, and every page this skill has ever produced was
+# therefore reported as carrying a checkpoint `cp-x` that no stop routes to. A warning that
+# fires on every correct page is worse than no warning: it is the one a reader learns to skip,
+# and this rule's whole job is to be noticed on the rare page that really did orphan a judgment.
+# Verified on five published pages, on both sides of the change that found it.
+defined_cps = check.page.without(open: /<style/, close: %r{</style>})
+                   .scan(/<section class="cp[^>]*id="cp-[^"]+"/)
                    .filter_map { |m| m[/id="(cp-[^"]+)"/, 1] }.uniq
 cp_hrefs = region.scan(/href="#cp-[^"]+"/)
 routed = cp_hrefs.filter_map { |m| m[/#(cp-[^"]+)"/, 1] }.uniq

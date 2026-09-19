@@ -704,6 +704,24 @@ PASS  3 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-lens-forms.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  4 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page anchors-probe-lens-forms.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  4 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-probe-sandbox-lie.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
@@ -1452,6 +1470,24 @@ PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment start-here-style-comment.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page start-here-style-comment.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment start-here-two-lists.html
 exit=0
 SKIP  doc links: none on this input
@@ -1684,6 +1720,16 @@ PASS  no probe targets production
 PASS  every probe is read-only
 PASS  all 1 constant(s) named by a probe exist in the repository
 FAIL  1 scope(s) or method(s) a probe calls are not defined in this repository — a plausible scope name is the likeliest thing an invented probe gets wrong: published 
+## --fragment anchors-probe-lens-forms.html --repo searches-repo
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  4 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+PASS  all 1 constant(s) named by a probe exist in the repository
+PASS  2 scope(s) or method(s) called by a probe are defined in the repository
 ## --fragment anchors-probe-label-thin.html --repo searches-repo
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
