@@ -16,11 +16,12 @@ Built by **WyeWorks**.
 
 ## Contents 📑
 
-- [Why?](#why-)
-- [AI code review ≠ AI-assisted code review](#ai-code-review--ai-assisted-code-review---‍)
-- [Diffs are necessary. They are no longer sufficient.](#diffs-are-necessary-they-are-no-longer-sufficient-)
-- [Review behaviours, not file lists](#review-behaviours-not-file-lists-️)
-- [The most important code may not have changed](#the-most-important-code-may-not-have-changed-)
+- [Motivation](#motivation-)
+  - [Comprehension debt](#comprehension-debt)
+  - [AI code review ≠ AI-assisted code review](#ai-code-review--ai-assisted-code-review)
+  - [Diffs are necessary. They are no longer sufficient.](#diffs-are-necessary-they-are-no-longer-sufficient)
+  - [Review behaviours, not file lists](#review-behaviours-not-file-lists)
+  - [The most important code may not have changed](#the-most-important-code-may-not-have-changed)
 - [What is a Review Map?](#what-is-a-review-map-)
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
@@ -30,21 +31,26 @@ Built by **WyeWorks**.
   - [How hard it works](#how-hard-it-works)
   - [Onboarding a reviewer into the stack](#onboarding-a-reviewer-into-the-stack)
   - [When the branch keeps moving](#when-the-branch-keeps-moving)
-- [Evidence over confidence](#evidence-over-confidence-)
-- [What a Review Map cannot do](#what-a-review-map-cannot-do-️)
-- [Rails-first](#rails-first-️‍)
-- [Example Review Map](#example-review-map-️)
+- [What to expect from a map](#what-to-expect-from-a-map-)
+  - [Evidence over confidence](#evidence-over-confidence)
+  - [What a Review Map cannot do](#what-a-review-map-cannot-do)
+  - [Rails first, Phoenix second](#rails-first-phoenix-second)
+  - [Example Review Map](#example-review-map)
 - [CI integration](#ci-integration-)
   - [What you get](#what-you-get)
-- [Technical overview](#technical-overview-)
-- [Configuration](#configuration-️)
-- [Contributing](#contributing-)
-- [License](#license-)
-- [About WyeWorks](#about-wyeworks)
+- [Reference](#reference-)
+  - [Technical overview](#technical-overview)
+  - [Configuration](#configuration)
+- [About the project](#about-the-project-)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [WyeWorks](#wyeworks)
 
 ---
 
-## Why? ⚡
+## Motivation ⚡
+
+### Comprehension debt
 
 AI coding tools can produce large changes much faster than teams can absorb them.
 
@@ -68,9 +74,7 @@ and more comprehension, rather than one bought with the other:
 
 > **Move faster with AI. Stay in control.**
 
----
-
-## AI code review ≠ AI-assisted code review 🤖 + 👩‍💻
+### AI code review ≠ AI-assisted code review
 
 **AI code review** is great at asking:
 
@@ -97,9 +101,7 @@ No fake confidence badge.
 Human judgment stays final. A page good enough to approve from without reading the code would be a
 failure — the reviewer would be holding a verdict instead of a mental model.
 
----
-
-## Diffs are necessary. They are no longer sufficient. 🔍
+### Diffs are necessary. They are no longer sufficient.
 
 Diffs are excellent for reviewing code line by line.
 
@@ -119,9 +121,7 @@ What must the team understand to maintain it?
 
 A **Review Map** adds that layer.
 
----
-
-## Review behaviours, not file lists 🗺️
+### Review behaviours, not file lists
 
 A diff is organized by files.
 
@@ -154,9 +154,7 @@ judgments the change asks of you, and where to look to make each one. Persistenc
 contract and the frontend boundary get no sections of their own, on purpose: one behaviour crosses
 all three, and giving each its own section means describing that behaviour three times.
 
----
-
-## The most important code may not have changed 👀
+### The most important code may not have changed
 
 A PR can change the meaning of code without changing its lines.
 
@@ -443,7 +441,9 @@ regenerates from scratch and tells you which one it hit.
 
 ---
 
-## Evidence over confidence 🔬
+## What to expect from a map 🔬
+
+### Evidence over confidence
 
 The tool separates what is known from what is inferred.
 
@@ -465,7 +465,7 @@ Every claim also carries a `file:line` into your repository, and by default a se
 those claims before the page is finished (see [Usage](#usage-) → *effort*).
 
 Nor does the page claim to have found everything — see
-[What a Review Map cannot do](#what-a-review-map-cannot-do-️) below. It never reads as a clean bill of
+[What a Review Map cannot do](#what-a-review-map-cannot-do) below. It never reads as a clean bill of
 health, and it never carries a boilerplate disclaimer saying so either: the limits are the same on
 every Review Map, so they are written down once, here, rather than reprinted under a heading you have
 already read a dozen times.
@@ -474,9 +474,7 @@ The goal is not to sound confident.
 
 The goal is to help the reviewer investigate the change.
 
----
-
-## What a Review Map cannot do 🌫️
+### What a Review Map cannot do
 
 A Review Map is written by a model reading your repository. That is what lets it trace a consequence
 into code the diff never opened, and it is also the honest limit on the page.
@@ -499,9 +497,7 @@ into code the diff never opened, and it is also the honest limit on the page.
 is what the page's depth is calibrated against. Other models will trade cost for reach differently —
 try a few against your own codebase and keep the one whose maps you actually trust.
 
----
-
-## Rails-first ❤️‍🔥
+### Rails first, Phoenix second
 
 The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
 behaviour often emerges from several pieces working together:
@@ -545,9 +541,7 @@ complete but **unverified**, and until its verification run happens it withholds
 Elixir page anchors with probes and prose and emits no documentation URL — a narrower page, not a
 broken one, and the same fail-closed rule the Rails catalogue applies per row.
 
----
-
-## Example Review Map 🖼️
+### Example Review Map
 
 No public example is linked yet — the pages produced so far are private artifacts of real client
 pull requests. The fastest way to see one is to run the skill against a branch of your own; a
@@ -653,7 +647,9 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 
 ---
 
-## Technical overview 🧩
+## Reference 🧩
+
+### Technical overview
 
 | | |
 | --- | --- |
@@ -670,9 +666,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
 | **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 
----
-
-## Configuration 🛠️
+### Configuration
 
 Nothing is required, and that is deliberate: every setting is a thing that can go stale against the
 repository it describes.
@@ -723,7 +717,9 @@ wrong, that is a bug worth reporting.
 
 ---
 
-## Contributing 🤝
+## About the project 🤝
+
+### Contributing
 
 Issues and pull requests are welcome. To run the plugin from a checkout without installing it:
 
@@ -746,15 +742,11 @@ judging a wording change against planted findings.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the layout, the eval loop and the release process.
 
----
-
-## License 📄
+### License
 
 [MIT](LICENSE).
 
----
-
-## About WyeWorks
+### WyeWorks
 
 `accountable-review` is an open-source project by **WyeWorks**.
 
