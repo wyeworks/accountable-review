@@ -2,10 +2,9 @@
 
 > [!NOTE]
 > **1.0.0 — use it on real pull requests.** The page format and the procedure behind it are
-> settled. Installation is still from a checkout, since the marketplace listing is not live yet, so
-> `git pull` is how you take an update and a tag is how you hold one back. What a Review Map does
-> not claim to do is not a version number away — see
-> [What a Review Map cannot do](#what-a-review-map-cannot-do-).
+> settled, and it installs from the WyeWorks marketplace in two commands (see
+> [Installation](#installation-)). What a Review Map does not claim to do is not a version number
+> away — see [What a Review Map cannot do](#what-a-review-map-cannot-do-).
 
 > **AI-assisted code review for teams that want to move faster with coding agents without losing control of their codebase.**
 
@@ -335,25 +334,39 @@ Our goal is simple:
 
 ### Claude Code
 
-Until the marketplace listing is live, point Claude Code at a checkout. Clone the repository:
+Add the WyeWorks marketplace and install, from inside Claude Code:
+
+```text
+/plugin marketplace add wyeworks/claude-plugins
+/plugin install accountable-review@wyeworks
+```
+
+or from a terminal:
+
+```bash
+claude plugin marketplace add wyeworks/claude-plugins
+claude plugin install accountable-review@wyeworks
+```
+
+Restart, and the skills are available in every project as `/accountable-review:review-map` and
+`/accountable-review:setup-ci`. `claude plugin update accountable-review@wyeworks` takes the next
+release; you only receive one when the version in the plugin's manifest moves, so an update is
+something you ask for.
+
+Add `--scope project` to both commands to declare the plugin in a repository's own settings, so
+everyone working on it gets the same one.
+
+**To run it from a checkout instead** — which is what you want if you are changing the plugin, since
+`/reload-plugins` then picks up your edits without restarting:
 
 ```bash
 git clone https://github.com/wyeworks/accountable-review.git
-```
-
-Then start Claude Code from the repository you want to review, passing the checkout with
-`--plugin-dir`:
-
-```bash
 cd /path/to/your/app
 claude --plugin-dir /path/to/accountable-review
 ```
 
-The skills are available as `/accountable-review:review-map` and `/accountable-review:setup-ci` for
-that session. Nothing is installed, so `git pull` in the checkout is how you update.
-
-Installation from the Claude Code plugin marketplace — one `/plugin install`, no checkout to keep
-around — is coming soon.
+Nothing is installed that way, so `git pull` in the checkout is how you update, and the skills exist
+only for sessions started with that flag.
 
 ### Codex
 
