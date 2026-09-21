@@ -157,7 +157,7 @@
                             localStorage, no counters. All three are presentation:
                             delete the block and the page still reads
 -->
-<title>Always require typing username when self-deleting account Review</title>
+<title>Add HistoricalOwnership foundation for tracking gem ownership history Review</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1353,17 +1353,18 @@ figcaption strong { color: var(--ink-3); }
   <nav class="rail" aria-label="Sections">
     <div class="rail-id">
       <div class="lbl" style="letter-spacing:.18em">Review map</div>
-      <div class="tick">fixes/self-deletion-username</div>
-      <div class="cite"><a class="cite" href="https://github.com/mastodon/mastodon/pull/40576">PR #40576</a> &middot; 3 files</div>
+      <div class="tick">nev/6534/historical-ownership-foundation</div>
+      <div class="cite"><a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699">PR #6699</a> &middot; 11 files</div>
     </div>
 
     <div class="rail-links">
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
       <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
-      <a class="sub" data-rail="cp-a" href="#cp-a">Is byte-for-byte equality the right bar?</a>
-      <a class="sub" data-rail="cp-b" href="#cp-b">Does the field need the mobile attributes?</a>
-      <a class="sub" data-rail="cp-c" href="#cp-c">Can the user tell what to change?</a>
-      <a class="sub" data-rail="cp-d" href="#cp-d">Where should the challenge live?</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">Should an organization transfer end a tenure?</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">Is the backfill safe against live writes?</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">Is one row per tenure the right grain?</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">Are the invariants enforced where needed?</a>
+      <a class="sub" data-rail="cp-e" href="#cp-e">Should the ordering live in Access?</a>
       <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
       <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
     </div>
@@ -1374,360 +1375,416 @@ figcaption strong { color: var(--ink-3); }
 
     <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
       <div class="lbl lbl-wide" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px">
-        <span>mastodon</span><span style="color:var(--rule-strong)">/</span><span>mastodon</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/mastodon/mastodon/pull/40576">PR #40576</a><span style="color:var(--rule-strong)">&middot;</span><span>ClearlyClaire</span>
+        <span>rubygems</span><span style="color:var(--rule-strong)">/</span><span>rubygems.org</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/rubygems/rubygems.org/pull/6699">PR #6699</a><span style="color:var(--rule-strong)">&middot;</span><span>Eric Mueller</span>
       </div>
 
-      <h1>Self-deletion now asks for the username as well as the password</h1>
+      <h1>Add HistoricalOwnership foundation for tracking gem ownership history</h1>
 
-      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">The confirmation challenge on
-        <code>/settings/delete</code> changes from one credential to two: the account's username is
-        now required from every user, and the password is required in addition wherever one is
-        stored.</p>
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">
+        A new table records that a user once owned a gem, kept in step with the live
+        <code>ownerships</code> table by four callbacks and seeded by a maintenance task.
+      </p>
 
       <div class="gt gt-meta" style="margin-top:44px">
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">fixes/self-deletion-username <span style="color:var(--fainter)">&rarr;</span> main</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">977f46e <span>&rarr;</span> ab1e731</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">bugfix</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">1</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">3</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">2 / 1</div></div>
+        <div class="c">
+          <div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div>
+          <div class="path" style="font-size:12px">nev/6534/historical-ownership-foundation <span style="color:var(--fainter)">&rarr;</span> master</div>
+          <div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">b637b16 <span>&rarr;</span> 9d5892f</div>
+        </div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">feature</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">6</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">11</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test / gen</div><div class="path" style="font-size:12px">6 / 4 / 1</div></div>
       </div>
     </header>
 
     <section id="changed">
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
-      <h2 style="max-width:30ch;margin-bottom:18px">One credential became two, for everyone who has two</h2>
+      <h2 style="max-width:30ch;margin-bottom:18px">Every confirmed gem ownership now leaves a durable record of who held it</h2>
 
-      <p>Deleting your own account was confirmed by whichever single credential the installation held
-        for you: your password, or &mdash; when Mastodon stores none &mdash; your username. It is now
-        confirmed by the username always, plus the password wherever one exists. The rewritten guard
-        checks the username first and returns early when it does not match; the password check that
-        follows is short-circuited by <code>encrypted_password.blank?</code>, so accounts with no
-        stored password face the same username-only challenge as before and no population loses a
-        factor. The view was reordered to match: the username field is rendered unconditionally and
-        the password field only when there is a password. The description gives the motivation
-        &mdash; people reusing one password across accounts, handed from a mobile app into a browser
-        signed in as someone else, were deleting the wrong account.</p>
-
-      <dl class="ba">
-        <dt>Before</dt><dd>One field. The password, or the username for accounts Mastodon stores no
-          password for.</dd>
-        <dt class="now">After</dt>
-        <dd class="now">The username always, and the password as well wherever the account has one.</dd>
-      </dl>
+      <p>
+        A new <code>historical_ownerships</code> table records that a user once held a gem, at what
+        highest role, and between which two moments. Four callbacks on <code>Ownership</code> keep it
+        in step with the live table: one opens a row when an ownership is created already-confirmed
+        or is later accepted, one ratchets that row's role upward on promotion and ignores demotions,
+        and one stamps <code>removed_at</code> on destroy. <code>Rubygem#disown</code> deletes
+        ownerships without running callbacks, so it closes its rows explicitly. A maintenance task
+        backfills one open row per currently-confirmed ownership.
+      </p>
+      <p>
+        Nothing reads the new table yet &mdash; the description says this is the first of three
+        slices of #6534, and that the backfill has to finish before the other two are merge-safe.
+        The partial unique index on <code>(rubygem_id, user_id) WHERE removed_at IS NULL</code> is
+        what every write path here depends on.
+      </p>
     </section>
 
     <section id="attention" style="padding-top:48px">
       <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
       <h2 style="margin-bottom:18px">What needs your attention</h2>
-      <p>Four judgments, all of them about the half of the challenge that is new to most users: what
-        string counts as a match, what the browser will send, what the user is told when it fails, and
-        where the comparison lives. They are in the order to think about them.</p>
+      <p>Five judgments. The first four turn on whether the new table stays true to the live
+        <code>ownerships</code> table under paths this PR did not touch; the last is about where the
+        role ordering belongs. The order is the order to think about them.</p>
 
       <section class="cp" id="cp-a">
         <span class="lbl lbl-wide">Checkpoint A</span>
-        <h3>Is byte-for-byte equality the right bar for the typed username?</h3>
+        <h3>Should moving a gem into an organization end its owners' recorded tenure?</h3>
 
-        <p>The comparison is Ruby's <code>String#==</code>, so the typed value has to match the stored
-          one exactly. That comparison is not new &mdash; the old passwordless branch used it too
-          &mdash; but it was previously reached only by users on installations that store no password,
-          and it is now on the path every user takes. Mastodon normalizes a username in two places and
-          the challenge uses neither: <code>Account</code> squishes whitespace out of the stored value
-          on save, and every lookup in the application goes through a scope that lowercases both sides
-          <span class="tier tier-unc">from unchanged code</span>. So an account registered as
-          <code>Gargron</code> is not confirmed by <code>gargron</code>, nor by <code>@Gargron</code>
-          as the profile page spells it, nor by a value carrying a trailing space from a copy-paste.
-          Decide whether that strictness is the intended bar or an accident of where the comparison
-          came from.</p>
+        <p>
+          <code>close_historical_ownership</code> stamps <code>removed_at</code> on every
+          <code>Ownership</code> destroy, with no test of who is destroying it. Both organization
+          paths destroy exactly the ownerships of the users who are <em>joining</em> the
+          organization, after the <code>Membership</code> rows are created and the gem has taken its
+          <code>organization_id</code> &mdash; because access now comes from the organization
+          <span class="tier tier-unc">from unchanged code</span>. Each of those users is therefore
+          recorded as having stopped owning the gem at the moment of transfer, so
+          <code>HistoricalOwnership.current</code> omits people who still have access and
+          <code>.alumni</code> claims people who never left.
+        </p>
 
         <ul class="lookat">
           <li>
-            <b>The rewritten guard</b>
-            <span>the username check runs first and returns early; the password half is what the
-              <code>blank?</code> disjunction short-circuits</span>
-            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R31-R35">app/controllers/settings/deletes_controller.rb:31-35</a>
-<details class="excerpt excerpt--diff">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/controllers/settings/deletes_controller.rb:29-37</span>
-    <span class="tag">Changed</span>
-    <span class="ex-why">the guard order: username first, then password only if one exists</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/controllers/settings/deletes_controller.rb" style="counter-reset: exl 28"><span class="l"><span class="sig"> </span>  end</span>
-<span class="l"><span class="sig"> </span></span>
-<span class="l"><span class="sig"> </span>  def challenge_passed?</span>
-<span class="l del"><span class="sig">-</span>    if current_user.encrypted_password.blank?</span>
-<span class="l del"><span class="sig">-</span>      current_account.username == resource_params[:username]</span>
-<span class="l del"><span class="sig">-</span>    else</span>
-<span class="l del"><span class="sig">-</span>      current_user.valid_password?(resource_params[:password])</span>
-<span class="l del"><span class="sig">-</span>    end</span>
-<span class="l add"><span class="sig">+</span>    return false unless current_account.username == resource_params[:username]</span>
-<span class="l add"><span class="sig">+</span></span>
-<span class="l add"><span class="sig">+</span>    current_user.encrypted_password.blank? || current_user.valid_password?(resource_params[:password])</span>
-<span class="l"><span class="sig"> </span>  end</span>
-<span class="l"><span class="sig"> </span></span>
-<span class="l"><span class="sig"> </span>  def destroy_account!</span>
-</pre>
-    <p class="ex-src">Changed at <a class="cite" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R29-R37">app/controllers/settings/deletes_controller.rb:29-37</a></p>
-  </div>
-</details>
+            <b>The unconditional close</b>
+            <span>one <code>update_all</code> over whatever row is open, on any destroy</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R155-R159">app/models/ownership.rb:155-159</a>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">app/models/ownership.rb:155-159</span>
+                <span class="tag">At head</span>
+                <span class="ex-why">the close callback runs on every Ownership destroy, whoever is destroying it</span>
+              </summary>
+              <div class="ex-body">
+            <pre data-src="app/models/ownership.rb" data-lang="ruby" style="counter-reset: exl 154"><span class="l">  # Intentionally tolerant of not finding a record to update</span>
+            <span class="l">  def close_historical_ownership</span>
+            <span class="l">    HistoricalOwnership.where(rubygem_id:, user_id:, removed_at: nil)</span>
+            <span class="l">      .update_all(removed_at: Time.current)</span>
+            <span class="l">  end</span>
+            </pre>
+                <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L155-L159">app/models/ownership.rb:155-159</a></p>
+              </div>
+            </details>
           </li>
           <li>
-            <b>How the app matches a username</b>
-            <span>the scope behind <code>Account.find_local</code>, the uniqueness validator, LDAP
-              sign-in and the ActivityPub tag manager &mdash; lowering both sides
+            <b>Transfer's ownership sweep</b>
+            <span>runs at <code>transfer!</code>'s step 4, after the memberships and the
+              <code>organization_id</code> are already in place
               <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165">app/models/account.rb:165</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/models/account.rb:165-165</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">the scope every username lookup in the app goes through, lowering both sides</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/models/account.rb" data-lang="ruby" style="counter-reset: exl 164"><span class="l">  scope :with_username, -&gt;(value) { value.is_a?(Array) ? where(arel_table[:username].lower.in(value.map { |x| x.to_s.downcase })) : where(arel_table[:username].lower.eq(value.to_s.downcase)) }</span>
-</pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165-L165">app/models/account.rb:165-165</a></p>
-  </div>
-</details>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">app/models/rubygem_transfer.rb:64-69</span>
+                <span class="tag">Unchanged</span>
+                <span class="ex-why">the destroy_all that ends per-gem ownership for users who keep access through the organization</span>
+              </summary>
+              <div class="ex-body">
+            <pre data-src="app/models/rubygem_transfer.rb" data-lang="ruby" style="counter-reset: exl 63"><span class="l">  def remove_ownerships_for_joining_members</span>
+            <span class="l">    invited_users = invites.includes(:user).reject { |invite| invite.role.nil? || invite.outside_contributor? }.map(&amp;:user)</span>
+            <span class="l">    invited_users &lt;&lt; created_by</span>
+            <span class="l"></span>
+            <span class="l">    Ownership.includes(:rubygem, :user, :api_key_rubygem_scopes).where(user: invited_users, rubygem: selected_rubygems).destroy_all</span>
+            <span class="l">  end</span>
+            </pre>
+                <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a></p>
+              </div>
+            </details>
           </li>
           <li>
-            <b>The stored side's own normalization</b>
-            <span>usernames are squished on save, so a stored value never carries the surrounding
-              whitespace a typed one may <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L143">app/models/account.rb:143</a>
+            <b>The same sweep on onboarding</b>
+            <span>the second entry point into the same consequence, unchanged by this PR
+              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a>
           </li>
           <li>
-            <b>What the new expectations pin</b>
-            <span>right username with a wrong password, and a wrong username with the right password,
-              both fail; no case, whitespace or <code>@</code>-prefix variant is exercised</span>
-            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-e0ef784ee56f406a10f79cc7002ceaf87ca8f26fb6cac877451ddecf72354b07R18-R33">spec/system/settings/deletes_spec.rb:18-33</a>
+            <b>What the destroy tests pin</b>
+            <span>one owner of two, a missing row, and a rescinded invite &mdash; all via
+              <code>safe_destroy</code> on a single ownership</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R223-R264">test/models/ownership_test.rb:223-264</a>
           </li>
         </ul>
 
-        <span class="lbl">rails runner &middot; read-only &middot; whether the app's own username lookup lowercases both sides</span>
-<pre class="probe">bin/rails runner 'puts Account.with_username("Gargron").to_sql'</pre>
+        <div class="gap"><b>GAP</b><span>No test drives <code>RubygemTransfer#transfer!</code> or
+          <code>OrganizationOnboarding#onboard!</code> against <code>historical_ownerships</code>.</span></div>
 
-        <p class="open"><b>Open question</b> Whether a user who types their own username in the wrong
-          case should be refused, given that every other lookup in the application accepts it.</p>
+        <p class="open"><b>Open question</b> Is an organization transfer the end of a tenure, or a
+          change in how the same tenure is held?</p>
       </section>
 
       <section class="cp" id="cp-b">
         <span class="lbl lbl-wide">Checkpoint B</span>
-        <h3>Does the field now shown to everyone need the attributes the handle inputs beside it carry?</h3>
+        <h3>Is the backfill safe to run while the application is writing?</h3>
 
-        <p>The moved input declares <code>autocomplete: 'off'</code> and nothing else, so an iOS
-          keyboard will capitalize its first letter and autocorrect is free to substitute a word
-          &mdash; against a comparison that accepts neither (Checkpoint A). This codebase knows the
-          attributes: the account-migration views pass <code>autocapitalize: 'none', autocorrect:
-          'off'</code> on the field where you type a handle. The self-confirmation username field in
-          those same views does not, and that has been tolerable because it is behind
-          <code>- else</code> and only passwordless users ever see it
-          <span class="tier tier-unc">from unchanged code</span>. This change takes the same
-          unattributed input out from behind that branch and puts it in front of every user, on the
-          flow the description says mobile users reach through a handed-off browser. Decide whether
-          the raised exposure changes the answer.</p>
+        <p>
+          <code>doc/maintenance-tasks.md</code> asks a task that races the application to preserve
+          newer writes and to skip records deleted after collection
+          <span class="tier tier-unc">from unchanged code</span>. <code>process</code> writes
+          <code>role</code> and <code>first_owned_at</code> from the record its batch materialised,
+          so a promotion landing after that load is written back at the old role &mdash; the ratchet
+          callback ran first, against a row that did not exist yet, and matched nothing. An ownership
+          <em>destroyed</em> after that load is the sharper case: its own
+          <code>close_historical_ownership</code> found nothing open, and <code>process</code> then
+          creates a row that nothing will ever close
+          <span class="tier tier-inf">inferred</span>.
+        </p>
 
         <ul class="lookat">
           <li>
-            <b>The moved input</b>
-            <span>what it declares, and that the password field below it is what stayed conditional</span>
-            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R23">app/views/settings/deletes/show.html.haml:23</a>
-<details class="excerpt excerpt--diff">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/views/settings/deletes/show.html.haml:20-29</span>
-    <span class="tag">Changed</span>
-    <span class="ex-why">what the username input declares, and what it does not</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/views/settings/deletes/show.html.haml" style="counter-reset: exl 19"><span class="l"><span class="sig"> </span></span>
-<span class="l"><span class="sig"> </span>  %hr.spacer/</span>
-<span class="l"><span class="sig"> </span></span>
-<span class="l add"><span class="sig">+</span>  = f.input :username, wrapper: :with_block_label, input_html: { autocomplete: 'off' }, hint: t('deletes.confirm_username')</span>
-<span class="l add"><span class="sig">+</span></span>
-<span class="l"><span class="sig"> </span>  - if current_user.encrypted_password.present?</span>
-<span class="l"><span class="sig"> </span>    = f.input :password, wrapper: :with_block_label, input_html: { autocomplete: 'current-password' }, hint: t('deletes.confirm_password')</span>
-<span class="l del"><span class="sig">-</span>  - else</span>
-<span class="l del"><span class="sig">-</span>    = f.input :username, wrapper: :with_block_label, input_html: { autocomplete: 'off' }, hint: t('deletes.confirm_username')</span>
-<span class="l"><span class="sig"> </span></span>
-<span class="l"><span class="sig"> </span>  .actions</span>
-<span class="l"><span class="sig"> </span>    = f.button :button, t('deletes.proceed'), type: :submit, class: 'negative'</span>
-</pre>
-    <p class="ex-src">Changed at <a class="cite" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R20-R29">app/views/settings/deletes/show.html.haml:20-29</a></p>
-  </div>
-</details>
+            <b>The process body</b>
+            <span>every attribute comes from the in-memory <code>ownership</code>, not from a reload</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R14-R19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</span>
+                <span class="tag">Added</span>
+                <span class="ex-why">process reads the ownership it was handed, and find_or_create_by! is a SELECT then an INSERT</span>
+              </summary>
+              <div class="ex-body">
+            <pre data-src="app/tasks/maintenance/backfill_historical_ownerships_task.rb" data-lang="ruby" style="counter-reset: exl 13"><span class="l">  def process(ownership)</span>
+            <span class="l">    HistoricalOwnership.find_or_create_by!(rubygem_id: ownership.rubygem_id, user_id: ownership.user_id, removed_at: nil) do |historical|</span>
+            <span class="l">      historical.role = ownership.role</span>
+            <span class="l">      historical.first_owned_at = ownership.confirmed_at</span>
+            <span class="l">    end</span>
+            <span class="l">  end</span>
+            </pre>
+                <p class="ex-src">Added at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/tasks/maintenance/backfill_historical_ownerships_task.rb#L14-L19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a></p>
+              </div>
+            </details>
           </li>
           <li>
-            <b>The same pair of fields in the migration flow</b>
-            <span>the handle input carries both attributes; the username confirmation two lines down
-              carries neither, and is reached only when there is no password
+            <b>The safety rules this task answers to</b>
+            <span>preserve newer writes, skip legitimately deleted records, make reruns harmless
               <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/settings/migrations/show.html.haml#L47-L53">app/views/settings/migrations/show.html.haml:47-53</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/views/settings/migrations/show.html.haml:47-53</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">the handle input carries the mobile attributes; the self-confirmation username input beside it does not</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/views/settings/migrations/show.html.haml" data-lang="xml" style="counter-reset: exl 46"><span class="l">      = f.input :acct, wrapper: :with_block_label, input_html: { autocapitalize: 'none', autocorrect: 'off' }, disabled: on_cooldown?</span>
-<span class="l"></span>
-<span class="l">    .fields-row__column.fields-group.fields-row__column-6</span>
-<span class="l">      - if current_user.encrypted_password.present?</span>
-<span class="l">        = f.input :current_password, wrapper: :with_block_label, input_html: { autocomplete: 'current-password' }, required: true, disabled: on_cooldown?</span>
-<span class="l">      - else</span>
-<span class="l">        = f.input :current_username, wrapper: :with_block_label, input_html: { autocomplete: 'off' }, required: true, disabled: on_cooldown?</span>
-</pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/settings/migrations/show.html.haml#L47-L53">app/views/settings/migrations/show.html.haml:47-53</a></p>
-  </div>
-</details>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/doc/maintenance-tasks.md#L7-L9">doc/maintenance-tasks.md:7-9</a>
+          </li>
+          <li>
+            <b>What the task tests cover</b>
+            <span>collection bounds, one create and one no-op rerun &mdash; none of the four cases
+              &sect; Testing names</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70R6-R50">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb:6-50</a>
           </li>
         </ul>
 
-        <div class="gap"><b>GAP</b><span>The system spec drives the field through Capybara, which
-          types the value verbatim; nothing in the suite can observe what a mobile keyboard would
-          send.</span></div>
+        <p class="open"><b>Open question</b> Is the task meant to run against live traffic, or during
+          a window with ownership writes paused?</p>
       </section>
 
       <section class="cp" id="cp-c">
         <span class="lbl lbl-wide">Checkpoint C</span>
-        <h3>After a failed attempt, can the user tell what to change?</h3>
+        <h3>Is one row per tenure the grain the next two slices need?</h3>
 
-        <p>The failure branch is unchanged and says <em>The information you entered was not correct</em>
-          for any cause. With one field that was unambiguous; with two it no longer names which half
-          failed, and because the branch redirects rather than re-rendering, the <code>show</code>
-          action builds a fresh <code>Form::DeleteConfirmation</code> and both inputs come back empty
-          <span class="tier tier-unc">from unchanged code</span>. A user who mistyped their username
-          retypes their password too, with nothing to tell them the password was never the problem.
-          The session is already authenticated, so there is no third party the ambiguity protects the
-          information from &mdash; which makes this a decision about whether the vagueness is wanted
-          here, not a disclosure question. The consequence is drawn as Impact path A.</p>
+        <p>
+          The unique index constrains only the <em>open</em> row, so closed rows accumulate freely:
+          a user who owns a gem, is removed, and owns it again ends with two, and the second row's
+          <code>first_owned_at</code> holds the start of the second tenure rather than the first.
+          <code>current</code> and <code>alumni</code> therefore answer &ldquo;is this tenure
+          open&rdquo;, not &ldquo;has this user ever owned this gem&rdquo;, which needs a
+          <code>distinct</code> across both. The role ratchet is per tenure too, so a user who was an
+          owner, left, and returned as a maintainer reads as a maintainer.
+        </p>
 
         <ul class="lookat">
           <li>
-            <b>The failure branch and the fresh form</b>
-            <span>one alert for both causes, then a redirect that discards what was typed</span>
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L12-L19">app/controllers/settings/deletes_controller.rb:12-19</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/controllers/settings/deletes_controller.rb:12-19</span>
-    <span class="tag">At head</span>
-    <span class="ex-why">the failure branch: one alert for both fields, delivered by redirect</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/controllers/settings/deletes_controller.rb" data-lang="ruby" style="counter-reset: exl 11"><span class="l">  def destroy</span>
-<span class="l">    if challenge_passed?</span>
-<span class="l">      destroy_account!</span>
-<span class="l">      redirect_to new_user_session_path, notice: I18n.t('deletes.success_msg')</span>
-<span class="l">    else</span>
-<span class="l">      redirect_to settings_delete_path, alert: I18n.t('deletes.challenge_not_passed')</span>
-<span class="l">    end</span>
-<span class="l">  end</span>
-</pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L12-L19">app/controllers/settings/deletes_controller.rb:12-19</a></p>
-  </div>
-</details>
+            <b>The open-row constraint</b>
+            <span>unique only where <code>removed_at IS NULL</code>, with no constraint on the pair
+              itself</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-cbf8b25d6d853acf58fa9057841f407d29ffe90649c75cf9e3f51b2d6e3aa1d3R368-R380">db/schema.rb:368-380</a>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">db/schema.rb:368-380</span>
+                <span class="tag">At head</span>
+                <span class="ex-why">one open row per pair is a partial index, not a constraint on the pair</span>
+              </summary>
+              <div class="ex-body">
+            <pre data-src="db/schema.rb" data-lang="ruby" style="counter-reset: exl 367"><span class="l">  create_table "historical_ownerships", force: :cascade do |t|</span>
+            <span class="l">    t.datetime "created_at", null: false</span>
+            <span class="l">    t.datetime "first_owned_at", null: false</span>
+            <span class="l">    t.datetime "private_at"</span>
+            <span class="l">    t.datetime "removed_at"</span>
+            <span class="l">    t.integer "role", null: false</span>
+            <span class="l">    t.bigint "rubygem_id", null: false</span>
+            <span class="l">    t.datetime "updated_at", null: false</span>
+            <span class="l">    t.bigint "user_id", null: false</span>
+            <span class="l">    t.index ["rubygem_id", "user_id"], name: "index_historical_ownerships_on_rubygem_id_and_user_id", unique: true, where: "(removed_at IS NULL)"</span>
+            <span class="l">    t.index ["rubygem_id"], name: "index_historical_ownerships_on_rubygem_id"</span>
+            <span class="l">    t.index ["user_id"], name: "index_historical_ownerships_on_user_id"</span>
+            <span class="l">  end</span>
+            </pre>
+                <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/db/schema.rb#L368-L380">db/schema.rb:368-380</a></p>
+              </div>
+            </details>
           </li>
           <li>
-            <b>The alert's wording</b>
-            <span>a pre-existing key, already translated everywhere, written when there was one field
-              <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/config/locales/en.yml#L1518">config/locales/en.yml:1518</a>
+            <b>Where the second row comes from</b>
+            <span><code>find_or_create_by!</code> keys on <code>removed_at: nil</code>, so a closed
+              row can never match and a new one is created</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R144">app/models/ownership.rb:139-144</a>
           </li>
           <li>
-            <b>Both fields on the page at once</b>
-            <span>the hint under each is per-field, so the form promises specificity the failure
-              message does not deliver</span>
-            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R23-R26">app/views/settings/deletes/show.html.haml:23-26</a>
+            <b>The two scopes the next slices will read</b>
+            <span>both partition by <code>removed_at</code> alone, neither groups by user and gem</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R11-R12">app/models/historical_ownership.rb:11-12</a>
           </li>
         </ul>
 
-        <p class="open"><b>Open question</b> Whether the single generic alert is deliberate, or simply
-          what the one-field form left behind.</p>
+        <div class="gap"><b>GAP</b><span>No test walks the own &rarr; remove &rarr; own-again cycle,
+          so nothing pins how many rows it leaves or what is in them.</span></div>
+
+        <p class="open"><b>Open question</b> Is <code>first_owned_at</code> meant to be the first
+          tenure's start across a user's whole history, which the column name reads as and the write
+          does not produce?</p>
       </section>
 
       <section class="cp" id="cp-d">
         <span class="lbl lbl-wide">Checkpoint D</span>
-        <h3>Should the challenge live on <code>Form::DeleteConfirmation</code> rather than in the controller?</h3>
+        <h3>Should a failed history write roll back the ownership change itself?</h3>
 
-        <p>The PR grew the challenge in the controller, where it already was.
-          <code>Form::DeleteConfirmation</code> stayed two bare accessors. Its closest sibling is
-          <code>Form::Redirect</code>, the account-migration challenge in the same settings area,
-          which answers the same question &mdash; prove you own this account &mdash; on the form
-          object: it declares the typed username as an attribute, normalizes it, and adds the error to
-          the field that failed rather than returning one boolean
-          <span class="tier tier-unc">from unchanged code</span>. That shape is what Checkpoints A and
-          C are each asking about from a different side. Decide whether keeping the two challenges
-          different is deliberate, or whether the second one should have moved when it gained a second
-          field.</p>
+        <p>
+          All four hooks are <code>after_create</code>, <code>after_update</code> and
+          <code>after_destroy</code>, so they run inside the <code>Ownership</code> save transaction,
+          beside the existing event recorders that already work that way
+          <span class="tier tier-unc">from unchanged code</span>. The new model carries no
+          validations, so <code>role</code> and <code>first_owned_at</code> being
+          <code>NOT NULL</code>, and one open row per pair, are enforced by Postgres alone: a
+          violation raises out of the callback and takes down the confirmation or the removal the
+          user asked for. <code>close_historical_ownership</code> is deliberately tolerant of finding
+          nothing; the two creating paths are tolerant of nothing.
+        </p>
 
         <ul class="lookat">
           <li>
-            <b>What the form object holds</b>
-            <span>two accessors and nothing else &mdash; no attributes, no validation, no
-              normalization <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L1-L7">app/models/form/delete_confirmation.rb:1-7</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/models/form/delete_confirmation.rb:1-7</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">the whole form object: two accessors, no validation, no normalization</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/models/form/delete_confirmation.rb" data-lang="ruby" style="counter-reset: exl 0"><span class="l"># frozen_string_literal: true</span>
-<span class="l"></span>
-<span class="l">class Form::DeleteConfirmation</span>
-<span class="l">  include ActiveModel::Model</span>
-<span class="l"></span>
-<span class="l">  attr_accessor :password, :username</span>
-<span class="l">end</span>
-</pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L1-L7">app/models/form/delete_confirmation.rb:1-7</a></p>
-  </div>
-</details>
+            <b>The callback block</b>
+            <span>three new hooks interleaved with the event recorders, none of them
+              <code>after_commit</code></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R18-R26">app/models/ownership.rb:18-26</a>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">app/models/ownership.rb:18-26</span>
+                <span class="tag">At head</span>
+                <span class="ex-why">the three new callbacks sit beside the existing event recorders, inside the same save transaction</span>
+              </summary>
+              <div class="ex-body">
+            <pre data-src="app/models/ownership.rb" data-lang="ruby" style="counter-reset: exl 17"><span class="l">  after_create :record_create_event</span>
+            <span class="l">  after_create :create_historical_ownership, if: :confirmed?</span>
+            <span class="l">  after_update :record_confirmation_event, if: :saved_change_to_confirmed_at?</span>
+            <span class="l">  after_update :create_historical_ownership, if: :saved_change_to_confirmed_at?</span>
+            <span class="l">  after_update :record_role_updated_event, if: :saved_change_to_role?</span>
+            <span class="l">  after_update :notify_user_role_of_role_change, if: :saved_change_to_role?</span>
+            <span class="l">  after_update :upgrade_historical_ownership_role, if: :saved_change_to_role?</span>
+            <span class="l">  after_destroy :record_destroy_event</span>
+            <span class="l">  after_destroy :close_historical_ownership</span>
+            </pre>
+                <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L18-L26">app/models/ownership.rb:18-26</a></p>
+              </div>
+            </details>
           </li>
           <li>
-            <b>The sibling challenge, on its form object</b>
-            <span>normalization on the typed username, and a per-field error where the deletes
-              controller returns one boolean <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/redirect.rb#L16-L30">app/models/form/redirect.rb:16-30</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/models/form/redirect.rb:16-30</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">the sibling challenge: normalizes the typed username, and attributes the error per field</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/models/form/redirect.rb" data-lang="ruby" style="counter-reset: exl 15"><span class="l">  normalizes :acct, with: -&gt;(value) { value.to_s.strip.gsub(/\A@/, '') }, apply_to_nil: true</span>
-<span class="l">  normalizes :current_username, with: -&gt;(value) { value.strip.delete_prefix('@') }</span>
-<span class="l"></span>
-<span class="l">  def valid_with_challenge?(current_user)</span>
-<span class="l">    if current_user.encrypted_password.present?</span>
-<span class="l">      errors.add(:current_password, :invalid) unless current_user.valid_password?(current_password)</span>
-<span class="l">    else</span>
-<span class="l">      errors.add(:current_username, :invalid) unless account.username == current_username</span>
-<span class="l">    end</span>
-<span class="l"></span>
-<span class="l">    return false unless errors.empty?</span>
-<span class="l"></span>
-<span class="l">    set_target_account</span>
-<span class="l">    valid?</span>
-<span class="l">  end</span>
-</pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/redirect.rb#L16-L30">app/models/form/redirect.rb:16-30</a></p>
-  </div>
-</details>
+            <b>The constraints with no model counterpart</b>
+            <span>two <code>NOT NULL</code> columns and a partial unique index, and no
+              <code>validates</code> anywhere in the model</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198cR5-R16">db/migrate/20260716041502_create_historical_ownerships.rb:5-16</a>
+          </li>
+          <li>
+            <b>What the index test asserts</b>
+            <span>that an index on the pair exists &mdash; not that it is unique, and not that it is
+              partial</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-0cea0e2d1f599cce1bf25ae15a606425821e18e0ab785ad66a912580d154750dR12">test/models/historical_ownership_test.rb:12</a>
           </li>
         </ul>
 
-        <p class="open"><b>Open question</b> Whether the two challenges are meant to stay separate
-          implementations, given that they differ now in more ways than they did before this change.</p>
+        <span class="lbl">rails runner &middot; read-only &middot; whether the unique partial index this depends on is really there after migrating</span>
+<pre class="probe">bin/rails runner 'pp ActiveRecord::Base.connection.indexes(:historical_ownerships).map { |i| [i.name, i.unique, i.where] }'</pre>
+      </section>
+
+      <section class="cp" id="cp-e">
+        <span class="lbl lbl-wide">Checkpoint E</span>
+        <h3>Should the role ordering live in <code>Access</code> rather than on the model?</h3>
+
+        <p>
+          <code>lib/access.rb</code> already owns the ordering: <code>ROLES</code> carries the flags
+          and <code>with_minimum_role</code> turns a role into the range above it, which is how both
+          <code>Ownership</code> and <code>Membership</code> ask their version of this question
+          <span class="tier tier-unc">from unchanged code</span>. This PR adds a second ordering
+          beside it &mdash; <code>ROLE_HIERARCHY</code>, derived from the enum at class-definition
+          time, and <code>roles_below</code>, returning role names &mdash; so
+          &ldquo;at or above&rdquo; is a range of integers in one file and &ldquo;below&rdquo; is an
+          array of strings in another. Both are correct today.
+        </p>
+
+        <ul class="lookat">
+          <li>
+            <b>The ordering the app already has</b>
+            <span><code>ROLES</code> and <code>with_minimum_role</code>, the pair both role-carrying
+              models reach for <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/lib/access.rb#L10-L22">lib/access.rb:10-22</a>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">lib/access.rb:10-22</span>
+                <span class="tag">Unchanged</span>
+                <span class="ex-why">the ordering the app already has, and the accessor both other role models use</span>
+              </summary>
+              <div class="ex-body">
+            <pre data-src="lib/access.rb" data-lang="ruby" style="counter-reset: exl 9"><span class="l">  ROLES = {</span>
+            <span class="l">    "maintainer" =&gt; MAINTAINER,</span>
+            <span class="l">    "owner" =&gt; OWNER,</span>
+            <span class="l">    "admin" =&gt; ADMIN</span>
+            <span class="l">  }.with_indifferent_access.freeze</span>
+            <span class="l"></span>
+            <span class="l">  def self.flag_for_role(role)</span>
+            <span class="l">    ROLES.fetch(role)</span>
+            <span class="l">  end</span>
+            <span class="l"></span>
+            <span class="l">  def self.with_minimum_role(role)</span>
+            <span class="l">    Range.new(flag_for_role(role), nil)</span>
+            <span class="l">  end</span>
+            </pre>
+                <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/lib/access.rb#L10-L22">lib/access.rb:10-22</a></p>
+              </div>
+            </details>
+          </li>
+          <li>
+            <b>The second ordering</b>
+            <span>derived from the enum rather than from <code>Access</code>, and used only by the
+              ratchet</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R8-R16">app/models/historical_ownership.rb:8-16</a>
+            <details class="excerpt excerpt--source">
+              <summary>
+                <span class="chev">&#9656;</span>
+                <span class="ex-loc">app/models/historical_ownership.rb:8-16</span>
+                <span class="tag">Added</span>
+                <span class="ex-why">a second ordering, derived from the enum and expressed as an array of strings</span>
+              </summary>
+              <div class="ex-body">
+            <pre data-src="app/models/historical_ownership.rb" data-lang="ruby" style="counter-reset: exl 7"><span class="l">  enum :role, { owner: Access::OWNER, maintainer: Access::MAINTAINER }, validate: true</span>
+            <span class="l">  ROLE_HIERARCHY = roles.sort_by { |_role, flag| flag }.map(&amp;:first).freeze</span>
+            <span class="l"></span>
+            <span class="l">  scope :current, -&gt; { where(removed_at: nil) }</span>
+            <span class="l">  scope :alumni, -&gt; { where.not(removed_at: nil) }</span>
+            <span class="l"></span>
+            <span class="l">  def self.roles_below(role)</span>
+            <span class="l">    ROLE_HIERARCHY.first(ROLE_HIERARCHY.index(role.to_s))</span>
+            <span class="l">  end</span>
+            </pre>
+                <p class="ex-src">Added at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/historical_ownership.rb#L8-L16">app/models/historical_ownership.rb:8-16</a></p>
+              </div>
+            </details>
+          </li>
+          <li>
+            <b>Where the sibling model asks</b>
+            <span><code>Membership</code> carries three roles and still goes through
+              <code>Access.flag_for_role</code> <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/membership.rb#L12-L14">app/models/membership.rb:12-14</a>
+          </li>
+        </ul>
+
+        <p class="open"><b>Open question</b> Is <code>roles_below</code> expected to stay two-valued?
+          <code>Access::ADMIN</code> exists and <code>Membership</code> uses it, and
+          <code>ROLE_HIERARCHY.index</code> returns <code>nil</code> for any role outside this
+          enum.</p>
       </section>
     </section>
 
@@ -1738,60 +1795,65 @@ figcaption strong { color: var(--ink-3); }
         <li>
           <span class="n">01</span>
           <span class="t">
-            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R31-R35">app/controllers/settings/deletes_controller.rb:31-35</a>
-            <span class="why">The whole behavioural change is these five lines. Read the guard order
-              before anything else; everything below is either what it compares against or what
-              happens when it says no.</span>
-          </span>
-          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
-        </li>
-        <li>
-          <span class="n">02</span>
-          <span class="t">
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L143">app/models/account.rb:143</a>
-            <span class="why">What Mastodon does to a username on the way in. Read it before the
-              lookup below, because together they are the bar the guard is measured against.
-              <span class="tier tier-unc">from unchanged code</span></span>
-          </span>
-          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
-        </li>
-        <li>
-          <span class="n">03</span>
-          <span class="t">
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165">app/models/account.rb:165</a>
-            <span class="why">And what it does on the way out, in the scope every other username
-              lookup in the application goes through.
-              <span class="tier tier-unc">from unchanged code</span></span>
-          </span>
-          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
-        </li>
-        <li>
-          <span class="n">04</span>
-          <span class="t">
-            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R20-R29">app/views/settings/deletes/show.html.haml:20-29</a>
-            <span class="why">The other half of the diff: which field is now unconditional, which
-              stayed behind the password check, and what the moved input declares.</span>
-          </span>
-          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
-        </li>
-        <li>
-          <span class="n">05</span>
-          <span class="t">
-            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/redirect.rb#L16-L30">app/models/form/redirect.rb:16-30</a>
-            <span class="why">The app's other account-identity challenge, end to end. It is the
-              comparison Checkpoints C and D both rest on, and worth holding before you decide either.
-              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198cR5-R16">db/migrate/20260716041502_create_historical_ownerships.rb:5-16</a>
+            <span class="why">The shape every write path here is built on: two <code>NOT NULL</code>
+              columns, and uniqueness that applies only to the open row.</span>
           </span>
           <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
         </li>
         <li>
-          <span class="n">06</span>
+          <span class="n">02</span>
           <span class="t">
-            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-e0ef784ee56f406a10f79cc7002ceaf87ca8f26fb6cac877451ddecf72354b07R18-R33">spec/system/settings/deletes_spec.rb:18-33</a>
-            <span class="why">Read last, once you know what the questions are: it shows which of them
-              the suite now pins and which it never reaches.</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R1-R17">app/models/historical_ownership.rb:1-17</a>
+            <span class="why">The whole model in seventeen lines. Its role ordering is also what
+              Checkpoint E asks about, so read both questions off this file.</span>
+          </span>
+          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <span class="t">
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R18-R26">app/models/ownership.rb:18-26</a>
+            <span class="why">The four hooks and their guards, read together with the event
+              recorders they sit between.</span>
+          </span>
+          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+        </li>
+        <li>
+          <span class="n">04</span>
+          <span class="t">
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R159">app/models/ownership.rb:139-159</a>
+            <span class="why">The three bodies. The closing one writes unconditionally, which is
+              what the first judgment turns on.</span>
           </span>
           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">05</span>
+          <span class="t">
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L18-L35">app/models/rubygem_transfer.rb:18-35</a>
+            <span class="why">Unchanged, and the only place that shows the ownership sweep happens
+              after the memberships exist <span class="tier tier-unc">from unchanged code</span></span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">06</span>
+          <span class="t">
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R165-R265">test/models/ownership_test.rb:165-265</a>
+            <span class="why">What the new behaviour is actually pinned to, and which entry points
+              it never drives.</span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">07</span>
+          <span class="t">
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R1-R20">app/tasks/maintenance/backfill_historical_ownerships_task.rb:1-20</a>
+            <span class="why">Last, because it is the one thing here that runs once against
+              production data and cannot be re-decided afterwards.</span>
+          </span>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
       </ol>
     </section>
@@ -1804,33 +1866,33 @@ figcaption strong { color: var(--ink-3); }
         <span class="lbl">Impact paths</span>
 
         <div class="ip-card">
-          <span class="ip-hd">A &middot; A failed confirmation says less than it used to</span>
-          <p class="ip-why">A user who mistypes one of the two fields is told only that something was
-            wrong, and gets an empty form back, so they retype the field that was already correct.
-            <a href="#cp-c">Checkpoint C</a></p>
+          <span class="ip-hd">A &middot; Organization members recorded as former owners</span>
+          <p class="ip-why">Every user who joins an organization in a gem transfer is recorded as
+            having stopped owning the gem, while their access continues through the organization.
+            <a href="#cp-a">Checkpoint A</a></p>
           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>challenge_passed?</b><span class="ip-d">two values now, one boolean out</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R31-R35">app/controllers/settings/deletes_controller.rb:31-35</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls through to</span><span class="ip-box"><b>#destroy else branch</b><span class="ip-d">one alert, then redirect</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L17">app/controllers/settings/deletes_controller.rb:17</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>renders</span><span class="ip-box"><b>deletes.challenge_not_passed</b><span class="ip-d">written for one field</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/config/locales/en.yml#L1518">config/locales/en.yml:1518</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Both fields cleared, neither named</b><span class="ip-d">observable behaviour</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>close_historical_ownership</b><span class="ip-d">stamps removed_at on the open row</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R155-R159">app/models/ownership.rb:155-159</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>remove_ownerships_for_joining_members</b><span class="ip-d">destroy_all over the joining users</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>RubygemTransfer#transfer!</b><span class="ip-d">memberships granted first</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L18-L35">app/models/rubygem_transfer.rb:18-35</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>A closed tenure for someone who still has access</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
         </div>
 
         <div class="ip-card">
-          <span class="ip-hd">B &middot; A value the owner typed correctly can still be refused</span>
-          <p class="ip-why">Nothing between the keyboard and the comparison trims, downcases or strips
-            a leading <code>@</code>, so an owner who reads their username off their own profile can
-            be locked out of deleting their account. <a href="#cp-a">Checkpoint A</a></p>
+          <span class="ip-hd">B &middot; A gem's first push now writes a second table</span>
+          <p class="ip-why">Claiming an unowned gem on push reaches the new insert through
+            <code>confirm!</code>, inside the transaction that creates the ownership, so a constraint
+            the history row violates fails the push. <a href="#cp-d">Checkpoint D</a></p>
           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>f.input :username</b><span class="ip-d">now rendered for every user</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R23">app/views/settings/deletes/show.html.haml:23</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>Form::DeleteConfirmation#username</b><span class="ip-d">bare accessor, no normalization</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L6">app/models/form/delete_confirmation.rb:6</a></span></li>
-              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>the username guard</b><span class="ip-d">String#== against the stored value</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R32">app/controllers/settings/deletes_controller.rb:32</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>@Gargron and gargron both refused</b><span class="ip-d">observable behaviour</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>create_historical_ownership</b><span class="ip-d">inserts inside the save transaction</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R144">app/models/ownership.rb:139-144</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>Ownership.create_confirmed</b><span class="ip-d">create! then confirm!</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L48-L50">app/models/ownership.rb:48-50</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>Rubygem#create_ownership</b><span class="ip-d">claims an unowned gem</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem.rb#L310-L312">app/models/rubygem.rb:310-312</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>A rejected push where the history write fails</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
         </div>
@@ -1841,62 +1903,82 @@ figcaption strong { color: var(--ink-3); }
           <span><i class="key-out"></i>Behaviour</span>
         </div>
 
-        <p class="note" style="margin-top:16px">A name-based pass cannot see what a browser does to
-          the value before it is submitted, which is the first hop of path B and the whole of
-          Checkpoint B.</p>
+        <p class="note" style="margin-top:16px">A name-based pass reaches callers of
+          <code>destroy</code>, <code>destroy_all</code> and <code>confirm!</code>; it does not reach
+          anything that removes an ownership through raw SQL, a console session or a future Avo
+          action, and it cannot see what the next two slices of #6534 will read.</p>
       </figure>
 
       <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L6">app/models/form/delete_confirmation.rb:6</a> &mdash; the accessor that now carries a required value for every user, and normalizes nothing. <a href="#cp-d">Checkpoint D</a></li>
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165">app/models/account.rb:165</a> &mdash; the case-insensitive lookup the challenge's comparison does not use. <a href="#cp-a">Checkpoint A</a></li>
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L17">app/controllers/settings/deletes_controller.rb:17</a> &mdash; one alert and a redirect, now answering for two fields. <a href="#cp-c">Checkpoint C</a></li>
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/settings/migrations/show.html.haml#L47-L53">app/views/settings/migrations/show.html.haml:47-53</a> &mdash; the pattern this input departs from, and the one it matches. <a href="#cp-b">Checkpoint B</a></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a> &mdash; destroys the ownerships of the users who keep access through the organization. <a href="#cp-a">Checkpoint A</a></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a> &mdash; the same sweep, reached from onboarding instead of transfer. <a href="#cp-a">Checkpoint A</a></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L48-L50">app/models/ownership.rb:48-50</a> &mdash; reaches the create hook through <code>confirm!</code> rather than through <code>create!</code>. <a href="#cp-d">Checkpoint D</a></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/pusher.rb#L241">app/models/pusher.rb:241</a> &mdash; the push path into <code>create_ownership</code>, and the highest-traffic way into the new insert. <a href="#cp-d">Checkpoint D</a></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/controllers/owners_controller.rb#L18">app/controllers/owners_controller.rb:18</a> &mdash; the invitation link, the other route into the same insert. <a href="#cp-d">Checkpoint D</a></li>
       </ul>
     </section>
-
-
     <details class="evidence">
-      <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all 3 changed paths</summary>
+      <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all 11 changed paths</summary>
 
       <div class="gt gt-paths">
-<!-- M +3/-5 -->
-<div class="c" data-path="app/controllers/settings/deletes_controller.rb"><a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05">app/controllers/settings/deletes_controller.rb</a></div>
-<!-- M +2/-2 -->
-<div class="c" data-path="app/views/settings/deletes/show.html.haml"><a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087">app/views/settings/deletes/show.html.haml</a></div>
-<!-- M +9/-0 -->
-<div class="c" data-path="spec/system/settings/deletes_spec.rb"><a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-e0ef784ee56f406a10f79cc7002ceaf87ca8f26fb6cac877451ddecf72354b07">spec/system/settings/deletes_spec.rb</a></div>
+      <!-- A +17/-0 -->
+      <div class="c" data-path="app/models/historical_ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3">app/models/historical_ownership.rb</a></div>
+      <!-- M +27/-0 -->
+      <div class="c" data-path="app/models/ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433">app/models/ownership.rb</a></div>
+      <!-- M +2/-0 -->
+      <div class="c" data-path="app/models/rubygem.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503">app/models/rubygem.rb</a></div>
+      <!-- M +1/-0 -->
+      <div class="c" data-path="app/models/user.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9802ca3c9c4cf89904fd44bc114e35ebdf2c5dd3d5b645491e2b253e1afef29b">app/models/user.rb</a></div>
+      <!-- A +20/-0 -->
+      <div class="c" data-path="app/tasks/maintenance/backfill_historical_ownerships_task.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8">app/tasks/maintenance/backfill_historical_ownerships_task.rb</a></div>
+      <!-- A +18/-0 -->
+      <div class="c" data-path="db/migrate/20260716041502_create_historical_ownerships.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198c">db/migrate/20260716041502_create_historical_ownerships.rb</a></div>
+      <!-- M +16/-0 -->
+      <div class="c" data-path="db/schema.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-cbf8b25d6d853acf58fa9057841f407d29ffe90649c75cf9e3f51b2d6e3aa1d3">db/schema.rb</a></div>
+      <!-- A +19/-0 -->
+      <div class="c" data-path="test/factories/historical_ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-839eda01e439de8f31c75c67b0b97b234425e7ddcb64604816517119b3f13740">test/factories/historical_ownership.rb</a></div>
+      <!-- A +46/-0 -->
+      <div class="c" data-path="test/models/historical_ownership_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-0cea0e2d1f599cce1bf25ae15a606425821e18e0ab785ad66a912580d154750d">test/models/historical_ownership_test.rb</a></div>
+      <!-- M +102/-0 -->
+      <div class="c" data-path="test/models/ownership_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4">test/models/ownership_test.rb</a></div>
+      <!-- A +51/-0 -->
+      <div class="c" data-path="test/tasks/maintenance/backfill_historical_ownerships_task_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb</a></div>
+      <!-- 11 rows, generated from git diff --numstat 9d5892f97d320b8d5ca8446f7119743afeb97183...b637b1631454524c605e4f8c20585b7fb5abdf49 -->
       </div>
 
       <details class="searched">
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>grep -rn "DeleteConfirmation\|delete_confirmation" --include=*.rb --include=*.haml --include=*.yml .</code> <span class="sr-r">the form object, the controller, the view and the two specs; the rest is the unrelated <code>webauthn_credentials.delete_confirmation</code> key repeated across locale files</span></li>
-            <li><code>grep -rn "settings_delete_path\|settings/delete" app/ spec/</code> <span class="sr-r">one in-app link, at <code>auth/registrations/edit.html.haml:71</code>, plus the controller, the view and the two specs</span></li>
-            <li><code>grep -rn "AccountDeletionWorker" app/ lib/</code> <span class="sr-r">nine lines, seven of them <code>perform_async</code> sites; only <code>Settings::DeletesController</code> is user-initiated</span></li>
-            <li><code>grep -rn "mark_deleted!" app/ lib/</code> <span class="sr-r">the definition, the deletes controller, and a comment in <code>Scheduler::SelfDestructScheduler</code></span></li>
-            <li><code>grep -rn "ChallengableConcern\|require_challenge!" app/controllers/</code> <span class="sr-r">the four 2FA controllers and <code>Auth::ChallengesController</code>; not the deletes controller, so its <code>challenge_passed?</code> overrides nothing</span></li>
-            <li><code>grep -rn "with_username" app/</code> <span class="sr-r">the scope at <code>account.rb:165</code> and five call sites &mdash; the finder concern, the uniqueness validator, LDAP sign-in, the ActivityPub tag manager and account suggestions</span></li>
-            <li><code>grep -rn "autocapitalize" app/</code> <span class="sr-r">four hits, all <code>:acct</code> or <code>:attribution_domains</code> inputs; no self-confirmation username field carries it</span></li>
-            <li><code>grep -ln "validates\|validate " app/models/form/*.rb</code> <span class="sr-r">four of the fifteen form objects; <code>delete_confirmation.rb</code> is not one</span></li>
-            <li><code>grep -rn "encrypted_password" app/</code> <span class="sr-r">sixteen lines; the challenge-shaped ones are the deletes controller, <code>form/redirect.rb:20</code>, <code>account_migration.rb:46</code>, <code>challengable_concern.rb:53</code> and three views</span></li>
-            <li><code>grep -rn "form_delete_confirmation" app/javascript/</code> <span class="sr-r">no hits; the form is server-rendered only</span></li>
+            <li><code>git grep -n 'historical_ownership' HEAD -- app lib config db/schema.rb</code> <span class="sr-r">every reference at head: the model, four callbacks and their bodies, two associations, <code>disown</code>, the task, and the schema &mdash; no reader anywhere</span></li>
+            <li><code>git grep -n -E 'roles_below|ROLE_HIERARCHY' HEAD -- app lib test</code> <span class="sr-r">one caller, <code>app/models/ownership.rb:148</code>, plus the model's own tests</span></li>
+            <li><code>git grep -n -E 'removed_at|first_owned_at|private_at' HEAD -- app lib</code> <span class="sr-r">five writers of <code>removed_at</code>, two of <code>first_owned_at</code>, none of <code>private_at</code></span></li>
+            <li><code>grep -rn 'confirmed_at' app lib config | grep -v _test</code> <span class="sr-r">three write sites, one of which is a <code>Membership</code>; nothing sets it back to nil</span></li>
+            <li><code>git grep -n 'update_all(role' HEAD -- app lib</code> <span class="sr-r">three, and the two outside this diff both set <code>:maintainer</code>, which the ratchet ignores by design</span></li>
+            <li><code>git grep -n 'confirm!|create_confirmed' HEAD -- app lib</code> <span class="sr-r">the invitation controller, <code>Rubygem#create_ownership</code>, and <code>Pusher</code> twice</span></li>
+            <li><code>grep -rn '\.destroy\b' app lib | grep -iE 'user\.destroy|rubygem\.destroy'</code> <span class="sr-r">no hits, so <code>dependent: :destroy</code> on the two new associations has no production caller</span></li>
+            <li><code>git grep -n -E 'insert_all|upsert_all' HEAD -- app lib</code> <span class="sr-r">one hit, on blocked email domains; no bulk write reaches ownership data</span></li>
           </ul>
-          <p class="sr-limit"><strong>Out of reach.</strong> A name-based pass cannot see what a browser
-            does to an input's value before submitting it, nor what third-party Mastodon clients put in
-            front of this flow; both are where the description locates the problem the change is for.</p>
+          <p class="sr-limit"><strong>Out of reach.</strong> A name-based pass cannot see raw SQL run
+            from a console or a migration, an Avo action added later, or what the next two slices of
+            #6534 will query. It also cannot see the <code>maintenance_tasks</code> runner's own
+            batching, which is what the deleted-after-collection claim in Checkpoint B rests on; that
+            was read in the gem's source at the version <code>Gemfile.lock</code> pins, not in this
+            repository.</p>
         </div>
       </details>
 
       <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L24">app/controllers/settings/deletes_controller.rb:24</a> &mdash; already permitted <code>:username</code>, which is why the change needed no strong-params edit.</li>
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/config/locales/en.yml#L1520">config/locales/en.yml:1520</a> &mdash; <code>deletes.confirm_username</code> pre-existed and is already translated, so the field gains its hint in every locale; it now appears beside <code>confirm_password</code> rather than instead of it.</li>
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/auth/registrations/edit.html.haml#L71">app/views/auth/registrations/edit.html.haml:71</a> &mdash; the only in-app link into this flow; unchanged and unaffected.</li>
-        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/admin/accounts_controller.rb#L74">app/controllers/admin/accounts_controller.rb:74</a> &mdash; administrative deletion goes through <code>Admin::AccountDeletionWorker</code> and never through this challenge.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/user.rb#L365-L366">app/models/user.rb:365-366</a> &mdash; a discarded account's ownerships are destroyed, so its rows close; the user record itself is never destroyed, so <code>dependent: :destroy</code> never fires and the closed history outlives the account.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L71-L77">app/models/rubygem_transfer.rb:71-77</a> and <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/organization_onboarding.rb#L133-L139">app/models/organization_onboarding.rb:133-139</a> &mdash; demote outside contributors with <code>update_all</code>, which never runs the ratchet callback; both set <code>:maintainer</code>, which the ratchet would have ignored anyway.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L85-L96">app/models/ownership.rb:85-96</a> &mdash; <code>validate_unique_user</code> is what keeps one <code>Ownership</code> per pair, and so what makes the new partial unique index satisfiable from the callback path.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/pusher.rb#L236">app/models/pusher.rb:236</a> &mdash; calls <code>disown</code> when the last indexed version is yanked, which is the bypass <code>Rubygem#disown</code> closes its rows explicitly for.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/policies/admin/application_policy.rb#L30-L36">app/policies/admin/application_policy.rb:30-36</a> &mdash; <code>avo_update?</code> is <code>false</code> and <code>Admin::OwnershipPolicy</code> does not override it, so no admin can edit an <code>Ownership</code> field into re-firing these callbacks.</li>
       </ul>
     </details>
+
   </main>
 </div>
 
