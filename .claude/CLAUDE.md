@@ -1123,6 +1123,19 @@ Editing one of these means checking the others still agree.
   appears **twice** — beside the impact panel in section 04 and again in the foot — so the section-04
   copy had no rules at all. Unscoping it is what lets both carry the teal rule, and it is a bug the
   palette found rather than one the palette caused.
+- **A published example is regenerated, never edited, and it names the version that produced it.**
+  `examples/` holds two real runs against public pull requests, served at
+  `wyeworks.github.io/accountable-review` by `.github/workflows/pages.yml`, which uploads that
+  directory and nothing else. Public repositories are the requirement rather than a preference: a
+  map whose every citation 404s for the reader is not an example of anything.
+
+  **The failure is silent and it is staleness.** The page format moves, and nothing about a page
+  rendering a two-release-old shape says so — so the version is recorded rather than implied, and a
+  format change means running the skill again, not patching the HTML. A hand-tuned example shows
+  what someone could write instead of what the skill does, which is the one thing an example may
+  not do. Four files carry the version and have to agree: `examples/README.md` owns the provenance
+  and the regeneration recipe **alone**, `examples/index.html`'s foot and `README.md`
+  § *Example Review Map* restate it, and `CONTRIBUTING.md`'s layout lists the directory.
 
 ## Invariants the CI setup adds
 

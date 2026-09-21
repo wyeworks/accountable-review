@@ -1,0 +1,59 @@
+name: pages
+
+# Publishes examples/ to GitHub Pages, so the README can link a Review Map a reader can
+# open rather than download. GitHub serves a committed .html as text/plain, so the files
+# being in the repository is not enough on its own — this is what makes them pages.
+#
+# It uploads ONLY examples/, which is why Pages is deployed from a workflow rather than
+# configured to serve a branch folder. The obvious alternative, Pages → main → /docs, would
+# put ci.md, review-map.md and codex.md on a public site nobody designed; those are
+# references for people reading the repository, and the two audiences want different things.
+#
+# The site is static HTML that happens to be this project's own output format. Nothing here
+# generates a Review Map — the pages under examples/ are committed artifacts of runs that
+# already happened, and examples/README.md records which version produced each one.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'examples/**'
+      # The workflow itself, so a change to what gets uploaded redeploys rather than waiting
+      # for the next edit to a page.
+      - '.github/workflows/pages.yml'
+  # Same reason validate.yml carries one: a push made by an agent's credentials creates no
+  # workflow run, so without a by-hand trigger a branch pushed that way can never deploy.
+  workflow_dispatch:
+
+# Read the repository, write the Pages deployment, and mint the OIDC token deploy-pages
+# exchanges for one. `contents: read` is the whole of the repository scope: this job cannot
+# push, and it has no business doing so.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and queued rather than cancelled. This is the opposite of the
+# review-map workflow's rule, deliberately: there, a superseded run describes a revision
+# nobody is looking at any more, so cancelling it saves minutes and loses nothing. Here a
+# cancelled run leaves the live site on the older commit with nothing to say so.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # The directory, not the repository. Everything outside examples/ stays off the
+          # site — see the header comment.
+          path: examples
+      - id: deploy
+        uses: actions/deploy-pages@v4

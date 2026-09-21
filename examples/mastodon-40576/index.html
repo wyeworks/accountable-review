@@ -1,0 +1,2072 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!--
+  accountable-review · review-map page template
+
+  Copy this file, fill in the content, delete unused component examples and any
+  section the diff does not earn. Everything below is verified working: no
+  horizontal overflow, wide blocks scroll in their own container, and all three
+  theme states resolve.
+
+  Design language: "PR review interface redesign". Warm paper ground, Fraunces
+  at weight 400 for display, and FOUR semantic colour families over one shared
+  five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
+  the diff does not touch, plum for provenance. Each one means one thing and the
+  token block says which; a family used outside its rule stops carrying meaning
+  everywhere else. A fifth ramp, --primer-*, is the exception that proves that
+  rule: it means nothing at all. It frames aside.primer and nothing else, in
+  Rails red, and the token block says why a page with no severity vocabulary can
+  afford one. The structural idea is that a checkpoint is NOT a card — it
+  is a question, the two or three sentences that make it one, and where to look;
+  a hairline separates one from the next. Cards are reserved for the few things
+  that genuinely are objects: a chain figure, the impact panel.
+
+  THEME RULE, do not break it: every colour is a token defined on bare :root and
+  redefined in BOTH dark blocks. The four families are derived rather than picked,
+  so a dark value is the light ramp's own slot at the reflected lightness — which
+  is why there is no second set of hand-tuned hex values to keep in step. Never
+  declare a colour only inside a media or [data-theme] block — that is the
+  classic unreadable-artifact bug. The three
+  states are: explicit dark, explicit light, and the unstamped default that most
+  viewers actually get, where only prefers-color-scheme applies.
+  The source design is light-only; the dark half below is ours, and the pair
+  that inverts (.ip-out, the filled node that ends a chain) is written against
+  tokens precisely so it keeps inverting relative to the page.
+
+  NO SEVERITY VOCABULARY, by design: this system has no chip that grades the PR.
+  Claims carry an evidence tier (span.tier) where the diff does not show them
+  directly, and that is the whole vocabulary. The checkpoints are ORDERED by
+  what a reviewer would most regret misunderstanding, and an order is not a
+  scale: no number beside a question, no "blocking", no "watch". The one line
+  that names an unresolved thing is p.open, labelled "Open question".
+
+  AND NO VERIFICATION BADGE, for the same reason and in the same place so the two
+  cannot come back separately. A run at --effort high sends an adversarial pass at
+  its own analysis before any of this is written (SKILL.md steps 6 and 8); nothing
+  about that reaches the page. There is no "verified" chip, no "checked" marker,
+  no count of corrected claims. An evidence tier says how a claim is known; a
+  badge saying how hard someone looked is the clean bill of health this page must
+  never read as.
+
+  AND NO STACK BADGE, in the same place for the same reason. This template serves
+  both Rails and Phoenix pages. What differs between them is the content of the
+  sentences, the nodes in a figure.chain and the command inside a pre.probe —
+  never a chip, a marker or a section. A reader should not be able to tell which
+  lens file produced the page except by reading what it says about their
+  repository.
+
+  AND NO MENTOR BADGE, which is the fourth of these and the one with the best
+  excuse. --mentor DOES change what is on the page: it admits aside.primer, which
+  is visible by existing. That is exactly why it needs no chip — the reader can
+  see which page they got, which a flag naming a second document could not
+  offer. A "mentor mode" banner, a count of the primers, an "onboarding" eyebrow:
+  each one is the badge shape coming back through the one door that looks open.
+
+  AND NOTHING MARKS A CODING-DECISION CHECKPOINT AS ONE, which is the fifth and
+  the one that hides inside a component rather than beside it. At most one
+  checkpoint per page judges how the change was built rather than what it now does
+  — see report-format.md § Coding decisions — and it is an ordinary section.cp in
+  the last position. No label, no eyebrow, no section of its own, and no sentence
+  announcing that the page also checks conventions. Announcing it is how it turns
+  into a style review: a reader who is told a convention section exists expects it
+  filled every time, and a run that knows the reader expects it will fill it.
+
+  AND NO CARRY BADGE, which is the sixth and now the one with the best excuse of
+  all. --update re-reads only the commits since the previous map (SKILL.md
+  § Re-running over new commits), so a real difference exists between the parts of
+  the page and a marker for it feels owed. It is not. The page says WHICH REVISION
+  its content describes, once, in the masthead cell and one sentence in § 01 — and
+  never which checkpoints were re-derived. No "new" flag on a checkpoint, no
+  "carried" tag, no "3 of 5 updated" line: three ordered states beside a question
+  is the severity chip above, rebuilt out of words that sound like provenance.
+
+  The page carries no tick state and no "n of m" counter anywhere, because a
+  count of cleared items reads as progress toward approval. See report-format.md.
+
+  Placeholders are written as {{LIKE_THIS}}.
+
+  MAP — the style block first, then the body skeleton at the bottom of the file.
+
+    :root tokens .......... colours, fonts. Declared three times: bare :root,
+                            prefers-color-scheme dark, [data-theme="dark"].
+                            --nav-* / --gap-* / --unchanged-* / --prov-* are the
+                            four semantic families; the rule for each is in the
+                            block itself and it is the design, not a convention.
+                            --primer-* is the fifth ramp and the only one that
+                            means nothing: it is one component's frame
+    shell, rail ........... .wrap, main, .progress, and the sticky numbered rail
+    type .................. headings, .lede, .note, .lbl, .path, .cite, code
+    section furniture ..... .eyebrow — a label and a rule that fills the row
+    before / after ........ dl.ba — two rows, never one paragraph. Section 01
+                            only, and only when a workflow fundamentally changed
+    evidence tier ......... .tier — neutral by default, .tier-unc teal for
+                            `from unchanged code`, .tier-inf ochre for an
+                            inference. .tag is an excerpt's state, in plum,
+                            because what the bytes ARE is provenance
+    gaps .................. .gap (ochre, a stated absence), details.searched (what was
+                            grepped — collapsed, and plum: provenance, never a claim)
+    source excerpts ....... details.excerpt -- generated by scripts/excerpt.sh, and
+                            it sits BESIDE the claim or the .lookat entry it
+                            confirms. The --source variant is syntax-tinted at
+                            runtime from its data-lang; --diff is not, its colour
+                            means +/-
+    framework anchors ..... a.doc (a link from references/rails-docs.md, never a
+                            constructed URL) and pre.probe (a command the reviewer
+                            runs; the page never shows its output). At most one of
+                            each per checkpoint, and a probe carries a THREE-part
+                            label whose last part says what the output would settle
+    primer callout ........ aside.primer — the THIRD anchor, and the only component
+                            a flag admits. --mentor only, inside a checkpoint, at
+                            most one per checkpoint and three per page. It holds the
+                            checkpoint's one a.doc and a pre.demo, which is the one
+                            block on this page that may show a result line, because
+                            its receiver is a class this repository does not have.
+                            Its header names the stack in words — "Understanding
+                            Ruby on Rails" — and its frame is --primer-*
+    review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
+                            sentences, an optional figure.chain, ul.lookat (1-4
+                            places to look, each a title, a clause and its
+                            citation, in that order), an optional p.open
+    start here ............ ol.begin — one list: the route through the code, 3-7
+                            stops. Entries link into the checkpoint that owns them
+    chains ................ figure.chain inside a checkpoint — mechanism INSIDE the
+                            change, and therefore no .ip-aff node. .ip-step is the
+                            neutral hop, and exists only here
+    impact paths .......... .impact — section 04. 1-3 directed chains + .legend,
+                            ONE PATH PER .ip-card, so three diagrams read as three.
+                            Each node past a path's first carries its INCOMING
+                            relation in .ip-rel, so an edge is labelled or it is
+                            missing. Lane comes from the kind: .ip-chg left,
+                            .ip-aff right and teal, .ip-out spans and ends the path
+    path preamble ......... p.ip-why — one per .ip-card, above the lanes. What goes
+                            wrong and to whom, then the checkpoint. Never the hops
+    node locator .......... a.path.ip-loc — last line of an .ip-box, in both figure
+                            vocabularies. Required on .ip-chg and .ip-aff, optional
+                            on .ip-step, never on .ip-out. Carries NO data-path:
+                            coverage-gate.sh greps that page-wide
+    grid tables ........... .gt (gap:1px over --rule), .gt-meta, .gt-paths — the
+                            inventory, paths with no classification. data-path stays
+                            on a div.c, so the gate runs wherever the inventory sits
+    evidence foot ......... details.evidence — section 05, below the last section.
+                            Not a section: no number, no rail entry, shut
+    build state ........... .buildstate banner and .pending markers — deleted at the
+                            final publish, never left on a finished page
+    body skeleton ......... rail, sections 01 -> 04, two checkpoints assembled whole
+                            and one pending stub, the impact panel, the evidence foot
+    script ................ scroll progress, rail scroll-spy, and the syntax tint on
+                            unchanged excerpts. Nothing else — no state, no
+                            localStorage, no counters. All three are presentation:
+                            delete the block and the page still reads
+-->
+<title>Always require typing username when self-deleting account Review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..600,0,0;1,9..144,400,0,0&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap">
+
+<style>
+/* ============================================================
+   Tokens. Warm paper neutrals, and FOUR SEMANTIC FAMILIES that
+   share one ramp shape: every family is a single hue at fixed
+   lightness and chroma per slot, so no two can drift apart in
+   weight, and the dark half is one arithmetic reflection of the
+   light rather than a second hand-picked set.
+
+     light   bg .975/.014   bg-2 .955/.028   rule .885/.045
+             rule-2 .79/.065   ink .45/.105
+     dark    bg .235/.028   bg-2 .275/.045   rule .42/.055
+             rule-2 .52/.075   ink .80/.09
+
+   WHAT EACH FAMILY IS ALLOWED TO MEAN. The rule is the system —
+   a family used outside it stops carrying meaning everywhere
+   else on the page, which is the only thing colour is doing here.
+
+     --nav-*        slate 252   You can click it. Rail links,
+                                citations, paths, the progress bar,
+                                in-page anchors. Nothing that is not
+                                a link may be slate, which is why
+                                there is no separate underline or
+                                selection colour any more: they were
+                                two off-system hex values doing what
+                                two slots of this ramp already do.
+     --gap-*        ochre  72   Something is missing and the page is
+                                saying so: p.open, the inferred tier,
+                                the build-state banner. NEVER a
+                                severity and never a grade.
+     --unchanged-*  teal  200   This code is not in the diff. The
+                                `from unchanged code` tier, the
+                                dashed .ip-aff node and its legend
+                                key, the "Affected, not changed"
+                                lists. It is a fact about the
+                                repository, so it cannot be read as a
+                                verdict — which is what makes it safe
+                                to add to a page with no severity
+                                vocabulary. Never on a link, so it
+                                never competes with slate.
+     --prov-*       plum  318   How a thing is known, never what it
+                                means: the excerpt .tag, the searches
+                                block, the evidence foot, the probe
+                                label. The quietest family on purpose
+                                — a border and an ink, never a fill
+                                you notice before the prose.
+
+   AND ONE RAMP THAT IS NOT A FAMILY, because it has no meaning to
+   spend:
+
+     --primer-*     red    28   The frame of aside.primer, and of
+                                nothing else on this page. Not a
+                                fifth meaning — a reminder of which
+                                framework is speaking, in the red
+                                that framework uses, so a reader new
+                                to the stack recognises the block
+                                that exists for them before reading
+                                a word of it.
+
+   THAT IS THE ONLY THING RED DOES OUTSIDE AN EXCERPT, and the test
+   it passes is the one teal passed: it cannot be read as a verdict,
+   because it is not attached to a claim at all. It frames a
+   quotation of the manual. A red for risk, for confidence, or on
+   anything the page asserts about THIS change is the severity chip
+   arriving as a palette — which is why this ramp is named for its
+   component and not for a meaning. A token called --primer-* has
+   nowhere else to go.
+
+   Green and red inside an excerpt stay exactly what they were:
+   added and removed lines, there and nowhere else. What keeps them
+   apart from the frame is not the hue, it is the container — one is
+   a panel border around a lesson, the other a row stripe inside
+   quoted code, and the two never abut.
+
+   ONE OPEN QUESTION, WRITTEN DOWN RATHER THAN GUESSED AT. Rails is
+   the only stack that earns a primer today, because elixir-docs.md
+   withholds every link and a primer is gated on one. If that
+   catalogue opens, a Phoenix primer in Rails red is wrong, and the
+   answer is a variant class on the aside — never a colour a run
+   types, and never a second component.
+   ============================================================ */
+:root {
+  --ground:      #f6f5f1;
+  --surface:     #faf9f6;
+  --surface-hi:  #ffffff;
+  --surface-2:   #f1efe9;
+  --surface-3:   #fbfaf7;
+  --chip:        #eceae3;
+
+  --ink:         #1b1a17;
+  --ink-2:       #26251f;
+  --ink-3:       #3d3b36;
+  --muted:       #6f6c65;
+  --faint:       #8d8a82;
+  --fainter:     #a5a29a;
+  --on-ink:      #f2f0ea;
+  --on-ink-code: #dcd8cd;
+
+  --rule:        #e5e1d8;
+  --rule-soft:   #ece8e0;
+  --rule-strong: #cec9be;
+  --rule-dash:   #b9b4a8;
+  --rule-card:   #d8d3c8;
+
+  --nav-bg:            oklch(0.975 0.014 252);
+  --nav-bg-2:          oklch(0.955 0.028 252);
+  --nav-rule:          oklch(0.885 0.045 252);
+  --nav-rule-2:        oklch(0.79  0.065 252);
+  --nav-ink:           oklch(0.45  0.105 252);
+  --nav-ink-hi:        oklch(0.36  0.12  252);
+
+  --gap-bg:            oklch(0.975 0.014 72);
+  --gap-bg-2:          oklch(0.955 0.028 72);
+  --gap-rule:          oklch(0.885 0.045 72);
+  --gap-rule-2:        oklch(0.79  0.065 72);
+  --gap-ink:           oklch(0.45  0.105 72);
+
+  --unchanged-bg:      oklch(0.975 0.014 200);
+  --unchanged-bg-2:    oklch(0.955 0.028 200);
+  --unchanged-rule:    oklch(0.885 0.045 200);
+  --unchanged-rule-2:  oklch(0.79  0.065 200);
+  --unchanged-ink:     oklch(0.45  0.105 200);
+
+  --prov-bg:           oklch(0.975 0.014 318);
+  --prov-bg-2:         oklch(0.955 0.028 318);
+  --prov-rule:         oklch(0.885 0.045 318);
+  --prov-rule-2:       oklch(0.79  0.065 318);
+  --prov-ink:          oklch(0.45  0.105 318);
+
+  --primer-bg:         oklch(0.975 0.014 28);
+  --primer-bg-2:       oklch(0.955 0.028 28);
+  --primer-rule:       oklch(0.885 0.045 28);
+  --primer-rule-2:     oklch(0.79  0.065 28);
+  --primer-ink:        oklch(0.45  0.105 28);
+
+  --ex-add:      #e6efe6;
+  --add-sig:     #3f6b45;
+  --ex-del:      #f6e7e3;
+  --del-sig:     #a4453a;
+
+  /* Syntax tint for an unchanged excerpt. Applied at runtime by the page's
+     script — see the excerpt block below. Low chroma on purpose: this page
+     already spends colour on meaning (accent = navigation, ochre = a stated
+     gap, green/red = added and removed), and code that glows competes with
+     all three. Comments stay the quietest thing in the block. */
+  --syn-key:     oklch(0.44 0.12 318);
+  --syn-str:     oklch(0.46 0.09 150);
+  --syn-com:     oklch(0.60 0.02 80);
+  --syn-name:    oklch(0.45 0.09 235);
+  --syn-num:     oklch(0.50 0.10 50);
+
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --mono:    'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* The unstamped default most viewers get: only prefers-color-scheme applies,
+   and an explicit light choice must still beat a dark OS. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:      #14130f;
+    --surface:     #1b1a16;
+    --surface-hi:  #201f1a;
+    --surface-2:   #26241f;
+    --surface-3:   #191814;
+    --chip:        #2b2924;
+
+    --ink:         #ece9e1;
+    --ink-2:       #ddd9cf;
+    --ink-3:       #c2bdb1;
+    --muted:       #9c968a;
+    --faint:       #837d72;
+    --fainter:     #6b665c;
+    --on-ink:      #14130f;
+    --on-ink-code: #3d3b36;
+
+    --rule:        #302e27;
+    --rule-soft:   #292720;
+    --rule-strong: #423f36;
+    --rule-dash:   #4d4940;
+    --rule-card:   #383529;
+
+    --nav-bg:            oklch(0.235 0.028 252);
+    --nav-bg-2:          oklch(0.275 0.045 252);
+    --nav-rule:          oklch(0.42  0.055 252);
+    --nav-rule-2:        oklch(0.52  0.075 252);
+    --nav-ink:           oklch(0.80  0.09  252);
+    --nav-ink-hi:        oklch(0.88  0.075 252);
+
+    --gap-bg:            oklch(0.235 0.028 72);
+    --gap-bg-2:          oklch(0.275 0.045 72);
+    --gap-rule:          oklch(0.42  0.055 72);
+    --gap-rule-2:        oklch(0.52  0.075 72);
+    --gap-ink:           oklch(0.80  0.09  72);
+
+    --unchanged-bg:      oklch(0.235 0.028 200);
+    --unchanged-bg-2:    oklch(0.275 0.045 200);
+    --unchanged-rule:    oklch(0.42  0.055 200);
+    --unchanged-rule-2:  oklch(0.52  0.075 200);
+    --unchanged-ink:     oklch(0.80  0.09  200);
+
+    --prov-bg:           oklch(0.235 0.028 318);
+    --prov-bg-2:         oklch(0.275 0.045 318);
+    --prov-rule:         oklch(0.42  0.055 318);
+    --prov-rule-2:       oklch(0.52  0.075 318);
+    --prov-ink:          oklch(0.80  0.09  318);
+
+    --primer-bg:         oklch(0.235 0.028 28);
+    --primer-bg-2:       oklch(0.275 0.045 28);
+    --primer-rule:       oklch(0.42  0.055 28);
+    --primer-rule-2:     oklch(0.52  0.075 28);
+    --primer-ink:        oklch(0.80  0.09  28);
+
+    --ex-add:      #1b2a1d;
+    --add-sig:     #7fbf8c;
+    --ex-del:      #33201d;
+    --del-sig:     #e0918a;
+
+    --syn-key:     oklch(0.79 0.10 318);
+    --syn-str:     oklch(0.79 0.09 150);
+    --syn-com:     oklch(0.63 0.02 80);
+    --syn-name:    oklch(0.80 0.08 235);
+    --syn-num:     oklch(0.79 0.09 50);
+  }
+}
+
+/* The explicit toggle, so it wins in the other direction too. */
+:root[data-theme="dark"] {
+  --ground:      #14130f;
+  --surface:     #1b1a16;
+  --surface-hi:  #201f1a;
+  --surface-2:   #26241f;
+  --surface-3:   #191814;
+  --chip:        #2b2924;
+
+  --ink:         #ece9e1;
+  --ink-2:       #ddd9cf;
+  --ink-3:       #c2bdb1;
+  --muted:       #9c968a;
+  --faint:       #837d72;
+  --fainter:     #6b665c;
+  --on-ink:      #14130f;
+  --on-ink-code: #3d3b36;
+
+  --rule:        #302e27;
+  --rule-soft:   #292720;
+  --rule-strong: #423f36;
+  --rule-dash:   #4d4940;
+  --rule-card:   #383529;
+
+  --nav-bg:            oklch(0.235 0.028 252);
+  --nav-bg-2:          oklch(0.275 0.045 252);
+  --nav-rule:          oklch(0.42  0.055 252);
+  --nav-rule-2:        oklch(0.52  0.075 252);
+  --nav-ink:           oklch(0.80  0.09  252);
+  --nav-ink-hi:        oklch(0.88  0.075 252);
+
+  --gap-bg:            oklch(0.235 0.028 72);
+  --gap-bg-2:          oklch(0.275 0.045 72);
+  --gap-rule:          oklch(0.42  0.055 72);
+  --gap-rule-2:        oklch(0.52  0.075 72);
+  --gap-ink:           oklch(0.80  0.09  72);
+
+  --unchanged-bg:      oklch(0.235 0.028 200);
+  --unchanged-bg-2:    oklch(0.275 0.045 200);
+  --unchanged-rule:    oklch(0.42  0.055 200);
+  --unchanged-rule-2:  oklch(0.52  0.075 200);
+  --unchanged-ink:     oklch(0.80  0.09  200);
+
+  --prov-bg:           oklch(0.235 0.028 318);
+  --prov-bg-2:         oklch(0.275 0.045 318);
+  --prov-rule:         oklch(0.42  0.055 318);
+  --prov-rule-2:       oklch(0.52  0.075 318);
+  --prov-ink:          oklch(0.80  0.09  318);
+
+  --primer-bg:         oklch(0.235 0.028 28);
+  --primer-bg-2:       oklch(0.275 0.045 28);
+  --primer-rule:       oklch(0.42  0.055 28);
+  --primer-rule-2:     oklch(0.52  0.075 28);
+  --primer-ink:        oklch(0.80  0.09  28);
+
+  --ex-add:      #1b2a1d;
+  --add-sig:     #7fbf8c;
+  --ex-del:      #33201d;
+  --del-sig:     #e0918a;
+
+  --syn-key:     oklch(0.79 0.10 318);
+  --syn-str:     oklch(0.79 0.09 150);
+  --syn-com:     oklch(0.63 0.02 80);
+  --syn-name:    oklch(0.80 0.08 235);
+  --syn-num:     oklch(0.79 0.09 50);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font-family: var(--body); font-size: 15.5px; line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--nav-bg-2); }
+
+a { color: var(--nav-ink); text-decoration-color: var(--nav-rule-2); text-underline-offset: 2px; }
+a:hover { color: var(--nav-ink-hi); text-decoration-color: currentColor; }
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--nav-ink); outline-offset: 3px;
+}
+
+/* ============================================================
+   Type. Fraunces is variable: SOFT and WONK are pinned off —
+   WONK gives it a swashy single-storey g, which is the wrong
+   register for a review document and is on by default at some
+   weights. opsz follows the size, which is the whole point of
+   the face. Display weight is 400 everywhere; the design rests
+   on that not reading as decorative, so do not reach for 700.
+   ============================================================ */
+h1, h2, h3, h4 {
+  font-family: var(--display); font-weight: 400; margin: 0; text-wrap: pretty;
+  font-optical-sizing: auto; font-variation-settings: 'SOFT' 0, 'WONK' 0;
+}
+h1 { font-size: clamp(36px, 5vw, 58px); line-height: 1.04; letter-spacing: -.016em; max-width: 19ch; }
+h2 { font-size: clamp(27px, 3.2vw, 34px); line-height: 1.14; letter-spacing: -.012em; }
+h3 { font-size: clamp(24px, 2.6vw, 30px); line-height: 1.16; letter-spacing: -.01em; }
+h4 { font-size: 22px; line-height: 1.24; letter-spacing: -.008em; }
+p { margin: 0; }
+strong { font-weight: 600; }
+em { font-style: italic; }
+
+/* PROSE RUNS THE FULL WIDTH OF THE COLUMN. It was capped at a 64ch measure, and
+   the cap is gone: the column is already bounded by .wrap's 1240px and main's
+   padding, so the measure was a second, narrower column drawn inside the first.
+   What it cost is visible on any published page -- a paragraph stopping a third of
+   the way short of the .lookat list, the impact card and the excerpt beneath it,
+   which all run the whole row. A paragraph that ends where nothing else does reads
+   as a different column rather than as a comfortable line length. The blocks still
+   capped are the ones inside a grid cell, where the cell is the measure.
+
+   Prose flow, and the one piece of spacing a run types rather than copies.
+   p is margin:0 because inside a collapsed block and a .lookat clause the gap
+   belongs to the container's own padding or flex gap, and a paragraph bringing
+   its own would double it. Every BLOCK below carries a top margin instead —
+   .ba 40, figure.chain 26, .lookat 22, .open 20 — so the only gap with no owner
+   is the one after a paragraph, and a run writing two of them in a row got a
+   wall of text with nothing between the sentences. A published page shipped
+   exactly that: section 1's two intro paragraphs set solid, and the block below
+   them starting on the line where the prose stopped.
+
+   So the paragraph carries a bottom margin where prose actually flows, which is
+   a section's own children and nowhere else. This is the idiom the markup half
+   already used by hand — style="margin-bottom:22px" on the paragraph above a
+   .gt — moved here so it stops being something to remember. Adjacent margins
+   collapse, so a component's own larger top margin still decides the gap and
+   nothing that was 22 or 26 becomes 44. :not(:last-child) because a section has
+   no bottom padding to collapse against: a trailing paragraph would push the
+   next section's 58 out to 76, and only sometimes. */
+section > p:not(:last-child) { margin-bottom: 18px; }
+
+.lede { margin-top: 22px; font-size: 15.5px; line-height: 1.68; color: var(--ink-3); }
+.note { font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+code, .mono { font-family: var(--mono); font-variant-ligatures: none; }
+code {
+  font-size: .84em; background: var(--chip); padding: 1px 5px; border-radius: 3px;
+  color: var(--ink-2); overflow-wrap: break-word;
+}
+code.bare, h1 code, h2 code, h3 code, h4 code { background: none; padding: 0; }
+h3 code, h4 code { font-size: .72em; }
+
+.path { font-family: var(--mono); font-size: 13px; color: var(--ink); overflow-wrap: anywhere; }
+.cite { font-family: var(--mono); font-size: 12.5px; color: var(--faint); }
+/* A citation keeps its own ink — dense monospace in full slate is noise — but the
+   underline is slate, because the underline is the part that says "clickable" and
+   an off-family hairline here is exactly what --accent-line was. */
+a.path, a.cite { text-decoration-color: var(--nav-rule); }
+
+/* The uppercase mono micro-label. The most-used device in this system:
+   it is how a field, a section and a legend all announce themselves. */
+.lbl {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--faint);
+}
+.lbl-a { color: var(--nav-ink); font-size: 10.5px; letter-spacing: .2em; }
+.lbl-ink { color: var(--ink); }
+.lbl-wide { font-size: 10.5px; letter-spacing: .2em; }
+
+/* ============================================================
+   Shell and rail
+   ============================================================ */
+.wrap { display: flex; align-items: flex-start; max-width: 1240px; margin: 0 auto; }
+main { flex: 1 1 auto; min-width: 0; padding: 0 56px 140px; }
+@media (max-width: 1000px) { main { padding: 0 24px 100px; } }
+
+.progress { position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 60; }
+.progress > i { display: block; height: 2px; width: 0; background: var(--nav-ink); transition: width 90ms linear; }
+
+.rail {
+  position: sticky; top: 0; flex: 0 0 232px; height: 100vh;
+  padding: 38px 24px 38px 32px; display: flex; flex-direction: column; gap: 22px;
+  border-right: 1px solid var(--rule);
+}
+@media (max-width: 1000px) { .rail { display: none; } }
+.rail-id { display: flex; flex-direction: column; gap: 6px; }
+.rail-id .tick { font-family: var(--display); font-weight: 400; font-size: 19px; line-height: 1.2; }
+.rail-links { display: flex; flex-direction: column; gap: 1px; }
+/* A RAIL ENTRY IS INLINE FLOW, NOT A FLEX ROW, and that is not a preference. A
+   checkpoint's short form routinely carries a code chip -- "Nil location and its
+   readers", with the middle word in code -- and under display:flex every element
+   and every run of text around it becomes its own flex item: three items, three
+   10px gaps, and with nowrap in force the text items shrink and wrap mid-phrase.
+   A published page rendered that entry as a ragged block of three fragments.
+
+   So the number is an inline-block of a fixed width and the hanging indent is
+   padding plus a negative text-indent, which also puts a wrapped second line under
+   the label rather than under the number. A sub-entry carries no number and so has
+   no indent to hang. */
+.rail-links a {
+  display: block; padding: 6px 0 6px 24px; text-indent: -24px;
+  font-size: 13px; text-decoration: none; color: var(--ink-3);
+}
+.rail-links a > .n {
+  display: inline-block; width: 14px; margin-right: 10px; text-indent: 0;
+  font-family: var(--mono); font-size: 10px; color: var(--fainter);
+}
+.rail-links a.sub { padding: 5px 0 5px 24px; text-indent: 0; font-size: 12.5px; color: var(--muted); }
+.rail-links a.on { color: var(--ink); font-weight: 600; }
+.rail-links a:hover { color: var(--nav-ink); }
+/* The chip is right in running prose and wrong in a 232px rail, where a background
+   and 5px of padding make one word of a title look like a button. */
+.rail-links a code { background: none; padding: 0; font-size: .92em; color: inherit; }
+
+/* ============================================================
+   Section furniture. A section announces itself with a label and
+   a rule that fills the rest of the row.
+   ============================================================ */
+section { padding: 58px 0 0; scroll-margin-top: 20px; }
+/* An eyebrow carries a .lbl span in a section head, and bare text where it labels a
+   list inside one — "Affected, not changed", which searches.rb opens its scope on and
+   therefore has to sit directly after the class attribute. So the label typography
+   lives on the eyebrow itself and a .lbl child still overrides it, being matched
+   directly rather than inherited. */
+.eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 26px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
+.eyebrow > i { flex: 1; height: 1px; background: var(--rule); }
+
+/* before / after — two rows, never one paragraph.
+
+   Its spacing is deliberately asymmetric, and the reason is its top hairline.
+   That rule is the block announcing itself, so it needs room ABOVE to read as a
+   new thing starting rather than as the bottom border of whatever sat there
+   before — 40, the widest gap in the section, where figure.chain takes 26. It
+   needs almost nothing BELOW: the last row's own 22px of padding was landing on
+   top of the next component's margin or the next section's 58, and the pair read
+   as a hole. The block ends at its last line and the gap after it belongs to
+   whatever comes next. */
+.ba { display: grid; grid-template-columns: 132px 1fr; gap: 0 28px; margin-top: 40px; border-top: 1px solid var(--rule); }
+.ba > dt { padding: 20px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+.ba > dd { margin: 0; padding: 20px 0 22px; max-width: 62ch; font-size: 15.5px; line-height: 1.66; color: var(--ink-3); }
+.ba > dd:last-of-type { padding-bottom: 6px; }
+.ba > dt.now { color: var(--ink); }
+.ba > dt.now, .ba > dd.now { border-top: 1px solid var(--rule); }
+.ba > dd.now { color: var(--ink-2); }
+@media (max-width: 700px) {
+  .ba { grid-template-columns: minmax(0, 1fr); }
+  .ba > dd { padding-top: 0; border-top: 0; }
+}
+
+/* ============================================================
+/* ============================================================
+   Evidence tier and the neutral tag. Neither grades the change.
+   A claim the diff shows directly carries NO tier: silence is
+   the first tier, and labelling everything is noise.
+   ============================================================ */
+.tier, .tag {
+  display: inline-flex; align-items: center; padding: 2px 7px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; white-space: nowrap; vertical-align: 2px;
+}
+.tier { border: 1px solid var(--rule-strong); background: var(--surface-2); color: var(--muted); }
+/* Two tiers carry a hue, and they carry the hue of what they are made of rather
+   than of how much they worry: teal because the evidence is code outside the
+   diff, ochre because something is missing. The remaining tiers stay neutral,
+   and "explicitly changed" stays silent — that is still the first tier. */
+.tier-unc { border-color: var(--unchanged-rule-2); background: var(--unchanged-bg); color: var(--unchanged-ink); }
+.tier-inf { border-color: var(--gap-rule-2); background: var(--gap-bg-2); color: var(--gap-ink); }
+/* An excerpt's state tag is provenance — what the bytes are, not what they mean —
+   so it is plum, and it takes the border .tier already had so the two line up. */
+.tag { border: 1px solid var(--prov-rule); background: var(--prov-bg); color: var(--prov-ink); }
+
+/* A stated absence. Ochre, deliberately not the accent: a gap is
+   evidence, not a feature, and never a severity. */
+.gap { display: flex; gap: 12px; padding: 14px 16px; background: var(--gap-bg-2); border: 1px solid var(--gap-rule); }
+.gap > b { flex: 0 0 auto; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); }
+.gap > span { font-size: 14.5px; line-height: 1.6; color: var(--ink-3); }
+/* What was grepped, including the searches that came up empty — collapsed, and the
+   second component on the page that is. It is provenance, not a claim: the entries it
+   backs are the div.item rows above it, so the page must read complete with it shut.
+   See report-format.md § What was searched.
+
+   A row is a command and a result clause, never a paragraph. The block was a single
+   run-on div and real pages filled it with three-sentence explanations of entries the
+   reader had just read; the two-part row is what makes a long one scannable and a
+   verbose one look wrong.
+
+   The row STACKS: the command on its own line, the clause under it. It was a wrapping
+   flex line, on the theory that a short command keeps its clause alongside and a long
+   one pushes it down — but the width a clause needs is not the width it is given, so
+   the bad case is the middle one, and the middle one is the common one. A 60-character
+   command leaves 24ch of tail, enough for the clause to stay on the line and not
+   enough to read: a published page ran four-word clauses down a narrow ragged column
+   beside the command, one word per line at the worst of it. A grid had the same defect
+   from the other side. Stacking has no middle case — every clause gets the full width,
+   at the cost of a line per row in a block that is shut by default.
+
+   Two things say which command a clause belongs to, and both are load-bearing because
+   nothing else does: a hanging indent (16px of padding on the row, pulled back off the
+   command) and a row gap of 11px against the 2px between a command and its own clause.
+   Take either away and a clause reads as the start of the next search. */
+details.searched { border: 1px solid var(--prov-rule); background: var(--prov-bg); margin: 12px 0; }
+details.searched > summary { display: flex; gap: 10px; align-items: baseline; padding: 10px 14px; cursor: pointer; list-style: none; font-size: 13.5px; color: var(--prov-ink); }
+details.searched > summary::-webkit-details-marker { display: none; }
+details.searched > summary::marker { content: ""; }
+.searched .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
+details.searched[open] .chev { transform: rotate(90deg); }
+.searched .sr-body { padding: 0 14px 12px; border-top: 1px solid var(--prov-rule); }
+.searched .sr-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 11px; }
+.searched .sr-list > li { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding-left: 16px; }
+.searched .sr-list code { min-width: 0; max-width: 100%; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+/* The hanging indent belongs to the LEADING command alone. As a descendant rule the
+   -16px reached every code in the row, including one inside the clause, and pulled it
+   16px left — over the words before it. A published page showed the overlap. Same
+   shape as .pending's text-indent: a rule about a row's first child, written as though
+   the row had only one. */
+.searched .sr-list > li > code:first-child { margin-left: -16px; }
+.searched .sr-r { align-self: stretch; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.searched .sr-limit { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 72ch; }
+
+/* ============================================================
+   Framework anchors — a documentation link and a runtime probe.
+   NEITHER IS EVIDENCE. The claim still rests on a file:line; see
+   report-format.md § Framework anchors, which owns the rules and
+   the budget. Both are built out of tokens that already exist,
+   deliberately: an anchor that introduced a colour would be a new
+   thing to declare in all three theme blocks and forget in one.
+   ============================================================ */
+a.doc { font-family: var(--mono); font-size: 12px; white-space: nowrap; text-decoration-color: var(--nav-rule); }
+a.doc::after { content: "\2197"; margin-left: 2px; font-size: .9em; color: var(--faint); }
+
+/* A command the reviewer runs, not a quotation of this repo: no
+   generator behind it, and NO OUTPUT BENEATH IT, because the skill
+   never ran it.
+
+   IT WRAPS, and that is the one place it parts company with an excerpt.
+   An excerpt must never be re-wrapped, because re-flowing a quotation
+   changes what the author wrote; a probe is not a quotation, so nothing
+   is lost. It was white-space:pre with overflow-x:auto, and since every
+   probe in this system runs to about ninety characters, that meant every
+   probe on every page was cut off at the right edge of the column with
+   the reviewer scrolling a box to read the thing they were being asked
+   to paste. pre-wrap breaks at the spaces the command already has and
+   leaves the text node alone, so it still copies byte for byte.
+
+   The hanging indent is what says a second line is a continuation and
+   not a second command — the idiom details.searched already uses on a
+   long grep, for exactly the same reason. overflow-x stays for the one
+   case wrapping cannot help: an unbroken token wider than the column. */
+pre.probe {
+  margin: 10px 0; padding: 12px 14px 12px 32px; overflow-x: auto;
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+  white-space: pre-wrap; text-indent: -18px; color: var(--ink-2);
+  background: var(--prov-bg); border-left: 2px solid var(--prov-rule-2);
+}
+/* The probe's own label, matched through the pre it introduces because it sits
+   BEFORE it and rails-anchors.rb requires that adjacency. Where :has() is not
+   supported the label falls back to the ordinary .lbl ink, which is the whole
+   degradation: the probe still reads and still says what it would settle. */
+.lbl:has(+ pre.probe) { color: var(--prov-ink); }
+
+/* ============================================================
+   The primer callout — THE THIRD FRAMEWORK ANCHOR, and the only
+   component on this page that a flag admits. It appears at
+   --mentor and nowhere else, only inside a section.cp, and it is
+   what a doc link escalates into when the reviewer would judge
+   better knowing the framework's rule itself rather than only
+   where it is written down. report-format.md § Mentor mode owns
+   the budget and what earns one.
+
+   IT IS FRAMED IN RAILS RED, on --primer-*, and that ramp exists
+   for this component alone. The reason is the reader it is for:
+   someone new to the stack, who needs to recognise the block that
+   was written for them before reading a word of it. A hue does
+   that and a heading does not. The token block owns why a page
+   with no severity vocabulary can afford a red — it is attached to
+   no claim, so it cannot be read as a verdict — and the rule that
+   keeps it honest is that the frame may never spread. Red on
+   anything this page ASSERTS is the severity chip arriving as a
+   palette.
+
+   The ramp is declared in all three theme states like every other
+   colour here, which is the defect the tint tokens are counted by
+   name to catch, and tests/run.sh counts --primer-ink the same way
+   for the same reason.
+
+   THE HEADER IS THE STACK, IN WORDS — "Understanding Ruby on
+   Rails". It replaced "Rails | Primer", which spent its widest
+   line saying what kind of component this is; a reader can see
+   that. What they cannot see is what the block is going to teach
+   them, and the header now says it. It is set in the display serif
+   at the page's own ink, near black, which is as close to a
+   logotype as this page gets: there is no <svg> here, and
+   rails-anchors.rb fails a primer that grows one.
+
+   NO MARK, AND THEREFORE NO TRADEMARK LINE. With no logotype on
+   display there is nothing for a notice to disclaim, so the two
+   went together — and with them the branded/unbranded variant
+   split, which existed only to say who drew the mark. One shape
+   still serves a framework, a gem and a hex package alike; only
+   the words in the header change with them.
+
+   Three things it must not become, all of which look like
+   diligence on the way:
+     · a probe. pre.demo quotes documented framework behaviour on
+       a GENERIC receiver, so it may carry a result line: it is a
+       quotation of the manual, and the manual states results.
+       pre.probe asks THIS application and may never show output,
+       because the run did not boot it. So a demo lives only
+       inside a primer, and a probe never inside one — adjacent,
+       never nested.
+     · a tutorial. A behaviour every developer in the stack
+       already knows earns nothing, at any flag. --mentor lowers
+       the bar from "cannot decide without this" to "would decide
+       better knowing it"; it does not remove it, and a mentor run
+       that earns no primer writes none.
+     · an unevidenced claim. It cites the line in THIS repository
+       that earned it and carries the pinned link it escalated
+       from. Two paragraphs of framework prose read as
+       self-justifying, which is why both halves are checked.
+   ============================================================ */
+.primer {
+  margin: 16px 0 6px; background: var(--primer-bg);
+  border: 1px solid var(--primer-rule); border-top: 2px solid var(--primer-rule-2);
+}
+.pr-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 12px 20px; border-bottom: 1px solid var(--primer-rule);
+}
+/* What the block teaches, said in words, in the display serif at the page's own
+   ink, and never in the frame ink. The frame is the reminder of which framework is
+   speaking, and a red title as well would make the header the loudest thing in a
+   checkpoint whose h3 is the question the reader is actually there to answer.
+   Near-black is also the closest this page comes to a logotype, which is on
+   purpose — there is no <svg> anywhere here, and a primer that grows one fails
+   rails-anchors.rb. */
+.pr-title {
+  font-family: var(--display); font-weight: 400; font-size: 19px;
+  line-height: 1; letter-spacing: -.01em; color: var(--ink);
+}
+.pr-api { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--faint); overflow-wrap: anywhere; }
+
+.pr-body { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+.pr-main { min-width: 0; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 11px; }
+.pr-main > b { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.pr-main > p { max-width: 56ch; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); text-wrap: pretty; }
+.pr-main > .item { font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.pr-main > a.doc { align-self: flex-start; margin-top: 3px; white-space: normal; }
+
+.pr-side {
+  min-width: 0; padding: 18px 20px 20px;
+  background: var(--primer-bg-2); border-left: 1px solid var(--primer-rule);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pr-side > .lbl { font-size: 9.5px; color: var(--primer-ink); }
+.pr-side > .note { font-size: 13px; line-height: 1.58; }
+
+/* The manual, quoted. It SCROLLS rather than wrapping, which is the opposite of
+   what it started as: a wrapped result line puts the answer on a line of its own,
+   where it reads as another statement instead of as the answer to the one above
+   it. Code that wraps says something different from the code that was written,
+   and a quotation may not do that. This is the same rule an excerpt follows and
+   the opposite of pre.probe's, which wraps because a command is not a quotation.
+   Keep the lines short — under about 38 characters and nothing scrolls at all. */
+pre.demo {
+  margin: 0; overflow-x: auto;
+  font-family: var(--mono); font-size: 12px; line-height: 1.75;
+  color: var(--ink-2); white-space: pre;
+}
+@media (max-width: 700px) {
+  .pr-body { grid-template-columns: minmax(0, 1fr); }
+  .pr-side { border-left: 0; border-top: 1px solid var(--primer-rule); }
+}
+
+/* ============================================================
+   Source excerpts — generated by scripts/excerpt.sh, never typed.
+   The page must read complete with EVERY excerpt closed, which is
+   why the why-line lives in the summary and not in the body.
+   The pre grows to max-content and .ex-body scrolls, so the add/del
+   stripes span the whole scroll width instead of stopping at the fold.
+   data-src, never data-path: coverage-gate.sh greps data-path page-wide.
+   ============================================================ */
+details.excerpt { border: 1px solid var(--rule); background: var(--surface-hi); margin: 12px 0; }
+details.excerpt > summary { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; align-items: center; padding: 12px 14px; cursor: pointer; list-style: none; }
+details.excerpt > summary::-webkit-details-marker { display: none; }
+details.excerpt > summary::marker { content: ""; }
+.excerpt .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
+details.excerpt[open] .chev { transform: rotate(90deg); }
+.excerpt .ex-loc { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.excerpt .ex-why { grid-column: 2 / -1; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 66ch; }
+.excerpt .ex-body { padding: 0 14px 14px; border-top: 1px solid var(--rule); overflow-x: auto; }
+.excerpt .ex-body > pre {
+  margin: 12px 0 0; padding: 0; font-family: var(--mono); font-size: 12px; line-height: 1.6;
+  color: var(--ink-2); white-space: normal; width: max-content; min-width: 100%;
+}
+.excerpt .ex-body .l { display: block; white-space: pre; position: relative; padding-left: 4.4em; min-width: max-content; counter-increment: exl; }
+.excerpt .ex-body .l::before {
+  content: counter(exl); position: absolute; left: 0; width: 3.3em; text-align: right;
+  color: var(--fainter); font-variant-numeric: tabular-nums; user-select: none;
+}
+/* A blank line in the quoted range is still a row. An empty block box is zero
+   tall, so without this the blank line vanishes and its number lands on top of
+   the next one — visible as two digits stacked in the gutter. Generated content
+   is not copied, so the excerpt still copies as the code and nothing else. */
+.excerpt .ex-body .l:empty::after { content: "\200B"; }
+.excerpt .ex-body .l.add { background: var(--ex-add); }
+.excerpt .ex-body .l.del { background: var(--ex-del); counter-increment: none; }
+.excerpt .ex-body .l.del::before { content: ""; }
+.excerpt .ex-body .sig { color: var(--fainter); user-select: text; }
+.excerpt .ex-body .l.add .sig { color: var(--add-sig); }
+.excerpt .ex-body .l.del .sig { color: var(--del-sig); }
+.excerpt .ex-src { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
+
+/* Syntax tint, --source only. The script at the bottom of this file rewrites the
+   text nodes inside each .l into these classes; with the script gone, or the CDN
+   blocked, every line stays one plain text node and the block renders as it did
+   before highlighting existed. The class names are highlight.js's, so this is the
+   library's theme — written against our tokens because an external stylesheet is
+   not loadable here and a theme file would declare colour in one state only.
+   Everything unlisted inherits the excerpt's own --ink-2, which is the point: a
+   short slice of code has a handful of things worth pointing at, not thirty. */
+.excerpt--source .hljs-keyword,
+.excerpt--source .hljs-literal,
+.excerpt--source .hljs-built_in,
+.excerpt--source .hljs-selector-tag,
+.excerpt--source .hljs-operator     { color: var(--syn-key); }
+.excerpt--source .hljs-string,
+.excerpt--source .hljs-regexp,
+.excerpt--source .hljs-char.escape_,
+.excerpt--source .hljs-meta .hljs-string { color: var(--syn-str); }
+.excerpt--source .hljs-comment,
+.excerpt--source .hljs-quote        { color: var(--syn-com); font-style: italic; }
+.excerpt--source .hljs-title,
+.excerpt--source .hljs-title.class_,
+.excerpt--source .hljs-title.function_,
+.excerpt--source .hljs-section,
+.excerpt--source .hljs-name,
+.excerpt--source .hljs-type,
+.excerpt--source .hljs-class        { color: var(--syn-name); }
+.excerpt--source .hljs-number,
+.excerpt--source .hljs-symbol,
+.excerpt--source .hljs-attr,
+.excerpt--source .hljs-attribute,
+.excerpt--source .hljs-variable,
+.excerpt--source .hljs-template-variable,
+.excerpt--source .hljs-property,
+.excerpt--source .hljs-meta,
+.excerpt--source .hljs-bullet       { color: var(--syn-num); }
+/* A tinted span must never change the shape of the line: no weight, no size, no
+   background. The quotation is the bytes, and bold code reads as emphasis the
+   author of that code never wrote. */
+.excerpt--source .ex-body span[class^="hljs-"] { font-weight: inherit; background: none; }
+
+/* ============================================================
+   Section 3 · start here. ONE list: the route through the code
+   and what on it needs judgment are the same question.
+   ============================================================ */
+.begin { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.begin li { display: grid; grid-template-columns: 26px 1fr auto; gap: 6px 16px; padding: 18px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+.begin .n { font-family: var(--mono); font-size: 11px; color: var(--fainter); padding-top: 4px; font-variant-numeric: tabular-nums; }
+.begin .t { min-width: 0; }
+.begin .t > .path { display: block; margin-bottom: 5px; }
+.begin .t > .why { display: block; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); max-width: 64ch; }
+.begin .ptr { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding-top: 4px; white-space: nowrap; }
+/* A stop may carry an excerpt, so the li has a fourth child and the li is a grid.
+   With no span it auto-places into the 26px number column, where .ex-loc's
+   overflow-wrap: anywhere renders the path one character per line. 2 / -1 puts it
+   under the path it confirms, and holds under the 700px grid below where column 2
+   is the last one. min-width: 0 is the other half: a grid item cannot shrink past
+   its min-content, which here is the pre's longest line, so the span alone widens
+   the column past the viewport and the PAGE scrolls sideways instead of .ex-body.
+   .lookat > li carries the same reset, which is why its excerpts never showed it. */
+.begin li > .excerpt { grid-column: 2 / -1; min-width: 0; margin: 10px 0 0; }
+@media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
+
+/* ============================================================
+   Section 02 · THE REVIEW CHECKPOINT. One judgment the reviewer
+   has to make: the question as the h3, why it is a question in
+   the paragraph, and where to look below that. It is NOT a card
+   — a hairline between checkpoints is the whole frame, because a
+   box drawn around each of five judgments reads as five reports,
+   which is the shape this page replaced.
+
+   .cp is a <section> so the rail can spy on it and so a pending
+   stub is the same element as a written one.
+   ============================================================ */
+.cp { padding: 44px 0 0; scroll-margin-top: 20px; }
+.cp + .cp { margin-top: 10px; border-top: 1px solid var(--rule); }
+.cp > .lbl { display: block; margin-bottom: 12px; }
+.cp > h3 { max-width: 38ch; }
+.cp > p { margin-top: 14px; }
+
+/* Where to look — one to four locations. THREE PARTS, IN THIS ORDER: a title
+   naming what is at that location, the clause saying what to see in it, and the
+   citation last. The clause is not optional furniture: a bare citation is a
+   location the reader has to open to find out why it is on the list, which is the
+   deleted-field defect wearing a link. The title is not optional either, and
+   report-format.md § The review checkpoint owns what makes one good.
+
+   THE TITLE EXISTS BECAUSE A LIST OF FOUR PATHS CANNOT BE SCANNED. Every entry
+   used to open with a 60-character monospace address, so finding the entry you
+   wanted meant reading all four clauses: the entry carried an address and an
+   explanation and no name. A title is the line a reader's eye stops on, which is
+   why it goes first and why the address — the thing they act on only after
+   deciding to open it — goes last.
+
+   Entries are separated by 26px of gap and nothing else. No hairline per entry:
+   rules between four short paragraphs draw a table around prose, and a row is what
+   this component stopped being. Inside an entry the parts sit 0 to 4px apart, so
+   the three lines group as one thing before the next gap arrives; that ratio is
+   the whole separation, and shrinking the gap towards the internal spacing is what
+   makes four entries read as one block. The list's own top rule stays — it is what
+   separates the list from the explanation above it. An excerpt sits under the
+   entry it confirms, full width. */
+.lookat { list-style: none; margin: 22px 0 24px; padding: 18px 0 0; border-top: 1px solid var(--rule); display: grid; gap: 26px; }
+.lookat > li { min-width: 0; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.lookat > li > b { display: block; font-weight: 600; color: var(--ink); }
+.lookat > li > span { display: block; }
+.lookat > li > .path { display: block; margin-top: 4px; }
+.lookat .excerpt { margin: 10px 0 0; }
+
+/* An open question. Ochre like .gap and for the same reason: a stated absence
+   is evidence, never a severity. The label is fixed at "Open question" —
+   "Watch" and "Blocking" are a severity vocabulary with the chip taken off,
+   and page-invariants.rb warns on both. */
+/* Full width, like the prose and the list above it: an open line ending short of
+   both read as an aside, where it is in fact the one thing in the checkpoint the
+   code could not settle. */
+.open { margin-top: 20px; padding: 14px 16px; background: var(--gap-bg-2); border-left: 2px solid var(--gap-rule); font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+.open > b { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); }
+
+
+/* ============================================================
+   Section 4 · IMPACT PATHS. Replaces the .blast box grid, which
+   carried membership of two sets and nothing else — so it read
+   as a word cloud, and the one thing it could not express is the
+   one thing this section is about: a directed edge.
+
+   A path runs from changed code, through the affected-but-
+   unchanged code that gives the change its consequence, to an
+   observable behaviour. Every node past the first carries its
+   INCOMING relation in .ip-rel, so an unlabelled edge is a
+   missing element rather than an empty one.
+
+   THE LANE IS DERIVED FROM THE NODE KIND, NEVER AUTHORED:
+   .ip-chg sits left, .ip-aff right, .ip-out spans both. So the
+   boundary between "changed by this PR" and "the existing
+   system" is structurally true, and there is no lane class for
+   a run to get backwards.
+
+   ONE PATH PER .ip-card, AND THE FIGURE IS A GROUP RATHER THAN
+   A BOX. It began as five paths stacked inside one bordered
+   panel under five .ip-hd headers, and at that length they stop
+   being read as diagrams: a reader on the third chain has the
+   first one's geometry behind them, a 34px gap is the only thing
+   saying where one path ends, and a shared frame invites a
+   sixth. So the frame is now the card, which is the thing a
+   reader actually holds, and .impact carries only the label, the
+   legend and the note.
+
+   The lane labels repeat in every card, deliberately. That is
+   both the price of separating the diagrams and the reason to: a
+   card is a whole figure, so a reader arriving at the third one
+   must not scroll back for what its two columns mean.
+
+   Under 780px the lanes collapse to one column and the lane
+   rule goes. Nothing is lost: the three node kinds still carry
+   changed / affected / behaviour, so the boundary is
+   reinforcement rather than the only encoding.
+
+   The component, the causal verb vocabulary, the shape rules
+   and the caps live in report-format.md § Impact paths, and
+   ONLY there — the way an excerpt's do in § Source excerpts.
+   ============================================================ */
+/* The figure itself gets no box, no padding and no background — deliberately: it is a GROUP,
+   and every visible edge belongs to a card. Its children are laid out by adjacent-sibling
+   margins the way .decision + .decision is, rather than by a grid gap, so the label above and
+   the legend below can set their own distances.
+
+   --ip-drop is how far a lane crossing descends before it turns, and it lives here because
+   FOUR rules have to agree on it — see THE LANE CROSSING below. */
+.impact { --ip-drop: 11px; }
+.impact > .lbl { display: block; margin-bottom: 14px; }
+.ip-card { padding: 20px 24px 24px; background: var(--surface-hi); border: 1px solid var(--rule); }
+.ip-card + .ip-card { margin-top: 14px; }
+.ip-lanes { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; margin: 0 0 18px; }
+.ip-lanes > span { font-family: var(--mono); font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+
+/* The lane rule, one per card, so the path inside it aligns to the lane labels above. Painted
+   as a BACKGROUND, not an absolutely positioned overlay: a background sits behind child
+   content for free, and the overlay version drew the line straight across the filled .ip-out
+   node, splitting the one box that spans both lanes into two.
+
+   IT IS DASHED, AND IT IS NOT --rule-strong. It began as a 1px solid --rule-strong hairline,
+   which is byte-for-byte what a connector and an elbow are drawn in — so the one line on the
+   figure that carries no direction looked exactly like the lines that do, and a path crossing
+   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "the
+   existing system", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
+   FLOW, DASHES BOUND. Anything drawn in --rule-strong is part of a chain.
+
+   DOTTED RATHER THAN DASHED, and that is the second half of it. At 3-on-5-off in the same ink
+   as an .ip-aff border, a divider running the whole height of the card carried more ink than
+   the chain did, and the boundary outweighed the thing the figure is about. 2 on, 9 off keeps
+   every dot legible — which is why the colour stays --rule-dash rather than going a step
+   lighter — while dropping the total ink far enough that it reads as ground, not as figure. */
+.ip-body {
+  background-image: repeating-linear-gradient(to bottom, var(--rule-dash) 0 2px, transparent 2px 9px);
+  background-size: 1px 100%;
+  background-position: calc(50% - 0.5px) 0;
+  background-repeat: no-repeat;
+}
+
+/* The card's head. It carries the gap down to the body itself rather than leaving it to a top
+   margin on .ip-lanes, because the lanes are display:none under 780px and the head would then
+   sit flat on the first node. */
+.ip-hd { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+
+/* What the path is about, in one or two sentences, before the reader traces anything. Set in the
+   body face rather than the mono the rest of the card uses, because it is prose and that contrast
+   is what stops it reading as another node. A card without it is a diagram the reader has to
+   decode in order to find out whether it was worth decoding. */
+.ip-why { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0 0 16px; }
+.ip-path { list-style: none; margin: 0; padding: 0; }
+
+/* Each node is its own row; the lane is a column inside that row. */
+.ip-n { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+.ip-n > * { grid-column: 1; }
+.ip-aff > * { grid-column: 2; }
+.ip-out > * { grid-column: 1 / -1; }
+
+.ip-box { padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.ip-chg > .ip-box { border: 1px solid var(--ink); background: var(--ground); }
+.ip-aff > .ip-box { border: 1px dashed var(--unchanged-rule-2); background: var(--unchanged-bg); }
+.ip-out > .ip-box { border: 1px solid var(--ink); background: var(--ink); }
+.ip-box b { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.ip-box .ip-d { font-family: var(--mono); font-size: 11px; line-height: 1.45; color: var(--muted); overflow-wrap: anywhere; }
+/* The dash says "not in the diff" and the ink says it a second time, in the one
+   place a reader is deciding whether a node is the change or the system it lands
+   in. The node's own name stays --ink: it is a symbol, not a claim. */
+.ip-aff > .ip-box .ip-d { color: var(--unchanged-ink); }
+.ip-out > .ip-box b { color: var(--ground); }
+.ip-out > .ip-box .ip-d { color: var(--ground); opacity: .72; }
+
+/* The locator: where this node’s code lives, last line of the box and quiet enough that the label
+   still reads first. A node naming a symbol and nothing else leaves the reader to guess which file
+   it is in, which is the one question a figure of identifiers reliably raises. align-self keeps the
+   underline the width of the path rather than of the box, and wrapping is anywhere because a deep
+   Rails path offers a browser no break it will take. .ip-out never carries one — a behaviour has no
+   file — so there is deliberately no rule for it here. */
+.ip-loc { font-family: var(--mono); font-size: 10px; color: var(--faint); text-decoration: none; border-bottom: 1px solid var(--nav-rule); align-self: start; overflow-wrap: anywhere; }
+.ip-loc:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* The edge: a labelled connector. <i> is the gutter that draws
+   the hairline and the arrowhead, the way a numbered spine does. */
+.ip-rel { display: flex; align-items: center; gap: 10px; min-height: 44px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ip-rel > i { flex: 0 0 22px; align-self: stretch; position: relative; }
+.ip-rel > i::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 7px; width: 1px; background: var(--rule-strong); }
+.ip-rel > i::after { content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid var(--rule-strong); }
+
+/* THE LANE CROSSING, drawn rather than implied. Without it a path that changes lane reads as
+   two disconnected halves: the chain simply reappears in the other column with no line back to
+   the node it descends from, and a reader cannot tell which one that was. The adjacent-sibling
+   selector is what makes it possible with no extra markup and nothing for a run to place — a
+   lane change IS `.ip-chg + .ip-aff` or its reverse, because the lane comes from the kind.
+   The elbow runs the whole way between the two rails — from the centre of the previous node's
+   22px rail, across the 40px gutter, to the centre of this connector's own — so it reads as
+   starting underneath the node it descends from. Stopping it at the lane boundary was the first
+   attempt, and it left the chain looking like it reappeared in the other column from nowhere.
+
+   AND IT DESCENDS --ip-drop BEFORE IT TURNS. Turning flush against the source box was the
+   second attempt, and a horizontal leaving a box's bottom edge reads as a line going sideways
+   OUT of it; the short vertical says the chain drops out of the node the way every other hop
+   does and then changes lane, which is the same thing the arrowhead says at the far end.
+
+   Four rules have to agree on --ip-drop, and the fourth is the one that breaks silently: the
+   DESTINATION rail has to start at the corner rather than at the row's top edge, or a hairline
+   the length of the drop dangles above it in the other lane. The other three are the stub
+   (::after), the horizontal (::before), and the reset under 780px, where the lanes collapse
+   and there is no crossing left to draw.
+
+   The x arithmetic, once, because all three cases are the same two numbers: a lane is 100% of
+   a single-lane .ip-rel and the gutter is 40px, so the far rail is one lane plus the gutter
+   away, ±11px for the 22px rail's own centre. The .ip-out case spans both lanes, which makes
+   its own 50% the lane boundary rather than 100% the lane. */
+.ip-chg + .ip-aff > .ip-rel, .ip-aff + .ip-chg > .ip-rel, .ip-aff + .ip-out > .ip-rel { position: relative; }
+.ip-chg + .ip-aff > .ip-rel::before, .ip-aff + .ip-chg > .ip-rel::before,
+.ip-aff + .ip-out > .ip-rel::before {
+  content: ""; position: absolute; top: var(--ip-drop); height: 1px; background: var(--rule-strong);
+}
+.ip-chg + .ip-aff > .ip-rel::after, .ip-aff + .ip-chg > .ip-rel::after,
+.ip-aff + .ip-out > .ip-rel::after {
+  content: ""; position: absolute; top: 0; height: var(--ip-drop); width: 1px; background: var(--rule-strong);
+}
+/* Left to right: the origin rail is a lane and a gutter back from this connector's own. */
+.ip-chg + .ip-aff > .ip-rel::before { left: calc(-100% - 29px); width: calc(100% + 40px); }
+.ip-chg + .ip-aff > .ip-rel::after  { left: calc(-100% - 29px); }
+/* Right to left: the same distance the other way, so the stub is out past this element's edge. */
+.ip-aff + .ip-chg > .ip-rel::before { left: 11px; width: calc(100% + 40px); }
+.ip-aff + .ip-chg > .ip-rel::after  { left: calc(100% + 51px); }
+/* And the last hop, where an .ip-aff node is followed by the .ip-out that spans both lanes: the
+   outcome's rail sits in lane 1, so without this the chain drops out of the right lane and the
+   arrow into the behaviour appears on the left with nothing joining them. */
+.ip-aff + .ip-out > .ip-rel::before { left: 11px; width: calc(50% + 20px); }
+.ip-aff + .ip-out > .ip-rel::after  { left: calc(50% + 31px); }
+/* The fourth rule: the destination rail starts at the corner. */
+.ip-chg + .ip-aff > .ip-rel > i::before, .ip-aff + .ip-chg > .ip-rel > i::before,
+.ip-aff + .ip-out > .ip-rel > i::before { top: var(--ip-drop); }
+
+/* The group's foot: one legend for every card, because the three node kinds mean the same thing
+   in all of them. It sits on the page ground rather than inside a card now, so the rule above it
+   is --rule — --rule-soft is a surface hairline and all but vanishes on the ground. */
+.legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.legend > span { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.key-chg { flex: 0 0 auto; width: 14px; height: 10px; border: 1px solid var(--ink); background: var(--ground); }
+.key-aff { flex: 0 0 auto; width: 14px; height: 10px; border: 1px dashed var(--unchanged-rule-2); background: var(--unchanged-bg); }
+.key-out { flex: 0 0 auto; width: 14px; height: 10px; border: 1px solid var(--ink); background: var(--ink); }
+@media (max-width: 780px) {
+  .ip-card { padding: 18px 16px 20px; }
+  .ip-lanes { display: none; }
+  .ip-body { background-image: none; }
+  /* One lane, so no crossing: the elbow and its stub go, and --ip-drop going with them is what
+     puts every rail back on the row's top edge without a rule per selector. */
+  .impact { --ip-drop: 0px; }
+  .ip-chg + .ip-aff > .ip-rel::before, .ip-aff + .ip-chg > .ip-rel::before,
+  .ip-aff + .ip-out > .ip-rel::before,
+  .ip-chg + .ip-aff > .ip-rel::after, .ip-aff + .ip-chg > .ip-rel::after,
+  .ip-aff + .ip-out > .ip-rel::after { display: none; }
+  .ip-n { grid-template-columns: minmax(0, 1fr); }
+  .ip-n > *, .ip-aff > *, .ip-out > * { grid-column: 1; }
+}
+
+
+/* ============================================================
+   figure.chain — the same vertical chain inside a CHECKPOINT,
+   where the job is different. Section 04 shows a consequence
+   crossing into code the change did not touch; a chain in a
+   checkpoint shows a mechanism INSIDE the change — a request
+   path, a value derived over several hops, the order guards run
+   in. So it reuses every node and edge rule above and drops the
+   two-lane apparatus: no lanes, no legend, no card header, and
+   NO .ip-aff.
+
+   That last one is a rule rather than a style. A hop that lands
+   in unchanged code whose meaning the change altered IS an impact
+   path: it belongs in section 04, drawn once, and the checkpoint
+   that turns on it says so in a clause. Drawing it here as well
+   is the same consequence drawn twice at conversational distance,
+   which reads as thoroughness.
+
+   .ip-step is the kind that exists only here — a hop that claims
+   nothing about the diff, drawn as the plain solid box so a
+   reader is never asked to decide whether it means "changed".
+   report-format.md § Chains owns all of it.
+   ============================================================ */
+figure.chain { margin-top: 26px; padding: 20px 24px 22px; background: var(--surface-hi); border: 1px solid var(--rule); }
+figure.chain .ip-n { grid-template-columns: minmax(0, 1fr); }
+figure.chain .ip-n > * { grid-column: 1; }
+figure.chain > figcaption { margin-top: 14px; }
+.ip-step > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
+
+/* ============================================================
+   Grid tables. gap:1px over --rule, so every seam is a rule at
+   any wrap point and there is no border-collapse to fight.
+   Column widths are tuned for Roboto Mono; the container scrolls
+   rather than crushing the path column.
+   ============================================================ */
+.gt { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); overflow-x: auto; }
+.gt > .h { background: var(--surface-2); padding: 11px 16px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.gt > .c { background: var(--surface); padding: 12px 16px; min-width: 0; }
+.gt .path { font-size: 11.5px; line-height: 1.5; color: var(--ink-2); }
+.gt-meta   { grid-template-columns: 2fr repeat(4, minmax(0, 1fr)); }
+/* .gt-paths is the diff inventory: paths only, no classification. It is what
+   details.evidence below holds. Still a .gt cell, because data-path has to sit
+   on a `div class="c"` for the coverage gate to keep running. Two columns,
+   since a path is the whole cell. */
+.gt-paths  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gt-paths > .c { padding: 9px 14px; }
+/* .gt paints its gaps by showing --rule through a 1px grid gap, which needs every row
+   full. An odd number of paths leaves the last row half empty and the container's own
+   rule colour renders there as a solid slab — a filled box that reads as a cell with
+   nothing in it. The final odd cell spans instead. Harmless in the one-column query
+   below, where 1 / -1 is that column.  */
+.gt-paths > .c:last-child:nth-child(odd) { grid-column: 1 / -1; }
+@media (max-width: 900px) {
+  .gt-meta   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gt-paths  { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ============================================================
+   The evidence foot — section 05, and not a section: no number,
+   no rail entry, shut. It holds the diff inventory, what was
+   grepped, and the affected code no checkpoint turns on.
+
+   It is PROVENANCE, not a claim, which is what makes collapsing
+   it legal under the hard rule that the page reads complete with
+   every collapsed block shut. A finding must never end up here:
+   anything in the foot that is a judgment the reviewer has to
+   make is a checkpoint that was mis-filed.
+
+   coverage-gate.sh greps data-path page-wide on the raw bytes,
+   so it neither knows nor cares that the carrier sits in here.
+   ============================================================ */
+details.evidence { margin-top: 62px; padding-top: 24px; border-top: 1px solid var(--rule); }
+details.evidence > summary { display: flex; gap: 9px; align-items: center; cursor: pointer; list-style: none; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--prov-ink); }
+details.evidence > summary::-webkit-details-marker { display: none; }
+details.evidence > summary::marker { content: ""; }
+.evidence .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
+details.evidence[open] .chev { transform: rotate(90deg); }
+.evidence .gt { margin-top: 20px; }
+.evidence .eyebrow { margin: 30px 0 14px; }
+/* NOT scoped to .evidence: this list appears twice, once beside the impact panel
+   in section 04 and once in the foot, and the scoped version left the first one
+   unstyled. The teal rule is the third place the page says "not in the diff", and
+   it is the same hue as the .ip-aff node the entry is often standing in for. */
+.ev-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.ev-list > li { padding-left: 13px; border-left: 2px solid var(--unchanged-rule); font-size: 14.5px; line-height: 1.6; color: var(--ink-3); }
+
+
+/* ============================================================
+   Build state. A staged page must never look finished. Four
+   states have to stay distinguishable: written, pending, NOT
+   written because the run stopped, and omitted because the diff
+   did not earn it. Both of these are DELETED at the final publish;
+   leaving a .pending behind is worse than publishing late.
+
+   .pending attaches at two granularities: a whole <section>, and a
+   CHECKPOINT, since section 02 is delivered one checkpoint at a
+   time. The second needs no markup of its own — a checkpoint is
+   already its own <section class="cp" id="cp-x">, so the generic
+   pending section IS the checkpoint stub with the question on it,
+   and the rail carries a per-checkpoint marker below.
+   ============================================================ */
+.buildstate {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin: 24px 0 0; padding: 12px 18px;
+  background: var(--gap-bg-2); border: 1px solid var(--gap-rule);
+  font-size: 14px; color: var(--ink-3);
+}
+.buildstate strong { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--gap-ink); }
+/* TEXT-INDENT: 0 IS LOAD-BEARING. text-indent inherits, and an inline-flex box
+   lays out its own line, so the rail entry's -24px hanging indent (.rail-links a)
+   reached inside this chip and pulled the word 24px left of its own border --
+   over the entry's title on one line, off the box on a wrapped one. The box sat
+   where it belonged and its contents did not, which is why a published page read
+   as broken rendering rather than as a layout rule nobody had written. .n carries
+   the same reset for being an inline-block in that line; the chip arrived later
+   and without it. It belongs on the base rule and not on the rail override,
+   because the next indented context to carry a chip will not know to reset it. */
+.pending {
+  display: inline-flex; align-items: center; padding: 1px 6px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  background: var(--gap-bg-2); border: 1px solid var(--gap-rule); color: var(--gap-ink);
+  vertical-align: 1px; text-indent: 0;
+}
+.rail-links .pending { font-size: 8.5px; padding: 0 4px; letter-spacing: .08em; }
+
+/* ============================================================
+   Figures. There are two, and neither is a drawing: figure.chain
+   inside a checkpoint and figure.impact in section 04, both built
+   out of the same .ip-* chain. Nothing on this page is an <svg>.
+   ============================================================ */
+figure { margin: 0; }
+figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
+figcaption strong { color: var(--ink-3); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<!-- Scroll progress. The only decoration on the page that moves. -->
+<div class="progress"><i id="bar"></i></div>
+
+<div class="wrap">
+  <nav class="rail" aria-label="Sections">
+    <div class="rail-id">
+      <div class="lbl" style="letter-spacing:.18em">Review map</div>
+      <div class="tick">fixes/self-deletion-username</div>
+      <div class="cite"><a class="cite" href="https://github.com/mastodon/mastodon/pull/40576">PR #40576</a> &middot; 3 files</div>
+    </div>
+
+    <div class="rail-links">
+      <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
+      <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">Is byte-for-byte equality the right bar?</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">Does the field need the mobile attributes?</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">Can the user tell what to change?</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">Where should the challenge live?</a>
+      <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
+      <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
+    </div>
+  </nav>
+
+  <main>
+
+
+    <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
+      <div class="lbl lbl-wide" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px">
+        <span>mastodon</span><span style="color:var(--rule-strong)">/</span><span>mastodon</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/mastodon/mastodon/pull/40576">PR #40576</a><span style="color:var(--rule-strong)">&middot;</span><span>ClearlyClaire</span>
+      </div>
+
+      <h1>Self-deletion now asks for the username as well as the password</h1>
+
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">The confirmation challenge on
+        <code>/settings/delete</code> changes from one credential to two: the account's username is
+        now required from every user, and the password is required in addition wherever one is
+        stored.</p>
+
+      <div class="gt gt-meta" style="margin-top:44px">
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">fixes/self-deletion-username <span style="color:var(--fainter)">&rarr;</span> main</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">977f46e <span>&rarr;</span> ab1e731</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">bugfix</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">1</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">3</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">2 / 1</div></div>
+      </div>
+    </header>
+
+    <section id="changed">
+      <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
+      <h2 style="max-width:30ch;margin-bottom:18px">One credential became two, for everyone who has two</h2>
+
+      <p>Deleting your own account was confirmed by whichever single credential the installation held
+        for you: your password, or &mdash; when Mastodon stores none &mdash; your username. It is now
+        confirmed by the username always, plus the password wherever one exists. The rewritten guard
+        checks the username first and returns early when it does not match; the password check that
+        follows is short-circuited by <code>encrypted_password.blank?</code>, so accounts with no
+        stored password face the same username-only challenge as before and no population loses a
+        factor. The view was reordered to match: the username field is rendered unconditionally and
+        the password field only when there is a password. The description gives the motivation
+        &mdash; people reusing one password across accounts, handed from a mobile app into a browser
+        signed in as someone else, were deleting the wrong account.</p>
+
+      <dl class="ba">
+        <dt>Before</dt><dd>One field. The password, or the username for accounts Mastodon stores no
+          password for.</dd>
+        <dt class="now">After</dt>
+        <dd class="now">The username always, and the password as well wherever the account has one.</dd>
+      </dl>
+    </section>
+
+    <section id="attention" style="padding-top:48px">
+      <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
+      <h2 style="margin-bottom:18px">What needs your attention</h2>
+      <p>Four judgments, all of them about the half of the challenge that is new to most users: what
+        string counts as a match, what the browser will send, what the user is told when it fails, and
+        where the comparison lives. They are in the order to think about them.</p>
+
+      <section class="cp" id="cp-a">
+        <span class="lbl lbl-wide">Checkpoint A</span>
+        <h3>Is byte-for-byte equality the right bar for the typed username?</h3>
+
+        <p>The comparison is Ruby's <code>String#==</code>, so the typed value has to match the stored
+          one exactly. That comparison is not new &mdash; the old passwordless branch used it too
+          &mdash; but it was previously reached only by users on installations that store no password,
+          and it is now on the path every user takes. Mastodon normalizes a username in two places and
+          the challenge uses neither: <code>Account</code> squishes whitespace out of the stored value
+          on save, and every lookup in the application goes through a scope that lowercases both sides
+          <span class="tier tier-unc">from unchanged code</span>. So an account registered as
+          <code>Gargron</code> is not confirmed by <code>gargron</code>, nor by <code>@Gargron</code>
+          as the profile page spells it, nor by a value carrying a trailing space from a copy-paste.
+          Decide whether that strictness is the intended bar or an accident of where the comparison
+          came from.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>The rewritten guard</b>
+            <span>the username check runs first and returns early; the password half is what the
+              <code>blank?</code> disjunction short-circuits</span>
+            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R31-R35">app/controllers/settings/deletes_controller.rb:31-35</a>
+<details class="excerpt excerpt--diff">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/controllers/settings/deletes_controller.rb:29-37</span>
+    <span class="tag">Changed</span>
+    <span class="ex-why">the guard order: username first, then password only if one exists</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/settings/deletes_controller.rb" style="counter-reset: exl 28"><span class="l"><span class="sig"> </span>  end</span>
+<span class="l"><span class="sig"> </span></span>
+<span class="l"><span class="sig"> </span>  def challenge_passed?</span>
+<span class="l del"><span class="sig">-</span>    if current_user.encrypted_password.blank?</span>
+<span class="l del"><span class="sig">-</span>      current_account.username == resource_params[:username]</span>
+<span class="l del"><span class="sig">-</span>    else</span>
+<span class="l del"><span class="sig">-</span>      current_user.valid_password?(resource_params[:password])</span>
+<span class="l del"><span class="sig">-</span>    end</span>
+<span class="l add"><span class="sig">+</span>    return false unless current_account.username == resource_params[:username]</span>
+<span class="l add"><span class="sig">+</span></span>
+<span class="l add"><span class="sig">+</span>    current_user.encrypted_password.blank? || current_user.valid_password?(resource_params[:password])</span>
+<span class="l"><span class="sig"> </span>  end</span>
+<span class="l"><span class="sig"> </span></span>
+<span class="l"><span class="sig"> </span>  def destroy_account!</span>
+</pre>
+    <p class="ex-src">Changed at <a class="cite" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R29-R37">app/controllers/settings/deletes_controller.rb:29-37</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>How the app matches a username</b>
+            <span>the scope behind <code>Account.find_local</code>, the uniqueness validator, LDAP
+              sign-in and the ActivityPub tag manager &mdash; lowering both sides
+              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165">app/models/account.rb:165</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/models/account.rb:165-165</span>
+    <span class="tag">Unchanged</span>
+    <span class="ex-why">the scope every username lookup in the app goes through, lowering both sides</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/account.rb" data-lang="ruby" style="counter-reset: exl 164"><span class="l">  scope :with_username, -&gt;(value) { value.is_a?(Array) ? where(arel_table[:username].lower.in(value.map { |x| x.to_s.downcase })) : where(arel_table[:username].lower.eq(value.to_s.downcase)) }</span>
+</pre>
+    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165-L165">app/models/account.rb:165-165</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The stored side's own normalization</b>
+            <span>usernames are squished on save, so a stored value never carries the surrounding
+              whitespace a typed one may <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L143">app/models/account.rb:143</a>
+          </li>
+          <li>
+            <b>What the new expectations pin</b>
+            <span>right username with a wrong password, and a wrong username with the right password,
+              both fail; no case, whitespace or <code>@</code>-prefix variant is exercised</span>
+            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-e0ef784ee56f406a10f79cc7002ceaf87ca8f26fb6cac877451ddecf72354b07R18-R33">spec/system/settings/deletes_spec.rb:18-33</a>
+          </li>
+        </ul>
+
+        <span class="lbl">rails runner &middot; read-only &middot; whether the app's own username lookup lowercases both sides</span>
+<pre class="probe">bin/rails runner 'puts Account.with_username("Gargron").to_sql'</pre>
+
+        <p class="open"><b>Open question</b> Whether a user who types their own username in the wrong
+          case should be refused, given that every other lookup in the application accepts it.</p>
+      </section>
+
+      <section class="cp" id="cp-b">
+        <span class="lbl lbl-wide">Checkpoint B</span>
+        <h3>Does the field now shown to everyone need the attributes the handle inputs beside it carry?</h3>
+
+        <p>The moved input declares <code>autocomplete: 'off'</code> and nothing else, so an iOS
+          keyboard will capitalize its first letter and autocorrect is free to substitute a word
+          &mdash; against a comparison that accepts neither (Checkpoint A). This codebase knows the
+          attributes: the account-migration views pass <code>autocapitalize: 'none', autocorrect:
+          'off'</code> on the field where you type a handle. The self-confirmation username field in
+          those same views does not, and that has been tolerable because it is behind
+          <code>- else</code> and only passwordless users ever see it
+          <span class="tier tier-unc">from unchanged code</span>. This change takes the same
+          unattributed input out from behind that branch and puts it in front of every user, on the
+          flow the description says mobile users reach through a handed-off browser. Decide whether
+          the raised exposure changes the answer.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>The moved input</b>
+            <span>what it declares, and that the password field below it is what stayed conditional</span>
+            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R23">app/views/settings/deletes/show.html.haml:23</a>
+<details class="excerpt excerpt--diff">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/views/settings/deletes/show.html.haml:20-29</span>
+    <span class="tag">Changed</span>
+    <span class="ex-why">what the username input declares, and what it does not</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/views/settings/deletes/show.html.haml" style="counter-reset: exl 19"><span class="l"><span class="sig"> </span></span>
+<span class="l"><span class="sig"> </span>  %hr.spacer/</span>
+<span class="l"><span class="sig"> </span></span>
+<span class="l add"><span class="sig">+</span>  = f.input :username, wrapper: :with_block_label, input_html: { autocomplete: 'off' }, hint: t('deletes.confirm_username')</span>
+<span class="l add"><span class="sig">+</span></span>
+<span class="l"><span class="sig"> </span>  - if current_user.encrypted_password.present?</span>
+<span class="l"><span class="sig"> </span>    = f.input :password, wrapper: :with_block_label, input_html: { autocomplete: 'current-password' }, hint: t('deletes.confirm_password')</span>
+<span class="l del"><span class="sig">-</span>  - else</span>
+<span class="l del"><span class="sig">-</span>    = f.input :username, wrapper: :with_block_label, input_html: { autocomplete: 'off' }, hint: t('deletes.confirm_username')</span>
+<span class="l"><span class="sig"> </span></span>
+<span class="l"><span class="sig"> </span>  .actions</span>
+<span class="l"><span class="sig"> </span>    = f.button :button, t('deletes.proceed'), type: :submit, class: 'negative'</span>
+</pre>
+    <p class="ex-src">Changed at <a class="cite" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R20-R29">app/views/settings/deletes/show.html.haml:20-29</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The same pair of fields in the migration flow</b>
+            <span>the handle input carries both attributes; the username confirmation two lines down
+              carries neither, and is reached only when there is no password
+              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/settings/migrations/show.html.haml#L47-L53">app/views/settings/migrations/show.html.haml:47-53</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/views/settings/migrations/show.html.haml:47-53</span>
+    <span class="tag">Unchanged</span>
+    <span class="ex-why">the handle input carries the mobile attributes; the self-confirmation username input beside it does not</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/views/settings/migrations/show.html.haml" data-lang="xml" style="counter-reset: exl 46"><span class="l">      = f.input :acct, wrapper: :with_block_label, input_html: { autocapitalize: 'none', autocorrect: 'off' }, disabled: on_cooldown?</span>
+<span class="l"></span>
+<span class="l">    .fields-row__column.fields-group.fields-row__column-6</span>
+<span class="l">      - if current_user.encrypted_password.present?</span>
+<span class="l">        = f.input :current_password, wrapper: :with_block_label, input_html: { autocomplete: 'current-password' }, required: true, disabled: on_cooldown?</span>
+<span class="l">      - else</span>
+<span class="l">        = f.input :current_username, wrapper: :with_block_label, input_html: { autocomplete: 'off' }, required: true, disabled: on_cooldown?</span>
+</pre>
+    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/settings/migrations/show.html.haml#L47-L53">app/views/settings/migrations/show.html.haml:47-53</a></p>
+  </div>
+</details>
+          </li>
+        </ul>
+
+        <div class="gap"><b>GAP</b><span>The system spec drives the field through Capybara, which
+          types the value verbatim; nothing in the suite can observe what a mobile keyboard would
+          send.</span></div>
+      </section>
+
+      <section class="cp" id="cp-c">
+        <span class="lbl lbl-wide">Checkpoint C</span>
+        <h3>After a failed attempt, can the user tell what to change?</h3>
+
+        <p>The failure branch is unchanged and says <em>The information you entered was not correct</em>
+          for any cause. With one field that was unambiguous; with two it no longer names which half
+          failed, and because the branch redirects rather than re-rendering, the <code>show</code>
+          action builds a fresh <code>Form::DeleteConfirmation</code> and both inputs come back empty
+          <span class="tier tier-unc">from unchanged code</span>. A user who mistyped their username
+          retypes their password too, with nothing to tell them the password was never the problem.
+          The session is already authenticated, so there is no third party the ambiguity protects the
+          information from &mdash; which makes this a decision about whether the vagueness is wanted
+          here, not a disclosure question. The consequence is drawn as Impact path A.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>The failure branch and the fresh form</b>
+            <span>one alert for both causes, then a redirect that discards what was typed</span>
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L12-L19">app/controllers/settings/deletes_controller.rb:12-19</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/controllers/settings/deletes_controller.rb:12-19</span>
+    <span class="tag">At head</span>
+    <span class="ex-why">the failure branch: one alert for both fields, delivered by redirect</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/settings/deletes_controller.rb" data-lang="ruby" style="counter-reset: exl 11"><span class="l">  def destroy</span>
+<span class="l">    if challenge_passed?</span>
+<span class="l">      destroy_account!</span>
+<span class="l">      redirect_to new_user_session_path, notice: I18n.t('deletes.success_msg')</span>
+<span class="l">    else</span>
+<span class="l">      redirect_to settings_delete_path, alert: I18n.t('deletes.challenge_not_passed')</span>
+<span class="l">    end</span>
+<span class="l">  end</span>
+</pre>
+    <p class="ex-src">At head, <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L12-L19">app/controllers/settings/deletes_controller.rb:12-19</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The alert's wording</b>
+            <span>a pre-existing key, already translated everywhere, written when there was one field
+              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/config/locales/en.yml#L1518">config/locales/en.yml:1518</a>
+          </li>
+          <li>
+            <b>Both fields on the page at once</b>
+            <span>the hint under each is per-field, so the form promises specificity the failure
+              message does not deliver</span>
+            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R23-R26">app/views/settings/deletes/show.html.haml:23-26</a>
+          </li>
+        </ul>
+
+        <p class="open"><b>Open question</b> Whether the single generic alert is deliberate, or simply
+          what the one-field form left behind.</p>
+      </section>
+
+      <section class="cp" id="cp-d">
+        <span class="lbl lbl-wide">Checkpoint D</span>
+        <h3>Should the challenge live on <code>Form::DeleteConfirmation</code> rather than in the controller?</h3>
+
+        <p>The PR grew the challenge in the controller, where it already was.
+          <code>Form::DeleteConfirmation</code> stayed two bare accessors. Its closest sibling is
+          <code>Form::Redirect</code>, the account-migration challenge in the same settings area,
+          which answers the same question &mdash; prove you own this account &mdash; on the form
+          object: it declares the typed username as an attribute, normalizes it, and adds the error to
+          the field that failed rather than returning one boolean
+          <span class="tier tier-unc">from unchanged code</span>. That shape is what Checkpoints A and
+          C are each asking about from a different side. Decide whether keeping the two challenges
+          different is deliberate, or whether the second one should have moved when it gained a second
+          field.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>What the form object holds</b>
+            <span>two accessors and nothing else &mdash; no attributes, no validation, no
+              normalization <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L1-L7">app/models/form/delete_confirmation.rb:1-7</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/models/form/delete_confirmation.rb:1-7</span>
+    <span class="tag">Unchanged</span>
+    <span class="ex-why">the whole form object: two accessors, no validation, no normalization</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/form/delete_confirmation.rb" data-lang="ruby" style="counter-reset: exl 0"><span class="l"># frozen_string_literal: true</span>
+<span class="l"></span>
+<span class="l">class Form::DeleteConfirmation</span>
+<span class="l">  include ActiveModel::Model</span>
+<span class="l"></span>
+<span class="l">  attr_accessor :password, :username</span>
+<span class="l">end</span>
+</pre>
+    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L1-L7">app/models/form/delete_confirmation.rb:1-7</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The sibling challenge, on its form object</b>
+            <span>normalization on the typed username, and a per-field error where the deletes
+              controller returns one boolean <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/redirect.rb#L16-L30">app/models/form/redirect.rb:16-30</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/models/form/redirect.rb:16-30</span>
+    <span class="tag">Unchanged</span>
+    <span class="ex-why">the sibling challenge: normalizes the typed username, and attributes the error per field</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/form/redirect.rb" data-lang="ruby" style="counter-reset: exl 15"><span class="l">  normalizes :acct, with: -&gt;(value) { value.to_s.strip.gsub(/\A@/, '') }, apply_to_nil: true</span>
+<span class="l">  normalizes :current_username, with: -&gt;(value) { value.strip.delete_prefix('@') }</span>
+<span class="l"></span>
+<span class="l">  def valid_with_challenge?(current_user)</span>
+<span class="l">    if current_user.encrypted_password.present?</span>
+<span class="l">      errors.add(:current_password, :invalid) unless current_user.valid_password?(current_password)</span>
+<span class="l">    else</span>
+<span class="l">      errors.add(:current_username, :invalid) unless account.username == current_username</span>
+<span class="l">    end</span>
+<span class="l"></span>
+<span class="l">    return false unless errors.empty?</span>
+<span class="l"></span>
+<span class="l">    set_target_account</span>
+<span class="l">    valid?</span>
+<span class="l">  end</span>
+</pre>
+    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/redirect.rb#L16-L30">app/models/form/redirect.rb:16-30</a></p>
+  </div>
+</details>
+          </li>
+        </ul>
+
+        <p class="open"><b>Open question</b> Whether the two challenges are meant to stay separate
+          implementations, given that they differ now in more ways than they did before this change.</p>
+      </section>
+    </section>
+
+    <section id="start" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Where to begin</span><i></i></div>
+      <h2 style="margin-bottom:22px">Read the code in this order</h2>
+      <ol class="begin">
+        <li>
+          <span class="n">01</span>
+          <span class="t">
+            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R31-R35">app/controllers/settings/deletes_controller.rb:31-35</a>
+            <span class="why">The whole behavioural change is these five lines. Read the guard order
+              before anything else; everything below is either what it compares against or what
+              happens when it says no.</span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <span class="t">
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L143">app/models/account.rb:143</a>
+            <span class="why">What Mastodon does to a username on the way in. Read it before the
+              lookup below, because together they are the bar the guard is measured against.
+              <span class="tier tier-unc">from unchanged code</span></span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <span class="t">
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165">app/models/account.rb:165</a>
+            <span class="why">And what it does on the way out, in the scope every other username
+              lookup in the application goes through.
+              <span class="tier tier-unc">from unchanged code</span></span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">04</span>
+          <span class="t">
+            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R20-R29">app/views/settings/deletes/show.html.haml:20-29</a>
+            <span class="why">The other half of the diff: which field is now unconditional, which
+              stayed behind the password check, and what the moved input declares.</span>
+          </span>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
+        </li>
+        <li>
+          <span class="n">05</span>
+          <span class="t">
+            <a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/redirect.rb#L16-L30">app/models/form/redirect.rb:16-30</a>
+            <span class="why">The app's other account-identity challenge, end to end. It is the
+              comparison Checkpoints C and D both rest on, and worth holding before you decide either.
+              <span class="tier tier-unc">from unchanged code</span></span>
+          </span>
+          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+        </li>
+        <li>
+          <span class="n">06</span>
+          <span class="t">
+            <a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-e0ef784ee56f406a10f79cc7002ceaf87ca8f26fb6cac877451ddecf72354b07R18-R33">spec/system/settings/deletes_spec.rb:18-33</a>
+            <span class="why">Read last, once you know what the questions are: it shows which of them
+              the suite now pins and which it never reaches.</span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+      </ol>
+    </section>
+
+    <section id="impact" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+      <h2 style="margin-bottom:22px">Impact outside the diff</h2>
+
+      <figure class="impact">
+        <span class="lbl">Impact paths</span>
+
+        <div class="ip-card">
+          <span class="ip-hd">A &middot; A failed confirmation says less than it used to</span>
+          <p class="ip-why">A user who mistypes one of the two fields is told only that something was
+            wrong, and gets an empty form back, so they retype the field that was already correct.
+            <a href="#cp-c">Checkpoint C</a></p>
+          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <div class="ip-body">
+            <ol class="ip-path">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>challenge_passed?</b><span class="ip-d">two values now, one boolean out</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R31-R35">app/controllers/settings/deletes_controller.rb:31-35</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls through to</span><span class="ip-box"><b>#destroy else branch</b><span class="ip-d">one alert, then redirect</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L17">app/controllers/settings/deletes_controller.rb:17</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>renders</span><span class="ip-box"><b>deletes.challenge_not_passed</b><span class="ip-d">written for one field</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/config/locales/en.yml#L1518">config/locales/en.yml:1518</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Both fields cleared, neither named</b><span class="ip-d">observable behaviour</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="ip-card">
+          <span class="ip-hd">B &middot; A value the owner typed correctly can still be refused</span>
+          <p class="ip-why">Nothing between the keyboard and the comparison trims, downcases or strips
+            a leading <code>@</code>, so an owner who reads their username off their own profile can
+            be locked out of deleting their account. <a href="#cp-a">Checkpoint A</a></p>
+          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <div class="ip-body">
+            <ol class="ip-path">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>f.input :username</b><span class="ip-d">now rendered for every user</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087R23">app/views/settings/deletes/show.html.haml:23</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>Form::DeleteConfirmation#username</b><span class="ip-d">bare accessor, no normalization</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L6">app/models/form/delete_confirmation.rb:6</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>the username guard</b><span class="ip-d">String#== against the stored value</span><a class="path ip-loc" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05R32">app/controllers/settings/deletes_controller.rb:32</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>@Gargron and gargron both refused</b><span class="ip-d">observable behaviour</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span><i class="key-chg"></i>Changed by this PR</span>
+          <span><i class="key-aff"></i>Affected, not changed</span>
+          <span><i class="key-out"></i>Behaviour</span>
+        </div>
+
+        <p class="note" style="margin-top:16px">A name-based pass cannot see what a browser does to
+          the value before it is submitted, which is the first hop of path B and the whole of
+          Checkpoint B.</p>
+      </figure>
+
+      <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
+      <ul class="ev-list">
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/form/delete_confirmation.rb#L6">app/models/form/delete_confirmation.rb:6</a> &mdash; the accessor that now carries a required value for every user, and normalizes nothing. <a href="#cp-d">Checkpoint D</a></li>
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/models/account.rb#L165">app/models/account.rb:165</a> &mdash; the case-insensitive lookup the challenge's comparison does not use. <a href="#cp-a">Checkpoint A</a></li>
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L17">app/controllers/settings/deletes_controller.rb:17</a> &mdash; one alert and a redirect, now answering for two fields. <a href="#cp-c">Checkpoint C</a></li>
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/settings/migrations/show.html.haml#L47-L53">app/views/settings/migrations/show.html.haml:47-53</a> &mdash; the pattern this input departs from, and the one it matches. <a href="#cp-b">Checkpoint B</a></li>
+      </ul>
+    </section>
+
+
+    <details class="evidence">
+      <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all 3 changed paths</summary>
+
+      <div class="gt gt-paths">
+<!-- M +3/-5 -->
+<div class="c" data-path="app/controllers/settings/deletes_controller.rb"><a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7a790b9c61191f4e483df75071689eac73fc2bbd9194c0885e1a561fa4ccfe05">app/controllers/settings/deletes_controller.rb</a></div>
+<!-- M +2/-2 -->
+<div class="c" data-path="app/views/settings/deletes/show.html.haml"><a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-7740a55a4dfeeb7a3cab4bfbc4e217d2bc9f5cea95ca507378f2d9da9fbdc087">app/views/settings/deletes/show.html.haml</a></div>
+<!-- M +9/-0 -->
+<div class="c" data-path="spec/system/settings/deletes_spec.rb"><a class="path" href="https://github.com/mastodon/mastodon/pull/40576/files#diff-e0ef784ee56f406a10f79cc7002ceaf87ca8f26fb6cac877451ddecf72354b07">spec/system/settings/deletes_spec.rb</a></div>
+      </div>
+
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>grep -rn "DeleteConfirmation\|delete_confirmation" --include=*.rb --include=*.haml --include=*.yml .</code> <span class="sr-r">the form object, the controller, the view and the two specs; the rest is the unrelated <code>webauthn_credentials.delete_confirmation</code> key repeated across locale files</span></li>
+            <li><code>grep -rn "settings_delete_path\|settings/delete" app/ spec/</code> <span class="sr-r">one in-app link, at <code>auth/registrations/edit.html.haml:71</code>, plus the controller, the view and the two specs</span></li>
+            <li><code>grep -rn "AccountDeletionWorker" app/ lib/</code> <span class="sr-r">nine lines, seven of them <code>perform_async</code> sites; only <code>Settings::DeletesController</code> is user-initiated</span></li>
+            <li><code>grep -rn "mark_deleted!" app/ lib/</code> <span class="sr-r">the definition, the deletes controller, and a comment in <code>Scheduler::SelfDestructScheduler</code></span></li>
+            <li><code>grep -rn "ChallengableConcern\|require_challenge!" app/controllers/</code> <span class="sr-r">the four 2FA controllers and <code>Auth::ChallengesController</code>; not the deletes controller, so its <code>challenge_passed?</code> overrides nothing</span></li>
+            <li><code>grep -rn "with_username" app/</code> <span class="sr-r">the scope at <code>account.rb:165</code> and five call sites &mdash; the finder concern, the uniqueness validator, LDAP sign-in, the ActivityPub tag manager and account suggestions</span></li>
+            <li><code>grep -rn "autocapitalize" app/</code> <span class="sr-r">four hits, all <code>:acct</code> or <code>:attribution_domains</code> inputs; no self-confirmation username field carries it</span></li>
+            <li><code>grep -ln "validates\|validate " app/models/form/*.rb</code> <span class="sr-r">four of the fifteen form objects; <code>delete_confirmation.rb</code> is not one</span></li>
+            <li><code>grep -rn "encrypted_password" app/</code> <span class="sr-r">sixteen lines; the challenge-shaped ones are the deletes controller, <code>form/redirect.rb:20</code>, <code>account_migration.rb:46</code>, <code>challengable_concern.rb:53</code> and three views</span></li>
+            <li><code>grep -rn "form_delete_confirmation" app/javascript/</code> <span class="sr-r">no hits; the form is server-rendered only</span></li>
+          </ul>
+          <p class="sr-limit"><strong>Out of reach.</strong> A name-based pass cannot see what a browser
+            does to an input's value before submitting it, nor what third-party Mastodon clients put in
+            front of this flow; both are where the description locates the problem the change is for.</p>
+        </div>
+      </details>
+
+      <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
+      <ul class="ev-list">
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/settings/deletes_controller.rb#L24">app/controllers/settings/deletes_controller.rb:24</a> &mdash; already permitted <code>:username</code>, which is why the change needed no strong-params edit.</li>
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/config/locales/en.yml#L1520">config/locales/en.yml:1520</a> &mdash; <code>deletes.confirm_username</code> pre-existed and is already translated, so the field gains its hint in every locale; it now appears beside <code>confirm_password</code> rather than instead of it.</li>
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/views/auth/registrations/edit.html.haml#L71">app/views/auth/registrations/edit.html.haml:71</a> &mdash; the only in-app link into this flow; unchanged and unaffected.</li>
+        <li><a class="path" href="https://github.com/mastodon/mastodon/blob/977f46e9d22f4f07ccbe36efe186068bf054f7d4/app/controllers/admin/accounts_controller.rb#L74">app/controllers/admin/accounts_controller.rb:74</a> &mdash; administrative deletion goes through <code>Admin::AccountDeletionWorker</code> and never through this challenge.</li>
+      </ul>
+    </details>
+  </main>
+</div>
+
+<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, and
+     the syntax tint on unchanged excerpts.
+     This is the ONLY script the page carries: no state, no localStorage, no
+     counters. All four are presentation, and the page reads correctly with the
+     whole block removed — the excerpts simply render in one ink, as they did
+     before the tint existed, and a citation lands in the tab it was clicked from.
+
+     highlight.js comes from cdnjs because that is the one script host a published
+     artifact may load; its stylesheets are NOT loadable, which is why the theme
+     for it lives in our token block above. Two grammars are loaded beside the
+     core bundle because neither is in it and both are code this page quotes:
+     erb for Rails views, elixir for Elixir modules. Carry all three lines.
+     There is deliberately no heex grammar — highlight.js ships none, and
+     excerpt.sh emits no data-lang for .heex for that reason. Loaded plainly, before the inline
+     script, so it is defined by the time that runs. If it 404s or is blocked,
+     window.hljs is undefined and the tint is skipped. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/erb.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/elixir.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var bar = document.getElementById('bar');
+  if (bar) {
+    var onScroll = function () {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (h > 0 ? Math.min(100, (window.scrollY / h) * 100) : 0) + '%';
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  var rails = Array.prototype.slice.call(document.querySelectorAll('[data-rail]'));
+  var secs = rails
+    .map(function (a) { return document.getElementById(a.getAttribute('data-rail')); })
+    .filter(Boolean);
+
+  if (secs.length && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      var vis = entries
+        .filter(function (e) { return e.isIntersecting; })
+        .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+      if (!vis[0]) { return; }
+      var id = vis[0].target.id;
+      rails.forEach(function (a) {
+        var on = a.getAttribute('data-rail') === id;
+        a.classList.toggle('on', on);
+        if (on) { a.setAttribute('aria-current', 'true'); } else { a.removeAttribute('aria-current'); }
+      });
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+    secs.forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---- Off-page links open in a new tab ---------------------------------
+     Applied, never authored, for the same reason the tint is. A run types
+     dozens of citations per page and would have to remember an attribute on
+     every one of them; here it is one rule that cannot be forgotten, cannot
+     be typed wrong, and does not have to be added to the template's every
+     anchor before a new component can carry one.
+
+     Why the page wants it: a citation is followed from the MIDDLE of an
+     agenda the reader has not finished. Replacing the page with GitHub costs
+     them their place, the rail's position, every excerpt they had opened and
+     every checkpoint they had read — and the way back is a browser Back that
+     lands at the top. The page is the thing being read; the diff is the thing
+     being consulted.
+
+     The exception is this page pointing at itself — the rail, a checkpoint
+     pointer, an impact card's back-reference — and those must NOT move,
+     because a new tab there is the same lost place with an extra window.
+     The test is therefore "same document, differing only by fragment",
+     computed from the resolved href rather than from a class list, so a
+     component added later is covered without anyone remembering this block.
+
+     rel is set WITH target and never apart from it: target="_blank" hands
+     the opened page a window.opener handle back to this one, and every link
+     this touches goes to a host the page does not control.
+
+     Presentation, like everything else in this script: with the block
+     removed the links still work, they simply land in the same tab. */
+  Array.prototype.forEach.call(document.querySelectorAll('a[href]'), function (a) {
+    var here = location.href.split('#')[0], there;
+    try { there = new URL(a.getAttribute('href'), location.href).href.split('#')[0]; }
+    catch (e) { return; }
+    if (there === here) { return; }
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+  });
+
+  /* ---- Syntax tint, .excerpt--source only -------------------------------
+     The rule this obeys: an excerpt is a quotation, so the script may change
+     how the characters look and nothing else. It highlights the whole slice as
+     one stream (per-line highlighting mis-reads a multi-line string or a
+     heredoc), splits the result back onto the original lines so the CSS line
+     counter still seeds from the file, and then compares the reconstruction to
+     the text it started with, line by line. Any difference at all and the line
+     is left exactly as the generator wrote it: a wrong tint is a small lie, a
+     changed character is a false quotation.
+
+     .excerpt--diff carries no data-lang and so never reaches here. Its rows
+     already use colour to mean added and removed, and a hunk is not one
+     lexical stream in the first place. */
+  function tint(pre) {
+    var lang = pre.getAttribute('data-lang');
+    if (!lang || !window.hljs || !hljs.getLanguage(lang)) { return; }
+
+    var lines = pre.querySelectorAll('span.l');
+    if (!lines.length) { return; }
+
+    var src = [], i;
+    for (i = 0; i < lines.length; i++) {
+      if (lines[i].querySelector('span')) { return; }   // a signed row: not ours
+      src.push(lines[i].textContent);
+    }
+
+    var html;
+    try {
+      html = hljs.highlight(src.join('\n'), { language: lang, ignoreIllegals: true }).value;
+    } catch (e) { return; }
+
+    // Flatten the highlighted tree into [[classChain, text], ...] per line.
+    var holder = document.createElement('div');
+    holder.innerHTML = html;
+    var rows = [[]];
+    (function walk(node, chain) {
+      for (var c = node.firstChild; c; c = c.nextSibling) {
+        if (c.nodeType === 3) {
+          var parts = c.nodeValue.split('\n');
+          for (var j = 0; j < parts.length; j++) {
+            if (j) { rows.push([]); }
+            if (parts[j]) { rows[rows.length - 1].push([chain, parts[j]]); }
+          }
+        } else if (c.nodeType === 1) {
+          walk(c, c.className ? chain.concat([c.className]) : chain);
+        }
+      }
+    })(holder, []);
+
+    // Verify before touching the page: same number of lines, same characters.
+    if (rows.length !== lines.length) { return; }
+    for (i = 0; i < rows.length; i++) {
+      var t = '';
+      for (var k = 0; k < rows[i].length; k++) { t += rows[i][k][1]; }
+      if (t !== src[i]) { return; }
+    }
+
+    for (i = 0; i < lines.length; i++) {
+      var frag = document.createDocumentFragment();
+      for (var m = 0; m < rows[i].length; m++) {
+        var chain = rows[i][m][0], node = document.createTextNode(rows[i][m][1]);
+        for (var d = chain.length - 1; d >= 0; d--) {
+          var wrap = document.createElement('span');
+          wrap.className = chain[d];
+          wrap.appendChild(node);
+          node = wrap;
+        }
+        frag.appendChild(node);
+      }
+      lines[i].textContent = '';
+      lines[i].appendChild(frag);
+    }
+  }
+
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.excerpt--source .ex-body > pre[data-lang]'), tint);
+})();
+</script>
+
+</body></html>
