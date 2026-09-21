@@ -1,11 +1,5 @@
 # accountable-review 🧭
 
-> [!NOTE]
-> **1.0.0 — use it on real pull requests.** The page format and the procedure behind it are
-> settled, and it installs from the WyeWorks marketplace in two commands (see
-> [Installation](#installation-)). What a Review Map does not claim to do is not a version number
-> away — see [What a Review Map cannot do](#what-a-review-map-cannot-do-).
-
 > **AI-assisted code review for teams that want to move faster with coding agents without losing control of their codebase.**
 
 `accountable-review` turns a pull request into a **Review Map**: a published HTML page that guides a
