@@ -40,8 +40,8 @@ docs/                              the public documentation the README links out
 examples/                          published example maps, served at wyeworks.github.io by pages.yml
 ├── index.html                     the front door — borrows the design language, not the page rules
 ├── README.md                      which PR, which revision and which version produced each page
-├── discourse-43845/               34 files: most of the judgment sits outside the diff
-└── mastodon-40576/                3 files, 4 judgments, the last a coding decision
+├── rubygems-6699/                 11 additive files, 5 judgments, the last a coding decision
+└── discourse-43845/               34 files: most of the judgment sits outside the diff
 skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/

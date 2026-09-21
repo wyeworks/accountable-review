@@ -13,8 +13,8 @@ which is most of what makes an example worth reading.
 
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
+| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `b637b16` → `9d5892f` | 11 files · 5 checkpoints · 2 impact paths |
 | `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `0f717c7` → `64358ac` | 34 files · 5 checkpoints · 3 impact paths |
-| `mastodon-40576/` | [mastodon/mastodon#40576](https://github.com/mastodon/mastodon/pull/40576) — *Always require typing username when self-deleting account* | `977f46e` → `ab1e731` | 3 files · 4 checkpoints · 2 impact paths |
 
 `index.html` is the front door to the two. It is not a Review Map and follows none of the page
 rules — it borrows the design language and the theme rule, and nothing else.
@@ -56,14 +56,17 @@ and writes portable static HTML; it changes where the bytes land and nothing els
 
 They fail in opposite directions, which is what a pair is for.
 
-**Discourse** is the case the format exists for. Thirty-four files, and most of what a reviewer has
-to decide is not in any of them: whether the site's username rules still bind a server-generated
-name, whether the CAPTCHA still gates the request that creates the account. A diff cannot show
-either.
+**RubyGems** is eleven files that all look safe. It is the first slice of a larger change: a new
+table, four callbacks that keep it in step with the live one, and a backfill task — nothing reads
+the new table yet, and every line of it is an addition. What a reviewer has to decide is therefore
+almost entirely about code the diff never opened: which existing paths destroy an ownership without
+running a callback, which of them now close a tenure for someone whose access continues anyway, and
+whether a failed history write should take the push down with it. It also carries the one checkpoint
+per page that may judge how a change was built rather than what it now does — and it earns the slot
+the only way that is allowed, by pointing at where this codebase already answered the same question.
 
-**Mastodon** is three files and still four judgments, which is the argument against skimming a small
-diff. It also carries the one checkpoint per page that may judge how a change was built rather than
-what it now does — and it earns the slot the only way that is allowed, by pointing at where this
-codebase already answered the same question.
+**Discourse** is the case for a large diff. Thirty-four files, and most of what a reviewer has to
+decide is not in any of them: whether the site's username rules still bind a server-generated name,
+whether the CAPTCHA still gates the request that creates the account. A diff cannot show either.
 
 Neither page grades its pull request, and this directory does not rank the two.

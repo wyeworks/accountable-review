@@ -19,7 +19,8 @@
 
   It also keeps the product principle, which reaches every page this project
   publishes: nothing here grades either pull request, and nothing grades the maps.
-  The two entries are ordered small-diff-last for contrast, which is not a ranking.
+  The two entries are ordered additive-diff-first for contrast — a change that
+  looks safe against one that is plainly large — which is not a ranking.
 -->
 
 <style>
@@ -174,6 +175,25 @@ code {
   <div class="cards">
 
     <article class="card">
+      <span class="lbl">RubyGems.org</span>
+      <h2><a href="rubygems-6699/">Every confirmed gem ownership now leaves a durable record of who held it</a></h2>
+      <p>
+        Eleven files that all look safe: a new table, the callbacks that keep it in step with the
+        live one, and a backfill task. Nothing reads the new table yet, so what a reviewer has to
+        decide is almost entirely about code the diff never opened — which paths destroy an
+        ownership without running a callback, and which of them now close a tenure for someone
+        whose access continues anyway.
+      </p>
+      <div class="meta">
+        <span><b>11</b> files</span>
+        <span><b>5</b> checkpoints</span>
+        <span><b>2</b> impact paths</span>
+        <span>PR <a href="https://github.com/rubygems/rubygems.org/pull/6699">rubygems.org#6699</a></span>
+      </div>
+      <a class="go" href="rubygems-6699/">Open the map</a>
+    </article>
+
+    <article class="card">
       <span class="lbl">Discourse</span>
       <h2><a href="discourse-43845/">Email-code signup waits for a username before it creates the account</a></h2>
       <p>
@@ -189,24 +209,6 @@ code {
         <span>PR <a href="https://github.com/discourse/discourse/pull/43845">discourse#43845</a></span>
       </div>
       <a class="go" href="discourse-43845/">Open the map</a>
-    </article>
-
-    <article class="card">
-      <span class="lbl">Mastodon</span>
-      <h2><a href="mastodon-40576/">Self-deletion now asks for the username as well as the password</a></h2>
-      <p>
-        Three files, and still four judgments — which is the case for reading a small diff
-        carefully. It also carries the one checkpoint per page that may ask how a change was
-        built rather than what it does, and it only asks because it can point at where this
-        codebase already answered the same question.
-      </p>
-      <div class="meta">
-        <span><b>3</b> files</span>
-        <span><b>4</b> checkpoints</span>
-        <span><b>2</b> impact paths</span>
-        <span>PR <a href="https://github.com/mastodon/mastodon/pull/40576">mastodon#40576</a></span>
-      </div>
-      <a class="go" href="mastodon-40576/">Open the map</a>
     </article>
 
   </div>
