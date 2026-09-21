@@ -684,18 +684,20 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
    reader had just read; the two-part row is what makes a long one scannable and a
    verbose one look wrong.
 
-   The row WRAPS, it is not a two-column grid, and the difference is the whole reason
-   this reads. A grep with two --include flags is 70 monospace characters, and as
-   `minmax(0, max-content) 1fr` that command took the whole width while the clause
-   column collapsed to its own min-content: a six-line row reading one word per line,
-   beside a command that had wrapped anyway. So the pair is a flex line instead. A
-   short command keeps its clause alongside; a long one pushes the clause onto its own
-   full-width line, which is the stacked form arriving per row rather than at a
-   breakpoint the content cannot see. Two things then say which command a dropped
-   clause belongs to, and both are load-bearing because nothing else does: a hanging
-   indent (16px of padding on the row, pulled back off the command) and a row gap of
-   11px against the 2px between a command and its own clause. Take either away and a
-   clause on its own line reads as the start of the next search. */
+   The row STACKS: the command on its own line, the clause under it. It was a wrapping
+   flex line, on the theory that a short command keeps its clause alongside and a long
+   one pushes it down — but the width a clause needs is not the width it is given, so
+   the bad case is the middle one, and the middle one is the common one. A 60-character
+   command leaves 24ch of tail, enough for the clause to stay on the line and not
+   enough to read: a published page ran four-word clauses down a narrow ragged column
+   beside the command, one word per line at the worst of it. A grid had the same defect
+   from the other side. Stacking has no middle case — every clause gets the full width,
+   at the cost of a line per row in a block that is shut by default.
+
+   Two things say which command a clause belongs to, and both are load-bearing because
+   nothing else does: a hanging indent (16px of padding on the row, pulled back off the
+   command) and a row gap of 11px against the 2px between a command and its own clause.
+   Take either away and a clause reads as the start of the next search. */
 details.searched { border: 1px solid var(--prov-rule); background: var(--prov-bg); margin: 12px 0; }
 details.searched > summary { display: flex; gap: 10px; align-items: baseline; padding: 10px 14px; cursor: pointer; list-style: none; font-size: 13.5px; color: var(--prov-ink); }
 details.searched > summary::-webkit-details-marker { display: none; }
@@ -704,15 +706,15 @@ details.searched > summary::marker { content: ""; }
 details.searched[open] .chev { transform: rotate(90deg); }
 .searched .sr-body { padding: 0 14px 12px; border-top: 1px solid var(--prov-rule); }
 .searched .sr-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 11px; }
-.searched .sr-list > li { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; padding-left: 16px; }
-.searched .sr-list code { min-width: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.searched .sr-list > li { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding-left: 16px; }
+.searched .sr-list code { min-width: 0; max-width: 100%; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
 /* The hanging indent belongs to the LEADING command alone. As a descendant rule the
    -16px reached every code in the row, including one inside the clause, and pulled it
    16px left — over the words before it. A published page showed the overlap. Same
    shape as .pending's text-indent: a rule about a row's first child, written as though
    the row had only one. */
 .searched .sr-list > li > code:first-child { margin-left: -16px; }
-.searched .sr-r { flex: 1 1 24ch; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.searched .sr-r { align-self: stretch; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .searched .sr-limit { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 72ch; }
 
 /* ============================================================
