@@ -543,20 +543,36 @@ broken one, and the same fail-closed rule the Rails catalogue applies per row.
 
 ### Example Review Map
 
-No public example is linked yet — the pages produced so far are private artifacts of real client
-pull requests. The fastest way to see one is to run the skill against a branch of your own; a
-four-file bugfix produces a one-screen page in a couple of minutes.
+Two, against open pull requests in public Rails codebases:
 
-What a good example shows:
+**[🧭 Read the example Review Maps](https://wyeworks.github.io/accountable-review/)**
+
+| | |
+| --- | --- |
+| [**Discourse #43845**](https://wyeworks.github.io/accountable-review/discourse-43845/) — *Email-code signup waits for a username before it creates the account* | 34 files, 5 checkpoints. The case the format exists for: most of what a reviewer has to decide is not in the diff — which of the site's username rules still bind a server-generated name, whether the CAPTCHA still gates the request that creates the account. |
+| [**Mastodon #40576**](https://wyeworks.github.io/accountable-review/mastodon-40576/) — *Self-deletion now asks for the username as well as the password* | 3 files, 4 checkpoints. The argument against skimming a small diff — and it carries the one checkpoint per page that may ask how a change was built, earning the slot by pointing at where the codebase already answered the same question. |
+
+They are public repositories on purpose: every `file:line` citation on those pages resolves, so you
+can follow any claim into the code it is about. Both are ordinary output at the default settings,
+unedited after the run produced them.
+
+Worth opening them for:
 
 - a handful of checkpoints, each a question you could answer wrongly, in the order you would most
   regret getting wrong — and nothing anywhere that reads as a severity or a verdict
 - affected-but-unchanged code, drawn as chains from the change to what someone would observe, with
   the searches that found it recorded and re-runnable
 - evidence vs. inference, labelled per claim
-- collapsed source excerpts, quoted verbatim from your repository
+- collapsed source excerpts, quoted verbatim from the repository
 - a reading order that builds understanding rather than following the diff
 - open questions only the author can answer
+
+Both were generated with version 1.0.1. The page format moves between releases, so
+[`examples/README.md`](examples/README.md) records which version produced each page and how to
+regenerate them — a linked example quietly rendering an old format is worse than none.
+
+The other way to see one is to run the skill against a branch of your own; a four-file bugfix
+produces a one-screen page in a couple of minutes.
 
 ---
 

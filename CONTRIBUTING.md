@@ -37,6 +37,11 @@ ci/                                what runs in CI, not what a skill reads
 docs/                              the public documentation the README links out to
 ├── review-map.md                  anatomy of the page
 └── ci.md                          the delivery seam, and how to add a provider
+examples/                          published example maps, served at wyeworks.github.io by pages.yml
+├── index.html                     the front door — borrows the design language, not the page rules
+├── README.md                      which PR, which revision and which version produced each page
+├── discourse-43845/               34 files: most of the judgment sits outside the diff
+└── mastodon-40576/                3 files, 4 judgments, the last a coding decision
 skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
