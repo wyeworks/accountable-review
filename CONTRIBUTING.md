@@ -90,6 +90,13 @@ Keep the review rules in the shared files so an improvement applies to both host
 
 ## Verifying a change
 
+> [!NOTE]
+> **The tests and evals here are a draft.** They cover the scripts and the mechanical page rules
+> well; they cover the prose — the part that decides whether a page is right — much less. A green
+> suite is necessary and not sufficient, so reading a page the change produced is still the real
+> check. Solidifying this safety net is the next piece of work, and it will change what is listed
+> below.
+
 Before pushing, the manifest check must pass. CI runs the same one:
 
 ```bash

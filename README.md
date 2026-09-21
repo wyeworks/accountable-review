@@ -708,6 +708,13 @@ sense — the "source" is prose that another Claude instance executes, so change
 running the skill against a real PR and reading the page it produces, plus an eval harness for
 judging a wording change against planted findings.
 
+> [!NOTE]
+> **The safety net is a draft.** The deterministic tests and the eval harness cover the scripts and
+> the mechanical page rules; they cover much less of the prose, which is the part that decides
+> whether a page is right. Treat a green run as necessary rather than sufficient — solidifying that
+> net is the next piece of work here, and until then a change is verified by reading a real page it
+> produced.
+
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the layout, the eval loop and the release process.
 
 ---
