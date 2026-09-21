@@ -27,7 +27,7 @@ Built by **WyeWorks**.
   - [Claude Code](#claude-code)
   - [Codex](#codex)
 - [Usage](#usage-)
-  - [One page shape](#one-page-shape)
+  - [Basic usage](#basic-usage)
   - [How hard it works](#how-hard-it-works)
   - [Onboarding a reviewer into the stack](#onboarding-a-reviewer-into-the-stack)
   - [When the branch keeps moving](#when-the-branch-keeps-moving)
@@ -150,9 +150,7 @@ worker, template — and the point is the same: no directory contains the behavi
 
 `accountable-review` traces the PR around the **behaviour being implemented**, not the order of
 files in the diff — and then publishes the part of that work you have to act on: the handful of
-judgments the change asks of you, and where to look to make each one. Persistence, the endpoint
-contract and the frontend boundary get no sections of their own, on purpose: one behaviour crosses
-all three, and giving each its own section means describing that behaviour three times.
+judgments the change asks of you, and where to look to make each one.
 
 ### The most important code may not have changed
 
@@ -166,15 +164,7 @@ Examples:
 - an existing query gets a new caller,
 - a TypeScript type now participates in a changed backend contract.
 
-A normal diff cannot show those relationships.
-
-A Review Map can.
-
-> **The lines stayed the same. The system around them did not.**
-
-Finding that code is the expensive half of the work, so the page also **records what was searched**.
-An empty result reads as evidence rather than as omission, and every recorded search is a command you
-can re-run.
+A normal diff cannot show those relationships. A Review Map can.
 
 ---
 
@@ -193,34 +183,6 @@ Read the code in this order     3-7 stops, in the order that builds understandin
 Impact outside the diff         1-3 chains, from changed code into code it gives new meaning to,
                                 each node linked to the file it lives in
 ▸ Evidence & diff coverage      every changed path, the searches run, the rest of what was found
-```
-
-A **checkpoint** is the primitive. Not a category — *ProjectSearcher implementation* names a file —
-but a judgment you could get wrong. Most are about what the change now does; **at most one per page
-is about how it was built** — where a class was put, what kind of object it is, which existing
-abstraction it went around — and that one only ever appears when the page can point at the place your
-codebase already answers the same question, so it reads as *why is this one different?* rather than as
-a style guide. It asks; it does not answer.
-
-```text
-Is nil → cross_facility an intentional semantic default?
-
-  The constructor now defaults a missing facility rather than raising, and two searchers
-  read that value. On /transactions the current facility is nil, so the fallback decides
-  what the page scopes to.                                    from unchanged code
-
-  Look at
-
-    The nil default
-    where a missing facility becomes cross_facility instead of raising
-    BaseSearcher#initialize:14-19
-
-    The consumer that widens with it
-    reads the value without checking which facility it came from
-    ProjectSearcher#options:31
-
-  Open question  Whether cross-facility scope is intended there, or an artefact of the
-                 constructor change.
 ```
 
 Claims about unchanged code come with the code attached: a collapsed excerpt of the real source,
@@ -333,31 +295,19 @@ marked pending, so a half-written page can never be mistaken for a finished one.
 To have one generated for every pull request instead of by hand, see
 [CI integration](#ci-integration-) below.
 
-### One page shape
+### Basic usage
 
-There is one page, and no flag chooses it:
+This generates the default Review Map for PR #412. The skill works best for PRs that are about to
+be merged, but it also works well with already-merged PRs when you want to catch up on changes.
 
 ```text
 /accountable-review:review-map 412
 ```
 
-No argument selects a length or a depth, and an argument the skill does not recognise is reported
-rather than guessed at — a misread flag silently produces the wrong run, and the page gives you no
-way to tell.
-
-The page used to have two shapes and a word budget to tell them apart. What a reviewer wants is not a
-length setting: it is an answer to *what do I have to judge here, and where do I look?* The analysis
-underneath is unchanged and deep — the run traces consumers across the whole diff, reads the tests,
-follows values across the boundary and attacks its own conclusions. What reaches the page is the part
-you have to act on, which on a small or medium PR is usually 700 to 1,500 words.
-
-Short is not thin. No finding, no citation, no evidence tier and no figure comes out to make a page
-shorter, the number of checkpoints is never traded against a word count, and every changed file is
-still accounted for.
+What makes it onto the page is the part you actually need to act on. For a small or medium-sized PR,
+that usually means around 700 to 1,500 words.
 
 ### How hard it works
-
-A separate axis, orthogonal to the one above:
 
 ```text
 /accountable-review:review-map 412                 # --effort high, the default
@@ -378,10 +328,6 @@ pull request the whole pass cost 23 seconds of waiting, under 1% of the run, and
 reviewed without it missed five things the falsified page carried. `--effort low` turns it off, which
 is worth doing when the diff is small enough that a second reader has nothing to find.
 
-**The page looks exactly the same either way.** No badge, no marker, no count of what was corrected —
-a stamp saying how hard someone looked is the clean bill of health this page must never read as. What
-changed is reported to you in the terminal, not to whoever opens the link.
-
 ### Onboarding a reviewer into the stack
 
 A third axis, and the only one that puts anything on the page:
@@ -394,21 +340,9 @@ A third axis, and the only one that puts anything on the page:
 A Review Map normally assumes you know the framework and are meeting *this change* for the first
 time. `--mentor` is for the other case — a reviewer new to Rails or to Phoenix, on their first
 pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
-know, the page stops linking to the manual and states the rule: a short **primer** inside that
+know, the page stops linking to the manual and states the rule: a short primer inside that
 checkpoint, with the API named, the behaviour explained, a worked example on a generic class, the
 line in *your* repository that made it relevant, and the pinned documentation link it came from.
-
-**It adds primers and it changes nothing else.** Same sections, the same checkpoints in the same
-order, same reading path, same impact section, same budget on every other part. Delete the
-primers from a mentor page and you have the ordinary page back — which is exactly why it is a flag
-rather than a second document, and why there is no "mentor mode" badge on the page: you can see
-which one you got.
-
-At most one primer per checkpoint and three per page. A judgment every developer in the stack
-already understands earns none, and a run that finds nothing worth teaching writes none — the flag
-is not an instruction to explain the framework. If you name a stack it is checked against the
-repository rather than believed, so `--mentor rails` in a Phoenix checkout stops the run instead of
-applying the wrong lens.
 
 > **Phoenix today:** a primer is gated on the documentation link it escalates from, and the Elixir
 > catalogue ships closed until a verification run has opened every row in it. So `--mentor` on a
@@ -470,9 +404,7 @@ health, and it never carries a boilerplate disclaimer saying so either: the limi
 every Review Map, so they are written down once, here, rather than reprinted under a heading you have
 already read a dozen times.
 
-The goal is not to sound confident.
-
-The goal is to help the reviewer investigate the change.
+The goal is not to sound confident. The goal is to help the reviewer investigate the change.
 
 ### What a Review Map cannot do
 
@@ -497,7 +429,7 @@ into code the diff never opened, and it is also the honest limit on the page.
 is what the page's depth is calibrated against. Other models will trade cost for reach differently —
 try a few against your own codebase and keep the one whose maps you actually trust.
 
-### Rails first, Phoenix second
+### Ruby on Rails first
 
 The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
 behaviour often emerges from several pieces working together:
@@ -529,17 +461,6 @@ job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing w
 behind it, and a `phx-click` renamed in a template without its `handle_event` clause crashes the
 LiveView the first time someone clicks it. Which of the two you get is detected from the repository, a
 `Gemfile` against a `mix.exs`, not configured; a repo holding both asks which to cover.
-
-Where a reviewer needs the framework rule itself, the page anchors it two ways: a documentation link
-**pinned to the versions in your own lock file** — the Rails series and gem versions from
-`Gemfile.lock`, each package's exact version from `mix.lock` — and a read-only console probe to run
-against your own application. Probes are proposed, never run: the skill does not boot your app, so no
-output on the page is ever invented.
-
-One asymmetry worth knowing rather than discovering: the Elixir documentation catalogue ships
-complete but **unverified**, and until its verification run happens it withholds every link. An
-Elixir page anchors with probes and prose and emits no documentation URL — a narrower page, not a
-broken one, and the same fail-closed rule the Rails catalogue applies per row.
 
 ### Example Review Map
 
