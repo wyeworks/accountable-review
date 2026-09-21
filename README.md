@@ -14,6 +14,36 @@ Built by **WyeWorks**.
 
 ---
 
+## Contents 📑
+
+- [Why?](#why-)
+- [AI code review ≠ AI-assisted code review](#ai-code-review--ai-assisted-code-review---‍)
+- [Diffs are necessary. They are no longer sufficient.](#diffs-are-necessary-they-are-no-longer-sufficient-)
+- [Review behaviours, not file lists](#review-behaviours-not-file-lists-️)
+- [The most important code may not have changed](#the-most-important-code-may-not-have-changed-)
+- [What is a Review Map?](#what-is-a-review-map-)
+- [Installation](#installation-️)
+  - [Claude Code](#claude-code)
+  - [Codex](#codex)
+- [Usage](#usage-)
+  - [One page shape](#one-page-shape)
+  - [How hard it works](#how-hard-it-works)
+  - [Onboarding a reviewer into the stack](#onboarding-a-reviewer-into-the-stack)
+  - [When the branch keeps moving](#when-the-branch-keeps-moving)
+- [Evidence over confidence](#evidence-over-confidence-)
+- [What a Review Map cannot do](#what-a-review-map-cannot-do-️)
+- [Rails-first](#rails-first-️‍)
+- [Example Review Map](#example-review-map-️)
+- [CI integration](#ci-integration-)
+  - [What you get](#what-you-get)
+- [Technical overview](#technical-overview-)
+- [Configuration](#configuration-️)
+- [Contributing](#contributing-)
+- [License](#license-)
+- [About WyeWorks](#about-wyeworks)
+
+---
+
 ## Why? ⚡
 
 AI coding tools can produce large changes much faster than teams can absorb them.
@@ -32,6 +62,11 @@ When code enters the codebase faster than the team understands it, short-term sp
 long-term loss of control. That gap has a name —
 [comprehension debt](https://addyosmani.com/blog/comprehension-debt/) — and it comes due the first
 time someone has to change the code nobody read.
+
+The answer is not less AI. It is more reviewer understanding alongside it — more productivity
+and more comprehension, rather than one bought with the other:
+
+> **Move faster with AI. Stay in control.**
 
 ---
 
@@ -201,126 +236,6 @@ It helps the diff make sense.
 
 📖 Full anatomy of the page — every section, the checkpoint, the staging behaviour, the excerpt and
 framework-anchor rules — is in [`docs/review-map.md`](docs/review-map.md).
-
----
-
-## Evidence over confidence 🔬
-
-The tool separates what is known from what is inferred.
-
-A statement may come from:
-
-- changed code,
-- unchanged repository code,
-- tests,
-- inference,
-- or uncertain intent.
-
-A claim the diff shows directly carries no label. Everything else is marked — *from unchanged code*,
-*inferred from tests*, *inferred*, *uncertain* — so an inference can never pass as a fact. Where the
-tool cannot establish intent, it says so:
-
-> It is unclear whether existing time entries stay editable after archival. No test covers it.
-
-Every claim also carries a `file:line` into your repository, and by default a second reader attacks
-those claims before the page is finished (see [Usage](#usage-) → *effort*).
-
-Nor does the page claim to have found everything — see
-[What a Review Map cannot do](#what-a-review-map-cannot-do-) below. It never reads as a clean bill of
-health, and it never carries a boilerplate disclaimer saying so either: the limits are the same on
-every Review Map, so they are written down once, here, rather than reprinted under a heading you have
-already read a dozen times.
-
-The goal is not to sound confident.
-
-The goal is to help the reviewer investigate the change.
-
----
-
-## What a Review Map cannot do 🌫️
-
-A Review Map is written by a model reading your repository. That is what lets it trace a consequence
-into code the diff never opened, and it is also the honest limit on the page.
-
-- **It is a pass, not an audit.** Three passes over the same 109-file diff produced eight headline
-  findings between them, only one of which appeared in all three. Explanation is reproducible; defect
-  discovery is sampling.
-- **It has blind spots, and they are not random.** Behaviour living in configuration, in data, in a
-  queue, in another service or in the gap between two deploys is harder to reach from a diff than
-  behaviour living in a method — so those are the regions a map is quietest about, and quiet is not
-  the same as clear. On a very large diff it also runs out of room before it runs out of diff, and
-  says which region it skimmed.
-- **Some of it can simply be wrong** — a misread method, a framework default that does not hold for
-  your version, a consequence prevented somewhere the run never looked. Every claim is labelled by
-  how it is known and carries a `file:line`, so open the citation for anything you would act on.
-- **It never decides anything.** A map that says nothing about a file is not telling you the file is
-  fine, only that this pass surfaced no judgment there.
-
-**And it depends on the model behind it.** We develop and test with Claude Opus 5 most of the time, and that
-is what the page's depth is calibrated against. Other models will trade cost for reach differently —
-try a few against your own codebase and keep the one whose maps you actually trust.
-
----
-
-## Rails-first ❤️‍🔥
-
-The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
-behaviour often emerges from several pieces working together:
-
-- routes
-- controllers
-- Active Record models
-- validations and callbacks
-- policies
-- jobs
-- serializers
-- service objects
-- tests
-- frontend clients
-
-The plugin is designed to help reviewers understand those relationships as a system, and it knows
-where the framework's own rules bite: `update_all` at a call site the diff never opened skips the
-validation this PR adds, a uniqueness validation is not a unique index, `--sandbox` rolls back so
-`after_commit` never fires there.
-
-It also reads the app for **what your team already decided**. A value object in `app/models` is
-ordinary; a value object in `app/models` when four of its kind live in `app/services` is a choice
-someone made, and the page will ask whether it was deliberate — with the four siblings cited, because
-without them there is nothing to ask. That question is never a recommendation, never appears more than
-once, and never takes a slot from a judgment about behaviour.
-
-**Elixir/Phoenix is the second stack** — a LiveView app or a JSON API — with its own lens for the same
-job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing without the index
-behind it, and a `phx-click` renamed in a template without its `handle_event` clause crashes the
-LiveView the first time someone clicks it. Which of the two you get is detected from the repository, a
-`Gemfile` against a `mix.exs`, not configured; a repo holding both asks which to cover.
-
-Where a reviewer needs the framework rule itself, the page anchors it two ways: a documentation link
-**pinned to the versions in your own lock file** — the Rails series and gem versions from
-`Gemfile.lock`, each package's exact version from `mix.lock` — and a read-only console probe to run
-against your own application. Probes are proposed, never run: the skill does not boot your app, so no
-output on the page is ever invented.
-
-One asymmetry worth knowing rather than discovering: the Elixir documentation catalogue ships
-complete but **unverified**, and until its verification run happens it withholds every link. An
-Elixir page anchors with probes and prose and emits no documentation URL — a narrower page, not a
-broken one, and the same fail-closed rule the Rails catalogue applies per row.
-
----
-
-## Philosophy ✨
-
-```text
-More AI productivity
-        +
-More reviewer understanding
-        =
-More speed without losing control
-```
-
-Our goal is simple:
-
-> **Move faster with AI. Stay in control.**
 
 ---
 
@@ -525,6 +440,110 @@ It refuses rather than guessing. A force-push or rebase, a base branch that move
 delta covering more than half the diff, a lock file bump, or a recorded search that now finds the
 changed code — each of those means the previous page is not a safe thing to build on, so the run
 regenerates from scratch and tells you which one it hit.
+
+---
+
+## Evidence over confidence 🔬
+
+The tool separates what is known from what is inferred.
+
+A statement may come from:
+
+- changed code,
+- unchanged repository code,
+- tests,
+- inference,
+- or uncertain intent.
+
+A claim the diff shows directly carries no label. Everything else is marked — *from unchanged code*,
+*inferred from tests*, *inferred*, *uncertain* — so an inference can never pass as a fact. Where the
+tool cannot establish intent, it says so:
+
+> It is unclear whether existing time entries stay editable after archival. No test covers it.
+
+Every claim also carries a `file:line` into your repository, and by default a second reader attacks
+those claims before the page is finished (see [Usage](#usage-) → *effort*).
+
+Nor does the page claim to have found everything — see
+[What a Review Map cannot do](#what-a-review-map-cannot-do-️) below. It never reads as a clean bill of
+health, and it never carries a boilerplate disclaimer saying so either: the limits are the same on
+every Review Map, so they are written down once, here, rather than reprinted under a heading you have
+already read a dozen times.
+
+The goal is not to sound confident.
+
+The goal is to help the reviewer investigate the change.
+
+---
+
+## What a Review Map cannot do 🌫️
+
+A Review Map is written by a model reading your repository. That is what lets it trace a consequence
+into code the diff never opened, and it is also the honest limit on the page.
+
+- **It is a pass, not an audit.** Three passes over the same 109-file diff produced eight headline
+  findings between them, only one of which appeared in all three. Explanation is reproducible; defect
+  discovery is sampling.
+- **It has blind spots, and they are not random.** Behaviour living in configuration, in data, in a
+  queue, in another service or in the gap between two deploys is harder to reach from a diff than
+  behaviour living in a method — so those are the regions a map is quietest about, and quiet is not
+  the same as clear. On a very large diff it also runs out of room before it runs out of diff, and
+  says which region it skimmed.
+- **Some of it can simply be wrong** — a misread method, a framework default that does not hold for
+  your version, a consequence prevented somewhere the run never looked. Every claim is labelled by
+  how it is known and carries a `file:line`, so open the citation for anything you would act on.
+- **It never decides anything.** A map that says nothing about a file is not telling you the file is
+  fine, only that this pass surfaced no judgment there.
+
+**And it depends on the model behind it.** We develop and test with Claude Opus 5 most of the time, and that
+is what the page's depth is calibrated against. Other models will trade cost for reach differently —
+try a few against your own codebase and keep the one whose maps you actually trust.
+
+---
+
+## Rails-first ❤️‍🔥
+
+The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
+behaviour often emerges from several pieces working together:
+
+- routes
+- controllers
+- Active Record models
+- validations and callbacks
+- policies
+- jobs
+- serializers
+- service objects
+- tests
+- frontend clients
+
+The plugin is designed to help reviewers understand those relationships as a system, and it knows
+where the framework's own rules bite: `update_all` at a call site the diff never opened skips the
+validation this PR adds, a uniqueness validation is not a unique index, `--sandbox` rolls back so
+`after_commit` never fires there.
+
+It also reads the app for **what your team already decided**. A value object in `app/models` is
+ordinary; a value object in `app/models` when four of its kind live in `app/services` is a choice
+someone made, and the page will ask whether it was deliberate — with the four siblings cited, because
+without them there is nothing to ask. That question is never a recommendation, never appears more than
+once, and never takes a slot from a judgment about behaviour.
+
+**Elixir/Phoenix is the second stack** — a LiveView app or a JSON API — with its own lens for the same
+job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing without the index
+behind it, and a `phx-click` renamed in a template without its `handle_event` clause crashes the
+LiveView the first time someone clicks it. Which of the two you get is detected from the repository, a
+`Gemfile` against a `mix.exs`, not configured; a repo holding both asks which to cover.
+
+Where a reviewer needs the framework rule itself, the page anchors it two ways: a documentation link
+**pinned to the versions in your own lock file** — the Rails series and gem versions from
+`Gemfile.lock`, each package's exact version from `mix.lock` — and a read-only console probe to run
+against your own application. Probes are proposed, never run: the skill does not boot your app, so no
+output on the page is ever invented.
+
+One asymmetry worth knowing rather than discovering: the Elixir documentation catalogue ships
+complete but **unverified**, and until its verification run happens it withholds every link. An
+Elixir page anchors with probes and prose and emits no documentation URL — a narrower page, not a
+broken one, and the same fail-closed rule the Rails catalogue applies per row.
 
 ---
 
