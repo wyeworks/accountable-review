@@ -1,8 +1,11 @@
 # accountable-review 🧭
 
 > [!NOTE]
-> **Beta — early stages.** This is still under active development, and things may change or
-> break between commits. We plan to have a ready-to-use version in the coming days.
+> **1.0.0 — use it on real pull requests.** The page format and the procedure behind it are
+> settled. Installation is still from a checkout, since the marketplace listing is not live yet, so
+> `git pull` is how you take an update and a tag is how you hold one back. What a Review Map does
+> not claim to do is not a version number away — see
+> [What a Review Map cannot do](#what-a-review-map-cannot-do-).
 
 > **AI-assisted code review for teams that want to move faster with coding agents without losing control of their codebase.**
 
@@ -332,7 +335,7 @@ Our goal is simple:
 
 ### Claude Code
 
-While this is in beta, point Claude Code at a checkout. Clone the repository:
+Until the marketplace listing is live, point Claude Code at a checkout. Clone the repository:
 
 ```bash
 git clone https://github.com/wyeworks/accountable-review.git
