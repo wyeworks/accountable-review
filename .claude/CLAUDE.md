@@ -5,7 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repository is
 
 There is no application code here. The repository is the `accountable-review` Claude Code plugin,
-with local Codex support for `review-map` through `bin/install-codex-skill`. It
+with local Codex support for `review-map` through `bin/install-codex-skill` and local Cursor support
+through `.cursor-plugin/plugin.json` and `bin/install-cursor-plugin`. It
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
 a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
@@ -163,8 +164,9 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the assembled checkpoint, the chain and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
-| `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local Codex HTML, named Claude agent or Codex subagent tools |
+| `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML in Codex and Cursor; the named Claude agent, Codex subagent tools, or Cursor's background Task |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
+| `.cursor-plugin/plugin.json`, `cursor/agents/` | The Cursor manifest and its falsifier wrapper. The manifest names `skills/review-map/` and `cursor/agents/` **explicitly**, so Cursor never sees `setup-ci` (Claude-only in CI) or the Claude wrapper, whose `tools` and `model: sonnet` mean nothing there. `name` and `version` must equal `.claude-plugin/plugin.json`'s, and `tests/cursor-plugin.sh` fails while they differ: each host reads only its own manifest, so a bump to one alone strands the other host's installs silently. `docs/cursor.md` is the public wording |
 | `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
@@ -1732,7 +1734,7 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
   had no rule found nine calls and seventy seconds spent re-establishing a path and moving excerpt
   files that had been written somewhere else first.
-- It assumes Claude Code or Codex plus a git repo containing a Rails or a Phoenix app. Everything else —
+- It assumes Claude Code, Codex or Cursor plus a git repo containing a Rails or a Phoenix app. Everything else —
   which of the two it is, the Rails root location or the `lib/<app>` and `lib/<app>_web` split, RSpec
   vs Minitest vs ExUnit, API-only vs server-rendered vs LiveView, how authorization is attached,
   whether a separate frontend exists and where its client and types live — is discovered, never
@@ -1791,7 +1793,12 @@ The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugi
 ```
 
 Keep `version` out of that entry — `plugin.json` wins when both are set, and one source of truth is
-less to forget. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
+less to forget.
+
+**Cursor reads its own manifest, `.cursor-plugin/plugin.json`, and nothing above reaches it.** Bump
+its `version` in the same commit; `bin/evals offline` fails until the two agree. It is not in any
+Cursor marketplace yet, so today it installs by `bin/install-cursor-plugin`, and a listing is a
+submission that ships this file rather than a change to it. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
 
 Two things do not belong at the plugin root: a `CLAUDE.md` (it ships to every install but is never
 loaded as project context, which is why this file lives in `.claude/`), and any component directory

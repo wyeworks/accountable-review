@@ -26,6 +26,7 @@ Built by **WyeWorks**.
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
   - [Codex](#codex)
+  - [Cursor](#cursor)
 - [Usage](#usage-)
   - [Basic usage](#basic-usage)
   - [How hard it works](#how-hard-it-works)
@@ -268,6 +269,34 @@ and Anthropic credentials. The local installer installs only `review-map`.
 
 See [Codex setup and verification](docs/codex.md) for project-scoped installation, removal,
 and the boundaries of this first integration.
+
+### Cursor
+
+Local `review-map` generation is supported in Cursor, as a local plugin. From a checkout of this
+repository:
+
+```bash
+bin/install-cursor-plugin
+```
+
+This links the checkout into `~/.cursor/plugins/local/accountable-review`, where Cursor reads
+`.cursor-plugin/plugin.json`. The plugin carries `review-map` and the read-only subagent its high
+effort pass uses — not `setup-ci`. It leaves an existing installation alone, and pulling the
+checkout updates the plugin. Reload Cursor if the skill does not appear.
+
+Open the repository you want to review in Cursor, then ask for:
+
+```text
+/review-map
+```
+
+As in Codex, the result is a **local HTML file**, linked from the response, and `--output
+/absolute/path/outside-the-repo` writes it as `index.html` there. High effort launches its
+independent readers as background subagents; if subagents are unavailable the skill says so, and
+`--effort low` runs without them.
+
+**Cursor CI execution is not supported.** `setup-ci` and the CI runner use Claude Code and
+Anthropic credentials. See [Cursor setup and verification](docs/cursor.md).
 
 ---
 
@@ -590,7 +619,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 
 | | |
 | --- | --- |
-| **Supported agents** | Claude Code, plus local `review-map` in Codex (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Supported agents** | Claude Code, plus local `review-map` in Codex and Cursor (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
 | **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
@@ -599,7 +628,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
 | **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
-| **Publishing** | In Codex, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
+| **Publishing** | In Codex and Cursor, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
 | **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 
@@ -616,7 +645,7 @@ What you choose per run:
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
 | **Update** | Off by default; `--update` re-reads only the commits since the existing page and edits it in place. |
-| **Output** | A published artifact in Claude Code, a local HTML file in Codex; `--output <dir>` writes static HTML to a chosen directory instead. |
+| **Output** | A published artifact in Claude Code, a local HTML file in Codex and Cursor; `--output <dir>` writes static HTML to a chosen directory instead. |
 
 In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
 optional:

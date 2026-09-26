@@ -1,0 +1,34 @@
+#!/bin/sh
+# Link this checkout into Cursor's local plugin directory as the accountable-review plugin.
+# Usage: bin/install-cursor-plugin [--plugins-dir DIR]
+# No copies, config changes, or CI setup. An existing installation is never replaced.
+# Cursor reads .cursor-plugin/plugin.json from the link, which exposes review-map and
+# the Cursor falsifier wrapper only — not setup-ci, and not the Claude agent wrapper.
+set -eu
+
+HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+SOURCE=$(dirname "$HERE")
+PLUGINS_DIR=${HOME:?HOME must be set}/.cursor/plugins/local
+while [ "$#" -gt 0 ]; do
+  case $1 in
+    --plugins-dir)
+      [ "$#" -ge 2 ] && [ -n "$2" ] || { echo 'install-cursor-plugin: --plugins-dir needs a directory' >&2; exit 2; }
+      PLUGINS_DIR=$2; shift 2 ;;
+    -h|--help) echo 'Usage: bin/install-cursor-plugin [--plugins-dir DIR]'; exit 0 ;;
+    *) echo "install-cursor-plugin: unknown argument: $1" >&2; exit 2 ;;
+  esac
+done
+
+[ -f "$SOURCE/.cursor-plugin/plugin.json" ] || { echo "Missing manifest: $SOURCE/.cursor-plugin/plugin.json" >&2; exit 1; }
+mkdir -p "$PLUGINS_DIR"
+PLUGINS_DIR=$(CDPATH= cd -- "$PLUGINS_DIR" && pwd -P)
+DEST=$PLUGINS_DIR/accountable-review
+if [ -L "$DEST" ] && [ "$(readlink "$DEST")" = "$SOURCE" ]; then
+  echo "unchanged: $DEST -> $SOURCE"
+elif [ -e "$DEST" ] || [ -L "$DEST" ]; then
+  echo "install-cursor-plugin: refusing to replace $DEST; choose another --plugins-dir or remove the old installation yourself." >&2
+  exit 1
+else
+  ln -s "$SOURCE" "$DEST"
+  echo "installed: $DEST -> $SOURCE"
+fi

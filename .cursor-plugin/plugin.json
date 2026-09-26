@@ -1,0 +1,27 @@
+{
+  "name": "accountable-review",
+  "displayName": "Accountable Review",
+  "description": "Turns a pull request into a local HTML review agenda — what changed, the judgments a reviewer has to make with the exact lines that settle each one, the order to read the code in, and the impact outside the diff through the unchanged code the change gives new meaning to — so a reviewer can explain the change before judging it. Ships review-map for Rails and for Elixir/Phoenix, with or without a separate client.",
+  "version": "1.1.0",
+  "author": {
+    "name": "WyeWorks",
+    "url": "https://github.com/wyeworks"
+  },
+  "homepage": "https://github.com/wyeworks/accountable-review",
+  "repository": "https://github.com/wyeworks/accountable-review",
+  "license": "MIT",
+  "category": "developer-tools",
+  "keywords": [
+    "code-review",
+    "pull-request",
+    "rails",
+    "nextjs",
+    "elixir",
+    "phoenix",
+    "liveview",
+    "comprehension",
+    "documentation"
+  ],
+  "skills": "./skills/review-map/",
+  "agents": "./cursor/agents/"
+}

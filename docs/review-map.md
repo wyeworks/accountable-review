@@ -332,8 +332,9 @@ checkpoint.
 
 ## What it assumes
 
-Only that it is running in Claude Code or Codex, against a git repository containing a Rails or
-a Phoenix application. Codex delivery and delegation are described in [Codex support](codex.md).
+Only that it is running in Claude Code, Codex or Cursor, against a git repository containing a Rails or
+a Phoenix application. Codex delivery and delegation are described in [Codex support](codex.md), Cursor's in
+[Cursor support](cursor.md).
 
 **Which of the two is detected, not configured** — a `Gemfile` or `config/application.rb` for Rails, a
 `mix.exs` for Elixir — and it decides which lens file and which doc catalogue the run reads. A repo

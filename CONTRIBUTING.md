@@ -25,7 +25,9 @@ the unit of quality is instruction clarity, not compilation.
 
 ```
 .claude-plugin/plugin.json         plugin manifest (name, version, metadata)
+.cursor-plugin/plugin.json         the Cursor manifest: review-map and cursor/agents/ only, same version
 agents/claim-falsifier.md          adversarial verifier, one per analysis note at --effort high
+cursor/agents/                     the same verifier's Cursor wrapper
 ci/                                what runs in CI, not what a skill reads
 ├── generate-review-map.sh         runs review-map non-interactively into a static directory
 ├── application-code.sh            the scope gate: is this diff worth a Review Map at all
@@ -88,10 +90,23 @@ that makes a model follow it under pressure.
 use `--skills-dir <temporary-directory>` when testing installation. It installs only the local
 review skill, not CI support. [docs/codex.md](docs/codex.md) covers usage and a manual smoke test.
 
+## Working on Cursor support
+
+`.cursor-plugin/plugin.json` is the Cursor manifest. It names `skills/review-map/` and
+`cursor/agents/` explicitly, so Cursor gets the review skill and its own falsifier wrapper but not
+`setup-ci` or the Claude wrapper at `agents/`. `bin/install-cursor-plugin` links the checkout into
+`~/.cursor/plugins/local/`; use `--plugins-dir <temporary-directory>` when testing.
+`skills/review-map/tests/cursor-plugin.sh` fails when the two manifests' `name` or `version`
+disagree, so bump both in a release commit. [docs/cursor.md](docs/cursor.md) covers usage and a
+manual smoke test.
+
+## Host references
+
 `references/hosts/` owns host-specific delivery and delegation. The ten-step procedure remains
-in `SKILL.md`, and both hosts' independent readers load `references/claim-falsifier.md`.
-`agents/claim-falsifier.md` is the Claude wrapper and still owns its Claude tool/model settings.
-Keep the review rules in the shared files so an improvement applies to both hosts.
+in `SKILL.md`, and every host's independent readers load `references/claim-falsifier.md`.
+`agents/claim-falsifier.md` is the Claude wrapper and owns its Claude tool/model settings;
+`cursor/agents/review-map-falsifier.md` is the Cursor one. Keep the review rules in the shared
+files so an improvement applies to every host.
 
 ## Verifying a change
 
@@ -161,7 +176,9 @@ one thing a run cannot verify for itself, and the Elixir one stays closed until 
 ## Releasing
 
 `.claude-plugin/plugin.json`'s `version` is the update pin: users only receive a change once that
-field moves, so bump it in the same commit as the change and tag the release.
+field moves, so bump it in the same commit as the change and tag the release. Bump
+`.cursor-plugin/plugin.json`'s `version` to the same value in that commit — `bin/evals offline`
+fails while they differ, because a Cursor install reads only its own manifest.
 
 ```bash
 claude plugin validate . --strict
