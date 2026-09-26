@@ -1793,12 +1793,12 @@ The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugi
 ```
 
 Keep `version` out of that entry — `plugin.json` wins when both are set, and one source of truth is
-less to forget.
+less to forget. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
 
 **Cursor reads its own manifest, `.cursor-plugin/plugin.json`, and nothing above reaches it.** Bump
 its `version` in the same commit; `bin/evals offline` fails until the two agree. It is not in any
 Cursor marketplace yet, so today it installs by `bin/install-cursor-plugin`, and a listing is a
-submission that ships this file rather than a change to it. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
+submission that ships this file rather than a change to it.
 
 Two things do not belong at the plugin root: a `CLAUDE.md` (it ships to every install but is never
 loaded as project context, which is why this file lives in `.claude/`), and any component directory
