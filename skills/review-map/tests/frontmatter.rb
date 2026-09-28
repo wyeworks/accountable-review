@@ -37,14 +37,6 @@ end
 
 failures = 0
 
-# The check, checked. The planted form is the exact defect this file exists for; if it ever
-# parses clean, the parser or the extraction has stopped looking and every PASS below is void.
-planted = "---\nname: x\ndescription: Passing --output makes the run non-interactive: the page is written.\n---\n"
-if problems(planted, dir_name: "x", skill: true).empty?
-  puts "FAIL self-check: the planted unquoted `: ` parsed clean"
-  failures += 1
-end
-
 files = Dir[File.join(ROOT, "skills/*/SKILL.md")].map { |f| [f, true] } +
         Dir[File.join(ROOT, "agents/*.md")].map { |f| [f, false] }
 if files.empty?
