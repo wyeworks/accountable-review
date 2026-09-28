@@ -1,6 +1,17 @@
 ---
 name: review-map
-description: Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+description: >-
+  Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make
+  with the exact lines that settle each one, the order to read the code in, and what the change
+  reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets
+  Rails and Elixir/Phoenix, LiveView or JSON API, with or without a separate client such as Next.js.
+  Use this whenever someone needs to understand a change rather than grade it: asks what a PR or
+  branch does, where to start on a large diff, which files matter, what the change might break,
+  whether frontend and backend still agree, or needs to bring a reviewer up to speed — even if they
+  never say "review map". Invoke as /accountable-review:review-map in Claude Code, $review-map in
+  Codex or /skill:review-map in Pi, with a PR number, URL, branch or diff range; options are
+  --effort high|low, --mentor, and --output <dir> for non-interactive static HTML, as in CI. Not for
+  posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -28,12 +39,13 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## Host and invocation
 
-Use `/accountable-review:review-map` in Claude Code or `$review-map` in Codex. Both accept a
+Use `/accountable-review:review-map` in Claude Code, `$review-map` in Codex or `/skill:review-map`
+in Pi. All three accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
 `--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
 
-Before step 1, read **only your host's reference**: [Codex](references/hosts/codex.md) or
-[Claude Code](references/hosts/claude-code.md). It owns delegation and delivery mechanics;
+Before step 1, read **only your host's reference**: [Codex](references/hosts/codex.md),
+[Claude Code](references/hosts/claude-code.md) or [Pi](references/hosts/pi.md). It owns delegation and delivery mechanics;
 the ten steps below own the review. Resolve bundled paths relative to this `SKILL.md`,
 not the repository being reviewed. User instructions take precedence over skill guidance.
 
@@ -49,7 +61,7 @@ host reference is the same rule one level up — yours, not the other host's.
 
 | File | Read at | For |
 |---|---|---|
-| `references/hosts/claude-code.md` *or* `references/hosts/codex.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
+| `references/hosts/claude-code.md`, `references/hosts/codex.md` *or* `references/hosts/pi.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
 | `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
@@ -109,7 +121,7 @@ point of putting them in a separate context. The host reference owns how the rea
   they answer different questions — the first is why spawning them does not slow the run down, the
   second is what they add to the bill. `evals/profile.sh` prints them side by side, and Claude's falsifier
   runs on its own model (`agents/claim-falsifier.md`) so the second number can be bought down without
-  touching the first. Codex inherits its configured model, and both measurements are from Claude
+  touching the first. Codex and Pi run their configured model, and both measurements are from Claude
   runs. **Effort is what decides whether the page is right, and nothing makes a run
   faster by making the page shorter** — the time goes into tracing consumers at step 5, not into
   writing sections. Three rules:
@@ -538,7 +550,8 @@ the whole reason this moved: the pass used to run after the flows were published
 claim had been public for as long as the challenge took to arrive.
 
 **How.** One independent reader per note, launched the way **your host reference** says — Claude
-spawns the registered `accountable-review:claim-falsifier` agent, Codex spawns a session subagent —
+spawns the registered `accountable-review:claim-falsifier` agent, Codex spawns a session subagent,
+Pi starts a separate read-only `pi` process —
 **up to the host’s available concurrency.** This is the one exception to the rule against subagents in
 § *Hard rules*.
 
@@ -886,8 +899,8 @@ all of them. Publish early and republish as parts complete: **the same file path
 URL never changes.** The reader can open it at minute two, watch it fill in, and start reading the
 moment the part they need lands.
 
-The host reference supplies the delivery mechanics. Claude publishes an Artifact; Codex saves
-portable HTML locally. In Codex, every later “publish” means saving that same local file,
+The host reference supplies the delivery mechanics. Claude publishes an Artifact; Codex and Pi save
+portable HTML locally. In Codex and Pi, every later “publish” means saving that same local file,
 not calling a publishing tool. `Write` and `Edit` below mean file creation and targeted edits
 with the host’s available tools, not required tool names.
 
@@ -1210,7 +1223,7 @@ Everything else about writing holds at every stage:
   `<dir>/index.html` instead; the fragments still go in `$W`, and nothing but the page belongs in
   `<dir>`.
 
-Tell the user the URL (or local file link in Codex) when stage 1 goes out, say it will fill in,
+Tell the user the URL (or the local file in Codex and Pi) when stage 1 goes out, say it will fill in,
 and do not repeat it on every republish — one link, mentioned once, then a note when it is complete. With `--output` there is no
 URL: say where the file is, once, and nothing more.
 

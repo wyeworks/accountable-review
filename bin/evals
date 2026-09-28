@@ -2,7 +2,7 @@
 # evals — one command per thing you actually do to the evals.
 #
 #   bin/evals offline                        every no-model suite. What CI checks. About a minute.
-#   bin/evals offline frozen                 just one: self-test | unit | frozen | review-map | setup-ci | manifest
+#   bin/evals offline frozen                 just one: self-test | unit | frozen | frontmatter | review-map | setup-ci | manifest
 #   bin/evals section <case>                 DEFERRED — see evals/deferred/README.md
 #   bin/evals report [case]                  aggregate what is already in results/
 #   bin/evals page [id]                      the recipe for one whole-page case
@@ -50,12 +50,13 @@ need() { command -v "$1" >/dev/null 2>&1 || die "needs $1 on PATH"; }
 
 # The suite table. Each row is a name, the command it needs on PATH, and what it runs.
 # Keep it in step with .github/workflows/validate.yml — `parity` below is what notices.
-SUITES="self-test unit frozen review-map setup-ci manifest"
+SUITES="self-test unit frozen frontmatter review-map setup-ci manifest"
 
 # The scripts under skills/ that this table covers, for the parity check.
 COVERED="skills/review-map/evals/checks/self-test.rb
 skills/review-map/evals/checks/lib/test/test_page.rb
 skills/review-map/evals/checks/frozen.rb
+skills/review-map/tests/frontmatter.rb
 skills/review-map/tests/run.sh
 skills/review-map/tests/self-test.sh
 skills/review-map/tests/install-codex.sh
@@ -93,6 +94,7 @@ run_suite() {
     self-test) suite self-test ruby ruby "$EVALS/checks/self-test.rb" ;;
     unit)      suite unit      ruby ruby "$EVALS/checks/lib/test/test_page.rb" ;;
     frozen)    suite frozen    ruby ruby "$EVALS/checks/frozen.rb" ;;
+    frontmatter) suite frontmatter ruby ruby "$SKILL/tests/frontmatter.rb" ;;
     review-map) suite review-map sh sh "$SKILL/tests/run.sh"
                suite review-map-self sh sh "$SKILL/tests/self-test.sh"
                suite codex-install sh sh "$SKILL/tests/install-codex.sh" ;;
