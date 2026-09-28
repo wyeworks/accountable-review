@@ -25,6 +25,7 @@ the unit of quality is instruction clarity, not compilation.
 
 ```
 .claude-plugin/plugin.json         plugin manifest (name, version, metadata)
+package.json                       the npm package Pi installs and its gallery lists: review-map only
 agents/claim-falsifier.md          adversarial verifier, one per analysis note at --effort high
 ci/                                what runs in CI, not what a skill reads
 ├── generate-review-map.sh         runs review-map non-interactively into a static directory
@@ -170,3 +171,16 @@ claude plugin tag --push          # creates accountable-review--v<version>
 ```
 
 The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugins`.
+
+`package.json` carries the same version, and `bin/evals offline package` fails when the two differ,
+so move both in the same commit. Publishing it to npm is what lists `review-map` in
+[Pi's package gallery](https://pi.dev/packages), which indexes npm packages with the `pi-package`
+keyword:
+
+```bash
+npm pack --dry-run                # check the file list: SKILL.md, references/, scripts/
+npm publish --access public
+```
+
+`files` ships only what a run reads. The evals, fixtures and tests stay in the repository, which
+is 600 KB of package rather than 2.6 MB.

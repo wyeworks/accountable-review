@@ -276,12 +276,14 @@ and the boundaries of this first integration.
 directly as a package:
 
 ```bash
-pi install git:github.com/wyeworks/accountable-review
+pi install npm:@wyeworks/accountable-review
 ```
 
 Add `-l` to declare it in the current project's `.pi/settings.json` instead of your personal
-settings. `pi update` takes new commits; append `@<tag>` to the source to pin a release. The
-package also lists `setup-ci`, which only works with Claude Code (see below).
+settings, and `@<version>` to pin a release; `pi update` takes the next one. The package holds
+`review-map` only, since `setup-ci` configures a Claude Code workflow.
+`pi install git:github.com/wyeworks/accountable-review` installs the same thing from the
+repository instead, at its latest commit.
 
 **To install only `review-map`, from a checkout**, use the Codex installer. Pi reads
 `~/.agents/skills` too, so the same link serves both:

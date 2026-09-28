@@ -1,0 +1,31 @@
+{
+  "name": "@wyeworks/accountable-review",
+  "version": "1.1.0",
+  "description": "Turns a pull request into a review map a reviewer can read before judging the change: the judgments it asks for, where to look, and what it reaches in code it did not touch. For Rails and Elixir/Phoenix.",
+  "keywords": [
+    "pi-package",
+    "code-review",
+    "pull-request",
+    "rails",
+    "elixir",
+    "phoenix",
+    "comprehension"
+  ],
+  "homepage": "https://github.com/wyeworks/accountable-review",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wyeworks/accountable-review.git"
+  },
+  "license": "MIT",
+  "author": "WyeWorks (https://github.com/wyeworks)",
+  "pi": {
+    "skills": [
+      "./skills/review-map"
+    ]
+  },
+  "files": [
+    "skills/review-map/SKILL.md",
+    "skills/review-map/references",
+    "skills/review-map/scripts"
+  ]
+}

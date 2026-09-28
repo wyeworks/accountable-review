@@ -1791,7 +1791,15 @@ The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugi
 ```
 
 Keep `version` out of that entry — `plugin.json` wins when both are set, and one source of truth is
-less to forget. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
+less to forget.
+
+**`package.json` is the one exception to that, and it is checked rather than trusted.** It is the npm
+package Pi installs and [its gallery](https://pi.dev/packages) lists, and npm has no way to read a
+version from anywhere else. So there are two, and `skills/review-map/tests/package.rb` fails when they
+differ, when `pi-package` is missing from the keywords, or when a `pi.skills` path falls outside
+`files` — npm would publish a package that installs cleanly and holds no skill. It ships
+`review-map` alone, because what `setup-ci` configures runs Claude, and the manifest is also what
+keeps a `pi install git:` of this repository from loading it. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
 
 Two things do not belong at the plugin root: a `CLAUDE.md` (it ships to every install but is never
 loaded as project context, which is why this file lives in `.claude/`), and any component directory

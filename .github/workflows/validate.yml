@@ -58,6 +58,9 @@ jobs:
       # above passed a description that Pi's strict loader rejects outright, so a skill can be
       # valid to Claude Code and silently absent in another Agent Skills host.
       - run: ruby skills/review-map/tests/frontmatter.rb
+      # The npm package that lists review-map in Pi's gallery: its version must match plugin.json,
+      # and what `pi.skills` names must be inside `files`, or npm publishes a package with no skill.
+      - run: ruby skills/review-map/tests/package.rb
 
   ci-setup:
     runs-on: ubuntu-latest

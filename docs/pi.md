@@ -7,21 +7,23 @@ how independent readers are launched and where the HTML is delivered.
 
 ## Install
 
-Either as a Pi package:
+Either as a Pi package, from npm or from this repository:
 
 ```sh
-pi install git:github.com/wyeworks/accountable-review      # personal
-pi install -l git:github.com/wyeworks/accountable-review   # this project's .pi/settings.json
+pi install npm:@wyeworks/accountable-review                # personal
+pi install -l npm:@wyeworks/accountable-review             # this project's .pi/settings.json
+pi install git:github.com/wyeworks/accountable-review      # the latest commit instead
 ```
 
 or, for `review-map` alone, from a checkout with `bin/install-codex-skill`. Pi discovers
 `~/.agents/skills`, so the symlink Codex uses serves Pi too, and [Codex support](codex.md) covers
 its flags and removal.
 
-The package has no `package.json`. Pi finds skills in a package's `skills/` directory by
-convention, so it loads both `review-map` and `setup-ci` and ignores the Claude-only
-`.claude-plugin/` and `agents/`. `setup-ci` loads, but what it sets up runs Claude, not Pi.
-Run `/reload` after editing a linked checkout.
+Both read the root `package.json`, whose `pi.skills` names `review-map` alone: what `setup-ci`
+sets up runs Claude, not Pi. Pi ignores the Claude-only `.claude-plugin/` and `agents/`. The npm
+package carries only the skill's `SKILL.md`, `references/` and `scripts/`, and publishing it with the
+`pi-package` keyword is what lists it in [Pi's gallery](https://pi.dev/packages). Run `/reload`
+after editing a linked checkout.
 
 **Pi drops a skill whose frontmatter is not strict YAML**, and says nothing about it in print mode.
 `skills/review-map/tests/frontmatter.rb` exists because the plugin once shipped a description that
