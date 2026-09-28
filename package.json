@@ -20,10 +20,11 @@
   "author": "WyeWorks (https://github.com/wyeworks)",
   "pi": {
     "skills": [
-      "./skills/review-map"
+      "./pi/skills/accountable-review-map"
     ]
   },
   "files": [
+    "pi/skills/accountable-review-map/SKILL.md",
     "skills/review-map/SKILL.md",
     "skills/review-map/references",
     "skills/review-map/scripts"

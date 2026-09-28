@@ -7,35 +7,48 @@ how independent readers are launched and where the HTML is delivered.
 
 ## Install
 
-Either as a Pi package, from npm or from this repository:
+From npm, from the repository, or from a checkout:
 
 ```sh
 pi install npm:@wyeworks/accountable-review                # personal
 pi install -l npm:@wyeworks/accountable-review             # this project's .pi/settings.json
 pi install git:github.com/wyeworks/accountable-review      # the latest commit instead
+pi install /path/to/accountable-review                     # a checkout; git pull updates it
 ```
 
-or, for `review-map` alone, from a checkout with `bin/install-codex-skill`. Pi discovers
-`~/.agents/skills`, so the symlink Codex uses serves Pi too, and [Codex support](codex.md) covers
-its flags and removal.
+## One skill, with a prefixed name
 
-Both read the root `package.json`, whose `pi.skills` names `review-map` alone: what `setup-ci`
-sets up runs Claude, not Pi. Pi ignores the Claude-only `.claude-plugin/` and `agents/`. The npm
-package carries only the skill's `SKILL.md`, `references/` and `scripts/`, and publishing it with the
-`pi-package` keyword is what lists it in [Pi's gallery](https://pi.dev/packages). Run `/reload`
-after editing a linked checkout.
+**Pi has no per-package namespace.** A skill's name is its frontmatter `name`, and when two share
+one, Pi keeps the first it discovered and warns. Claude Code namespaces plugin skills
+(`/accountable-review:review-map`), but in Pi a bare `review-map` or `setup-ci` is a name any
+other package can take.
+
+So the root `package.json` carries a `pi` manifest that loads **`pi/skills/accountable-review-map/`**
+and nothing else. That skill holds no procedure. It names `skills/review-map/SKILL.md` by a
+relative path and tells the model to read and follow it, with this command's arguments and
+`references/hosts/pi.md`. The procedure keeps one home. `skills/review-map/tests/frontmatter.rb`
+fails if the pointer stops resolving or either description passes the Agent Skills limit of
+1,024 characters, over which Pi warns on every start.
+
+`setup-ci` is left out of the manifest because the workflow it writes runs Claude, not Pi. Pi
+ignores the Claude-only `.claude-plugin/` and `agents/`. The npm package carries only the entry
+skill and `review-map`'s `SKILL.md`, `references/` and `scripts/`, and publishing it with the
+`pi-package` keyword is what lists it in [Pi's gallery](https://pi.dev/packages).
+
+`bin/install-codex-skill` also works: Pi reads `~/.agents/skills`, so the symlink Codex uses reaches
+Pi, and [Codex support](codex.md) covers its flags and removal. That route bypasses the manifest,
+so the skill appears under the bare name `review-map`. Run `/reload` after editing a checkout.
 
 **Pi drops a skill whose frontmatter is not strict YAML**, and says nothing about it in print mode.
 `skills/review-map/tests/frontmatter.rb` exists because the plugin once shipped a description that
-Claude Code accepted and Pi rejected. Pi also warns on descriptions over 1,024 characters, the Agent
-Skills limit, so keep `review-map`'s under it.
+Claude Code accepted and Pi rejected.
 
 ## Use
 
 ```text
-/skill:review-map
-/skill:review-map 123
-/skill:review-map --effort low --output /tmp/my-review-map
+/skill:accountable-review-map
+/skill:accountable-review-map 123
+/skill:accountable-review-map --effort low --output /tmp/my-review-map
 ```
 
 Arguments after the skill name reach step 1 unchanged. Without `--output` the page is saved under
@@ -70,8 +83,8 @@ check. For a behavioural smoke test, build the fixtures and run against one:
 ```sh
 bin/evals fixtures /tmp/review-map-pi-fixtures
 cd /tmp/review-map-pi-fixtures/rails-only-small
-pi --skill /path/to/accountable-review/skills/review-map
-# then: /skill:review-map --output /tmp/review-map-pi-output
+pi -e /path/to/accountable-review        # or: pi install /path/to/accountable-review
+# then: /skill:accountable-review-map --output /tmp/review-map-pi-output
 ```
 
 Check that `$W/challenges/` holds one `.md` and one `.exit` per selected note, that the parent

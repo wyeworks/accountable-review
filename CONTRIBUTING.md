@@ -25,7 +25,8 @@ the unit of quality is instruction clarity, not compilation.
 
 ```
 .claude-plugin/plugin.json         plugin manifest (name, version, metadata)
-package.json                       the npm package Pi installs and its gallery lists: review-map only
+package.json                       Pi's manifest and the npm package its gallery lists: pi/skills/ only
+pi/skills/accountable-review-map/  Pi's prefixed entry point, a pointer at skills/review-map/SKILL.md
 agents/claim-falsifier.md          adversarial verifier, one per analysis note at --effort high
 ci/                                what runs in CI, not what a skill reads
 ├── generate-review-map.sh         runs review-map non-interactively into a static directory

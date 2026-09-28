@@ -164,6 +164,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the assembled checkpoint, the chain and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML in Codex and Pi; a named Claude agent, Codex subagent tools, or — Pi having no subagents — a background `pi -p` process whose read-only tool allowlist Pi enforces |
+| `pi/skills/accountable-review-map/` | Pi's entry point, and the only skill Pi loads: the root `package.json`'s `pi` manifest names it and nothing else. Pi has no per-package namespace, so it exists to give `review-map` a name that says whose it is. It holds **no procedure**, only a relative pointer at `skills/review-map/SKILL.md`, which `tests/frontmatter.rb` fails if it stops resolving. A second copy of the procedure here would be § *One canonical home* broken in the file that owns the rule |
+| `package.json` | The Pi manifest and the npm package Pi's gallery lists: `pi.skills` names the entry point alone, `files` ships only what a run reads. Its `version` tracks `plugin.json`, and `tests/package.rb` fails when it does not |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
 | `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
@@ -1791,15 +1793,15 @@ The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugi
 ```
 
 Keep `version` out of that entry — `plugin.json` wins when both are set, and one source of truth is
-less to forget.
+less to forget. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
 
 **`package.json` is the one exception to that, and it is checked rather than trusted.** It is the npm
 package Pi installs and [its gallery](https://pi.dev/packages) lists, and npm has no way to read a
 version from anywhere else. So there are two, and `skills/review-map/tests/package.rb` fails when they
 differ, when `pi-package` is missing from the keywords, or when a `pi.skills` path falls outside
-`files` — npm would publish a package that installs cleanly and holds no skill. It ships
-`review-map` alone, because what `setup-ci` configures runs Claude, and the manifest is also what
-keeps a `pi install git:` of this repository from loading it. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
+`files` — npm would publish a package that installs cleanly and holds no skill. It ships Pi's
+prefixed entry point and the `review-map` files it points at, never `setup-ci`, whose workflow runs
+Claude.
 
 Two things do not belong at the plugin root: a `CLAUDE.md` (it ships to every install but is never
 loaded as project context, which is why this file lives in `.claude/`), and any component directory
