@@ -9,7 +9,7 @@ description: >-
   branch does, where to start on a large diff, which files matter, what the change might break,
   whether frontend and backend still agree, or needs to bring a reviewer up to speed — even if they
   never say "review map". Invoke as /accountable-review:review-map in Claude Code, $review-map in
-  Codex or /skill:review-map in Pi, with a PR number, URL, branch or diff range; options are
+  Codex or /skill:accountable-review-map in Pi, with a PR number, URL, branch or diff range; options are
   --effort high|low, --mentor, and --output <dir> for non-interactive static HTML, as in CI. Not for
   posting review comments or approval verdicts.
 ---
@@ -39,8 +39,8 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## Host and invocation
 
-Use `/accountable-review:review-map` in Claude Code, `$review-map` in Codex or `/skill:review-map`
-in Pi. All three accept a
+Use `/accountable-review:review-map` in Claude Code, `$review-map` in Codex or
+`/skill:accountable-review-map` in Pi, whose entry point is `pi/skills/` at the plugin root. All three accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
 `--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
 

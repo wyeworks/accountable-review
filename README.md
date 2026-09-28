@@ -280,21 +280,26 @@ pi install git:github.com/wyeworks/accountable-review
 ```
 
 Add `-l` to declare it in the current project's `.pi/settings.json` instead of your personal
-settings. `pi update` takes new commits; append `@<tag>` to the source to pin a release. The
-package also lists `setup-ci`, which only works with Claude Code (see below).
+settings. `pi update` takes new commits; append `@<tag>` to the source to pin a release.
 
-**To install only `review-map`, from a checkout**, use the Codex installer. Pi reads
-`~/.agents/skills` too, so the same link serves both:
+Pi has no per-package namespace, so the package gives Pi one skill with a prefixed name,
+**`accountable-review-map`**. It is an entry point to the same `review-map` skill Claude and Codex
+run. `setup-ci` is not installed, because the workflow it writes runs Claude Code.
+
+**To run from a checkout instead**, install its path. `git pull` then updates it:
 
 ```bash
 git clone https://github.com/wyeworks/accountable-review.git
-accountable-review/bin/install-codex-skill
+pi install ./accountable-review
 ```
+
+(`bin/install-codex-skill` works in Pi too, since Pi reads `~/.agents/skills`, but it exposes the
+skill under the bare name `review-map`.)
 
 Open the repository you want to review in Pi, then invoke:
 
 ```text
-/skill:review-map 123
+/skill:accountable-review-map 123
 ```
 
 The result is a **local HTML file**, the same page Claude and Codex produce. Its path is given in the

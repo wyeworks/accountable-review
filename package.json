@@ -1,0 +1,12 @@
+{
+  "name": "@wyeworks/accountable-review",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Turns a pull request into a review map a reviewer can read before judging the change.",
+  "license": "MIT",
+  "pi": {
+    "skills": [
+      "./pi/skills/accountable-review-map"
+    ]
+  }
+}
