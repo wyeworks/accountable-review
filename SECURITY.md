@@ -49,6 +49,4 @@ You can expect an acknowledgment within **5 business days**. We aim to provide a
 an accepted report within **30 days**, depending on severity. We will credit reporters in the release
 notes unless you ask to remain anonymous.
 
-If a report is declined (for example, because it describes intended behavior — such as the workflow's
-proposed-but-never-executed validation commands, or the plugin's deliberate refusal to boot the
-application under review), we will explain why.
+If a report is declined, we will explain why.
