@@ -26,6 +26,7 @@ Built by **WyeWorks**.
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
   - [Codex](#codex)
+  - [Pi](#pi)
 - [Usage](#usage-)
   - [Basic usage](#basic-usage)
   - [How hard it works](#how-hard-it-works)
@@ -268,6 +269,43 @@ and Anthropic credentials. The local installer installs only `review-map`.
 
 See [Codex setup and verification](docs/codex.md) for project-scoped installation, removal,
 and the boundaries of this first integration.
+
+### Pi
+
+[Pi](https://github.com/earendil-works/pi) reads Agent Skills, so it can install this repository
+directly as a package:
+
+```bash
+pi install git:github.com/wyeworks/accountable-review
+```
+
+Add `-l` to declare it in the current project's `.pi/settings.json` instead of your personal
+settings. `pi update` takes new commits; append `@<tag>` to the source to pin a release. The
+package also lists `setup-ci`, which only works with Claude Code (see below).
+
+**To install only `review-map`, from a checkout**, use the Codex installer. Pi reads
+`~/.agents/skills` too, so the same link serves both:
+
+```bash
+git clone https://github.com/wyeworks/accountable-review.git
+accountable-review/bin/install-codex-skill
+```
+
+Open the repository you want to review in Pi, then invoke:
+
+```text
+/skill:review-map 123 --effort low --output /tmp/review-map
+```
+
+**Pi support is a preview, so pass both flags for now.** Pi has no subagents and nothing to publish
+to, and the skill does not yet have Pi-specific instructions for either. `--output` writes the page
+as `index.html` in a directory outside the repository under review; open it in a browser.
+`--effort low` skips the falsification pass, which needs independent readers. Pi's documentation
+describes [skills](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/skills.md)
+and [packages](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/packages.md).
+
+**Pi CI execution is not supported.** As with Codex, `setup-ci` and the CI runner use Claude Code
+and Anthropic credentials.
 
 ---
 
@@ -590,7 +628,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 
 | | |
 | --- | --- |
-| **Supported agents** | Claude Code, plus local `review-map` in Codex (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Supported agents** | Claude Code, plus local `review-map` in Codex and, as a preview at `--effort low --output`, in Pi (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
 | **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
