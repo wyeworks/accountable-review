@@ -54,6 +54,10 @@ jobs:
       # what replaced that oracle when the shell was deleted, and it is the only thing left
       # that would notice a rule quietly changing what it says.
       - run: skills/review-map/evals/checks/frozen.rb
+      # Every skill's and agent's frontmatter through a strict YAML parser. The manifest job
+      # above passed a description that Pi's strict loader rejects outright, so a skill can be
+      # valid to Claude Code and silently absent in another Agent Skills host.
+      - run: ruby skills/review-map/tests/frontmatter.rb
 
   ci-setup:
     runs-on: ubuntu-latest
