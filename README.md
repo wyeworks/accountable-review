@@ -26,7 +26,6 @@ Built by **WyeWorks**.
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
   - [Codex](#codex)
-  - [Pi](#pi)
 - [Usage](#usage-)
   - [Basic usage](#basic-usage)
   - [How hard it works](#how-hard-it-works)
@@ -269,49 +268,6 @@ and Anthropic credentials. The local installer installs only `review-map`.
 
 See [Codex setup and verification](docs/codex.md) for project-scoped installation, removal,
 and the boundaries of this first integration.
-
-### Pi
-
-[Pi](https://github.com/earendil-works/pi) reads Agent Skills, so it can install this repository
-directly as a package:
-
-```bash
-pi install git:github.com/wyeworks/accountable-review
-```
-
-Add `-l` to declare it in the current project's `.pi/settings.json` instead of your personal
-settings. `pi update` takes new commits; append `@<tag>` to the source to pin a release. The
-package also lists `setup-ci`, which only works with Claude Code (see below).
-
-**To install only `review-map`, from a checkout**, use the Codex installer. Pi reads
-`~/.agents/skills` too, so the same link serves both:
-
-```bash
-git clone https://github.com/wyeworks/accountable-review.git
-accountable-review/bin/install-codex-skill
-```
-
-Open the repository you want to review in Pi, then invoke:
-
-```text
-/skill:review-map 123
-```
-
-The result is a **local HTML file**, the same page Claude and Codex produce. Its path is given in the
-response. To choose where it goes, add `--output /absolute/path/outside-the-repo`, and the page is
-written there as `index.html`.
-
-High effort is the default. Pi has no subagents, so each independent reader runs as a separate `pi`
-process in the background. Pi limits it to reading and searching, and it uses your configured
-default model. If `pi` is not on your `PATH`, the skill says so and offers `--effort low`.
-
-See [Pi setup and verification](docs/pi.md) for how the readers are launched, a smoke test, and
-what this integration does not cover. Pi's own documentation covers
-[skills](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/skills.md) and
-[packages](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/packages.md).
-
-**Pi CI execution is not supported.** As with Codex, `setup-ci` and the CI runner use Claude Code
-and Anthropic credentials.
 
 ---
 
@@ -634,7 +590,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 
 | | |
 | --- | --- |
-| **Supported agents** | Claude Code, plus local `review-map` in Codex and in Pi (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Supported agents** | Claude Code, plus local `review-map` in Codex (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
 | **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
@@ -643,7 +599,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
 | **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
-| **Publishing** | In Codex and Pi, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
+| **Publishing** | In Codex, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
 | **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 
@@ -660,7 +616,7 @@ What you choose per run:
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
 | **Update** | Off by default; `--update` re-reads only the commits since the existing page and edits it in place. |
-| **Output** | A published artifact in Claude Code, a local HTML file in Codex and Pi; `--output <dir>` writes static HTML to a chosen directory instead. |
+| **Output** | A published artifact in Claude Code, a local HTML file in Codex; `--output <dir>` writes static HTML to a chosen directory instead. |
 
 In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
 optional:

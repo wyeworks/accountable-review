@@ -163,7 +163,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the assembled checkpoint, the chain and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
-| `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML in Codex and Pi; a named Claude agent, Codex subagent tools, or — Pi having no subagents — a background `pi -p` process whose read-only tool allowlist Pi enforces |
+| `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local Codex HTML, named Claude agent or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
 | `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
@@ -1732,7 +1732,7 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
   had no rule found nine calls and seventy seconds spent re-establishing a path and moving excerpt
   files that had been written somewhere else first.
-- It assumes Claude Code, Codex or Pi plus a git repo containing a Rails or a Phoenix app. Everything else —
+- It assumes Claude Code or Codex plus a git repo containing a Rails or a Phoenix app. Everything else —
   which of the two it is, the Rails root location or the `lib/<app>` and `lib/<app>_web` split, RSpec
   vs Minitest vs ExUnit, API-only vs server-rendered vs LiveView, how authorization is attached,
   whether a separate frontend exists and where its client and types live — is discovered, never

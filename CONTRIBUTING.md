@@ -87,10 +87,9 @@ that makes a model follow it under pressure.
 `bin/install-codex-skill` links the shared `skills/review-map` directory into Codex discovery;
 use `--skills-dir <temporary-directory>` when testing installation. It installs only the local
 review skill, not CI support. [docs/codex.md](docs/codex.md) covers usage and a manual smoke test.
-Pi discovers the same link; [docs/pi.md](docs/pi.md) covers its package install and smoke test.
 
 `references/hosts/` owns host-specific delivery and delegation. The ten-step procedure remains
-in `SKILL.md`, and every host's independent readers load `references/claim-falsifier.md`.
+in `SKILL.md`, and both hosts' independent readers load `references/claim-falsifier.md`.
 `agents/claim-falsifier.md` is the Claude wrapper and still owns its Claude tool/model settings.
 Keep the review rules in the shared files so an improvement applies to both hosts.
 
