@@ -299,8 +299,9 @@ both, or Claude Code lists the skill twice.
 
 The CLI can place the skills in any other agent it supports, Pi for example. Outside Claude Code,
 `review-map` follows one set of instructions whichever agent it is: the page is a local HTML file,
-and `--effort high` runs only if the agent offers subagents. One that does not, like Pi, says so and
-offers `--effort low`. Only Claude Code and Codex are tested.
+and `--effort high` needs an independent reader — the agent's own subagents, or else a read-only
+background run of its own CLI. An agent with neither says so and offers `--effort low`. Only
+Claude Code and Codex are tested.
 
 `setup-ci` is offered too — `/setup-ci` in Claude Code, the only host it works in. The workflow it
 writes clones the plugin itself at a pinned tag, so how you installed the skill locally does not

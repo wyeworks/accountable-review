@@ -543,7 +543,8 @@ claim had been public for as long as the challenge took to arrive.
 
 **How.** One independent reader per note, launched the way **your host reference** says — Claude
 spawns the registered `accountable-review:claim-falsifier` agent (a general-purpose one when
-installed without the plugin), Codex spawns a session subagent —
+installed without the plugin), and every other host works down its reference's ladder: its own
+subagent tool, else a read-only background run of its own CLI —
 **up to the host’s available concurrency.** This is the one exception to the rule against subagents in
 § *Hard rules*.
 
