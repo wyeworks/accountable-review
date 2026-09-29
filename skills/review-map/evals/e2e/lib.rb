@@ -53,17 +53,28 @@ module E2E
   # One blobless clone per repository, shared by every repetition; one detached worktree per
   # repetition, so parallel runs never share a working tree. Blobless because a Discourse clone
   # with every blob is gigabytes and a review map reads a few hundred files.
+  #
+  # The pull ref is fetched as a REMOTE-TRACKING ref whether or not the commits are already
+  # present, and that is load-bearing rather than tidy. A squash-merged PR's head is on no branch,
+  # so `git branch -r --contains <head>` — the skill's link-rung test — comes back empty and the
+  # page drops to plain-text citations, which is the one thing a real OSS PR is here to avoid.
+  # The first discourse-43002 run did exactly that: the commits were present, the ref was not.
   def self.clone(pr)
-    dir = File.join(cache, pr.repo.tr("/", "__"))
+    dir = File.join(cache, pr.repo.tr("/", "_"))
     unless File.directory?(File.join(dir, ".git"))
       FileUtils.mkdir_p(File.dirname(dir))
       sh!("git", "clone", "--filter=blob:none", "--no-checkout", "https://github.com/#{pr.repo}.git", dir)
     end
+    ref = "refs/remotes/origin/pr/#{pr.pr}"
     wanted = [pr.base_sha, pr.head_sha, pr.update_from].compact
     missing = wanted.reject { |sha| system("git", "-C", dir, "cat-file", "-e", "#{sha}^{commit}", err: File::NULL) }
-    unless missing.empty?
-      sh!("git", "-C", dir, "fetch", "--filter=blob:none", "origin",
-          "+refs/pull/#{pr.pr}/head:refs/remotes/origin/pr/#{pr.pr}", *missing)
+    has_ref = system("git", "-C", dir, "show-ref", "--verify", "--quiet", ref)
+    if !missing.empty? || !has_ref
+      sh!("git", "-C", dir, "fetch", "--filter=blob:none", "origin", "+refs/pull/#{pr.pr}/head:#{ref}", *missing)
+    end
+    unless system("git", "-C", dir, "merge-base", "--is-ancestor", pr.head_sha, ref)
+      abort "e2e: #{pr.head_sha} is not on #{ref} — the PR was force-pushed past the pinned " \
+            "head, so the page would have no remote to link against. Re-pin head_sha."
     end
     dir
   end
