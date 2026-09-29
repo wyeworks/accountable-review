@@ -29,7 +29,8 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## Host and invocation
 
-Use `/accountable-review:review-map` in Claude Code or `$review-map` in Codex. Both accept a
+Use `/accountable-review:review-map` in Claude Code (`/review-map` when installed as a standalone
+skill, as `npx skills add` does) or `$review-map` in Codex. Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
 `--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
 
@@ -539,7 +540,8 @@ the whole reason this moved: the pass used to run after the flows were published
 claim had been public for as long as the challenge took to arrive.
 
 **How.** One independent reader per note, launched the way **your host reference** says — Claude
-spawns the registered `accountable-review:claim-falsifier` agent, Codex spawns a session subagent —
+spawns the registered `accountable-review:claim-falsifier` agent (a general-purpose one when
+installed without the plugin), Codex spawns a session subagent —
 **up to the host’s available concurrency.** This is the one exception to the rule against subagents in
 § *Hard rules*.
 

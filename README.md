@@ -25,6 +25,7 @@ Built by **WyeWorks**.
 - [What is a Review Map?](#what-is-a-review-map-)
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
+  - [Any agent, with the skills CLI](#any-agent-with-the-skills-cli)
   - [Codex](#codex)
 - [Usage](#usage-)
   - [Basic usage](#basic-usage)
@@ -236,6 +237,40 @@ claude --plugin-dir /path/to/accountable-review
 
 Nothing is installed that way, so `git pull` in the checkout is how you update, and the skills exist
 only for sessions started with that flag.
+
+### Any agent, with the skills CLI
+
+The skills live under `skills/` as ordinary [Agent Skills](https://agentskills.io), so the
+cross-agent [`skills`](https://github.com/vercel-labs/skills) CLI installs them into Claude Code
+and Codex without cloning anything:
+
+```bash
+npx skills add wyeworks/accountable-review
+```
+
+It asks which skills and which agents; answer in flags instead with, for example:
+
+```bash
+npx skills add wyeworks/accountable-review -g --skill review-map -a claude-code -a codex
+```
+
+**Prefer `-g`.** Without it the skills are copied into the current project (`.agents/skills/`,
+`.claude/skills/` and so on), which puts files in the repository you are about to review. `npx skills
+update` takes new commits, and `npx skills remove review-map` uninstalls.
+
+Installed this way the skill is a standalone one rather than part of a plugin, so in Claude Code it
+is invoked as `/review-map` instead of `/accountable-review:review-map`; Codex uses `$review-map` as
+below. `--effort high` still works in Claude Code: the independent readers
+are launched as general-purpose subagents handed the same bundled mandate, rather than as the
+plugin's registered `claim-falsifier` agent. Install through the plugin **or** the skills CLI, not
+both, or Claude Code lists the skill twice.
+
+The CLI can place the skills in other agents too, but Claude Code and Codex are the two hosts
+`review-map` has delivery and delegation instructions for; anywhere else is unsupported.
+
+`setup-ci` is offered too — `/setup-ci` in Claude Code, the only host it works in. The workflow it
+writes clones the plugin itself at a pinned tag, so how you installed the skill locally does not
+matter to CI.
 
 ### Codex
 
@@ -590,7 +625,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 
 | | |
 | --- | --- |
-| **Supported agents** | Claude Code, plus local `review-map` in Codex (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Supported agents** | Claude Code, plus local `review-map` in Codex (see installation above), installable into either with `npx skills add wyeworks/accountable-review`. Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
 | **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
