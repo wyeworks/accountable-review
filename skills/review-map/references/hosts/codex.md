@@ -1,7 +1,12 @@
-# Codex host
+# Codex host, and the default for every other host
 
 Read this before step 1. The shared procedure still owns the page, its one shape, the evidence
-rules and the completeness gate. These are the Codex mechanics for that procedure.
+rules and the completeness gate. These are the Codex mechanics for that procedure, and they are
+also the mechanics for **any host that is not Claude Code** — Pi, or another agent that loaded
+this skill from an Agent Skills directory. Nothing below needs more than a shell, file reads and
+edits; where it names a Codex tool, use the equivalent your host offers, and where your host has
+none, the rule for an unavailable one applies. A local file is the delivery that works everywhere,
+which is why this reference is the default rather than Claude's.
 
 ## Local delivery
 
@@ -21,7 +26,9 @@ does not require tools with those exact names.
 ## Independent falsification
 
 At `--effort high`, explicitly spawn one independent subagent per selected analysis note. Use
-the Codex session's available subagent tools, not Claude's named agent registry. No custom
+the session's available subagent tools — Codex's, or your host's equivalent — not Claude's named
+agent registry. A host with no subagent tool at all (Pi has none, by design) has delegation
+unavailable, and the last paragraph of this section applies. No custom
 agent installation or model override is required: inherit the configured model and effort.
 Give each reader the absolute path to `references/claim-falsifier.md` (relative to the skill
 base, not this host reference), the repository path, BASE and HEAD, and the path of its one
@@ -51,4 +58,5 @@ assurance badge or a falsification tally on the page.
 ## Scope
 
 This integration supports local `review-map` generation. The bundled `setup-ci` skill and
-CI runner still use Claude Code and Anthropic credentials; they do not run Codex yet.
+CI runner still use Claude Code and Anthropic credentials; they do not run Codex, or any other
+host, yet.

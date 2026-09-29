@@ -297,8 +297,10 @@ are launched as general-purpose subagents handed the same bundled mandate, rathe
 plugin's registered `claim-falsifier` agent. Install through the plugin **or** the skills CLI, not
 both, or Claude Code lists the skill twice.
 
-The CLI can place the skills in other agents too, but Claude Code and Codex are the two hosts
-`review-map` has delivery and delegation instructions for; anywhere else is unsupported.
+The CLI can place the skills in other agents too, such as Pi. There `review-map` follows the same
+instructions as in Codex: the page is a local HTML file, and `--effort high` needs the agent to
+offer subagents. An agent without them — Pi has none — says so and offers `--effort low`. Only
+Claude Code and Codex are tested.
 
 `setup-ci` is offered too — `/setup-ci` in Claude Code, the only host it works in. The workflow it
 writes clones the plugin itself at a pinned tag, so how you installed the skill locally does not
@@ -634,7 +636,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
 | **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
-| **Publishing** | In Codex, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
+| **Publishing** | In Codex or any other agent, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
 | **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 
