@@ -79,8 +79,8 @@ TALLIES = [
 ].freeze
 
 TALLIES.each do |fragment, want_exit, want_text, extra|
-  out, err, status = ReviewMap.capture({ "CHECK_TALLY" => "0" },
-                                    File.join(EVALS, "verdict-tally.sh"),
+  out, err, status = ReviewMap.capture({ "CHECK_TALLY" => "0" }, "ruby",
+                                    File.join(EVALS, "e2e", "verdicts.rb"),
                                     File.join(GOLD, fragment), *extra)
   output = out + err
   problem = []
@@ -88,7 +88,7 @@ TALLIES.each do |fragment, want_exit, want_text, extra|
   problem << %(no line matching "#{want_text}") unless output.include?(want_text)
 
   problem.empty? ? pass += 1 : fail += 1
-  report("verdict-tally  #{fragment}", problem, output)
+  report("verdicts  #{fragment}", problem, output)
 end
 
 # The page-only checks refuse a fragment rather than passing on evidence they do not have.

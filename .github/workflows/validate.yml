@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
       # Pinned, and not the runner's system Ruby: minitest is a BUNDLED gem rather than a
       # default one, so `require "minitest/autorun"` is not guaranteed on a bare image. The
-      # pin also keeps the job comparable run to run, for the same reason run.sh puts the
+      # pin also keeps the job comparable run to run, for the same reason e2e/run.rb puts the
       # model and effort on every result line.
       # Keep this in step with the repo-root .tool-versions, which pins the same thing for the
       # same reason so `bin/evals offline` needs no prefix locally.
