@@ -25,8 +25,8 @@ Built by **WyeWorks**.
 - [What is a Review Map?](#what-is-a-review-map-)
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
-  - [Any agent, with the skills CLI](#any-agent-with-the-skills-cli)
   - [Codex](#codex)
+  - [Any agent, with the skills CLI](#any-agent-with-the-skills-cli)
 - [Usage](#usage-)
   - [Basic usage](#basic-usage)
   - [How hard it works](#how-hard-it-works)
@@ -238,40 +238,6 @@ claude --plugin-dir /path/to/accountable-review
 Nothing is installed that way, so `git pull` in the checkout is how you update, and the skills exist
 only for sessions started with that flag.
 
-### Any agent, with the skills CLI
-
-The skills live under `skills/` as ordinary [Agent Skills](https://agentskills.io), so the
-cross-agent [`skills`](https://github.com/vercel-labs/skills) CLI installs them into Claude Code
-and Codex without cloning anything:
-
-```bash
-npx skills add wyeworks/accountable-review
-```
-
-It asks which skills and which agents; answer in flags instead with, for example:
-
-```bash
-npx skills add wyeworks/accountable-review -g --skill review-map -a claude-code -a codex
-```
-
-**Prefer `-g`.** Without it the skills are copied into the current project (`.agents/skills/`,
-`.claude/skills/` and so on), which puts files in the repository you are about to review. `npx skills
-update` takes new commits, and `npx skills remove review-map` uninstalls.
-
-Installed this way the skill is a standalone one rather than part of a plugin, so in Claude Code it
-is invoked as `/review-map` instead of `/accountable-review:review-map`; Codex uses `$review-map` as
-below. `--effort high` still works in Claude Code: the independent readers
-are launched as general-purpose subagents handed the same bundled mandate, rather than as the
-plugin's registered `claim-falsifier` agent. Install through the plugin **or** the skills CLI, not
-both, or Claude Code lists the skill twice.
-
-The CLI can place the skills in other agents too, but Claude Code and Codex are the two hosts
-`review-map` has delivery and delegation instructions for; anywhere else is unsupported.
-
-`setup-ci` is offered too — `/setup-ci` in Claude Code, the only host it works in. The workflow it
-writes clones the plugin itself at a pinned tag, so how you installed the skill locally does not
-matter to CI.
-
 ### Codex
 
 Local `review-map` generation is supported in Codex. From a checkout of this repository:
@@ -303,6 +269,40 @@ and Anthropic credentials. The local installer installs only `review-map`.
 
 See [Codex setup and verification](docs/codex.md) for project-scoped installation, removal,
 and the boundaries of this first integration.
+
+### Any agent, with the skills CLI
+
+The skills live under `skills/` as ordinary [Agent Skills](https://agentskills.io), so the
+cross-agent [`skills`](https://github.com/vercel-labs/skills) CLI installs them into Claude Code
+and Codex without cloning anything:
+
+```bash
+npx skills add wyeworks/accountable-review
+```
+
+It asks which skills and which agents; answer in flags instead with, for example:
+
+```bash
+npx skills add wyeworks/accountable-review -g --skill review-map -a claude-code -a codex
+```
+
+**Prefer `-g`.** Without it the skills are copied into the current project (`.agents/skills/`,
+`.claude/skills/` and so on), which puts files in the repository you are about to review. `npx skills
+update` takes new commits, and `npx skills remove review-map` uninstalls.
+
+Installed this way the skill is a standalone one rather than part of a plugin, so in Claude Code it
+is invoked as `/review-map` instead of `/accountable-review:review-map`; Codex uses `$review-map` as
+above. `--effort high` still works in Claude Code: the independent readers
+are launched as general-purpose subagents handed the same bundled mandate, rather than as the
+plugin's registered `claim-falsifier` agent. Install through the plugin **or** the skills CLI, not
+both, or Claude Code lists the skill twice.
+
+The CLI can place the skills in other agents too, but Claude Code and Codex are the two hosts
+`review-map` has delivery and delegation instructions for; anywhere else is unsupported.
+
+`setup-ci` is offered too — `/setup-ci` in Claude Code, the only host it works in. The workflow it
+writes clones the plugin itself at a pinned tag, so how you installed the skill locally does not
+matter to CI.
 
 ---
 
