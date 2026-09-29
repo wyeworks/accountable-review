@@ -23,7 +23,7 @@ require_relative "page"
 module ReviewMap
   class Check
     # Two kinds of input. A page is a whole published document; a fragment is one section,
-    # produced by a driver in ../drivers from the frozen upstream in ../frozen. Checks that
+    # lifted out of a page or written by hand, as golden/ is. Checks that
     # need the whole document refuse a fragment rather than passing vacuously on it.
     #
     # LEVEL is the skill's detail level, and it is a THIRD axis: MODE is build state

@@ -1,257 +1,176 @@
 # Evals
 
-Three grading scopes, because the thing being measured is prose and the prose has parts.
+Three layers, because the thing being measured is prose, and prose has a part a script can settle
+and a part it can't.
 
-| Scope | Input | What it can settle |
-|---|---|---|
-| **Page** | a whole published page, from a real run | The invariants that only exist across sections |
-| **Section** | one HTML fragment, produced from the frozen upstream | Everything internal to one section |
-| **Component** | a script's output, lifted out of either | Mechanics: excerpt shape, inventory cells, chain conformance |
+| Layer | Input | What it settles | When it runs |
+|---|---|---|---|
+| **Mechanical** | a page or a fragment, and the repository | Yes-or-no facts: the completeness gate, no verdict language, tiers, excerpts, links, the impact panel's shape | Every push, in CI (`bin/evals offline`) |
+| **End to end** | a real merged OSS pull request | A whole run of the skill, checked mechanically, then judged per aspect by an LLM anchored in the checkout | Before a major release (`bin/evals e2e`) |
+| **Calibration** | a certified gold page, plus copies each planting one defect | Whether a judge says what a person already decided it should say | Whenever a judge or its model changes (`bin/evals calibrate`) |
 
 ```
 evals/
-├── evals.json               the page cases: one whole run each
-├── trigger-eval.json        should-trigger / should-not-trigger queries
-├── deferred/                the section cases and drivers, unrun — see deferred/README.md
-├── drivers/                 the prompts that produce one section from frozen upstream
-├── frozen/                  that upstream, hand-authored per fixture
-├── fixtures/make-fixtures.sh  builds the repositories everything runs against
 ├── check.rb                 dispatcher over checks/, one tally
-├── checks/                  one script per rule family, plus self-test.rb
+├── checks/                  one Ruby script per rule family, plus self-test.rb and frozen.rb
 ├── golden/                  fragments with known verdicts, for self-test.rb
-├── run.sh / report.sh       produce a section N times; aggregate the results
-├── profile.sh / profile.jq  where one run's wall clock went, from the session transcript
-├── judge.sh / judge-prompt.md  grade one fragment against the written expectations
-├── verdict-tally.sh         read one verdicts.json, shared by judge.sh and run.sh
-└── results/                 one jsonl line per run (gitignored)
+├── e2e/
+│   ├── prs.yml              the pull requests: pinned base and head, role calibration | eval
+│   ├── run.rb               generate → check → judge → profile → one jsonl line
+│   ├── judge.rb             one judge, one page
+│   ├── judges/              what-changed.md is the one working judge; IDEAS.md is the rest
+│   ├── calibrate.rb         each judge against gold and its planted defects
+│   ├── calibration/         <id>/gold.html, defects/*.patch, labels.yml; status.json
+│   ├── verdicts.rb          reads one verdicts.json; shared by judge.rb and self-test.rb
+│   ├── report.rb            results/e2e.jsonl as an HTML page
+│   └── history/             one summary per release, committed
+├── profile.sh / profile.jq  where one run's time and money went, from the session transcript
+├── verify-catalogue.sh      the documentation catalogues, opened. Needs network
+├── trigger-eval.json        should-trigger / should-not-trigger queries — not wired to anything
+└── results/                 one jsonl line per run or calibration pass (gitignored)
 ```
 
-## Why the split
+## What this replaced, and why
 
-Before this, an eval was a whole run: one page, one 272-line script, twelve judged expectations. Three
-things were wrong with that as a way to *improve* the skill.
+Until 1.0.2 this directory had a second harness: six synthetic fixture repositories built by a
+2,900-line `make-fixtures.sh`, each planting findings outside the diff; seven whole-page cases in
+`evals.json` that a person drove and graded by hand; and six section cases that produced one
+section from a hand-written frozen upstream, run three times by `run.sh` and judged by `judge.sh`.
+The section cases had graded sections of the page the agenda replaced and sat unrun in `deferred/`;
+the page cases recorded nothing. **None of it was being used**, so it is gone rather than deferred
+again. It is all in the history at the commit before this README was rewritten.
 
-- **Attribution.** A weak § 2 could be step 6's grouping, step 4's goal, or § 2's own spec. The score
-  could not say which.
-- **Cost.** Re-measuring a three-word change cost a full multi-turn run, and `CLAUDE.md` already says
-  one run is weak evidence. Repetition was the thing that was unaffordable.
-- **Grader attention.** A grader asked to verify thirty things does all of them badly, and the
-  mechanical ones are what it is worst at.
+Three things about it were right and are kept: **a result line is stamped with the sha of the prose
+that produced it**, so a number is attributable to a version; **the judge is anchored** — it runs
+inside the repository and settles a claim by opening the file; and **three runs, not one**, because
+defect discovery is sampling and variance is the measurement.
 
-So the section scope exists to make iteration cheap, and the page scope stays as the gate.
+Two things were wrong, and they are why the replacement looks the way it does:
 
-## What each scope cannot settle
+- **Synthetic fixtures only plant true findings, and they never reach link rung 1.** Every fixture
+  had no remote or an unpushed branch, so no real permalink, no withheld-diff routing and no
+  `#diff-` fragment was ever exercised by a whole run. A real merged pull request on GitHub
+  exercises all of it, and every citation on the page resolves for whoever reads the report.
+- **A judge nobody checked is a number generator.** `judge.sh` was never tested against an answer a
+  person had already decided. Calibration is that test.
 
-Read this before quoting a number from `report.sh`.
-
-A **section** eval cannot see duplication across sections, cannot run the completeness gate, and
-cannot judge the page-wide excerpt budget — one canonical home is a relation *between* sections, and a
-fragment has no other sections to relate to. Those stay with the page cases.
-
-**The reorder gave that limit a sharper edge, worth stating before someone writes another expectation
-across it.** § 4's rule that a consequence a flow owns is compressed to a pointer is a relation
-between § 2 and § 4, so a § 4 fragment can only be judged on its *shape* — one clause, one citation,
-a link — and never on whether the compression was safe, because the flow it points at is not there
-and neither is a reader who has read it. The first run against `monolith-guard-chain` restated a
-flow-owned entry at full length, and part of why is that a standalone fragment has nothing to point
-at. Judge the form here; the page cases judge whether anything was lost.
-
-**The section cases are deferred, and that matters for what the page cases now have to carry.** They
-graded one section of the page this design replaced; the agenda's equivalent unit is a checkpoint,
-which is a different driver rather than a rename (`deferred/README.md`). Until they return, the page
-cases are the only scope that reads a produced page — so everything a section case used to settle
-cheaply, three repetitions at a time, is settled expensively or not at all. Reinstating them is the
-highest-value thing in this directory.
-
-Freezing the upstream also removes the step whose variance the page cases measure. A section at 100%
-is therefore compatible with poor pages; it just locates the defect upstream, which is a useful
-reading rather than a contradiction.
-
-A **section pass-rate is not page quality.** Nothing in `results/` claims otherwise, and neither
-should a summary built from it.
+What went with the fixtures, and is still covered only mechanically, is listed in
+`e2e/judges/IDEAS.md` § *What retiring the synthetic fixtures lost*.
 
 ## One command per scenario
 
-`bin/evals` at the repo root is a dispatcher over everything in here. It owns the paths and the
-defaults this file argues for — three repetitions, judged, run at once — and **nothing else**: every
-flag, every rule and every output idiom stays in the script it calls, and no script changed to make
-it work. So a result line written before it existed is still comparable with one written after.
+`bin/evals` at the repo root is a dispatcher over everything in here. It owns the paths and nothing
+else: every flag and every rule stays in the script it calls.
 
 ```sh
-bin/evals offline                        # every no-model suite. What CI checks.
-bin/evals offline frozen                 # or just one of them
-bin/evals page 1                         # the recipe for one whole-page case
-bin/evals page 1                         # the recipe for one whole-page case
-bin/evals catalogue elixir               # the maintenance pass. Needs network.
-bin/evals help                           # the rest
+bin/evals offline                          # every no-model suite. What CI checks. About a minute.
+bin/evals offline frozen                   # or just one of them
+bin/evals e2e                              # the PRs in e2e/prs.yml
+bin/evals e2e discourse-43002 -n 3 -j 3    # three whole runs of one, at once
+bin/evals calibrate                        # every judge against its gold page
+bin/evals report                           # the HTML report
+bin/evals catalogue elixir                 # the maintenance pass. Needs network.
 ```
 
 `offline` is about a minute on this machine, and it is not evenly spread: `setup-ci` is 48s of it
-because its self-test re-runs the whole suite once per deliberate break, `frozen` is 11s over 1,873
-cases, and the three Ruby suites together are 3s. Naming one suite is how you skip the rest.
+because its self-test re-runs the whole suite once per deliberate break (issue #71 is the port that
+fixes that), `frozen` is 11s over 1,873 cases, and the Ruby suites together are 3s. It runs every
+suite even after one fails and exits non-zero if any suite **did not run** — a suite whose
+interpreter is missing is named in the tally rather than silently absent. Its `parity` line fails
+when `.github/workflows/validate.yml` names a suite the dispatcher's table does not cover.
 
-It is a convenience, not a layer: everything below still works exactly as written, and the sections
-below give the underlying command beside the short one. Two details are worth knowing before relying
-on it. `offline` runs every suite even after one fails and exits non-zero if any suite **did not
-run** — a suite whose interpreter is missing is named in the tally rather than silently absent, for
-the reason § *checks/self-test.rb* gives. And it carries a `parity` line that fails when
-`.github/workflows/validate.yml` names a suite the dispatcher's table does not cover; the two lists
-stay duplicated on purpose, because CI's explicit steps are what attribute a failure to a suite in
-the Actions UI, but they may not drift.
+## End to end
 
-## Running a section
+`e2e/run.rb <id>` does one repetition as:
 
-```sh
-bin/evals section <case>                        # DEFERRED — see deferred/README.md
-```
+1. a detached worktree of the PR's repository at head, from a blobless clone in `$EVAL_CACHE`
+   (default `~/.cache/accountable-review-e2e`);
+2. **`ci/generate-review-map.sh --output`** — the skill run exactly as CI runs it, with the plugin
+   loaded from this checkout. That is the one non-interactive path, and it is why this harness does
+   not share the old one's blind spot: under a bare `claude -p` there is no `Artifact` tool, so a run
+   could never do its last step (§ *The PR-528 rerun* below);
+3. `check.rb --final --page --repo --base`;
+4. every judge in `e2e/judges/`, **blind to step 3**;
+5. `profile.sh` over the session, which `run.rb` pins with `--session-id` through a `--claude-bin`
+   wrapper so the transcript can be found afterwards — parent and subagents both;
+6. one line in `results/e2e.jsonl`.
 
-The defaults go in front of what you pass, and `run.sh` takes the last value it sees, so any flag you
-name wins. `--no-judge` is the one flag the dispatcher handles itself — `run.sh` has no such option,
-and dropping the default is the whole of what it means. Underneath:
+Everything a repetition produced stays in its directory under `$EVAL_OUT` (default
+`$TMPDIR/review-map-e2e/<id>/<batch>-r<n>/`): the page, `check.txt`, the judges' raw replies and
+parsed verdicts, the profile, the generation log. `report.rb` links to all of it.
 
-```sh
-./run.sh <case> -n 3 --judge                    # DEFERRED: nothing in cases/ any more
-./report.sh <case>                              # still reads whatever is in results/
-```
+**The adapter needs a credential in the environment**, `ANTHROPIC_API_KEY` or the
+`CLAUDE_CODE_OAUTH_TOKEN` that `claude setup-token` prints, because it is written for a runner
+nobody is logged into. `run.rb` checks first and says so.
 
-`run.sh` rebuilds the fixtures, substitutes the driver's placeholders, runs `claude -p` from inside the
-fixture, checks the fragment it wrote, and appends one line to `results/<case>.jsonl` stamped with the
-skill's git sha. That stamp is the point: it makes a pass rate attributable to a wording version.
+### The stamp
 
-Two things to know about how it runs. It does **not** load the plugin — the driver names the skill
-files by absolute path, which is what isolates the prose being measured from the packaging around it;
-packaging is what the page cases exercise. And it defaults to `--permission-mode bypassPermissions`,
-because the fixtures are disposable repositories under `$TMPDIR` and the alternative is a runner that
-hangs overnight on a prompt nobody is watching. `EVAL_PERMISSION_MODE` overrides it.
+Every line carries `plugin_version`, `skill_sha` (with `+dirty` when the skill has uncommitted
+edits), the skill's `effort`, the producing `model` (`ambient` when none was named — which is not a
+fact about anything, so name it when you intend to compare), and per judge its file's sha, its
+model and whether it is calibrated. `report.rb` groups by the first four, so a row measured on one
+version of the prose is never averaged into another; a judge column is only coloured when that
+judge is calibrated at the sha and model it ran at.
 
-`--judge` runs `judge.sh` after the check, and its counts land in the jsonl under their own keys with
-a `judged` flag beside them — never summed with the mechanical ones, because a number that silently
-mixes a script's verdict with a model's reading is worse than two numbers. Without `--judge` the
-expectations are still yours to read by hand; `judge.sh` also runs standalone on any fragment.
+### The judge
 
-**Three runs, not one.** Variance is the measurement. One green run of a section says almost nothing;
-three runs where the same expectation fails twice is a finding about the spec.
+One judge per aspect of the page, each a file in `e2e/judges/` with its pinned model, the section it
+grades and at most five criteria in front matter, and the prompt below. **`what-changed.md` is the
+only working one**, deliberately: one judge calibrated against a gold page tells us whether the
+method works before it is copied six times. `IDEAS.md` records the other five and what a planted
+defect for each would look like.
 
-## Where the time goes
+What makes the verdicts worth anything is not the rubric, it is the anchoring. The judge runs
+**inside the checkout at head**, with Read, Grep, Glob and read-only `git`, so "is this claim right"
+is settled by opening the file the claim cites. Take that away and it decays into a second opinion
+about prose. It never sees the mechanical results: two independent readings beat one reading
+anchored to the other. And it cannot load a skill or an MCP server — `--disable-slash-commands` and
+`--strict-mcp-config` — because a judge on a machine with this plugin installed must not be able to
+run review-map on the page it is grading.
 
-All of it is the model, and `profile.sh` is what says which part. Measured on this machine:
-`make-fixtures.sh` 0.6s, `check.rb` on a written fragment 0.15s, `checks/self-test.rb` 1.5s,
-`verdict-tally.sh` a few milliseconds. Producing one fragment took 345–490s on the first recorded
-runs, and `--judge` adds a second call of the same order. So `-n 3 --judge` over both fixtures is a
-dozen model calls and most of an hour, and nothing in the harness is worth optimising.
+Three verdicts, not two. `unclear` exists so the judge does not have to guess — including when it
+cannot tell what a criterion is asking of this page. A judge forced into a binary invents
+confidence, and an invented verdict is worse than an honest gap because it survives into a number.
 
-Which leaves two levers — run the repetitions at once, or read each one with a cheaper model. `run.sh`
-has both:
+And a `notes` field, for when **the criterion is the problem** rather than the page. That is not a
+courtesy: it corrected this repository's ground truth twice in the old harness's first two judged
+runs — once reporting a factual error in a caption that no expectation covered, once rejecting the
+wording of an expectation outright as false at line granularity. Read `notes` before the verdicts;
+`report.rb` prints them above the table for that reason.
 
-| | Costs | Buys |
-|---|---|---|
-| `-j N` | nothing but concurrent API load | wall clock: the N repetitions run at once, in batches of `N` |
-| `--model` / `--effort`, or `--fast` for the pair | comparability | a cheaper reader per run |
-| `--judge-model` / `--judge-effort` | comparability of the judged half | a cheaper grader |
+**Counting is never a criterion.** § 01's word budget is measured by `run.rb` (`changed_words`,
+guidance 80–160) and shown beside the verdicts, not asked of the judge: a grader asked to verify
+thirty things does all of them badly, and the mechanical ones are what it is worst at.
 
-`-j` is free of consequence — the runs are independent, each writes its own `$RUNDIR`, and each prints
-its tally as a single labelled line so parallel output stays attributable. `--fast` is not free, which
-is why what it changed is recorded: `model` and `effort` go on every jsonl line beside the sha, and
-`report.sh` makes them part of the group key. A sonnet/low row can therefore never be averaged into a
-row measured on the shipping model — the fast loop tells you which wording to keep, and the last pass
-before believing a number runs on the model the skill ships against. A row printed as `-/-` was
-produced by whatever the ambient config was that day, which is not a fact about anything; name the
-model when you intend to compare.
+`e2e/verdicts.rb` does the parsing, recovering a fenced or prose-wrapped reply in memory and keeping
+the raw one on disk, and `checks/self-test.rb` exercises it against `golden/verdicts-*.json` without
+a model — a tally that reads a truncated file as "no fails" is the same defect as a check that
+always passes, and worse here because what it emits looks like a measurement.
 
-`--fast` deliberately leaves the judge alone. The producer is the thing under test and a cheaper
-reader of it is a legitimate cheaper experiment; the judge **is** the measurement, so a cheap judge
-does not make the loop faster, it makes the number softer. `--judge-model` and `--judge-effort` are
-there for when you mean it, and `report.sh` prints the judge's model on the judged line rather than in
-the group key — it does not affect the checks, so splitting the whole group by it would claim a
-dependency that is not there. Two graders in one group get two judged lines, never a mean over both.
+## Calibration
 
-Every knob has an environment variable, for a shell you keep open: `EVAL_MODEL`, `EVAL_EFFORT`,
-`EVAL_JUDGE_MODEL`, `EVAL_JUDGE_EFFORT`, plus the existing `EVAL_PERMISSION_MODE` and `EVAL_TIMEOUT`.
+`e2e/calibration/README.md` owns the procedure. The shape: each calibration PR — **held out**, so
+never in the eval set — has a gold page a person certified criterion by criterion, and one patch per
+planted defect against it. `calibrate.rb` runs each judge three times on gold and on every variant.
+**Specificity**: gold passes every criterion at least twice. **Sensitivity**: each variant's targeted
+criterion fails at least twice. Both hold, or the judge is uncalibrated, and `status.json` records
+the judge file's sha and model — so editing a judge uncalibrates it, which is the point.
 
-### The detail level was the third axis, and it is gone
+**There is one calibration PR, `discourse/discourse#43002`**, chosen because its claims are easy to
+check by hand, and it has no gold page yet: making one is a real run and a person's reading, and
+`calibrate.rb` prints the steps. Gold is not `examples/` — those are regenerated when the format
+moves, and gold has to stay put as long as its patches apply.
 
-The skill produced two page shapes, and a case declared which one it wanted. There is one shape now
-and no flag names another, so `evals.json` carries no `level`, `check.rb` accepts `--level` and reads
-it with nothing, and `run.sh` still writes it on the jsonl line so old result lines stay parseable.
+## Before a release
 
-**Leaving the flag accepted rather than removing it is deliberate**, and it is the same argument that
-kept `normal` meaning `low`: `run.sh` passes `--level` to `check.rb`, an unknown argument exits 2, and
-a flag day across the harness buys nothing. What would be a mistake is a new check that reads it. Two
-checks used to, and both are deleted; a third would be the second page shape coming back through the
-grader.
+Before a **major** release: `bin/evals calibrate`, then `bin/evals e2e <id> -n 3 -j 3` for every
+`eval` PR, then `bin/evals report --history <version>`, and commit the history file. Read the
+report's notes before its numbers.
 
-### The skill effort is the fourth, and it is not the `--effort` beside it
-
-`run.sh` now takes two things called effort, and they are unrelated. `--effort` is the CLI reasoning
-effort the *producing model* runs at, and it is half of `--fast`. `--skill-effort` is the flag the
-*skill* is invoked with: at `high`, `SKILL.md` step 8 sends one `claim-falsifier` subagent at each
-written behaviour flow to try to break its claims, and the run adjudicates what comes back. Both land
-on the results line under their own keys and both are in `report.sh`'s group key, so a `high` row can
-never be averaged into a `normal` one.
-
-A case declares `skill_effort` and `--skill-effort` overrides it. **A case file that declares none
-means `normal`**, for the reason an absent `level` means `full`: every run recorded before the flag
-existed did what `normal` names, and silently rereading the corpus would make old lines incomparable
-with new ones.
-
-**The falsifier is registered with `--agents`, not by loading the plugin**, which keeps the property
-this file defends two sections up — the driver names the skill files by absolute path, so what is
-measured is the prose rather than the packaging. `--agents` accepts the plugin-scoped identifier
-verbatim, so the eval spawns the same name a real install does, and `run.sh` reads the description
-and the tool list out of `agents/claim-falsifier.md` rather than keeping a second copy of them.
-It is registered on **every** run, including `normal` ones where nothing spawns it: an unused agent
-costs nothing, and an arm of an A/B carrying an extra CLI flag differs by something other than the
-thing under test.
-
-### `--mentor` is a fifth axis and deliberately has no flag here
-
-`--mentor` admits the primer callout into the checkpoints that earn one, and there is no
-`--skill-mentor` to match `--skill-effort`. The reason is the one that governs every axis above: an
-axis is a **column on the results line**, and a column added for a feature with no case behind it
-makes every recorded line incomparable in exchange for nothing measured.
-
-What is covered is the mechanical half — `checks/rails-anchors.rb` § 8 grades every primer on a page
-it is handed, and the eight `golden/anchors-primer-*` fixtures prove each rule fires. What is not
-covered is the half that matters most: whether a primer was the *right* thing to spend a callout on,
-and whether the judgment underneath actually needed it. That is a judged expectation about one
-checkpoint, which is precisely the shape `deferred/` holds — so the axis is worth adding at the same
-time as the case it would carry, and not before.
-
-**No case gained an expectation for it, deliberately.** Six per case is a cap this file argues for,
-and a seventh would make the grader worse at the other six — which would be measuring the judge
-rather than the flag. The A/B runs the *existing* expectations at both efforts and compares:
-
-```sh
-./run.sh <case> -n 3 -j 3 --judge --skill-effort low
-./run.sh <case> -n 3 -j 3 --judge --skill-effort high
-./report.sh <case>
-```
-
-**That A/B is currently unrunnable**, because the section cases are deferred and `cases/` is empty.
-The measurement it describes is still the right one and the numbers below still stand; what is
-missing is a case to run it against. Restoring one is the first thing a checkpoint-shaped section
-case buys back.
-
-`checks/searches.rb` is the sharpest mechanical reading available here, because a recorded search
-that does not reproduce is exactly what a falsifier is told to hunt; the judged expectations about
-affected-but-unchanged entries are the other half.
-
-**One run has fired it end to end; the flag still ships unmeasured, and those are different
-statements.** The mechanism is confirmed — `behaviour-flows/rails-only-small` at `--skill-effort
-high` spawned the falsifier, folded in two of its challenges after verifying them against the files
-(a dead `scope :archived`, and an actor claim the code did not support), came back 28/0/0, and leaked
-nothing about the pass onto the fragment. What that does **not** establish is whether the pass earns
-its cost: n=1, with no `normal` arm on the same sha to compare against. Whether `high` is worth a
-blocked round of agents is the question the axis exists to answer, and until both arms exist the
-honest claim is that the pass is *available*, not that it *helps*.
-
-The one cost signal from that run, offered as an order of magnitude and not as a measurement: 866s
-against the 345–490s this file records for early section runs — on a different sha and a different
-model, so the comparison is suggestive at best. Run both arms before quoting a ratio.
-Read § *Two page runs against `monolith-guard-chain`* before scoring it — recall on planted findings
-was total in both runs there, so a fixture whose findings are all true and all plantable cannot show
-a falsifier earning its keep. What would is a fixture planting **plausible-but-wrong invitations**,
-which none of the four does; that belongs in § *Next cases worth adding*.
+What that costs, from § *The money is a different ranking* below: one generation is 20–40 minutes
+and 30–39M cache-read tokens, plus 17–23% for the falsifiers at the default effort, and each judge
+call is a fraction of that. Three repetitions of five PRs is fifteen generations — an afternoon with
+`-j`, and a bill worth deciding on rather than discovering.
 
 ## Profiling one run
 
@@ -261,7 +180,7 @@ skill is instrumented, and it works on runs that happened before it existed:
 
 ```sh
 ./profile.sh                                   # newest run in this directory
-./profile.sh --rundir "$RUNDIR"                # an eval repetition, by its pinned session
+./profile.sh --session <uuid> --all            # an e2e repetition, by the session run.rb pinned
 ./profile.sh --transcript <file.jsonl> --all   # any transcript
 ./profile.sh --list                            # what transcripts exist, newest first
 ./profile.sh --timeline                        # call by call, instead of the rollup
@@ -340,24 +259,22 @@ that moved is worse than no table. Two figures come from the `cost-state` record
 marked *session-wide*, because a session that ran review-map and then other work carries one cost for
 both.
 
-`run.sh` pins a session id with `--session-id` and records it, so a finished repetition can be
-profiled afterwards: the human report lands in `$RUNDIR/profile.txt` beside `check.txt`, the machine
-copy in `profile.json`, and seven scalars — `session`, `requests`, `model_seconds`, `tool_seconds`,
-`ttft_seconds`, `stream_seconds`, `output_tokens`, `thinking_tokens` — go on the jsonl line, where
-`report.sh` prints them as a third `time` block under the same group key. Per-bucket seconds stay in
-`profile.json`: `report.sh` matches flat field names, and the bucket taxonomy describes the current
-procedure rather than stating a fact about a run, so a column per bucket would make old lines and new
-lines incomparable in the one file whose purpose is comparing across shas.
+`e2e/run.rb` pins a session id with `--session-id`, through a one-line `--claude-bin` wrapper handed
+to `ci/generate-review-map.sh`, so a finished repetition can be profiled afterwards: the human report
+lands in its run directory as `profile.txt`, the machine copy as `profile.json`, and seven scalars —
+`requests`, `model_seconds`, `tool_seconds`, `ttft_seconds`, `stream_seconds`, `output_tokens`,
+`thinking_tokens` — go on the jsonl line beside the session. Per-bucket seconds stay in
+`profile.json`, because the bucket taxonomy describes the current procedure rather than stating a
+fact about a run, so a column per bucket would make old lines and new lines incomparable in the one
+file whose purpose is comparing across shas.
 
-`seconds` is left exactly as it was. It is harness wall clock — fixture rebuild, `claude` startup,
-`check.rb`, the judge — so it exceeds `model_seconds + tool_seconds`, and that difference is the only
-measurement of the harness's own overhead there is. On the run that validated this, 163s against
-158.2s: 4.8s of harness.
+`seconds` on the line is harness wall clock — worktree, `claude` startup, `check.rb`, the judges —
+so it exceeds `model_seconds + tool_seconds`, and that difference is the only measurement of the
+harness's own overhead there is.
 
-Eval runs need `--all`, and `--rundir` implies it. The driver inlines the section instructions instead
-of invoking the skill, so those transcripts carry no `attributionSkill` and there is nothing to filter
-on — which is also why `--all` is never the default: with the filter off, neighbouring work in the
-same session is counted.
+`run.rb` passes `--all`, and there it is exact rather than loose: the session is pinned to one run,
+so there is no neighbouring work for the `attributionSkill` filter to exclude. `--all` is still never
+the default, because on an ordinary interactive session it would count everything else done there.
 
 ### The PR-528 rerun, and why its timing is void
 
@@ -399,7 +316,8 @@ Three lessons, in descending order of how much they cost:
 ### What the loop said about batching, and why almost none of it shipped
 
 Worth keeping as a worked example, because the profile pointed at a real inefficiency and the obvious
-fix still failed the measurement twice.
+fix still failed the measurement twice. It was measured with the retired section harness, so read
+"section eval" below as that instrument; the lesson about the instrument is the part that transfers.
 
 The profile found that a run issued **exactly one tool call per turn, across 95 turns, never two** —
 while about 2.5s of every turn is fixed cost, so roughly 240s of that run was per-turn overhead. Claude
@@ -438,57 +356,6 @@ batching helps needs a whole-page run against a fixture, profiled. Until that ex
 version stays out: on the only evidence available it is a regression, and "the benefit is somewhere the
 harness cannot see" is an argument, not a measurement.
 
-## Running a page
-
-`bin/evals page` prints the recipe — the fixture path, the `claude --plugin-dir` line, the case's
-prompt verbatim, and the check that follows:
-
-```sh
-bin/evals page                                  # the seven cases: id and fixture
-bin/evals page 1                                # the recipe for one of them
-bin/evals page-check 1 /path/to/page.html       # its check, --expect and --forbid filled in
-```
-
-It is addressed by **case id, not fixture**, because seven cases share six fixtures: `monorepo-contract`
-carries two, which ask different questions of the same diff. It builds the fixtures only when the one it needs is
-missing (`--rebuild` forces it): `make-fixtures.sh` opens with an unconditional `rm -rf` of the whole
-destination, and a second `evals page` in another terminal would otherwise delete the repository your
-live session is sitting in. `page-check` refuses to parse prose — case 3 has no mechanical check and
-case 4's is two commands behind a snapshot instruction, so those print the field and stop rather than
-inventing a command.
-
-Underneath, unchanged from before:
-
-```sh
-./fixtures/make-fixtures.sh
-cd $TMPDIR/review-map-fixtures/rails-only-small
-claude --plugin-dir /path/to/accountable-review
-```
-
-Paste the case's `prompt` from `evals.json`; when it publishes, check the page:
-
-```sh
-<skill>/evals/check.rb --page /path/to/page.html --repo . --base HEAD~1 \
-  --expect 'app/queries/active_projects.rb' --forbid 'N/A'
-```
-
-The page ships in stages at one URL, so there are three page states. `--final`, the default, runs the
-completeness gate and insists no banner or pending marker survived. `--draft` checks a page caught
-mid-run: the banner has to be there, carrying the sentence that stops a pending part reading as
-nothing to say. `--stopped` is for a run that ended early on purpose — the banner must state what was
-not written rather than promise stages that are never coming. Page case 4 needs the first two, so copy
-the page file aside right after the first publish; that snapshot is the only record of stage 1.
-
-Three states, but **four milestones**, and the two numbers are unrelated: § 2 arrives one behaviour
-flow at a time, so how many times a run republishes depends on how many flows the diff earns. A draft
-snapshot is worth taking mid-§ 2 as well as at stage 1 — `golden/flows-partial-page.html` is what that
-shape looks like, and `golden/flows-stubs-only-page.html` is the moment before it. Neither state is
-visible to any check that reads the publish *sequence*, because none does: every check grades a
-snapshot.
-
-`--scope core` runs exactly the five checks the old single script ran, which is the comparison to make
-if a page starts failing for a reason you did not expect.
-
 ## checks/
 
 One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines and nothing else;
@@ -525,16 +392,14 @@ component caps. **The number a successor must never grade is the checkpoint coun
 `:root`, no ledger and no banner — because silently dropping it is how a fragment ends up reading as
 thoroughly verified as a page.
 
-**`run.sh` passes `--repo`**, so the checks that need the repository run on a section fragment rather
-than skipping: `searches.rb` re-runs the recorded searches inside it, `rails-anchors.rb` asks whether
-the constants a probe names exist there, `page-invariants.rb` asks git whether the head is pushed —
-which is how the link rung finally became mechanical for section runs instead of a thing only a reader
-could catch. `link-form.rb` is in every section scope too, but only its first rule grades there:
-run.sh passes `--repo` and not `--base`, so the span a citation's text names is checked on a fragment
-while the two rules that need to know what the diff holds — which files GitHub withholds, and whether
-a `#diff-` fragment hashes to a real path — SKIP until a page case supplies both. Passing `--base`
-here would light them up and would also change what `excerpts.rb` reads for its state tag, so it is
-left alone: an old result line has to keep meaning what it meant.
+**`e2e/run.rb` passes `--repo` and `--base`**, so every check that needs the repository or the diff
+runs on a generated page rather than skipping: `searches.rb` re-runs the recorded searches inside the
+checkout, `rails-anchors.rb` asks whether the constants a probe names exist there,
+`page-invariants.rb` asks git whether the head is pushed, and `link-form.rb` grades all of its rules —
+the span a citation names, the `#diff-` fragment against a real path, and no anchor into a diff GitHub
+withholds. The last two could never grade on the retired fixtures, which had no pushed head; on a
+merged OSS pull request they grade every citation. Given a fragment and `--repo` alone, only
+`link-form.rb`'s first rule grades and the rest SKIP, which is the right way round.
 
 `searches.rb` and `link-form.rb` are the two checks whose rule is a relation between the page and a
 repository. `link-form.rb` is also the reason `golden/links-repo.sh` exists: the third of its rules
@@ -546,39 +411,6 @@ has to be reported as well: it prints how many entries it skipped as pointers,
 how many it could not resolve to a file, and — when nothing was recorded at all — that provenance was
 unverifiable rather than false. A handful of FAILs over an unstated denominator would read as a clean
 sweep of everything else.
-
-## The judge
-
-One pass over one fragment, all the expectations at once. That is the cheaper arrangement, and its
-failure mode is the one this file already names: a grader asked to verify many things at once verifies
-each of them less carefully. Six is small enough to be worth trying before paying for a call per
-expectation, and the per-expectation variant is the obvious next step if verdicts start looking thin.
-
-What makes the verdicts worth anything is not the rubric, it is the anchoring. The judge runs **inside
-the fixture**, with the frozen upstream, so "is this claim right" is settled by opening the file the
-claim cites. Take that away and it decays into a second opinion about prose. It also never sees the
-mechanical results: two independent readings beat one reading anchored to the other.
-
-Three verdicts, not two. `unclear` exists so the judge does not have to guess — including when it
-cannot tell what an expectation is asking. A judge forced into a binary invents confidence, and an
-invented verdict is worse than an honest gap because it survives into a number.
-
-And a `notes` field, for when **the expectation is the problem** rather than the fragment. That is not
-a courtesy — it has corrected this repository's ground truth twice in two runs. On `monorepo-contract`
-it reported no ill-posed expectation but volunteered a factual error no expectation covered: a diagram
-caption claiming a component reads a field it never touches, inherited from the specimen label in the
-template's own catalogue. On `rails-only-small` it rejected the wording of an expectation outright —
-"contains no changed file" is false at line granularity, because the flow's entry point lives in a
-file the diff modifies elsewhere — and pointed out that the fragment's own phrasing was the sharper
-one. Both fixes are in the repo; neither was a change to the section under test.
-
-Which is the argument for reading `notes` before reading the verdicts. A judged run that comes back
-all-pass has still told you something if the notes are not empty.
-
-`verdict-tally.sh` does the parsing for both `judge.sh` and `run.sh`, so there is one implementation
-and `self-test.rb` can exercise it against `golden/verdicts-*.json` without a model — a tally that
-reads a truncated file as "no fails" is the same defect as a check that always passes, and worse here
-because what it emits looks like a measurement.
 
 ### rails-anchors.rb
 
@@ -603,22 +435,6 @@ this script would SKIP.
 
 It says SKIP on a page with no link and no probe, which is most pages produced before this existed.
 
-## The mechanical / judged line
-
-`check.rb` owns the yes-or-no facts: does the ledger account for every changed path, are severity chips
-back, is there verdict language, is any inference unlabelled, does a diagram use a colour that only
-exists in one theme. A script checks those identically every time, for nothing, in CI.
-
-Everything in `expectations` needs a reader: whether the cohort split is defensible, whether an
-affected-but-unchanged entry is *right* rather than merely present, whether the page still reads
-completely with every excerpt closed — judged field by field, which no script can see.
-
-Diagrams sit on the line and need both halves. `diagram.rb` catches what is countable; crowding,
-overlap and an arrowhead that lands beside its box rather than on it are none of those things.
-`diagram-shot.rb --visual` produces the images, and looking at them is the check. Both defects in the
-sentence above were found that way, in diagrams this script had just called clean — and one of them
-became a new check.
-
 ## checks/self-test.rb
 
 Runs the checks against `golden/`, where every fragment plants exactly one defect, and asserts the
@@ -634,10 +450,10 @@ contained the word the check greps for.
 Every rule check, the dispatcher and the suite. `check.rb` decides which checks apply and adds
 up what they printed; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`;
 `lib/review_map/` is the shared library and `lib/test/` its tests. What stayed shell stayed for
-a reason: `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` are process
-orchestration and JSON, which is the shell's strongest ground; `verify-catalogue.sh` opens URLs
-and is documented as not a check; `fixtures/make-fixtures.sh` is 2,400 lines of heredoc with
-almost no logic in it.
+a reason: `profile.sh` is process orchestration and JSON, which is the shell's strongest ground,
+and `verify-catalogue.sh` opens URLs and is documented as not a check. The shell orchestration that
+used to sit beside them — `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` — went with the
+synthetic harness, and its replacement under `e2e/` is Ruby.
 
 ### How it was done, and why that matters more than the result
 
@@ -786,115 +602,29 @@ The lesson is narrow and worth keeping: **a shell script deleted from the tree i
 oracle.** For as long as the last commit carrying it is reachable, a port that must absorb a
 change to it can be graded against it instead of reviewed against it.
 
-## The fixtures plant their answers
+## What the retired fixtures taught, which still holds
 
-Each fixture contains findings that are true but **not in the diff**, which is the skill's whole claim.
-They are the ground truth the expectations check against:
-
-| Fixture | Diff | Planted, outside the diff |
-|---|---|---|
-| `rails-only-small` | 5 files, no client, **no remote** (link rung 4) | `app/queries/active_projects.rb` scopes the selectable list; new slug uniqueness validation has no unique index |
-| `monorepo-contract` | 7 files across `api/` and `web/`, **remote configured but nothing pushed** (link rung 3) | the wire key is `archived_at` and the type declares `archivedAt`, with no case transform anywhere, so the field is `undefined` for every project; the serializer also emits `null` against a non-null type; the archive endpoint can 422 and no client handles it; `web/src/queries/selectableProjects.ts` filters the list; `archive!` calls an association the model never declares |
-| `trivial` | 1 file, a README typo | nothing — the right output is a refusal to generate ceremony |
-| `monolith-guard-chain` | 7 files, server-rendered monolith, no client package, **GitHub remote, nothing pushed** (link rung 3) | the two sibling guards in the *changed* `application_controller.rb` still key on `steward?`, forty lines below the changed hunk; `steward/base_controller.rb` is the admission test the fix was aligned to, and its own profile guard is now unreachable; `matching/eligibility_filter.rb` rejects on `steward?` twice and `User.recommendable` does it again in SQL for four jobs, while `general_recommendations_eligible` excludes the free plan this same diff grants — so the two scopes disagree; `switch_to_free!`'s comment names a controller guard the new caller is not behind, and the protection survives only because `has_paid_subscription?` requires `plan_active?`; `chapters_controller.rb` skips the plan guard but not the profile-setup guard, and `chapters` is absent from `profile_setup_not_required?`, so the new redirect target bounces on the users `generate_steward_invite!` selects for; `load_management` reads approved memberships and acceptance creates none; `test/test_helper.rb` completes every test user's profile, so a green suite cannot observe any of it |
-| `rails-house-style` | 7 files, Rails-only, Minitest, **no remote** (link rung 4) | the new `in_dunning` status has two unchanged readers that disagree with it in opposite directions — `app/jobs/invoice_reminder_job.rb` matches the literal `"overdue"` and silently stops chasing anyone in dunning, `app/services/refund_policy.rb` has an exhaustive `case` whose `else` raises; `InvoicesController#dunning` is the only one of four actions without `authorize_invoice!`; and the house answer itself, which is a fact about two directories rather than about any file — `app/models` holds two records and the one non-record this diff adds, while `app/services` holds four classes of exactly that kind |
-| `two-push` | 3 commits, Rails-only, no remote — the only fixture built for a **re-run** rather than a run | the second push adds `app/jobs/stale_project_sweeper.rb`, a new reader of `archived_at` in a file the first map could not have cited. The carry rule cannot see it — no checkpoint's markup mentions that path — and what does see it is the first map's own recorded search, replayed at the new head. So the right answer is that the update is **refused** and the run regenerates: this is the fixture for `carry-plan.sh`'s P6, and the only planted finding whose pass condition is a run declining to take a shortcut |
-
-**`rails-house-style` is the only fixture that plants something the page must *not* say**, and that is
-why it exists rather than being folded into `rails-only-small`. `app/services/dunning_scheduler.rb` is
-the same kind of object as `app/models/dunning_stage.rb`, added in the same diff, sitting where its four
-siblings sit — so there is nothing to cite against it and no question to ask. A fixture that only rewards
-the coding-decision question cannot show the lens turning into style policing, which is the failure this
-feature arrives with. Note also what it deliberately does **not** plant: no uniqueness-without-an-index
-and no query object outside the diff. `rails-only-small` owns both, and two fixtures failing together on
-one step-5 regression would read as two independent signals.
-
-### Two page runs against `monolith-guard-chain`, and how not to score them
-
-Two cold runs, same fixture, same prompt, same model (opus, skill at `eda1bf3`):
-
-| | Planted findings named | `check.rb --final` |
-|---|---|---|
-| Run 1 | 15 / 15 | 53 passed, 0 failed |
-| Run 2 | 15 / 15 | 48 passed, **1 failed**, 3 warnings |
-
-**Read the pages to score them; do not grep for identifiers.** The first attempt at the table above
-scored 14/15 and 12/15 by grepping each page for a method or index name. All three "misses" were
-false negatives. Run 1 covers the roster gap at `chapters_controller.rb:88-91` and
-`manage.html.erb` without ever writing `load_management`; run 2 writes "the invite guard at
-`chapter.rb:89-93`" rather than `generate_steward_invite!`, and cites `db/schema.rb:25-27` rather
-than `index_chapters_on_steward_id`. A page that cites a line range instead of a name is following
-the citation rules, so grep-scoring penalises exactly the behaviour the format asks for.
-
-So this pair says something narrower than "findings are a sample" and something sharper. **Recall on
-findings that were deliberately planted was total, twice.** Where the runs genuinely diverged was
-everywhere else:
-
-- *Beyond* the planted set. Run 1 alone found that no fixture or test represents an **unaccepted**
-  `institute_roles` row — a third producer of flagged-but-not-admitted — and that the success notice
-  is probably swept by the second redirect. Run 2 alone found that `ProfileSetupController#update`
-  returns the user to the dashboard rather than the chapter, that `chapter_steward` is a sticky
-  boolean `dependent: :nullify` can falsify, and that the stewarded chapter appears in no navigation.
-- In structure. Run 1 split the flows by *which decision is being made*; run 2 split them by *who the
-  user is*, and built a six-column guard-chain table run 1 has no equivalent of.
-
-Neither is a superset of the other, and neither missed anything the fixture planted. Treat a planted
-set as a floor test — it measures whether the skill finds what is known to be there, not the tail,
-and the tail is where the variance lives.
-
-Run 2's hard failure is the thing to carry into reading any green run: a diagram using `.node-dead`
-with no legend behind it, plus a label overflowing its box by 4px. Diagrams are the component with no
-generator, and they are where two runs most reliably differ.
-
-If you change a fixture, change `frozen/` and the expectations with it. A fixture whose planted finding
-has been edited away turns a real eval into one that always passes; a frozen upstream that has drifted
-turns every section eval into a test of agreement with a stale document.
-
-## Adding a case
-
-Four files, and the fifth is optional:
-
-1. `frozen/<fixture>/` — already there for all three real fixtures; extend it if the section needs
-   upstream that is not yet written down.
-2. `drivers/<slug>.md` — the prompt. Read `drivers/README.md` first: a driver pins inputs and must not
-   restate a rule from `SKILL.md` or `report-format.md`.
-3. `cases/<slug>.json` — at most six judged expectations. There is no `level`: one page shape.
-4. `check.rb` — add the slug to `SCOPES`. A case reusing an existing scope needs nothing here.
-5. `checks/<slug>.rb` plus a golden fragment, if the part has anything mechanically checkable.
-
-Slugs, not numbers: `report-format.md`'s numbering is the source of order, and a filename that
-repeats it only makes the reader look the number up. That rule earned itself when two sections
-swapped places: the cases kept their files and their history, and only their prose had to move.
-
-**All six existing cases are in `deferred/` and none of them runs.** They graded sections of the page
-this design replaced, and the unit that replaced a section is a **checkpoint** — so the case to write
-is not a rename of one of them. What a checkpoint case has to grade is different in kind from what a
-section case graded: not *is this section composed correctly* but *is this a judgment rather than a
-category, did the merge in step 7c take the right three observations, did the chain earn its place,
-does the explanation walk the chain instead of stating the judgment.* Those are all judged
-expectations, and the mechanical half is thin — which is a change from every case that came before,
-and worth knowing before writing one.
-
-A second scope is worth having beside it, and cheaper: the whole of § 02, graded on the agenda rather
-than on one checkpoint. Whether the count matches the deltas § 01 names, whether the order is
-defensible, and whether two of them are the same question are all relations *between* checkpoints, so
-a single-checkpoint fragment cannot see any of them — the same limit a section fragment always had,
-one level down.
+**Read the pages to score them; do not grep for identifiers.** Two cold runs against the retired
+`monolith-guard-chain` fixture were first scored 14/15 and 12/15 by grepping each page for a method or
+index name. All three "misses" were false negatives: one page covered the roster gap by citing
+`chapters_controller.rb:88-91` without ever writing `load_management`, the other wrote "the invite
+guard at `chapter.rb:89-93`" rather than the method's name. A page that cites a line range instead of
+a name is following the citation rules, so grep-scoring penalises exactly the behaviour the format
+asks for. Read properly, both were 15/15 — which is the second lesson: **a planted set is a floor
+test.** It measures whether the skill finds what is known to be there, not the tail, and the tail is
+where two runs genuinely diverged — each found real things the other did not, and they split the
+same diff into different checkpoints. That is why the recall judge in `IDEAS.md` reads rather than
+greps, and why its reference list is a floor too.
 
 ## On harnesses
 
-The page cases use the schema `skill-creator` documents, with three additions: `fixture` names the repo
-a case runs in, `check` is its mechanical command, and `level` is the detail level its prompt asks for.
-The section cases add `driver` and `scope`, and `level` there too.
+`claude plugin eval` is the better long-term home — it lives in the CLI, runs a no-plugin baseline
+arm for free, and belongs in CI. It was early access and not enabled on this account when this was
+written, so nothing here is in its `case.yaml` format: config written against an unverifiable schema
+is guessing. `prs.yml`, the judges, the calibration set and `checks/` are the durable part and carry
+over to either.
 
-`claude plugin eval` is the better long-term home, since it lives in the CLI, runs a no-plugin baseline
-arm for free, and belongs in CI. It is early access and not enabled on this account, so nothing here is
-written in its `case.yaml` format — config written against an unverifiable schema is guessing. The
-fixtures, the frozen upstream and `checks/` are the durable part and carry over to either.
-
-`profile.sh` is the one piece here written against a schema nobody publishes: the session transcript
-under `~/.claude/projects/`. So it is the first thing to break after a Claude Code upgrade, and it is
-built to break loudly — see § *Profiling one run*. Everything it reports is derived from timestamps
-and `usage` on records the transcript already carries, so there is nothing to migrate if it does
-break, only a reader to repair. The fixtures, the frozen upstream and `checks/` remain the durable
-part.
+`profile.sh` is the one piece written against a schema nobody publishes — the session transcript
+under `~/.claude/projects/` — so it is the first thing to break after a Claude Code upgrade, and it is
+built to break loudly. Everything it reports is derived from timestamps and `usage` on records the
+transcript already carries, so there is nothing to migrate if it does break, only a reader to repair.

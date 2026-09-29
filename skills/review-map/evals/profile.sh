@@ -109,8 +109,8 @@ newest_for_cwd() {
 if [ -n "$RUNDIR" ]; then
   [ -d "$RUNDIR" ] || { echo "profile.sh: no such rundir: $RUNDIR" >&2; exit 2; }
   if [ -r "$RUNDIR/session" ]; then SESSION=$(cat "$RUNDIR/session"); fi
-  [ -n "$SESSION" ] || { echo "profile.sh: $RUNDIR records no session id (run.sh too old?)" >&2; exit 2; }
-  ALL=1   # eval runs inline the driver, so nothing carries attributionSkill
+  [ -n "$SESSION" ] || { echo "profile.sh: $RUNDIR records no session id (e2e/run.rb writes one)" >&2; exit 2; }
+  ALL=1   # the session is pinned to one e2e run, so there is no neighbouring work to exclude
 fi
 
 if [ -n "$SESSION" ] && [ -z "$TRANSCRIPT" ]; then

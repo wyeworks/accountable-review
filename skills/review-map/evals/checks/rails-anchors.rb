@@ -25,7 +25,7 @@
 # guessing the stack here would be a rule that fails on a monorepo touching both.
 #
 # The name is Rails-shaped and the scope is not, deliberately: renaming it would churn
-# check.rb, self-test-cases.txt, evals.json, a case and a driver for no behavioural gain.
+# check.rb, self-test-cases.txt and the frozen corpus for no behavioural gain.
 #
 # What needs a reader, and lives in the case: whether the link is the RIGHT concept for
 # the claim, and whether the probe is the one worth proposing. This settles only whether
