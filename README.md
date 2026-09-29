@@ -297,10 +297,10 @@ are launched as general-purpose subagents handed the same bundled mandate, rathe
 plugin's registered `claim-falsifier` agent. Install through the plugin **or** the skills CLI, not
 both, or Claude Code lists the skill twice.
 
-The CLI can place the skills in other agents too, such as Pi. There `review-map` follows the same
-instructions as in Codex: the page is a local HTML file, and `--effort high` needs the agent to
-offer subagents. An agent without them — Pi has none — says so and offers `--effort low`. Only
-Claude Code and Codex are tested.
+The CLI can place the skills in any other agent it supports, Pi for example. Outside Claude Code,
+`review-map` follows one set of instructions whichever agent it is: the page is a local HTML file,
+and `--effort high` runs only if the agent offers subagents. One that does not, like Pi, says so and
+offers `--effort low`. Only Claude Code and Codex are tested.
 
 `setup-ci` is offered too — `/setup-ci` in Claude Code, the only host it works in. The workflow it
 writes clones the plugin itself at a pinned tag, so how you installed the skill locally does not
