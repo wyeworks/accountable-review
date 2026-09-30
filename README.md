@@ -26,7 +26,7 @@ Built by **WyeWorks**.
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
   - [Codex](#codex)
-  - [Any agent, with the skills CLI](#any-agent-with-the-skills-cli)
+  - [Skills CLI](#skills-cli)
 - [Usage](#usage-)
   - [Basic usage](#basic-usage)
   - [How hard it works](#how-hard-it-works)
@@ -270,7 +270,7 @@ and Anthropic credentials. The local installer installs only `review-map`.
 See [Codex setup and verification](docs/codex.md) for project-scoped installation, removal,
 and the boundaries of this first integration.
 
-### Any agent, with the skills CLI
+### Skills CLI
 
 The skills live under `skills/` as ordinary [Agent Skills](https://agentskills.io), so the
 cross-agent [`skills`](https://github.com/vercel-labs/skills) CLI installs them into Claude Code

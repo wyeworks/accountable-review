@@ -11,7 +11,7 @@ DEST="$T/skills with spaces/review-map"
 [ -L "$DEST" ]
 [ "$(readlink "$DEST")" = "$ROOT/skills/review-map" ]
 # A discovered installation includes everything needed at runtime, including the mandate.
-for path in SKILL.md references/hosts/codex.md references/claim-falsifier.md scripts/page-skeleton.sh; do
+for path in SKILL.md references/hosts/generic.md references/claim-falsifier.md scripts/page-skeleton.sh; do
   cmp "$DEST/$path" "$ROOT/skills/review-map/$path"
 done
 sh "$INSTALL" --skills-dir "$T/skills with spaces" | grep '^unchanged:'

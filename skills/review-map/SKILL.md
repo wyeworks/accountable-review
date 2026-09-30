@@ -35,7 +35,7 @@ PR number, URL, branch, or diff range; `--effort high` (default) or `--effort lo
 `--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
 
 Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
-in Claude Code, and [the one for every other host](references/hosts/codex.md) anywhere else — Codex
+in Claude Code, and [the one for every other host](references/hosts/generic.md) anywhere else — Codex
 and Pi being the primary examples, and any other agent that loaded this skill getting the same
 local-file delivery. It owns delegation and delivery mechanics;
 the ten steps below own the review. Resolve bundled paths relative to this `SKILL.md`,
@@ -53,7 +53,7 @@ host reference is the same rule one level up — yours, not the other host's.
 
 | File | Read at | For |
 |---|---|---|
-| `references/hosts/claude-code.md` *or* `references/hosts/codex.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
+| `references/hosts/claude-code.md` *or* `references/hosts/generic.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
 | `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |

@@ -31,8 +31,8 @@ checkout remains intact. Restart Codex if a newly installed skill does not appea
 Without a checkout, the cross-agent [`skills`](https://github.com/vercel-labs/skills) CLI copies
 the skill into `~/.agents/skills` instead of linking it:
 `npx skills add wyeworks/accountable-review -g --skill review-map -a codex`. `npx skills update`
-takes new commits and `npx skills remove review-map` uninstalls; the README's *Any agent, with the
-skills CLI* has the rest.
+takes new commits and `npx skills remove review-map` uninstalls; the README's *Skills CLI*
+section has the rest.
 
 Codex's [skill documentation](https://learn.chatgpt.com/docs/build-skills) describes discovery
 and explicit invocation. This first integration uses local skills, not a Codex marketplace package.
