@@ -29,12 +29,15 @@ comments on the PR. If the project has a review command, say so at the end and l
 
 ## Host and invocation
 
-Use `/accountable-review:review-map` in Claude Code or `$review-map` in Codex. Both accept a
+Use `/accountable-review:review-map` in Claude Code (`/review-map` when installed as a standalone
+skill, as `npx skills add` does) or `$review-map` in Codex. Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
 `--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
 
-Before step 1, read **only your host's reference**: [Codex](references/hosts/codex.md) or
-[Claude Code](references/hosts/claude-code.md). It owns delegation and delivery mechanics;
+Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
+in Claude Code, and [the one for every other host](references/hosts/generic.md) anywhere else — Codex
+and Pi being the primary examples, and any other agent that loaded this skill getting the same
+local-file delivery. It owns delegation and delivery mechanics;
 the ten steps below own the review. Resolve bundled paths relative to this `SKILL.md`,
 not the repository being reviewed. User instructions take precedence over skill guidance.
 
@@ -50,7 +53,7 @@ host reference is the same rule one level up — yours, not the other host's.
 
 | File | Read at | For |
 |---|---|---|
-| `references/hosts/claude-code.md` *or* `references/hosts/codex.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
+| `references/hosts/claude-code.md` *or* `references/hosts/generic.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
 | `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
@@ -539,7 +542,9 @@ the whole reason this moved: the pass used to run after the flows were published
 claim had been public for as long as the challenge took to arrive.
 
 **How.** One independent reader per note, launched the way **your host reference** says — Claude
-spawns the registered `accountable-review:claim-falsifier` agent, Codex spawns a session subagent —
+spawns the registered `accountable-review:claim-falsifier` agent (a general-purpose one when
+installed without the plugin), and every other host works down its reference's ladder: its own
+subagent tool, else a read-only background run of its own CLI —
 **up to the host’s available concurrency.** This is the one exception to the rule against subagents in
 § *Hard rules*.
 
@@ -887,8 +892,8 @@ all of them. Publish early and republish as parts complete: **the same file path
 URL never changes.** The reader can open it at minute two, watch it fill in, and start reading the
 moment the part they need lands.
 
-The host reference supplies the delivery mechanics. Claude publishes an Artifact; Codex saves
-portable HTML locally. In Codex, every later “publish” means saving that same local file,
+The host reference supplies the delivery mechanics. Claude publishes an Artifact; Codex and every
+other host save portable HTML locally. There, every later “publish” means saving that same local file,
 not calling a publishing tool. `Write` and `Edit` below mean file creation and targeted edits
 with the host’s available tools, not required tool names.
 
@@ -1211,7 +1216,7 @@ Everything else about writing holds at every stage:
   `<dir>/index.html` instead; the fragments still go in `$W`, and nothing but the page belongs in
   `<dir>`.
 
-Tell the user the URL (or local file link in Codex) when stage 1 goes out, say it will fill in,
+Tell the user the URL (or local file link outside Claude Code) when stage 1 goes out, say it will fill in,
 and do not repeat it on every republish — one link, mentioned once, then a note when it is complete. With `--output` there is no
 URL: say where the file is, once, and nothing more.
 
