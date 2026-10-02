@@ -193,8 +193,14 @@ if page.has?(ASSURE)
 else
   check.ok("no assurance language — the effort level is invisible on the page")
 end
-if page.has?(/clean bill of health/i)
+# On the comment-stripped copy, like every prose rule around it. page-template.html says "no clean
+# bill of health" in its own comments, which a published page carries verbatim, so reading the raw
+# bytes warned on every real page — and a warning that fires every time is one nobody reads, which
+# is the opposite of what a WARN is for. The ok line is what lets a fixture pin the quiet case.
+if prose.has?(/clean bill of health/i)
   check.maybe("'clean bill of health' appears — legitimate only as a denial; read the sentence")
+else
+  check.ok("no 'clean bill of health' in the prose")
 end
 
 # 2c · Draft narration.
