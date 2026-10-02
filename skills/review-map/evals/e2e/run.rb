@@ -31,6 +31,7 @@ require "securerandom"
 require_relative "lib"
 require_relative "judge"
 require_relative "progress"
+require_relative "summary"
 
 opts = { n: 1, j: 1, judge: true, keep: false }
 OptionParser.new do |o|
@@ -194,6 +195,7 @@ def repetition(pr, opts, stamp, batch, rep)
     E2E.drop_worktree(pr, repo) if made_worktree && !opts[:keep]
     row["seconds"] = (Time.now - started).round(1)
     E2E.append("e2e", row)
+    $rows_lock.synchronize { $rows << row }
   end
 
   judged = (row["judges"] || {}).map do |n, j|
@@ -208,6 +210,8 @@ def repetition(pr, opts, stamp, batch, rep)
 end
 
 eta = Progress.eta(E2E.read("e2e"), pr.id)
+$rows = []
+$rows_lock = Mutex.new
 $live = (1..(opts[:rejudge] ? 1 : opts[:n])).to_h { |i| [i, Progress::Rep.new(i, eta)] }
 $board = Progress::Board.new(pr.id, $live.values).start
 at_exit { $board.stop }
@@ -215,8 +219,7 @@ at_exit { $board.stop }
 if opts[:rejudge]
   repetition(pr, opts, stamp, batch, 1)
   $board.stop
-  puts "\nrecorded in #{File.join(E2E::RESULTS, 'e2e.jsonl')} — bin/evals report to read it"
-  exit 0
+  exit(Summary.print(pr, $rows) == :fail ? 1 : 0)
 end
 
 queue = Queue.new
@@ -230,4 +233,6 @@ workers = Array.new([opts[:j], opts[:n]].min) do
 end
 workers.each(&:join)
 $board.stop
-puts "\nrecorded in #{File.join(E2E::RESULTS, 'e2e.jsonl')} — bin/evals report to read it"
+# Exit 1 only on a FAIL. A LOOK — a calibrated judge that could not tell — exits 0, because a
+# person has to read it and a red exit would say the page was wrong when nobody knows yet.
+exit(Summary.print(pr, $rows) == :fail ? 1 : 0)

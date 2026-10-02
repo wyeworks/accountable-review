@@ -97,6 +97,8 @@ when `.github/workflows/validate.yml` names a suite the dispatcher's table does 
 
 While it runs, `e2e/progress.rb` draws a live board, one line per repetition: elapsed time against the median of earlier runs of the same PR, the latest tool call mapped to what it is for, falsifiers spawned, and checkpoints written against pending. Every field is read from the pinned transcript or the staged page, never guessed, and in a pipe or a CI log it prints one line per change instead.
 
+When it ends it prints a verdict per repetition and overall, and exits on it: **✅ PASS** when a page was generated, `check.rb` reported no FAIL and every criterion of every calibrated judge passed; **❌ FAIL** (exit 1) otherwise, with the reasons listed; **🔍 LOOK** (exit 0) when a calibrated judge answered `unclear`, because a person has to read that before anyone knows. Warnings, an uncalibrated judge and the § 01 word count are shown and never decide it. `e2e/summary.rb` owns the rule.
+
 Everything a repetition produced stays in its directory under `$EVAL_OUT` (default
 `$TMPDIR/review-map-e2e/<id>/<batch>-r<n>/`): the page, `check.txt`, the judges' raw replies and
 parsed verdicts, the profile, the generation log. `report.rb` links to all of it.
