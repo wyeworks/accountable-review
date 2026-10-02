@@ -71,9 +71,9 @@ grep it.** Two runs against the retired `monolith-guard-chain` fixture scored 14
 grep and 15/15 by reading, because a page that cites a line range instead of a method name is
 following the citation rules.
 
-# The eval set (none yet)
+# The eval set (one PR so far)
 
-`prs.yml` has one PR, and it's the held-out calibration case. The eval set should be four to
+`prs.yml` has one eval PR, `discourse-44196`, chosen as the calibration PR's sibling. The eval set should be four to
 six merged, public PRs of different shapes, none of them the calibration PR:
 
 - a small Rails bugfix
