@@ -4,6 +4,30 @@ Codex runs the shared `review-map` skill locally. The review procedure, Rails/Ph
 template, source excerpts, and coverage gate are the same files Claude Code uses. The host
 adapter changes how independent readers are launched and where the HTML is delivered.
 
+## Install from the marketplace
+
+This repository is its own Codex marketplace: `.agents/plugins/marketplace.json` lists one plugin,
+and `.codex-plugin/plugin.json` describes it. From a terminal:
+
+```sh
+codex plugin marketplace add wyeworks/accountable-review
+codex plugin add accountable-review@accountable-review
+```
+
+Codex copies the plugin into `~/.codex/plugins/cache/accountable-review/accountable-review/<version>/`
+and the skill appears as `accountable-review:review-map`, the name Claude Code gives it. Restart
+Codex if it does not appear. The plugin ships `review-map` alone — `setup-ci` writes a workflow
+that runs Claude, so it stays out of a Codex install (see *Current boundary*).
+
+`codex plugin marketplace upgrade accountable-review` fetches the latest catalogue. A release
+reaches you when the manifest's `version` moves, which is the same pin Claude Code uses: the two
+manifests carry one version, and `skills/review-map/tests/codex-plugin.rb` fails if they disagree.
+`codex plugin remove accountable-review@accountable-review` uninstalls it, and
+`codex plugin marketplace remove accountable-review` forgets the catalogue.
+
+To pin a release or try a branch, add the ref: `codex plugin marketplace add
+wyeworks/accountable-review --ref <tag-or-branch>`.
+
 ## Install from a checkout
 
 Clone this repository, enter it, and run:
@@ -12,11 +36,13 @@ Clone this repository, enter it, and run:
 bin/install-codex-skill
 ```
 
-The installer creates a symlink at `~/.agents/skills/review-map`. It does not modify Codex
+The installer creates a symlink at `~/.agents/skills/review-map`, a standalone skill invoked as
+`$review-map`. It does not modify Codex
 configuration, choose a model, install a CLI, or install `setup-ci`. Repeating it against
 the same checkout succeeds without changing the link. An existing file, directory, or
 different symlink is reported and preserved. Keep the checkout at its installed path;
 `git pull` updates the skill. If you move the checkout, remove the old link and reinstall.
+Use this **or** the marketplace, not both, or Codex lists the skill under both names.
 
 For a project-only installation, pass that project's discovery directory explicitly:
 
@@ -35,17 +61,19 @@ takes new commits and `npx skills remove review-map` uninstalls; the README's *S
 section has the rest.
 
 Codex's [skill documentation](https://learn.chatgpt.com/docs/build-skills) describes discovery
-and explicit invocation. This first integration uses local skills, not a Codex marketplace package.
+and explicit invocation.
 
 ## Use
 
 Start Codex in the application repository and invoke, for example:
 
 ```text
-$review-map
-$review-map 123
-$review-map --effort low --output /tmp/my-review-map
+$accountable-review:review-map
+$accountable-review:review-map 123
+$accountable-review:review-map --effort low --output /tmp/my-review-map
 ```
+
+Installed from a checkout or by the skills CLI, the same invocations start with `$review-map`.
 
 There is one page shape and no flag chooses it; `--effort high` is the default. With no
 output argument, Codex saves the staged page
@@ -70,8 +98,8 @@ for host settings. The installer never changes those settings.
 
 ## Verify a local change
 
-Run `bin/evals offline` for the existing mechanical suites, manifest validation, and
-installer tests. The installer test uses a temporary directory, verifies resources through
+Run `bin/evals offline` for the existing mechanical suites, manifest validation, the Codex
+manifest check, and installer tests. The installer test uses a temporary directory, verifies resources through
 the link, and checks that repeat installs and conflicting installations preserve data.
 
 For a behavioral smoke test, build the existing fixtures in a disposable directory:
@@ -80,8 +108,13 @@ For a behavioral smoke test, build the existing fixtures in a disposable directo
 bin/evals fixtures /tmp/review-map-codex-fixtures
 ```
 
+To exercise the plugin path rather than the link, `codex plugin marketplace add
+/path/to/accountable-review` registers the checkout as a local marketplace and `codex plugin add`
+copies the working tree as it stands, so remove and re-add the plugin after an edit.
+
 The fixture builder replaces that directory. Open its `rails-only-small` repository in
-Codex and run `$review-map --effort high --output /tmp/review-map-codex-output`.
+Codex and run `$accountable-review:review-map --effort high --output /tmp/review-map-codex-output`
+(`$review-map` if you linked the skill instead).
 Verify that the readers actually returned results, the parent checked their evidence,
 the HTML completes without a publishing call, and the fixture working tree remains clean.
 Repeat at `--effort low` to exercise the other arm. Check
