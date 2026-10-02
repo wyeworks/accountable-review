@@ -58,6 +58,10 @@ jobs:
       # above passed a description that Pi's strict loader rejects outright, so a skill can be
       # valid to Claude Code and silently absent in another Agent Skills host.
       - run: ruby skills/review-map/tests/frontmatter.rb
+      # Codex reads .codex-plugin/plugin.json ahead of Claude's manifest, so the two can drift
+      # with nothing above noticing: a version left behind, setup-ci shipped into Codex, or a
+      # marketplace entry naming something else. It mutates its own inputs to prove it fires.
+      - run: ruby skills/review-map/tests/codex-plugin.rb
 
   ci-setup:
     runs-on: ubuntu-latest
@@ -82,4 +86,3 @@ jobs:
       # because a template mutation alone cannot exercise a comparison against that template.
       - run: skills/review-map/tests/run.sh
       - run: skills/review-map/tests/self-test.sh
-      - run: skills/review-map/tests/install-codex.sh
