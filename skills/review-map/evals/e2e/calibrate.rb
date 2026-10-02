@@ -3,7 +3,12 @@
 
 # calibrate.rb — does a judge say what a person already decided it should say?
 #
-#   e2e/calibrate.rb [<judge>] [-k N] [--id <calibration id>] [--variant NAME] [--keep]
+#   e2e/calibrate.rb [<judge>] [-k N] [-j N] [--model M] [--id <calibration id>] [--variant NAME] [--keep]
+#
+# -j runs that many judge calls at once; they are independent, so it costs nothing but API load.
+# --model overrides the judge's pinned model and -k below 3 samples too little to decide anything:
+# either makes it a SMOKE pass — useful for finding a patch that plants nothing, before paying for
+# the real one — and a smoke pass never writes status.json.
 #
 # A judge is an instrument, and an instrument nobody has checked against a known answer is a
 # number generator. So each calibration PR in prs.yml carries, under calibration/<id>/:
@@ -36,10 +41,12 @@ require "tmpdir"
 require_relative "lib"
 require_relative "judge"
 
-opts = { k: 3, keep: false }
+opts = { k: 3, j: 1, keep: false }
 OptionParser.new do |o|
-  o.banner = "usage: calibrate.rb [<judge>] [-k N] [--id ID] [--variant NAME] [--keep]"
-  o.on("-k N", Integer, "judge runs per page (default 3)") { |v| opts[:k] = v }
+  o.banner = "usage: calibrate.rb [<judge>] [-k N] [-j N] [--model M] [--id ID] [--variant NAME] [--keep]"
+  o.on("-k N", Integer, "judge runs per page (default 3; below 3 is a smoke pass)") { |v| opts[:k] = v }
+  o.on("-j N", Integer, "judge calls at once (default 1)") { |v| opts[:j] = v }
+  o.on("--model M", "override the judge's pinned model (a smoke pass)") { |v| opts[:model] = v }
   o.on("--id ID", "one calibration PR (default: every calibration PR with a gold page)") { |v| opts[:id] = v }
   o.on("--variant NAME", "one variant only (gold always runs) — for iterating on a patch") { |v| opts[:variant] = v }
   o.on("--keep", "keep the worktree and the per-run output") { opts[:keep] = true }
@@ -63,12 +70,14 @@ if with_gold.empty?
   MSG
 end
 
+smoke = !!(opts[:variant] || opts[:model] || opts[:k] < 3)
+all_held = true
 status_path = File.join(E2E::CALIBRATION, "status.json")
 status = File.exist?(status_path) ? JSON.parse(File.read(status_path)) : {}
 
 judges.each do |name|
   jmeta = Judge.load(name)
-  model = jmeta[:meta]["model"]
+  model = opts[:model] || jmeta[:meta]["model"]
   ncrit = jmeta[:meta]["criteria"].length
   findings = []
   ok = true
@@ -93,43 +102,56 @@ judges.each do |name|
         pages[v] = out
       end
 
+      expected_for = {}
       pages.each do |variant, page|
         # A page lives in its own directory, as it does after a real run: the judge is handed
         # the page's directory with --add-dir, and a sibling variant must not be readable from it.
         pdir = File.join(work, "page-#{variant}")
         FileUtils.mkdir_p(pdir)
         FileUtils.cp(page, File.join(pdir, "index.html"))
-
+      
         expected = gold_labels.dup
         unless variant == "gold"
           override = labels.dig("variants", variant, name) or abort "calibrate: labels.yml has no #{name} labels for variant #{variant}"
           override.each { |n, v| expected[Integer(n) - 1] = v }
         end
-        targeted = variant == "gold" ? (0...ncrit).to_a : (0...ncrit).select { |i| expected[i] != gold_labels[i] }
-
-        got = Array.new(ncrit) { [] }
-        opts[:k].times do |run|
-          r = Judge.run(name, page: File.join(pdir, "index.html"), repo: repo, base: pr.base_sha,
-                              head: pr.head_sha, out: File.join(work, "out", variant, run.to_s))
-          if r.usable
-            doc = Verdicts.read(r.verdicts_path)
-            doc["verdicts"].each { |v| got[Integer(v["n"]) - 1] << v["verdict"] if v["n"].to_i.between?(1, ncrit) }
+        expected_for[variant] = expected
+      end
+      
+      got = Hash.new { |h, k| h[k] = Array.new(ncrit) { [] } }
+      lock = Mutex.new
+      jobs = Queue.new
+      pages.each_key { |variant| opts[:k].times { |run| jobs << [variant, run] } }
+      Array.new([opts[:j], jobs.size].min) do
+        Thread.new do
+          while (job = begin jobs.pop(true) rescue nil end)
+            variant, run = job
+            r = Judge.run(name, page: File.join(work, "page-#{variant}", "index.html"), repo: repo, base: pr.base_sha,
+                                head: pr.head_sha, out: File.join(work, "out", variant, run.to_s), model: model)
+            doc = r.usable ? Verdicts.read(r.verdicts_path) : nil
+            lock.synchronize do
+              doc&.fetch("verdicts")&.each { |v| got[variant][Integer(v["n"]) - 1] << v["verdict"] if v["n"].to_i.between?(1, ncrit) }
+              E2E.append("calibration", "judge" => name, "judge_sha" => jmeta[:sha], "model" => model,
+                                        "id" => pr.id, "variant" => variant, "run" => run, "usable" => r.usable,
+                                        "verdicts" => doc && doc["verdicts"], "notes" => doc && doc["notes"])
+              puts "  … #{variant} r#{run} #{r.usable ? 'done' : 'UNUSABLE'} (#{r.seconds}s)"
+            end
           end
-          E2E.append("calibration", "judge" => name, "judge_sha" => jmeta[:sha], "model" => model,
-                                    "id" => pr.id, "variant" => variant, "run" => run, "usable" => r.usable,
-                                    "verdicts" => r.usable ? Verdicts.read(r.verdicts_path)["verdicts"] : nil,
-                                    "notes" => r.usable ? Verdicts.read(r.verdicts_path)["notes"] : nil)
         end
-
+      end.each(&:join)
+      
+      pages.each_key do |variant|
+        expected = expected_for[variant]
+        targeted = variant == "gold" ? (0...ncrit).to_a : (0...ncrit).select { |i| expected[i] != gold_labels[i] }
         (0...ncrit).each do |i|
-          hits = got[i].count(expected[i])
+          hits = got[variant][i].count(expected[i])
           gated = targeted.include?(i)
           pass = !gated || hits >= need
           ok &&= pass
           findings << { "id" => pr.id, "variant" => variant, "criterion" => i + 1, "expected" => expected[i],
-                        "got" => got[i], "gated" => gated, "held" => pass }
+                        "got" => got[variant][i], "gated" => gated, "held" => pass }
           mark = gated ? (pass ? "ok  " : "MISS") : "  · "
-          puts format("%s %-8s %-28s c%d  want %-7s got %s", mark, name, variant, i + 1, expected[i], got[i].join(","))
+          puts format("%s %-8s %-34s c%d  want %-7s got %s", mark, name, variant, i + 1, expected[i], got[variant][i].join(","))
         end
       end
     ensure
@@ -138,19 +160,20 @@ judges.each do |name|
     end
   end
 
+  all_held &&= ok
   status[name] = { "judge_sha" => jmeta[:sha], "model" => model, "k" => opts[:k], "need" => need,
-                   "calibrated" => ok && !opts[:variant], "date" => Time.now.utc.iso8601,
+                   "calibrated" => ok && !smoke, "date" => Time.now.utc.iso8601,
                    "prs" => with_gold.map(&:id), "findings" => findings }
-  puts "\n#{name} @ #{jmeta[:sha]} · #{model}: #{ok ? 'CALIBRATED' : 'NOT calibrated'}" \
-       "#{opts[:variant] ? ' (one variant only — not recorded as calibrated)' : ''}"
+  verdict = ok ? (smoke ? "all held (smoke pass — not a calibration)" : "CALIBRATED") : "NOT calibrated"
+  puts "\n#{name} @ #{jmeta[:sha]} · #{model}: #{verdict}"
 end
 
-# A one-variant run is for iterating on a patch; it has not calibrated anything, so it must not
-# overwrite a status that a full run earned.
-if opts[:variant]
-  puts "not written: #{status_path} (one variant only)"
+# A smoke pass — one variant, a model other than the pinned one, or fewer than three runs — has
+# calibrated nothing, so it must not overwrite a status that a full run earned.
+if smoke
+  puts "not written: #{status_path} (smoke pass)"
 else
   File.write(status_path, JSON.pretty_generate(status) + "\n")
   puts "written: #{status_path}"
 end
-exit(status.values_at(*judges).all? { |s| s["calibrated"] } ? 0 : 1)
+exit(smoke ? (all_held ? 0 : 1) : (status.values_at(*judges).all? { |s| s["calibrated"] } ? 0 : 1))

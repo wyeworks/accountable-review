@@ -1,0 +1,13 @@
+--- gold.html
++++ gold.html
+@@ -1399,8 +1399,8 @@
+       <p>Before this change, the reports layout was an ordered list of reports. Every card was the same size.
+         Now each entry also has <code>rows</code> (1&ndash;4) and <code>cols</code> (1&ndash;2), and a card
+         taller than one row must span both columns. The layout endpoint still replaces the whole list on every
+-        save. As a result, any request that leaves out a card's size now resets that card to one cell. Only
+-        admins see the handle, and only after the card's data has loaded. The handle is hidden on narrow
++        save. As a result, any request that leaves out a card's size now resets that card to one cell. Admins and
++        moderators see the handle, and only after the card's data has loaded. The handle is hidden on narrow
+         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
+         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
+         one writer the diff did not touch.</p>
