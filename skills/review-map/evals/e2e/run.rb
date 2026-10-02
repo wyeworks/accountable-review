@@ -30,6 +30,7 @@ require "optparse"
 require "securerandom"
 require_relative "lib"
 require_relative "judge"
+require_relative "progress"
 
 opts = { n: 1, j: 1, judge: true, keep: false }
 OptionParser.new do |o|
@@ -72,8 +73,9 @@ stamp = {
 E2E.clone(pr) # once, before any thread needs it
 batch = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
 
-def generate(pr, rundir, repo, head, opts, label)
+def generate(pr, rundir, repo, head, opts, label, live = nil)
   session = SecureRandom.uuid
+  live&.generating(session, File.join(rundir, "page", "index.html"))
   wrapper = File.join(rundir, "claude-#{label}")
   model = opts[:model] ? " --model '#{opts[:model]}'" : ""
   File.write(wrapper, "#!/bin/sh\nexec #{ENV.fetch('CLAUDE_BIN', 'claude')} --session-id #{session}#{model} \"$@\"\n")
@@ -109,6 +111,7 @@ rescue JSON::ParserError
 end
 
 def repetition(pr, opts, stamp, batch, rep)
+  live = $live[rep]
   rundir = opts[:rejudge] || File.join(E2E.out, pr.id, "#{batch}-r#{rep}")
   FileUtils.mkdir_p(rundir)
   repo = File.join(rundir, "repo")
@@ -139,12 +142,12 @@ def repetition(pr, opts, stamp, batch, rep)
     unless opts[:rejudge]
     E2E.worktree(pr, repo, pr.update_from || pr.head_sha)
     if pr.update_from
-      ok, s0, = generate(pr, rundir, repo, pr.update_from, opts, "first")
+      ok, s0, = generate(pr, rundir, repo, pr.update_from, opts, "first", live)
       row["first_session"] = s0
       row["first_generated"] = ok
       E2E.sh!("git", "-C", repo, "checkout", "--quiet", "--detach", pr.head_sha)
     end
-    ok, session, gen_s = generate(pr, rundir, repo, pr.head_sha, opts, "head")
+    ok, session, gen_s = generate(pr, rundir, repo, pr.head_sha, opts, "head", live)
     row.merge!("session" => session, "generated" => ok, "generate_seconds" => gen_s)
     File.write(File.join(rundir, "session"), session) # so `bin/evals profile --rundir` finds it
     page = File.join(rundir, "page", "index.html")
@@ -152,6 +155,7 @@ def repetition(pr, opts, stamp, batch, rep)
     end
 
     if File.exist?(page)
+      live.phase = "🔬 checking the page"
       check_out, = Open3.capture2e(File.join(E2E::EVALS, "check.rb"), "--final", "--page", page,
                                    "--repo", repo, "--base", pr.base_sha)
       File.write(File.join(rundir, "check.txt"), check_out)
@@ -170,6 +174,7 @@ def repetition(pr, opts, stamp, batch, rep)
       if opts[:judge]
         Dir[File.join(E2E::JUDGES, "*.md")].reject { |f| File.basename(f) == "IDEAS.md" }.sort.each do |jf|
           name = File.basename(jf, ".md")
+          live.phase = "⚖️  judging #{name}"
           r = Judge.run(name, page: page, repo: repo, base: pr.base_sha, head: pr.head_sha,
                               out: File.join(rundir, "judges"))
           row["judges"] ||= {}
@@ -183,6 +188,7 @@ def repetition(pr, opts, stamp, batch, rep)
       end
     end
 
+    live.phase = "📊 profiling" if session
     row.merge!(profile(rundir, session)) if session
   ensure
     E2E.drop_worktree(pr, repo) if made_worktree && !opts[:keep]
@@ -194,12 +200,21 @@ def repetition(pr, opts, stamp, batch, rep)
     c = j["counts"]
     c ? "#{n} #{c['pass']}/#{c['fail']}/#{c['unclear']} (#{j['calibration']})" : "#{n} unusable"
   end
-  puts "#{pr.id} r#{rep}: generated=#{row['generated']} · check #{row['check_passed']}p/#{row['check_failed']}f/" \
+  live.failed = !row["generated"] || !File.exist?(File.join(rundir, "page", "index.html"))
+  live.finished = true
+  live.phase = live.failed ? "💥 no page" : "✅ done"
+  $board.say "#{live.failed ? '💥' : '✅'} #{pr.id} r#{rep}: generated=#{row['generated']} · check #{row['check_passed']}p/#{row['check_failed']}f/" \
        "#{row['check_warning']}w · §01 #{row['changed_words'] || '-'} words · #{judged.join(', ')} · #{rundir}"
 end
 
+eta = Progress.eta(E2E.read("e2e"), pr.id)
+$live = (1..(opts[:rejudge] ? 1 : opts[:n])).to_h { |i| [i, Progress::Rep.new(i, eta)] }
+$board = Progress::Board.new(pr.id, $live.values).start
+at_exit { $board.stop }
+
 if opts[:rejudge]
   repetition(pr, opts, stamp, batch, 1)
+  $board.stop
   puts "\nrecorded in #{File.join(E2E::RESULTS, 'e2e.jsonl')} — bin/evals report to read it"
   exit 0
 end
@@ -214,4 +229,5 @@ workers = Array.new([opts[:j], opts[:n]].min) do
   end
 end
 workers.each(&:join)
+$board.stop
 puts "\nrecorded in #{File.join(E2E::RESULTS, 'e2e.jsonl')} — bin/evals report to read it"

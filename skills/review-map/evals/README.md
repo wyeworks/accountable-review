@@ -95,6 +95,8 @@ when `.github/workflows/validate.yml` names a suite the dispatcher's table does 
    wrapper so the transcript can be found afterwards — parent and subagents both;
 6. one line in `results/e2e.jsonl`.
 
+While it runs, `e2e/progress.rb` draws a live board, one line per repetition: elapsed time against the median of earlier runs of the same PR, the latest tool call mapped to what it is for, falsifiers spawned, and checkpoints written against pending. Every field is read from the pinned transcript or the staged page, never guessed, and in a pipe or a CI log it prints one line per change instead.
+
 Everything a repetition produced stays in its directory under `$EVAL_OUT` (default
 `$TMPDIR/review-map-e2e/<id>/<batch>-r<n>/`): the page, `check.txt`, the judges' raw replies and
 parsed verdicts, the profile, the generation log. `report.rb` links to all of it.
