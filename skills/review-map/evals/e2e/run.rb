@@ -4,6 +4,7 @@
 # run.rb — generate a Review Map of a real pull request, check it, judge it, record it.
 #
 #   e2e/run.rb <id> [-n N] [-j N] [--effort high|low] [--model M] [--no-judge] [--keep]
+#   e2e/run.rb <id> --rejudge RUNDIR   # check and judge a run that already exists; no generation
 #   e2e/run.rb --list
 #
 # One repetition is:
@@ -39,6 +40,7 @@ OptionParser.new do |o|
   o.on("--model M", "the PRODUCING model; the judge's is pinned in its file") { |v| opts[:model] = v }
   o.on("--no-judge", "generate and check only") { opts[:judge] = false }
   o.on("--keep", "keep the worktree") { opts[:keep] = true }
+  o.on("--rejudge DIR", "re-check and re-judge an existing run directory instead of generating") { |v| opts[:rejudge] = File.expand_path(v) }
   o.on("--list", "list the PRs in prs.yml") do
     E2E.prs.each { |p| puts format("%-20s %-11s %-6s %s#%d", p.id, p.role, p.stack, p.repo, p.pr) }
     exit 0
@@ -49,7 +51,7 @@ id = ARGV.shift or abort("usage: run.rb <id> [-n N] … (run.rb --list for the i
 pr = E2E.pr(id)
 
 creds = %w[ANTHROPIC_API_KEY CLAUDE_CODE_OAUTH_TOKEN CLAUDE_CODE_USE_BEDROCK CLAUDE_CODE_USE_VERTEX]
-if creds.none? { |k| ENV[k].to_s != "" }
+if !opts[:rejudge] && creds.none? { |k| ENV[k].to_s != "" }
   abort <<~MSG
     e2e: no model credential in the environment. ci/generate-review-map.sh is written for a
     runner nobody is logged into, so it reads one from the environment rather than your login:
@@ -107,14 +109,34 @@ rescue JSON::ParserError
 end
 
 def repetition(pr, opts, stamp, batch, rep)
-  rundir = File.join(E2E.out, pr.id, "#{batch}-r#{rep}")
+  rundir = opts[:rejudge] || File.join(E2E.out, pr.id, "#{batch}-r#{rep}")
   FileUtils.mkdir_p(rundir)
   repo = File.join(rundir, "repo")
   row = stamp.merge("id" => pr.id, "rep" => rep, "batch" => batch, "rundir" => rundir,
                     "head_sha" => pr.head_sha, "base_sha" => pr.base_sha)
   started = Time.now
+  made_worktree = false
 
   begin
+    if opts[:rejudge]
+      # The page was produced by whatever prose was current when it was generated, so the stamp
+      # is that run's, not this checkout's: a re-judged line must never attribute an old page to
+      # a new sha. The generation fields are carried over and nothing is regenerated.
+      original = E2E.read("e2e").reverse.find { |o| o["rundir"] == rundir && !o["rejudged"] }
+      abort "e2e: no recorded run for #{rundir} in results/e2e.jsonl" unless original
+      row.merge!(original.slice("plugin_version", "skill_sha", "effort", "model", "batch", "rep", "session",
+                                "generated", "generate_seconds", "requests", "model_seconds", "tool_seconds",
+                                "ttft_seconds", "stream_seconds", "output_tokens", "thinking_tokens"))
+      row["rejudged"] = Time.now.utc.iso8601
+      unless File.directory?(repo)
+        E2E.worktree(pr, repo, pr.head_sha)
+        made_worktree = true
+      end
+      page = File.join(rundir, "page", "index.html")
+      abort "e2e: no page at #{page}" unless File.exist?(page)
+      session = nil
+    end
+    unless opts[:rejudge]
     E2E.worktree(pr, repo, pr.update_from || pr.head_sha)
     if pr.update_from
       ok, s0, = generate(pr, rundir, repo, pr.update_from, opts, "first")
@@ -126,6 +148,8 @@ def repetition(pr, opts, stamp, batch, rep)
     row.merge!("session" => session, "generated" => ok, "generate_seconds" => gen_s)
     File.write(File.join(rundir, "session"), session) # so `bin/evals profile --rundir` finds it
     page = File.join(rundir, "page", "index.html")
+    made_worktree = true
+    end
 
     if File.exist?(page)
       check_out, = Open3.capture2e(File.join(E2E::EVALS, "check.rb"), "--final", "--page", page,
@@ -159,9 +183,9 @@ def repetition(pr, opts, stamp, batch, rep)
       end
     end
 
-    row.merge!(profile(rundir, session))
+    row.merge!(profile(rundir, session)) if session
   ensure
-    E2E.drop_worktree(pr, repo) unless opts[:keep]
+    E2E.drop_worktree(pr, repo) if made_worktree && !opts[:keep]
     row["seconds"] = (Time.now - started).round(1)
     E2E.append("e2e", row)
   end
@@ -172,6 +196,12 @@ def repetition(pr, opts, stamp, batch, rep)
   end
   puts "#{pr.id} r#{rep}: generated=#{row['generated']} · check #{row['check_passed']}p/#{row['check_failed']}f/" \
        "#{row['check_warning']}w · §01 #{row['changed_words'] || '-'} words · #{judged.join(', ')} · #{rundir}"
+end
+
+if opts[:rejudge]
+  repetition(pr, opts, stamp, batch, 1)
+  puts "\nrecorded in #{File.join(E2E::RESULTS, 'e2e.jsonl')} — bin/evals report to read it"
+  exit 0
 end
 
 queue = Queue.new
