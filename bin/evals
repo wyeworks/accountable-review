@@ -60,7 +60,6 @@ skills/review-map/tests/frontmatter.rb
 skills/review-map/tests/codex-plugin.rb
 skills/review-map/tests/run.sh
 skills/review-map/tests/self-test.sh
-skills/review-map/tests/install-codex.sh
 skills/setup-ci/tests/run.sh
 skills/setup-ci/tests/self-test.sh"
 
@@ -98,8 +97,7 @@ run_suite() {
     frontmatter) suite frontmatter ruby ruby "$SKILL/tests/frontmatter.rb" ;;
     codex-plugin) suite codex-plugin ruby ruby "$SKILL/tests/codex-plugin.rb" ;;
     review-map) suite review-map sh sh "$SKILL/tests/run.sh"
-               suite review-map-self sh sh "$SKILL/tests/self-test.sh"
-               suite codex-install sh sh "$SKILL/tests/install-codex.sh" ;;
+               suite review-map-self sh sh "$SKILL/tests/self-test.sh" ;;
     setup-ci)  suite setup-ci  sh   sh "$SETUP/tests/run.sh"
                suite setup-ci-self sh sh "$SETUP/tests/self-test.sh" ;;
     manifest)  suite manifest  claude claude plugin validate . --strict ;;

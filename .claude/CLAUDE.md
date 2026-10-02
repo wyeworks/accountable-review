@@ -5,8 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repository is
 
 There is no application code here. The repository is the `accountable-review` Claude Code plugin,
-with Codex support for `review-map` as a plugin from this repository's own Codex marketplace, or
-linked from a checkout by `bin/install-codex-skill`. It
+with Codex support for `review-map` as a plugin from this repository's own Codex marketplace. It
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
 a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:

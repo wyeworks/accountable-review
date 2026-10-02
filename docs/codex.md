@@ -28,31 +28,21 @@ manifests carry one version, and `skills/review-map/tests/codex-plugin.rb` fails
 To pin a release or try a branch, add the ref: `codex plugin marketplace add
 wyeworks/accountable-review --ref <tag-or-branch>`.
 
-## Install from a checkout
+## Link from a checkout
 
-Clone this repository, enter it, and run:
-
-```sh
-bin/install-codex-skill
-```
-
-The installer creates a symlink at `~/.agents/skills/review-map`, a standalone skill invoked as
-`$review-map`. It does not modify Codex
-configuration, choose a model, install a CLI, or install `setup-ci`. Repeating it against
-the same checkout succeeds without changing the link. An existing file, directory, or
-different symlink is reported and preserved. Keep the checkout at its installed path;
-`git pull` updates the skill. If you move the checkout, remove the old link and reinstall.
-Use this **or** the marketplace, not both, or Codex lists the skill under both names.
-
-For a project-only installation, pass that project's discovery directory explicitly:
+To work on the skill, link it into Codex's skills directory so edits apply without reinstalling.
+From the root of a clone of this repository:
 
 ```sh
-bin/install-codex-skill --skills-dir /path/to/app/.agents/skills
+mkdir -p ~/.agents/skills
+ln -s "$PWD/skills/review-map" ~/.agents/skills/review-map
 ```
 
-That creates a local absolute symlink, not a portable installation to commit for teammates.
-To uninstall, remove only the `review-map` symlink from the directory you chose. The source
-checkout remains intact. Restart Codex if a newly installed skill does not appear.
+That is a standalone skill invoked as `$review-map`; `setup-ci` is not linked. Keep the checkout
+at that path, since the link points into it, and `git pull` updates the skill. Use this **or** the
+marketplace, not both, or Codex lists the skill under both names. To unlink,
+`rm ~/.agents/skills/review-map`, which removes the link and leaves the checkout alone. Restart
+Codex if a newly linked skill does not appear.
 
 Without a checkout, the cross-agent [`skills`](https://github.com/vercel-labs/skills) CLI copies
 the skill into `~/.agents/skills` instead of linking it:
@@ -94,13 +84,12 @@ The reader is instructed to do read-only work; enforcement depends on the host's
 sandbox options. If delegation is disabled or unavailable, the skill reports that high
 effort cannot run and offers low effort. A failed reader is not counted as a finished pass.
 See the official [subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents)
-for host settings. The installer never changes those settings.
+for host settings. Installing the plugin never changes those settings.
 
 ## Verify a local change
 
-Run `bin/evals offline` for the existing mechanical suites, manifest validation, the Codex
-manifest check, and installer tests. The installer test uses a temporary directory, verifies resources through
-the link, and checks that repeat installs and conflicting installations preserve data.
+Run `bin/evals offline` for the existing mechanical suites, manifest validation, and the Codex
+manifest check.
 
 For a behavioral smoke test, build the existing fixtures in a disposable directory:
 

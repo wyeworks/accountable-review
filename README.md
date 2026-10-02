@@ -270,19 +270,19 @@ explicitly to run without independent readers. The page never presents that pass
 **Codex CI execution is not supported yet.** `setup-ci` and the CI runner still use Claude Code
 and Anthropic credentials, so the Codex plugin ships `review-map` alone.
 
-**To run it from a checkout instead**, link the skill into Codex's discovery directory:
+**To run it from a checkout instead** — which is what you want if you are changing the skill,
+since edits apply without reinstalling — link it into Codex's skills directory:
 
 ```bash
-bin/install-codex-skill
+mkdir -p ~/.agents/skills
+ln -s /path/to/accountable-review/skills/review-map ~/.agents/skills/review-map
 ```
 
-This links `skills/review-map` into `~/.agents/skills/review-map`, where it is a standalone skill
-invoked as `$review-map`. It leaves an existing installation alone and refuses to replace another
-skill; `git pull` in the checkout is how you update. Use the marketplace **or** the checkout link,
-not both, or Codex lists the skill twice.
+Linked that way it is a standalone skill invoked as `$review-map`, and `git pull` in the checkout is
+how you update. Use the marketplace **or** the link, not both, or Codex lists the skill twice.
 
-See [Codex setup and verification](docs/codex.md) for project-scoped installation, removal,
-and the boundaries of this integration.
+See [Codex setup and verification](docs/codex.md) for removal and the boundaries of this
+integration.
 
 ### Skills CLI
 

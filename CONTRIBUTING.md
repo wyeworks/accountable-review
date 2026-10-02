@@ -93,10 +93,9 @@ accountable-review@accountable-review` installs your working tree; it is a copy,
 re-add after an edit. `ruby skills/review-map/tests/codex-plugin.rb` checks the two Codex files
 against Claude's manifest.
 
-`bin/install-codex-skill` links the shared `skills/review-map` directory into Codex discovery
-instead, which picks up edits live;
-use `--skills-dir <temporary-directory>` when testing installation. It installs only the local
-review skill, not CI support. [docs/codex.md](docs/codex.md) covers usage and a manual smoke test.
+To pick up edits live instead, symlink the skill into Codex's skills directory —
+`ln -s "$PWD/skills/review-map" ~/.agents/skills/review-map` from the checkout root — where it is
+the standalone `$review-map`. [docs/codex.md](docs/codex.md) covers usage and a manual smoke test.
 
 `references/hosts/` owns host-specific delivery and delegation. The ten-step procedure remains
 in `SKILL.md`, and both hosts' independent readers load `references/claim-falsifier.md`.

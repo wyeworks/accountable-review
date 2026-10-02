@@ -30,8 +30,8 @@ comments on the PR. If the project has a review command, say so at the end and l
 ## Host and invocation
 
 Use `/accountable-review:review-map` in Claude Code or `$accountable-review:review-map` in Codex
-(`/review-map` and `$review-map` when installed as a standalone skill, as `npx skills add` and
-`bin/install-codex-skill` do). Both accept a
+(`/review-map` and `$review-map` when installed as a standalone skill, as `npx skills add` does).
+Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
 `--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
 
