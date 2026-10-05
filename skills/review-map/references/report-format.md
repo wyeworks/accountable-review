@@ -56,7 +56,7 @@ belongs in the sentences that cite this repository, which say it by naming real 
 **`--update` is the one run mode that puts a sentence on the page, and the reason is not
 generosity.** It re-reads only the commits since the previous map, so parts of the page it leaves
 describe an earlier revision than the masthead's head. Effort can stay invisible because both
-efforts produce a page describing one revision; an updated page does not, and § 1's *a page
+efforts produce a page describing one revision; an updated page does not, and § *Section 1*'s *a page
 describing an earlier revision while looking current is the one failure a reader cannot detect from
 the inside* is the rule that makes the disclosure mandatory rather than polite.
 
@@ -99,16 +99,17 @@ refusals that hold that line.
 | | Section | Appears | Owns |
 |---|---|---|---|
 | 01 | What changed | always | The masthead, the semantic delta, intent and its tier |
-| 02 | What needs your attention | always | Three to five checkpoints per delta § 01 names, seven at the outside. No standing caveat |
+| 02 | What needs your attention | always | Three to five checkpoints per delta *What changed* names, seven at the outside. No standing caveat |
 | 03 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
 | 04 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
 | 05 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
 
-The order is the reviewer's path, and each section assumes the ones before it. § 02 teaches the
-judgments; § 03 is the moment the reviewer opens the code, holding §§ 01–02; § 04 is a second pass over
-the same change through one lens, so it can point at a checkpoint instead of re-explaining it. § 05 is
-not a section at all — no number, no rail entry, shut — and it is the only part of the page a reader
-is never expected to open.
+The order is the reviewer's path, and each section assumes the ones before it. *What needs your
+attention* teaches the judgments; *Read the code in this order* is the moment the reviewer opens the
+code, holding the first two; *Impact outside the diff* is a second pass over the same change through
+one lens, so it can point at a checkpoint instead of re-explaining it. The evidence foot is not a
+section at all — no number, no rail entry, shut — and it is the only part of the page a reader is
+never expected to open.
 
 **Citations** — *Deep links*, the two URL forms and which lines each one can address, and *Choosing a
 mode*, the four-rung degradation ladder. Settle the rung once, in step 1 of the procedure; the form
@@ -230,28 +231,29 @@ page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. 
 reading path refer to a checkpoint by its question, and section 02's intro says in one sentence that
 the order is the order to think about them.
 
-**Three to five per independent semantic delta named in § 01, and seven on the page is the stop.**
-`SKILL.md` step 7e has the selection rule. A PR with one delta carries three to five whatever its line
-count; a PR whose § 01 legitimately carries two delta bullets may carry up to seven. Fewer than three
-is right for a PR small enough that a third would be padding.
+**Three to five per independent semantic delta named in *What changed*, and seven on the page is the
+stop.** `SKILL.md` step 7e has the selection rule. A PR with one delta carries three to five
+whatever its line count; a PR whose *What changed* legitimately carries two delta bullets may carry
+up to seven. Fewer than three is right for a PR small enough that a third would be padding.
 
-**The driver is the delta, not the diff, and that is the whole point.** A rename across eighty files,
-a codemod and a regenerated lockfile are one semantic delta, so the count does not move — what a big
-diff of that kind buys is a longer inventory, which is collapsed and costs the reader nothing. One
-behaviour reaching a long way is also one delta: the reach shows up as more *Look at* entries, a
-chain, a card in *Impact outside the diff*. Only a PR that ships genuinely independent changes has
-more than one delta, and that is the only shape that earns a sixth checkpoint. Since the deltas are
-already the bullets § 01 carries, **the reader has already read the reason the agenda is longer** —
-it is not a number this page asserts about itself.
+**The driver is the delta, not the diff, and that is the whole point.** A rename across eighty
+files, a codemod and a regenerated lockfile are one semantic delta, so the count does not move —
+what a big diff of that kind buys is a longer inventory, which is collapsed and costs the reader
+nothing. One behaviour reaching a long way is also one delta: the reach shows up as more *Look at*
+entries, a chain, a card in *Impact outside the diff*. Only a PR that ships genuinely independent
+changes has more than one delta, and that is the only shape that earns a sixth checkpoint. Since the
+deltas are already the bullets *What changed* carries, **the reader has already read the reason the
+agenda is longer** — it is not a number this page asserts about itself.
 
-**Seven is where it stops, and the reason is § 03 rather than arithmetic.** At some width the reading
-order can no longer be a route through the code — schema before the code that trusts it, the smallest
-complete example before the bulk — because every stop has been spent naming a checkpoint, and § 03
-has become an index of § 02. Seven is a first calibration of where that happens, in the sense
-§ *The agenda budget* means it; the test is whether § 03 still reads as a route.
+**Seven is where it stops, and the reason is the reading path rather than arithmetic.** At some
+width the reading order can no longer be a route through the code — schema before the code that
+trusts it, the smallest complete example before the bulk — because every stop has been spent naming
+a checkpoint, and *Read the code in this order* has become an index of *What needs your attention*.
+Seven is a first calibration of where that happens, in the sense § *The agenda budget* means it; the
+test is whether *Read the code in this order* still reads as a route.
 
 Past seven the answer is not an eighth checkpoint. It is `SKILL.md` step 7a's bundling sentence in
-§ 01, and, if the diff strained the run, the statement of which region was skimmed.
+*What changed*, and, if the diff strained the run, the statement of which region was skimmed.
 
 A finding that does not become a checkpoint keeps its entry in *Impact outside the diff* or in the
 evidence foot, so nothing found is lost — only its promotion to a judgment. **A judgment is the one
@@ -721,11 +723,12 @@ go and read it.
 </aside>
 ```
 
-**Inside a checkpoint, after the explanation and any chain, before `ul.lookat`.** The reader meets the
-unfamiliar API immediately after the mechanism that uses it and before the places they are sent to
-look — below that list the lesson arrives after they have already opened four files without the rule
-that decides what they are reading. A primer in § 03, § 04 or the evidence foot is a framework lesson
-with no judgment attached to it, and `evals/checks/rails-anchors.rb` fails one.
+**Inside a checkpoint, after the explanation and any chain, before `ul.lookat`.** The reader meets
+the unfamiliar API immediately after the mechanism that uses it and before the places they are sent
+to look — below that list the lesson arrives after they have already opened four files without the
+rule that decides what they are reading. A primer in *Read the code in this order*, *Impact outside
+the diff* or the evidence foot is a framework lesson with no judgment attached to it, and
+`evals/checks/rails-anchors.rb` fails one.
 
 **Gated on its doc link, and that link is the checkpoint's link.** Exactly one `a.doc`, pinned per
 § *Framework anchors*, whose budget is unchanged: a checkpoint carrying a primer carries no other
@@ -817,12 +820,13 @@ The first is an asymmetry. A citation to an *unchanged* line sends the reader in
 with no context, and the ones who do not go take the finding **on faith**. Faith is what this page is
 built to remove, so the lines come to the reader instead.
 
-The second is this page's own ordering. § 02 comes *before* § 03, and § 03 is the moment the reviewer
-opens the code — so while they are reading the checkpoints they do not have the diff in front of
-them. An earlier version of this section assumed they did — *"a citation to a changed line is cheap
-to follow, the reviewer has the diff open anyway"* — and rationed `--diff` excerpts on that basis.
-What it produced was sections whose only quoted code was code the PR never touched. The shortest way
-to make a judgment possible is often to show the lines it turns on, changed or not.
+The second is this page's own ordering. *What needs your attention* comes *before* *Read the code in
+this order*, and *Read the code in this order* is the moment the reviewer opens the code — so while
+they are reading the checkpoints they do not have the diff in front of them. An earlier version of
+this section assumed they did — *"a citation to a changed line is cheap to follow, the reviewer has
+the diff open anyway"* — and rationed `--diff` excerpts on that basis. What it produced was sections
+whose only quoted code was code the PR never touched. The shortest way to make a judgment possible
+is often to show the lines it turns on, changed or not.
 
 Two variants:
 
@@ -837,11 +841,11 @@ and a quotation that makes a judgment possible is not provenance.
 
 | Location | Variant |
 |---|---|
-| § 02 · a *Look at* entry pointing at unchanged code | `--source` |
-| § 02 · a *Look at* entry pointing at a changed hunk the judgment turns on | `--diff` |
-| § 02 · a claim in a checkpoint's explanation that a reader would otherwise take on faith | Either, whichever fits the claim |
-| § 03 · a reading-path stop whose reason is not already excerpted in its checkpoint | Either |
-| § 04 · an affected entry beside the panel | `--source` |
+| *What needs your attention* · a *Look at* entry pointing at unchanged code | `--source` |
+| *What needs your attention* · a *Look at* entry pointing at a changed hunk the judgment turns on | `--diff` |
+| *What needs your attention* · a claim in a checkpoint's explanation that a reader would otherwise take on faith | Either, whichever fits the claim |
+| *Read the code in this order* · a reading-path stop whose reason is not already excerpted in its checkpoint | Either |
+| *Impact outside the diff* · an affected entry beside the panel | `--source` |
 
 Not in the inventory: an inventory cell is a checklist entry, not a claim, and a hundred collapsed
 hunks is a page nobody can load.
@@ -895,14 +899,14 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   tag against the vocabulary, for the inputs where there is nothing to compare against.
 - **An excerpt is evidence for one claim, not coverage of a file.** Never a whole file, never every
   hunk. Completeness belongs to the inventory.
-- **The field carries its own citation, not one from elsewhere on the page.** The closed-page rule is
-  easy to satisfy globally and still fail locally: a run wrote *"an unchanged trait in
-  `spec/factories/projects.rb` stamps `archived_at`"* with the path as bare prose, the only `file:line`
-  for it being the excerpt's own footer. The same citation did appear linked in § 04 and in § 03's
-  reading order, so the page as a whole was fine — but a reader working through that field with the
-  block shut had nothing to click. Judge the rule field by field, not page-wide. `check.rb` cannot
-  catch this: it checks summaries and collapse state, never whether a citation survives the block
-  closing.
+- **The field carries its own citation, not one from elsewhere on the page.** The closed-page rule
+  is easy to satisfy globally and still fail locally: a run wrote *"an unchanged trait in
+  `spec/factories/projects.rb` stamps `archived_at`"* with the path as bare prose, the only
+  `file:line` for it being the excerpt's own footer. The same citation did appear linked in *Impact
+  outside the diff* and in *Read the code in this order*'s reading order, so the page as a whole was
+  fine — but a reader working through that field with the block shut had nothing to click. Judge the
+  rule field by field, not page-wide. `check.rb` cannot catch this: it checks summaries and collapse
+  state, never whether a citation survives the block closing.
 - **The excerpt does not replace the link.** It deliberately omits the surrounding context, so the
   citation stays in the body for a reader who needs more than the quoted lines.
 - **Next to a `--diff` excerpt, say which range you mean.** The script labels the block with the
@@ -996,13 +1000,13 @@ Then the mechanical limits:
   or test boilerplate — inventory cells by definition, and an excerpt of one teaches nothing. `db/schema.rb`
   is the one nuanced case; see the note under the location table.
 - **A page-wide sense of scale**, since the per-field cap alone does not bound the total: the count
-  grows with the number of checkpoints and the number of load-bearing findings, never with the file count,
-  which is a far slower curve. One or two per checkpoint is the ordinary shape — the hunk the judgment
-  turns on, plus the one unchanged citation it rests on — and a third wants a reason. **Count per
-  checkpoint, not per section, inside § 02**: a section-wide limit of two there is a limit of two
-  across the bulk of the page, which is how this format once ended up under-quoting the diff.
-  Outside § 02, more than two
-  in a section is still the sign that the prose is not doing its job.
+  grows with the number of checkpoints and the number of load-bearing findings, never with the file
+  count, which is a far slower curve. One or two per checkpoint is the ordinary shape — the hunk the
+  judgment turns on, plus the one unchanged citation it rests on — and a third wants a reason.
+  **Count per checkpoint, not per section, inside** *What needs your attention*: a section-wide
+  limit of two there is a limit of two across the bulk of the page, which is how this format once
+  ended up under-quoting the diff. Outside *What needs your attention*, more than two in a section
+  is still the sign that the prose is not doing its job.
 
 **Link rung changes the budget, in one direction only.** At rungs 3 and 4 nothing is clickable, so an
 excerpt is the only followable evidence there is: lean towards more. At rungs 1 and 2 the budget above
@@ -1220,8 +1224,8 @@ And a change with no nameable edge earns **no panel at all**: the affected list 
 either way, and a figure that cannot say what reaches what is the thing this component exists to
 stop.
 
-The panel **is** section 04's one figure — one `.impact` group, whatever its card count — so § 04
-earns no second.
+The panel **is** section 04's one figure — one `.impact` group, whatever its card count — so *Impact
+outside the diff* earns no second.
 
 Two things the panel is not. It is not a dependency graph: it is the one to three curated paths
 chosen because a reviewer has to hold them, and completeness here would destroy the thing that makes
@@ -1269,9 +1273,9 @@ the comprehension checkpoint is gone entirely, because the checkpoint's own ques
 The coverage ledger became the foot's unclassified inventory.
 
 **The checkpoint owns the explanation, and the sections after it point back.** That is what the
-ordering buys: §§ 03 and 04 both come after § 02, so neither has to re-explain a judgment to be
-readable. A section that finds itself explaining a checkpoint's finding a second time is in the wrong
-section.
+ordering buys: *Read the code in this order* and *Impact outside the diff* both come after *What
+needs your attention*, so neither has to re-explain a judgment to be readable. A section that finds
+itself explaining a checkpoint's finding a second time is in the wrong section.
 
 **The page has two designators, and a flow is not one of them.** A checkpoint is *Checkpoint A*,
 the letter its `id="cp-a"` and its rail entry already carry; an impact path is *Impact path A*, the
@@ -1289,12 +1293,13 @@ its last, mixing both namespaces inside one paragraph. `evals/checks/page-invari
 for it.
 
 **And the section sign is not a designator either: no `§` in the page's prose, ever.** It is the
-notation these references and `SKILL.md` use for their own headings and for the page's sections —
-*§ 01* is how they name *What changed* — and a run writes in the voice it has been reading, so it
-reaches the page as *"graded by one judge per aspect of the page — today only § 01's"*.
+notation these references and `SKILL.md` use for their own headings — they once used it for the
+page's sections too, *§ 01* for *What changed* — and a run writes in the voice it has been reading,
+so it reaches the page as *"graded by one judge per aspect of the page — today only § 01's"*.
 It turns up in short labels as often as in sentences — a *Look at* entry titled *"What the judge is
 given as § 01"* is the same defect — and on the page it has three readings and no target: this
-page's first section, a section of some document in the repository, or a checkpoint. Nothing on the page is called *§ 01*, and nothing turns it into a link.
+page's first section, a section of some document in the repository, or a checkpoint. Nothing on
+the page is called *§ 01*, and nothing turns it into a link.
 So a pointer takes one of three forms, each one a reader can follow:
 
 - **Another part of this page** — *Checkpoint A*, *Impact path A*, or a section by its **title**,
@@ -1340,9 +1345,10 @@ needing no discussion are still listed, batched into a compact table with a one-
 ("regenerated by the migration", "import path updated", "factory for the new model"). Renames and
 pure moves get a line saying so, which is itself useful.
 
-**The invariant is one-directional.** Every path in the diff must appear in the page. The reverse does
-*not* hold: the page cites unchanged files everywhere by design — that is what § 04 and every
-*Look at* entry pointing outside the diff are for. So the check is a subset test, never set equality:
+**The invariant is one-directional.** Every path in the diff must appear in the page. The reverse
+does *not* hold: the page cites unchanged files everywhere by design — that is what *Impact outside
+the diff* and every *Look at* entry pointing outside the diff are for. So the check is a subset
+test, never set equality:
 
 ```
 set(diff paths) ⊆ set(paths cited in page)     ✅ the invariant
@@ -1359,10 +1365,11 @@ what `coverage-gate.sh` greps page-wide to assert that equality. That is the who
 is a grid cell rather than a list item, and `data-path` is **reserved** to it: an excerpt using the
 attribute would register as a surplus path. Excerpts carry `data-src`.
 
-**The carrier is not section 04, and that is a change from an earlier version of this format.** § 04
-used to hold the whole diff as well, which put a list of every changed path in the middle of the
-section whose own spec says *completeness here is about consequences, not paths*. On a 24-file PR it
-rendered as 24 links above a caption explaining that the eight worth opening were ranked elsewhere.
+**The carrier is not section 04, and that is a change from an earlier version of this format.**
+*Impact outside the diff* used to hold the whole diff as well, which put a list of every changed
+path in the middle of the section whose own spec says *completeness here is about consequences, not
+paths*. On a 24-file PR it rendered as 24 links above a caption explaining that the eight worth
+opening were ranked elsewhere.
 
 **The foot is provenance, and collapsing it is legal for that reason.** The hard rule is that the
 page reads complete with every collapsed block shut, and an inventory of paths passes that test where
@@ -1446,13 +1453,14 @@ not one.
 
 A **section**, which is the stub above.
 
-A **checkpoint**, because § 02 is delivered one at a time (`SKILL.md` step 9). An unwritten checkpoint
-is a whole `<section class="cp" id="cp-x">` stub — assembled in `page-template.html` beside the
-pending section, and copied from there rather than rebuilt — and § 02's rail entry keeps a marker
-until every checkpoint under it is written. **A checkpoint stub's line of substance is its
-question**: that is what lets the agenda be read before any of it is written, and it is the reason
-opening stage 2 is worth a publish of its own. A reader who learns what the three judgments are has
-most of what they came for, ten minutes before the explanations arrive.
+A **checkpoint**, because *What needs your attention* is delivered one at a time (`SKILL.md` step
+9). An unwritten checkpoint is a whole `<section class="cp" id="cp-x">` stub — assembled in
+`page-template.html` beside the pending section, and copied from there rather than rebuilt — and
+*What needs your attention*'s rail entry keeps a marker until every checkpoint under it is written.
+**A checkpoint stub's line of substance is its question**: that is what lets the agenda be read
+before any of it is written, and it is the reason opening stage 2 is worth a publish of its own. A
+reader who learns what the three judgments are has most of what they came for, ten minutes before
+the explanations arrive.
 
 The second case needs **no markup of its own**: the rail already carries a per-checkpoint marker and
 each checkpoint is already its own `<section>`. A parallel mechanism for it is a regression, not an
@@ -1478,12 +1486,12 @@ analysed at one revision and parts analysed at an earlier one, and the reader is
 **It is not a build state, and filing it as one would break both.** Written, pending, omitted — and
 the stated limit a skimmed region gets — are all statements about coverage *within one revision*.
 Carry-over is a statement about *which revision a part describes*. Different axis, and the page
-already has a home for that axis: the masthead's `Revision` cell and § 01's stated limit.
+already has a home for that axis: the masthead's `Revision` cell and *What changed*'s stated limit.
 
 So an update never re-enters the build state. **There is no banner and no marker at any point
 during one** — the page is complete at every instant, because a banner risks being left behind and
 `ci/generate-review-map.sh` refuses to deliver a page still carrying one. What the page gains is
-two things, both in § 1's territory and both fixed rather than composed per run:
+two things, both in § *Section 1*'s territory and both fixed rather than composed per run:
 
 ```
 9f8e7d6 → a1b2c3d · updated from e4d5c6b
@@ -1624,7 +1632,7 @@ ambiguous.
 
 **On an update the cell carries a third line**, `· updated from <short sha>`, and § *Build state*
 § *An updated page* owns it along with the one sentence that goes with it here. Nothing else about
-§ 01 moves.
+*What changed* moves.
 
 **Change shape** — a chip naming what kind of change this is: feature · refactor · bugfix ·
 migration · dependency bump · mixed. One word, and it is a category, never a grade.
@@ -1663,8 +1671,8 @@ big should the page be?* is what decides when one is owed.
 ## Section 2 · What needs your attention — always
 
 The page's core, and the one section a reader who has time for nothing else should read. Three to
-five checkpoints per independent delta § 01 names, seven at the outside; § *The review checkpoint*
-owns every rule about them, the count included.
+five checkpoints per independent delta *What changed* names, seven at the outside; § *The review
+checkpoint* owns every rule about them, the count included.
 
 The section itself carries only a heading and one sentence saying what these turn on and that the
 order is the order to think about them. Then the checkpoints, in ranked order. No caveat under the
@@ -1699,11 +1707,12 @@ honest rather than a gap.
 since one stop routinely serves two judgments and one judgment routinely needs two stops. A checkpoint
 nothing on this list points at is a question the reader was asked and never routed to.
 
-**That rule is also what bounds the agenda, and it bounds it from the reader's side.** The stop count
-is not driven by the checkpoint count — this section is a route, ordered by conceptual dependency, not
-an index of § 02 in reading order. So when routing every checkpoint would consume the whole list and
-leave no room for the schema before the code that trusts it, the agenda has gone wider than the page
-can carry, and § *The review checkpoint* is where that is settled.
+**That rule is also what bounds the agenda, and it bounds it from the reader's side.** The stop
+count is not driven by the checkpoint count — this section is a route, ordered by conceptual
+dependency, not an index of *What needs your attention* in reading order. So when routing every
+checkpoint would consume the whole list and leave no room for the schema before the code that trusts
+it, the agenda has gone wider than the page can carry, and § *The review checkpoint* is where that
+is settled.
 
 Never a grade, never a severity chip. Where attention goes is expressed by what is on this list and
 in what order, which is the only form of ranking this page has.
@@ -1780,7 +1789,7 @@ outside one of them is a page to read again, not a page that is wrong.
 
 | Part | Words |
 |---|---|
-| § 01's paragraph | 80–160 |
+| *What changed* | 80–160 |
 | A checkpoint — question, explanation, *Look at* clauses, open line | 50–140 |
 | A reading-path stop's `span.why` | ≤ 40 |
 | An affected entry's clause | ≤ 30 |
@@ -1790,7 +1799,7 @@ outside one of them is a page to read again, not a page that is wrong.
 change has judgments and a fixed total would price them against each other:
 
 ```
-≈ §01 (80–160) + n × (50–140) + §03 (stops × ≤40) + §04 (cards × p.ip-why) + section framing
+≈ What changed (80–160) + n × (50–140) + reading path (stops × ≤40) + impact (cards × p.ip-why) + section framing
 ```
 
 At four checkpoints on a small or medium PR that comes to roughly **700 to 1,500 words**, which is
