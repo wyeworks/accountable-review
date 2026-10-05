@@ -28,7 +28,7 @@ Three facts `CLAUDE.md` cannot state, because it is written for the host that ha
   can always run, and `bin/evals e2e` generates through `ci/generate-review-map.sh`, which invokes
   Claude with an Anthropic credential, so it does not run from Codex.
 
-The product's own Codex support — installing `review-map` into a Codex skills directory — is a
-different subject, and [`docs/codex.md`](docs/codex.md) owns it.
+The product's own Codex support — the Codex plugin and marketplace, and linking `review-map` into a
+Codex skills directory — is a different subject, and [`docs/codex.md`](docs/codex.md) owns it.
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) is how to run things. `CLAUDE.md` is why the rules exist.

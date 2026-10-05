@@ -25,6 +25,8 @@ the unit of quality is instruction clarity, not compilation.
 
 ```
 .claude-plugin/plugin.json         plugin manifest (name, version, metadata)
+.codex-plugin/plugin.json          the Codex manifest: same name and version, review-map only
+.agents/plugins/marketplace.json   the Codex marketplace — one plugin, this repository
 agents/claim-falsifier.md          adversarial verifier, one per analysis note at --effort high
 ci/                                what runs in CI, not what a skill reads
 ├── generate-review-map.sh         runs review-map non-interactively into a static directory
@@ -84,9 +86,16 @@ that makes a model follow it under pressure.
 
 ## Working on Codex support
 
-`bin/install-codex-skill` links the shared `skills/review-map` directory into Codex discovery;
-use `--skills-dir <temporary-directory>` when testing installation. It installs only the local
-review skill, not CI support. [docs/codex.md](docs/codex.md) covers usage and a manual smoke test.
+Codex installs the plugin from this repository's own marketplace (`.agents/plugins/marketplace.json`),
+reading `.codex-plugin/plugin.json`, which ships `skills/review-map` and nothing else.
+`codex plugin marketplace add /path/to/checkout` then `codex plugin add
+accountable-review@accountable-review` installs your working tree; it is a copy, so remove and
+re-add after an edit. `ruby skills/review-map/tests/codex-plugin.rb` checks the two Codex files
+against Claude's manifest.
+
+To pick up edits live instead, symlink the skill into Codex's skills directory —
+`ln -s "$PWD/skills/review-map" ~/.agents/skills/review-map` from the checkout root — where it is
+the standalone `$review-map`. [docs/codex.md](docs/codex.md) covers usage and a manual smoke test.
 
 `references/hosts/` owns host-specific delivery and delegation. The ten-step procedure remains
 in `SKILL.md`, and both hosts' independent readers load `references/claim-falsifier.md`.
@@ -163,7 +172,9 @@ one thing a run cannot verify for itself, and the Elixir one stays closed until 
 ## Releasing
 
 `.claude-plugin/plugin.json`'s `version` is the update pin: users only receive a change once that
-field moves, so bump it in the same commit as the change and tag the release.
+field moves, so bump it in the same commit as the change and tag the release. Bump
+`.codex-plugin/plugin.json` to the same value in the same commit — Codex users update on it the same
+way, and `tests/codex-plugin.rb` fails while the two differ.
 
 Before a **major** release, run the end-to-end evals and keep what they said: calibrate, run every
 `eval` PR three times, and commit the summary beside the release.
@@ -181,4 +192,5 @@ claude plugin validate . --strict
 claude plugin tag --push          # creates accountable-review--v<version>
 ```
 
-The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugins`.
+The Claude Code marketplace catalogue lives in a separate repository, `wyeworks/claude-plugins`; the
+Codex one is `.agents/plugins/marketplace.json` here, and needs no edit per release.

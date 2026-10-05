@@ -26,6 +26,7 @@ Built by **WyeWorks**.
 - [Installation](#installation-️)
   - [Claude Code](#claude-code)
   - [Codex](#codex)
+  - [Skills CLI](#skills-cli)
 - [Usage](#usage-)
   - [Basic usage](#basic-usage)
   - [How hard it works](#how-hard-it-works)
@@ -239,20 +240,23 @@ only for sessions started with that flag.
 
 ### Codex
 
-Local `review-map` generation is supported in Codex. From a checkout of this repository:
+This repository is its own Codex marketplace. From a terminal:
 
 ```bash
-bin/install-codex-skill
+codex plugin marketplace add wyeworks/accountable-review
+codex plugin add accountable-review@accountable-review
 ```
 
-This links `skills/review-map` into `~/.agents/skills/review-map`. It leaves an existing
-installation alone and refuses to replace another skill. Keep the checkout: pulling updates
-updates the linked skill too. Restart Codex if the skill does not appear.
+Restart Codex, and the skill is available in every project as `$accountable-review:review-map` —
+the same name as in Claude Code, behind Codex's `$` instead of `/`. `codex plugin marketplace
+upgrade accountable-review` fetches the latest catalogue, and as with Claude Code you only receive a
+release when the version in the plugin's manifest moves. `codex plugin remove
+accountable-review@accountable-review` uninstalls it.
 
 Open the repository you want to review in Codex, then invoke:
 
 ```text
-$review-map
+$accountable-review:review-map
 ```
 
 The result is a **local HTML file**, linked from the response, using the same template and
@@ -264,10 +268,58 @@ pass. If those tools are unavailable, the skill reports the limitation; use `--e
 explicitly to run without independent readers. The page never presents that pass as an approval.
 
 **Codex CI execution is not supported yet.** `setup-ci` and the CI runner still use Claude Code
-and Anthropic credentials. The local installer installs only `review-map`.
+and Anthropic credentials, so the Codex plugin ships `review-map` alone.
 
-See [Codex setup and verification](docs/codex.md) for project-scoped installation, removal,
-and the boundaries of this first integration.
+**To run it from a checkout instead** — which is what you want if you are changing the skill,
+since edits apply without reinstalling — link it into Codex's skills directory:
+
+```bash
+mkdir -p ~/.agents/skills
+ln -s /path/to/accountable-review/skills/review-map ~/.agents/skills/review-map
+```
+
+Linked that way it is a standalone skill invoked as `$review-map`, and `git pull` in the checkout is
+how you update. Use the marketplace **or** the link, not both, or Codex lists the skill twice.
+
+See [Codex setup and verification](docs/codex.md) for removal and the boundaries of this
+integration.
+
+### Skills CLI
+
+The skills live under `skills/` as ordinary [Agent Skills](https://agentskills.io), so the
+cross-agent [`skills`](https://github.com/vercel-labs/skills) CLI installs them into Claude Code
+and Codex without cloning anything:
+
+```bash
+npx skills add wyeworks/accountable-review
+```
+
+It asks which skills and which agents; answer in flags instead with, for example:
+
+```bash
+npx skills add wyeworks/accountable-review -g --skill review-map -a claude-code -a codex
+```
+
+**Prefer `-g`.** Without it the skills are copied into the current project (`.agents/skills/`,
+`.claude/skills/` and so on), which puts files in the repository you are about to review. `npx skills
+update` takes new commits, and `npx skills remove review-map` uninstalls.
+
+Installed this way the skill is a standalone one rather than part of a plugin, so in Claude Code it
+is invoked as `/review-map` instead of `/accountable-review:review-map`, and in Codex as `$review-map`
+instead of `$accountable-review:review-map`. `--effort high` still works in Claude Code: the independent readers
+are launched as general-purpose subagents handed the same bundled mandate, rather than as the
+plugin's registered `claim-falsifier` agent. Install through the plugin **or** the skills CLI, not
+both, or Claude Code lists the skill twice.
+
+The CLI can place the skills in any other agent it supports, Pi for example. Outside Claude Code,
+`review-map` follows one set of instructions whichever agent it is: the page is a local HTML file,
+and `--effort high` needs an independent reader — the agent's own subagents, or else a read-only
+background run of its own CLI. An agent with neither says so and offers `--effort low`. Only
+Claude Code and Codex are tested.
+
+`setup-ci` is offered too — `/setup-ci` in Claude Code, the only host it works in. The workflow it
+writes clones the plugin itself at a pinned tag, so how you installed the skill locally does not
+matter to CI.
 
 ---
 
@@ -590,7 +642,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 
 | | |
 | --- | --- |
-| **Supported agents** | Claude Code, plus local `review-map` in Codex (see installation above). Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
+| **Supported agents** | Claude Code and Codex, each installable as a plugin from its own marketplace or into either with `npx skills add wyeworks/accountable-review`. In Codex the plugin ships `review-map` only. Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
 | **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair. A repo with both asks; a repo with neither says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
@@ -599,7 +651,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Test frameworks** | RSpec, Minitest and ExUnit, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
 | **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
-| **Publishing** | In Codex, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
+| **Publishing** | In Codex or any other agent, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
 | **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 

@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repository is
 
 There is no application code here. The repository is the `accountable-review` Claude Code plugin,
-with local Codex support for `review-map` through `bin/install-codex-skill`. It
+with Codex support for `review-map` as a plugin from this repository's own Codex marketplace. It
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
 a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
@@ -171,7 +171,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the assembled checkpoint, the chain and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
-| `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local Codex HTML, named Claude agent or Codex subagent tools |
+| `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
 | `scripts/page-skeleton.sh` | Emits the head, the whole token block and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
@@ -180,6 +180,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the inventory and the diff |
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git rather than of a fixture. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` passed an unquoted `: ` that Pi's loader rejects without a word |
+| `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one working judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release |
@@ -1795,6 +1796,25 @@ The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugi
 
 Keep `version` out of that entry — `plugin.json` wins when both are set, and one source of truth is
 less to forget. A catalogue entry may pin `ref` or `sha` instead if a release needs holding back.
+
+**Codex has a manifest and a catalogue of its own, both in this repository**, and the version is
+one value in two files. `.codex-plugin/plugin.json` carries the same `name` and `version` as
+`.claude-plugin/plugin.json`, so the bump above is a bump of both; `.agents/plugins/marketplace.json`
+names one plugin whose source is this repository (`local`, `./`), so `codex plugin marketplace add
+wyeworks/accountable-review` is the whole distribution and the release tag serves both hosts.
+
+Two facts about Codex decided that shape, and both are in its source rather than its docs. **It
+reads `.codex-plugin/plugin.json` ahead of Claude's manifest and falls back to it otherwise** — and
+Claude's has no `skills` field, so the fallback loads Codex's default `./skills`, which ships
+`setup-ci` into a host whose CI half still runs Claude. The Codex manifest exists to say
+`"skills": "./skills/review-map"`, and that one line is the reason the file is not redundant.
+**It also reads `.claude-plugin/marketplace.json`, but skips the `github` source kind** the
+`wyeworks/claude-plugins` entry uses (it accepts `local`, `url`, `git-subdir` and `npm`), so pointing
+Codex at that catalogue lists nothing — which is why Codex's catalogue lives here rather than there.
+Installed either way the skill is `accountable-review:review-map`, because both hosts namespace a
+plugin skill by the manifest's `name`, and that shared name is the parity. Nothing in
+`claude plugin validate --strict` reads either Codex file, so `tests/codex-plugin.rb` is the check
+that they still agree, and it runs in `bin/evals offline` and CI.
 
 Two things do not belong at the plugin root: a `CLAUDE.md` (it ships to every install but is never
 loaded as project context, which is why this file lives in `.claude/`), and any component directory
