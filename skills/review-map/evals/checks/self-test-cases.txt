@@ -91,6 +91,8 @@
 # caveat until the format dropped it, so a pattern reaching too far would fire everywhere at
 # once. That half is pinned by frozen.rb, which holds every case's whole output.
  page-invariants    | invariants-standing-disclaimer.html | 0 | a standing disclaimer may have come back
+ page-invariants    | invariants-bill-in-comment.html | 0 | no 'clean bill of health' in the prose
+ page-invariants    | invariants-bill-in-prose.html   | 0 | 'clean bill of health' appears
 # Recency, § 2e. Two shapes because they are two different mistakes: a class on the checkpoint,
 # which is the severity chip with provenance words on it, and a count of cleared questions, which
 # is the same thing with the arithmetic left to the reader. The clean row is the load-bearing one —

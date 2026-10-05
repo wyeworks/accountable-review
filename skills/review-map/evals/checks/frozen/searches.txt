@@ -346,6 +346,18 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page invariants-assurance.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-bill-in-comment.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-bill-in-comment.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-bill-in-prose.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-bill-in-prose.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-clean.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

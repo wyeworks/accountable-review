@@ -3,7 +3,7 @@
 #
 #   Usage: tests/self-test.sh
 #
-# Same argument as evals/checks/self-test.rb and setup-ci/tests/self-test.sh: a check that passes
+# Same argument as evals/checks/self-test.rb: a check that passes
 # because it never looked is worse than no check, and the only way to tell the two apart is to
 # introduce the defect and watch the suite go red.
 #
@@ -74,7 +74,9 @@ fi
 
 # 1. The regression this whole design exists to prevent: someone decides it is simpler to hold the
 #    style block in the script than to extract it, and the two copies drift from that day on.
-sed 's|^extract "\$HEAD_S" "\$HEAD_E" "\$TEMPLATE" | { echo "<style>.injected{color:red}</style>"; extract "$HEAD_S" "$HEAD_E" "$TEMPLATE"; } |' \
+#    Appended rather than prepended: a line ahead of the head's opening <title> is refused by the
+#    script's own title guard, and this case has to reach the prefix assertion to prove it.
+sed 's|^extract "\$HEAD_S" "\$HEAD_E" "\$TEMPLATE" | { extract "$HEAD_S" "$HEAD_E" "$TEMPLATE"; echo "<style>.injected{color:red}</style>"; } |' \
   "$SKELETON" > "$WORK/inline-css.sh"
 chmod 755 "$WORK/inline-css.sh"
 case_runs_red "the script emits a line of its own instead of only the template's bytes" "$TEMPLATE" "$WORK/inline-css.sh"
@@ -108,6 +110,14 @@ case_runs_red "--syn-key is declared in only two of the three theme states" "$WO
 # 7. The title placeholder gone means every page ships with the same tab name.
 sed 's|{{PR_TITLE_OR_BRANCH}} Review|Review|' "$TEMPLATE" > "$WORK/no-title.html"
 case_runs_red "the title placeholder is missing, so no page can be named" "$WORK/no-title.html" "$SKELETON"
+
+# 8. The <title> moved back below the header comment, with the script's guard taken out too, so only
+#    run.sh's own first-line assertion is left to notice. The gallery lists that page by file name.
+awk '/^<title>/ { t = $0; next } /^<link rel="preconnect" href="https:\/\/fonts.googleapis.com">/ && t { print t; t = "" } { print }' \
+  "$TEMPLATE" > "$WORK/title-late.html"
+sed '/^case \$(sed -n .1p. "\$tmp") in$/,/^esac$/d' "$SKELETON" > "$WORK/no-title-guard.sh"
+chmod 755 "$WORK/no-title-guard.sh"
+case_runs_red "the <title> is not the page's first line, so the gallery names it after the file" "$WORK/title-late.html" "$WORK/no-title-guard.sh"
 
 # ---- the page's one shape ----
 #

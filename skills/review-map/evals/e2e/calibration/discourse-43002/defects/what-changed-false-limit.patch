@@ -1,0 +1,10 @@
+--- gold.html
++++ gold.html
+@@ -1404,6 +1404,7 @@
+         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
+         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
+         one writer the diff did not touch.</p>
++      <p>The Ember client under <code>frontend/</code> could not be read, so what this page says about the handle is inferred from the server side.</p>
+     </section>
+ 
+     <section id="attention" style="padding-top:48px">

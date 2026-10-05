@@ -719,8 +719,8 @@ claude --plugin-dir /path/to/accountable-review
 
 `/reload-plugins` picks up edits without restarting. There is no build and no test suite in the usual
 sense — the "source" is prose that another Claude instance executes, so changes are verified by
-running the skill against a real PR and reading the page it produces, plus an eval harness for
-judging a wording change against planted findings.
+running the skill against a real PR and reading the page it produces, plus an eval harness that runs it
+against real open-source pull requests and grades each page with calibrated LLM judges.
 
 > [!NOTE]
 > **The safety net is a draft.** The deterministic tests and the eval harness cover the scripts and

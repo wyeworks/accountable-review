@@ -4,6 +4,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -18,6 +19,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -32,6 +34,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -46,6 +49,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -60,6 +64,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -74,6 +79,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -88,6 +94,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -102,6 +109,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -116,6 +124,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -130,6 +139,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -144,6 +154,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -158,6 +169,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -172,6 +184,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -186,6 +199,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -200,6 +214,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -214,6 +229,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -228,6 +244,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -242,6 +259,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -256,6 +274,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -270,6 +289,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -284,6 +304,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -298,6 +319,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -312,6 +334,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -326,6 +349,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -340,6 +364,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -354,6 +379,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -368,6 +394,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -382,6 +409,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -396,6 +424,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -410,6 +439,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -424,6 +454,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -438,6 +469,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -452,6 +484,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -466,6 +499,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -480,6 +514,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -494,6 +529,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -508,6 +544,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (4 label(s))
@@ -522,6 +559,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (4 label(s))
@@ -536,6 +574,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -550,6 +589,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -564,6 +604,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -578,6 +619,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -592,6 +634,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -606,6 +649,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -620,6 +664,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -634,6 +679,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -648,6 +694,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -662,6 +709,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -676,6 +724,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -690,6 +739,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -704,6 +754,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -718,6 +769,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -732,6 +784,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -746,6 +799,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -760,6 +814,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -774,6 +829,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -788,6 +844,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -802,6 +859,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -816,6 +874,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -830,6 +889,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -844,6 +904,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -858,6 +919,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -872,6 +934,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -886,6 +949,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -900,6 +964,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -914,6 +979,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -928,6 +994,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -942,6 +1009,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -956,6 +1024,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -970,6 +1039,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -984,6 +1054,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -998,6 +1069,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1012,6 +1084,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1026,6 +1099,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1040,6 +1114,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1054,6 +1129,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1068,6 +1144,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1082,6 +1159,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1096,6 +1174,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1110,6 +1189,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1124,6 +1204,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1138,6 +1219,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1152,6 +1234,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1166,6 +1249,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1180,6 +1264,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1194,6 +1279,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1208,6 +1294,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1222,6 +1309,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1236,6 +1324,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1250,6 +1339,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1264,6 +1354,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1278,6 +1369,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1292,6 +1384,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1306,6 +1399,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1320,6 +1414,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1334,6 +1429,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1348,6 +1444,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1362,6 +1459,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1376,6 +1474,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1390,6 +1489,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1404,6 +1504,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1418,6 +1519,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1432,6 +1534,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1446,6 +1549,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1460,6 +1564,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1474,6 +1579,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1488,6 +1594,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1502,6 +1609,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1516,6 +1624,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1530,6 +1639,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1544,6 +1654,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1558,6 +1669,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1572,6 +1684,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1586,6 +1699,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1600,6 +1714,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 FAIL  assurance language — the page is advertising that it was checked: independently verified 
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1614,6 +1729,67 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 FAIL  assurance language — the page is advertising that it was checked: independently verified 
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment invariants-bill-in-comment.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page invariants-bill-in-comment.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment invariants-bill-in-prose.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page invariants-bill-in-prose.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1628,6 +1804,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1642,6 +1819,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1656,6 +1834,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: The first pass ran first version of this section 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1670,6 +1849,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: The first pass ran first version of this section 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1684,6 +1864,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1698,6 +1879,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1712,6 +1894,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1726,6 +1909,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1740,6 +1924,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1754,6 +1939,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -1768,6 +1954,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1782,6 +1969,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1796,6 +1984,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1810,6 +1999,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1824,6 +2014,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1838,6 +2029,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1852,6 +2044,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1866,6 +2059,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1880,6 +2074,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1894,6 +2089,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1909,6 +2105,7 @@ PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 WARN  a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1924,6 +2121,7 @@ PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 WARN  a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -1938,6 +2136,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
@@ -1953,6 +2152,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
@@ -1968,6 +2168,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -1982,6 +2183,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -1996,6 +2198,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 FAIL  assurance language — the page is advertising that it was checked: findings were re-checked 
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2010,6 +2213,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 FAIL  assurance language — the page is advertising that it was checked: findings were re-checked 
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2024,6 +2228,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2038,6 +2243,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2052,6 +2258,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: On an earlier pass 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2066,6 +2273,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: On an earlier pass 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2080,6 +2288,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 FAIL  a checkpoint is marked by its recency — the page says which revision it describes, never which parts were re-read: class="cp new" 
 PASS  evidence tiers used (1 label(s))
@@ -2094,6 +2303,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 FAIL  a checkpoint is marked by its recency — the page says which revision it describes, never which parts were re-read: class="cp new" 
 PASS  evidence tiers used (1 label(s))
@@ -2108,6 +2318,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 FAIL  a checkpoint is marked by its recency — the page says which revision it describes, never which parts were re-read: 2 of 5 checkpoints addressed 
 PASS  evidence tiers used (1 label(s))
@@ -2122,6 +2333,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 FAIL  a checkpoint is marked by its recency — the page says which revision it describes, never which parts were re-read: 2 of 5 checkpoints addressed 
 PASS  evidence tiers used (1 label(s))
@@ -2136,6 +2348,7 @@ PASS  no severity chips
 FAIL  verdict language found: recommend approving 
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2150,6 +2363,7 @@ PASS  no severity chips
 FAIL  verdict language found: recommend approving 
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2164,6 +2378,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2178,6 +2393,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2192,6 +2408,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2206,6 +2423,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2220,6 +2438,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2234,6 +2453,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2248,6 +2468,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2262,6 +2483,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2276,6 +2498,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2290,6 +2513,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2304,6 +2528,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2318,6 +2543,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2332,6 +2558,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2346,6 +2573,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2360,6 +2588,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2374,6 +2603,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2388,6 +2618,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2402,6 +2633,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2416,6 +2648,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -2430,6 +2663,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -2444,6 +2678,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2458,6 +2693,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2472,6 +2708,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2486,6 +2723,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2500,6 +2738,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -2514,6 +2753,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -2528,6 +2768,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -2542,6 +2783,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -2556,6 +2798,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -2570,6 +2813,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -2584,7 +2828,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
-WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (7 label(s))
@@ -2599,7 +2843,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
-WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (7 label(s))
@@ -2614,6 +2858,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -2628,6 +2873,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2643,6 +2889,7 @@ PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 WARN  a bare 'Blocking' or 'Watch' label is rendered — read it, it may be severity by another name
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2657,6 +2904,7 @@ PASS  no severity chips
 FAIL  verdict language found: recommend approving 
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2671,6 +2919,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2685,6 +2934,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2699,6 +2949,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 FAIL  a graded noun asserted rather than refused: overall risk 
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2713,6 +2964,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2727,6 +2979,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 FAIL  assurance language — the page is advertising that it was checked: independently verified 
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2741,6 +2994,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: The first pass ran first version of this section 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2755,6 +3009,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 FAIL  the page narrates its own drafting — a correction replaces a claim, it never annotates it: On an earlier pass 
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2769,6 +3024,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 FAIL  assurance language — the page is advertising that it was checked: findings were re-checked 
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2783,6 +3039,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2797,6 +3054,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2811,8 +3069,39 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 WARN  a standing disclaimer may have come back — that sentence lives in README.md, not on the page: not an audit overlapping but different this pass surfaced 
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment invariants-bill-in-comment.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment invariants-bill-in-prose.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+WARN  'clean bill of health' appears — legitimate only as a denial; read the sentence
+PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
 PASS  data-path is only on ledger rows (0)
@@ -2826,6 +3115,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 FAIL  a checkpoint is marked by its recency — the page says which revision it describes, never which parts were re-read: class="cp new" 
 PASS  evidence tiers used (1 label(s))
@@ -2840,6 +3130,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 FAIL  a checkpoint is marked by its recency — the page says which revision it describes, never which parts were re-read: 2 of 5 checkpoints addressed 
 PASS  evidence tiers used (1 label(s))
@@ -2854,6 +3145,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2868,6 +3160,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
@@ -2882,6 +3175,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (2 label(s))
@@ -2896,6 +3190,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2910,6 +3205,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2924,6 +3220,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2938,6 +3235,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2952,6 +3250,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2966,6 +3265,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (1 label(s))
@@ -2980,6 +3280,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))
@@ -2994,6 +3295,7 @@ PASS  no severity chips
 PASS  no verdict or approval language
 PASS  no asserted risk or severity score
 PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
 PASS  evidence tiers used (5 label(s))

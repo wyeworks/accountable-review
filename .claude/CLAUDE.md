@@ -46,10 +46,11 @@ matters there.
 than one skill versus the other.** `setup-ci` produces a YAML file and four shell scripts; `review-map`
 has `page-skeleton.sh`, `excerpt.sh`, `ledger-rows.sh` and `coverage-gate.sh`. All of it is ordinary
 software with right answers, so it has ordinary tests: `skills/setup-ci/tests/` and
-`skills/review-map/tests/`, each a `run.sh` (no model, no network, about a second) beside a
-`self-test.sh` that breaks the things `run.sh` claims to check and asserts the suite notices each one.
-They all run in CI on every push, for the reason `evals/checks/self-test.rb` does: a check that passes
-because it never looked is worse than no check. When you edit either template, or any script under
+`skills/review-map/tests/`, each a `run.sh` (no model, no network, seconds). `review-map`'s sits
+beside a `self-test.sh` that breaks the things `run.sh` claims to check and asserts the suite notices
+each one, for the reason `evals/checks/self-test.rb` does: a check that passes because it never
+looked is worse than no check. `setup-ci` had one too and it was removed: it re-ran `run.sh` once per
+break, 52 of them, about ten minutes a push. When you edit either template, or any script under
 `skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them — `bin/evals offline` runs
 every suite together, which is what CI does too.
 
@@ -104,30 +105,37 @@ iteration, and it will arrive as helpfulness.
 prose: 80–160 for *What changed*, 50–140 a checkpoint, and a page total that is those parts summed —
 about 700–1,500 visible words at four checkpoints on a small or medium PR, derived rather than flat
 so that a wider agenda cannot be forced under its own per-checkpoint floor. `brief-budget.rb` used to enforce its predecessor and is deleted with the level it
-belonged to, so the numbers are read by a person or by nobody. That is the honest state — the numbers
+belonged to, so the numbers are read by a person or by nobody — except § 01, whose word count
+`evals/e2e/run.rb` records on every end-to-end run as guidance, never as a verdict. That is the honest state — the numbers
 are a first calibration derived from component caps rather than measured on published pages — but it
 means a page drifting long drifts silently. The one number that must never be graded is the
 **checkpoint count**: a page that came in under a ceiling by losing a judgment has done the one thing
 the budget forbids.
 
-`skills/review-map/evals/` is where judging happens, and it currently has **one scope rather than
-three**. `fixtures/make-fixtures.sh` builds five repositories whose interesting findings sit
-deliberately *outside* the diff, so there is a written right answer to check against. A **page** case
-is a whole run, graded on what only a whole page carries. A **component** check runs on a script's
-output. The **section** cases are deferred — they graded one section of the page this design
-replaced, and the agenda's unit is a checkpoint, which is a different driver rather than a rename
-(`evals/deferred/README.md`).
+`skills/review-map/evals/` is where judging happens, in three layers. **Mechanical**: `check.rb`
+and the nine checks, run on every push. **End to end** (`evals/e2e/`): a whole run of the skill
+against a **real merged OSS pull request** pinned in `prs.yml`, generated through
+`ci/generate-review-map.sh --output` exactly as CI does, checked mechanically, then graded by one
+LLM judge per aspect of the page, anchored in the checkout and blind to the mechanical results.
+**Calibration**: a judge counts only once it has matched a person's verdicts on a certified gold
+page and on copies of it that each plant one defect. Calibration PRs are held out of the eval set.
 
-**That deferral is the largest hole in the harness and should not be permanent.** A section case was
-what made "run it three times" affordable, and three runs is the smallest sample that separates a
-wording change from noise; without one, every question about whether prose improved is a whole-page
-run or a guess. `evals/README.md` § *Adding a case* says what a checkpoint case has to grade and why
-it is different in kind: the mechanical half is thin, and almost everything worth knowing about a
-checkpoint — is it a judgment, was the merge right, did the chain earn its place — is judged.
+**One judge exists, and that is deliberate** — `judges/what-changed.md`, for § 01. The other aspects
+(checkpoints, reading path, impact, evidence, voice, recall) are notes in `judges/IDEAS.md`, not
+code: one calibrated judge proves the method before the method is copied. The single calibration PR
+is `discourse/discourse#43002`, whose gold page was certified by a person on 2026-09-30; the judge
+passed calibration against it on Opus on 2026-10-02, which `calibration/status.json` records.
 
-`bin/evals offline` is what CI runs and what you run before pushing. `bin/evals page <id>` prints the
-recipe for one whole-page case. Results carry the skill's git sha, so a pass rate is attributable to
-a version of the prose.
+**The old synthetic harness is gone, not deferred** — fixture repositories with planted answers,
+hand-driven page cases, and section cases that graded a page this design replaced. None of it was
+being used. What it still covered at whole-run level (the trivial refusal, `--update`'s P6 refusal,
+the 7.1 override path, a planted recall floor) is listed in `IDEAS.md`; each keeps its mechanical half
+in `tests/run.sh`.
+
+`bin/evals offline` is what CI runs and what you run before pushing. `bin/evals e2e`, `calibrate`
+and `report` are the rest, run before a major release. Results carry the skill's git sha, so a pass
+rate is attributable to a version of the prose, and an uncalibrated judge's column is never shown as
+a score.
 
 When the question is where the minutes went rather than whether the page was right,
 `evals/profile.sh` reads the transcript of a run — an eval repetition or a real PR — and splits its
@@ -148,7 +156,7 @@ leave no trace at all, so they get no row. The numbers live in `evals/README.md`
 goes* and *Profiling one run*, which is the only place they are maintained; read it before quoting
 one, and § *Deliberately single-context* for what the pass costs and why that is two numbers.
 
-Read `evals/README.md` before adding a case.
+Read `evals/README.md` before adding a PR or a judge.
 ## How the documents divide the work
 
 Each reference owns one axis; keep them from bleeding into each other.
@@ -173,8 +181,9 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git rather than of a fixture. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` passed an unquoted `: ` that Pi's loader rejects without a word |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
-| `bin/evals` | One command per eval scenario — `offline`, `page`, `catalogue`, and the rest in its own header; `section` is deferred with the cases it dispatched. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
-| `evals/` | Fixtures with planted findings, the frozen upstream, `checks/`, `deferred/` (the section cases and drivers, unrun), and `profile.sh`, which measures what a run *cost* rather than whether it was right. `checks/` is Ruby; `run.sh`, `report.sh`, `judge.sh`, `verdict-tally.sh` and `profile.sh` stay shell because they are process orchestration and JSON. Not loaded at runtime; see `evals/README.md` |
+| `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
+| `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
+| `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one working judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release |
 | `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. Nine of them, down from fifteen: six graded markup the agenda does not have, and two of those six would have SKIPped forever, which is worse than none because a SKIP reads as verified. `impact-paths.rb` grades `figure.impact` and nothing else, so a checkpoint's `figure.chain` — same markup, different job — is invisible to it by scope rather than by an exemption. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output for all nine, and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
@@ -231,7 +240,7 @@ Editing one of these means checking the others still agree.
   § *The agenda budget* is prose: per-part caps and a page total that is those parts summed, which
   at four checkpoints on a small or medium PR comes to 700–1,500 visible words; plus a floor stated
   as a rule rather than a number. `brief-budget.rb` enforced its predecessor and is
-  deleted, so nothing counts words now. Two of its lessons are kept in that section deliberately.
+  deleted, so nothing gates words now; the end-to-end harness records § 01's count and nothing else. Two of its lessons are kept in that section deliberately.
   Length is guidance rather than a failure, because a hard failure on length teaches a run to drop a
   claim to get under a number, which is worse than the long page. And **the checkpoint count is never
   budgeted**: a page that came in under the ceiling by losing a judgment has done the one thing the
@@ -292,7 +301,7 @@ Editing one of these means checking the others still agree.
   **It has no eval axis, and that is the honest gap.** An axis is a column on every result line, and
   adding one for a feature with no case behind it makes old lines incomparable in exchange for
   nothing measured. The mechanical half is covered; whether a primer was worth spending a callout on
-  is judged, which is the shape `evals/deferred/` holds.
+  is judged, and no judge asks it yet — `evals/e2e/judges/IDEAS.md` is where it would go.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
   attention* **per independent semantic delta *What changed* names**, seven on the page at the
   outside, each **one judgment** the reviewer has to make: an `<h3>` question, two to four
@@ -341,8 +350,8 @@ Editing one of these means checking the others still agree.
 
   Nothing mechanical grades a checkpoint. `start-here.rb` requires the reading path to point at one,
   `rails-anchors.rb` counts them as the denominator for its doc-link budget, and `tests/run.sh` asserts
-  the template assembles three. Whether a question is a judgment is a judged expectation, and
-  `evals.json` is where it is asked.
+  the template assembles three. Whether a question is a judgment is a judged expectation, and it is
+  the first candidate in `evals/e2e/judges/IDEAS.md` — no working judge asks it yet.
 - **Two kinds of checkpoint, and the second one is capped.** A **behavioural** checkpoint judges what
   the system now does. A **coding-decision** checkpoint judges how the change was built — where a class
   was put, what kind of object it is, which existing abstraction it went around. They render
@@ -371,7 +380,7 @@ Editing one of these means checking the others still agree.
   checkpoints come from* lists it last; both lens files carry the shapes and the searches that produce
   the citation; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical checks
   any of it — like the category test, whether a departure was real and whether the page asked rather
-  than answered are judged, and `evals.json` is where they are asked.
+  than answered are judged, and `evals/e2e/judges/IDEAS.md` records the judge that would ask them.
 - **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is
   mechanical.** `figure.impact` in section 04 and `figure.chain` inside a checkpoint are the same
   `ol.ip-path` with the same node kinds and the same causal verbs. `report-format.md` § *Chains* owns
@@ -696,11 +705,10 @@ Editing one of these means checking the others still agree.
   severity chip; `agents/claim-falsifier.md` carries the mandate and pins its own `model:`;
   `evals/checks/page-invariants.rb` §§ 2b and 2c fail a page that advertises having been checked or
   narrates its own drafting; and `README.md` § *How hard it works* is the public wording. The
-  falsifier's model agrees across the **harness** rather than the page — `evals/run.sh` reads it out
-  of the agent file into `--agents`, it lands on the result line and in `report.sh`'s group key so an
-  opus row is never averaged into a sonnet one, and `profile.sh` prints what the subagent transcripts
-  actually recorded. That last one is the only real check: `--agents` accepts keys it does not
-  understand without complaining, so sending the field is not proof it was honoured.
+  falsifier's model is checked across the **harness** rather than the page: `evals/e2e/run.rb`
+  generates with the plugin loaded, so the agent file's own `model:` is what a run gets, and
+  `profile.sh` prints what the subagent transcripts actually recorded. That is the only real check —
+  a pinned field is not proof it was honoured.
 
   **A verification badge is the same regression as a severity chip, and it will look more innocent.**
   Grading the PR is obviously forbidden; grading *the page* — "every claim verified", a count of what
@@ -717,9 +725,8 @@ Editing one of these means checking the others still agree.
   The register is right *in this file* and wrong on the page: a maintainer needs to know why a rule
   exists, a reviewer does not need the page's drafting history.
 
-  The eval axis is `--skill-effort`, not `--effort`: `evals/run.sh` already had an `--effort` meaning
-  the CLI reasoning effort the reader runs at, and two knobs under one name in one script is a bug
-  waiting for a hurried reader. Both are in `report.sh`'s group key.
+  On a result line the skill's effort is `effort` and the producing model is `model`, and both are
+  in `report.rb`'s group key, so a `high` row is never averaged into a `low` one.
 - **`--update` buys cheapness with claims nobody re-read, and the page says which revision it
   describes rather than how much of it was re-read.** A re-run reads the commits since the previous
   map, re-analyses what they reach and edits that page in place. The saving is almost entirely step
@@ -816,7 +823,7 @@ Editing one of these means checking the others still agree.
   of its boundary, with nine mutations behind it. The CI half is `templates/workflow.yml`'s two
   cache steps, `read-config.sh`'s `update` key, `ci/generate-review-map.sh`'s conditional
   pass-through and manifest `@3`, `references/workflow.md` § *The previous map* owning the carrier's
-  reasoning **alone**, and `setup-ci/tests/` with eight more mutations.
+  reasoning **alone**, and `setup-ci/tests/run.sh`.
 
   **The graded half splits along conditional versus unconditional, and that split is the design
   rather than a convenience.** *No recency marker, no resolved tick* holds on **every** page — an
@@ -830,14 +837,12 @@ Editing one of these means checking the others still agree.
   counted on the comment-stripped copy, because the template's own comment beside the `Revision`
   cell explains that segment and a raw count read it as a second one.
 
-  **The eval case is a recipe, and that is why it needed no harness change.** `bin/evals page`
-  prints fixture, prompt and check for a person to follow, and case 4 already held two commands with
-  a snapshot instruction in front of them — so case 7's two runs are prose in the same field.
-  `evals/run.sh` and `report.sh` are untouched, and there is no new axis: a page case produces no
-  result line to carry one. The `two-push` fixture is **new rather than a third commit on an
-  existing one**, because adding one would move `HEAD~1` under every case already pointing there.
-  Its planted finding is the only one in the corpus whose pass condition is a run **declining** to
-  take a shortcut.
+  **Its whole-run eval went with the synthetic fixtures.** A `two-push` fixture used to plant a
+  second push adding a new reader in a file no checkpoint cites, so the pass condition was a run
+  **declining** to update. The preconditions stay covered either side of every boundary in
+  `tests/run.sh`; the whole run comes back as a `prs.yml` entry with `update_from`, which `run.rb`
+  already supports, once a merged OSS pull request with that shape is found
+  (`evals/e2e/judges/IDEAS.md`).
 - **Findings are a sample, not an audit — and the page no longer says so.** The rule is unchanged and
   load-bearing rather than hedging: the skill explains, explanation is reproducible, defect discovery
   is not, and the page must never read as a clean bill of health. What moved is where the sentence
@@ -1026,7 +1031,7 @@ Editing one of these means checking the others still agree.
 
   What no script settles: whether these are the right 2–3 paths and whether each edge is **true**.
   The tighter cap makes that sharper, not softer — choosing three consequences out of six is part of
-  the work — and a page case is where it is asked.
+  the work — and the § 04 judge in `evals/e2e/judges/IDEAS.md` is where it would be asked.
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four `SKELETON:`
   markers. Everything in the head and tail ranges — the `<head>`, the entire token block, the three
   highlight.js tags and the tint script, 54.5 KB of it — is written straight into the page by
@@ -1193,8 +1198,8 @@ Same rule as above: editing one of these means checking the others still agree.
   file generates and so do 9 lines across six. From the generating side that reads as an OR, which
   invites a "simplification" that would discard a change large by either measurement. The asymmetry
   is the reason: a needless map costs a model run somebody ignores, a missing one is invisible, so
-  the suppressing predicate is the one that should be hard to satisfy. `self-test.sh` breaks the
-  `&&` into `||`; `run.sh`'s `bulky` and `spread` catch it.
+  the suppressing predicate is the one that should be hard to satisfy. `run.sh`'s `bulky` and `spread`
+  are what catch an `&&` turned into `||`.
 
   **Application paths only is what makes the counts mean anything**, and it is why this cannot be a
   job `if:`. The `pull_request` payload's counts are whole-diff, so a three-line model change beside
@@ -1242,8 +1247,7 @@ Same rule as above: editing one of these means checking the others still agree.
   `references/workflow.md` § *The application-code gate* owns the reasoning **alone** including
   fail-open, the default's trade and the second range, `SKILL.md`'s hard rules forbid counting
   anything but application code and baking a number into the YAML, `tests/run.sh` covers both rules
-  either side of each threshold and both halves of the second question, `tests/self-test.sh` breaks
-  them fifteen ways, and `docs/ci.md` restates it.
+  either side of each threshold and both halves of the second question, and `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
   gate. `SKILL.md` step 1 owns the flag, step 9 says the stages become save points rather than
@@ -1326,7 +1330,7 @@ Same rule as above: editing one of these means checking the others still agree.
   **That assertion has to run against the whole file, comments included.** It did not, briefly: the
   negative assertions run against a comment-stripped copy so the workflow may explain in a comment why
   it does not use `pull_request_target`, and a timestamp added as a comment sailed straight through
-  a test whose entire purpose was to catch it. `tests/self-test.sh` case 6 is that regression.
+  a test whose entire purpose was to catch it. `tests/run.sh` now reads the whole file for it.
 - **Drift is reported, never resolved.** A hand-edited Accountable Review workflow is a file a team
   owns, and setup reverting their pinned action or tightened timeout is the worst thing this command
   can do. `install-workflow.sh` prints the diff and exits 3; `--update` is the only way past it, and
@@ -1533,11 +1537,10 @@ The allowlist test itself was matching **substrings**, against a comment claimin
 `active_record_validations.html`. It matches whole backticked tokens now. The rule whose stated
 purpose is *"a URL nobody opened is a 404 the reader finds"* was passing a 404.
 
-And the fixtures needed `Gemfile.lock`, which none had: pinning reads the locked version, so every
-fixture run would have been obliged to emit no links at all, making the case expectations
-unsatisfiable. `rails-only-small` and `monorepo-contract` now lock **7.1** deliberately — that is the
-series the `insert_all` override applies to, so the fixtures exercise the override rather than only
-the common path.
+The retired synthetic fixtures locked **7.1** deliberately, so a whole run exercised the `insert_all`
+override rather than only the common path. That whole-run coverage went with them; the override is
+still verified by `verify-catalogue.sh` and graded by `rails-anchors.rb`'s golden fixtures, and an
+OSS eval PR on a 7.1 app would bring it back.
 
 ## Deliberately single-context, with one named exception
 

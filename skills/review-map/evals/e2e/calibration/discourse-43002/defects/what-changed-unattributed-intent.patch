@@ -1,0 +1,14 @@
+--- gold.html
++++ gold.html
+@@ -1401,9 +1401,8 @@
+         taller than one row must span both columns. The layout endpoint still replaces the whole list on every
+         save. As a result, any request that leaves out a card's size now resets that card to one cell. Only
+         admins see the handle, and only after the card's data has loaded. The handle is hidden on narrow
+-        viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
+-        description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
+-        one writer the diff did not touch.</p>
++        viewports. The commits also add reduced-motion handling and right-to-left handle placement. Admins
++        wanted cards that remember their size, and now they do.</p>
+     </section>
+ 
+     <section id="attention" style="padding-top:48px">

@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
       # Pinned, and not the runner's system Ruby: minitest is a BUNDLED gem rather than a
       # default one, so `require "minitest/autorun"` is not guaranteed on a bare image. The
-      # pin also keeps the job comparable run to run, for the same reason run.sh puts the
+      # pin also keeps the job comparable run to run, for the same reason e2e/run.rb puts the
       # model and effort on every result line.
       # Keep this in step with the repo-root .tool-versions, which pins the same thing for the
       # same reason so `bin/evals offline` needs no prefix locally.
@@ -69,10 +69,9 @@ jobs:
       - uses: actions/checkout@v4
       # The deterministic half of the CI setup: what the generated workflow contains, that
       # setup leaves other people's workflows alone, that running it twice is safe, that the
-      # config file is respected, and that the delivery seam returns its contract. Then the
-      # same trick as above — ten deliberate breaks, each of which must make the suite fail.
+      # config file is respected, and that the delivery seam returns its contract. No mutation
+      # suite here: it re-ran this one once per break and cost minutes on every push.
       - run: skills/setup-ci/tests/run.sh
-      - run: skills/setup-ci/tests/self-test.sh
 
   review-map-scripts:
     runs-on: ubuntu-latest
@@ -82,7 +81,7 @@ jobs:
       # answers, and this is that half. page-skeleton.sh emits the page's head, token block and
       # tint script straight into the page, so no model reads or types a colour — and the test
       # asserts that by partition: head + markup + tail must be the template's own bytes. Then
-      # the same trick as the two jobs above, including two mutations of the script itself,
+      # the same trick as the evals job above, including two mutations of the script itself,
       # because a template mutation alone cannot exercise a comparison against that template.
       - run: skills/review-map/tests/run.sh
       - run: skills/review-map/tests/self-test.sh

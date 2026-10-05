@@ -1,0 +1,40 @@
+# The pull requests the end-to-end evals run against. Real, merged, public — so every citation
+# on a generated page resolves for whoever reads the report, and every head is still reachable.
+#
+#   id            what run.rb, judge.rb and calibrate.rb address it by
+#   repo, pr      owner/name and the PR number; run.rb fetches refs/pull/<pr>/head
+#   base_sha      the MERGE-BASE, not the base branch tip — what the diff's left side is, and
+#                 what report-format.md § Section 1 says the masthead names. Pinned once.
+#   head_sha      the PR head at the revision the case is about. Pinned: a PR that gains a
+#                 commit must not quietly change what a case measures.
+#   stack         rails | phoenix — what SKILL.md step 2 should detect. Recorded, not passed.
+#   role          calibration — held out, used only to calibrate judges (e2e/calibration/<id>/)
+#                 eval        — what a release is measured on. judges/IDEAS.md lists the shapes still missing.
+#   update_from   optional: an earlier head. run.rb runs there first, then --update at head_sha.
+#   notes         why this PR is here, for a person choosing what to add next.
+
+- id: discourse-43002
+  repo: discourse/discourse
+  pr: 43002
+  base_sha: 07211c3b4aca4d7126cc7c5cabb03936575e5694
+  head_sha: 4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f
+  stack: rails
+  role: calibration
+  notes: >-
+    FEATURE: resizable report cards on the admin dashboard. 14 files, +1381/-27, three commits,
+    Rails with the Ember client in the same repository. The gold case: chosen because its claims
+    are easy to check by hand, which is what certifying a gold page needs.
+
+- id: discourse-44196
+  repo: discourse/discourse
+  pr: 44196
+  base_sha: 74c44fbebe39131151e5eaff480c7ab423a9b807
+  head_sha: 01ba1cbb0e8e827ef5de9efbf36ff2430106b52c
+  stack: rails
+  role: eval
+  notes: >-
+    FEATURE: Allow admins to edit pre-registered MCP clients. 14 files, +596/-8, one commit.
+    Chosen as the calibration PR's sibling: same repository, same shape — an admin feature with a
+    migration and structure.sql, a controller, model and lib change, a new Ember route and template,
+    and tests on both sides — so a judge calibrated on discourse-43002 is measured on a page of the
+    kind it was calibrated for, and never on that page.

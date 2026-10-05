@@ -1,0 +1,11 @@
+# Where gold.html came from. It is the unedited output of one run; a hand-tuned gold page would
+# calibrate the judge against what someone could write rather than what the skill writes.
+plugin_version: 1.0.2
+skill_sha: 77d9b07
+effort: high
+generated: 2026-09-30
+run_batch: 20260930T022646Z
+certified_by: Jorge Bejar
+certified: 2026-09-30
+judges: [what-changed]   # § 01 only: the claims were checked against the diff at head
+# Rung 1: every citation links to the pull request on GitHub.

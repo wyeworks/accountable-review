@@ -114,8 +114,7 @@ why the template carries the warning inline.
 comparisons, `==`, `!=`, `&&` and `||`. `(additions + deletions) > 50` is an invalid-file error, not
 a sum. That expression is no longer in the guard — the counts moved to a step, where shell can add —
 but the rule is what makes putting them back here impossible rather than merely wrong, and
-`tests/run.sh` still asserts it against whatever the expression holds. `tests/self-test.sh` injects
-the arithmetic to prove the assertion fires.
+`tests/run.sh` still asserts it against whatever the expression holds.
 
 **In a folded scalar (`>-`), a more-indented line is not folded.** Its newline survives into the
 expression string and invalidates the file. Every line of the expression sits at exactly six spaces,
@@ -402,8 +401,7 @@ prints both along with every path and its line count.
 A skip needs **both** measurements small. So a 900-line change in one file is generated, and so is a
 9-line change across six files — each clears one threshold and not the other. Read from the
 generating side that is an OR, which is the same rule seen from the other end; both halves are in
-`tests/run.sh` as `bulky` and `spread`, and `self-test.sh` breaks the `&&` into a `||` to prove they
-fire.
+`tests/run.sh` as `bulky` and `spread`.
 
 The reason for AND rather than OR is the asymmetry of being wrong. A map generated for a change that
 did not need one costs a model run somebody ignores. A map *not* generated is invisible — nobody

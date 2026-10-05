@@ -124,8 +124,8 @@ DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, 
 FLOW_LABEL = %r{\bFlows? [A-G]\b|(?:id|href)="\#?flow-}
 
 # The section sign, which is the flow label's sibling: a name from the run's reading rather than
-# from the page. SKILL.md and the references call the page's sections "§ 01" to "§ 05" and their
-# own headings "§ Something", and a run writes in the voice it has been reading — so one real page
+# from the page. SKILL.md and the references used to call the page's sections "§ 01" to "§ 05",
+# and still call their own headings "§ Something"; a run writes in the voice it has been reading — so one real page
 # said "graded by one judge per aspect of the page — today only § 01's", which points at this
 # page's first section, a section of some repository document, or a checkpoint, and links none of
 # them. Nothing on a page is named with a §, so there is no sentence that legitimately carries one.
@@ -208,8 +208,14 @@ if page.has?(ASSURE)
 else
   check.ok("no assurance language — the effort level is invisible on the page")
 end
-if page.has?(/clean bill of health/i)
+# On the comment-stripped copy, like every prose rule around it. page-template.html says "no clean
+# bill of health" in its own comments, which a published page carries verbatim, so reading the raw
+# bytes warned on every real page — and a warning that fires every time is one nobody reads, which
+# is the opposite of what a WARN is for. The ok line is what lets a fixture pin the quiet case.
+if prose.has?(/clean bill of health/i)
   check.maybe("'clean bill of health' appears — legitimate only as a denial; read the sentence")
+else
+  check.ok("no 'clean bill of health' in the prose")
 end
 
 # 2c · Draft narration.

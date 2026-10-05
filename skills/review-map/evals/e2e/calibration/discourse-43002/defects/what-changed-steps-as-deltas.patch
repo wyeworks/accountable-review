@@ -1,0 +1,15 @@
+--- gold.html
++++ gold.html
+@@ -1404,6 +1404,12 @@
+         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
+         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
+         one writer the diff did not touch.</p>
++      <ul>
++        <li>An admin hovers a card and the handle appears</li>
++        <li>The admin drags the corner and the grid reflows</li>
++        <li>The client sends the new layout to the server</li>
++        <li>The server deletes and re-inserts every row</li>
++      </ul>
+     </section>
+ 
+     <section id="attention" style="padding-top:48px">

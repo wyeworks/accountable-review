@@ -7,19 +7,17 @@
 #     check.rb --page page.html --repo DIR --base REF [--head REF]
 #              [--draft | --final | --stopped] [--expect S]... [--forbid S]...
 #
-#   One section, produced by a driver in drivers/ from the frozen upstream:
+#   One section, lifted out of a page or written by hand:
 #     check.rb --fragment attention.html --scope attention
 #
 # --level is still accepted and read by nothing. There is one page shape now and no flag
-# names another, so this flag survives only because evals/run.sh still passes it and an
-# unknown argument exits 2. Do not add a check that reads it: a second shape is what this
-# page stopped being.
+# names another; the flag survives so an old command line still parses rather than exiting 2.
+# Do not add a check that reads it: a second shape is what this page stopped being.
 #
-# Three grading scopes, and the difference matters. A PAGE carries invariants no fragment
-# can: completeness, one canonical home, the excerpt budget, the build state. A FRAGMENT is
-# one section, graded on its own so a wording change in one part of report-format.md can be
-# measured without paying for a whole run. A section that passes therefore says nothing
-# about whether the page repeats itself — that is the page's job, and README.md says so.
+# Two grading scopes, and the difference matters. A PAGE carries invariants no fragment can:
+# completeness, one canonical home, the excerpt budget, the build state. A FRAGMENT is one
+# section, graded on its own — golden/ is almost entirely fragments. A section that passes
+# therefore says nothing about whether the page repeats itself; that is the page's job.
 #
 # Each check lives in checks/ and prints PASS / FAIL / WARN / SKIP lines. This script only
 # decides which ones apply and adds up what they printed. Exit code follows the FAILs.
