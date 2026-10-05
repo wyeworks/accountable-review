@@ -1293,8 +1293,8 @@ notation these references and `SKILL.md` use for their own headings and for the 
 *§ 01* is how they name *What changed* — and a run writes in the voice it has been reading, so it
 reaches the page as *"graded by one judge per aspect of the page — today only § 01's"*.
 It turns up in short labels as often as in sentences — a *Look at* entry titled *"What the judge is
-given as § 01"* is the same defect — and on the page it has three readings and no target: this page's first section, a section of some document in the
-repository, or a checkpoint. Nothing on the page is called *§ 01*, and nothing turns it into a link.
+given as § 01"* is the same defect — and on the page it has three readings and no target: this
+page's first section, a section of some document in the repository, or a checkpoint. Nothing on the page is called *§ 01*, and nothing turns it into a link.
 So a pointer takes one of three forms, each one a reader can follow:
 
 - **Another part of this page** — *Checkpoint A*, *Impact path A*, or a section by its **title**,
