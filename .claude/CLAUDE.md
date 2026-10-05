@@ -1523,7 +1523,15 @@ release.
 ```bash
 claude plugin validate . --strict
 claude plugin tag --push          # creates accountable-review--v<version>
+gh release create accountable-review--v<version> --verify-tag --title "accountable-review <version>"
 ```
+
+**The tag is not a label, it is what `setup-ci` installs.** `render-workflow.sh` derives
+`accountable-review--v<version>` from the installed `plugin.json`, and the generated workflow
+`git clone --branch`es it, so a release tagged any other way ships a `setup-ci` whose every workflow
+fails at install. Nothing caught that for four releases: 0.24.0 to 1.0.1 were tagged plain, 1.0.2 to
+1.0.4 not at all, and the prefixed tag first existed at 1.0.5. The plain tags stay on the remote as
+history; do not add more.
 
 The marketplace catalogue lives in a separate repository, `wyeworks/claude-plugins`, whose
 `.claude-plugin/marketplace.json` is named `wyeworks` and points at this repo:

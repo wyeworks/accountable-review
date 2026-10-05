@@ -190,7 +190,11 @@ Read the report's notes before its numbers, and treat an *uncalibrated* column a
 ```bash
 claude plugin validate . --strict
 claude plugin tag --push          # creates accountable-review--v<version>
+gh release create accountable-review--v<version> --verify-tag --title "accountable-review <version>"
 ```
+
+Tag only with `claude plugin tag`. `setup-ci`'s generated workflow clones
+`accountable-review--v<version>`, so a release tagged any other way breaks CI installs.
 
 The Claude Code marketplace catalogue lives in a separate repository, `wyeworks/claude-plugins`; the
 Codex one is `.agents/plugins/marketplace.json` here, and needs no edit per release.
