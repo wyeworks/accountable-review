@@ -123,6 +123,21 @@ DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, 
 # report a bypass as caught.
 FLOW_LABEL = %r{\bFlows? [A-G]\b|(?:id|href)="\#?flow-}
 
+# The section sign, which is the flow label's sibling: a name from the run's reading rather than
+# from the page. SKILL.md and the references call the page's sections "§ 01" to "§ 05" and their
+# own headings "§ Something", and a run writes in the voice it has been reading — so one real page
+# said "graded by one judge per aspect of the page — today only § 01's", which points at this
+# page's first section, a section of some repository document, or a checkpoint, and links none of
+# them. Nothing on a page is named with a §, so there is no sentence that legitimately carries one.
+#
+# Matched on the prose a reader sees: comments stripped for § 7's reason, and then <style> and
+# <script> dropped, because the head range page-skeleton.sh emits carries the template's CSS
+# comments verbatim and those cite report-format.md by section. A <pre> block or a <code> span is
+# a quotation of the repository rather than a pointer, and is exempt — a diff excerpt of a
+# Markdown file may hold the sign, and so may a heading quoted as code.
+SECTION_SIGN = /\u00a7+\s*[[:alnum:]][[:alnum:].]*/
+INLINE_CODE = %r{<code\b[^>]*>.*?</code>}
+
 # Recency, which is the severity chip arriving as provenance and --update is the door it comes
 # through. When a re-run finds that the new commits answered a checkpoint, the tempting thing is to
 # strike it through or label it resolved — showing the reviewer what has been addressed. A page
@@ -322,6 +337,22 @@ if prose.has?(FLOW_LABEL)
   check.bad("the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: #{named.join(" ")} ")
 else
   check.ok("no flow designator — the page refers to checkpoints and impact paths only")
+end
+
+# 8 · The section sign. report-format.md § One canonical home owns the rule: a pointer names a
+#     part of this page by its designator or its linked title, a repository heading in words with
+#     its file cited, or — usually best — the thing the section stood for.
+visible = prose
+  .without(open: /<style\b/, close: %r{</style>})
+  .without(open: /<script\b/, close: %r{</script>})
+  .without(open: /<pre\b/, close: %r{</pre>})
+signed = visible.lines.flat_map do |raw|
+  raw.chomp.gsub(INLINE_CODE, "").scan(SECTION_SIGN)
+end
+if signed.any?
+  check.bad("the page points with a section sign, which names nothing on the page and links nowhere — name the section by its linked title, or the repository heading in words with its file cited: #{signed.sort.uniq.join(" ")} ")
+else
+  check.ok("no section-sign pointers — every reference names something the reader can follow")
 end
 
 check.finish

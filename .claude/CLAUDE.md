@@ -948,6 +948,14 @@ Editing one of these means checking the others still agree.
   form, `SKILL.md` step 6 states it where the labels are minted, `page-invariants.rb` § 7 greps
   the comment-stripped copy for it, and `golden/invariants-flow-designator.html` plants it beside
   a correct *Impact path A* so the fixture fails for the collision rather than for the token.
+
+  **The section sign is the same leak from a different source.** These documents call the page's
+  sections *§ 01* to *§ 05*, and a run writes in the voice it reads, so a page said *"today only
+  § 01's"* — a pointer with three readings and no target. The page never writes `§` outside a
+  `<code>` span or an excerpt: a section of the page by its linked title, a repository heading in
+  words with its file cited. Same four files, same owner; `page-invariants.rb` § 8 is the check,
+  behind `golden/invariants-section-sign.html` and the `-quoted` fixture that keeps its exemptions
+  honest.
 - **Source excerpts are quotations, and the page reads complete without them.** A page primitive: a
   collapsed `details.excerpt` holding verbatim code, in two variants — `--diff` for changed lines,
   `--source` for unchanged ones, which is the variant that carries the product because no diff view

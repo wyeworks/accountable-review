@@ -1288,6 +1288,25 @@ run avoids: one real page carried *(Flow A)* in a checkpoint's second sentence a
 its last, mixing both namespaces inside one paragraph. `evals/checks/page-invariants.rb` § 7 greps
 for it.
 
+**And the section sign is not a designator either: no `§` in the page's prose, ever.** It is the
+notation these references and `SKILL.md` use for their own headings and for the page's sections —
+*§ 01* is how they name *What changed* — and a run writes in the voice it has been reading, so it
+reaches the page as *"graded by one judge per aspect of the page — today only § 01's"*. On the page
+that has three readings and no target: this page's first section, a section of some document in the
+repository, or a checkpoint. Nothing on the page is called *§ 01*, and nothing turns it into a link.
+So a pointer takes one of three forms, each one a reader can follow:
+
+- **Another part of this page** — *Checkpoint A*, *Impact path A*, or a section by its **title**,
+  linked to its id: *see <a href="#impact">Impact outside the diff</a>*, never *see § 04*.
+- **A heading in a file of the repository** — the heading in words and the file as a citation,
+  linked to the line the heading is on: *the "Pinning" section of `docs/upgrading.md`
+  (`docs/upgrading.md:42`)*. The repository's own `§` stays in its own files; the page translates it.
+- **The thing itself, when the section was only standing in for it** — usually the best of the
+  three. *"Today only the What-changed section is judged"* needs no pointer at all.
+
+A `§` inside a `<code>` span or an excerpt is a quotation of the repository rather than a pointer,
+and is left alone. Everywhere else `evals/checks/page-invariants.rb` § 8 fails the page for one.
+
 The reference form is one sentence, no re-explanation:
 
 > The `ActiveProjects` consequence is what Checkpoint B turns on.

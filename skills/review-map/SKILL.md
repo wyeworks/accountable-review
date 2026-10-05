@@ -493,6 +493,12 @@ A*, which are the reader's. A checkpoint reading *"a leader-opened thread (Flow 
 the note you are holding, the checkpoint you are writing and the impact path beside it are all
 lettered — `references/report-format.md` § *One canonical home* owns the rule.
 
+**Nor does the page ever write `§`.** This file and its references call the page's sections *§ 01*
+to *§ 05* and their own headings *§ Something*; the page has no such names and nothing that links
+them, so a *§ 01* that reaches a sentence points nowhere a reader can go. Name a section of the page
+by its title, linked to its id; name a heading in a repository file in words, with the file cited;
+or, best, say the thing the section stood for. Same rule, same owner.
+
 Then label each flow and each leftover file, for your own ranking in step 7 — the label reaches the
 page only as what *What changed* leads with and what the agenda leaves off:
 

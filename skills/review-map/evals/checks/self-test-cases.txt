@@ -108,6 +108,11 @@
 # the wider pass half, pinned by frozen.rb.
  page-invariants    | invariants-flow-designator.html | 1 | the page names a flow
  page-invariants    | invariants-clean.html         | 0 | no flow designator
+# The section sign, § 8 — the flow label's sibling. The FAIL row plants the sentence a real page
+# wrote; the PASS row holds the sign only where it is a quotation (a <code> span, an excerpt's
+# <pre>, a <style> comment like the emitted head's), so an exemption that stops holding goes red.
+ page-invariants    | invariants-section-sign.html  | 1 | the page points with a section sign
+ page-invariants    | invariants-section-sign-quoted.html | 0 | no section-sign pointers
  excerpts           | excerpt-clean.html            | 0 | collapsed by default
  excerpts           | excerpt-open.html             | 1 | open by default
  excerpts           | excerpt-duplicate.html        | 1 | same range is excerpted more than once
