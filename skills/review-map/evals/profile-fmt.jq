@@ -83,6 +83,6 @@ def tok: if . == null then "-" elif . >= 1000000 then ((. / 100000 | round) / 10
     "",
     ( $d.diagnostics[] | "\(.v)  \(.m)" ),
     (if ($d.diagnostics|length) > 0 then "" else empty end),
-    "read evals/README.md § \"Where the time goes\" before quoting any of this"
+    "read evals/README.md § \"Profiling one run\" before quoting any of this"
   ]
 | flatten | .[]

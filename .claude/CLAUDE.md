@@ -152,9 +152,9 @@ side and never one instead of the other.
 
 It infers nothing the transcript does not carry: publish stages are mechanical, the ten steps are
 **not** — `ledger-rows.sh` fires at minute four and again at minute thirteen — and steps 4, 6 and 8
-leave no trace at all, so they get no row. The numbers live in `evals/README.md` §§ *Where the time
-goes* and *Profiling one run*, which is the only place they are maintained; read it before quoting
-one, and § *Deliberately single-context* for what the pass costs and why that is two numbers.
+leave no trace at all, so they get no row. The numbers live in `evals/README.md` § *Profiling one run*,
+which is the only place they are maintained; read it before quoting one, and `SKILL.md` step 6c for
+what the falsification pass costs and why that is two numbers.
 
 Read `evals/README.md` before adding a PR or a judge.
 ## How the documents divide the work
@@ -517,7 +517,7 @@ Editing one of these means checking the others still agree.
   API path is a 404 the reader finds on the page's behalf, and an unpinned one documents a Rails this
   app may not be running. **A probe is proposed, never run**, so the page shows a command and never
   output: a fabricated `=> …` is the most concrete-looking thing on the page and the one part of it
-  that is fiction. See § *Pinning, and the two things it does not fix* for why the pin is about
+  that is fiction. See § *The catalogue is the one thing a run cannot verify* for why the pin is about
   checkability rather than precision.
 
   The third anchor is `--mentor`'s and § *Mentor mode* owns it; the only thing it changes here is
@@ -696,8 +696,8 @@ Editing one of these means checking the others still agree.
   published at stage 3 and corrected afterwards, so **it was wrong while it was public** — a cost
   that no longer has to be paid. What remains is the late challenge arriving after a checkpoint has
   landed, and the rule for that is the one it always was: a claim retracted before the final publish
-  beats one that is never retracted. § *Deliberately single-context* owns what the pass costs and why
-  the default moved; do not restate its numbers here.
+  beats one that is never retracted. § *Deliberately single-context* says why the pass is the one
+  exception and what it costs; `SKILL.md` step 6c holds the numbers — do not restate them here.
 
   Six files have to agree: `SKILL.md` step 1 parses it, step 6c owns what `high` does and step 8 what
   happens to the result; `report-format.md` § *One page shape* states that the format has nothing to
@@ -732,117 +732,45 @@ Editing one of these means checking the others still agree.
   map, re-analyses what they reach and edits that page in place. The saving is almost entirely step
   5; the price is that a carried claim was not re-verified.
 
-  **The page is the state, and that is the design decision the rest follows from.** Three rules
-  already put everything an update needs onto it — every claim carries a `file:line`, every excerpt
-  carries `data-src`, the masthead names the revision — so there is no sidecar schema and no new
-  attribute. `$W/analysis/` is used when present and never required, because it survives on a
-  developer's machine and never on a fresh CI runner, and a design that needed it would be two
-  designs.
+  **The page is the state.** Every claim carries a `file:line`, every excerpt `data-src`, the
+  masthead the revision — so there is no sidecar and no new attribute. `$W/analysis/` is used when
+  present and never required: it survives on a laptop and never on a CI runner, and a design that
+  needed it would be two designs.
 
-  **`--update` is the third kind of flag, and the taxonomy is what stops it becoming a level.**
-  `--effort` is invisible because both efforts describe one revision. `--mentor` is visible and
-  safe by subtraction. `--update` must be visible for a reason neither of those has: parts of its
-  page describe an earlier head, and *a page describing an earlier revision while looking current
-  is the one failure a reader cannot detect from the inside* — already an invariant, three bullets
-  down. So it puts one fixed sentence on the page and a segment in the masthead, and the test it
-  passes is that both say **which revision the content describes, never how hard the run worked**.
-  The second is the verification badge, refused here exactly as it is at `--effort high`.
+  **It is the third kind of flag, and the taxonomy is what stops it becoming a level.** `--effort` is
+  invisible because both efforts describe one revision; `--mentor` is visible and safe by
+  subtraction; `--update` must be visible because parts of its page describe an earlier head. So it
+  puts one fixed sentence on the page and an `updated from <sha>` masthead segment, and both say
+  **which revision the content describes, never how hard the run worked**. A *resolved* tick or a
+  *new/carried* chip is the severity scale back, and an answered checkpoint is deleted instead.
 
-  **Carrying is about not re-tracing, not about freezing the agenda**, and confusing the two is how
-  this goes wrong in the direction that looks tidy. Step 7 still ranks the whole agenda on every
-  update — ranking is reasoning over a handful of one-line questions with no file reads, so it is
-  nearly free — and a new observation may merge into a carried checkpoint, which then stops being
-  carried. An update that appended its new checkpoints would have turned a ranked agenda into a
-  changelog of the change.
+  **Carrying is about not re-tracing, not about freezing the agenda.** Step 7 re-ranks the whole
+  agenda on every update; an update that appended its new checkpoints would turn a ranked agenda
+  into a changelog. **Which checkpoints carry is a script, because by eye every one looks
+  carryable**: `carry-plan.sh`, six preconditions joined by AND, failing to a *full* run. Its P6 is
+  the one that protects the product — the dangerous delta is a new consumer in a file no checkpoint
+  cites, so the page's recorded searches are replayed.
 
-  **The decision is a script because by eye every checkpoint looks carryable.** `carry-plan.sh`
-  holds six preconditions joined by AND and failing to a *full* run, which is
-  `ci/application-code.sh`'s asymmetry: a needless full run costs minutes nobody watches, a wrongly
-  carried claim is undetectable from the inside. Its P6 is the one that protects the product —
-  affected-but-unchanged code means the dangerous change is a new consumer in a file no checkpoint
-  cites, invisible to any rule about what a checkpoint cites, so the page's own recorded searches
-  are replayed and a delta path among their hits refuses the update. Hits rather than scope,
-  because the recorded scopes are broad enough that a scope test would reach nothing.
-
-  **The disclosure had to widen two checks, and how the gaps were found is the reusable part.**
-  Running `page-invariants.rb`'s own patterns against candidate wordings — rather than reading
-  them — showed that `NARRATE` matched *"on a earlier pass"* and not *"on an earlier pass"*, so the
-  grammatical form was the one that escaped, and that `ASSURE` missed *"the findings were
-  re-checked"* because `re-` sat between the words it joined. Both are sentences an update writes
-  and neither is one an ordinary run reaches for, which is why they survived until now. The third
-  fixture is the load-bearing one: `golden/invariants-update-clean.html` holds the sanctioned
-  disclosure and must stay green, because a rule that fails a page for admitting its limits gets
-  the admission removed rather than the rule — the lesson `invariants-risk-score-*` already paid
-  for.
-
-  **The carrier is a cache, and refusing the artifact download is what keeps the seam.** Nothing
-  persisted between CI runs before this, so `--update` reached nothing there: `$RUNNER_TEMP` dies
-  with the runner. `actions/cache` restores the previous map into `--output` before generation and
-  saves it after delivery, inside the `SETUP:IF:push` block, because a pull request that gets one
-  map has no second run to restore into. Downloading the previous **artifact** was refused: it
-  needs a new standing `actions: read` scope, and it would make the workflow a second thing that
-  knows the map is an artifact — the delivery seam unpicked, broken the moment a team sets
-  `provider:` to a static host. The previous map must be restored by something that does not know
+  **Every way it can go wrong must lead to the page that has no cost** — a cache miss, a missing
+  `rg`, a refused precondition all regenerate in full. In CI the carrier is `actions/cache`, never
+  the previous artifact, because downloading that would make the workflow a second thing that knows
   where the map goes.
 
-  **The carrier needs ripgrep, which a GitHub runner does not have, and that was invisible until
-  CI went red.** Both halves of reusing a map replay the page's recorded searches, and the lens
-  files write those with `rg`, so without the package P6 refuses every one and a re-run rebuilds
-  the page — the feature inert in the environment the cache was built for. The workflow installs
-  it **on demand**, guarded on the restore having matched, and **cannot fail the job**, because
-  the install is an optimisation and a failed one costs minutes rather than the map. The same
-  dependency is why no fixture in `review-map/tests/` or `setup-ci/tests/` may record an `rg`
-  search: thirteen rows passed locally and failed on a runner, two of them having been green for
-  the wrong reason. `evals/checks/searches.rb` solved it differently, falling back to ERE at line
-  151, which is right for a grader and wrong here — a dialect mismatch yields fewer hits, and
-  fewer hits is a checkpoint carried that should have refused.
-
-  **A cache miss is not a failure, and nothing about the carrier is load-bearing for correctness** —
-  the flag is a saving with a cost, so every way it can go wrong leads to the page that has no cost.
-  Two rules that predate it are what make restoring a page safe: a half-written one carries a
-  pending marker and P3 refuses it, and a run that dies after the restore leaves a page naming the
-  **old** head, which `ci/generate-review-map.sh` already refuses to deliver. That second one is why
-  `SKILL.md` step 9 makes the `Revision` cell the last edit — written as honesty, and load-bearing
-  once a stale page can be sitting in the output directory.
-
-  **`updated_from` is read off the finished page rather than tracked.** The masthead's `updated
-  from <sha>` segment is a fixed form, so the manifest agrees with the page by construction and a
-  run that fell back to a full generation records `null` without the adapter having to learn that
-  it did. Provenance, like the rest of that file: no count of what was re-read, because a count of
-  how much of a page was looked at again is the verification badge in numeric form.
-
-  Twelve files agree: `scripts/carry-plan.sh` owns the preconditions and the carry rule **alone**;
-  `SKILL.md` § *Re-running over new commits* owns the procedure, with step 1 parsing the flag, step
-  9 forbidding the skeleton and the banner, step 10 exempting the gate, and two hard rules;
-  `report-format.md` § *Build state* § *An updated page* owns the wording and the refusals,
-  § *Section 1* the masthead segment and the merge-base definition, § *One page shape* why a run
-  mode may say one thing, § *The review checkpoint* delete-never-tick and § *Source excerpts* never
-  carrying one across its file's delta; `page-template.html` refuses the carry badge beside the
-  other five; `evals/checks/page-invariants.rb` §§ 2b and 2c carry the two widened patterns behind
-  three `golden/invariants-update-*` fixtures; and `tests/` covers every precondition either side
-  of its boundary, with nine mutations behind it. The CI half is `templates/workflow.yml`'s two
-  cache steps, `read-config.sh`'s `update` key, `ci/generate-review-map.sh`'s conditional
-  pass-through and manifest `@3`, `references/workflow.md` § *The previous map* owning the carrier's
-  reasoning **alone**, and `setup-ci/tests/run.sh`.
-
-  **The graded half splits along conditional versus unconditional, and that split is the design
-  rather than a convenience.** *No recency marker, no resolved tick* holds on **every** page — an
-  ordinary run must not write one either — so it is `page-invariants.rb` § 2e, unconditional, where
-  no flag has to be remembered. Only *the disclosure is present, once* is conditional, so it is
-  `build-state.rb` behind `--updated`, which is a **boolean beside the mode and never a fourth mode
-  value**: an updated page is a *final* page, and a mode value would have exempted it from the
-  no-banner check while looking like it added one. § 2e's class alternative matches a whole
-  space-delimited class because the marker arrives as `class="cp updated"` — § 3's tier-modifier
-  bug, in the direction where the rule passes a page carrying the defect — and the disclosure is
-  counted on the comment-stripped copy, because the template's own comment beside the `Revision`
-  cell explains that segment and a raw count read it as a second one.
-
-  **Its whole-run eval went with the synthetic fixtures.** A `two-push` fixture used to plant a
-  second push adding a new reader in a file no checkpoint cites, so the pass condition was a run
-  **declining** to update. The preconditions stay covered either side of every boundary in
-  `tests/run.sh`; the whole run comes back as a `prs.yml` entry with `update_from`, which `run.rb`
-  already supports, once a merged OSS pull request with that shape is found
-  (`evals/e2e/judges/IDEAS.md`).
+  Owners, each **alone** for its part: `scripts/carry-plan.sh` (preconditions, carry rule);
+  `SKILL.md` § *Re-running over new commits* (procedure; steps 1, 9, 10 and two hard rules point at
+  it); `report-format.md` § *Build state* § *An updated page* (the wording and the refusals);
+  `setup-ci/references/workflow.md` § *The previous map* (the cache, ripgrep, why not the artifact).
+  Also agreeing: `report-format.md` §§ *Section 1* (masthead segment, merge-base), *One page shape*,
+  *The review checkpoint* (delete, never tick) and *Source excerpts* (never carried across its
+  file's delta); `page-template.html` (refuses the carry badge); `read-config.sh`'s `update` key and
+  `references/config.md`; `ci/generate-review-map.sh` (conditional pass-through, manifest `@3`);
+  `templates/workflow.yml`'s two cache steps; `setup-ci/tests/run.sh`.
+  Graded by `page-invariants.rb` §§ 2b, 2c and 2e (the last unconditional: no recency marker on any page) and
+  `build-state.rb --updated` (the disclosure, once), behind three `golden/invariants-update-*`
+  fixtures — `-clean` must stay green, because a rule that fails a page for admitting its limits
+  gets the admission removed. `tests/run.sh` covers each precondition either side of its boundary
+  and may record no `rg` search (its comment says why); the whole-run eval waits on a `prs.yml`
+  entry with `update_from` (`evals/e2e/judges/IDEAS.md`).
 - **Findings are a sample, not an audit — and the page no longer says so.** The rule is unchanged and
   load-bearing rather than hedging: the skill explains, explanation is reproducible, defect discovery
   is not, and the page must never read as a clean bill of health. What moved is where the sentence
@@ -1188,65 +1116,31 @@ Same rule as above: editing one of these means checking the others still agree.
   happened — but it is why the provider emits `artifact_name` and `retention_days` as extra keys, and
   why extras are carried through to `$GITHUB_OUTPUT` at all.
 - **Two rules decide whether CI generates a Review Map, and both are measured over application
-  paths only.** `ci/application-code.sh`, called from a `scope` step every later step is guarded on.
-  Rule 1: does the diff change application code at all — tests, documentation, tooling and
-  `diff-render.sh`'s `generated`/`binary`/`lockfile` verdicts do not count. Rule 2: is it more than
-  trivial — skipped when application files ≤ `trivial_files` **and** application lines ≤
-  `trivial_lines`, defaults 2 and 20, read from `.accountable-review.yml` at run time.
+  paths only.** `ci/application-code.sh`, from a `scope` step every later step is guarded on. Rule 1:
+  does the diff change application code at all. Rule 2: is it more than trivial — skipped when
+  application files ≤ `trivial_files` **and** application lines ≤ `trivial_lines` (2 and 20), read
+  from `.accountable-review.yml` at run time and never rendered into the YAML.
 
-  **AND, and the polarity is what will get edited.** A skip needs both small, so 900 lines in one
-  file generates and so do 9 lines across six. From the generating side that reads as an OR, which
-  invites a "simplification" that would discard a change large by either measurement. The asymmetry
-  is the reason: a needless map costs a model run somebody ignores, a missing one is invisible, so
-  the suppressing predicate is the one that should be hard to satisfy. `run.sh`'s `bulky` and `spread`
-  are what catch an `&&` turned into `||`.
+  **AND, and the polarity is what will get edited.** From the generating side it reads as an OR,
+  which invites a "simplification". A needless map costs a model run somebody ignores; a missing one
+  is invisible — so the suppressing predicate is the one that must be hard to satisfy. **Application
+  paths only is why this cannot be a job `if:`**: the payload's counts are whole-diff and it has no
+  file list. The gate **fails open**, and a skip says which rule fired and the counts behind it.
 
-  **Application paths only is what makes the counts mean anything**, and it is why this cannot be a
-  job `if:`. The `pull_request` payload's counts are whole-diff, so a three-line model change beside
-  a five-thousand-line lockfile reads as enormous and rule 2 would never fire; the payload has no
-  file list either, so rule 1 could not live there. `run.sh`'s `masked` pins it, and the negative
-  assertions forbid both the payload fields and the flag names in the rendered YAML.
+  **The same question is asked again over `<previous head>..<head>`**, by `ci/map-still-current.sh`,
+  because with a map per push `BASE...HEAD` cannot see that *this* push changed no application code.
+  It adds no rule — `application-code.sh` over the delta, `carry-plan.sh` over the restored page —
+  and downgrades the scope step's own verdict, so no guard moved. **Only `no-application-code`
+  counts, never `trivial`**, and **it stands the job down rather than rewriting the page**: a script
+  refreshing model-authored HTML risks a stale number on a page that looks current.
 
-  **The thresholds are configuration, not design.** Unlike the triggers and the guards these are
-  numbers a team owns, so none is rendered into the workflow and changing one never means
-  regenerating it. Either at `0` disables rule 2, because nothing containing application code has
-  zero application files or lines — the opt-out, needing no third key.
-
-  **A skip says which rule fired and the counts behind it** — the recorded-searches rule applied to
-  CI, and what makes a wrong skip reportable rather than invisible. It has to be, because rule 2
-  discards the small wide-reaching edit first; § *The application-code gate* argues that trade and
-  owns the numbers.
-
-  **The same question is asked a second time, over a second range, and that is where the cheap path
-  lives.** With a map per push the gate's range is wrong for every run after the first: a
-  README-only push to a branch that changed application code earlier still answers `generate`,
-  because the pull request contains application code and `BASE...HEAD` cannot see that this push did
-  not. `ci/map-still-current.sh` asks it over `<previous head>..<head>` and **downgrades the scope
-  step's own verdict**, which is why no guard moved — every later step already stands aside on
-  `verdict != 'generate'` and the skip-explaining step already exists. The cache restore moved above
-  the scope step and lost its guard, because the second half of the decision is about the restored
-  map.
-
-  It adds **no rule of its own**: `application-code.sh` over the delta, `carry-plan.sh` over the
-  restored page. Two things about that composition are load-bearing. **Only `no-application-code`
-  counts, never `trivial`** — those are one answer to the gate's question and two answers to this
-  one, and one line in a file a checkpoint cites is exactly where a page quietly stops being true.
-  And **the second half closes a hole the first cannot see**: tests are not application code, so a
-  test-only push satisfies half one alone while the spec line a checkpoint links to has moved.
-
-  **It stands the job down rather than rewriting the page**, and the refusal is the point. A
-  docs-only push changes the diff's file count and its inventory, not just the head SHA, so
-  refreshing the masthead means a script editing model-authored HTML where a missed pattern leaves a
-  stale number on a page that still looks current — this product's one intolerable failure, bought
-  with a cosmetic gain. The map stands at the revision it names, which is honest because the
-  application code at that revision is the application code now.
-
-  Eight files agree: `ci/application-code.sh` holds both rules, `ci/map-still-current.sh` asks them
-  over the second range and holds the composition **alone**, `read-config.sh` and
-  `references/config.md` the two keys, `templates/workflow.yml` the `scope` step and the guards,
-  `references/workflow.md` § *The application-code gate* owns the reasoning **alone** including
-  fail-open, the default's trade and the second range, `SKILL.md`'s hard rules forbid counting
-  anything but application code and baking a number into the YAML, `tests/run.sh` covers both rules
+  Eight files agree: `ci/application-code.sh` holds both rules; `ci/map-still-current.sh` the
+  composition **alone**; `read-config.sh` and `references/config.md` the two keys;
+  `templates/workflow.yml` the `scope` step and the guards; `references/workflow.md` § *The
+  application-code gate* owns the reasoning **alone** — polarity, payload, fail-open, the default's
+  trade, the second range; `SKILL.md`'s hard rules forbid counting anything but application code or
+  baking a number into the YAML; `tests/run.sh` covers each threshold either side (`bulky`, `spread`,
+  `masked`) and both halves of the second question; `docs/ci.md` restates it.
   either side of each threshold and both halves of the second question, and `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
@@ -1386,237 +1280,74 @@ Same rule as above: editing one of these means checking the others still agree.
 
 ## The catalogue is the one thing a run cannot verify
 
-Both `references/rails-docs.md` and `references/elixir-docs.md` are allowlists, and the run takes URLs
-from them without opening them — there is no fetch step and egress to those hosts is commonly blocked. That is the right runtime rule
-and it is not up for revisiting: a live search per anchor would add requests to the run's scarcest
-resource, make two runs of the same PR cite different URLs, break `assumes only Claude Code plus a git
-repo`, and put SEO-ranked mirrors of Rails 4 docs inside the trust boundary the allowlist exists to
-draw.
+`references/rails-docs.md` and `references/elixir-docs.md` are allowlists, and a run takes URLs from
+them without opening any. That runtime rule is not up for revisiting — `rails-docs.md`'s opening
+says why a live search per anchor is worse. What follows is that a catalogue's correctness is a
+**maintenance** property with a date on it, and `evals/verify-catalogue.sh` is the maintenance: every
+row in the **pinned** form a run actually emits, every series in the floor, table rows only, dated.
+Its header carries the first sweep's eight defects and their three classes; the one to remember is
+`active_record_nested_attributes.html`, a plausible URL constructed once and admitted, which no
+script catches and no care while writing prevents.
 
-What follows from it is that the file's correctness is a **maintenance** property with a date on it,
-not a property of the run. The first re-check found **8 defects in the 88 URLs it then held**, in three classes:
-version drift the unversioned URLs cannot notice (7.2 moved `insert_all`; the controller guide renamed
-one section twice), a guide page that had never existed in any series, and three fragments GitHub
-stopped emitting. Only the first is what "the docs moved" intuitively means, and only the second is
-catchable by reading.
+**`elixir-docs.md` is closed, and that is the feature.** Every Elixir row was written the way that
+URL was, so the file withholds every link until a dated verification line replaces its § *Version*
+paragraph — the fail-closed rule at file scope. An Elixir run anchors with probes and prose, and
+`--mentor` on Phoenix produces no primer. `verify-catalogue.sh --catalogue references/elixir-docs.md`
+is that file's **release gate**, not optional maintenance.
 
-### `elixir-docs.md` is closed, and that is the feature
+**Every doc link is pinned, for checkability rather than precision**: a pinned page names its
+version, so the reader can hold it against their lock file. Below the floor, or with no verified
+path for the series, **no link at all**. Pinning fixes the URL and not the sentence, which is what
+the marks are for — `‡ probe` (the behaviour moved; name the setting, propose a probe) and
+`‡ since X` (state the default, name X). Different actions, not severities. **The probe is the
+version-proof anchor**, and the reason `‡ probe` routes there rather than to a better link.
 
-The Elixir catalogue ships **complete in structure and content and withholding every link.** Its
-§ *Version* says no row in it has been opened, and instructs the run to emit nothing from it until a
-dated verification line replaces that paragraph. So an Elixir run today anchors with probes and prose
-and carries no documentation URL at all.
+**Rails pins one series per app; Elixir pins per package**, so a correct Phoenix page carries several
+version segments and generalising the one-series rule to hexdocs would fail every correct Phoenix
+page while passing every test. `golden/anchors-hexdocs-clean.html` exists for exactly that edit. A
+hexdocs path keeps its package (`ecto/Ecto.Changeset.html#cast/4`), because `Ecto.Migration` under
+`ecto` is a 404 that reads as correct.
 
-This is not a half-finished file, it is the fail-closed rule applied at **file scope** rather than at
-row scope, and the reason is the defect class directly above: the worst thing the Rails sweep found was
-not rot but `active_record_nested_attributes.html`, a plausible URL constructed once and admitted to
-the allowlist, which no script catches and no amount of care while writing prevents. Every Elixir row
-was written the same way that one was — from knowledge, by a process with no egress to hexdocs. Holding
-them closed is the only honest state for rows nobody has opened.
-
-**What lifts it is one command**, and `evals/verify-catalogue.sh --catalogue references/elixir-docs.md`
-is therefore that file's release gate rather than optional maintenance the way it is for the Rails one.
-A clean run prints a dated line and the package versions it checked at; that line replaces the withhold
-and the links go live in the same commit.
-
-Two things worth knowing before touching it. **The marks in it are a first pass**, not the output of a
-CHANGELOG audit like the Rails ones — the file says so of itself, and says that the LiveView `0.20 → 1.x`
-range is where an audit would pay most. And **the probe is unaffected and is the better anchor anyway**,
-which is the position `rails-docs.md` § *Pinning* already argues on its own terms: a probe interrogates
-the installed code instead of describing it, so it cannot be out of date and cannot 404. A closed
-catalogue makes an Elixir page narrower, not wrong.
-
-### Pinning per series, and pinning per package
-
-The two catalogues pin differently, and exactly one page-level rule differs with them.
-
-Rails has a single `major.minor` for the whole framework, so **one app, one series**: a page mixing
-`/v7.1/` with `/v8.0/` pinned from something other than this repo's `Gemfile.lock`, and
-`checks/rails-anchors.rb` fails it. An Elixir app pins `ecto`, `phoenix`, `phoenix_live_view`, `oban`
-and `elixir` independently from `mix.lock`, and hexdocs serves *exact* versions rather than resolving a
-series prefix to the newest patch — so **a correct Elixir page carries several different version
-segments**, and generalizing the one-series rule to hexdocs would fail every correct Phoenix page while
-passing every existing test. `evals/golden/anchors-hexdocs-clean.html` exists for exactly that edit: it
-is a *clean* fragment carrying two package versions on purpose, so the mistake goes red in `self-test.rb`
-instead of in the field.
-
-Two consequences follow for the machinery. The stored path **keeps its package** —
-`ecto/Ecto.Changeset.html#cast/4` — because `Ecto.Migration` under `ecto` rather than `ecto_sql` is a
-404 that reads as correct, and keeping the package in the path is the only thing that makes it
-checkable; `anchors-hexdocs-wrong-package.html` pins that. And `verify-catalogue.sh` checks a hexdocs
-row **once, at its package's newest stable release**, the way it already checks a gem row, because
-there is no series axis to expand along. The six standard-library docs (`elixir`, `eex`, `ex_unit`,
-`iex`, `logger`, `mix`) have no hex package at all and take Elixir's own release version, with
-`--elixir-version` as the override when the GitHub API is unreachable.
-
-### Pinning, and the two things it does not fix
-
-**Every doc link is pinned to the app's own version** — the Rails `major.minor` from `Gemfile.lock`
-for the two Rails hosts, the exact locked version for a gem's tag. Unconditionally, including for the
-39 rows whose meaning has not moved in a decade. The reason is not precision, it is *checkability*: a
-pinned Rails doc page prints "Ruby on Rails 8.0.5.1" in its header and a GitHub tag shows the tag, so
-the reader can hold the link against their own lock file. An unpinned path silently means current
-stable and offers nothing to check — which is how a page explains 8.1 behaviour to a 7.1 app in a tone
-of complete confidence. Above the verified ceiling the run pins anyway and the script catches it
-later; below the floor, or where a row has no verified path, **it emits no link at all.** Failing
-closed is the guarantee: an unlinked explanation cannot mislead.
-
-Pinning fixes the URL. It does **not** fix the sentence, and that is the part that actually misleads.
-A perfectly pinned 8.0 link under *"`perform_later` enqueues before the transaction commits"* is more
-authoritative and still wrong, because 8.0 defaults `enqueue_after_transaction_commit` on. So an audit
-of the Active Record / Active Job / Action Pack / Active Support CHANGELOGs for 7.2, 8.0 and 8.1
-classified all 47 Rails rows, and the result is two marks that constrain the **claim**, never the link:
-
-- `‡ probe` — the behaviour changed inside the range, so no sentence is true of every app. The page
-  may not assert it: name the setting that decides it and propose a probe. Three rows.
-- `‡ since X` — surface was added in X, the default still holds. State it as the default and name X.
-  Five rows. A probe here would be over-citation, which is the failure the anchor budget exists for.
-
-They are different actions, not severities, and collapsing them costs something either way. The audit
-also found the old single ‡ was catching about a quarter of what it existed to catch: of three marked
-rows two were right, one was over-applied (nested `transaction` join semantics never moved), and six
-version-sensitive rows carried no mark — including strong parameters, where **8.0 introduced
-`params.expect`** and a page could confidently recommend it to a 7.2 app that cannot run it.
-
-**The probe is the version-proof anchor**, and that is why `‡ probe` routes there rather than to a
-better link. A probe interrogates the installed code instead of describing it, so it cannot be out of
-date. The catalogue's whole version problem dissolves for probes and is only ever managed for links.
-
-`evals/verify-catalogue.sh` is the maintenance pass — every row in the **pinned** form a run actually
-emits, every series in the floor, per-series overrides honoured, dated, exit 1 on any defect. Checking
-the unpinned form would be checking a string nothing emits. A clean run now proves something stronger
-than it used to: every row resolves for every app the catalogue admits (currently 322/322). Three
-things about it are load-bearing:
-
-- **It reads table rows only** (`grep '^|'`), because the prose quotes the dead URLs it is warning
-  about, and a whole-file sweep would verify the warnings. `checks/rails-anchors.rb` now narrows the
-  same way, for the same reason — it derives its allowlist from this file, so a URL named in a caveat
-  would otherwise allowlist itself.
-- **It is not under `checks/`.** `check.rb` dispatches offline rules over a page; this needs the
-  network, so it is neither dispatched nor part of `self-test.rb`.
-- **It cannot replace reading the page.** It proves a URL resolves and an anchor exists, never that
-  the page documents the concept the row claims. § *Adding a row* still comes first.
-
-The version floor is **7.1 → current stable**, one string at the top of the script. Three of 57 rows
-resolve to a different path in some series — `insert_all` moved class in 7.2, the controller guide
-renamed one section twice, conditional validation gained a plural — and each carries its override
-inline in the cell as `· <series>: <path>`, right where a run is already looking rather than in a
-table it has to remember to consult. Below the floor: no link.
-
-Six files have to agree. Each catalogue's § *Pinning* and § *What the marks mean* own the forms and
-the marks **alone**; `report-format.md` § *Framework anchors* states why the page cares and points;
-`SKILL.md` step 2 records the versions (a run that skips it cannot emit a doc link) and step 7 carries
-the two rules; `verify-catalogue.sh` verifies the pinned form; and `checks/rails-anchors.rb` enforces
-offline what it could not before — **every doc link carries a version segment, in either stack**, and
-**the Rails ones all agree on one series**, because one app has one Rails version and a page mixing
-`/v7.1/` with `/v8.0/` pinned from something other than this repo. That second rule is Rails-only and
-must stay that way: see § *Pinning per series, and pinning per package*.
-
-`page-template.html` is the sixth, and it is the one that was missed first time round: it shows the
-doc link **already pinned**, with the version as a placeholder and a comment saying it is substituted
-per run. The assembled example is what step 9 copies markup from, so a template carrying the unpinned
-form teaches a run to publish a page that fails its own check — and one carrying a literal `v8.0`
-teaches one app's version to every other. `golden/anchors-unpinned-link.html` and
-`golden/anchors-mixed-series.html` prove both fire.
-
-Two more rules in that check exist because a review found them missing, and all four bypasses shared
-one shape — **a rule that passes is not a rule that looked**:
-
-- **An unsubstituted `{version}`** matches its own catalogue row perfectly, so the allowlist test
-  waves it through while it is a guaranteed 404. Forgetting the substitution is the likeliest
-  mechanical failure of gem pinning, so it gets its own rule rather than relying on a rule about
-  something else.
-- **A path catalogued only as another series' override.** Pinning
-  `Persistence/ClassMethods.html#method-i-insert_all` at `/v8.0/` returns HTTP 200 on a page that
-  never mentions the method — the exact defect § *Version* calls worse than a 404, reintroduced by the
-  override mechanism meant to fix it. The check knows the page's series and the row knows the
-  override's, and nothing had correlated them.
-
-The allowlist test itself was matching **substrings**, against a comment claiming it did not:
-`guides.rubyonrails.org/v8.0/validations.html` — a 404 — passed because `validations.html` sits inside
-`active_record_validations.html`. It matches whole backticked tokens now. The rule whose stated
-purpose is *"a URL nobody opened is a 404 the reader finds"* was passing a 404.
-
-The retired synthetic fixtures locked **7.1** deliberately, so a whole run exercised the `insert_all`
-override rather than only the common path. That whole-run coverage went with them; the override is
-still verified by `verify-catalogue.sh` and graded by `rails-anchors.rb`'s golden fixtures, and an
-OSS eval PR on a 7.1 app would bring it back.
+Six files agree. Each catalogue's §§ *Version*, *Pinning* and *What the marks mean* own the forms and
+marks **alone**; `report-format.md` § *Framework anchors* says why the page cares; `SKILL.md` step 2
+records the versions (skip it and no doc link can be emitted) and step 7 carries the two rules;
+`verify-catalogue.sh` verifies; `checks/rails-anchors.rb` enforces offline — a version segment on
+every link, one series for Rails only, no unsubstituted `{version}`, no other series' override path,
+whole-token allowlist matching — with the reason for each beside its rule. **`page-template.html` is
+the sixth and the one missed first**: it shows the doc link already pinned with the version as a
+placeholder, because a template carrying the unpinned form, or a literal `v8.0`, teaches it to every
+run. The four bypasses that check once had share one shape — **a rule that passes is not a rule that
+looked**.
 
 ## Deliberately single-context, with one named exception
 
 The skill runs in one context and spawns exactly one kind of agent, the falsifier that reads one
-analysis note. That is a
-choice, not an omission — an earlier iteration fanned out to `Explore` agents per layer, and it came
-out.
+analysis note. That is a choice, not an omission — an earlier iteration fanned out to `Explore`
+agents per layer and came out, and a later run that reached for one stalled 997 seconds, 41% of its
+wall clock, in a single blocked turn. `SKILL.md`'s hard rules say so, because a boundary stated only
+here is one the skill was never told about.
 
-`SKILL.md`'s hard rules now say so outright, which they did not before: a real run reached for one
-`Explore` agent and stalled the parent for 997 seconds — 41% of its wall clock — in a single blocked
-turn. A boundary stated only here is a boundary the skill has never been told about.
+**The falsification pass is the exception, and why it does not reopen the rule is the part to
+keep**, because the next thing that wants an exception will look similar and probably is not. Its
+seam is per **analysis note**, which is per flow — a whole behaviour, so nothing is fragmented the
+analysis had not already separated. It is read-only and returns *challenges*, not page content: the
+parent writes every word and opens every cited file before acting on one. It reads a note rather
+than a published section, so nothing is wrong in public while a challenge is in flight; and step 7
+reassembles the parent's own notes, not several agents' conclusions.
 
-**The one exception is the falsification pass** (`SKILL.md` step 6c, folded in at step 8, and
-`agents/claim-falsifier.md`), which since 0.16.0 runs by default. It is worth understanding why it does not reopen what the paragraphs
-below closed, because the next thing that wants an exception will look similar and probably is not.
+**It costs tokens, not wall clock, and the two are different questions.** Blocked time is under 1% of
+a run because the parent keeps drafting; the falsifiers' own contexts are a fifth of the run's
+cache-read tokens — which is why `agents/claim-falsifier.md` pins its own model, and why a cost
+quoted from the parent transcript alone is short. **A run that waits on them has lost the whole
+argument**: spawn-then-idle turns the cheapest step into the most expensive, and is the likeliest way
+this default gets reverted by someone measuring it. The numbers and their provenance live in
+`SKILL.md` step 6c and `evals/README.md` § *Profiling one run*; do not restate them here.
 
-The seam is per **analysis note**, which is per flow, which is the seam those paragraphs already name
-as the right one: a flow is a whole behaviour, so nothing is fragmented that the analysis had not
-already separated. The agent is read-only and returns *challenges*, not page content — the parent
-still writes every word, and still opens every cited file before acting on one, so no comprehension
-moves anywhere.
-
-**The note is what the agent reads, and that is a change from the first version of this pass.** It
-used to be handed a published `<section id="flow-x">` — markup, excerpts, a rail — which meant two
-costs: the agent spent reads finding the claims inside a document, and a flow corrected by a
-challenge **had been wrong in public** for as long as the challenge took to arrive. A note is prose,
-every citation is a `path:line`, and it exists before anything is published. There is now a synthesis
-step after the split (step 7), which is the one thing those paragraphs warn about — but it
-reassembles the parent's own notes rather than several agents' conclusions, which is the distinction
-that made the warning necessary.
-
-**And it does not block, which is the fact that changed the default.** The agents launch async and
-return a receipt in about two seconds; the challenges arrive as notifications while the parent drafts
-the next stage. Measured on a 28-file PR: five falsifiers, **23 seconds of blocked parent, 0.9% of a
-2607-second run**, first challenges landing 365 seconds after the last spawn.
-
-**The cost objection the flag was gated behind was half right, and the half that was right is the
-tokens.** It does not cost wall clock — that was an artefact of how the pass was assumed to work. It
-does cost tokens: each falsifier reads in its own context, and profiling those transcripts put the
-pass at **17-23% of every cache-read token** a run spends. Two numbers, two questions, and the default
-is defensible on the first while the pass remains the second most expensive thing in the procedure.
-What follows is not that the default is wrong but that the *model* is a knob:
-`agents/claim-falsifier.md` pins its own, because a reader whose output the parent re-verifies before
-using is the safest place in this design to spend less. **Both numbers were measured against the old
-seam**, where the falsifier read a published flow section rather than an analysis note, so the token
-figure is an upper bound that has not been re-measured; the wall-clock one should be unchanged, since
-what made it 0.9% is that the parent keeps working.
-
-They still go out in a single message. It costs nothing, the challenges arrive together rather than
-trickling, and if a harness ever does make them block, one message stalls the run once — for the
-slowest — where the same agents one at a time stall it once each. The 997 seconds above were one
-sequential blocking spawn, and that number is about `Explore`, not about the falsifier.
-
-Two things it is not. It is not a licence for step 5, step 6 or step 7 to fan out — the first two
-span the whole diff by nature, and step 7's whole job is holding the whole agenda at once in order to
-merge and rank it, which is the least splittable thing in the procedure. And it is not a second
-context doing the work: the falsifiers read, the parent writes, and the parent transcript still reads
-as one context plus a handful of receipts. That last fact is a trap as well as a reassurance: it is
-why `profile.sh` reads `<session>/subagents/` too, and why a run cost quoted from the parent alone is
-a fifth to a quarter short.
-
-**A run that waits on them has lost the whole argument.** The 0.9% holds only because the parent
-drafts while they read; spawn-then-idle turns the cheapest step in the procedure into the most
-expensive, and it is the likeliest way this default gets reverted by someone measuring it.
-
-The reason is that the decomposition is the *next* thing to get right, not something to inherit
-half-specified. Two of this version's steps span the whole diff by nature: step 5 traces consumers
-across both sides of the stack, and step 6 groups behaviour that no single layer contains. Splitting
-those by layer is exactly the mistake the page exists to correct — it would move comprehension
-fragmentation from the human to the agents, and the synthesis step would have to reassemble what the
-split threw away.
-
-So a very large diff will strain this version. That is the signal the next iteration is meant to act
-on, which is why `SKILL.md` tells the skill to *report* the strain (say which region it skimmed)
-rather than quietly skim. When specialists do arrive, the seam is per-flow, not per-layer, and the
-orchestrator's job is reconnecting them into end-to-end behaviours.
+**It is not a licence for steps 5, 6 or 7 to fan out.** The first two span the whole diff by nature
+— splitting them by layer moves comprehension fragmentation from the human to the agents — and
+step 7 holds the whole agenda at once to merge and rank it, the least splittable thing in the
+procedure. So a very large diff strains this version, and `SKILL.md` says to *report* the strain
+rather than quietly skim. When specialists arrive, the seam is per-flow, never per-layer.
 
 ### The unsolved half: how to sample a diff too large to read
 

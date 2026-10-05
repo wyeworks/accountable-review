@@ -39,7 +39,7 @@
 # <session>/subagents/, which nothing here used to read, so the report now charges them to the run.
 #
 # What it will NOT do is reconstruct the ten steps, because the transcript does not carry a
-# position in a procedure. See `bucket()` below and evals/README.md § "Where the time goes".
+# position in a procedure. See `bucket()` below and evals/README.md § "Profiling one run".
 #
 # Two runs in one session are split on a long gap, and the threshold is 45 minutes rather than the
 # 15 it started at: a single run was measured holding a 997s (16.6 min) gap while a blocking subagent
