@@ -1,0 +1,24 @@
+<!-- Clean: every section sign below is a QUOTATION of the repository rather than a pointer,
+     which page-invariants.rb § 8 exempts — one inside a <code> span naming a heading verbatim,
+     one inside an excerpt's <pre> quoting a Markdown file, and one inside a <style> comment of
+     the kind the emitted head range carries. The rule must report its PASS here; a FAIL means
+     an exemption stopped holding and the check would start failing correct pages on their
+     quotations. -->
+<style>
+/* See report-format.md § What was searched. */
+.x { color: inherit; }
+</style>
+<section class="cp" id="cp-a">
+  <h3>Does the new heading keep the link the README already points at?</h3>
+  <p>The README links to <code>docs/ci.md § The comment</code>, and the rename moves that heading
+    <span class="tier">from unchanged code</span>.</p>
+  <details class="excerpt excerpt--diff" data-src="docs/ci.md:12-13">
+    <summary>docs/ci.md:12–13</summary>
+    <pre><code>-## § The comment
++## Posting the link</code></pre>
+  </details>
+  <ul class="lookat">
+    <li><b>The link</b> — names the old heading
+      <a class="cite" href="#">README.md:88</a></li>
+  </ul>
+</section>

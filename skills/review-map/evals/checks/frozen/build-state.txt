@@ -406,6 +406,18 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-risk-score.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-section-sign-quoted.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-section-sign-quoted.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-section-sign.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-section-sign.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-severity-chip.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

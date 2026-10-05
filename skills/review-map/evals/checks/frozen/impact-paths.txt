@@ -1198,6 +1198,18 @@ SKIP  no .impact panel in this input
 ## --page invariants-risk-score.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-section-sign-quoted.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-section-sign-quoted.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-section-sign.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-section-sign.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment invariants-severity-chip.html
 exit=0
 SKIP  no .impact panel in this input

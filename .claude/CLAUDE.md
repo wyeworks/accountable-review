@@ -303,14 +303,14 @@ Editing one of these means checking the others still agree.
   nothing measured. The mechanical half is covered; whether a primer was worth spending a callout on
   is judged, and no judge asks it yet — `evals/e2e/judges/IDEAS.md` is where it would go.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
-  attention* **per independent semantic delta § 01 names**, seven on the page at the outside, each
-  **one judgment** the reviewer has to make: an `<h3>` question, two to four
+  attention* **per independent semantic delta *What changed* names**, seven on the page at the
+  outside, each **one judgment** the reviewer has to make: an `<h3>` question, two to four
   sentences, an optional `figure.chain`, a `ul.lookat` of one to four entries — each a short title,
-  a clause and its deep-linked citation, in that order — an optional `div.gap` labelled *GAP*, and an
-  optional `p.open` labelled *Open question*. Both labels are fixed, and for one reason: an absence
-  and an unresolved question are the two places a severity word gets in. `report-format.md` § *The review
-  checkpoint* owns all of it and owns it **alone**; `page-template.html` assembles one with every
-  optional part, one without, and a pending stub.
+  a clause and its deep-linked citation, in that order — an optional `div.gap` labelled *GAP*, and
+  an optional `p.open` labelled *Open question*. Both labels are fixed, and for one reason: an
+  absence and an unresolved question are the two places a severity word gets in. `report-format.md`
+  § *The review checkpoint* owns all of it and owns it **alone**; `page-template.html` assembles one
+  with every optional part, one without, and a pending stub.
 
   **It replaced a seven-field review unit, and the reason is the thing to preserve.** Every meaningful
   change got the same grid — implementation, tests, affected code, things to understand, validation,
@@ -331,15 +331,15 @@ Editing one of these means checking the others still agree.
   three times, and will have spent its budget doing it.
 
   **The count scales on the delta, never on the diff.** Three to five per independent semantic delta
-  § 01 names, seven on the page at the outside — so eighty files of one rename is still three to
-  five, and only a PR shipping genuinely independent changes earns a sixth. **What replaced a flat
-  ceiling of five is the observation that the ceiling contradicted a hard rule**: a sixth judgment
-  had to go to a clause or to the evidence foot, and the foot is where promotion-by-omission forbids
-  a judgment to live. Five files agree — `report-format.md` § *The review checkpoint* owns it alone
-  and § *Section 3* owns the routing that bounds it, `SKILL.md` step 7e and § *How big should the
-  page be?* carry it into the procedure, and `start-here.rb` warns on a checkpoint no stop points at.
-  Nothing grades the count; `rails-anchors.rb` pins its per-checkpoint denominators at five so a
-  wider agenda cannot quietly loosen the anchor budget.
+  *What changed* names, seven on the page at the outside — so eighty files of one rename is still
+  three to five, and only a PR shipping genuinely independent changes earns a sixth. **What replaced
+  a flat ceiling of five is the observation that the ceiling contradicted a hard rule**: a sixth
+  judgment had to go to a clause or to the evidence foot, and the foot is where
+  promotion-by-omission forbids a judgment to live. Five files agree — `report-format.md` § *The
+  review checkpoint* owns it alone and § *Section 3* owns the routing that bounds it, `SKILL.md`
+  step 7e and § *How big should the page be?* carry it into the procedure, and `start-here.rb` warns
+  on a checkpoint no stop points at. Nothing grades the count; `rails-anchors.rb` pins its
+  per-checkpoint denominators at five so a wider agenda cannot quietly loosen the anchor budget.
 
   **Ordering is not grading, and the distance between them is one word.** The checkpoints are ranked by
   what a reviewer would most regret misunderstanding. A number beside a question, a *high* in a title,
@@ -602,14 +602,15 @@ Editing one of these means checking the others still agree.
   first. `ledger-rows.sh` still emits the four-cell form without `--paths-only`; nothing calls it, and
   `report-format.md` § *A future full mode* is where it is written down.
 
-  **The carrier is not section 04, and the gate never noticed it move.** § 04 used to hold the whole
-  diff too, which made it the second inventory its own closing rule forbids. On a 24-file PR that
-  rendered as 24 links above a caption explaining that the eight worth opening were ranked elsewhere.
-  `coverage-gate.sh` is a raw-byte page-wide grep, so it cannot tell whether a carrier is visible,
-  collapsed, or in a section at all — which is why that change cost no script. Collapsing it is legal
-  because an inventory is *provenance*, which passes the reads-complete-when-shut rule where a finding
-  never would. Collapsed is not optional and neither is the gate: a run that skipped it because the
-  list is out of sight has turned a shorter page into one that may have dropped a file.
+  **The carrier is not section 04, and the gate never noticed it move.** *Impact outside the diff*
+  used to hold the whole diff too, which made it the second inventory its own closing rule forbids.
+  On a 24-file PR that rendered as 24 links above a caption explaining that the eight worth opening
+  were ranked elsewhere. `coverage-gate.sh` is a raw-byte page-wide grep, so it cannot tell whether
+  a carrier is visible, collapsed, or in a section at all — which is why that change cost no script.
+  Collapsing it is legal because an inventory is *provenance*, which passes the
+  reads-complete-when-shut rule where a finding never would. Collapsed is not optional and neither
+  is the gate: a run that skipped it because the list is out of sight has turned a shorter page into
+  one that may have dropped a file.
 
   **Nothing narrows this, and `--update` is the first thing that could have.** An update re-reads
   only the commits since the previous map, so it is narrowed almost everywhere — and the inventory
@@ -932,11 +933,12 @@ Editing one of these means checking the others still agree.
   like coverage: *ProjectSearcher implementation*, *Migration*, *Tests*. Five of those is the per-layer
   format with the section shells taken off, and it is cheaper to write than four merged judgments,
   which is exactly why a run reaches for it.
-- **The order is the reviewer's path, and the checkpoint owns the explanation.** § 02 *What needs your
-  attention* teaches the judgments; § 03 *Read the code in this order* is the moment they open the
-  code; § 04 *Impact outside the diff* is the same change seen through one lens. Everything after § 02
-  therefore **points back** at it — a checkpoint never defers an explanation forward, and §§ 03 and 04
-  never re-explain one. § 03 is **one list**: what most needs judgment and what to read first are the
+- **The order is the reviewer's path, and the checkpoint owns the explanation.** *What needs your
+  attention* teaches the judgments; *Read the code in this order* is the moment they open the code;
+  *Impact outside the diff* is the same change seen through one lens. Everything after the attention
+  section therefore **points back** at it — a checkpoint never defers an explanation forward, and the
+  reading path and the impact panel never re-explain one. The reading path is **one list**: what most
+  needs judgment and what to read first are the
   same question, and answering it twice is the shape to watch for coming back. Where the attention
   goes is expressed by what is on that list and in what order; every other file is accounted for in
   the evidence foot, unranked.
@@ -953,6 +955,15 @@ Editing one of these means checking the others still agree.
   form, `SKILL.md` step 6 states it where the labels are minted, `page-invariants.rb` § 7 greps
   the comment-stripped copy for it, and `golden/invariants-flow-designator.html` plants it beside
   a correct *Impact path A* so the fixture fails for the collision rather than for the token.
+
+  **The section sign is the same leak from a different source.** These documents used to call the
+  page's sections *§ 01* to *§ 05*, and a run writes in the voice it reads, so a page said *"today
+  only § 01's"* — a pointer with three readings and no target. They now name a section by its title
+  and keep `§` for their own headings. The page never writes `§` outside a
+  `<code>` span or an excerpt: a section of the page by its linked title, a repository heading in
+  words with its file cited. Same four files, same owner; `page-invariants.rb` § 8 is the check,
+  behind `golden/invariants-section-sign.html` and the `-quoted` fixture that keeps its exemptions
+  honest.
 - **Source excerpts are quotations, and the page reads complete without them.** A page primitive: a
   collapsed `details.excerpt` holding verbatim code, in two variants — `--diff` for changed lines,
   `--source` for unchanged ones, which is the variant that carries the product because no diff view
@@ -1247,10 +1258,10 @@ Same rule as above: editing one of these means checking the others still agree.
   of those and there are two products, only one of which is developed against, and the one the team
   actually reads in CI is the one nobody looks at while editing the prose. There is one answer to
   "how much page", at both levels of watching, and `--output` is not a second one.
-- **A Review Map names its revision, on the page.** Two short SHAs in the masthead's `Revision` cell,
-  head → base, beside the branch names. Three files agree: `report-format.md` § 1 states the rule,
-  `page-template.html` carries the cell, and `ci/generate-review-map.sh` refuses to deliver a page
-  that does not contain the head's short SHA.
+- **A Review Map names its revision, on the page.** Two short SHAs in the masthead's `Revision`
+  cell, head → base, beside the branch names. Three files agree: `report-format.md` § *Section 1*
+  states the rule, `page-template.html` carries the cell, and `ci/generate-review-map.sh` refuses to
+  deliver a page that does not contain the head's short SHA.
 
   It is not CI-specific and must not become so. A branch name goes stale the moment someone pushes,
   and a page that describes an earlier revision while looking current is the one failure a reader

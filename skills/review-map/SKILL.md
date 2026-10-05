@@ -493,6 +493,12 @@ A*, which are the reader's. A checkpoint reading *"a leader-opened thread (Flow 
 the note you are holding, the checkpoint you are writing and the impact path beside it are all
 lettered — `references/report-format.md` § *One canonical home* owns the rule.
 
+**Nor does the page ever write `§`.** This file and its references use it for their own headings —
+*§ Something* — and pages have carried it as *§ 01* for *What changed*; the page has no such names
+and nothing that links them, so a `§` that reaches a sentence points nowhere a reader can go. Name a
+section of the page by its title, linked to its id; name a heading in a repository file in words,
+with the file cited; or, best, say the thing the section stood for. Same rule, same owner.
+
 Then label each flow and each leftover file, for your own ranking in step 7 — the label reaches the
 page only as what *What changed* leads with and what the agenda leaves off:
 
@@ -661,8 +667,8 @@ yes, stop.
 **The count follows the delta, never the file count.** One delta is three to five whatever the diff
 weighs: eighty files of one rename is one judgment, and one behaviour reaching across four layers is
 also one — its reach becomes *Look at* entries, a chain and a card in section 04, not more
-checkpoints. Two delta bullets in § 01 is what earns a sixth. Since those bullets are on the page, the
-reader has already been told why the agenda is longer.
+checkpoints. Two delta bullets in *What changed* is what earns a sixth. Since those bullets are on
+the page, the reader has already been told why the agenda is longer.
 
 **A sixth candidate under one delta is a signal to merge again**, not to add a sixth; if it will not
 merge, the checkpoint nearest to it names it in one clause. Past seven on any PR, stop adding: write
@@ -1421,7 +1427,7 @@ longer carried and goes through step 8 like anything else.
 | 4 · Derive what changed | **Narrowed**: ask only whether the delta moves the semantic delta or a stated limit. The metric strip is recomputed from step 3 |
 | 5 · Trace | **Narrowed to the delta.** No re-tracing of carried flows. This is the whole saving |
 | 6 · Notes and falsifiers | **Narrowed**: notes for delta-touched flows only, falsifiers only at those notes, cap of six unchanged |
-| 7 · Synthesise | 7a re-asked cheaply; 7b and 7c over delta candidates only; **7d re-ranks the whole agenda** and **7e enforces the caps over the whole agenda**; 7f–7j for touched checkpoints only. § 03 is rewritten whole if the agenda moved at all |
+| 7 · Synthesise | 7a re-asked cheaply; 7b and 7c over delta candidates only; **7d re-ranks the whole agenda** and **7e enforces the caps over the whole agenda**; 7f–7j for touched checkpoints only. *Read the code in this order* is rewritten whole if the agenda moved at all |
 | 8 · Verify | **In full and unconditionally, for everything written or re-derived.** Never for carried material |
 | 9 · Write | `Edit`s only. No skeleton, no banner, `Revision` cell last |
 | 10 · Complete and gate | **In full, always** |
@@ -1445,7 +1451,7 @@ previous map already traced.
 - **The `Revision` cell is the last edit of the run.** Until it changes, the page honestly names
   the revision it still mostly describes — and if the update dies halfway, the page fails the CI
   adapter's check that it names its head rather than being delivered as a current map of an old
-  revision. Add the disclosure sentence to § 01 in the same edit.
+  revision. Add the disclosure sentence to *What changed* in the same edit.
 - **A checkpoint the new commits answered is deleted**, with its reading-path stop and its rail
   entry, and nothing marks where it was. § *The review checkpoint* owns that rule.
 - **Section 04 may need adding rather than filling.** If the previous page omitted it and the delta
@@ -1490,9 +1496,9 @@ words for *What changed*, 50 to 140 a checkpoint, and a page total that is those
 big.** If the bulk is one change — a rename, a codemod, one behaviour reaching a long way — it buys
 more *Look at* entries per checkpoint, the impact figure's third card, and an inventory that grows
 with the diff at no cost to anyone, because it is collapsed. **The agenda does not move**: eighty
-files of one transform is one judgment. If the PR instead ships genuinely independent changes, § 01
-says so in a bullet each, and the agenda grows with them — three to five per delta, seven on the page
-at the outside. Step 7e has both conditions on going past the fifth.
+files of one transform is one judgment. If the PR instead ships genuinely independent changes, *What
+changed* says so in a bullet each, and the agenda grows with them — three to five per delta, seven
+on the page at the outside. Step 7e has both conditions on going past the fifth.
 
 Seven is the stop because past it section 03 can no longer be a route: every stop has been spent
 naming a checkpoint, and the reading order has become an index of the agenda.
@@ -1528,10 +1534,10 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   and an order is not a scale**: no number beside a question, no *blocking*, no *watch*. The line that
   names an unresolved thing is labelled *Open question* and nothing else.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
-- **Never carry a claim across revisions without saying so on the page.** An update
-  (§ *Re-running over new commits*) leaves parts that were analysed at an earlier head, and a page
-  describing an earlier revision while looking current is the one failure a reader cannot detect
-  from the inside. The masthead names both revisions and § 01 carries one sentence; the wording is
+- **Never carry a claim across revisions without saying so on the page.** An update (§ *Re-running
+  over new commits*) leaves parts that were analysed at an earlier head, and a page describing an
+  earlier revision while looking current is the one failure a reader cannot detect from the inside.
+  The masthead names both revisions and *What changed* carries one sentence; the wording is
   `report-format.md` § *Build state* § *An updated page* and it is not composed per run.
 - **Never mark a checkpoint by its recency.** No *new*, no *updated*, no *carried*, no count of how
   many were re-derived, and a checkpoint the change has since answered is deleted rather than
