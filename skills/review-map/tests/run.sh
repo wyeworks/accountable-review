@@ -322,6 +322,12 @@ else
   bad "the title is HTML-escaped by the script, so an & in a PR title is not a defect"
 fi
 assert_eq "$(count "$WORK/t.html" '{{PR_TITLE_OR_BRANCH}}')" "0" "the title placeholder is substituted"
+# First line, not merely present: the Artifact gallery names a page from its <title>, and behind the
+# template's header comment it missed it and listed every Review Map as "page".
+case $(sed -n '1p' "$WORK/t.html") in
+  '<title>Fix A &amp; B &lt;thing&gt; Review</title>') ok "the <title> is the emitted page's first line" ;;
+  *) bad "the <title> is the emitted page's first line" ;;
+esac
 
 # ---------------------------------------------------------------- idempotency, and the refusal
 cp "$WORK/t.html" "$WORK/t.first"
