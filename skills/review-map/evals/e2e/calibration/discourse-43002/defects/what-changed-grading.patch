@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -1403,7 +1403,7 @@
+         admins see the handle, and only after the card's data has loaded. The handle is hidden on narrow
+         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
+         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
+-        one writer the diff did not touch.</p>
++        one writer the diff did not touch. It is a small, low-risk change and looks safe to approve.</p>
+     </section>
+ 
+     <section id="attention" style="padding-top:48px">

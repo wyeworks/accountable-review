@@ -101,6 +101,15 @@ extract "$HEAD_S" "$HEAD_E" "$TEMPLATE" | awk -v t="$esc" '
   { k = "{{PR_TITLE_OR_BRANCH}}"; p = index($0, k)
     if (p > 0) $0 = substr($0, 1, p - 1) t substr($0, p + length(k))
     print }' > "$tmp"
+# The <title> must be the page's first line. The Artifact gallery names a page from its <title>,
+# and with the template's 11 KB header comment above it the gallery missed it and fell back to
+# the file name, so every Review Map was listed as "page". So the line sits first in the HEAD
+# range, and this refuses to write a page where it does not, rather than publish one more
+# untitled map.
+case $(sed -n '1p' "$tmp") in
+  '<title>'*) ;;
+  *) echo "page-skeleton.sh: the template's HEAD range must open with <title>, or the published page is listed under its file name" >&2; exit 1 ;;
+esac
 printf '%s\n' "$PLACEHOLDER" >> "$tmp"
 extract "$TAIL_S" "$TAIL_E" "$TEMPLATE" >> "$tmp"
 

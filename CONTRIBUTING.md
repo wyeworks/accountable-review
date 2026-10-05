@@ -61,7 +61,7 @@ skills/review-map/
 │   ├── coverage-gate.sh           asserts the inventory accounts for every changed path
 │   └── carry-plan.sh              on --update, what the previous page may keep and what it may not
 ├── tests/                         the deterministic tests for those scripts, and the proof they fire
-└── evals/                         fixtures, page and section cases, and the mechanical checks
+└── evals/                         the mechanical checks, and the end-to-end harness over real PRs
 skills/setup-ci/
 ├── SKILL.md                       inspect the repository, then configure CI
 ├── references/
@@ -128,20 +128,23 @@ every run, because they are where this version is most likely to be wrong: open 
 *Impact outside the diff* and confirm the cited file really consumes the changed thing, and confirm
 that every checkpoint is a judgment a reviewer could get wrong rather than a heading naming a file.
 
-`skills/review-map/evals/` is where that judging is systematised — fixtures with deliberately planted
-findings, whole-page cases, and one mechanical check script per rule family:
+`skills/review-map/evals/` is where that judging is systematised. `evals/e2e/` runs the skill end to
+end against real merged OSS pull requests pinned in `e2e/prs.yml`, checks each page mechanically, and
+grades it with LLM judges that count only once they are calibrated against a certified gold page:
 
 ```bash
-bin/evals page 1          # the recipe for one whole-page case
-bin/evals page-check 1 page.html
+bin/evals e2e                              # the pull requests it knows
+bin/evals e2e discourse-43002 -n 3 -j 3    # three whole runs, at once
+bin/evals calibrate                        # each judge against its gold page and planted defects
+bin/evals report                           # the HTML report
 ```
 
-The single-section cases are deferred: they graded one section of the page this design replaced, and
-their equivalent unit is a checkpoint rather than a section (`evals/deferred/README.md`). Results
-carry the skill's git sha, the model and the effort, so a pass rate is attributable to a version of
-the prose. `evals/README.md` has the rest — the split between mechanical and judged expectations, how
-to add a case, and `profile.sh` for when the question is where a run's minutes went rather than
-whether the page was right.
+A generation needs a credential in the environment (`ANTHROPIC_API_KEY`, or the
+`CLAUDE_CODE_OAUTH_TOKEN` that `claude setup-token` prints), because it runs through the same
+non-interactive adapter CI does. One judge exists so far, for *What changed*; the rest are notes in
+`e2e/judges/IDEAS.md`. Results carry the skill's git sha, the model and the effort, so a pass rate is
+attributable to a version of the prose. `evals/README.md` has the rest, including `profile.sh` for
+when the question is where a run's minutes went rather than whether the page was right.
 
 The checks are Ruby — `check.rb` dispatches one script per rule family — and they have their own
 regression suites, which run in CI and take a few seconds:
@@ -153,7 +156,6 @@ skills/review-map/evals/checks/frozen.rb                # ~1000 cases against th
 skills/review-map/tests/run.sh                          # page-skeleton.sh, diff-render.sh, carry-plan.sh
 skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
 skills/setup-ci/tests/run.sh                            # what the generated workflow contains
-skills/setup-ci/tests/self-test.sh                      # ten deliberate breaks, each must fail it
 ```
 
 A check script that always passes is worse than none, which is what the two self-tests are for: each
@@ -173,6 +175,17 @@ one thing a run cannot verify for itself, and the Elixir one stays closed until 
 field moves, so bump it in the same commit as the change and tag the release. Bump
 `.codex-plugin/plugin.json` to the same value in the same commit — Codex users update on it the same
 way, and `tests/codex-plugin.rb` fails while the two differ.
+
+Before a **major** release, run the end-to-end evals and keep what they said: calibrate, run every
+`eval` PR three times, and commit the summary beside the release.
+
+```bash
+bin/evals calibrate
+bin/evals e2e <id> -n 3 -j 3     # for each eval PR in evals/e2e/prs.yml
+bin/evals report --history <version>
+```
+
+Read the report's notes before its numbers, and treat an *uncalibrated* column as not measured.
 
 ```bash
 claude plugin validate . --strict

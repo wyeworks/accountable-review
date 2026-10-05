@@ -23,13 +23,13 @@ require_relative "page"
 module ReviewMap
   class Check
     # Two kinds of input. A page is a whole published document; a fragment is one section,
-    # produced by a driver in ../drivers from the frozen upstream in ../frozen. Checks that
+    # lifted out of a page or written by hand, as golden/ is. Checks that
     # need the whole document refuse a fragment rather than passing vacuously on it.
     #
     # LEVEL is the skill's detail level, and it is a THIRD axis: MODE is build state
     # (draft/final/stopped) and SCOPE is which section, neither of which says how many
     # sections the page was supposed to have. It defaults to `full` so every existing
-    # golden fragment and page case keeps meaning exactly what it meant — a check that
+    # golden fragment and frozen case keeps meaning exactly what it meant — a check that
     # quietly reinterpreted its own corpus would be measuring the wrong thing.
     # UPDATED is a FOURTH axis and a boolean, not a fourth value of MODE, and the distinction is
     # the whole reason it is spelled this way. An updated page is a FINAL page — it carries no

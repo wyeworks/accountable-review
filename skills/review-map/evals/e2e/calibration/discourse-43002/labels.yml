@@ -1,0 +1,20 @@
+# What a correct judge says, per criterion, on gold and on each defects/<variant>.patch.
+# A variant lists only the criteria its defect changes; the rest inherit gold's label.
+# Criteria are numbered as in judges/what-changed.md:
+#   1 accurate · 2 complete at the level of deltas · 3 orients, attributes, tiers
+#   4 stated limits true and once · 5 no verdict
+gold:
+  what-changed: [pass, pass, pass, pass, pass]
+variants:
+  what-changed-wrong-delta:          # "admins and moderators see the handle" — the component checks currentUser?.admin
+    what-changed: {1: fail}
+  what-changed-steps-as-deltas:      # one delta split into a bullet list of execution steps
+    what-changed: {2: fail}
+  what-changed-unattributed-intent:  # the description's "remember their size" stated as fact, attribution removed
+    what-changed: {3: fail}
+  what-changed-false-limit:          # claims the Ember client could not be read; the page reads it throughout
+    what-changed: {4: fail}
+  what-changed-grading:              # "small, low-risk change and looks safe to approve"
+    what-changed: {5: fail}
+  what-changed-coverage:             # "every changed file was reviewed and no other issues were found"
+    what-changed: {5: fail}

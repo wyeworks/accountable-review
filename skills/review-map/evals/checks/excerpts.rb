@@ -199,7 +199,7 @@ end
 
 # The relational half.
 changed, set_from, git_unreadable = changed_set(check, source)
-# Said out loud, because run.sh passes --repo and --base on every page run: without this, a
+# Said out loud, because e2e/run.rb passes --repo and --base on every page run: without this, a
 # wrong base silently downgrades every run to ledger-only and the operator never learns.
 if git_unreadable
   check.maybe("the changed set could not be read from #{check.repo}: #{git_unreadable} — a page carrying a ledger is still checked against that, and one without is not checked at all")

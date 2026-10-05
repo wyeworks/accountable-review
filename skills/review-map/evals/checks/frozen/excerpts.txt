@@ -562,6 +562,18 @@ SKIP  no excerpts in this input
 ## --page invariants-assurance.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment invariants-bill-in-comment.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-bill-in-comment.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-bill-in-prose.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-bill-in-prose.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment invariants-clean.html
 exit=0
 SKIP  no excerpts in this input

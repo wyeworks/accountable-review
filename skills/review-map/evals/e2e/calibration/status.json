@@ -1,0 +1,470 @@
+{
+  "what-changed": {
+    "judge_sha": "bb794ab56076",
+    "model": "claude-opus-5-5",
+    "k": 3,
+    "need": 2,
+    "calibrated": true,
+    "date": "2026-10-02T16:28:05Z",
+    "prs": [
+      "discourse-43002"
+    ],
+    "findings": [
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-coverage",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-coverage",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-coverage",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-coverage",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-coverage",
+        "criterion": 5,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-false-limit",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-false-limit",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-false-limit",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-false-limit",
+        "criterion": 4,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-false-limit",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-grading",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-grading",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-grading",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-grading",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-grading",
+        "criterion": 5,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-steps-as-deltas",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-steps-as-deltas",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-steps-as-deltas",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-steps-as-deltas",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-steps-as-deltas",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-unattributed-intent",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-unattributed-intent",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-unattributed-intent",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-unattributed-intent",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-unattributed-intent",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-wrong-delta",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-wrong-delta",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-wrong-delta",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-wrong-delta",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-wrong-delta",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      }
+    ]
+  }
+}

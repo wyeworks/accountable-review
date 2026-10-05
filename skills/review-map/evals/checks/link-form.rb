@@ -26,8 +26,8 @@
 # about, and SKIPs rather than passing when it has none — an unanswered question is not a verdict.
 #
 # It is in every scope in check.rb, including the section ones, but only rule 1 grades on a section
-# fragment: evals/run.sh passes --repo and not --base, and the rules below that ask what the diff
-# holds refuse without it. That is the right way round — the span is a property of one citation and
+# fragment given --repo and not --base: the rules below that ask what the diff holds refuse
+# without it. That is the right way round — the span is a property of one citation and
 # travels with any fragment, while the other three are properties of a diff.
 
 require "digest"
