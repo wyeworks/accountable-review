@@ -232,7 +232,10 @@ question you are actually answering.
 **`profile.sh` also reads the subagent transcripts now**, under `<session>/subagents/`, which nothing
 used to. The falsification pass is the case that matters: **0.9% of blocked wall clock and 17-23% of
 every cache-read token**, over 145-216 requests. Reporting only the first is why the pass read as
-free, and a run cost taken from the parent transcript alone is a fifth to a quarter short. The report
+free, and a run cost taken from the parent transcript alone is a fifth to a quarter short. **Both
+numbers were measured against the old seam**, where a falsifier read a published flow section rather
+than an analysis note, so the token figure is an upper bound nobody has re-measured; the wall-clock
+one should hold, since what makes it small is that the parent keeps working. The report
 prints the model those transcripts recorded, because `--agents` accepts a `model` key it may not
 honour — the transcript is the check, not the flag.
 

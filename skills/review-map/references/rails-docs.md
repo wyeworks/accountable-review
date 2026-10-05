@@ -7,6 +7,12 @@ block egress to these hosts outright. So a link is either something a human open
 down here, or it is a 404 the reader discovers on your behalf — and one dead link costs the same
 trust as one invented rake task.
 
+**A live search per anchor is not the fix, and is not up for revisiting.** It would add requests to
+the run's scarcest resource, make two runs of the same PR cite different URLs, break the assumption
+that the skill needs only its host and a git repository, and put SEO-ranked mirrors of Rails 4 docs
+inside the trust boundary this allowlist exists to draw. The file's correctness is a maintenance
+property with a date on it instead — § *Version*.
+
 `references/report-format.md` § *Framework anchors* owns what a doc link is *for*, when a claim earns
 one, and the budget. This file is only the lookup: concept in, URL out.
 
@@ -164,6 +170,14 @@ The audit that produced these marks read the Active Record, Active Job, Action P
 CHANGELOGs for 7.2, 8.0 and 8.1. It is re-run when the floor gains a series, and it is the half of
 this file no script can check: `verify-catalogue.sh` proves a URL resolves, never that the sentence
 above it is true of the version it resolves to.
+
+**Pinning fixes the URL, not the sentence, and the sentence is what misleads.** A perfectly pinned
+8.0 link under *"`perform_later` enqueues before the transaction commits"* is more authoritative and
+still wrong, because 8.0 defaults `enqueue_after_transaction_commit` on. The audit also found the
+single `‡` these marks replaced was catching about a quarter of what it existed to catch: of three
+marked rows one was over-applied (nested `transaction` join semantics never moved), and six
+version-sensitive rows carried no mark — including strong parameters, where 8.0 introduced
+`params.expect` and a page could confidently recommend it to a 7.2 app that cannot run it.
 
 ---
 
