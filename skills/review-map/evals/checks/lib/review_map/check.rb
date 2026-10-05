@@ -29,7 +29,7 @@ module ReviewMap
     # LEVEL is the skill's detail level, and it is a THIRD axis: MODE is build state
     # (draft/final/stopped) and SCOPE is which section, neither of which says how many
     # sections the page was supposed to have. It defaults to `full` so every existing
-    # golden fragment and page case keeps meaning exactly what it meant — a check that
+    # golden fragment and frozen case keeps meaning exactly what it meant — a check that
     # quietly reinterpreted its own corpus would be measuring the wrong thing.
     # UPDATED is a FOURTH axis and a boolean, not a fourth value of MODE, and the distinction is
     # the whole reason it is spelled this way. An updated page is a FINAL page — it carries no

@@ -68,19 +68,29 @@ Run `bin/evals offline` for the existing mechanical suites, manifest validation,
 installer tests. The installer test uses a temporary directory, verifies resources through
 the link, and checks that repeat installs and conflicting installations preserve data.
 
-For a behavioral smoke test, build the existing fixtures in a disposable directory:
+For a behavioral smoke test, check out the eval pull request pinned in
+`skills/review-map/evals/e2e/prs.yml` in a disposable directory:
 
 ```sh
-bin/evals fixtures /tmp/review-map-codex-fixtures
+git clone --filter=blob:none https://github.com/discourse/discourse.git /tmp/discourse
+git -C /tmp/discourse fetch origin +refs/pull/44196/head:refs/remotes/origin/pr/44196
+git -C /tmp/discourse checkout --detach 01ba1cbb0e8e827ef5de9efbf36ff2430106b52c
 ```
 
-The fixture builder replaces that directory. Open its `rails-only-small` repository in
-Codex and run `$review-map --effort high --output /tmp/review-map-codex-output`.
+Open `/tmp/discourse` in Codex and run `$review-map 44196 --repository discourse/discourse
+--base-sha 74c44fbebe39131151e5eaff480c7ab423a9b807 --head-sha 01ba1cbb0e8e827ef5de9efbf36ff2430106b52c
+--effort high --output /tmp/review-map-codex-output`.
 Verify that the readers actually returned results, the parent checked their evidence,
-the HTML completes without a publishing call, and the fixture working tree remains clean.
-Repeat at `--effort low` to exercise the other arm. Check
-the artifact against the existing page cases; a valid installation alone does not establish
-review quality or quality parity between models.
+the HTML completes without a publishing call, and the checkout's working tree remains clean.
+Repeat at `--effort low` to exercise the other arm. Then run the mechanical checks:
+
+```sh
+skills/review-map/evals/check.rb --final --page /tmp/review-map-codex-output/index.html \
+  --repo /tmp/discourse --base 74c44fbebe39131151e5eaff480c7ab423a9b807
+```
+
+A valid installation and a clean check do not establish review quality or quality parity
+between models.
 
 ## Current boundary
 

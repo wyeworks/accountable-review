@@ -25,7 +25,8 @@ Three facts `CLAUDE.md` cannot state, because it is written for the host that ha
   credentials. Codex does not run them yet. Editing that half from Codex is fine; the deterministic
   tests under `skills/setup-ci/tests/` cover it without a model.
 - **Whole-page evals need a model**, so the same split applies: `bin/evals offline` is the part you
-  can always run, and `bin/evals page <id>` prints a recipe rather than running one.
+  can always run, and `bin/evals e2e` generates through `ci/generate-review-map.sh`, which invokes
+  Claude with an Anthropic credential, so it does not run from Codex.
 
 The product's own Codex support — installing `review-map` into a Codex skills directory — is a
 different subject, and [`docs/codex.md`](docs/codex.md) owns it.

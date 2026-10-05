@@ -72,13 +72,33 @@ because their own `aria-label` contained the word the check was looking for.
 - **Sensitivity.** Each variant's targeted criterion fails in at least 2 of 3 runs.
 
 Both have to hold. Criteria a variant doesn't target are recorded but not gated. The result goes
-to `status.json` under the judge file's sha and the model, so **editing a judge uncalibrates
-it**, and report.rb then shows that judge's column as *uncalibrated* instead of as a score.
+to `status.json` under the judge file's sha and the model, so **editing a judge's file
+uncalibrates it**, and report.rb then shows that judge's column as *uncalibrated* instead of as a
+score. Editing the rest of the instrument does not, yet; see *Known gaps*.
 `--variant NAME` runs one variant while you iterate on a patch, and never writes `status.json`.
 
 ## Known gaps
 
 - **One calibration PR, and it's Rails** (`discourse-43002`, with the Ember client in the same
   repository). No judge is calibrated against a Phoenix page.
-- The gold page and its patches don't exist yet. `calibrate.rb` says so and prints the steps
-  above.
+- **The masthead is outside what calibration measured.** The judge's prompt calls § 01 "the masthead
+  plus `<section id="changed">`", but `E2E.section` (`../lib.rb`) hands it the section alone; the
+  masthead's `<h1>`, lede and Shape cell sit in the `<header>` before it (`gold.html:1372-1393`), and
+  the judge reaches them only by reading the whole page. All six defects in
+  `discourse-43002/defects/` sit inside the section, so calibration has not measured whether the
+  judge catches a false claim where § 01's headline claim lives. Closing it is two changes and one
+  recalibration: extract the header with the section for the judge — keeping the § 01 word count on
+  the section alone, since the agenda budget excludes the masthead — and add a seventh patch planting
+  a false `<h1>` or lede, labelled `{1: fail}`.
+- **The calibrated identity is the judge's file and nothing else.** `Judge.calibration` compares the
+  sha of `judges/<name>.md` and the model. The rest of the instrument — the prompt assembly and tool
+  allowlist in `judge.rb`, the section extraction, and `Verdicts.parse`'s recovery of a fenced or
+  prose-wrapped reply — can change while `status.json` still says calibrated. Hashing `lib.rb` whole
+  is the wrong fix, because it holds report plumbing too and an unrelated edit there would uncalibrate
+  every judge; move the extraction into `judge.rb` and hash the judge file, `judge.rb` and
+  `verdicts.rb` together, in the same change as the masthead fix, so one recalibration covers both.
+- **Blindness is assumed, not tested.** "Blind to the mechanical results" and "a sibling variant must
+  not be readable" both rest on `claude -p` confining `Read` to the working directory and the
+  `--add-dir` directories. `check.txt` sits one level above the judge's working directory
+  (`run.rb:162`). Nobody has run the judge's exact flags against a file outside those directories to
+  see whether it can be read.

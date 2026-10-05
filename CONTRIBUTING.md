@@ -147,7 +147,6 @@ skills/review-map/evals/checks/frozen.rb                # ~1000 cases against th
 skills/review-map/tests/run.sh                          # page-skeleton.sh, diff-render.sh, carry-plan.sh
 skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
 skills/setup-ci/tests/run.sh                            # what the generated workflow contains
-skills/setup-ci/tests/self-test.sh                      # ten deliberate breaks, each must fail it
 ```
 
 A check script that always passes is worse than none, which is what the two self-tests are for: each

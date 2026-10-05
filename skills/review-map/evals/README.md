@@ -158,11 +158,15 @@ never in the eval set — has a gold page a person certified criterion by criter
 planted defect against it. `calibrate.rb` runs each judge three times on gold and on every variant.
 **Specificity**: gold passes every criterion at least twice. **Sensitivity**: each variant's targeted
 criterion fails at least twice. Both hold, or the judge is uncalibrated, and `status.json` records
-the judge file's sha and model — so editing a judge uncalibrates it, which is the point.
+the judge file's sha and model — so editing a judge uncalibrates it, which is the point. Editing the
+rest of the instrument does not yet, and `e2e/calibration/README.md` § *Known gaps* says what that
+and the masthead leave unmeasured.
 
 **There is one calibration PR, `discourse/discourse#43002`**, chosen because its claims are easy to
-check by hand, and it has no gold page yet: making one is a real run and a person's reading, and
-`calibrate.rb` prints the steps. Gold is not `examples/` — those are regenerated when the format
+check by hand. Its gold page is the unedited output of one run, certified by a person on 2026-09-30
+(`calibration/discourse-43002/gold.yml`), and `what-changed` passed calibration against it and its six
+planted defects on 2026-10-02. Making another is a real run and a person's reading, and
+`calibration/README.md` has the steps. Gold is not `examples/` — those are regenerated when the format
 moves, and gold has to stay put as long as its patches apply.
 
 ## Before a release
@@ -356,7 +360,8 @@ is a single run and the honest reading of 11 against 9-10 is "no difference".
 experiment.** A section eval produces one fragment from the frozen upstream. It does no project
 discovery and no tracing across a real diff, so the two phases with a genuine fan-out are exactly the
 ones it cannot exercise — it can detect the cost of the prose and never the benefit. Deciding whether
-batching helps needs a whole-page run against a fixture, profiled. Until that exists, the general
+batching helps needs a whole-page run, profiled — `bin/evals e2e` and `profile.sh` are that
+instrument now, and nobody has run the experiment on them yet. Until someone does, the general
 version stays out: on the only evidence available it is a regression, and "the benefit is somewhere the
 harness cannot see" is an argument, not a measurement.
 

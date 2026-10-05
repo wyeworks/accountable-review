@@ -46,10 +46,11 @@ matters there.
 than one skill versus the other.** `setup-ci` produces a YAML file and four shell scripts; `review-map`
 has `page-skeleton.sh`, `excerpt.sh`, `ledger-rows.sh` and `coverage-gate.sh`. All of it is ordinary
 software with right answers, so it has ordinary tests: `skills/setup-ci/tests/` and
-`skills/review-map/tests/`, each a `run.sh` (no model, no network, about a second) beside a
-`self-test.sh` that breaks the things `run.sh` claims to check and asserts the suite notices each one.
-They all run in CI on every push, for the reason `evals/checks/self-test.rb` does: a check that passes
-because it never looked is worse than no check. When you edit either template, or any script under
+`skills/review-map/tests/`, each a `run.sh` (no model, no network, seconds). `review-map`'s sits
+beside a `self-test.sh` that breaks the things `run.sh` claims to check and asserts the suite notices
+each one, for the reason `evals/checks/self-test.rb` does: a check that passes because it never
+looked is worse than no check. `setup-ci` had one too and it was removed: it re-ran `run.sh` once per
+break, 52 of them, about ten minutes a push. When you edit either template, or any script under
 `skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them — `bin/evals offline` runs
 every suite together, which is what CI does too.
 
@@ -122,7 +123,8 @@ page and on copies of it that each plant one defect. Calibration PRs are held ou
 **One judge exists, and that is deliberate** — `judges/what-changed.md`, for § 01. The other aspects
 (checkpoints, reading path, impact, evidence, voice, recall) are notes in `judges/IDEAS.md`, not
 code: one calibrated judge proves the method before the method is copied. The single calibration PR
-is `discourse/discourse#43002`, and it has no gold page until a person certifies one.
+is `discourse/discourse#43002`, whose gold page was certified by a person on 2026-09-30; the judge
+passed calibration against it on Opus on 2026-10-02, which `calibration/status.json` records.
 
 **The old synthetic harness is gone, not deferred** — fixture repositories with planted answers,
 hand-driven page cases, and section cases that graded a page this design replaced. None of it was
@@ -819,7 +821,7 @@ Editing one of these means checking the others still agree.
   of its boundary, with nine mutations behind it. The CI half is `templates/workflow.yml`'s two
   cache steps, `read-config.sh`'s `update` key, `ci/generate-review-map.sh`'s conditional
   pass-through and manifest `@3`, `references/workflow.md` § *The previous map* owning the carrier's
-  reasoning **alone**, and `setup-ci/tests/` with eight more mutations.
+  reasoning **alone**, and `setup-ci/tests/run.sh`.
 
   **The graded half splits along conditional versus unconditional, and that split is the design
   rather than a convenience.** *No recency marker, no resolved tick* holds on **every** page — an
@@ -1184,8 +1186,8 @@ Same rule as above: editing one of these means checking the others still agree.
   file generates and so do 9 lines across six. From the generating side that reads as an OR, which
   invites a "simplification" that would discard a change large by either measurement. The asymmetry
   is the reason: a needless map costs a model run somebody ignores, a missing one is invisible, so
-  the suppressing predicate is the one that should be hard to satisfy. `self-test.sh` breaks the
-  `&&` into `||`; `run.sh`'s `bulky` and `spread` catch it.
+  the suppressing predicate is the one that should be hard to satisfy. `run.sh`'s `bulky` and `spread`
+  are what catch an `&&` turned into `||`.
 
   **Application paths only is what makes the counts mean anything**, and it is why this cannot be a
   job `if:`. The `pull_request` payload's counts are whole-diff, so a three-line model change beside
@@ -1233,8 +1235,7 @@ Same rule as above: editing one of these means checking the others still agree.
   `references/workflow.md` § *The application-code gate* owns the reasoning **alone** including
   fail-open, the default's trade and the second range, `SKILL.md`'s hard rules forbid counting
   anything but application code and baking a number into the YAML, `tests/run.sh` covers both rules
-  either side of each threshold and both halves of the second question, `tests/self-test.sh` breaks
-  them fifteen ways, and `docs/ci.md` restates it.
+  either side of each threshold and both halves of the second question, and `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
   gate. `SKILL.md` step 1 owns the flag, step 9 says the stages become save points rather than
@@ -1317,7 +1318,7 @@ Same rule as above: editing one of these means checking the others still agree.
   **That assertion has to run against the whole file, comments included.** It did not, briefly: the
   negative assertions run against a comment-stripped copy so the workflow may explain in a comment why
   it does not use `pull_request_target`, and a timestamp added as a comment sailed straight through
-  a test whose entire purpose was to catch it. `tests/self-test.sh` case 6 is that regression.
+  a test whose entire purpose was to catch it. `tests/run.sh` now reads the whole file for it.
 - **Drift is reported, never resolved.** A hand-edited Accountable Review workflow is a file a team
   owns, and setup reverting their pinned action or tightened timeout is the worst thing this command
   can do. `install-workflow.sh` prints the diff and exits 3; `--update` is the only way past it, and

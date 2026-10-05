@@ -3,7 +3,7 @@
 #
 #   Usage: tests/self-test.sh
 #
-# Same argument as evals/checks/self-test.rb and setup-ci/tests/self-test.sh: a check that passes
+# Same argument as evals/checks/self-test.rb: a check that passes
 # because it never looked is worse than no check, and the only way to tell the two apart is to
 # introduce the defect and watch the suite go red.
 #
