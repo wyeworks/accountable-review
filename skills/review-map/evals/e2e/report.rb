@@ -11,6 +11,9 @@
 # calibrate.rb has not passed at its current sha and model is labelled UNCALIBRATED instead of
 # being given a colour, because an uncalibrated judge's number is not a measurement yet.
 #
+# One row per page: a --rejudge supersedes the line it re-judges (E2E.runs), so re-judging a page
+# never turns it into a second repetition.
+#
 # This page grades Review Maps, not pull requests; it borrows nothing from the page rules and it
 # is never published. --history writes the same summary as JSON to e2e/history/<version>.json,
 # which is the one thing here that is committed: results/ is gitignored, and a release has to be
@@ -29,7 +32,7 @@ OptionParser.new do |o|
   o.on("--history VERSION", "also write e2e/history/VERSION.json") { |v| opts[:history] = v }
 end.parse!
 
-rows = E2E.read("e2e")
+rows = E2E.runs(E2E.read("e2e"))
 rows.select! { |r| r["id"] == opts[:id] } if opts[:id]
 abort "report: nothing in #{File.join(E2E::RESULTS, 'e2e.jsonl')} yet — bin/evals e2e <id> first" if rows.empty?
 

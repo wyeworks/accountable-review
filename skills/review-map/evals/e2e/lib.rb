@@ -126,6 +126,17 @@ module E2E
     File.readlines(path).filter_map { |l| JSON.parse(l) unless l.strip.empty? }
   end
 
+  # One row per generated page: the latest line for each run directory. A --rejudge appends a new
+  # line for a page that already has one, carrying the original's stamp, so reading the log raw
+  # counts one page as two repetitions — and both lines point at the same verdicts file, which the
+  # re-judge overwrote. The log stays append-only, so every judging of a page is still on record;
+  # anything that COUNTS reads through this.
+  def self.runs(rows)
+    latest = {}
+    rows.each_with_index { |r, i| latest[r["rundir"] || i] = r }
+    latest.values
+  end
+
   # ------------------------------------------------------------------ the page
 
   # § 01's prose, as the agenda budget counts it: the paragraphs, bullets and before/after rows
