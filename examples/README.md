@@ -14,7 +14,7 @@ which is most of what makes an example worth reading.
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
 | `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 3 checkpoints · 1 converge figure, no impact section |
-| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `8dabd61` | 36 files · 6 checkpoints · 1 converge and 2 chain figures · 1 impact path |
+| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 6 checkpoints · 1 converge and 2 chain figures · 1 impact path |
 
 `index.html` is the front door to the two. It is not a Review Map and follows none of the page
 rules — it borrows the design language and the theme rule, and nothing else.
