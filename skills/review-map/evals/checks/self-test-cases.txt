@@ -263,3 +263,30 @@
  page-invariants    | agenda-clean.html             | 0 | evidence tiers used
  page-invariants    | agenda-clean.html             | 0 | data-path is only on ledger rows
  excerpts           | agenda-clean.html             | 0 | no excerpt quotes the same lines twice
+
+# The checkpoint's figures: the chain, which nothing graded before this check, and the three shapes
+# a chain cannot draw. figures-clean.html carries one of each and pins a PASS per kind, because a
+# rule that only ever fires on broken input is a rule nobody notices has stopped firing on good
+# input. The two WARN rows exit 0: an unlisted word is never a reason to fail a true figure.
+#
+# figures-chain-aff.html is the one to keep. A chain hop into unchanged code draws perfectly and
+# reads as thoroughness, and it is the canonical-home regression arriving as a figure — the same
+# consequence the impact panel already drew.
+ figures            | figures-clean.html                  | 0 | cp-a's chain holds its shape
+ figures            | figures-clean.html                  | 0 | cp-b's converge holds its shape
+ figures            | figures-clean.html                  | 0 | cp-c's lifecycle holds its shape
+ figures            | figures-clean.html                  | 0 | cp-d's structure holds its shape
+ figures            | figures-clean.html                  | 0 | at most one figure per checkpoint
+ figures            | figures-two-figures.html            | 1 | one per checkpoint, of any kind
+ figures            | figures-unknown-kind.html           | 1 | is not a checkpoint figure
+ figures            | figures-chain-aff.html              | 1 | is an impact path, drawn once in section 04
+ figures            | figures-converge-one-path.html      | 1 | one path is a chain
+ figures            | figures-converge-rel.html           | 1 | they are siblings, not a sequence
+ figures            | figures-converge-target-loc.html    | 1 | an invariant is a property, not a file
+ figures            | figures-converge-grading-note.html  | 0 | never how much it matters
+ figures            | figures-lifecycle-aff.html          | 1 | a state is not a file
+ figures            | figures-lifecycle-no-loc.html       | 1 | shows whether it is guarded
+ figures            | figures-lifecycle-method-label.html | 0 | name the domain action
+ figures            | figures-structure-erd.html          | 1 | the ERD this figure refuses
+ figures            | agenda-clean.html                   | 0 | cp-a's chain holds its shape
+ figures            | reach-clean.html                    | 0 | no checkpoint figure in this input

@@ -1,0 +1,14 @@
+<!-- PLANTED: a checkpoint figure of a kind that does not exist. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Does every path that ends an ownership close its history row?</h3>
+  <p>History is written from callbacks, and one removal path does not run them.</p>
+  <figure class="flowchart">
+    <ol class="ip-path">
+      <li class="ip-n ip-chg"><span class="ip-box"><b>OwnershipsController#update</b><span class="ip-d">accepts role</span><a class="path ip-loc" href="#">app/controllers/ownerships_controller.rb:48</a></span></li>
+      <li class="ip-n ip-step"><span class="ip-rel"><i></i>calls</span><span class="ip-box"><b>Ownership#update</b><span class="ip-d">role validated</span><a class="path ip-loc" href="#">app/models/ownership.rb:30</a></span></li>
+      <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Owner demoted to maintainer</b><span class="ip-d">observable behaviour</span></span></li>
+    </ol>
+    <figcaption>How a role change reaches the stored ownership.</figcaption>
+  </figure>
+</section>

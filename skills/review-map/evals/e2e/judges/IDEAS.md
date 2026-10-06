@@ -34,6 +34,29 @@ judges, because one judge asked to check thirty things checks each of them less 
   not list, or one that recommends the fix.
 - **The count scales on the deltas § 01 names**, never on the file count.
 
+## § 02 figures
+
+`figures.rb` holds the shape and the locators. Everything below is what it cannot hold, and the
+first item is the one that makes the feature worth having or not.
+
+- **The figure was worth drawing.** A reviewer reading it understands that part of the change faster
+  than from the explanation and the diff. Defect: replace a converge with a chain of three files
+  joined by arrows, labels and locators intact — still well-formed, and now says nothing a list would
+  not.
+- **The shape is the judgment's shape.** A converge for an invariant with several writers, a lifecycle
+  for an entity with states, and not the reverse. Defect: redraw a converge's paths as a lifecycle's
+  states.
+- **A converge lists every writer the repository has.** The path it misses is the finding it exists
+  for. Defect: delete the `.ip-aff` bypass path and its *Look at* entry; the figure still passes every
+  mechanical rule. This one needs `--repo`, because the answer is a search, not a reading.
+- **Every edge is true.** Each locator performs the edge or transition it sits on. Defect: move a
+  transition's locator to the line above the `update!` it names.
+- **Zero was right.** No checkpoint without a figure would have been clearer with one, and no figure
+  exists because the PR is large. This is the hardest to grade and the most important to keep: the
+  regression is a page that draws more because drawing is now possible.
+- **No figure grades.** No *critical* in a `.cv-note`, no figure caption that ranks. `figures.rb`
+  warns on the common words; a judge reads the rest.
+
 ## § 03 reading path
 
 - It is one list, each stop links into a checkpoint, and the order has reasons.

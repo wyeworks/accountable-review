@@ -22,8 +22,9 @@ does not earn omitted outright.
   judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
   intended scope?* rather than *ProjectSearcher implementation*. A checkpoint carries the question,
   two to four sentences on why it is one, one to four places to look — each a short title, a clause
-  and its citation — and, when the judgment turns on something prose cannot hold, a compact chain
-  showing the mechanism. A line
+  and its citation — and, when the judgment turns on something prose cannot hold, one small figure
+  of the shape it has: a chain for a mechanism, several paths converging on one invariant they must
+  all keep, the states an entity moves between, or an entity and what it is now attached to. A line
   labelled *Open question* names what only the author can settle.
 
   They are ordered by what a reviewer would most regret misunderstanding. **That order is not a
@@ -137,6 +138,15 @@ reading obligation.
 
 A checkpoint carries only what that judgment needs. One may need a chain and an open question;
 another two links and three sentences; another a test that pins one branch and leaves another open.
+
+The figures are the part most easily mistaken for decoration, so they are held to one test: a
+reviewer who meets one understands that part of the change faster than from the prose and the diff.
+Most checkpoints have none, and a page with none is a normal page. The one worth knowing is the
+**convergence** figure — every path that creates, changes or removes something an invariant depends
+on, drawn arriving at that invariant. It is the figure that shows the path which does *not* run the
+callback the others do, and because it claims to show every path, it is drawn only after a recorded
+search for the ones that bypass it. Code the PR did not touch is drawn dashed, in the same teal it
+carries everywhere else on the page.
 Validation steps are real commands against your repository, not invented ceremony, and they appear
 where running one would settle the question rather than gathered into a list of their own.
 

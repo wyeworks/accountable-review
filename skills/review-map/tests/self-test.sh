@@ -154,7 +154,24 @@ sed 's|class="path ip-loc" href="{{BLOB}}#L{{START}}"|class="path ip-loc" data-p
   "$TEMPLATE" > "$WORK/loc-datapath.html"
 case_runs_red "a locator carries the inventory's data-path attribute" "$WORK/loc-datapath.html" "$SKELETON"
 
-# 10. The search row's hanging indent, unscoped — the rule as it shipped. -16px on every code in
+# 10. A connector between a converge's paths. They are siblings, not a sequence, and the impact
+#     panel's lane crossing hangs off `.ip-chg + .ip-aff > .ip-rel` — which a converge alternates.
+#     The assertion expects zero inside a range, so a misspelled pattern would pass unmutated.
+awk '/<ol class="cv-paths">/ { f = 1 } f && /class="ip-n ip-aff"/ && !d { sub(/<span class="ip-box">/, "<span class=\"ip-rel\"><i></i>calls</span><span class=\"ip-box\">"); d = 1 } { print }' \
+  "$TEMPLATE" > "$WORK/cv-rel.html"
+case_runs_red "a converge's paths are joined by a connector" "$WORK/cv-rel.html" "$SKELETON"
+
+# 11. A locator on the converge's target. An invariant is a property, not a file — the converge's
+#     version of #8, and it looks just as thorough.
+sed 's|<b>{{THE_INVARIANT}}</b><span class="ip-d">must hold on every path</span>|&<a class="path ip-loc" href="#">app/x.rb:1</a>|' \
+  "$TEMPLATE" > "$WORK/cv-target-loc.html"
+case_runs_red "a converge's target is given a locator" "$WORK/cv-target-loc.html" "$SKELETON"
+
+# 12. An unchanged node in a lifecycle. A state is not a file, so the teal kind has nothing to mean.
+sed 's|<li class="lc-s lc-new">|<li class="lc-s ip-aff">|' "$TEMPLATE" > "$WORK/lc-aff.html"
+case_runs_red "a lifecycle state is drawn as unchanged code" "$WORK/lc-aff.html" "$SKELETON"
+
+# 13. The search row's hanging indent, unscoped — the rule as it shipped. -16px on every code in
 #     the row reaches one inside the clause and drags it over the words before it; measured on a
 #     published page, a 16px overlap. Mutating it back into the descendant rule is the regression
 #     itself, not an approximation of it.
@@ -167,7 +184,7 @@ case_runs_red "the search row's indent pulls every code left, not only the leadi
 # Every row here leaves a page that renders identically and reads identically. The defect is only
 # felt by a reader who followed a citation and came back — which is nobody, during development.
 
-# 11. A target typed at a citation rather than applied by the tail script. One page's markup is
+# 14. A target typed at a citation rather than applied by the tail script. One page's markup is
 #     then correct and every later run copies an attribute it has to remember at every citation,
 #     which is how one of them ends up without it. The script is the rule; the markup half stays clean.
 sed 's|<a class="path" href="{{BLOB}}#L{{LINE}}">|<a class="path" target="_blank" href="{{BLOB}}#L{{LINE}}">|' \
@@ -181,7 +198,7 @@ case_runs_red "a citation in the markup half types a target for a run to copy" "
 # dropped while the callout still renders beautifully. run.sh asserts each guard; the rows here are
 # the ones whose assertion expects zero or reads an order, which the sanity row cannot vouch for.
 
-# 12. The logotype returns. This is the specific shape the svg ban comes back in, because the mark
+# 15. The logotype returns. This is the specific shape the svg ban comes back in, because the mark
 #     is the one drawing on this page that had a reason: it was an attribution. Asserted through
 #     .pr-mark rather than through the svg count, so the row goes red on the class alone — a mark
 #     smuggled in as a web font or a background image is the same defect and the same disclosure
@@ -190,7 +207,7 @@ awk '/<span class="pr-title">/ && !d { print "            <span class=\"pr-mark\
   "$TEMPLATE" > "$WORK/pr-mark.html"
 case_runs_red "the primer's logotype comes back, bringing the trademark obligation with it" "$WORK/pr-mark.html" "$SKELETON"
 
-# 13. Position. Below the Look at list the lesson arrives after the reader has already been sent to
+# 16. Position. Below the Look at list the lesson arrives after the reader has already been sent to
 #     the code, which is the one ordering that makes a primer worse than no primer: they open four
 #     files without the rule that decides what they are looking at.
 awk '
@@ -201,7 +218,7 @@ awk '
 ' "$TEMPLATE" > "$WORK/primer-late.html"
 case_runs_red "the primer is assembled below the Look at list it is meant to precede" "$WORK/primer-late.html" "$SKELETON"
 
-# 14. The header goes back to naming the component. "Rails | Primer" spends the widest line in the
+# 17. The header goes back to naming the component. "Rails | Primer" spends the widest line in the
 #     block on a fact the reader can see — that this is a callout — and says nothing about what it
 #     teaches. The eyebrow is reinstated here together with the separator it needs, because that is
 #     how the old shape actually returns: not as one stray span, but as the pair.
@@ -216,30 +233,30 @@ case_runs_red "the primer header names the component again instead of the stack"
 # leaves a page that looks completely correct, with an anchor that arrives at a "Load diff" stub
 # and a reader who cannot tell.
 
-# 15. The signal no size rule can replace. One changed line in a linguist-generated file is a
+# 18. The signal no size rule can replace. One changed line in a linguist-generated file is a
 #     small diff by every measurement there is, and GitHub collapses it anyway.
 sed 's|^  if _why=$(attr_says "$_path"); then|  if false; then|' "$DIFF_RENDER" > "$WORK/no-attrs.sh"
 case_render_red "the script stops asking .gitattributes, so a generated file reads as renderable" "$WORK/no-attrs.sh"
 
-# 16. Reading GitHub's limits and keeping only the memorable pair. The hard cap is the number
+# 19. Reading GitHub's limits and keeping only the memorable pair. The hard cap is the number
 #     that sounds like the limit; 400 lines is the one that decides almost every real citation.
 sed 's|^AUTOLOAD_LINES=400$|AUTOLOAD_LINES=20000|' "$DIFF_RENDER" > "$WORK/hard-cap-only.sh"
 case_render_red "only the 20,000-line hard cap is enforced, not the 400-line auto-load threshold" "$WORK/hard-cap-only.sh"
 
-# 17. The other direction, and the one that costs the page its product: answering "collapse" for
+# 20. The other direction, and the one that costs the page its product: answering "collapse" for
 #     a path the diff never touched pushes every *affected but unchanged* citation off the blob
 #     form it requires and onto a diff anchor that cannot address an unchanged line at all.
 sed "s|printf 'render\\\\tnot-in-diff|printf 'collapse\\\\tnot-in-diff|" "$DIFF_RENDER" > "$WORK/unchanged-collapsed.sh"
 case_render_red "a path outside the diff is reported as collapsed" "$WORK/unchanged-collapsed.sh"
 
-# 18. The guard whose absence is a silent clean bill of health: with the refs unresolved, every
+# 21. The guard whose absence is a silent clean bill of health: with the refs unresolved, every
 #     git call still feeds a pipeline that exits 0 and prints nothing, so the script reports that
 #     no file is withheld. Written without the guard first, and this row is why it has one.
 awk '/^for ref in "\$BASE" "\$HEAD_REF"; do$/ { skip = 3 } skip { skip--; next } { print }' \
   "$DIFF_RENDER" > "$WORK/no-ref-guard.sh"
 case_render_red "the ref guard is gone, so an unresolvable base reads as a diff with nothing withheld" "$WORK/no-ref-guard.sh"
 
-# 19. The measurement this script shipped with for a year: counting the changed lines instead of
+# 22. The measurement this script shipped with for a year: counting the changed lines instead of
 #     the diff GitHub renders. It is the mutation that looks most like the real thing — add+del
 #     is the obvious reading of "400 lines", it agrees with the correct measure on every file
 #     whose changes are contiguous, and it disagrees exactly where the context is: a scattered
@@ -254,14 +271,14 @@ case_render_red "the changed lines are counted instead of the diff GitHub render
 # printing a confident, well-formed plan — the only difference is that the plan is wrong, and
 # the page that follows it says it describes a revision half of it was never read against.
 
-# 20. The polarity. A skip needs EVERY precondition to hold; flipping the delta-size rule to fire
+# 23. The polarity. A skip needs EVERY precondition to hold; flipping the delta-size rule to fire
 #     only on a small delta inverts the one number standing between a cheap update and a page
 #     most of which nobody re-read.
 sed 's|if \[ "$N_FULL" -eq 0 \] \|\| \[ $((N_DELTA \* 2)) -gt "$N_FULL" \]; then|if [ $((N_DELTA * 2)) -lt 0 ]; then|' \
   "$CARRY_PLAN" > "$WORK/no-half-rule.sh"
 case_carry_red "the delta-size rule never fires, so a rewrite of the branch updates in place" "$WORK/no-half-rule.sh"
 
-# 21. P6, which is the rule that protects the product. Affected-but-unchanged code is what the
+# 24. P6, which is the rule that protects the product. Affected-but-unchanged code is what the
 #     page is for, and a new consumer landing in a file no checkpoint cites is invisible to the
 #     carry rule — the recorded searches are the only thing on the page that can see it. With the
 #     intersection stubbed out the script still runs every search and still reports them safe.
@@ -269,7 +286,7 @@ sed 's|^  landed=$(comm -12 "$TMP/delta" "$TMP/hitpaths" \| head -n 1)$|  landed
   "$CARRY_PLAN" > "$WORK/no-p8.sh"
 case_carry_red "a delta path among a recorded search's hits no longer refuses" "$WORK/no-p8.sh"
 
-# 22. The reason -v is not used. awk's -v processes escape sequences in the value, so a recorded
+# 25. The reason -v is not used. awk's -v processes escape sequences in the value, so a recorded
 #     `rg -n '\bProjects::Archive\b'` arrives with two backspaces where its word boundaries were.
 #     The pattern still runs and still matches things — just not the things the page recorded —
 #     and every search then reports itself clean. This is the single most deniable line here.
@@ -277,36 +294,36 @@ sed "s|  CARRY_CMD=\$1 awk '|  awk -v s=\"\$1\" '|; s|^      s = ENVIRON\[\"CARR
   "$CARRY_PLAN" > "$WORK/dash-v.sh"
 case_carry_red "the recorded pattern reaches awk through -v, which eats its backslash escapes" "$WORK/dash-v.sh"
 
-# 23. An unreplayable search is not a search that found nothing. Skipping the row rather than
+# 26. An unreplayable search is not a search that found nothing. Skipping the row rather than
 #     refusing turns the one honest answer — "I cannot check this" — into the most reassuring one.
 sed 's|^    UNSAFE=$cmd$|    continue|' "$CARRY_PLAN" > "$WORK/skip-unsafe.sh"
 case_carry_red "a search that cannot be replayed is skipped instead of refusing the update" "$WORK/skip-unsafe.sh"
 
-# 24. The substring trap, which coverage-gate.sh has already paid for once. Without the token
+# 27. The substring trap, which coverage-gate.sh has already paid for once. Without the token
 #     boundaries api/Gemfile matches inside api/Gemfile.lock, and a checkpoint that cites the
 #     changed file is carried because a different file's name contains it.
 sed "s|^BOUND='\[^A-Za-z0-9._/-\]'$|BOUND=''|" "$CARRY_PLAN" > "$WORK/substring.sh"
 case_carry_red "the path test is a substring match rather than a whole token" "$WORK/substring.sh"
 
-# 25. P1. A rebased branch's "delta" is a diff between two histories rather than the commits
+# 28. P1. A rebased branch's "delta" is a diff between two histories rather than the commits
 #     someone pushed, and every carry decision downstream is then made against the wrong set.
 awk '/^if ! git merge-base --is-ancestor/ { skip = 3 } skip { skip--; next } { print }' \
   "$CARRY_PLAN" > "$WORK/no-ancestry.sh"
 case_carry_red "the ancestry guard is gone, so a force-pushed branch updates in place" "$WORK/no-ancestry.sh"
 
-# 26. P3. Pending is a promise; carrying one promises work that nothing is doing, and the page it
+# 29. P3. Pending is a promise; carrying one promises work that nothing is doing, and the page it
 #     produces is a draft wearing a finished page's masthead.
 sed 's|^if grep -q .class="buildstate". "$PAGE" .*$|if false; then|' "$CARRY_PLAN" > "$WORK/draft-ok.sh"
 case_carry_red "a draft page is accepted as a base to update from" "$WORK/draft-ok.sh"
 
-# 27. The excerpt rule. An excerpt is a verbatim quotation and its state tag is computed from the
+# 30. The excerpt rule. An excerpt is a verbatim quotation and its state tag is computed from the
 #     diff, so a file entering the delta invalidates both. Keeping it is the one way this page
 #     lies about bytes while the bytes themselves are real.
 sed "s|    printf 'excerpt\\\\t%s\\\\tregen\\\\n' \"\$p\"|    printf 'excerpt\\\\t%s\\\\tkeep\\\\n' \"\$p\"|" \
   "$CARRY_PLAN" > "$WORK/keep-excerpts.sh"
 case_carry_red "an excerpt whose file moved in the delta is carried rather than regenerated" "$WORK/keep-excerpts.sh"
 
-# 28. A refusal that prints its plan rows anyway. Half a plan reads as a plan, and the rows that
+# 31. A refusal that prints its plan rows anyway. Half a plan reads as a plan, and the rows that
 #     did print are exactly the ones a run would act on.
 sed 's|^  echo "verdict: full"$|  sed "s/^/delta\\t/" "$TMP/delta" 2>/dev/null; echo "verdict: full"|' \
   "$CARRY_PLAN" > "$WORK/leaky-refusal.sh"

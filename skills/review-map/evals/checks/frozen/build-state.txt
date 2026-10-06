@@ -250,6 +250,78 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page excerpt-unchanged-changed-file.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment figures-chain-aff.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-chain-aff.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-converge-grading-note.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-converge-grading-note.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-converge-one-path.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-converge-one-path.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-converge-rel.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-converge-rel.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-converge-target-loc.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-converge-target-loc.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-lifecycle-aff.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-lifecycle-aff.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-lifecycle-method-label.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-lifecycle-method-label.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-lifecycle-no-loc.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-lifecycle-no-loc.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-structure-erd.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-structure-erd.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-two-figures.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-two-figures.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-unknown-kind.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-unknown-kind.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-card-no-lanes.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

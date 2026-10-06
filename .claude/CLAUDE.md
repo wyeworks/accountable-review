@@ -117,7 +117,7 @@ means a page drifting long drifts silently. The one number that must never be gr
 the budget forbids.
 
 `skills/review-map/evals/` is where judging happens, in three layers. **Mechanical**: `check.rb`
-and the nine checks, run on every push. **End to end** (`evals/e2e/`): a whole run of the skill
+and the ten checks, run on every push. **End to end** (`evals/e2e/`): a whole run of the skill
 against a **real merged OSS pull request** pinned in `prs.yml`, generated through
 `ci/generate-review-map.sh --output` exactly as CI does, checked mechanically, then graded by one
 LLM judge per aspect of the page, anchored in the checkout and blind to the mechanical results.
@@ -168,12 +168,12 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing, step 7 being the synthesis that turns analysis into an agenda — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, **the three topology figures** and the order a shape is chosen in, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus § *Coding decisions*, the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
-| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the assembled checkpoint, the chain and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
+| `references/page-template.html` | Design system — tokens (light and a dark half of our own), component classes, the assembled checkpoint, the chain, one of each topology figure and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
@@ -188,7 +188,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
 | `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one working judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release |
-| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. Nine of them, down from fifteen: six graded markup the agenda does not have, and two of those six would have SKIPped forever, which is worse than none because a SKIP reads as verified. `impact-paths.rb` grades `figure.impact` and nothing else, so a checkpoint's `figure.chain` — same markup, different job — is invisible to it by scope rather than by an exemption. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output for all nine, and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
+| `evals/checks/` | One Ruby script per rule family, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. Ten of them: fifteen became nine when six graded markup the agenda does not have — two of those six would have SKIPped forever, which is worse than none because a SKIP reads as verified — and `figures.rb` is the tenth. `impact-paths.rb` grades `figure.impact` and nothing else, so a checkpoint's `figure.chain` — same markup, different job — is invisible to it by scope rather than by an exemption; `figures.rb` grades the checkpoint's figures, that chain among them. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — and is the check whose rule is a relation between the page and a repository, which is what `golden/links-repo.sh` and `lib/review_map/fixture.rb` are for. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output for all ten, and `frozen.rb` verifies against it. `evals/README.md` § *checks/ is Ruby* has how it got that way, and the four defects the corpus alone could not have found |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
 | `skills/setup-ci/references/config.md` | `.accountable-review.yml` — the whole schema, the precedence rule, and why an unknown key is an error |
@@ -452,6 +452,36 @@ Editing one of these means checking the others still agree.
   eyes, and both defects that argument was built on were found in diagrams `diagram.rb` had just
   called clean. The trade is that a component cannot produce those defects, so the eyes are no longer
   owed. Reintroducing an SVG reintroduces the need, and `SKILL.md`'s hard rules say not to.
+- **Three of the deleted shapes came back as components, and the shape is chosen before it is
+  drawn.** `figure.converge` (several paths that must keep one invariant), `figure.lifecycle` (states
+  and the actions between them) and `figure.structure` (an entity and its relationships) sit in a
+  checkpoint's figure slot beside `figure.chain`, **one figure per checkpoint of any kind**, built
+  from the same `.ip-*` boxes and locators. The guard fork is still not drawable and still goes to
+  prose. Step 7f asks the shape questions in a fixed order — converge first, chain last — writes the
+  answer into `agenda.md`, and step 9 types the figure from that block only. **Zero figures is a valid
+  result and the count is never graded**; a page with more diagrams is not a better page.
+
+  **The converge is the one to understand, because it is the first checkpoint figure allowed to hold
+  `.ip-aff`, and the direction of the edge is what makes that safe.** An impact path flows *out* of
+  the change to a consequence; a converge's paths flow *in*, from writers, to an invariant — so an
+  unchanged writer that skips the callback the others run is drawn there, never also as an impact
+  card, with a *Look at* entry carrying the clause a node cannot. And its list **claims to be
+  complete**, which is why it is earned only by a recorded writer search: it looks most finished
+  exactly when it is most wrong. The same recorded search is what `carry-plan.sh`'s P6 replays, so
+  `--update` refuses rather than carrying a converge a new writer has falsified.
+
+  **`.cv-note` is a third free-text slot a severity word can enter**, after `GAP` and *Open question*,
+  and the only one without a fixed label. It says what a path skips, never how much that matters.
+
+  Seven files agree: `report-format.md` § *Topology figures* owns the shapes, the gates and the caps
+  **alone**, and § *Chains*, § *The review checkpoint*, § *One canonical home* and § *What was
+  searched* point at it; `SKILL.md` step 7f selects and step 9 builds; `page-template.html` holds the
+  CSS (head range, including the one print rule — an `.ip-out` fill prints white-on-white otherwise)
+  and assembles one each in checkpoints C to E; both lens files say which signal earns which shape;
+  `claim-falsifier.md` attacks a writer list for the path it missed; `evals/checks/figures.rb` grades
+  shape and locators, the first check to read a page's `figure.chain`; and `tests/run.sh` asserts the
+  template. `CAUSAL` moved to `checks/lib/review_map/vocabulary.rb` because two checks now read it, and
+  `lib/test/test_page.rb` fails when it and § *Impact paths*'s list disagree.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
   Rails (`Gemfile`, `config/application.rb`) or Elixir (`mix.exs`) and **names** one lens file and
   one catalogue. Both roots, or neither, are handled explicitly — ask in the first case, degrade

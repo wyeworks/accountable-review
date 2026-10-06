@@ -28,9 +28,9 @@ require_relative "checks/lib/review_map/check"
 # decides which ones apply and adds up what they printed. Exit code follows the FAILs.
 SCOPES = {
   "all"        => %w[completeness build-state page-invariants excerpts start-here
-                     impact-paths searches rails-anchors link-form],
+                     impact-paths figures searches rails-anchors link-form],
   "core"       => %w[completeness build-state page-invariants excerpts rails-anchors link-form],
-  "attention"  => %w[page-invariants excerpts rails-anchors link-form],
+  "attention"  => %w[page-invariants excerpts figures rails-anchors link-form],
   "start-here" => %w[page-invariants start-here link-form],
   "impact"     => %w[page-invariants impact-paths searches link-form],
 }.freeze

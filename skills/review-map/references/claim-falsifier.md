@@ -56,6 +56,11 @@ In descending order of how often it is worth the search:
   entry claims. A mislabelled tier is a mislabelled claim, and the page will inherit it.
 - **A simplification that holds only in the common case.** "Every write goes through the service" is
   falsified by one `update_all`, one `insert_all`, one `update_column`, one fixture, one seed file.
+- **A list of writers offered as complete.** When the note names the paths that create, change or
+  remove something an invariant depends on, it may become a figure that claims to show *every* such
+  path — so the path it missed is the most valuable thing you can find. Look for the one it did not
+  list: a bulk write, a `destroy` that skips callbacks via `delete`, a second controller, a job, a
+  rake task, a console-only admin method.
 - **A trace that stops early.** The note's hops end where the run stopped reading; the behaviour may
   not. Follow the last hop one further and see whether anything is waiting there.
 

@@ -1,0 +1,793 @@
+## --fragment agenda-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page agenda-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment agenda-probe-unlabelled.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page agenda-probe-unlabelled.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment agenda-probes-over-budget.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page agenda-probes-over-budget.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment anchors-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-demo-loose.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-demo-loose.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-fabricated-output.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-fabricated-output.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-hexdocs-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-hexdocs-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-hexdocs-unpinned.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-hexdocs-unpinned.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-hexdocs-wrong-package.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-hexdocs-wrong-package.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-invented-attribute.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-invented-attribute.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-invented-scope.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-invented-scope.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-link-alone.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-link-alone.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-link-in-excerpt.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-link-in-excerpt.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-mixed-series.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-mixed-series.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-doubled.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-doubled.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-marked.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-marked.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-orphan.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-orphan.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-over-budget.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-over-budget.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-probe-nested.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-probe-nested.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-uncited.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-uncited.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-primer-ungated.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-primer-ungated.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-probe-label-thin.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-probe-label-thin.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-probe-legit-forms.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-probe-legit-forms.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-probe-lens-forms.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-probe-lens-forms.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-probe-sandbox-lie.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-probe-sandbox-lie.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-probe-unlabelled.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-probe-unlabelled.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-runner-mutates.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-runner-mutates.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-uncatalogued-url.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-uncatalogued-url.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-unpinned-link.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-unpinned-link.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment build-state-updated-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page build-state-updated-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment build-state-updated-missing.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page build-state-updated-missing.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment build-state-updated-nosha.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page build-state-updated-nosha.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment build-state-updated-twice.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page build-state-updated-twice.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-at-head.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-at-head.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-diff-lang.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-diff-lang.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-duplicate.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-duplicate.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-open.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-open.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-typed-highlight.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-typed-highlight.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-typed-tag.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-typed-tag.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-unchanged-changed-file.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-unchanged-changed-file.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment figures-chain-aff.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's chain: node 2 is .ip-aff — a hop into unchanged code whose meaning the change altered is an impact path, drawn once in section 04
+## --page figures-chain-aff.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's chain: node 2 is .ip-aff — a hop into unchanged code whose meaning the change altered is an impact path, drawn once in section 04
+## --fragment figures-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+PASS  cp-b's converge holds its shape and carries its locators
+PASS  cp-c's lifecycle holds its shape and carries its locators
+PASS  cp-d's structure holds its shape and carries its locators
+## --page figures-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+WARN  cp-b's converge: no details.searched on the page — a converge claims its paths are all the writers, and only a recorded search makes that claim checkable
+PASS  cp-b's converge holds its shape and carries its locators
+PASS  cp-c's lifecycle holds its shape and carries its locators
+PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-converge-grading-note.html
+exit=0
+PASS  at most one figure per checkpoint
+WARN  cp-a's converge path 4: "critical" in a .cv-note — a note says what the path skips, never how much it matters
+PASS  cp-a's converge holds its shape and carries its locators
+## --page figures-converge-grading-note.html
+exit=0
+PASS  at most one figure per checkpoint
+WARN  cp-a's converge path 4: "critical" in a .cv-note — a note says what the path skips, never how much it matters
+WARN  cp-a's converge: no details.searched on the page — a converge claims its paths are all the writers, and only a recorded search makes that claim checkable
+PASS  cp-a's converge holds its shape and carries its locators
+## --fragment figures-converge-one-path.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's converge: 1 path(s) — a converge is 2–7, and one path is a chain
+## --page figures-converge-one-path.html
+exit=1
+PASS  at most one figure per checkpoint
+WARN  cp-a's converge: no details.searched on the page — a converge claims its paths are all the writers, and only a recorded search makes that claim checkable
+FAIL  cp-a's converge: 1 path(s) — a converge is 2–7, and one path is a chain
+## --fragment figures-converge-rel.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's converge: an .ip-rel between paths — they are siblings, not a sequence, and a connector fires the impact panel's lane crossing
+## --page figures-converge-rel.html
+exit=1
+PASS  at most one figure per checkpoint
+WARN  cp-a's converge: no details.searched on the page — a converge claims its paths are all the writers, and only a recorded search makes that claim checkable
+FAIL  cp-a's converge: an .ip-rel between paths — they are siblings, not a sequence, and a connector fires the impact panel's lane crossing
+## --fragment figures-converge-target-loc.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's converge: a locator on the target — an invariant is a property, not a file
+## --page figures-converge-target-loc.html
+exit=1
+PASS  at most one figure per checkpoint
+WARN  cp-a's converge: no details.searched on the page — a converge claims its paths are all the writers, and only a recorded search makes that claim checkable
+FAIL  cp-a's converge: a locator on the target — an invariant is a property, not a file
+## --fragment figures-lifecycle-aff.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's lifecycle: an .ip-aff node — a state is not a file, so unchanged-code has nothing to mean here
+## --page figures-lifecycle-aff.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's lifecycle: an .ip-aff node — a state is not a file, so unchanged-code has nothing to mean here
+## --fragment figures-lifecycle-method-label.html
+exit=0
+PASS  at most one figure per checkpoint
+WARN  cp-a's lifecycle: the transition into state 3 is labelled "after_destroy" — name the domain action, and leave the method to the locator
+PASS  cp-a's lifecycle holds its shape and carries its locators
+## --page figures-lifecycle-method-label.html
+exit=0
+PASS  at most one figure per checkpoint
+WARN  cp-a's lifecycle: the transition into state 3 is labelled "after_destroy" — name the domain action, and leave the method to the locator
+PASS  cp-a's lifecycle holds its shape and carries its locators
+## --fragment figures-lifecycle-no-loc.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's lifecycle: the transition into state 2 has no locator — the line that performs it is what shows whether it is guarded
+## --page figures-lifecycle-no-loc.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's lifecycle: the transition into state 2 has no locator — the line that performs it is what shows whether it is guarded
+## --fragment figures-structure-erd.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's structure: 5 relationship(s) — a structure is 1–4, and a whole schema is the ERD this figure refuses
+## --page figures-structure-erd.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's structure: 5 relationship(s) — a structure is 1–4, and a whole schema is the ERD this figure refuses
+## --fragment figures-two-figures.html
+exit=1
+FAIL  cp-a carries 2 figures (converge, structure) — one per checkpoint, of any kind, because two figures for one judgment are two answers to which shape it has
+PASS  cp-a's converge holds its shape and carries its locators
+PASS  cp-a's structure holds its shape and carries its locators
+## --page figures-two-figures.html
+exit=1
+FAIL  cp-a carries 2 figures (converge, structure) — one per checkpoint, of any kind, because two figures for one judgment are two answers to which shape it has
+WARN  cp-a's converge: no details.searched on the page — a converge claims its paths are all the writers, and only a recorded search makes that claim checkable
+PASS  cp-a's converge holds its shape and carries its locators
+PASS  cp-a's structure holds its shape and carries its locators
+## --fragment figures-unknown-kind.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's flowchart: figure.flowchart is not a checkpoint figure — the four are chain, converge, lifecycle, structure, and figure.impact lives in section 04
+## --page figures-unknown-kind.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's flowchart: figure.flowchart is not a checkpoint figure — the four are chain, converge, lifecycle, structure, and figure.impact lives in section 04
+## --fragment impact-card-no-lanes.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-card-no-lanes.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-entities-vocab-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-entities-vocab-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-four-paths.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-four-paths.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-loc-not-last.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-loc-not-last.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-loc-on-outcome.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-loc-on-outcome.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-missing-loc.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-missing-loc.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-no-affected.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-no-affected.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-no-outcome.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-no-outcome.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-no-why.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-no-why.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-prose-nodes.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-prose-nodes.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-shared-card.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-shared-card.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-two-locators.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-two-locators.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-unlabelled-edge.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-unlabelled-edge.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-why-citation.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-why-citation.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-why-variant-class.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-why-variant-class.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-assurance.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-assurance.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-bill-in-comment.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-bill-in-comment.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-bill-in-prose.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-bill-in-prose.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-draft-narration.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-draft-narration.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-flow-designator.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-flow-designator.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-loose-data-path.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-loose-data-path.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-no-tier.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-no-tier.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-risk-score-leading.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-risk-score-leading.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-risk-score-trailing.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-risk-score-trailing.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-risk-score.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-risk-score.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-section-sign-quoted.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-section-sign-quoted.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-section-sign.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-section-sign.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-severity-chip.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-severity-chip.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-standing-disclaimer.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-standing-disclaimer.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-tier-modifier-only.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-tier-modifier-only.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-update-assurance.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-update-assurance.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-update-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-update-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-update-narration.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-update-narration.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-update-recency.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-update-recency.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-update-resolved.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-update-resolved.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-verdict.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-verdict.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment links-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page links-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment links-collapsed-anchor.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page links-collapsed-anchor.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment links-collapsed-no-excerpt.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page links-collapsed-no-excerpt.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment links-range-truncated.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page links-range-truncated.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment links-unknown-anchor.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page links-unknown-anchor.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment reach-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page reach-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment searches-bre-dialect.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page searches-bre-dialect.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment searches-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page searches-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment searches-git-grep.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page searches-git-grep.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment searches-unreachable.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page searches-unreachable.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment start-here-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page start-here-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment start-here-no-why.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page start-here-no-why.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment start-here-orphan-checkpoint.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page start-here-orphan-checkpoint.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment start-here-style-comment.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page start-here-style-comment.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment start-here-two-lists.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page start-here-two-lists.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment page-template.html
+exit=1
+PASS  at most one figure per checkpoint
+WARN  cp-a's chain node 2: "{{CAUSAL_VERB}}" is outside the causal vocabulary in report-format.md § Impact paths
+FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}, {{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}
+FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
+FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
+FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
+## --page page-template.html
+exit=1
+PASS  at most one figure per checkpoint
+WARN  cp-a's chain node 2: "{{CAUSAL_VERB}}" is outside the causal vocabulary in report-format.md § Impact paths
+FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}, {{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}
+FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
+FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
+FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
+## --fragment figures-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+PASS  cp-b's converge holds its shape and carries its locators
+PASS  cp-c's lifecycle holds its shape and carries its locators
+PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+PASS  cp-b's converge holds its shape and carries its locators
+PASS  cp-c's lifecycle holds its shape and carries its locators
+PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+PASS  cp-b's converge holds its shape and carries its locators
+PASS  cp-c's lifecycle holds its shape and carries its locators
+PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+PASS  cp-b's converge holds its shape and carries its locators
+PASS  cp-c's lifecycle holds its shape and carries its locators
+PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+PASS  cp-b's converge holds its shape and carries its locators
+PASS  cp-c's lifecycle holds its shape and carries its locators
+PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-two-figures.html
+exit=1
+FAIL  cp-a carries 2 figures (converge, structure) — one per checkpoint, of any kind, because two figures for one judgment are two answers to which shape it has
+PASS  cp-a's converge holds its shape and carries its locators
+PASS  cp-a's structure holds its shape and carries its locators
+## --fragment figures-unknown-kind.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's flowchart: figure.flowchart is not a checkpoint figure — the four are chain, converge, lifecycle, structure, and figure.impact lives in section 04
+## --fragment figures-chain-aff.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's chain: node 2 is .ip-aff — a hop into unchanged code whose meaning the change altered is an impact path, drawn once in section 04
+## --fragment figures-converge-one-path.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's converge: 1 path(s) — a converge is 2–7, and one path is a chain
+## --fragment figures-converge-rel.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's converge: an .ip-rel between paths — they are siblings, not a sequence, and a connector fires the impact panel's lane crossing
+## --fragment figures-converge-target-loc.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's converge: a locator on the target — an invariant is a property, not a file
+## --fragment figures-converge-grading-note.html
+exit=0
+PASS  at most one figure per checkpoint
+WARN  cp-a's converge path 4: "critical" in a .cv-note — a note says what the path skips, never how much it matters
+PASS  cp-a's converge holds its shape and carries its locators
+## --fragment figures-lifecycle-aff.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's lifecycle: an .ip-aff node — a state is not a file, so unchanged-code has nothing to mean here
+## --fragment figures-lifecycle-no-loc.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's lifecycle: the transition into state 2 has no locator — the line that performs it is what shows whether it is guarded
+## --fragment figures-lifecycle-method-label.html
+exit=0
+PASS  at most one figure per checkpoint
+WARN  cp-a's lifecycle: the transition into state 3 is labelled "after_destroy" — name the domain action, and leave the method to the locator
+PASS  cp-a's lifecycle holds its shape and carries its locators
+## --fragment figures-structure-erd.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's structure: 5 relationship(s) — a structure is 1–4, and a whole schema is the ERD this figure refuses
+## --fragment agenda-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment reach-clean.html
+exit=0
+SKIP  no checkpoint figure in this input

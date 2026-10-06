@@ -474,7 +474,11 @@ rg -n '%MyApp\.Project\{' lib test                      # struct literals that s
 ```
 
 Bulk writes bypass changesets entirely. If the change relies on a validation, every hit in the first
-search is a path where the new invariant does not hold.
+search is a path where the new invariant does not hold. This is the search a `figure.converge` is
+earned by — each changeset function and every hit here is one of its paths, and a struct literal that
+skips the changeset is the unchanged path it exists to show. `report-format.md` § *Topology figures*
+owns the rest; an `Ecto.Enum` with guarded transitions is its `figure.lifecycle`, a new schema or
+association its `figure.structure`.
 
 **A changed LiveView event — search both directions**
 
