@@ -179,7 +179,10 @@ Four parts, and a shut evidence block at the foot:
 ```text
 What changed                    one paragraph: what is now true that was not
 What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the
-                                outside; each one judgment, framed as a question
+                                outside; each one judgment, framed as a question, and at
+                                most one small figure where its shape is clearer than prose:
+                                a chain, paths converging on one invariant, a lifecycle, or
+                                an entity and its relationships
 Read the code in this order     3-7 stops, in the order that builds understanding
 Impact outside the diff         1-3 chains, from changed code into code it gives new meaning to,
                                 each node linked to the file it lives in

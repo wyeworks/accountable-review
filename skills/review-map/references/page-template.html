@@ -144,7 +144,7 @@
                             Its header names the stack in words — "Understanding
                             Ruby on Rails" — and its frame is --primer-*
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
-                            sentences, an optional figure.chain, ul.lookat (1-4
+                            sentences, at most one figure, ul.lookat (1-4
                             places to look, each a title, a clause and its
                             citation, in that order), an optional p.open
     start here ............ ol.begin — one list: the route through the code, 3-7
@@ -152,6 +152,12 @@
     chains ................ figure.chain inside a checkpoint — mechanism INSIDE the
                             change, and therefore no .ip-aff node. .ip-step is the
                             neutral hop, and exists only here
+    topology figures ...... figure.converge (paths onto one invariant), .lifecycle
+                            (states and the actions between them), .structure (an
+                            entity and its relationships) — the shapes a chain
+                            cannot draw. Converge and structure MAY hold .ip-aff:
+                            an unchanged writer of an invariant is upstream of the
+                            change, not a consequence of it
     impact paths .......... .impact — section 04. 1-3 directed chains + .legend,
                             ONE PATH PER .ip-card, so three diagrams read as three.
                             Each node past a path's first carries its INCOMING
@@ -1258,6 +1264,103 @@ figure.chain > figcaption { margin-top: 14px; }
 .ip-step > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
 
 /* ============================================================
+   Three more checkpoint figures, for the shapes a chain cannot
+   draw because it has one successor per node: a FAN-IN onto one
+   invariant (figure.converge), STATES and the actions between
+   them (figure.lifecycle), and an ENTITY with its relationships
+   (figure.structure). report-format.md § Figures owns when each
+   is earned; this block owns only how they sit.
+
+   All three share the chain's card and its node boxes, so the
+   kinds keep their meaning: solid ink is changed code, dashed
+   teal is code the diff did not touch. NONE OF THEM HAS AN
+   .ip-rel BETWEEN .ip-n NODES. The impact panel's lane crossing
+   hangs off `.ip-chg + .ip-aff > .ip-rel`, and a converge alternates
+   exactly those kinds — a connector there would fire an elbow
+   into a lane this figure does not have.
+   ============================================================ */
+figure.converge, figure.lifecycle, figure.structure { margin-top: 26px; padding: 20px 24px 22px; background: var(--surface-hi); border: 1px solid var(--rule); }
+figure.converge > figcaption, figure.lifecycle > figcaption, figure.structure > figcaption { margin-top: 14px; }
+figure.converge .ip-n, figure.structure .ip-n { grid-template-columns: minmax(0, 1fr); }
+figure.converge .ip-n > *, figure.structure .ip-n > * { grid-column: 1; }
+
+/* CONVERGE. Paths on the left, the invariant on the right, and between them a bus: each path
+   row draws its own tick out to the right edge and its own slice of the vertical, so the bus
+   is continuous across rows with no geometry a run has to place. The first row's slice starts
+   at its middle and the last row's ends at its middle, which is what makes it read as a
+   bracket rather than a rail. The target is centred on the paths column, so its arrow always
+   lands inside the bracket — given at least two paths, which is the figure's floor anyway. */
+.cv-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; }
+.cv-paths { list-style: none; margin: 0; padding: 0; }
+.cv-paths > li { position: relative; padding: 5px 22px 5px 0; }
+.cv-paths > li::after { content: ""; position: absolute; right: 0; top: 50%; width: 22px; height: 1px; background: var(--rule-strong); }
+.cv-paths > li::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 1px; background: var(--rule-strong); }
+.cv-paths > li:first-child::before { top: 50%; }
+.cv-paths > li:last-child::before { bottom: 50%; }
+/* What the path skips — a fact about the code, never why it matters. Ochre because it is the
+   page saying something is missing on this path; it is not a severity, and it has no label. */
+.cv-note { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--gap-ink); }
+.cv-target { position: relative; padding-left: 30px; }
+.cv-target::before { content: ""; position: absolute; left: 0; top: 50%; width: 24px; height: 1px; background: var(--rule-strong); }
+.cv-target::after { content: ""; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 6px solid var(--rule-strong); }
+.cv-target > .ip-box { border: 1px solid var(--ink); background: var(--ink); }
+.cv-target > .ip-box b { color: var(--ground); }
+.cv-target > .ip-box .ip-d { color: var(--ground); opacity: .72; }
+
+/* LIFECYCLE. A chain of states rather than of code: each state after the first carries its
+   INCOMING transition as the same .ip-rel connector, named for the domain action, with the
+   line that performs it as a locator inside the connector. A new state is drawn in ink; a
+   state that already existed in the plain step box. A transition back to an earlier state is
+   a line of text, not a curve — the one thing a vertical list cannot draw, said in words. */
+.lc-states { list-style: none; margin: 0; padding: 0; }
+.lc-s > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
+.lc-s.lc-new > .ip-box { border-color: var(--ink); background: var(--ground); }
+.lc-states .ip-rel .ip-loc, .st-rel .ip-loc { text-transform: none; letter-spacing: 0; align-self: center; }
+.st-rel .ip-loc { align-self: start; }
+.lc-back { margin-top: 12px; padding-top: 10px; border-top: 1px dotted var(--rule-dash); font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted); }
+.lc-back .ip-loc { margin-left: 8px; }
+
+/* STRUCTURE. The entity the change is about on top, and a spine down from it with one
+   relationship per row: the relation and its cardinality, then the entity at the other end.
+   Hub and spoke rather than a grid of tables, because the question is what this entity is now
+   attached to — a full schema is the ERD this figure exists to refuse. An ABSENT relationship
+   is drawn where the absence is the point, in ochre, the page's colour for "missing". */
+.st-fields { list-style: none; margin: 2px 0 0; padding: 0; font-family: var(--mono); font-size: 11px; line-height: 1.5; color: var(--muted); }
+.st-fields > li::before { content: "\00B7\00A0"; }
+.st-edges { list-style: none; margin: 0 0 0 11px; padding: 0 0 0 22px; }
+.st-e { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 14px; align-items: center; padding-top: 12px; }
+figure.structure .st-e > * { grid-column: auto; }
+.st-e::before { content: ""; position: absolute; left: -22px; top: 0; bottom: 0; width: 1px; background: var(--rule-strong); }
+.st-e:last-child::before { bottom: auto; height: calc(50% + 6px); }
+.st-e::after { content: ""; position: absolute; left: -22px; top: calc(50% + 6px); width: 18px; height: 1px; background: var(--rule-strong); }
+.st-rel { display: flex; flex-direction: column; gap: 3px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.st-card { font-size: 10px; letter-spacing: .04em; text-transform: none; color: var(--ink-3); }
+.st-none > .st-rel { color: var(--gap-ink); }
+.st-none::after { background: none; border-top: 1px dashed var(--gap-rule); }
+
+@media (max-width: 780px) {
+  figure.converge, figure.lifecycle, figure.structure { padding: 18px 16px 20px; }
+  /* One column: the bracket moves to the left edge and the target sits under it. */
+  .cv-grid { grid-template-columns: minmax(0, 1fr); }
+  .cv-paths > li { padding: 5px 0 5px 22px; }
+  .cv-paths > li::after, .cv-paths > li::before { right: auto; left: 0; }
+  .cv-paths > li:last-child::before { bottom: 0; }
+  .cv-target { padding: 22px 0 0 22px; }
+  .cv-target::before { left: 0; top: 0; width: 1px; height: 16px; }
+  .cv-target::after { left: 0; top: 16px; transform: translateX(-50%); border: 4px solid transparent; border-top: 6px solid var(--rule-strong); border-bottom: 0; }
+  .st-e { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
+}
+
+/* PRINT. Browsers drop backgrounds when printing, and the filled outcome and target boxes are
+   ground-coloured text on an ink fill — so without this they print as white on white, and the
+   one box that names what the figure is FOR disappears. And a figure split across a page break
+   is two half-figures, neither of which says what it shows. */
+@media print {
+  figure.chain, figure.converge, figure.lifecycle, figure.structure, .ip-card { break-inside: avoid; }
+  .ip-box, .cv-target, .ip-rel > i, .key-out { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* ============================================================
    Grid tables. gap:1px over --rule, so every seam is a rule at
    any wrap point and there is no border-collapse to fight.
    Column widths are tuned for Roboto Mono; the container scrolls
@@ -1354,9 +1457,10 @@ details.evidence[open] .chev { transform: rotate(90deg); }
 .rail-links .pending { font-size: 8.5px; padding: 0 4px; letter-spacing: .08em; }
 
 /* ============================================================
-   Figures. There are two, and neither is a drawing: figure.chain
-   inside a checkpoint and figure.impact in section 04, both built
-   out of the same .ip-* chain. Nothing on this page is an <svg>.
+   Figures. None of them is a drawing: figure.chain, .converge,
+   .lifecycle and .structure inside a checkpoint, figure.impact in
+   section 04, all built out of the same .ip-* boxes. Nothing on
+   this page is an <svg>.
    ============================================================ */
 figure { margin: 0; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
@@ -1517,6 +1621,9 @@ figcaption strong { color: var(--ink-3); }
       <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
       <a class="sub" data-rail="cp-a" href="#cp-a">{{SHORT_FORM_OF_THE_QUESTION}}</a>
       <a class="sub" data-rail="cp-b" href="#cp-b">{{SHORT_FORM_OF_THE_QUESTION}}</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">{{SHORT_FORM_OF_THE_QUESTION}}</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">{{SHORT_FORM_OF_THE_QUESTION}}</a>
+      <a class="sub" data-rail="cp-e" href="#cp-e">{{SHORT_FORM_OF_THE_QUESTION}}</a>
       <a class="sub" data-rail="cp-x" href="#cp-x">{{SHORT_FORM_OF_THE_QUESTION}} <span class="pending">pending</span></a>
       <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
       <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
@@ -1938,6 +2045,104 @@ post.saved_change_to_title?  # =&gt; true</pre>
         </ul>
 
         <div class="gap"><b>GAP</b><span>{{WHAT_THE_TESTS_LEAVE_OPEN_WHERE_IT_CHANGES_THE_JUDGMENT}}</span></div>
+      </section>
+
+      <!-- ===== THREE MORE FIGURES, one per checkpoint, for shapes a chain cannot
+           draw. Same slot as the chain — after the explanation, before ul.lookat —
+           and the same cap: AT MOST ONE FIGURE PER CHECKPOINT, of any kind, and
+           most checkpoints earn none. report-format.md § Figures owns which shape
+           a judgment has and the order the questions are asked in. Each is
+           pared to the figure and what the figure needs: the rest of the
+           composition is checkpoint A's. The ul.lookat stays because a
+           converge's unchanged path NEEDS its entry — a node cannot carry
+           the clause. ===== -->
+
+      <!-- CONVERGE: several independent paths must all keep one invariant. Its list
+           CLAIMS TO BE ALL OF THEM, so it is earned only by a recorded writer search
+           in details.searched — the missing path is the defect it exists to show.
+           .ip-aff is allowed here: an unchanged writer is upstream of the change, not
+           a consequence of it. Every .ip-aff node also gets a ul.lookat entry, because
+           a node holds a label and a locator and the clause has to live somewhere.
+           .cv-note says what the path skips, in a few words, never why it matters.
+           NO .ip-rel IN HERE — the paths are siblings, not a sequence. -->
+      <section class="cp" id="cp-c">
+        <span class="lbl lbl-wide">Checkpoint C</span>
+        <h3>{{A_JUDGMENT_ABOUT_AN_INVARIANT}}?</h3>
+        <p>{{WHAT_THE_INVARIANT_IS_AND_WHICH_PATH_MIGHT_NOT_KEEP_IT}}</p>
+        <figure class="converge">
+          <div class="cv-grid">
+            <ol class="cv-paths">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DOMAIN_ACTION}}</b><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>{{ANOTHER_DOMAIN_ACTION}}</b><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>{{AN_UNCHANGED_WRITER}}</b><span class="cv-note">{{WHAT_IT_SKIPS}}</span><a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></span></li>
+            </ol>
+            <div class="cv-target"><span class="ip-box"><b>{{THE_INVARIANT}}</b><span class="ip-d">must hold on every path</span></span></div>
+          </div>
+          <figcaption>{{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}</figcaption>
+        </figure>
+        <ul class="lookat">
+          <li>
+            <b>{{THE_UNCHANGED_WRITER}}</b>
+            <span>{{WHAT_IT_BYPASSES_AND_WHAT_THAT_LEAVES}} <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- LIFECYCLE: an entity moving between named states. Each state after the first
+           carries its INCOMING transition, named as the domain action ("ownership
+           removed", not "after_destroy"), with the line that performs it as the
+           locator inside the connector. lc-new marks a state this change introduced.
+           A transition back to an earlier state is an lc-back line. A nullable
+           timestamp is not a state machine: drawing one invents states the code does
+           not have. -->
+      <section class="cp" id="cp-d">
+        <span class="lbl lbl-wide">Checkpoint D</span>
+        <h3>{{A_JUDGMENT_ABOUT_WHICH_TRANSITIONS_ARE_GUARDED}}?</h3>
+        <p>{{WHICH_STATES_EXIST_NOW_AND_WHAT_THE_REVIEWER_HAS_TO_DECIDE}}</p>
+        <figure class="lifecycle">
+          <ol class="lc-states">
+            <li class="lc-s"><span class="ip-box"><b>{{FIRST_STATE}}</b></span></li>
+            <li class="lc-s lc-new"><span class="ip-rel"><i></i>{{DOMAIN_ACTION}}<a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{NEW_STATE}}</b></span></li>
+            <li class="lc-s"><span class="ip-rel"><i></i>{{DOMAIN_ACTION}}<a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{LAST_STATE}}</b></span></li>
+          </ol>
+          <p class="lc-back">&#8634; {{DOMAIN_ACTION}} &rarr; {{AN_EARLIER_STATE}}<a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></p>
+          <figcaption>{{WHAT_STATES_THIS_CAN_BE_IN}}</figcaption>
+        </figure>
+        <ul class="lookat">
+          <li>
+            <b>{{WHAT_IS_AT_THIS_LOCATION_IN_A_FEW_WORDS}}</b>
+            <span>{{WHAT_TO_CHECK_THERE}}</span>
+            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- STRUCTURE: a persistent entity or relationship appeared, changed or went.
+           The entity on top with at most three fields that explain the behaviour, then
+           one row per relationship — the relation and its cardinality with the line
+           declaring it, then the entity at the other end: ip-chg if this change made
+           it, ip-aff if it already existed. st-none is a relationship that is ABSENT
+           where the absence is the point. Never the whole schema. -->
+      <section class="cp" id="cp-e">
+        <span class="lbl lbl-wide">Checkpoint E</span>
+        <h3>{{A_JUDGMENT_ABOUT_WHAT_THE_NEW_RELATIONSHIP_ALLOWS}}?</h3>
+        <p>{{WHAT_NOW_EXISTS_AND_WHAT_THE_REVIEWER_HAS_TO_DECIDE}}</p>
+        <figure class="structure">
+          <div class="ip-n ip-chg"><span class="ip-box"><b>{{THE_ENTITY}}</b><span class="ip-d">{{NEW_OR_WHAT_CHANGED}}</span><ul class="st-fields"><li>{{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}</li></ul><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></div>
+          <ul class="st-edges">
+            <li class="st-e ip-aff"><span class="st-rel">{{RELATION}}<span class="st-card">{{CARDINALITY}}</span><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{AN_EXISTING_ENTITY}}</b></span></li>
+            <li class="st-e st-none ip-aff"><span class="st-rel">no {{RELATION}}<span class="st-card">{{WHY_THE_ABSENCE_MATTERS}}</span></span><span class="ip-box"><b>{{ANOTHER_ENTITY}}</b><a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></span></li>
+          </ul>
+          <figcaption>{{WHAT_RELATIONSHIP_NOW_EXISTS}}</figcaption>
+        </figure>
+        <ul class="lookat">
+          <li>
+            <b>{{THE_EXISTING_ENTITY}}</b>
+            <span>{{WHAT_IT_NOW_HAS_TO_ACCOUNT_FOR}} <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
+          </li>
+        </ul>
       </section>
 
       <!-- ===== A PENDING CHECKPOINT, while section 02 fills in one at a time.

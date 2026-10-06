@@ -194,6 +194,31 @@ sed 's|class="path ip-loc" href="{{BLOB}}#L{{START}}"|class="path ip-loc" data-p
   "$TEMPLATE" > "$WORK/loc-datapath.html"
 case_runs_red "a locator carries the inventory's data-path attribute" "$WORK/loc-datapath.html" "$SKELETON"
 
+# 39. The topology figures, each removed. The reason is #8's: a figure a run has never seen
+#     assembled is a figure it does not draw, and the shapes these three exist for — a fan-in, a
+#     state machine, a schema — are exactly the ones the deleted SVG layouts were skipped on.
+for kind in converge lifecycle structure; do
+  awk -v o="<figure class=\"$kind\">" 'index($0, o) { f = 1 } f && /<\/figure>/ { f = 0; next } !f { print }' \
+    "$TEMPLATE" > "$WORK/no-$kind.html"
+  case_runs_red "the assembled $kind figure is gone" "$WORK/no-$kind.html" "$SKELETON"
+done
+
+# 40. A connector between a converge's paths. They are siblings, not a sequence, and the impact
+#     panel's lane crossing hangs off `.ip-chg + .ip-aff > .ip-rel` — which a converge alternates.
+awk '/<ol class="cv-paths">/ { f = 1 } f && /class="ip-n ip-aff"/ && !d { sub(/<span class="ip-box">/, "<span class=\"ip-rel\"><i></i>calls</span><span class=\"ip-box\">"); d = 1 } { print }' \
+  "$TEMPLATE" > "$WORK/cv-rel.html"
+case_runs_red "a converge's paths are joined by a connector" "$WORK/cv-rel.html" "$SKELETON"
+
+# 41. A locator on the converge's target. An invariant is a property, not a file — the converge's
+#     version of #17, and it looks just as thorough.
+sed 's|<b>{{THE_INVARIANT}}</b><span class="ip-d">must hold on every path</span>|&<a class="path ip-loc" href="#">app/x.rb:1</a>|' \
+  "$TEMPLATE" > "$WORK/cv-target-loc.html"
+case_runs_red "a converge's target is given a locator" "$WORK/cv-target-loc.html" "$SKELETON"
+
+# 42. An unchanged node in a lifecycle. A state is not a file, so the teal kind has nothing to mean.
+sed 's|<li class="lc-s lc-new">|<li class="lc-s ip-aff">|' "$TEMPLATE" > "$WORK/lc-aff.html"
+case_runs_red "a lifecycle state is drawn as unchanged code" "$WORK/lc-aff.html" "$SKELETON"
+
 # 19. The chip that lost its indent reset. The page still renders, the box still lands in the
 #     right place, and only the word inside it moves — 24px left of its own border, over the
 #     entry's title. The most visible defect this suite has ever had to be taught to see, and the

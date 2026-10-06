@@ -666,7 +666,7 @@ yes, stop.
 
 **The count follows the delta, never the file count.** One delta is three to five whatever the diff
 weighs: eighty files of one rename is one judgment, and one behaviour reaching across four layers is
-also one — its reach becomes *Look at* entries, a chain and a card in section 04, not more
+also one — its reach becomes *Look at* entries, a figure and a card in section 04, not more
 checkpoints. Two delta bullets in *What changed* is what earns a sixth. Since those bullets are on
 the page, the reader has already been told why the agenda is longer.
 
@@ -717,8 +717,8 @@ middle one is the product:
   behavioural checkpoint to sit in front of it.
 
 **7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
-two to four sentences. Then decide whether it also earns a chain, and how many *Look at* entries it
-needs. **Each entry is three things in order — a title, a clause, then the citation.** The title names
+two to four sentences. Then decide whether it also earns a figure, which shape, and how many *Look at*
+entries it needs. **Each entry is three things in order — a title, a clause, then the citation.** The title names
 what is at that location in two to six words, so four entries can be scanned rather than read; the
 file name is not a title, because the citation says that already. `report-format.md` § *The review
 checkpoint* owns the rest.
@@ -730,10 +730,46 @@ sequence, draw them.* It shows that mechanism **inside the change**, so if the c
 crosses into unchanged code, it is an impact path: it belongs in section 04, drawn once, and the
 checkpoint says so in a clause.
 
-Diagram and prose have different jobs. The chain says how the value gets there; the explanation says
-what the reader has to judge about it. **An explanation that walks the chain node by node is the
-defect** — it doubles the length and teaches nothing twice, and it is what a run reaches for when it
-is unsure the figure landed.
+**A chain is one of four shapes, and it is asked about last.** Before drawing one, ask what shape the
+judgment actually has — in this order, stopping at the first yes:
+
+1. Do several independent paths have to preserve one property? → `figure.converge`
+2. Does an entity move between named states? → `figure.lifecycle`
+3. Did a persistent entity or relationship appear, change or disappear? → `figure.structure`
+4. Would the explanation otherwise name three hops in sequence? → `figure.chain`
+5. None of these → no figure, which is the commonest answer and a correct one.
+
+Converge is first because it is the shape that shows where correctness fails: the path that does not
+keep the invariant is the finding, and a chain drawn through any one path hides it. Then four gates,
+all of which must hold — a reviewer question the figure answers, a real shape rather than files with
+arrows, simpler than the prose, and every node and edge evidenced by a line you read. `report-format.md`
+§ *Topology figures* owns all of it.
+
+**A converge needs its writer search before it may be drawn.** Its list claims to be every path, and
+the missing one is the defect it exists to show. So run the lens's recipe for a changed validation,
+callback or default — the bulk writes and direct constructors that skip it — and record it in
+`details.searched`. No recorded search, no converge. An unchanged writer it turns up is drawn **in**
+the converge as `.ip-aff`, never also as an impact card, and gets a *Look at* entry carrying its clause.
+
+**Write the decision into `agenda.md` before any markup**, one short block per checkpoint that earns a
+figure:
+
+```
+cp-b figure: converge
+  question: which paths must keep ownership history truthful?
+  invariant: one open history row per owner and gem
+  nodes: ownership confirmed (app/models/ownership.rb:112) · … · gem disowned, skips destroy callbacks (app/models/rubygem.rb:301, unchanged)
+  search: rg -n 'delete_all|update_all|update_column' app lib — 1 bypass
+```
+
+Step 9 types the figure from that block and nothing else. Deciding the shape and typing it are
+different acts, and a figure improvised from the raw notes while writing markup is the one that grows
+a node nobody traced.
+
+Diagram and prose have different jobs. The figure says how the value gets there, or which paths must
+hold; the explanation says what the reader has to judge about it. **An explanation that walks the
+figure node by node is the defect** — it doubles the length and teaches nothing twice, and it is what a
+run reaches for when it is unsure the figure landed.
 
 **7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it:
 
@@ -962,7 +998,7 @@ foot belongs to step 10's gate. A stage has to be worth opening the tab for.
 same prose twice — once streamed, once re-edited — which is the cost step 9 exists to avoid. It also
 compresses in the wrong direction: cutting a drafted paragraph tends to take the clause a claim
 rested on, where writing to the cap takes the sentence that was never needed. Nothing there is
-negotiable against a figure: the count exempts every chain label and locator, every `<code>` and
+negotiable against a figure: the count exempts everything inside a figure of any kind, every `<code>` and
 `<pre>`, and everything inside a collapsed block, so a long page is never fixed by dropping a
 drawing. An impact card's `p.ip-why` is prose and does count.
 
@@ -1064,12 +1100,14 @@ Everything else about writing holds at every stage:
   exists to choose a palette and pair typefaces; those decisions are already made here, and its own
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
   yields nothing. Load it only if you have a deliberate reason to depart from the template.
-- **Figures are components, and there is no `<svg>` on this page.** Two figure vocabularies exist and
-  the template assembles both: the vertical labelled chain — `figure.impact` in section 04,
-  `figure.chain` inside a checkpoint — and the `dl.ba` before/after pair. Build them from the
-  template's markup. `report-format.md` § *Chains* owns the node kinds, the causal vocabulary and the
-  rule that decides which of the two figures a given chain is; § *Impact paths* owns the panel's own
-  caps and owns them alone.
+- **Figures are components, and there is no `<svg>` on this page.** The template assembles every one:
+  the vertical labelled chain — `figure.impact` in section 04, `figure.chain` inside a checkpoint —
+  the three topology figures a checkpoint may carry instead of a chain (`figure.converge`,
+  `figure.lifecycle`, `figure.structure`, in checkpoints C to E), and the `dl.ba` before/after pair.
+  Build them from the template's markup, and type a topology figure only from its `agenda.md` block.
+  `report-format.md` § *Chains* owns the node kinds, the causal vocabulary and the rule that decides
+  which of the two chain figures a given chain is; § *Topology figures* owns the other three; § *Impact
+  paths* owns the panel's own caps and owns them alone.
 
   What this replaced was four SVG layouts worked out to scale in the template. They cost more than
   they carried: an `<svg>` is the most expensive thing on a page to type, so the characteristic
@@ -1082,6 +1120,12 @@ Everything else about writing holds at every stage:
   nodes ending at one `.ip-out`. The moment a hop lands in unchanged code whose meaning the change
   altered, it is an impact path: draw it once in section 04 and let the checkpoint say so in a clause.
   Redrawing it there is the canonical-home regression arriving as a figure.
+- **A converge and a structure may hold unchanged code, and the direction of the edge is why.** An
+  impact path flows *out* of the change to a consequence; a converge's paths flow *in*, from writers
+  upstream, to an invariant. An unchanged writer that skips what the others run is drawn in the
+  converge and nowhere else, with a *Look at* entry carrying the clause its node cannot. A converge's
+  paths carry no `.ip-rel` — they are siblings, and a connector between two of them fires the impact
+  panel's lane crossing — and its target, being an invariant, carries no locator.
 - **Inherit the markup, never the strings.** Every label in the assembled examples is a claim about a
   file, and a claim copied out of a specimen is a false claim nothing catches — a run once inherited
   a specimen's last box caption onto a component that never touches the field, and only a reader
@@ -1400,7 +1444,9 @@ what this page is for, so the dangerous change is a new consumer appearing in a 
 cites* — invisible to any rule about what a checkpoint cites. The searches the previous page
 recorded are the only thing that can see it, so the script replays them; a delta path among their
 hits means these commits reached code the page reasoned about, and that is step 7's work rather
-than an update's.
+than an update's. It is also what keeps a `figure.converge` honest across pushes: the writer search
+that earned it is one of those recorded searches, so a new writer of its invariant refuses the update
+rather than leaving a figure that claims to list every path and no longer does.
 
 ### The plan, and what each row means
 
@@ -1580,8 +1626,8 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   that a search did not establish, no summary claiming the diff was fully covered, and nothing
   anywhere that reads as a clean bill of health. Where a reviewer needs assurance rather than
   orientation, point them at a dedicated review pass.
-- **Never draw an `<svg>`.** The page's figures are two components — the vertical labelled chain and
-  the `dl.ba` pair — assembled from the template. A drawing derived per run spends the run's attention
+- **Never draw an `<svg>`.** The page's figures are components — the vertical labelled chain, the
+  three topology figures and the `dl.ba` pair — assembled from the template. A drawing derived per run spends the run's attention
   on geometry instead of on whether the edges are true, and makes two pages from this skill
   incomparable; a component cannot be drawn wrong.
 - Never drop a file from the page to keep it tidy.

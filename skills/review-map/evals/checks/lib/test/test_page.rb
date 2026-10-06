@@ -348,3 +348,24 @@ class TestReading < Minitest::Test
     end
   end
 end
+
+require_relative "../review_map/vocabulary"
+
+class TestVocabulary < Minitest::Test
+  REPORT_FORMAT = File.expand_path("../../../../references/report-format.md", __dir__)
+
+  # The causal vocabulary is written twice — as prose a run reads, in report-format.md, and as the
+  # list two checks grade against — and "extend both together" in a comment was the whole of the
+  # mechanism keeping them equal. This reads the blockquote and compares FIRST words, which is the
+  # unit the checks match on: a verb in the prose the checks do not know is reported as unlisted
+  # on a page that followed the reference, and one the checks know but the prose never offers is a
+  # word no run will ever write.
+  def test_causal_matches_the_reference
+    text = File.read(REPORT_FORMAT, encoding: "UTF-8")
+    quote = text[/The relation is the causal verb, and this is the vocabulary:\s*\n((?:>.*\n)+)/, 1]
+    refute_nil quote, "report-format.md no longer carries the vocabulary blockquote this test reads"
+
+    words = quote.gsub(/^>\s?/, "").gsub(/\*\*/, "").split("·").map { |v| v.strip.split.first }.uniq
+    assert_equal ReviewMap::CAUSAL.sort, words.sort
+  end
+end
