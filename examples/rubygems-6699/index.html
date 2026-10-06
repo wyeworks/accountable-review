@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Add HistoricalOwnership foundation for tracking gem ownership history Review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--
   accountable-review · review-map page template
 
@@ -74,7 +75,7 @@
   all. --update re-reads only the commits since the previous map (SKILL.md
   § Re-running over new commits), so a real difference exists between the parts of
   the page and a marker for it feels owed. It is not. The page says WHICH REVISION
-  its content describes, once, in the masthead cell and one sentence in § 01 — and
+  its content describes, once, in the masthead cell and one sentence in *What changed* — and
   never which checkpoints were re-derived. No "new" flag on a checkpoint, no
   "carried" tag, no "3 of 5 updated" line: three ordered states beside a question
   is the severity chip above, rebuilt out of words that sound like provenance.
@@ -123,7 +124,7 @@
                             Its header names the stack in words — "Understanding
                             Ruby on Rails" — and its frame is --primer-*
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
-                            sentences, an optional figure.chain, ul.lookat (1-4
+                            sentences, at most one figure, ul.lookat (1-4
                             places to look, each a title, a clause and its
                             citation, in that order), an optional p.open
     start here ............ ol.begin — one list: the route through the code, 3-7
@@ -131,6 +132,12 @@
     chains ................ figure.chain inside a checkpoint — mechanism INSIDE the
                             change, and therefore no .ip-aff node. .ip-step is the
                             neutral hop, and exists only here
+    topology figures ...... figure.converge (paths onto one invariant), .lifecycle
+                            (states and the actions between them), .structure (an
+                            entity and its relationships) — the shapes a chain
+                            cannot draw. Converge and structure MAY hold .ip-aff:
+                            an unchanged writer of an invariant is upstream of the
+                            change, not a consequence of it
     impact paths .......... .impact — section 04. 1-3 directed chains + .legend,
                             ONE PATH PER .ip-card, so three diagrams read as three.
                             Each node past a path's first carries its INCOMING
@@ -157,8 +164,6 @@
                             localStorage, no counters. All three are presentation:
                             delete the block and the page still reads
 -->
-<title>Add HistoricalOwnership foundation for tracking gem ownership history Review</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..600,0,0;1,9..144,400,0,0&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap">
@@ -1239,6 +1244,103 @@ figure.chain > figcaption { margin-top: 14px; }
 .ip-step > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
 
 /* ============================================================
+   Three more checkpoint figures, for the shapes a chain cannot
+   draw because it has one successor per node: a FAN-IN onto one
+   invariant (figure.converge), STATES and the actions between
+   them (figure.lifecycle), and an ENTITY with its relationships
+   (figure.structure). report-format.md § Figures owns when each
+   is earned; this block owns only how they sit.
+
+   All three share the chain's card and its node boxes, so the
+   kinds keep their meaning: solid ink is changed code, dashed
+   teal is code the diff did not touch. NONE OF THEM HAS AN
+   .ip-rel BETWEEN .ip-n NODES. The impact panel's lane crossing
+   hangs off `.ip-chg + .ip-aff > .ip-rel`, and a converge alternates
+   exactly those kinds — a connector there would fire an elbow
+   into a lane this figure does not have.
+   ============================================================ */
+figure.converge, figure.lifecycle, figure.structure { margin-top: 26px; padding: 20px 24px 22px; background: var(--surface-hi); border: 1px solid var(--rule); }
+figure.converge > figcaption, figure.lifecycle > figcaption, figure.structure > figcaption { margin-top: 14px; }
+figure.converge .ip-n, figure.structure .ip-n { grid-template-columns: minmax(0, 1fr); }
+figure.converge .ip-n > *, figure.structure .ip-n > * { grid-column: 1; }
+
+/* CONVERGE. Paths on the left, the invariant on the right, and between them a bus: each path
+   row draws its own tick out to the right edge and its own slice of the vertical, so the bus
+   is continuous across rows with no geometry a run has to place. The first row's slice starts
+   at its middle and the last row's ends at its middle, which is what makes it read as a
+   bracket rather than a rail. The target is centred on the paths column, so its arrow always
+   lands inside the bracket — given at least two paths, which is the figure's floor anyway. */
+.cv-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; }
+.cv-paths { list-style: none; margin: 0; padding: 0; }
+.cv-paths > li { position: relative; padding: 5px 22px 5px 0; }
+.cv-paths > li::after { content: ""; position: absolute; right: 0; top: 50%; width: 22px; height: 1px; background: var(--rule-strong); }
+.cv-paths > li::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 1px; background: var(--rule-strong); }
+.cv-paths > li:first-child::before { top: 50%; }
+.cv-paths > li:last-child::before { bottom: 50%; }
+/* What the path skips — a fact about the code, never why it matters. Ochre because it is the
+   page saying something is missing on this path; it is not a severity, and it has no label. */
+.cv-note { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--gap-ink); }
+.cv-target { position: relative; padding-left: 30px; }
+.cv-target::before { content: ""; position: absolute; left: 0; top: 50%; width: 24px; height: 1px; background: var(--rule-strong); }
+.cv-target::after { content: ""; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 6px solid var(--rule-strong); }
+.cv-target > .ip-box { border: 1px solid var(--ink); background: var(--ink); }
+.cv-target > .ip-box b { color: var(--ground); }
+.cv-target > .ip-box .ip-d { color: var(--ground); opacity: .72; }
+
+/* LIFECYCLE. A chain of states rather than of code: each state after the first carries its
+   INCOMING transition as the same .ip-rel connector, named for the domain action, with the
+   line that performs it as a locator inside the connector. A new state is drawn in ink; a
+   state that already existed in the plain step box. A transition back to an earlier state is
+   a line of text, not a curve — the one thing a vertical list cannot draw, said in words. */
+.lc-states { list-style: none; margin: 0; padding: 0; }
+.lc-s > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
+.lc-s.lc-new > .ip-box { border-color: var(--ink); background: var(--ground); }
+.lc-states .ip-rel .ip-loc, .st-rel .ip-loc { text-transform: none; letter-spacing: 0; align-self: center; }
+.st-rel .ip-loc { align-self: start; }
+.lc-back { margin-top: 12px; padding-top: 10px; border-top: 1px dotted var(--rule-dash); font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted); }
+.lc-back .ip-loc { margin-left: 8px; }
+
+/* STRUCTURE. The entity the change is about on top, and a spine down from it with one
+   relationship per row: the relation and its cardinality, then the entity at the other end.
+   Hub and spoke rather than a grid of tables, because the question is what this entity is now
+   attached to — a full schema is the ERD this figure exists to refuse. An ABSENT relationship
+   is drawn where the absence is the point, in ochre, the page's colour for "missing". */
+.st-fields { list-style: none; margin: 2px 0 0; padding: 0; font-family: var(--mono); font-size: 11px; line-height: 1.5; color: var(--muted); }
+.st-fields > li::before { content: "\00B7\00A0"; }
+.st-edges { list-style: none; margin: 0 0 0 11px; padding: 0 0 0 22px; }
+.st-e { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 14px; align-items: center; padding-top: 12px; }
+figure.structure .st-e > * { grid-column: auto; }
+.st-e::before { content: ""; position: absolute; left: -22px; top: 0; bottom: 0; width: 1px; background: var(--rule-strong); }
+.st-e:last-child::before { bottom: auto; height: calc(50% + 6px); }
+.st-e::after { content: ""; position: absolute; left: -22px; top: calc(50% + 6px); width: 18px; height: 1px; background: var(--rule-strong); }
+.st-rel { display: flex; flex-direction: column; gap: 3px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.st-card { font-size: 10px; letter-spacing: .04em; text-transform: none; color: var(--ink-3); }
+.st-none > .st-rel { color: var(--gap-ink); }
+.st-none::after { background: none; border-top: 1px dashed var(--gap-rule); }
+
+@media (max-width: 780px) {
+  figure.converge, figure.lifecycle, figure.structure { padding: 18px 16px 20px; }
+  /* One column: the bracket moves to the left edge and the target sits under it. */
+  .cv-grid { grid-template-columns: minmax(0, 1fr); }
+  .cv-paths > li { padding: 5px 0 5px 22px; }
+  .cv-paths > li::after, .cv-paths > li::before { right: auto; left: 0; }
+  .cv-paths > li:last-child::before { bottom: 0; }
+  .cv-target { padding: 22px 0 0 22px; }
+  .cv-target::before { left: 0; top: 0; width: 1px; height: 16px; }
+  .cv-target::after { left: 0; top: 16px; transform: translateX(-50%); border: 4px solid transparent; border-top: 6px solid var(--rule-strong); border-bottom: 0; }
+  .st-e { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
+}
+
+/* PRINT. Browsers drop backgrounds when printing, and the filled outcome and target boxes are
+   ground-coloured text on an ink fill — so without this they print as white on white, and the
+   one box that names what the figure is FOR disappears. And a figure split across a page break
+   is two half-figures, neither of which says what it shows. */
+@media print {
+  figure.chain, figure.converge, figure.lifecycle, figure.structure, .ip-card { break-inside: avoid; }
+  .ip-box, .cv-target, .ip-rel > i, .key-out { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* ============================================================
    Grid tables. gap:1px over --rule, so every seam is a rule at
    any wrap point and there is no border-collapse to fight.
    Column widths are tuned for Roboto Mono; the container scrolls
@@ -1335,9 +1437,10 @@ details.evidence[open] .chev { transform: rotate(90deg); }
 .rail-links .pending { font-size: 8.5px; padding: 0 4px; letter-spacing: .08em; }
 
 /* ============================================================
-   Figures. There are two, and neither is a drawing: figure.chain
-   inside a checkpoint and figure.impact in section 04, both built
-   out of the same .ip-* chain. Nothing on this page is an <svg>.
+   Figures. None of them is a drawing: figure.chain, .converge,
+   .lifecycle and .structure inside a checkpoint, figure.impact in
+   section 04, all built out of the same .ip-* boxes. Nothing on
+   this page is an <svg>.
    ============================================================ */
 figure { margin: 0; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
@@ -1353,20 +1456,17 @@ figcaption strong { color: var(--ink-3); }
   <nav class="rail" aria-label="Sections">
     <div class="rail-id">
       <div class="lbl" style="letter-spacing:.18em">Review map</div>
-      <div class="tick">nev/6534/historical-ownership-foundation</div>
+      <div class="tick">#6534 &middot; nev/6534/historical-ownership-foundation</div>
       <div class="cite"><a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699">PR #6699</a> &middot; 11 files</div>
     </div>
 
     <div class="rail-links">
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
       <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
-      <a class="sub" data-rail="cp-a" href="#cp-a">Should an organization transfer end a tenure?</a>
-      <a class="sub" data-rail="cp-b" href="#cp-b">Is the backfill safe against live writes?</a>
-      <a class="sub" data-rail="cp-c" href="#cp-c">Is one row per tenure the right grain?</a>
-      <a class="sub" data-rail="cp-d" href="#cp-d">Are the invariants enforced where needed?</a>
-      <a class="sub" data-rail="cp-e" href="#cp-e">Should the ordering live in Access?</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">Does every way an ownership ends close its row?</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">Can the backfill open a row for a gone ownership?</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">What does a deleted owner's row say?</a>
       <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
-      <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
     </div>
   </nav>
 
@@ -1375,416 +1475,282 @@ figcaption strong { color: var(--ink-3); }
 
     <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
       <div class="lbl lbl-wide" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px">
-        <span>rubygems</span><span style="color:var(--rule-strong)">/</span><span>rubygems.org</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/rubygems/rubygems.org/pull/6699">PR #6699</a><span style="color:var(--rule-strong)">&middot;</span><span>Eric Mueller</span>
+        <span>rubygems</span><span style="color:var(--rule-strong)">/</span><span>rubygems.org</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/rubygems/rubygems.org/pull/6699">PR #6699</a><span style="color:var(--rule-strong)">&middot;</span><span>nevinera</span>
       </div>
 
-      <h1>Add HistoricalOwnership foundation for tracking gem ownership history</h1>
+      <h1>Record every stint a user spends owning or maintaining a gem</h1>
 
-      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">
-        A new table records that a user once owned a gem, kept in step with the live
-        <code>ownerships</code> table by four callbacks and seeded by a maintenance task.
-      </p>
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">A new
+        <code>historical_ownerships</code> table, kept in step with <code>Ownership</code> by model
+        callbacks, plus a maintenance task that seeds it from today's confirmed ownerships. Slice 1 of
+        about 3 for #6534, per the description.</p>
 
       <div class="gt gt-meta" style="margin-top:44px">
-        <div class="c">
-          <div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div>
-          <div class="path" style="font-size:12px">nev/6534/historical-ownership-foundation <span style="color:var(--fainter)">&rarr;</span> master</div>
-          <div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">b637b16 <span>&rarr;</span> 9d5892f</div>
-        </div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">nev/6534/historical-ownership-foundation <span style="color:var(--fainter)">&rarr;</span> master</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">4199bcb <span>&rarr;</span> e9b5a3e</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">feature</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">6</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">7</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">11</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test / gen</div><div class="path" style="font-size:12px">6 / 4 / 1</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">6 / 4 &middot; 1 generated</div></div>
       </div>
     </header>
 
     <section id="changed">
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
-      <h2 style="max-width:30ch;margin-bottom:18px">Every confirmed gem ownership now leaves a durable record of who held it</h2>
+      <h2 style="max-width:30ch;margin-bottom:18px">Removing an owner no longer erases the fact that they owned the gem</h2>
 
-      <p>
-        A new <code>historical_ownerships</code> table records that a user once held a gem, at what
-        highest role, and between which two moments. Four callbacks on <code>Ownership</code> keep it
-        in step with the live table: one opens a row when an ownership is created already-confirmed
-        or is later accepted, one ratchets that row's role upward on promotion and ignores demotions,
-        and one stamps <code>removed_at</code> on destroy. <code>Rubygem#disown</code> deletes
-        ownerships without running callbacks, so it closes its rows explicitly. A maintenance task
-        backfills one open row per currently-confirmed ownership.
-      </p>
-      <p>
-        Nothing reads the new table yet &mdash; the description says this is the first of three
-        slices of #6534, and that the backfill has to finish before the other two are merge-safe.
-        The partial unique index on <code>(rubygem_id, user_id) WHERE removed_at IS NULL</code> is
-        what every write path here depends on.
-      </p>
+      <p>Before this change the app only knew who owns a gem now. Removing an ownership deleted its row,
+        so nothing recorded that the person had ever owned the gem. Now each stint a user spends as owner
+        or maintainer gets a <code>HistoricalOwnership</code> row. The row opens when the ownership is
+        confirmed, its role only ever moves up to the highest one held, and it closes
+        (<code>removed_at</code>) when the ownership ends. Pending invitations never get a row.
+        <code>Ownership</code> callbacks keep the table current. <code>Rubygem#disown</code> closes
+        rows by hand because it deletes ownerships without running callbacks. A maintenance task opens a
+        row for every ownership confirmed today, and earlier stints are not reconstructed. Nothing in
+        the app reads the table yet. The description says the profile and gem pages will read it in
+        later PRs, and that those PRs should merge only after this backfill finishes.</p>
     </section>
 
     <section id="attention" style="padding-top:48px">
       <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
       <h2 style="margin-bottom:18px">What needs your attention</h2>
-      <p>Five judgments. The first four turn on whether the new table stays true to the live
-        <code>ownerships</code> table under paths this PR did not touch; the last is about where the
-        role ordering belongs. The order is the order to think about them.</p>
+      <p>These turn on whether the new table says the true thing about each stint, and they are in
+        the order to think about them.</p>
 
       <section class="cp" id="cp-a">
         <span class="lbl lbl-wide">Checkpoint A</span>
-        <h3>Should moving a gem into an organization end its owners' recorded tenure?</h3>
+        <h3>Does every way an ownership ends close its history row?</h3>
 
-        <p>
-          <code>close_historical_ownership</code> stamps <code>removed_at</code> on every
-          <code>Ownership</code> destroy, with no test of who is destroying it. Both organization
-          paths destroy exactly the ownerships of the users who are <em>joining</em> the
-          organization, after the <code>Membership</code> rows are created and the gem has taken its
-          <code>organization_id</code> &mdash; because access now comes from the organization
-          <span class="tier tier-unc">from unchanged code</span>. Each of those users is therefore
-          recorded as having stopped owning the gem at the moment of transfer, so
-          <code>HistoricalOwnership.current</code> omits people who still have access and
-          <code>.alumni</code> claims people who never left.
-        </p>
+        <p>Five paths end an ownership, and all five close the open row. Four of them destroy the
+          ownership, which runs the new close at
+          <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R156-R159">app/models/ownership.rb:156-159</a>.
+          The fifth, <code>disown</code>, deletes ownership rows without callbacks and closes the history
+          rows itself. Two of the three paths this PR does not touch, onboarding a gem into an organization and
+          transferring one into it, destroy the ownership of every owner who joins. Those owners' rows close even though they keep managing the gem as organization
+          members <span class="tier tier-unc">from unchanged code</span>. You have to decide whether
+          that is what the follow-up pages should show.</p>
+
+        <figure class="converge">
+          <div class="cv-grid">
+            <ol class="cv-paths">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>owner removed</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R26">app/models/ownership.rb:26</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>gem disowned</b><span class="cv-note">ownerships deleted without callbacks</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R345-R347">app/models/rubygem.rb:345-347</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>account deleted</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L375-L376">app/models/user.rb:375-376</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>gem onboarded into an organization</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>gem transferred into an organization</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem_transfer.rb#L76-L84">app/models/rubygem_transfer.rb:76-84</a></span></li>
+            </ol>
+            <div class="cv-target"><span class="ip-box"><b>the open history row closes when the ownership ends</b><span class="ip-d">must hold on every path</span></span></div>
+          </div>
+          <figcaption>Which paths end an ownership, and so must close its history row.</figcaption>
+        </figure>
 
         <ul class="lookat">
           <li>
-            <b>The unconditional close</b>
-            <span>one <code>update_all</code> over whatever row is open, on any destroy</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R155-R159">app/models/ownership.rb:155-159</a>
-            <details class="excerpt excerpt--source">
-              <summary>
-                <span class="chev">&#9656;</span>
-                <span class="ex-loc">app/models/ownership.rb:155-159</span>
-                <span class="tag">At head</span>
-                <span class="ex-why">the close callback runs on every Ownership destroy, whoever is destroying it</span>
-              </summary>
-              <div class="ex-body">
-            <pre data-src="app/models/ownership.rb" data-lang="ruby" style="counter-reset: exl 154"><span class="l">  # Intentionally tolerant of not finding a record to update</span>
-            <span class="l">  def close_historical_ownership</span>
-            <span class="l">    HistoricalOwnership.where(rubygem_id:, user_id:, removed_at: nil)</span>
-            <span class="l">      .update_all(removed_at: Time.current)</span>
-            <span class="l">  end</span>
-            </pre>
-                <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L155-L159">app/models/ownership.rb:155-159</a></p>
-              </div>
-            </details>
+            <b>Disown's hand-written close</b>
+            <span>the only removal path that skips the callbacks; one <code>update_all</code> on the
+              gem's current rows makes up for it</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R345-R347">app/models/rubygem.rb:345-347</a>
+<details class="excerpt excerpt--diff">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/models/rubygem.rb:344-350</span>
+    <span class="tag">Changed</span>
+    <span class="ex-why">ownerships deleted without callbacks, then open history rows closed by hand</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/rubygem.rb" style="counter-reset: exl 343"><span class="l"><span class="sig"> </span>  def disown</span>
+<span class="l"><span class="sig"> </span>    ownerships_including_unconfirmed.find_each(&amp;:delete)</span>
+<span class="l"><span class="sig"> </span>    ownerships_including_unconfirmed.clear</span>
+<span class="l add"><span class="sig">+</span>    historical_ownerships.current.update_all(removed_at: Time.current)</span>
+<span class="l"><span class="sig"> </span></span>
+<span class="l"><span class="sig"> </span>    oidc_rubygem_trusted_publishers.find_each(&amp;:delete)</span>
+<span class="l"><span class="sig"> </span>    oidc_rubygem_trusted_publishers.clear</span>
+</pre>
+    <p class="ex-src">Changed at <a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R344-R350">app/models/rubygem.rb:344-350</a></p>
+  </div>
+</details>
           </li>
           <li>
-            <b>Transfer's ownership sweep</b>
-            <span>runs at <code>transfer!</code>'s step 4, after the memberships and the
-              <code>organization_id</code> are already in place
+            <b>Owners joining a new organization</b>
+            <span><code>destroy_all</code> on every joining owner's ownership, so each row closes.
+              Outside contributors are demoted with <code>update_all</code> instead, and their rows stay
+              open <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/models/organization_onboarding.rb:126-131</span>
+    <span class="tag">Unchanged</span>
+    <span class="ex-why">every owner joining the organization loses the ownership row, which now closes their history</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/organization_onboarding.rb" data-lang="ruby" style="counter-reset: exl 125"><span class="l">  def remove_ownerships_for_joining_members</span>
+<span class="l">    onboarded_users = invites.reject { it.role.nil? || it.outside_contributor? }.map(&amp;:user)</span>
+<span class="l">    onboarded_users &lt;&lt; created_by</span>
+<span class="l"></span>
+<span class="l">    Ownership.includes(:rubygem, :user, api_key_rubygem_scopes: :api_key).where(user: onboarded_users, rubygem: selected_rubygems).destroy_all</span>
+<span class="l">  end</span>
+</pre>
+    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>Owners joining an existing organization</b>
+            <span>the same <code>destroy_all</code>, run when a gem is transferred
               <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a>
-            <details class="excerpt excerpt--source">
-              <summary>
-                <span class="chev">&#9656;</span>
-                <span class="ex-loc">app/models/rubygem_transfer.rb:64-69</span>
-                <span class="tag">Unchanged</span>
-                <span class="ex-why">the destroy_all that ends per-gem ownership for users who keep access through the organization</span>
-              </summary>
-              <div class="ex-body">
-            <pre data-src="app/models/rubygem_transfer.rb" data-lang="ruby" style="counter-reset: exl 63"><span class="l">  def remove_ownerships_for_joining_members</span>
-            <span class="l">    invited_users = invites.includes(:user).reject { |invite| invite.role.nil? || invite.outside_contributor? }.map(&amp;:user)</span>
-            <span class="l">    invited_users &lt;&lt; created_by</span>
-            <span class="l"></span>
-            <span class="l">    Ownership.includes(:rubygem, :user, :api_key_rubygem_scopes).where(user: invited_users, rubygem: selected_rubygems).destroy_all</span>
-            <span class="l">  end</span>
-            </pre>
-                <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a></p>
-              </div>
-            </details>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem_transfer.rb#L76-L84">app/models/rubygem_transfer.rb:76-84</a>
           </li>
           <li>
-            <b>The same sweep on onboarding</b>
-            <span>the second entry point into the same consequence, unchanged by this PR
-              <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a>
-          </li>
-          <li>
-            <b>What the destroy tests pin</b>
-            <span>one owner of two, a missing row, and a rescinded invite &mdash; all via
-              <code>safe_destroy</code> on a single ownership</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R223-R264">test/models/ownership_test.rb:223-264</a>
+            <b>Account deletion</b>
+            <span>discarding a user destroys their ownerships, so their rows close. This PR does not
+              touch these lines of <code>user.rb</code> <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L375-L376">app/models/user.rb:375-376</a>
           </li>
         </ul>
 
-        <div class="gap"><b>GAP</b><span>No test drives <code>RubygemTransfer#transfer!</code> or
-          <code>OrganizationOnboarding#onboard!</code> against <code>historical_ownerships</code>.</span></div>
+        <div class="gap"><b>GAP</b><span>No test covers a row closing through disown, onboarding,
+          transfer or account deletion. The destroy tests at
+          <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R221-R262">test/models/ownership_test.rb:221-262</a>
+          exercise <code>safe_destroy</code> only.</span></div>
 
-        <p class="open"><b>Open question</b> Is an organization transfer the end of a tenure, or a
-          change in how the same tenure is held?</p>
+        <p class="open"><b>Open question</b> Should an owner who now manages the gem as an organization
+          member count as a prior owner?</p>
       </section>
 
       <section class="cp" id="cp-b">
         <span class="lbl lbl-wide">Checkpoint B</span>
-        <h3>Is the backfill safe to run while the application is writing?</h3>
+        <h3>Can the backfill open a history row for an ownership that is already gone?</h3>
 
-        <p>
-          <code>doc/maintenance-tasks.md</code> asks a task that races the application to preserve
-          newer writes and to skip records deleted after collection
-          <span class="tier tier-unc">from unchanged code</span>. <code>process</code> writes
-          <code>role</code> and <code>first_owned_at</code> from the record its batch materialised,
-          so a promotion landing after that load is written back at the old role &mdash; the ratchet
-          callback ran first, against a row that did not exist yet, and matched nothing. An ownership
-          <em>destroyed</em> after that load is the sharper case: its own
-          <code>close_historical_ownership</code> found nothing open, and <code>process</code> then
-          creates a row that nothing will ever close
-          <span class="tier tier-inf">inferred</span>.
-        </p>
+        <p><code>process</code> writes from the ownership object loaded with its batch and never reads it
+          again. Suppose that ownership is destroyed, or its gem disowned, after the batch loads but
+          before <code>process</code> runs. The close finds nothing to close, and the task then opens a
+          row for a stint that has already ended. Nothing closes that row until the gem is disowned, or until
+          the same user is added again and later removed. In that case the open row is reused with its old
+          start time, because
+          <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R140">app/models/ownership.rb:140</a>
+          finds any open row before it creates one <span class="tier tier-inf">inferred</span>. A
+          promotion in that window is lost too, since the role upgrade only updates existing rows. This repository's maintenance-task guide asks for this case to be handled.
+          You have to decide whether a window of one batch is acceptable.</p>
 
         <ul class="lookat">
           <li>
-            <b>The process body</b>
-            <span>every attribute comes from the in-memory <code>ownership</code>, not from a reload</span>
+            <b>The process step</b>
+            <span>role, start time and existence all come from the batch's copy</span>
             <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R14-R19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a>
-            <details class="excerpt excerpt--source">
-              <summary>
-                <span class="chev">&#9656;</span>
-                <span class="ex-loc">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</span>
-                <span class="tag">Added</span>
-                <span class="ex-why">process reads the ownership it was handed, and find_or_create_by! is a SELECT then an INSERT</span>
-              </summary>
-              <div class="ex-body">
-            <pre data-src="app/tasks/maintenance/backfill_historical_ownerships_task.rb" data-lang="ruby" style="counter-reset: exl 13"><span class="l">  def process(ownership)</span>
-            <span class="l">    HistoricalOwnership.find_or_create_by!(rubygem_id: ownership.rubygem_id, user_id: ownership.user_id, removed_at: nil) do |historical|</span>
-            <span class="l">      historical.role = ownership.role</span>
-            <span class="l">      historical.first_owned_at = ownership.confirmed_at</span>
-            <span class="l">    end</span>
-            <span class="l">  end</span>
-            </pre>
-                <p class="ex-src">Added at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/tasks/maintenance/backfill_historical_ownerships_task.rb#L14-L19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a></p>
-              </div>
-            </details>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</span>
+    <span class="tag">Added</span>
+    <span class="ex-why">writes from the object loaded with the batch, with no reload or existence check</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/tasks/maintenance/backfill_historical_ownerships_task.rb" data-lang="ruby" style="counter-reset: exl 13"><span class="l">  def process(ownership)</span>
+<span class="l">    HistoricalOwnership.find_or_create_by!(rubygem_id: ownership.rubygem_id, user_id: ownership.user_id, removed_at: nil) do |historical|</span>
+<span class="l">      historical.role = ownership.role</span>
+<span class="l">      historical.first_owned_at = ownership.confirmed_at</span>
+<span class="l">    end</span>
+<span class="l">  end</span>
+</pre>
+    <p class="ex-src">Added at <a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R14-R19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a></p>
+  </div>
+</details>
           </li>
           <li>
-            <b>The safety rules this task answers to</b>
-            <span>preserve newer writes, skip legitimately deleted records, make reruns harmless
+            <b>The repository's rule for stale records</b>
+            <span>lock and reload or make the write conditional, and skip records deleted after loading
               <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/doc/maintenance-tasks.md#L7-L9">doc/maintenance-tasks.md:7-9</a>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/doc/maintenance-tasks.md#L9-L11">doc/maintenance-tasks.md:9-11</a>
           </li>
           <li>
-            <b>What the task tests cover</b>
-            <span>collection bounds, one create and one no-op rerun &mdash; none of the four cases
-              &sect; Testing names</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70R6-R50">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb:6-50</a>
+            <b>A sibling backfill that follows it</b>
+            <span>locks the row, reloads it and checks it again before writing</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/tasks/maintenance/backfill_user_webauthn_ids_task.rb#L16-L23">app/tasks/maintenance/backfill_user_webauthn_ids_task.rb:16-23</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/tasks/maintenance/backfill_user_webauthn_ids_task.rb:16-23</span>
+    <span class="tag">Unchanged</span>
+    <span class="ex-why">the sibling task locks, reloads and re-checks before it writes</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/tasks/maintenance/backfill_user_webauthn_ids_task.rb" data-lang="ruby" style="counter-reset: exl 15"><span class="l">  def process(user)</span>
+<span class="l">    User.transaction do</span>
+<span class="l">      locked_user = User.lock.find_by(id: user.id)</span>
+<span class="l">      next unless locked_user &amp;&amp; locked_user.webauthn_id_in_database.nil?</span>
+<span class="l">      next if locked_user.webauthn_credentials.exists?</span>
+<span class="l"></span>
+<span class="l">      locked_user.update_column(:webauthn_id, WebAuthn.generate_user_id)</span>
+<span class="l">    end</span>
+</pre>
+    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/tasks/maintenance/backfill_user_webauthn_ids_task.rb#L16-L23">app/tasks/maintenance/backfill_user_webauthn_ids_task.rb:16-23</a></p>
+  </div>
+</details>
           </li>
         </ul>
 
-        <p class="open"><b>Open question</b> Is the task meant to run against live traffic, or during
-          a window with ownership writes paused?</p>
+        <div class="gap"><b>GAP</b><span>The task test covers creating a row and not duplicating one. No
+          test changes a record after it is loaded and then processes the stale copy, the case the guide
+          describes at
+          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/doc/maintenance-tasks.md#L23">doc/maintenance-tasks.md:23</a>.</span></div>
+
+        <p class="open"><b>Open question</b> Was the gap between loading a batch and processing it
+          considered? The description says no lifecycle hooks are relevant to the task.</p>
       </section>
 
       <section class="cp" id="cp-c">
         <span class="lbl lbl-wide">Checkpoint C</span>
-        <h3>Is one row per tenure the grain the next two slices need?</h3>
+        <h3>What should a history row say once its owner's account is deleted?</h3>
 
-        <p>
-          The unique index constrains only the <em>open</em> row, so closed rows accumulate freely:
-          a user who owns a gem, is removed, and owns it again ends with two, and the second row's
-          <code>first_owned_at</code> holds the start of the second tenure rather than the first.
-          <code>current</code> and <code>alumni</code> therefore answer &ldquo;is this tenure
-          open&rdquo;, not &ldquo;has this user ever owned this gem&rdquo;, which needs a
-          <code>distinct</code> across both. The role ratchet is per tenure too, so a user who was an
-          owner, left, and returned as a maintainer reads as a maintainer.
-        </p>
-
-        <ul class="lookat">
-          <li>
-            <b>The open-row constraint</b>
-            <span>unique only where <code>removed_at IS NULL</code>, with no constraint on the pair
-              itself</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-cbf8b25d6d853acf58fa9057841f407d29ffe90649c75cf9e3f51b2d6e3aa1d3R368-R380">db/schema.rb:368-380</a>
-            <details class="excerpt excerpt--source">
-              <summary>
-                <span class="chev">&#9656;</span>
-                <span class="ex-loc">db/schema.rb:368-380</span>
-                <span class="tag">At head</span>
-                <span class="ex-why">one open row per pair is a partial index, not a constraint on the pair</span>
-              </summary>
-              <div class="ex-body">
-            <pre data-src="db/schema.rb" data-lang="ruby" style="counter-reset: exl 367"><span class="l">  create_table "historical_ownerships", force: :cascade do |t|</span>
-            <span class="l">    t.datetime "created_at", null: false</span>
-            <span class="l">    t.datetime "first_owned_at", null: false</span>
-            <span class="l">    t.datetime "private_at"</span>
-            <span class="l">    t.datetime "removed_at"</span>
-            <span class="l">    t.integer "role", null: false</span>
-            <span class="l">    t.bigint "rubygem_id", null: false</span>
-            <span class="l">    t.datetime "updated_at", null: false</span>
-            <span class="l">    t.bigint "user_id", null: false</span>
-            <span class="l">    t.index ["rubygem_id", "user_id"], name: "index_historical_ownerships_on_rubygem_id_and_user_id", unique: true, where: "(removed_at IS NULL)"</span>
-            <span class="l">    t.index ["rubygem_id"], name: "index_historical_ownerships_on_rubygem_id"</span>
-            <span class="l">    t.index ["user_id"], name: "index_historical_ownerships_on_user_id"</span>
-            <span class="l">  end</span>
-            </pre>
-                <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/db/schema.rb#L368-L380">db/schema.rb:368-380</a></p>
-              </div>
-            </details>
-          </li>
-          <li>
-            <b>Where the second row comes from</b>
-            <span><code>find_or_create_by!</code> keys on <code>removed_at: nil</code>, so a closed
-              row can never match and a new one is created</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R144">app/models/ownership.rb:139-144</a>
-          </li>
-          <li>
-            <b>The two scopes the next slices will read</b>
-            <span>both partition by <code>removed_at</code> alone, neither groups by user and gem</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R11-R12">app/models/historical_ownership.rb:11-12</a>
-          </li>
-        </ul>
-
-        <div class="gap"><b>GAP</b><span>No test walks the own &rarr; remove &rarr; own-again cycle,
-          so nothing pins how many rows it leaves or what is in them.</span></div>
-
-        <p class="open"><b>Open question</b> Is <code>first_owned_at</code> meant to be the first
-          tenure's start across a user's whole history, which the column name reads as and the write
-          does not produce?</p>
-      </section>
-
-      <section class="cp" id="cp-d">
-        <span class="lbl lbl-wide">Checkpoint D</span>
-        <h3>Should a failed history write roll back the ownership change itself?</h3>
-
-        <p>
-          All four hooks are <code>after_create</code>, <code>after_update</code> and
-          <code>after_destroy</code>, so they run inside the <code>Ownership</code> save transaction,
-          beside the existing event recorders that already work that way
-          <span class="tier tier-unc">from unchanged code</span>. The new model carries no
-          validations, so <code>role</code> and <code>first_owned_at</code> being
-          <code>NOT NULL</code>, and one open row per pair, are enforced by Postgres alone: a
-          violation raises out of the callback and takes down the confirmation or the removal the
-          user asked for. <code>close_historical_ownership</code> is deliberately tolerant of finding
-          nothing; the two creating paths are tolerant of nothing.
-        </p>
+        <p>Accounts are soft-deleted. <code>delete_account!</code> calls <code>discard!</code>, which
+          destroys the user's ownerships, so their history rows close and are kept. The new
+          <code>dependent: :destroy</code> runs only on a hard destroy, and nothing in
+          <code>app/</code> performs one <span class="tier tier-unc">from unchanged code</span>.
+          User's default scope hides discarded accounts, and association reads go through it, so
+          <code>historical_ownership.user</code> loads <code>nil</code> for those rows
+          <span class="tier tier-inf">inferred</span>. The follow-up pages would meet those rows in
+          <code>alumni</code>. You have to decide whether deleted owners belong in the record.</p>
 
         <ul class="lookat">
           <li>
-            <b>The callback block</b>
-            <span>three new hooks interleaved with the event recorders, none of them
-              <code>after_commit</code></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R18-R26">app/models/ownership.rb:18-26</a>
-            <details class="excerpt excerpt--source">
-              <summary>
-                <span class="chev">&#9656;</span>
-                <span class="ex-loc">app/models/ownership.rb:18-26</span>
-                <span class="tag">At head</span>
-                <span class="ex-why">the three new callbacks sit beside the existing event recorders, inside the same save transaction</span>
-              </summary>
-              <div class="ex-body">
-            <pre data-src="app/models/ownership.rb" data-lang="ruby" style="counter-reset: exl 17"><span class="l">  after_create :record_create_event</span>
-            <span class="l">  after_create :create_historical_ownership, if: :confirmed?</span>
-            <span class="l">  after_update :record_confirmation_event, if: :saved_change_to_confirmed_at?</span>
-            <span class="l">  after_update :create_historical_ownership, if: :saved_change_to_confirmed_at?</span>
-            <span class="l">  after_update :record_role_updated_event, if: :saved_change_to_role?</span>
-            <span class="l">  after_update :notify_user_role_of_role_change, if: :saved_change_to_role?</span>
-            <span class="l">  after_update :upgrade_historical_ownership_role, if: :saved_change_to_role?</span>
-            <span class="l">  after_destroy :record_destroy_event</span>
-            <span class="l">  after_destroy :close_historical_ownership</span>
-            </pre>
-                <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L18-L26">app/models/ownership.rb:18-26</a></p>
-              </div>
-            </details>
+            <b>Soft delete and its scope</b>
+            <span>the default scope every lookup of <code>User</code> carries. This PR does not touch
+              these lines <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L13-L16">app/models/user.rb:13-16</a>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/models/user.rb:13-16</span>
+    <span class="tag">At head</span>
+    <span class="ex-why">accounts are soft-deleted, and the default scope hides them</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/user.rb" data-lang="ruby" style="counter-reset: exl 12"><span class="l">  self.discard_column = :deleted_at</span>
+<span class="l">  self.ignored_columns += [:token]</span>
+<span class="l"></span>
+<span class="l">  default_scope { not_deleted }</span>
+</pre>
+    <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L13-L16">app/models/user.rb:13-16</a></p>
+  </div>
+</details>
           </li>
           <li>
-            <b>The constraints with no model counterpart</b>
-            <span>two <code>NOT NULL</code> columns and a partial unique index, and no
-              <code>validates</code> anywhere in the model</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198cR5-R16">db/migrate/20260716041502_create_historical_ownerships.rb:5-16</a>
+            <b>The association a soft delete never fires</b>
+            <span><code>dependent: :destroy</code>, reachable only through <code>User#destroy</code></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9802ca3c9c4cf89904fd44bc114e35ebdf2c5dd3d5b645491e2b253e1afef29bR37">app/models/user.rb:37</a>
           </li>
           <li>
-            <b>What the index test asserts</b>
-            <span>that an index on the pair exists &mdash; not that it is unique, and not that it is
-              partial</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-0cea0e2d1f599cce1bf25ae15a606425821e18e0ab785ad66a912580d154750dR12">test/models/historical_ownership_test.rb:12</a>
+            <b>The row's owner lookup</b>
+            <span><code>belongs_to :user</code>, which resolves through that scope</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R5">app/models/historical_ownership.rb:5</a>
           </li>
         </ul>
 
-        <span class="lbl">rails runner &middot; read-only &middot; whether the unique partial index this depends on is really there after migrating</span>
-<pre class="probe">bin/rails runner 'pp ActiveRecord::Base.connection.indexes(:historical_ownerships).map { |i| [i.name, i.unique, i.where] }'</pre>
-      </section>
+        <span class="lbl">rails runner &middot; read-only &middot; whether loading a row's user filters out deleted accounts</span>
+<pre class="probe">bin/rails runner 'puts HistoricalOwnership.new(user_id: 1).association(:user).scope.to_sql'</pre>
 
-      <section class="cp" id="cp-e">
-        <span class="lbl lbl-wide">Checkpoint E</span>
-        <h3>Should the role ordering live in <code>Access</code> rather than on the model?</h3>
-
-        <p>
-          <code>lib/access.rb</code> already owns the ordering: <code>ROLES</code> carries the flags
-          and <code>with_minimum_role</code> turns a role into the range above it, which is how both
-          <code>Ownership</code> and <code>Membership</code> ask their version of this question
-          <span class="tier tier-unc">from unchanged code</span>. This PR adds a second ordering
-          beside it &mdash; <code>ROLE_HIERARCHY</code>, derived from the enum at class-definition
-          time, and <code>roles_below</code>, returning role names &mdash; so
-          &ldquo;at or above&rdquo; is a range of integers in one file and &ldquo;below&rdquo; is an
-          array of strings in another. Both are correct today.
-        </p>
-
-        <ul class="lookat">
-          <li>
-            <b>The ordering the app already has</b>
-            <span><code>ROLES</code> and <code>with_minimum_role</code>, the pair both role-carrying
-              models reach for <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/lib/access.rb#L10-L22">lib/access.rb:10-22</a>
-            <details class="excerpt excerpt--source">
-              <summary>
-                <span class="chev">&#9656;</span>
-                <span class="ex-loc">lib/access.rb:10-22</span>
-                <span class="tag">Unchanged</span>
-                <span class="ex-why">the ordering the app already has, and the accessor both other role models use</span>
-              </summary>
-              <div class="ex-body">
-            <pre data-src="lib/access.rb" data-lang="ruby" style="counter-reset: exl 9"><span class="l">  ROLES = {</span>
-            <span class="l">    "maintainer" =&gt; MAINTAINER,</span>
-            <span class="l">    "owner" =&gt; OWNER,</span>
-            <span class="l">    "admin" =&gt; ADMIN</span>
-            <span class="l">  }.with_indifferent_access.freeze</span>
-            <span class="l"></span>
-            <span class="l">  def self.flag_for_role(role)</span>
-            <span class="l">    ROLES.fetch(role)</span>
-            <span class="l">  end</span>
-            <span class="l"></span>
-            <span class="l">  def self.with_minimum_role(role)</span>
-            <span class="l">    Range.new(flag_for_role(role), nil)</span>
-            <span class="l">  end</span>
-            </pre>
-                <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/lib/access.rb#L10-L22">lib/access.rb:10-22</a></p>
-              </div>
-            </details>
-          </li>
-          <li>
-            <b>The second ordering</b>
-            <span>derived from the enum rather than from <code>Access</code>, and used only by the
-              ratchet</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R8-R16">app/models/historical_ownership.rb:8-16</a>
-            <details class="excerpt excerpt--source">
-              <summary>
-                <span class="chev">&#9656;</span>
-                <span class="ex-loc">app/models/historical_ownership.rb:8-16</span>
-                <span class="tag">Added</span>
-                <span class="ex-why">a second ordering, derived from the enum and expressed as an array of strings</span>
-              </summary>
-              <div class="ex-body">
-            <pre data-src="app/models/historical_ownership.rb" data-lang="ruby" style="counter-reset: exl 7"><span class="l">  enum :role, { owner: Access::OWNER, maintainer: Access::MAINTAINER }, validate: true</span>
-            <span class="l">  ROLE_HIERARCHY = roles.sort_by { |_role, flag| flag }.map(&amp;:first).freeze</span>
-            <span class="l"></span>
-            <span class="l">  scope :current, -&gt; { where(removed_at: nil) }</span>
-            <span class="l">  scope :alumni, -&gt; { where.not(removed_at: nil) }</span>
-            <span class="l"></span>
-            <span class="l">  def self.roles_below(role)</span>
-            <span class="l">    ROLE_HIERARCHY.first(ROLE_HIERARCHY.index(role.to_s))</span>
-            <span class="l">  end</span>
-            </pre>
-                <p class="ex-src">Added at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/historical_ownership.rb#L8-L16">app/models/historical_ownership.rb:8-16</a></p>
-              </div>
-            </details>
-          </li>
-          <li>
-            <b>Where the sibling model asks</b>
-            <span><code>Membership</code> carries three roles and still goes through
-              <code>Access.flag_for_role</code> <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/membership.rb#L12-L14">app/models/membership.rb:12-14</a>
-          </li>
-        </ul>
-
-        <p class="open"><b>Open question</b> Is <code>roles_below</code> expected to stay two-valued?
-          <code>Access::ADMIN</code> exists and <code>Membership</code> uses it, and
-          <code>ROLE_HIERARCHY.index</code> returns <code>nil</code> for any role outside this
-          enum.</p>
+        <p class="open"><b>Open question</b> Should a deleted account's stints be kept, removed, or kept
+          and shown without the user?</p>
       </section>
     </section>
 
@@ -1796,186 +1762,116 @@ figcaption strong { color: var(--ink-3); }
           <span class="n">01</span>
           <span class="t">
             <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198cR5-R16">db/migrate/20260716041502_create_historical_ownerships.rb:5-16</a>
-            <span class="why">The shape every write path here is built on: two <code>NOT NULL</code>
-              columns, and uniqueness that applies only to the open row.</span>
+            <span class="why">Every write below relies on one rule: at most one open row per gem and user,
+              enforced by the partial unique index.</span>
           </span>
-          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
         <li>
           <span class="n">02</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R1-R17">app/models/historical_ownership.rb:1-17</a>
-            <span class="why">The whole model in seventeen lines. Its role ordering is also what
-              Checkpoint E asks about, so read both questions off this file.</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R159">app/models/ownership.rb:139-159</a>
+            <span class="why">The three helpers behind the hooks at :19-26. Together they show when a row
+              opens, when its role moves up, and when it closes.</span>
           </span>
-          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">03</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R18-R26">app/models/ownership.rb:18-26</a>
-            <span class="why">The four hooks and their guards, read together with the event
-              recorders they sit between.</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R344-R350">app/models/rubygem.rb:344-350</a>
+            <span class="why">The one removal path that skips those hooks, called only from
+              <code>pusher.rb:236</code>.</span>
           </span>
-          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">04</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R159">app/models/ownership.rb:139-159</a>
-            <span class="why">The three bodies. The closing one writes unconditionally, which is
-              what the first judgment turns on.</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L138">app/models/organization_onboarding.rb:126-138</a>
+            <span class="why">Unchanged, and now ends the stints of every owner who joins. Its transfer twin
+              is <code>rubygem_transfer.rb:76-91</code>.
+              <span class="tier tier-unc">from unchanged code</span></span>
           </span>
           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">05</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L18-L35">app/models/rubygem_transfer.rb:18-35</a>
-            <span class="why">Unchanged, and the only place that shows the ownership sweep happens
-              after the memberships exist <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L270-L276">app/models/user.rb:270-276</a>
+            <span class="why">Account deletion is a discard, so the rows it closes outlive the account. This PR
+              does not touch these lines.
+              <span class="tier tier-unc">from unchanged code</span></span>
           </span>
-          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
         </li>
         <li>
           <span class="n">06</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R165-R265">test/models/ownership_test.rb:165-265</a>
-            <span class="why">What the new behaviour is actually pinned to, and which entry points
-              it never drives.</span>
-          </span>
-          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
-        </li>
-        <li>
-          <span class="n">07</span>
-          <span class="t">
             <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R1-R20">app/tasks/maintenance/backfill_historical_ownerships_task.rb:1-20</a>
-            <span class="why">Last, because it is the one thing here that runs once against
-              production data and cannot be re-decided afterwards.</span>
+            <span class="why">Last, because it writes to production data once, and the description puts its
+              run at one to two hours.</span>
           </span>
           <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
       </ol>
     </section>
 
-    <section id="impact" style="padding-top:62px">
-      <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
-      <h2 style="margin-bottom:22px">Impact outside the diff</h2>
-
-      <figure class="impact">
-        <span class="lbl">Impact paths</span>
-
-        <div class="ip-card">
-          <span class="ip-hd">A &middot; Organization members recorded as former owners</span>
-          <p class="ip-why">Every user who joins an organization in a gem transfer is recorded as
-            having stopped owning the gem, while their access continues through the organization.
-            <a href="#cp-a">Checkpoint A</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-          <div class="ip-body">
-            <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>close_historical_ownership</b><span class="ip-d">stamps removed_at on the open row</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R155-R159">app/models/ownership.rb:155-159</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>remove_ownerships_for_joining_members</b><span class="ip-d">destroy_all over the joining users</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>RubygemTransfer#transfer!</b><span class="ip-d">memberships granted first</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L18-L35">app/models/rubygem_transfer.rb:18-35</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>A closed tenure for someone who still has access</b><span class="ip-d">observable behaviour</span></span></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="ip-card">
-          <span class="ip-hd">B &middot; A gem's first push now writes a second table</span>
-          <p class="ip-why">Claiming an unowned gem on push reaches the new insert through
-            <code>confirm!</code>, inside the transaction that creates the ownership, so a constraint
-            the history row violates fails the push. <a href="#cp-d">Checkpoint D</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-          <div class="ip-body">
-            <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>create_historical_ownership</b><span class="ip-d">inserts inside the save transaction</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R144">app/models/ownership.rb:139-144</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>Ownership.create_confirmed</b><span class="ip-d">create! then confirm!</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L48-L50">app/models/ownership.rb:48-50</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>Rubygem#create_ownership</b><span class="ip-d">claims an unowned gem</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem.rb#L310-L312">app/models/rubygem.rb:310-312</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>A rejected push where the history write fails</b><span class="ip-d">observable behaviour</span></span></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="legend">
-          <span><i class="key-chg"></i>Changed by this PR</span>
-          <span><i class="key-aff"></i>Affected, not changed</span>
-          <span><i class="key-out"></i>Behaviour</span>
-        </div>
-
-        <p class="note" style="margin-top:16px">A name-based pass reaches callers of
-          <code>destroy</code>, <code>destroy_all</code> and <code>confirm!</code>; it does not reach
-          anything that removes an ownership through raw SQL, a console session or a future Avo
-          action, and it cannot see what the next two slices of #6534 will read.</p>
-      </figure>
-
-      <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
-      <ul class="ev-list">
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L64-L69">app/models/rubygem_transfer.rb:64-69</a> &mdash; destroys the ownerships of the users who keep access through the organization. <a href="#cp-a">Checkpoint A</a></li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a> &mdash; the same sweep, reached from onboarding instead of transfer. <a href="#cp-a">Checkpoint A</a></li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L48-L50">app/models/ownership.rb:48-50</a> &mdash; reaches the create hook through <code>confirm!</code> rather than through <code>create!</code>. <a href="#cp-d">Checkpoint D</a></li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/pusher.rb#L241">app/models/pusher.rb:241</a> &mdash; the push path into <code>create_ownership</code>, and the highest-traffic way into the new insert. <a href="#cp-d">Checkpoint D</a></li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/controllers/owners_controller.rb#L18">app/controllers/owners_controller.rb:18</a> &mdash; the invitation link, the other route into the same insert. <a href="#cp-d">Checkpoint D</a></li>
-      </ul>
-    </section>
     <details class="evidence">
       <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all 11 changed paths</summary>
 
       <div class="gt gt-paths">
-      <!-- A +17/-0 -->
-      <div class="c" data-path="app/models/historical_ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3">app/models/historical_ownership.rb</a></div>
-      <!-- M +27/-0 -->
-      <div class="c" data-path="app/models/ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433">app/models/ownership.rb</a></div>
-      <!-- M +2/-0 -->
-      <div class="c" data-path="app/models/rubygem.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503">app/models/rubygem.rb</a></div>
-      <!-- M +1/-0 -->
-      <div class="c" data-path="app/models/user.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9802ca3c9c4cf89904fd44bc114e35ebdf2c5dd3d5b645491e2b253e1afef29b">app/models/user.rb</a></div>
-      <!-- A +20/-0 -->
-      <div class="c" data-path="app/tasks/maintenance/backfill_historical_ownerships_task.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8">app/tasks/maintenance/backfill_historical_ownerships_task.rb</a></div>
-      <!-- A +18/-0 -->
-      <div class="c" data-path="db/migrate/20260716041502_create_historical_ownerships.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198c">db/migrate/20260716041502_create_historical_ownerships.rb</a></div>
-      <!-- M +16/-0 -->
-      <div class="c" data-path="db/schema.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-cbf8b25d6d853acf58fa9057841f407d29ffe90649c75cf9e3f51b2d6e3aa1d3">db/schema.rb</a></div>
-      <!-- A +19/-0 -->
-      <div class="c" data-path="test/factories/historical_ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-839eda01e439de8f31c75c67b0b97b234425e7ddcb64604816517119b3f13740">test/factories/historical_ownership.rb</a></div>
-      <!-- A +46/-0 -->
-      <div class="c" data-path="test/models/historical_ownership_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-0cea0e2d1f599cce1bf25ae15a606425821e18e0ab785ad66a912580d154750d">test/models/historical_ownership_test.rb</a></div>
-      <!-- M +102/-0 -->
-      <div class="c" data-path="test/models/ownership_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4">test/models/ownership_test.rb</a></div>
-      <!-- A +51/-0 -->
-      <div class="c" data-path="test/tasks/maintenance/backfill_historical_ownerships_task_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb</a></div>
-      <!-- 11 rows, generated from git diff --numstat 9d5892f97d320b8d5ca8446f7119743afeb97183...b637b1631454524c605e4f8c20585b7fb5abdf49 -->
+<!-- A +17/-0 -->
+<div class="c" data-path="app/models/historical_ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3">app/models/historical_ownership.rb</a></div>
+<!-- M +27/-0 -->
+<div class="c" data-path="app/models/ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433">app/models/ownership.rb</a></div>
+<!-- M +2/-0 -->
+<div class="c" data-path="app/models/rubygem.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503">app/models/rubygem.rb</a></div>
+<!-- M +1/-0 -->
+<div class="c" data-path="app/models/user.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9802ca3c9c4cf89904fd44bc114e35ebdf2c5dd3d5b645491e2b253e1afef29b">app/models/user.rb</a></div>
+<!-- A +20/-0 -->
+<div class="c" data-path="app/tasks/maintenance/backfill_historical_ownerships_task.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8">app/tasks/maintenance/backfill_historical_ownerships_task.rb</a></div>
+<!-- A +18/-0 -->
+<div class="c" data-path="db/migrate/20260716041502_create_historical_ownerships.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198c">db/migrate/20260716041502_create_historical_ownerships.rb</a></div>
+<!-- M +16/-0 -->
+<div class="c" data-path="db/schema.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-cbf8b25d6d853acf58fa9057841f407d29ffe90649c75cf9e3f51b2d6e3aa1d3">db/schema.rb</a></div>
+<!-- A +19/-0 -->
+<div class="c" data-path="test/factories/historical_ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-839eda01e439de8f31c75c67b0b97b234425e7ddcb64604816517119b3f13740">test/factories/historical_ownership.rb</a></div>
+<!-- A +46/-0 -->
+<div class="c" data-path="test/models/historical_ownership_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-0cea0e2d1f599cce1bf25ae15a606425821e18e0ab785ad66a912580d154750d">test/models/historical_ownership_test.rb</a></div>
+<!-- M +102/-0 -->
+<div class="c" data-path="test/models/ownership_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4">test/models/ownership_test.rb</a></div>
+<!-- A +51/-0 -->
+<div class="c" data-path="test/tasks/maintenance/backfill_historical_ownerships_task_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb</a></div>
+<!-- 11 rows, generated from git diff --numstat e9b5a3e5da3339c1eaa1e79c6b54fb0557b01781...4199bcb5c646121879386a2897aff5c76ea9ee31 -->
       </div>
 
       <details class="searched">
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>git grep -n 'historical_ownership' HEAD -- app lib config db/schema.rb</code> <span class="sr-r">every reference at head: the model, four callbacks and their bodies, two associations, <code>disown</code>, the task, and the schema &mdash; no reader anywhere</span></li>
-            <li><code>git grep -n -E 'roles_below|ROLE_HIERARCHY' HEAD -- app lib test</code> <span class="sr-r">one caller, <code>app/models/ownership.rb:148</code>, plus the model's own tests</span></li>
-            <li><code>git grep -n -E 'removed_at|first_owned_at|private_at' HEAD -- app lib</code> <span class="sr-r">five writers of <code>removed_at</code>, two of <code>first_owned_at</code>, none of <code>private_at</code></span></li>
-            <li><code>grep -rn 'confirmed_at' app lib config | grep -v _test</code> <span class="sr-r">three write sites, one of which is a <code>Membership</code>; nothing sets it back to nil</span></li>
-            <li><code>git grep -n 'update_all(role' HEAD -- app lib</code> <span class="sr-r">three, and the two outside this diff both set <code>:maintainer</code>, which the ratchet ignores by design</span></li>
-            <li><code>git grep -n 'confirm!|create_confirmed' HEAD -- app lib</code> <span class="sr-r">the invitation controller, <code>Rubygem#create_ownership</code>, and <code>Pusher</code> twice</span></li>
-            <li><code>grep -rn '\.destroy\b' app lib | grep -iE 'user\.destroy|rubygem\.destroy'</code> <span class="sr-r">no hits, so <code>dependent: :destroy</code> on the two new associations has no production caller</span></li>
-            <li><code>git grep -n -E 'insert_all|upsert_all' HEAD -- app lib</code> <span class="sr-r">one hit, on blocked email domains; no bulk write reaches ownership data</span></li>
+            <li><code>grep -rnE '\.(update_all|delete_all|insert_all|upsert_all|update_columns?)\b' app lib | grep -iE 'ownership|role'</code> <span class="sr-r">two role demotions (<code>organization_onboarding.rb:138</code>, <code>rubygem_transfer.rb:91</code>), notifier flags, and the new history writes; no bulk removal of ownerships</span></li>
+            <li><code>grep -rnE '(&amp;:delete\)|\.delete\b|\.clear\b)' app/models | grep -i ownership</code> <span class="sr-r">only <code>disown</code>, <code>rubygem.rb:345-346</code></span></li>
+            <li><code>grep -rnE 'safe_destroy|destroy_all' app/models app/controllers app/avo</code> <span class="sr-r">both owners controllers' <code>safe_destroy</code>, account discard, onboarding and transfer, among unrelated associations</span></li>
+            <li><code>grep -rnE 'Ownership\.(new|create)|ownerships(_including_unconfirmed)?\.(new|create|build)' app lib</code> <span class="sr-r">five creators; all confirm through <code>confirm!</code> or create already confirmed</span></li>
+            <li><code>grep -rn 'HistoricalOwnership\|historical_ownerships' app lib</code> <span class="sr-r">no reader outside the diff</span></li>
+            <li><code>grep -n 'MAINTAINER\|ADMIN\|OWNER' lib/access.rb</code> <span class="sr-r">50, 60 and 70; both enums carry only <code>owner</code> and <code>maintainer</code></span></li>
+            <li><code>grep -rnE '\b(user|rubygem|gem|@user|@rubygem)\.(destroy!?|delete)\b' app lib</code> <span class="sr-r">no hits: nothing in the app hard-destroys a user or a gem</span></li>
+            <li><code>grep -rn 'disown' app lib test</code> <span class="sr-r">one caller, <code>pusher.rb:236</code>; one unrelated test call</span></li>
+            <li><code>grep -n 'def ' app/policies/admin/application_policy.rb app/policies/admin/ownership_policy.rb</code> <span class="sr-r">update and destroy default to false; the ownership policy opens only <code>avo_show?</code></span></li>
           </ul>
-          <p class="sr-limit"><strong>Out of reach.</strong> A name-based pass cannot see raw SQL run
-            from a console or a migration, an Avo action added later, or what the next two slices of
-            #6534 will query. It also cannot see the <code>maintenance_tasks</code> runner's own
-            batching, which is what the deleted-after-collection claim in Checkpoint B rests on; that
-            was read in the gem's source at the version <code>Gemfile.lock</code> pins, not in this
-            repository.</p>
+          <p class="sr-limit"><strong>Out of reach.</strong> Writes made outside the app: SQL consoles,
+            data fixes run by hand, or another service writing to <code>ownerships</code>. None of these
+            run the callbacks, and a name-based search cannot see them.</p>
         </div>
       </details>
 
       <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/user.rb#L365-L366">app/models/user.rb:365-366</a> &mdash; a discarded account's ownerships are destroyed, so its rows close; the user record itself is never destroyed, so <code>dependent: :destroy</code> never fires and the closed history outlives the account.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/rubygem_transfer.rb#L71-L77">app/models/rubygem_transfer.rb:71-77</a> and <a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/organization_onboarding.rb#L133-L139">app/models/organization_onboarding.rb:133-139</a> &mdash; demote outside contributors with <code>update_all</code>, which never runs the ratchet callback; both set <code>:maintainer</code>, which the ratchet would have ignored anyway.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/ownership.rb#L85-L96">app/models/ownership.rb:85-96</a> &mdash; <code>validate_unique_user</code> is what keeps one <code>Ownership</code> per pair, and so what makes the new partial unique index satisfiable from the callback path.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/models/pusher.rb#L236">app/models/pusher.rb:236</a> &mdash; calls <code>disown</code> when the last indexed version is yanked, which is the bypass <code>Rubygem#disown</code> closes its rows explicitly for.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/b637b1631454524c605e4f8c20585b7fb5abdf49/app/policies/admin/application_policy.rb#L30-L36">app/policies/admin/application_policy.rb:30-36</a> &mdash; <code>avo_update?</code> is <code>false</code> and <code>Admin::OwnershipPolicy</code> does not override it, so no admin can edit an <code>Ownership</code> field into re-firing these callbacks.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/pusher.rb#L236-L239">app/models/pusher.rb:236-239</a> &mdash; pushing to a gem with no indexed versions disowns it, which closes the previous owners' rows and opens one for the pusher</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L133-L138">app/models/organization_onboarding.rb:133-138</a> &mdash; demotion through <code>update_all</code> skips the role hook. The row is unaffected because its role never moves down. The same holds for <code>rubygem_transfer.rb:86-91</code></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/avo/actions/add_owner.rb#L42">app/avo/actions/add_owner.rb:42</a> &mdash; creates an ownership that is already confirmed, so its row opens on create</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/lib/access.rb#L4-L6">lib/access.rb:4-6</a> &mdash; the role order rests on <code>OWNER</code> outranking <code>MAINTAINER</code>; <code>ADMIN</code> is in neither enum</li>
       </ul>
     </details>
 
@@ -2150,5 +2046,3 @@ figcaption strong { color: var(--ink-3); }
     document.querySelectorAll('.excerpt--source .ex-body > pre[data-lang]'), tint);
 })();
 </script>
-
-</body></html>

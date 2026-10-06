@@ -519,14 +519,14 @@ LiveView the first time someone clicks it. Which of the two you get is detected 
 
 ### Example Review Map
 
-Two, against open pull requests in public Rails codebases:
+Two, against real pull requests in public Rails codebases:
 
 **[🧭 Read the example Review Maps](https://wyeworks.github.io/accountable-review/)**
 
 | | |
 | --- | --- |
-| [**RubyGems.org #6699**](https://wyeworks.github.io/accountable-review/rubygems-6699/) — *Every confirmed gem ownership now leaves a durable record of who held it* | 11 files, 5 checkpoints. An additive diff that all looks safe — a new table, its callbacks, a backfill — where the judgments are about unchanged callers: which paths destroy an ownership without running a callback, and which of them close a tenure for someone whose access continues anyway. It also carries the one checkpoint per page that may ask how a change was built, earning the slot by pointing at where the codebase already answered the same question. |
-| [**Discourse #43845**](https://wyeworks.github.io/accountable-review/discourse-43845/) — *Email-code signup waits for a username before it creates the account* | 34 files, 5 checkpoints. The case the format exists for: most of what a reviewer has to decide is not in the diff — which of the site's username rules still bind a server-generated name, whether the CAPTCHA still gates the request that creates the account. |
+| [**RubyGems.org #6699**](https://wyeworks.github.io/accountable-review/rubygems-6699/) — *Record every stint a user spends owning or maintaining a gem* | 11 files, 3 checkpoints. An additive diff that all looks safe — a new table, its callbacks, a backfill — where the judgments are about unchanged callers. Its one figure draws every path that ends an ownership converging on the history row each must close, including the one that deletes ownerships without running their callbacks. |
+| [**Discourse #43845**](https://wyeworks.github.io/accountable-review/discourse-43845/) — *Email-code signup collects its details before it creates the account* | 36 files, 6 checkpoints. The case the format exists for: most of what a reviewer has to decide is not in the diff — whether every request that creates an account still passes the CAPTCHA, which of the site's username rules still bind a server-generated name. It also carries the one checkpoint per page that may ask how a change was built, earning the slot by pointing at where the codebase already answered the same question. |
 
 They are public repositories on purpose: every `file:line` citation on those pages resolves, so you
 can follow any claim into the code it is about. Both are ordinary output at the default settings,
