@@ -63,7 +63,7 @@ What went with the fixtures, and is still covered only mechanically, is listed i
 else: every flag and every rule stays in the script it calls.
 
 ```sh
-bin/evals offline                          # every no-model suite. What CI checks. About a minute.
+bin/evals offline                          # every no-model suite. What CI checks. About a minute and a half.
 bin/evals offline frozen                   # or just one of them
 bin/evals e2e                              # the PRs in e2e/prs.yml
 bin/evals e2e discourse-43002 -n 3 -j 3    # three whole runs of one, at once
