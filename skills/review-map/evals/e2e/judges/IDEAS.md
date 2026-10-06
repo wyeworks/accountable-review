@@ -26,9 +26,12 @@ judges, because one judge asked to check thirty things checks each of them less 
   first explanation.
 - **Every *Look at* entry is true.** The cited line shows what the clause says. Defect: shift a
   citation's line range off the line it claims.
-- **The coding-decision bar.** At most one coding-decision checkpoint, it cites an in-repo
-  precedent, it asks rather than answers, and it never displaces a behavioural judgment. Defect:
-  a coding-decision checkpoint with no in-repo citation, or one that recommends the fix.
+- **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
+  decision in the repository, or a convention on the lens file's closed stack list — asks rather
+  than answers, raises nothing the repository has itself settled on, is ranked after every
+  behavioural one, and none displaces a behavioural judgment; two that share one precedent should have been merged. Defect: a coding-decision
+  checkpoint with no citation from either source, one that rests on a convention the lens does
+  not list, or one that recommends the fix.
 - **The count scales on the deltas § 01 names**, never on the file count.
 
 ## § 03 reading path

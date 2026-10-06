@@ -356,22 +356,33 @@ Editing one of these means checking the others still agree.
   `rails-anchors.rb` counts them as the denominator for its doc-link budget, and `tests/run.sh` asserts
   the template assembles three. Whether a question is a judgment is a judged expectation, and it is
   the first candidate in `evals/e2e/judges/IDEAS.md` — no working judge asks it yet.
-- **Two kinds of checkpoint, and the second one is capped.** A **behavioural** checkpoint judges what
+- **Two kinds of checkpoint, and the second one is ranked behind the first.** A **behavioural** checkpoint judges what
   the system now does. A **coding-decision** checkpoint judges how the change was built — where a class
   was put, what kind of object it is, which existing abstraction it went around. They render
   identically and nothing on the page says which is which.
 
-  **The rule is name the departure, and cite it in this repository.** The form is *the PR chose X; this
-  codebase already does Y for the same job; is X deliberate?*, and the `Y` is a path — a sibling file, a
-  populated directory, a line in the project's own convention doc — carried on the page as a *Look at*
-  entry. **No in-repo citation, no question.** That bar is the whole difference between this and a style
-  guide, and it is the one thing here a lint rule cannot do: the answer is four files away and was never
-  written down. A preference stated with nothing to cite is the page grading the author's taste.
+  **The rule is name the departure, and cite it from one of two sources.** The form is *the PR chose
+  X; Y is the settled answer for the same job; is X deliberate?* The `Y` is either **this repository's
+  decision** — a line in its convention doc, else a sibling file or populated directory, as a *Look at*
+  entry — or **a stack convention on the lens file's closed list**, cited through its catalogue row as
+  the checkpoint's one doc link. **The repository outranks the stack**: a codebase that settled on the
+  PR's choice has no departure, whatever the manual says. **No citation from either, no question.**
+  The list is closed and documented so that the second source is the same bar one level up rather
+  than the run's sense of good Rails; it exists only where the catalogue is open, so Phoenix is
+  repo-only until `elixir-docs.md` is verified. A preference stated with nothing to cite is the page
+  grading the author's taste.
 
-  **Three caps, and the middle one is the product.** One per page; it **never displaces a behavioural
-  judgment**, so five behavioural checkpoints means no slot; ranked last. The exception is a refactor,
-  where it may be the only judgment the diff carries and then it is the page. A departure that does not
-  get the slot is written nowhere — an observation about shape with no home is noise, not a finding.
+  **No fixed count; the citation is the cap.** One per departure, each with its own citation,
+  merged first when two share a precedent; they **never displace a behavioural judgment** and never
+  push the page past seven — outside the per-delta three to five, inside the ceiling; ranked last. The
+  exception is a refactor, where they may be the only judgments the diff carries and then they are the
+  page. A departure with nothing to cite is written nowhere — an observation about shape with no home
+  is noise, not a finding.
+
+  **It was one per page, and that was the wrong cap.** The worry was a style review arriving as
+  thoroughness, but the citation bar already prevents that — a page can only ask as many as the
+  codebase has settled answers for — and a flat one threw away the second real departure on a PR
+  that had two, which is a judgment a reviewer who knows the codebase would have asked.
 
   It exists because the page was **behavioural by construction and that is only half of reviewing**.
   The run that produced it saw the fact and had nowhere to take it: a Review Map called a class "a small
@@ -379,10 +390,15 @@ Editing one of these means checking the others still agree.
   `app/models` when the app had an `app/services`. One sentence had blocked it — step 7a's *"in
   behavioural terms"*.
 
+  **It was repo-only, and that was the wrong bar.** Two sources was a maintainer's call: a team's
+  written decision is the strongest `Y`, and where a repository has written nothing, the conventions
+  Rails itself documents still hold. What keeps the second from becoming taste is that the run may not
+  extend the list — adding a row means adding its catalogue row through `verify-catalogue.sh`.
+
   Six files agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
   it; `report-format.md` § *Coding decisions* owns the bar and the caps **alone** and § *Where
   checkpoints come from* lists it last; both lens files carry the shapes and the searches that produce
-  the citation; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical checks
+  the citation, and `rails-nextjs.md` the closed stack list; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical checks
   any of it — like the category test, whether a departure was real and whether the page asked rather
   than answered are judged, and `evals/e2e/judges/IDEAS.md` records the judge that would ask them.
 - **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is

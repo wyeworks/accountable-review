@@ -350,7 +350,8 @@ find the seam between the two sides, because that is what a contract judgment is
 unchanged code of the same kind — often more accurate than a stale document. Note which top-level
 directories under `app/` (or `lib/<app>/`) exist and what each holds: that inventory is the evidence
 step 7b needs to ask whether a coding decision in this diff departs from one, and a departure it
-cannot cite is a question it may not ask.
+cannot cite — from this inventory, a convention doc, or the lens file's stack conventions — is a
+question it may not ask. A written decision found here is worth noting with its line.
 
 ## 3. Inventory the diff
 
@@ -600,8 +601,8 @@ and almost every checkpoint has to be a judgment about it.
 **Almost, because there are two kinds of checkpoint and only the first answers to this sentence.**
 A **behavioural** checkpoint is a judgment about the delta — what the system now does. A
 **coding-decision** checkpoint is a judgment about how the change was built: where a class was put,
-what kind of object it is, which existing abstraction it went around. That second kind is capped at
-one and ranked last, and 7b to 7e say why and how.
+what kind of object it is, which existing abstraction it went around. That second kind is ranked last
+and never displaces the first, and 7b to 7e say why and how.
 
 **7b. Identify the human judgments.** For each note, ask what a competent reviewer has to *decide*
 rather than *learn*: whether a scope is still the one that was intended, whether a nil default is
@@ -611,18 +612,21 @@ migration is safe to run against the rows that already exist. Write each as a qu
 A judgment is something the reviewer could get wrong, with consequences. A fact is something they
 read once. Facts feed the explanations; only judgments become checkpoints.
 
-**Then ask the coding-decision question once, and it has a bar in front of it: name the departure.**
+**Then ask the coding-decision question, once per departure, and it has a bar in front of it: name
+the departure.**
 The form is *the PR chose X; this codebase already does Y for the same job; is X deliberate?* — a
 value object under `app/models` where `app/services/` already holds four of its kind, a query built in
 a controller where `app/queries/` exists, a hand-rolled guard where a policy class was waiting, a
 `*Manager` among a dozen `*Service`s. Step 2 collected the conventions; this is where they are spent.
 
-**The bar is a citation, in this repository.** The question exists only if you can point at the
-existing answer it departs from — a sibling file, a populated directory, a line in a convention doc —
-and the citation goes on the page beside the question. **No in-repo counter-example, no question.**
-That is what separates this from a style guide: a reviewer who knows the codebase can ask it, a linter
-cannot, and the difference is the sibling you had to go and find. The lens file's search recipes are
-how; `report-format.md` § *Coding decisions* owns the rest of the rule.
+**The bar is a citation, from one of two sources.** The question exists only if you can point at
+the answer it departs from: **this repository's decision** — a line in its convention doc, else a
+populated directory or a sibling file — or **a stack convention on the lens file's closed list**,
+cited through its catalogue row. **The repository outranks the stack**: where the codebase has
+settled on the PR's choice there is no departure, whatever the stack convention says; where it is
+silent, the stack convention stands; where both agree, cite both. **No citation from either, no
+question** — a convention you know but the lens does not list is taste. The lens file's search
+recipes are how; `report-format.md` § *Coding decisions* owns the rest of the rule.
 
 **Ask it; never answer it.** No *should have been*, no *unidiomatic*, no *the Rails way*. The reviewer
 knows why the codebase is shaped as it is and you do not — step 6's neutrality rule is the register,
@@ -632,7 +636,7 @@ Some judgments hide outside any one flow, and a flow-by-flow reading is exactly 
 `references/report-format.md` § *The review checkpoint* carries the list to ask against — migration
 safety, an application invariant with no database counterpart, the authorization model, deploy
 ordering, test infrastructure, agentic tooling, jobs and flags and environment variables and
-transaction boundaries, and the one coding decision that departs from something this repository
+transaction boundaries, and the coding decisions that depart from something this repository
 already does. Each is a checkpoint only if it is a judgment for *this* diff; the list is a prompt,
 not a form.
 
@@ -649,7 +653,9 @@ most where the page's own evidence is weakest; how far it sits from the obvious 
 since a consequence visible in the hunk needs less help than one three files away; and how important
 the affected unchanged code is.
 
-**A coding-decision checkpoint is ranked last, whatever those four say about it.** Not because it does
+**Coding-decision checkpoints are ranked last, whatever those four say about them** — after every
+behavioural one, and among themselves by how settled the answer they depart from is — both sources, then a
+written repository decision, then a populated directory or a stack convention. Not because it does
 not matter — a class in the wrong place outlives the PR — but because misreading it costs the reviewer
 a conversation and misreading a behavioural one costs them production. The reader meets the
 consequences first and the shape afterwards.
@@ -699,22 +705,23 @@ which is why the agenda has room to grow rather than a ceiling that would push o
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
 checkpoint is written, never on how many there are.
 
-**The coding decision gets at most one slot, and it takes the last one or none.** Three caps, and the
-middle one is the product:
+**Coding decisions take the last slots, as many as clear the bar and fit.** No fixed count, and three
+limits:
 
-- **One per page — not one per delta.** This is the one count above that does **not** scale with the
-  number of independent changes: a PR shipping three deltas still asks at most one question about how
-  the code was built. A second is the page becoming a style review, and it will read as thoroughness.
-  The departure that does not get the slot is not written down anywhere — an observation about shape
-  with nowhere to go is noise, and the page is not obliged to report everything it noticed.
-- **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
-  behavioural agenda already fills the page, there is no slot, and that is the correct outcome rather
-  than a loss. A page that dropped *is nil safe for every consumer?* to ask where a class lives has
-  traded the product for a preference — and a page that reached an eighth checkpoint to fit one in has
-  bought a preference with the reviewer's attention.
-- **Unless the diff is a refactor**, in which case the coding decision may be the only judgment there
-  is, and then it is the page. Say that plainly in *What changed* rather than manufacturing a
-  behavioural checkpoint to sit in front of it.
+- **One per departure, each with its own citation.** If the diff departs from this codebase's
+  settled answers in two unrelated places, ask both — a reviewer who knows the codebase would. The
+  citation is what keeps this from becoming a style review, not a quota: a page can only ask as many
+  as the repository and the stack's list have answers to point at. Merge first, as in 7c — three files that went around the
+  same convention are one question. A departure with nothing to cite is not written down anywhere.
+- **They never displace a behavioural judgment, and they never justify going past seven.** They sit
+  outside the per-delta three to five and inside the ceiling of seven, filling only the room the
+  behavioural agenda leaves. A page that dropped *is nil safe for every consumer?* to ask where a
+  class lives has traded the product for a preference — and a page that reached an eighth checkpoint
+  to fit one in has bought a preference with the reviewer's attention. When room runs out first, keep
+  the departures from the most settled answers.
+- **Unless the diff is a refactor**, in which case coding decisions may be the only judgments there
+  are, and then they are the page. Say that plainly in *What changed* rather than manufacturing a
+  behavioural checkpoint to sit in front of them.
 
 **7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
 two to four sentences. Then decide whether it also earns a chain, and how many *Look at* entries it
