@@ -1,4 +1,4 @@
-# The impact panel, which is section 4's one figure and the part of it a diff cannot produce.
+# The impact panel, which is section 5's one figure and the part of it a diff cannot produce.
 # Each fixture plants ONE defect, and between them they cover the two failures this component
 # was built to end: an edge with no label (adjacency again) and a node with a clause in it (the
 # word cloud). impact-prose-nodes.html expects exit 1 for its standing-in citation and is pinned
@@ -55,7 +55,7 @@
  start-here         | start-here-clean.html         | 0 | each with a why
  start-here         | start-here-no-why.html        | 1 | is not a reading order
  start-here         | start-here-two-lists.html     | 1 | it is one list
-# Section 03 routes to EVERY checkpoint, not just to one. The orphan fixture keeps three stops,
+# Section 04 routes to EVERY checkpoint, not just to one. The orphan fixture keeps three stops,
 # three whys, three citations and three href="#cp-" links, so the rule that counts links passes
 # it — only comparing the two sets notices that cp-b is a question nobody was sent to answer.
 # It is a WARN, so the row pins the text at exit 0: a draft legitimately carries unrouted stubs
@@ -68,6 +68,14 @@
 # coverage rule counted that sentence as a checkpoint nothing routes to. Every published page
 # carried the warning, which is the state a real warning cannot survive.
  start-here         | start-here-style-comment.html | 0 | every checkpoint is reachable from the reading path
+# Context points at the checkpoints that earned it. start-here.rb holds the rule because it is the
+# reading path's pointer rule applied to the other section that points into the agenda. Both
+# defects are WARNs, pinned at exit 0, for the coverage rule's reason; and the clean row pins the
+# PASS line, because a rule only ever seen firing on broken input is one nobody notices stopped.
+# The template carries a Context too, and frozen/ records that it passes there.
+ start-here         | context-clean.html            | 0 | every Context entry points at a checkpoint on this page (2)
+ start-here         | context-no-pointer.html       | 0 | 1 of 2 Context entr(ies) name no checkpoint
+ start-here         | context-dead-pointer.html     | 0 | Context points at cp-c, which this page does not carry
 # The inventory carrier moved to the evidence foot and data-path moved with it. This row is the
 # POSITIVE case: a page that carries the attribute on a div.c passes, which is what an assertion
 # about where it may NOT sit would otherwise never look at.
@@ -279,7 +287,7 @@
  figures            | figures-clean.html                  | 0 | at most one figure per checkpoint
  figures            | figures-two-figures.html            | 1 | one per checkpoint, of any kind
  figures            | figures-unknown-kind.html           | 1 | is not a checkpoint figure
- figures            | figures-chain-aff.html              | 1 | is an impact path, drawn once in section 04
+ figures            | figures-chain-aff.html              | 1 | is an impact path, drawn once in section 05
  figures            | figures-converge-one-path.html      | 1 | one path is a chain
  figures            | figures-converge-rel.html           | 1 | they are siblings, not a sequence
  figures            | figures-converge-target-loc.html    | 1 | an invariant is a property, not a file

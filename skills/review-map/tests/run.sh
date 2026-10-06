@@ -109,7 +109,7 @@ assert_eq "$(count "$WORK/markup" 'hljs-')"   "0" "the markup half carries no ti
 # ---------------------------------------------------------------- the page has one shape
 # There is one page now, and no flag names another one. So the markup half is the whole page, and
 # what these rows assert is that every section a run has to write is assembled in front of it.
-for sec in changed attention start impact; do
+for sec in changed context attention start impact; do
   assert_eq "$(grep -c "^ *<section id=\"$sec\"" "$WORK/markup" || true)" "1" "the markup half carries <section id=\"$sec\">"
 done
 assert_eq "$(count "$WORK/markup" '<details class="evidence">')" "1" "the evidence foot is assembled"
@@ -124,19 +124,19 @@ assert_eq "$(grep -c 'class="eyebrow"[^>]*>Affected, not changed' "$WORK/markup"
 # THE CHECKPOINT, ASSEMBLED. Five written and one pending stub: a run copies the composition, and a
 # composition described but never shown assembled does not survive a weaker reader. A and B are the
 # composition, one with every optional part and one without; C, D and E exist to show one topology
-# figure each. The pending one is counted too, because a half-written section 02 has to be
+# figure each. The pending one is counted too, because a half-written section 03 has to be
 # distinguishable from a flattened one.
 assert_eq "$(count "$WORK/markup" 'class="cp"')"    "6" "five checkpoints assembled whole and one pending stub"
 assert_eq "$(count "$WORK/markup" 'id="cp-a"')"     "1" "the first checkpoint is anchored for the rail and the reading path"
 assert_eq "$(count "$WORK/markup" 'class="lookat"')" "5" "each written checkpoint carries its own where-to-look list"
 assert_eq "$(count "$WORK/markup" 'class="open"')"   "1" "the open-question line is assembled once"
 
-# THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 04. A chain inside a checkpoint shows
+# THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 05. A chain inside a checkpoint shows
 # mechanism inside the change, so it holds .ip-step and never .ip-aff: a hop into unchanged code is
 # an impact path and belongs in the panel, drawn once. This is the assertion that fails when the
 # two figures blur into each other.
 assert_eq "$(count "$WORK/markup" '<figure class="chain">')" "1" "one chain is assembled inside a checkpoint"
-assert_eq "$(count "$WORK/markup" '<figure class="impact">')" "1" "one impact panel is assembled, in section 04"
+assert_eq "$(count "$WORK/markup" '<figure class="impact">')" "1" "one impact panel is assembled, in section 05"
 if [ "$(count "$WORK/markup" 'class="ip-n ip-step"')" -ge 1 ]; then
   ok "the chain uses .ip-step, the neutral hop that exists only there"
 else
@@ -227,7 +227,7 @@ assert_eq "$(count "$PRIMER" 'class="probe"')" "0" "no probe inside a primer —
 assert_eq "$(count "$PRIMER" '<pre class="demo">')" "1" "the primer quotes the manual in one pre.demo"
 assert_eq "$(count "$WORK/markup" '<pre class="demo">')" "1" "and no demo sits anywhere else in the markup"
 
-# AND IT IS INSIDE A CHECKPOINT, before that checkpoint's ul.lookat. A primer in section 04 or in the
+# AND IT IS INSIDE A CHECKPOINT, before that checkpoint's ul.lookat. A primer in section 05 or in the
 # evidence foot is a framework lesson with no judgment attached to it; one below the lookat list is a
 # lesson arriving after the reader has already been sent to the code.
 cp_region=$(awk '/<section class="cp" id="cp-a">/ { f = 1 } f { print } /<ul class="lookat">/ { if (f) exit }' "$WORK/markup" | grep -c 'class="primer"' || true)
@@ -242,11 +242,37 @@ for gone in 'class="mech"' 'class="rows"' 'class="pipe"' 'class="checkpoint"' \
   assert_eq "$(count "$WORK/markup" "$gone")" "0" "the markup half has no $gone"
 done
 
-# The rail is assembled, never derived. Four numbered entries and one sub-entry per checkpoint.
+# The rail is assembled, never derived. Five numbered entries and one sub-entry per checkpoint.
 assert_eq "$(count "$WORK/markup" 'class="rail-links"')" "1" "exactly one rail"
-assert_eq "$(count "$WORK/markup" 'data-rail=')" "10" "the rail is four entries and six checkpoint sub-entries"
-assert_eq "$(count "$WORK/markup" '04</span>')"  "1" "the rail numbers up to 04"
-assert_eq "$(count "$WORK/markup" '05</span>')"  "0" "and stops there"
+assert_eq "$(count "$WORK/markup" 'data-rail=')" "11" "the rail is five entries and six checkpoint sub-entries"
+assert_eq "$(count "$WORK/markup" '05</span>')"  "1" "the rail numbers up to 05"
+assert_eq "$(count "$WORK/markup" '06</span>')"  "0" "and stops there — the evidence foot has no number"
+
+# CONTEXT — section 02, the repository concepts the checkpoints rely on. It sits BEFORE the agenda,
+# because a judgment about a piece the reader cannot name is a sentence they can read and not
+# follow. Every entry ends in a pointer at the checkpoints that use it, which is the earning test
+# made visible. And it is prose: the before/after flow figure is designed and deferred, and
+# figures.rb grades only checkpoint figures, so a figure here would arrive with nothing looking at
+# it — zero is the assertion that keeps the deferral honest. No tier either: an entry asserts
+# nothing about the change.
+ctx_range() { awk '/^ *<section id="context">/ { f = 1 } f { print } f && /^ *<\/section>/ { exit }' "$WORK/markup"; }
+assert_eq "$(count "$WORK/markup" '<dl class="ctx">')" "1" "one Context list is assembled"
+ctx_line=$(grep -n '^ *<section id="context">' "$WORK/markup" | head -1 | cut -d: -f1)
+att_line=$(grep -n '^ *<section id="attention"' "$WORK/markup" | head -1 | cut -d: -f1)
+if [ -n "$ctx_line" ] && [ -n "$att_line" ] && [ "$ctx_line" -lt "$att_line" ]; then
+  ok "Context comes before the agenda"
+else
+  bad "Context comes before the agenda"
+fi
+assert_eq "$(ctx_range | grep -c '<dd>' || true)" "$(ctx_range | grep -c 'class="ctx-used">Used by <a href="#cp-' || true)" "every Context entry points at a checkpoint that uses it"
+if [ "$(ctx_range | grep -c '<dd>' || true)" -ge 1 ]; then
+  ok "the Context list carries at least one entry"
+else
+  bad "the Context list carries at least one entry"
+fi
+assert_eq "$(ctx_range | grep -c '<figure' || true)" "0" "no figure inside Context — the flow figure is deferred, and nothing would grade one here"
+assert_eq "$(ctx_range | grep -c 'class="tier' || true)" "0" "no evidence tier inside Context — an entry asserts nothing about the change"
+assert_eq "$(ctx_range | grep -c 'class="primer' || true)" "0" "no primer inside Context — the framework is --mentor's, the repository is Context's"
 
 # AND THE ENTRY'S HANGING INDENT STOPS AT THE ENTRY. text-indent inherits and an inline-flex box
 # lays out its own line, so .rail-links a's -24px reached inside the pending chip and pulled the
@@ -258,7 +284,7 @@ assert_eq "$(awk '/^\.pending \{/,/^}/' "$WORK/head" | grep -c 'text-indent: 0')
   "the pending chip resets the rail entry's hanging indent"
 
 # AND A READING-PATH STOP SPANS ITS EXCERPT. report-format.md § Source excerpts permits an excerpt
-# on a § 03 stop, and .begin li is a three-column grid, so a details with no span auto-places into
+# on a § 04 stop, and .begin li is a three-column grid, so a details with no span auto-places into
 # the 26px number column — where .ex-loc's overflow-wrap: anywhere renders the path one character
 # per line, hundreds of pixels down. A published page did exactly that. Both halves are asserted:
 # the rule has to be in the emitted head AND the composition has to be shown assembled, because
@@ -716,7 +742,7 @@ cpage "$NOHIT" '<span class="pending">pending</span>'
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "a pending marker refuses for the same reason"
 
-cpage "$NOHIT" '<p>Section 4 was not written.</p>'
+cpage "$NOHIT" '<p>Section 5 was not written.</p>'
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "and a stopped run is finished deliberately, never updated"
 

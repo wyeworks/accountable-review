@@ -10,13 +10,20 @@ The product principle every rule below serves:
 
 ## The sections
 
-Five parts in the order a reviewer actually works, each owning one kind of thing, with any the diff
+Six parts in the order a reviewer actually works, each owning one kind of thing, with any the diff
 does not earn omitted outright.
 
 - **What changed** — the masthead, then one paragraph: what problem this solves, what is now true
   that was not, who is affected. Derived from tests, code and commits rather than copied from a
   possibly-stale PR description. A limit the run hit — a region it had to skim, a client it could not
   read — is stated here and nowhere else.
+- **Context** — only when earned, and most pages earn none. The pieces of *this repository* the
+  checkpoints talk about, named before the checkpoints talk about them: which request in a sequence
+  does what, code that is a plugin wrapping a core method rather than core code, a domain term a
+  setting introduces. One to five entries, each a sentence or two on what the thing **is**, a
+  citation, and a pointer at the checkpoints that rely on it. It never says what the change did to
+  the thing — that is the checkpoint's — and it is not `--mentor`: a primer teaches the framework,
+  Context names the repository, and no flag turns it on or off.
 - **What needs your attention** — the page's core. Three to five **review checkpoints** for each
   independent change the PR makes — seven on the page at the outside — each one
   judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
@@ -300,7 +307,8 @@ understood — every label still reads as words.
 ## It adapts to the PR
 
 Parts appear only when the diff earns them, and a small change gets a small agenda: three checkpoints
-where three is all there is, and no impact section at all when nothing crosses into unchanged code. A
+where three is all there is, no impact section at all when nothing crosses into unchanged code, and
+no Context when every judgment is followable without an introduction to the repository. A
 four-file bugfix produces a one-screen page, not an empty template. If a PR genuinely does not need
 one, the skill says so instead of generating ceremony.
 

@@ -174,10 +174,12 @@ A normal diff cannot show those relationships. A Review Map can.
 A Review Map is a **review agenda**: the smallest set of things you have to judge before you can
 approve a change, with the code that settles each one attached.
 
-Four parts, and a shut evidence block at the foot:
+Five parts, and a shut evidence block at the foot:
 
 ```text
 What changed                    one paragraph: what is now true that was not
+Context                         when earned: the pieces of this repository the judgments rely
+                                on, for a reader who knows the stack but not the codebase
 What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the
                                 outside; each one judgment, framed as a question, and at
                                 most one small figure where its shape is clearer than prose:

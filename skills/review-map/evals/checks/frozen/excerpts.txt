@@ -274,6 +274,24 @@ SKIP  no excerpts in this input
 ## --page build-state-updated-twice.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment context-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-dead-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment context-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  2 source excerpt(s), each with a summary

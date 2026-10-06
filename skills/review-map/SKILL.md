@@ -55,7 +55,7 @@ host reference is the same rule one level up — yours, not the other host's.
 | File | Read at | For |
 |---|---|---|
 | `references/hosts/claude-code.md` *or* `references/hosts/generic.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
-| `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/report-format.md` | steps 1, 7, 8, 9 | The six sections, the review checkpoint, the Context section, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
 | `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, two assembled checkpoints, the chain and the impact panel — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
@@ -191,7 +191,7 @@ point of putting them in a separate context. The host reference owns how the rea
   Two things about it belong here, beside the flags it sits with. **It is not a level and not an
   effort.** It never lowers a cap, never skips the gate, never skips step 8 for anything it writes,
   and never admits or removes a component; the moment it means "fewer excerpts" or "skip section
-  04" it has become a second document reached by a flag, which is the thing this page has no
+  05" it has become a second document reached by a flag, which is the thing this page has no
   shapes for. And **with no
   previous page, or when the plan below refuses, it falls back to a full run and says so in chat.**
   That is not an error: a full run is always the better page, so every way this flag can fail leads
@@ -666,7 +666,7 @@ yes, stop.
 
 **The count follows the delta, never the file count.** One delta is three to five whatever the diff
 weighs: eighty files of one rename is one judgment, and one behaviour reaching across four layers is
-also one — its reach becomes *Look at* entries, a figure and a card in section 04, not more
+also one — its reach becomes *Look at* entries, a figure and a card in section 05, not more
 checkpoints. Two delta bullets in *What changed* is what earns a sixth. Since those bullets are on
 the page, the reader has already been told why the agenda is longer.
 
@@ -677,9 +677,9 @@ eighth checkpoint is a list the reviewer will triage instead of an agenda they c
 
 **Two conditions on going past the fifth**, and check both before you do:
 
-- **Every checkpoint is routable from section 03** — its own stop, or a stop whose `span.why` names
+- **Every checkpoint is routable from section 04** — its own stop, or a stop whose `span.why` names
   it. If routing them all would consume the whole reading order and leave no room for conceptual
-  sequence, the agenda is wider than the page carries. `report-format.md` § *Section 3* owns the rule.
+  sequence, the agenda is wider than the page carries. `report-format.md` § *Section 4* owns the rule.
 - **It rests on a note you traced, not one you glanced at.** `$W/analysis/` records which is which. A
   checkpoint built on a glance is the page's weakest claim sitting under a heading that promises the
   exact lines that settle it — and on a strained run the glanced notes are exactly the ones a wide
@@ -727,7 +727,7 @@ checkpoint* owns the rest.
 guard order, a value derived across three or more hops, a request path with a branch in it. Ask it
 affirmatively rather than looking for an excuse: *if the explanation would have to name three hops in
 sequence, draw them.* It shows that mechanism **inside the change**, so if the chain you want to draw
-crosses into unchanged code, it is an impact path: it belongs in section 04, drawn once, and the
+crosses into unchanged code, it is an impact path: it belongs in section 05, drawn once, and the
 checkpoint says so in a clause.
 
 **A chain is one of four shapes, and it is asked about last.** Before drawing one, ask what shape the
@@ -819,7 +819,7 @@ to understand first for the next file to make sense?*
 entries: each starts in changed code, passes through at least one unchanged consumer, and ends at
 something a user or an operator would see. Choosing the third-best over the fourth is the work; the
 fourth keeps its entry below the figure or in the foot. **If nothing crosses into unchanged code,
-section 04 is omitted and the rail loses its entry** — an empty section saying nothing reaches
+section 05 is omitted and the rail loses its entry** — an empty section saying nothing reaches
 unchanged code reads as a clean bill of health.
 
 For each path you keep, settle two things here rather than while typing markup. **What the path is
@@ -844,8 +844,23 @@ Two rules keep this from becoming ceremony:
   factory in this repo — a command a reviewer can paste. Invented steps are worse than none, because
   they burn the reader's trust in the whole page on the first paste that fails.
 
+**7k. Name the context.** Last, because it is decided against the finished agenda: read each
+checkpoint as a reviewer who knows the stack and not this repository, and list what it assumes they
+can name — a sequence of requests, a plugin wrapping core code, a domain term a setting introduces.
+A concept gets an entry only when **all four** of `references/report-format.md` § *Section 2*'s
+conditions hold: a checkpoint uses it, that checkpoint would otherwise assume it, a newcomer to this
+repository would lack it, and it is the repository's rather than the framework's. Write the entries
+into `agenda.md` under `## Context`, each with its one-sentence *is*, its citation, and the
+checkpoint letters that use it; at most five. **No entry is the expected result on most pages**, and
+then the section is omitted rather than stubbed — say *none earned* in `agenda.md` and nowhere else.
+
+The trap is a list of what the diff touched. *The controller*, *the plugin*, *the spec* is
+inventory, and the per-layer page arriving under a new heading; an entry no checkpoint letter can be
+written beside was not earned. The other trap is the judgment arriving early: an entry says what a
+thing **is**, never what the change did to it.
+
 **Milestone 2 opens after this step** (step 9), with one pending stub per checkpoint. Milestone 3
-follows it once 7i's cards have checkpoints to point at.
+follows it once 7i's cards and 7k's entries have checkpoints to point at.
 
 ## 8. Verify before asserting — at every publish boundary
 
@@ -954,11 +969,15 @@ someone mid-paragraph is worse than one that arrives late.
 | Stage | After step | The page holds |
 |---|---|---|
 | 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending |
-| 2 · Agenda | 7, then per checkpoint | Section 02's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
-| 3 · Impact | 7i, after stage 2's opening publish | *Impact outside the diff*, as step 7i settled it |
+| 2 · Agenda | 7, then per checkpoint | Section 03's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
-**Section 04 cannot publish before the checkpoints exist, which is why it is third and not second.**
+**Section 05 cannot publish before the checkpoints exist, which is why it is third and not second.**
+*Context* sits above the agenda on the page and still arrives after it, for the same reason: every
+entry ends in a pointer at the checkpoints that use it, and whether any entry is earned at all is a
+question about the agenda. Orientation that delayed the questions would cost the reader the arrival
+they came for.
 Every impact card's `p.ip-why` ends in a pointer at the checkpoint that judges it
 (`references/report-format.md` § *Impact paths*), and until stage 2's opening publish has landed the
 stubs there is no `#cp-x` to point at. Publishing it after step 5 meant either a dead fragment or an
@@ -969,7 +988,7 @@ two of them into one judgment before the reader ever sees either.
 see step 8. They add no milestone: they produce corrections to analysis, not an arrival worth opening
 the tab for, and the reader never learns they ran.
 
-**The checkpoint is the unit of staging, not section 02.** Section 02 is the bulk, so a stage that
+**The checkpoint is the unit of staging, not section 03.** Section 03 is the bulk, so a stage that
 delivered it whole would put the longest wait of the run behind one arrival — which is the shape
 staging exists to avoid. Nothing new is needed to split it: `<section id="attention">` carries the
 heading and its lead sentence, and each checkpoint is already its own nested `<section class="cp" id="cp-x">`
@@ -1002,8 +1021,8 @@ negotiable against a figure: the count exempts everything inside a figure of any
 `<pre>`, and everything inside a collapsed block, so a long page is never fixed by dropping a
 drawing. An impact card's `p.ip-why` is prose and does count.
 
-**The page fills in out of document order, and that is fine.** Section 02 arrives one checkpoint at a
-time, so a written checkpoint sits above a pending sibling for most of stage 2, and section 04 is
+**The page fills in out of document order, and that is fine.** Section 03 arrives one checkpoint at a
+time, so a written checkpoint sits above a pending sibling for most of stage 2, and section 05 is
 still a stub below both of them until stage 3. The pending marker is what makes all of it readable —
 the risk the build state exists to prevent is an unwritten section looking like an empty one, not a
 section arriving out of order.
@@ -1055,13 +1074,15 @@ as a different page. The title is pinned earlier than that and by the script —
 into the head and HTML-escapes it, which a PR title containing an `&` needs — so do not write it again.
 Everything else about writing holds at every stage:
 
-- Follow `references/report-format.md` for the five sections, when each appears, how deep it goes,
+- Follow `references/report-format.md` for the six sections, when each appears, how deep it goes,
   and the rule that each fact has one home. Follow `references/page-template.html` for the design
   system and the components — read with `scripts/page-skeleton.sh --markup`, which prints the
   component half and leaves out the 54 KB you are about to be given for free.
 
-  **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 04 entry
-  only when step 7i found nothing crossing into unchanged code, and then remove the section with it.
+  **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
+  only when step 7i found nothing crossing into unchanged code, and the 02 entry only when step 7k
+  earned no concept, and then remove the section with it. Numbers stay as given when one goes: a
+  rail reading 01, 03, 04 says a section was omitted, which is true.
 - **Write the skeleton once, before anything else in stage 1:**
 
   ```sh
@@ -1101,7 +1122,7 @@ Everything else about writing holds at every stage:
   first instruction is to apply an existing system when one exists. Loading it costs a turn and
   yields nothing. Load it only if you have a deliberate reason to depart from the template.
 - **Figures are components, and there is no `<svg>` on this page.** The template assembles every one:
-  the vertical labelled chain — `figure.impact` in section 04, `figure.chain` inside a checkpoint —
+  the vertical labelled chain — `figure.impact` in section 05, `figure.chain` inside a checkpoint —
   the three topology figures a checkpoint may carry instead of a chain (`figure.converge`,
   `figure.lifecycle`, `figure.structure`, in checkpoints C to E), and the `dl.ba` before/after pair.
   Build them from the template's markup, and type a topology figure only from its `agenda.md` block.
@@ -1118,7 +1139,7 @@ Everything else about writing holds at every stage:
 - **A checkpoint chain shows mechanism inside the change, and holds no affected-unchanged node.** A
   request path, a value derived over several hops, the order guards run in — `.ip-chg` and `.ip-step`
   nodes ending at one `.ip-out`. The moment a hop lands in unchanged code whose meaning the change
-  altered, it is an impact path: draw it once in section 04 and let the checkpoint say so in a clause.
+  altered, it is an impact path: draw it once in section 05 and let the checkpoint say so in a clause.
   Redrawing it there is the canonical-home regression arriving as a figure.
 - **A converge and a structure may hold unchanged code, and the direction of the edge is why.** An
   impact path flows *out* of the change to a consequence; a converge's paths flow *in*, from writers
@@ -1290,10 +1311,10 @@ URL: say where the file is, once, and nothing more.
   carrying the git status letter and line counts. No section, no attention level, no group: those
   three judgements were a classified ledger the page no longer carries. Where a reviewer's attention
   goes is said by what is on the reading path, and saying it again in a column beside every file was
-  the second inventory section 04 is told not to become — on a real page, 24 links above a caption
+  the second inventory section 05 is told not to become — on a real page, 24 links above a caption
   explaining that the eight worth opening were ranked elsewhere.
 
-  **It does not go in section 04.** That section is about consequences, and a list of every changed
+  **It does not go in section 05.** That section is about consequences, and a list of every changed
   file inside it is exactly the shape above.
 
   **Pass the link option your rung earned**, so the rows come out linked and you never type inside the
@@ -1500,7 +1521,7 @@ previous map already traced.
   revision. Add the disclosure sentence to *What changed* in the same edit.
 - **A checkpoint the new commits answered is deleted**, with its reading-path stop and its rail
   entry, and nothing marks where it was. § *The review checkpoint* owns that rule.
-- **Section 04 may need adding rather than filling.** If the previous page omitted it and the delta
+- **Section 05 may need adding rather than filling.** If the previous page omitted it and the delta
   now crosses into unchanged code, the section and its rail entry are new — omitted is not pending,
   so there is no stub to replace. This is the one place an update writes where the page does not
   already carry a marker.
@@ -1546,7 +1567,7 @@ files of one transform is one judgment. If the PR instead ships genuinely indepe
 changed* says so in a bullet each, and the agenda grows with them — three to five per delta, seven
 on the page at the outside. Step 7e has both conditions on going past the fifth.
 
-Seven is the stop because past it section 03 can no longer be a route: every stop has been spent
+Seven is the stop because past it section 04 can no longer be a route: every stop has been spent
 naming a checkpoint, and the reading order has become an index of the agenda.
 
 **A mentor page is that budget plus its primers**, each 90–200 words and at most three of them,
@@ -1604,7 +1625,7 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   outside an `aside.primer` is a general-purpose hole for the same lie.
 - **The page must read completely with every collapsed block closed.** Three components collapse — a
   source excerpt beside the entry it confirms, `details.searched`, and `details.evidence`, the foot
-  that is section 05 — and the rule is the same for all three: they confirm a claim the prose already
+  that is section 06 — and the rule is the same for all three: they confirm a claim the prose already
   made, and never carry one. A claim that exists only inside a collapsed block is hidden content
   wearing the clothes of progressive disclosure. Judge this **entry by entry**: a citation that
   appears elsewhere on the page does not rescue a *Look at* entry whose only `file:line` is inside the

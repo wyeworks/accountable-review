@@ -74,7 +74,7 @@ figures = []
 checkpoints.each_with_index do |cp, i|
   html = cp.lines.join
   id = html[/<section class="cp[^"]*" id="([^"]+)"/, 1] || "checkpoint #{i + 1}"
-  # figure.impact is section 04's and impact-paths.rb grades it; it only reaches here through a
+  # figure.impact is section 05's and impact-paths.rb grades it; it only reaches here through a
   # fragment with no checkpoint around it.
   found = html.scan(FIGURE).reject { |kind, _| kind == "impact" }.map { |kind, body| [id, kind, body] }
   if found.size > 1
@@ -102,7 +102,7 @@ figures.each do |id, kind, body|
   faults = []
 
   unless KINDS_DRAWN.include?(kind)
-    check.bad("#{where}: figure.#{kind} is not a checkpoint figure — the four are #{KINDS_DRAWN.join(', ')}, and figure.impact lives in section 04")
+    check.bad("#{where}: figure.#{kind} is not a checkpoint figure — the four are #{KINDS_DRAWN.join(', ')}, and figure.impact lives in section 05")
     next
   end
 
@@ -118,7 +118,7 @@ figures.each do |id, kind, body|
     faults << "#{nodes.size} nodes — a chain is #{NODE_CAPS['chain'].minmax.join('–')}" unless NODE_CAPS["chain"].cover?(nodes.size)
     nodes.each_with_index do |(cls, inner), n|
       k = kind_of(cls)
-      faults << "node #{n + 1} is .ip-aff — a hop into unchanged code whose meaning the change altered is an impact path, drawn once in section 04" if k == "ip-aff"
+      faults << "node #{n + 1} is .ip-aff — a hop into unchanged code whose meaning the change altered is an impact path, drawn once in section 05" if k == "ip-aff"
       faults << "node #{n + 1} has an unknown kind" unless %w[ip-chg ip-step ip-out ip-aff].include?(k)
       rel = inner[%r{class="ip-rel"[^>]*>(.*?)</span>}m, 1]
       faults << "node 1 carries a relation — the first node has nothing incoming" if n.zero? && rel

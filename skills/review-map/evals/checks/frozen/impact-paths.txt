@@ -334,6 +334,24 @@ SKIP  no .impact panel in this input
 ## --page build-state-updated-twice.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-dead-pointer.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-no-pointer.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-no-pointer.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  no .impact panel in this input

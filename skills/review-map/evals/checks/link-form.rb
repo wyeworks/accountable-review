@@ -37,7 +37,7 @@ require_relative "lib/review_map/check"
 DIFF_ANCHOR = /#diff-(\h{64})(?:([RL])(\d+)(?:-([RL])(\d+))?)?/
 BLOB_LINES  = %r{/blob/\h{7,40}/[^"#]*#L(\d+)(?:-L(\d+))?}
 # a.path and a.cite are the two linked citation forms in page-template.html. The text is
-# `path:line` or `path:start-end`, or a bare path in a ledger row and in section 4's entries.
+# `path:line` or `path:start-end`, or a bare path in a ledger row and in section 5's entries.
 #
 # The class may carry a second name — a figure node's locator is `class="path ip-loc"` — so the
 # pattern allows one. It used to close the quote straight after `path`, which meant any compound

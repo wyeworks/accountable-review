@@ -202,6 +202,24 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page build-state-updated-twice.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-dead-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-no-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-no-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
