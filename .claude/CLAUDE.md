@@ -395,10 +395,10 @@ Editing one of these means checking the others still agree.
   Rails itself documents still hold. What keeps the second from becoming taste is that the run may not
   extend the list — adding a row means adding its catalogue row through `verify-catalogue.sh`.
 
-  Six files agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
+  Seven files agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
   it; `report-format.md` § *Coding decisions* owns the bar and the caps **alone** and § *Where
   checkpoints come from* lists it last; both lens files carry the shapes and the searches that produce
-  the citation, and `rails-nextjs.md` the closed stack list; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical checks
+  the citation, and `rails-nextjs.md` the closed stack list, every row of which names a `rails-docs.md` row; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical checks
   any of it — like the category test, whether a departure was real and whether the page asked rather
   than answered are judged, and `evals/e2e/judges/IDEAS.md` records the judge that would ask them.
 - **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is

@@ -85,6 +85,8 @@ it is the checkpoint's one doc link.
 | A precondition shared by actions is a controller callback | repeats the same guard inline at the top of several actions | *`before_action` order, `only`/`except`, and `skip_before_action`* |
 | Slow or external work in a request goes to Active Job | adds a blocking external call, mailer delivery or bulk loop inside an action | *`perform_later` enqueue timing…* |
 | Side effects that must see committed data use transaction callbacks | enqueues or calls out from `after_save` where the effect needs the row committed | *`after_commit` vs `after_save`* |
+| A form or input object that is not a table includes Active Model | hand-rolls `attr_accessor`, an `errors` hash and `valid?` on a class handed to `form_with` or a controller | *`ActiveModel::Model` gives a non-persisted object validations…* |
+| Behaviour shared across models or controllers is a concern | writes `self.included(base)` and `base.extend ClassMethods` by hand, or orders `include`s to satisfy a dependency between modules | *`ActiveSupport::Concern` for a shared module…* |
 
 - **A class under `app/models` with no `ApplicationRecord` behind it.** It has no `validates`, no
   callbacks, no `find_by`, no `where`, no `dependent:` — and Rails autoloads the directory either way,

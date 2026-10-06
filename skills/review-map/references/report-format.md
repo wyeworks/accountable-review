@@ -353,9 +353,12 @@ two sources:
 **The repository outranks the stack.** Where this codebase has settled on the PR's choice — a
 convention doc that says so, or a dozen siblings doing the same — there is no departure, whatever the
 stack convention says: the team decided, and asking again is the page overruling them. Where the
-repository is silent, the stack convention stands. Where both point the same way, cite both — that is
-the strongest form of the question, and the screenshot case of a controller holding a service's work
-against a written *extract business logic from controllers* is it.
+repository is silent, the stack convention stands. Where both point the same way, cite both — a guard
+repeated inline across three actions, in an app whose convention doc says shared preconditions go in
+a `before_action`, which the controller guide documents for the same job, is the strongest form of the
+question. A practice the stack list does not carry still asks through the first source alone: a
+controller doing a service's work is a question when the repository has written down *extract
+business logic from controllers*, and taste when it has not.
 
 > Does `MembershipMark` belong in `app/models`?
 >
