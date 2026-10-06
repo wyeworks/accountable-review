@@ -552,7 +552,7 @@ No tests as nodes, no file paths as labels, no fields that do not explain the be
   <div class="cv-grid">
     <ol class="cv-paths">
       <li class="ip-n ip-chg"><span class="ip-box"><b>ownership confirmed</b><a class="path ip-loc" href="{{DIFF}}R112">app/models/ownership.rb:112</a></span></li>
-      <li class="ip-n ip-aff"><span class="ip-box"><b>gem disowned</b><span class="cv-note">skips destroy callbacks</span><a class="path ip-loc" href="{{BLOB}}#L301">app/models/rubygem.rb:301</a></span></li>
+      <li class="ip-n ip-aff"><span class="ip-box"><b>gem disowned</b><span class="cv-note">ownerships deleted without callbacks</span><a class="path ip-loc" href="{{BLOB}}#L301-L303">app/models/rubygem.rb:301-303</a></span></li>
     </ol>
     <div class="cv-target"><span class="ip-box"><b>one open history row per owner and gem</b><span class="ip-d">must hold on every path</span></span></div>
   </div>
@@ -590,7 +590,17 @@ list keeps its row as it would for any other.
 `update_column`* — a fact about the code, in about six words. It is a free-text slot on a node, which
 makes it the third place on the page a severity word can get in after `GAP` and *Open question*, and
 the only one with no fixed label: *critical bypass* is a grade, and why the path matters is the
-checkpoint's to say. `figures.rb` warns on the common grading words.
+checkpoint's to say. `figures.rb` warns on the common grading words. Name **whose** callbacks are
+skipped — *ownerships deleted without callbacks*, not *deletes skip callbacks* — because a path that
+skips one model's callbacks often writes another's, and the bare phrase fits both.
+
+**The note and the locator describe the same lines.** A path's locator is ordinarily the line that
+writes, but once a note says what the path skips, the reader follows the locator to check that claim
+— so it must land on the skip. A path that skips and then compensates, like `disown` deleting
+ownerships and closing their history by hand two lines later, links the **range** that holds both:
+`rubygem.rb:345-347`, never the compensation alone, which shows a reader the opposite of what the
+note told them. This was found on the first real converge, and it is the figure's version of a
+citation that does not say what its clause claims.
 
 ### `figure.lifecycle`
 

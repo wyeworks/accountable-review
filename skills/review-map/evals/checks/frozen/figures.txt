@@ -691,7 +691,7 @@ exit=1
 PASS  at most one figure per checkpoint
 WARN  cp-a's chain node 2: "{{CAUSAL_VERB}}" is outside the causal vocabulary in report-format.md § Impact paths
 FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}, {{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}
-FAIL  cp-c's converge: 10 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHAT_IT_SKIPS}}, {{BLOB}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
+FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
 FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
 FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
 ## --page page-template.html
@@ -699,7 +699,7 @@ exit=1
 PASS  at most one figure per checkpoint
 WARN  cp-a's chain node 2: "{{CAUSAL_VERB}}" is outside the causal vocabulary in report-format.md § Impact paths
 FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}, {{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}
-FAIL  cp-c's converge: 10 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHAT_IT_SKIPS}}, {{BLOB}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
+FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
 FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
 FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
 ## --fragment figures-clean.html

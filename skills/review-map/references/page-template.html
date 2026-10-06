@@ -2063,7 +2063,9 @@ post.saved_change_to_title?  # =&gt; true</pre>
            .ip-aff is allowed here: an unchanged writer is upstream of the change, not
            a consequence of it. Every .ip-aff node also gets a ul.lookat entry, because
            a node holds a label and a locator and the clause has to live somewhere.
-           .cv-note says what the path skips, in a few words, never why it matters.
+           .cv-note says what the path skips, in a few words, never why it matters,
+           and names whose callbacks. Its locator then lands ON the skip — a
+           range when the path also compensates — never on the fix alone.
            NO .ip-rel IN HERE — the paths are siblings, not a sequence. -->
       <section class="cp" id="cp-c">
         <span class="lbl lbl-wide">Checkpoint C</span>
@@ -2074,7 +2076,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
             <ol class="cv-paths">
               <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DOMAIN_ACTION}}</b><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
               <li class="ip-n ip-chg"><span class="ip-box"><b>{{ANOTHER_DOMAIN_ACTION}}</b><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-box"><b>{{AN_UNCHANGED_WRITER}}</b><span class="cv-note">{{WHAT_IT_SKIPS}}</span><a class="path ip-loc" href="{{BLOB}}#L{{START}}">{{PATH}}:{{START}}</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>{{AN_UNCHANGED_WRITER}}</b><span class="cv-note">{{WHOSE_CALLBACKS_IT_SKIPS}}</span><a class="path ip-loc" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></span></li>
             </ol>
             <div class="cv-target"><span class="ip-box"><b>{{THE_INVARIANT}}</b><span class="ip-d">must hold on every path</span></span></div>
           </div>
