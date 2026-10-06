@@ -1,0 +1,59 @@
+<!-- CLEAN: one checkpoint per figure kind, each holding its shape and carrying its locators.
+     The positive case, so a rule that starts firing on correct markup goes red here. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Does a role change reach the stored ownership?</h3>
+  <p>The controller now accepts a role.</p>
+  <figure class="chain">
+    <ol class="ip-path">
+      <li class="ip-n ip-chg"><span class="ip-box"><b>OwnershipsController#update</b><span class="ip-d">accepts role</span><a class="path ip-loc" href="#">app/controllers/ownerships_controller.rb:48</a></span></li>
+      <li class="ip-n ip-step"><span class="ip-rel"><i></i>calls</span><span class="ip-box"><b>Ownership#update</b><span class="ip-d">role validated</span><a class="path ip-loc" href="#">app/models/ownership.rb:30</a></span></li>
+      <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Owner demoted to maintainer</b><span class="ip-d">observable behaviour</span></span></li>
+    </ol>
+    <figcaption>How a role change reaches the stored ownership.</figcaption>
+  </figure>
+</section>
+<section class="cp" id="cp-b">
+  <span class="lbl lbl-wide">Checkpoint B</span>
+  <h3>Does every path that ends an ownership close its history row?</h3>
+  <p>History is written from callbacks, and one removal path does not run them.</p>
+  <figure class="converge">
+    <div class="cv-grid">
+      <ol class="cv-paths">
+        <li class="ip-n ip-chg"><span class="ip-box"><b>ownership confirmed</b><a class="path ip-loc" href="#">app/models/ownership.rb:112</a></span></li>
+        <li class="ip-n ip-chg"><span class="ip-box"><b>role changed</b><a class="path ip-loc" href="#">app/models/ownership.rb:120</a></span></li>
+        <li class="ip-n ip-chg"><span class="ip-box"><b>ownership destroyed</b><a class="path ip-loc" href="#">app/models/ownership.rb:128</a></span></li>
+        <li class="ip-n ip-aff"><span class="ip-box"><b>gem disowned</b><span class="cv-note">skips destroy callbacks</span><a class="path ip-loc" href="#">app/models/rubygem.rb:301</a></span></li>
+      </ol>
+      <div class="cv-target"><span class="ip-box"><b>one open history row per owner and gem</b><span class="ip-d">must hold on every path</span></span></div>
+    </div>
+    <figcaption>Which paths must keep ownership history truthful.</figcaption>
+  </figure>
+</section>
+<section class="cp" id="cp-c">
+  <span class="lbl lbl-wide">Checkpoint C</span>
+  <h3>Can an ownership leave the historical state?</h3>
+  <p>A new terminal state is introduced.</p>
+  <figure class="lifecycle">
+    <ol class="lc-states">
+      <li class="lc-s"><span class="ip-box"><b>invited</b></span></li>
+      <li class="lc-s"><span class="ip-rel"><i></i>confirm<a class="path ip-loc" href="#">app/models/ownership.rb:74</a></span><span class="ip-box"><b>active</b></span></li>
+      <li class="lc-s lc-new"><span class="ip-rel"><i></i>ownership removed<a class="path ip-loc" href="#">app/models/ownership.rb:128</a></span><span class="ip-box"><b>historical</b></span></li>
+    </ol>
+    <figcaption>What states an ownership can be in, and what moves it between them.</figcaption>
+  </figure>
+</section>
+<section class="cp" id="cp-d">
+  <span class="lbl lbl-wide">Checkpoint D</span>
+  <h3>Is history reachable from where it is read?</h3>
+  <p>A new table is attached to two existing ones.</p>
+  <figure class="structure">
+    <div class="ip-n ip-chg"><span class="ip-box"><b>HistoricalOwnership</b><span class="ip-d">new table</span><ul class="st-fields"><li>role</li><li>first_owned_at</li><li>removed_at</li></ul><a class="path ip-loc" href="#">db/migrate/20250601_create_historical_ownerships.rb:3</a></span></div>
+    <ul class="st-edges">
+      <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="#">app/models/historical_ownership.rb:2</a></span><span class="ip-box"><b>User</b></span></li>
+      <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="#">app/models/historical_ownership.rb:3</a></span><span class="ip-box"><b>Rubygem</b></span></li>
+      <li class="st-e st-none ip-aff"><span class="st-rel">no has_many<span class="st-card">history unreachable from the gem</span></span><span class="ip-box"><b>Rubygem</b><a class="path ip-loc" href="#">app/models/rubygem.rb:12</a></span></li>
+    </ul>
+    <figcaption>What a historical ownership is attached to.</figcaption>
+  </figure>
+</section>

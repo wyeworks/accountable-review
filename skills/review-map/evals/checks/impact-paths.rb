@@ -6,9 +6,9 @@
 # IT GRADES figure.impact AND NOTHING ELSE. A checkpoint's figure.chain is built out of the
 # same ol.ip-path and the same node kinds, and every extraction below is scoped inside
 # <figure class="impact first — so a chain is invisible here, which is correct: a chain shows
-# mechanism inside the change and has no lanes, no legend and no .ip-aff to grade. The rule
-# that keeps the two apart is in report-format.md § Chains, and tests/run.sh is what asserts
-# the template obeys it.
+# mechanism inside the change and has no lanes, no legend and no .ip-aff to grade. The
+# checkpoint's figures, the chain among them, are figures.rb's; the rule that keeps a chain and
+# an impact path apart is in report-format.md § Figures.
 #
 # A path runs from changed code, through the affected-but-unchanged code that gives the change
 # its consequence, to an observable behaviour. What it replaced was a .blast box grid whose
@@ -40,6 +40,7 @@
 # consequence that does not happen.
 
 require_relative "lib/review_map/check"
+require_relative "lib/review_map/vocabulary"
 
 ANCHOR = /id="impact"/
 
@@ -58,23 +59,10 @@ NODE_CLOSE  = %r{</li>}
 
 KINDS = { "ip-chg" => :changed, "ip-aff" => :affected, "ip-out" => :outcome }.freeze
 
-# The causal vocabulary, matched on the label's FIRST word so a relation may carry an object:
-# "falls back to", "receives proficiency from", "filtered out by".
-#
-# PASSIVE FORMS ARE IN IT DELIBERATELY. A label reads from the node ABOVE to the node BELOW,
-# and half the edges on this page run producer-to-consumer, where the honest verb is passive:
-# a changed column is "read by" the query below it, not the other way round. Without them a
-# run has to invert the pair to find an active verb, which puts the consumer above the thing
-# it consumes and quietly reverses the figure. "ignored by" is the same case one step further
-# on, and it is the label for the commonest finding this page carries — a consumer that does
-# NOT account for what changed, which is causal even though nothing happens.
-#
-# Extend this list and report-format.md § Impact paths together — the rule diagram.rb states
-# for its class vocabulary, and for the same reason: a verb here but not there is
-# undocumented, and one there but not here is reported as unlisted.
-CAUSAL = %w[calls reads writes passes returns defaults falls filters filtered scopes
-            renders builds produces serializes receives enqueues broadcasts causes
-            read called rendered ignored subscribed].freeze
+# The causal vocabulary is ReviewMap::CAUSAL, in lib/review_map/vocabulary.rb, because
+# figures.rb grades a checkpoint chain's edges against the same list. Why the passives are in it
+# is written there.
+CAUSAL = ReviewMap::CAUSAL
 
 MAX_REL_WORDS = 5
 MAX_LABEL_CHARS = 40

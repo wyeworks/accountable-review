@@ -395,7 +395,11 @@ rg -n 'Project\.new|Project\.create|projects\.create' app lib spec
 ```
 
 Bulk writes bypass validations and callbacks entirely. If the change relies on a callback, every hit
-in the first search is a path where the new invariant does not hold.
+in the first search is a path where the new invariant does not hold. This is the search a
+`figure.converge` is earned by — the callback paths and every hit here are its paths, the hits drawn
+as unchanged code — and `report-format.md` § *Topology figures* owns the rest. A changed enum or
+status column with guarded transitions is the same file's `figure.lifecycle`; a new table or
+association, its `figure.structure`.
 
 **A changed enum or status value**
 

@@ -1,0 +1,17 @@
+<!-- PLANTED: five relationships, which is a schema rather than a delta. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Does every path that ends an ownership close its history row?</h3>
+  <p>History is written from callbacks, and one removal path does not run them.</p>
+  <figure class="structure">
+    <div class="ip-n ip-chg"><span class="ip-box"><b>HistoricalOwnership</b><span class="ip-d">new table</span><ul class="st-fields"><li>role</li><li>first_owned_at</li><li>removed_at</li></ul><a class="path ip-loc" href="#">db/migrate/20250601_create_historical_ownerships.rb:3</a></span></div>
+    <ul class="st-edges">
+      <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="#">app/models/historical_ownership.rb:2</a></span><span class="ip-box"><b>User</b></span></li>
+      <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="#">app/models/historical_ownership.rb:2</a></span><span class="ip-box"><b>User</b></span></li>
+      <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="#">app/models/historical_ownership.rb:2</a></span><span class="ip-box"><b>User</b></span></li>
+      <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="#">app/models/historical_ownership.rb:3</a></span><span class="ip-box"><b>Rubygem</b></span></li>
+      <li class="st-e st-none ip-aff"><span class="st-rel">no has_many<span class="st-card">history unreachable from the gem</span></span><span class="ip-box"><b>Rubygem</b><a class="path ip-loc" href="#">app/models/rubygem.rb:12</a></span></li>
+    </ul>
+    <figcaption>What a historical ownership is attached to.</figcaption>
+  </figure>
+</section>

@@ -121,12 +121,14 @@ else
 fi
 assert_eq "$(grep -c 'class="eyebrow"[^>]*>Affected, not changed' "$WORK/markup" || true)" "2" "the affected label is verbatim, beside the panel and in the foot"
 
-# THE CHECKPOINT, ASSEMBLED. Two written and one pending stub: a run copies the composition, and a
-# composition described but never shown assembled does not survive a weaker reader. The pending one
-# is counted too, because a half-written section 02 has to be distinguishable from a flattened one.
-assert_eq "$(count "$WORK/markup" 'class="cp"')"    "3" "two checkpoints assembled whole and one pending stub"
+# THE CHECKPOINT, ASSEMBLED. Five written and one pending stub: a run copies the composition, and a
+# composition described but never shown assembled does not survive a weaker reader. A and B are the
+# composition, one with every optional part and one without; C, D and E exist to show one topology
+# figure each. The pending one is counted too, because a half-written section 02 has to be
+# distinguishable from a flattened one.
+assert_eq "$(count "$WORK/markup" 'class="cp"')"    "6" "five checkpoints assembled whole and one pending stub"
 assert_eq "$(count "$WORK/markup" 'id="cp-a"')"     "1" "the first checkpoint is anchored for the rail and the reading path"
-assert_eq "$(count "$WORK/markup" 'class="lookat"')" "2" "each written checkpoint carries its own where-to-look list"
+assert_eq "$(count "$WORK/markup" 'class="lookat"')" "5" "each written checkpoint carries its own where-to-look list"
 assert_eq "$(count "$WORK/markup" 'class="open"')"   "1" "the open-question line is assembled once"
 
 # THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 04. A chain inside a checkpoint shows
@@ -142,6 +144,25 @@ else
 fi
 chain_aff=$(awk '/<figure class="chain">/ { f = 1 } f { print } /<\/figure>/ { f = 0 }' "$WORK/markup" | grep -c 'ip-aff' || true)
 assert_eq "$chain_aff" "0" "no .ip-aff node inside the chain — that hop is an impact path"
+
+# THE TOPOLOGY FIGURES — the three shapes a chain cannot draw, one assembled each. A converge's
+# paths are siblings, not a sequence, so it holds NO .ip-rel: the impact panel's lane crossing
+# hangs off `.ip-chg + .ip-aff > .ip-rel`, and a converge alternates exactly those kinds. Its target
+# is an invariant, a property rather than a file, so it carries no locator. A lifecycle is states,
+# not code, so it holds no .ip-aff.
+fig_range() { awk -v o="<figure class=\"$1\">" 'index($0, o) { f = 1 } f { print } /<\/figure>/ { f = 0 }' "$WORK/markup"; }
+for kind in converge lifecycle structure; do
+  assert_eq "$(count "$WORK/markup" "<figure class=\"$kind\">")" "1" "one $kind figure is assembled inside a checkpoint"
+  assert_eq "$(fig_range "$kind" | grep -c 'data-path' || true)" "0" "no data-path inside the $kind figure"
+done
+assert_eq "$(fig_range converge | grep -c 'ip-rel' || true)" "0" "no .ip-rel inside a converge — its paths are siblings, and a connector would fire the panel's elbow"
+if [ "$(fig_range converge | grep -c '<li class="ip-n' || true)" -ge 2 ]; then
+  ok "a converge draws at least two paths — one is a chain"
+else
+  bad "a converge draws at least two paths — one is a chain"
+fi
+assert_eq "$(fig_range converge | grep 'class="cv-target"' | grep -c 'ip-loc' || true)" "0" "no locator on a converge's target — an invariant is not in a file"
+assert_eq "$(fig_range lifecycle | grep -c 'ip-aff' || true)" "0" "no .ip-aff inside a lifecycle — a state is not a file"
 
 # THE PARAGRAPH AND THE LOCATOR, which are the two things a node and a card carry that a diagram
 # on its own does not. One p.ip-why per card and none in the chain: a checkpoint's own sentences
@@ -223,7 +244,7 @@ done
 
 # The rail is assembled, never derived. Four numbered entries and one sub-entry per checkpoint.
 assert_eq "$(count "$WORK/markup" 'class="rail-links"')" "1" "exactly one rail"
-assert_eq "$(count "$WORK/markup" 'data-rail=')" "7" "the rail is four entries and three checkpoint sub-entries"
+assert_eq "$(count "$WORK/markup" 'data-rail=')" "10" "the rail is four entries and six checkpoint sub-entries"
 assert_eq "$(count "$WORK/markup" '04</span>')"  "1" "the rail numbers up to 04"
 assert_eq "$(count "$WORK/markup" '05</span>')"  "0" "and stops there"
 

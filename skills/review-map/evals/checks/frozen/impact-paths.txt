@@ -382,6 +382,78 @@ SKIP  no .impact panel in this input
 ## --page excerpt-unchanged-changed-file.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-chain-aff.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-chain-aff.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-converge-grading-note.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-converge-grading-note.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-converge-one-path.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-converge-one-path.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-converge-rel.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-converge-rel.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-converge-target-loc.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-converge-target-loc.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-lifecycle-aff.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-lifecycle-aff.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-lifecycle-method-label.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-lifecycle-method-label.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-lifecycle-no-loc.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-lifecycle-no-loc.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-structure-erd.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-structure-erd.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-two-figures.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-two-figures.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-unknown-kind.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-unknown-kind.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment impact-card-no-lanes.html
 exit=1
 PASS  one impact panel

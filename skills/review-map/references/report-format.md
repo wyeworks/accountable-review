@@ -148,7 +148,7 @@ change the judgment, and the page carries the judgment.
   <h3>Does the new Project filter preserve the intended scope?</h3>
   <p>Two to four sentences: what changed here, what follows from it, and what the reviewer has
      to decide <span class="tier tier-unc">from unchanged code</span>.</p>
-  <figure class="chain">…</figure>                       <!-- optional: mechanism inside the change -->
+  <figure class="chain">…</figure>                       <!-- optional: at most ONE figure, of any kind -->
   <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <ul class="lookat">
     <li><b>The scope guard</b>
@@ -176,7 +176,10 @@ change the judgment, and the page carries the judgment.
   with a branch. It shows mechanism **inside the change** and holds no affected-unchanged node;
   § *Chains* owns the component and the rule that sends a crossing chain to *Impact outside the
   diff*. A chain followed by a paragraph that names each node again is the defect: the figure says
-  how the value gets there, the paragraph says what to judge about it.
+  how the value gets there, the paragraph says what to judge about it. The same slot holds one of
+  the three shapes a chain cannot draw — `figure.converge`, `figure.lifecycle`, `figure.structure`
+  — and § *Topology figures* owns which shape a judgment has and the order the questions are asked
+  in. **One figure per checkpoint, of any kind.**
 - **The primer, `aside.primer`, optional and `--mentor` only.** The framework's rule stated rather
   than pointed at, for a reviewer new to the stack. It sits here — after the chain, before the *Look
   at* list — and § *Mentor mode* owns every rule about it, including that it holds this checkpoint's
@@ -398,22 +401,22 @@ thing on a page to type, so the characteristic failure was never a wrong drawing
 two real pages published nine flows and zero figures with the layouts sitting readable in the template
 the whole time. A component has the opposite failure profile. It reflows on a phone, has no canvas to
 overflow, and cannot be drawn wrong — the only thing a run can get wrong is whether the edges are
-true, which is the thing worth its attention. So there is no `<svg>` on this page at all, and a run
-that wants to draw a fork, a schema or a state machine writes the chain that shows the one path the
-judgment turns on and says the rest in the explanation.
+true, which is the thing worth its attention. So there is no `<svg>` on this page at all. A fan-in,
+a state machine and a schema are no longer drawings either: each is a component of its own, built
+from these same boxes, and § *Topology figures* owns them.
 
 **The markup is § *Impact paths*'s `ol.ip-path`**, with four node kinds:
 
 | Kind | Class | Means | Legal in |
 |---|---|---|---|
 | Changed by this PR | `.ip-n.ip-chg` | code the diff touches | both figures |
-| Affected, not changed | `.ip-n.ip-aff` | unchanged code whose meaning the change altered — a finding | `figure.impact` only |
+| Affected, not changed | `.ip-n.ip-aff` | unchanged code whose meaning the change altered — a finding | `figure.impact`, and the two fan-in figures in § *Topology figures*; **never `figure.chain`** |
 | Step | `.ip-n.ip-step` | a hop the value passes through that claims nothing about the diff — a framework layer, an unchanged pass-through, the browser | `figure.chain` only |
 | Outcome | `.ip-n.ip-out` | what a user or an operator sees; last, exactly once | both figures |
 
 Every node past the first carries `<span class="ip-rel"><i></i>verb</span>`, from the causal
 vocabulary in § *Impact paths* — one list for both figures, extended in that section and in
-`evals/checks/impact-paths.rb`'s `CAUSAL` together. A label reads from the node above to the node
+`evals/checks/lib/review_map/vocabulary.rb` together, and a unit test fails when the two disagree. A label reads from the node above to the node
 below. `<b>` is an identifier and `.ip-d` a few words.
 
 **Every node that is code carries its locator**, and this is the one part of a node that is an
@@ -460,7 +463,9 @@ which reads as thoroughness.
 told apart by border, and the `figcaption` says in one line what the chain shows. Three to five nodes:
 fewer is a sentence, more is listing layers instead of following a value — a fetch wrapper that passes
 a field through unaltered is not a hop, and collapsing to the hops where the value changes shape, is
-renamed or is dropped is the honest chain. At most one per checkpoint, and most checkpoints earn none.
+renamed or is dropped is the honest chain. **At most one figure per checkpoint, of any kind** — a
+chain or one of the three in § *Topology figures* — and most checkpoints earn none. Two figures for
+one judgment are two answers to what shape it has.
 
 **State the trigger affirmatively.** "Most earn none" was once said of a figure whose trigger was
 actually common, and the section that held it drew nothing for two whole pages as a result. So: **if the explanation would
@@ -471,7 +476,8 @@ could not read one end of the path, and that nothing interesting happens at any 
 classes part at a guard, draw the diverted class's chain — the class the finding is about, ending
 where it lands — and say in the explanation where the other class goes. If both destinations are
 judgments, that is two checkpoints. Drawing a population the code does not distinguish is worse than
-drawing neither.
+drawing neither. The reverse shape — several paths arriving at one place, each of which must keep the
+same thing true — is not a chain at all; it is `figure.converge`.
 
 **Labels, not sentences.** A node carries an identifier and a few words; a relation carries a verb.
 Searches, caveats and conclusions go in the explanation or the `figcaption`, never in a node — a chain
@@ -489,6 +495,183 @@ chain to be understood, the paragraph is.
 **`dl.ba` is the other figure** — two rows, *Before* the state that no longer holds and *After* the
 one that does. It appears in *What changed* when a workflow fundamentally changes, and nowhere else.
 § *Section 1* has its rule.
+
+---
+
+## Topology figures
+
+A chain draws one shape: a sequence. Three shapes a reviewer judges are not sequences, and before
+these components existed a run that met one drew the single path through it and said the rest in
+prose — which is the reconstruction a figure is supposed to save the reader. So a checkpoint may carry
+one of three more figures, built from § *Chains*'s boxes, its locator and its node kinds:
+
+| Figure | The shape | The reviewer question it answers |
+|---|---|---|
+| `figure.converge` | several independent paths must all preserve one property | *which paths must keep this true, and does each one?* |
+| `figure.lifecycle` | an entity moves between named states | *what states can this be in, and what moves it between them?* |
+| `figure.structure` | a persistent entity or relationship appeared, changed or went | *what is this now attached to?* |
+
+**This is not a diagram feature, and zero is a valid result.** A figure exists only where it saves the
+reader reconstructing something the prose would make them hold in their head; the success test is that
+a reviewer who meets one understands that part of the change faster than from the explanation and the
+diff, never that more pages carry figures. Nothing counts figures, and nothing ever should.
+
+### Choosing the shape
+
+At step 7f, for a checkpoint that may earn a figure, ask in this order and stop at the first yes:
+
+1. **Do several independent paths have to preserve one property?** → `figure.converge`. Asked first
+   because it is the shape that shows where correctness can fail: the path that does not keep the
+   invariant is the finding, and a chain through any one path hides it.
+2. **Does an entity move between named states?** → `figure.lifecycle`.
+3. **Did a persistent entity or relationship appear, change or disappear?** → `figure.structure`.
+4. **Would the explanation otherwise name three hops in sequence?** → `figure.chain`.
+5. **None of these** → no figure.
+
+Then four gates, all of which must hold, or there is no figure:
+
+- **A reviewer question.** The figure answers a question from the table above, and the `figcaption`
+  states it in one line. A figure that cannot be tied to one is decoration.
+- **A topology, not adjacency.** Files joined by arrows are not a shape — `ownership.rb → historical_ownership.rb → rubygem.rb`
+  says nothing a list would not. *Normal removal and the `disown` path both have to close the history row*
+  is a shape.
+- **Simpler than the prose.** If the figure would need more explaining than the thing it shows, write
+  the sentence instead.
+- **Evidenced.** Every node and every edge carries a locator to the line that makes it true. A
+  relationship or transition you inferred rather than read is left out, not drawn dashed; a figure
+  completed to look complete is the most convincing wrong thing a page can hold.
+
+**Labels name the domain, the locator names the code.** *ownership removed*, not *after_destroy*;
+*confirm*, not *confirm!*. The method is what the locator points at, and a reader can open it there.
+No tests as nodes, no file paths as labels, no fields that do not explain the behaviour.
+
+### `figure.converge`
+
+```html
+<figure class="converge">
+  <div class="cv-grid">
+    <ol class="cv-paths">
+      <li class="ip-n ip-chg"><span class="ip-box"><b>ownership confirmed</b><a class="path ip-loc" href="{{DIFF}}R112">app/models/ownership.rb:112</a></span></li>
+      <li class="ip-n ip-aff"><span class="ip-box"><b>gem disowned</b><span class="cv-note">ownerships deleted without callbacks</span><a class="path ip-loc" href="{{BLOB}}#L301-L303">app/models/rubygem.rb:301-303</a></span></li>
+    </ol>
+    <div class="cv-target"><span class="ip-box"><b>one open history row per owner and gem</b><span class="ip-d">must hold on every path</span></span></div>
+  </div>
+  <figcaption>Which paths must keep ownership history truthful.</figcaption>
+</figure>
+```
+
+Two to seven paths — one path is a chain — and one target naming the invariant, with **no locator**,
+because an invariant is a property rather than a file. **No `.ip-rel` anywhere in it**: the paths are
+siblings, not a sequence, and the only edge is the bracket into the target, which the CSS draws.
+
+**Its list claims to be complete, and that is the rule that makes it safe to draw.** A converge says
+*these are the paths*, and it looks most finished exactly when it is most wrong, because the path
+missing from it is the finding. So it is earned only by a **recorded writer search** — the lens's
+recipe for a changed validation, callback or default, which finds the bulk writes and the direct
+constructors that bypass it — written into `details.searched` like any other (§ *What was searched*).
+No recorded search, no converge: draw the chain through the one path the judgment turns on, or write
+the sentence. `evals/checks/figures.rb` warns on a converge with no search on its page.
+
+**`.ip-aff` is legal here, and the test for when is the direction of the edge.** An impact path flows
+**out** of changed code to a consequence downstream. A converge's paths flow **in**, from writers
+upstream, to an invariant the change introduced or relies on. An unchanged writer that does not keep
+the new invariant — `Rubygem#disown` deleting ownerships without the callback that closes their history
+— is the commonest finding this figure exists for, and it is not a consequence of the change: it is a
+path the change did not reach. So it is drawn here, and **not also drawn as an impact card**, which
+§ *One canonical home* records. A path that genuinely fits both belongs here when the checkpoint's
+question is the invariant.
+
+**Every `.ip-aff` path also gets a `ul.lookat` entry in the same checkpoint.** A node holds a label
+and a locator and never a clause, so without the entry an unchanged writer is a dashed box that nothing
+on the page explains. The entry carries the clause and its tier, and the foot's *Affected, not changed*
+list keeps its row as it would for any other.
+
+**`.cv-note` says what the path skips, and nothing else.** *skips destroy callbacks*, *writes with
+`update_column`* — a fact about the code, in about six words. It is a free-text slot on a node, which
+makes it the third place on the page a severity word can get in after `GAP` and *Open question*, and
+the only one with no fixed label: *critical bypass* is a grade, and why the path matters is the
+checkpoint's to say. `figures.rb` warns on the common grading words. Name **whose** callbacks are
+skipped — *ownerships deleted without callbacks*, not *deletes skip callbacks* — because a path that
+skips one model's callbacks often writes another's, and the bare phrase fits both.
+
+**The note and the locator describe the same lines.** A path's locator is ordinarily the line that
+writes, but once a note says what the path skips, the reader follows the locator to check that claim
+— so it must land on the skip. A path that skips and then compensates, like `disown` deleting
+ownerships and closing their history by hand two lines later, links the **range** that holds both:
+`rubygem.rb:345-347`, never the compensation alone, which shows a reader the opposite of what the
+note told them. This was found on the first real converge, and it is the figure's version of a
+citation that does not say what its clause claims.
+
+### `figure.lifecycle`
+
+```html
+<figure class="lifecycle">
+  <ol class="lc-states">
+    <li class="lc-s"><span class="ip-box"><b>invited</b></span></li>
+    <li class="lc-s"><span class="ip-rel"><i></i>confirm<a class="path ip-loc" href="{{DIFF}}R74">app/models/ownership.rb:74</a></span><span class="ip-box"><b>active</b></span></li>
+    <li class="lc-s lc-new"><span class="ip-rel"><i></i>ownership removed<a class="path ip-loc" href="{{DIFF}}R128">app/models/ownership.rb:128</a></span><span class="ip-box"><b>historical</b></span></li>
+  </ol>
+  <p class="lc-back">&#8634; reinstated &rarr; active<a class="path ip-loc" href="{{BLOB}}#L90">app/models/ownership.rb:90</a></p>
+  <figcaption>What states an ownership can be in, and what moves it between them.</figcaption>
+</figure>
+```
+
+Two to five states. Each one after the first carries its incoming transition as an `.ip-rel`
+connector, named for the action, **with the line that performs it as a locator inside the
+connector** — the old lifecycle's rule, and still the reason to draw one: the line that performs a
+transition is what shows whether it is guarded at all. `lc-new` marks a state this change introduced.
+A transition back to an earlier state cannot be drawn by a vertical list, so it is a `p.lc-back` line
+of text with its own locator; two at most, and a lifecycle that needs more is a graph this figure
+does not draw — write it as prose.
+
+**No `.ip-aff`.** A state is not a file, so *unchanged code* has nothing to mean on one.
+
+**A nullable timestamp is not a state machine.** `archived_at` being set or not is two states only in
+the sense that every boolean is; drawing it invents a machine the code does not have. A lifecycle is
+earned by a status column, an enum, a state-machine gem, or timestamps that the code treats as ordered
+stages — and tests that walk the transitions in sequence are the best evidence the code thinks so.
+
+### `figure.structure`
+
+```html
+<figure class="structure">
+  <div class="ip-n ip-chg"><span class="ip-box"><b>HistoricalOwnership</b><span class="ip-d">new table</span><ul class="st-fields"><li>removed_at</li></ul><a class="path ip-loc" href="{{DIFF}}R3">db/migrate/…_create_historical_ownerships.rb:3</a></span></div>
+  <ul class="st-edges">
+    <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="{{DIFF}}R2">app/models/historical_ownership.rb:2</a></span><span class="ip-box"><b>Rubygem</b></span></li>
+    <li class="st-e st-none ip-aff"><span class="st-rel">no has_many<span class="st-card">history unreachable from the gem</span></span><span class="ip-box"><b>Rubygem</b><a class="path ip-loc" href="{{BLOB}}#L12">app/models/rubygem.rb:12</a></span></li>
+  </ul>
+  <figcaption>What a historical ownership is attached to.</figcaption>
+</figure>
+```
+
+One focal entity — the one this change made or altered, so always `ip-chg` — with at most three
+fields, chosen because the behaviour turns on them. Then one to four relationships, each a relation,
+a cardinality or constraint in a few words (`1:N`, `optional`, `unique while active`), and the entity
+at the other end: `ip-chg` if this change made it, `ip-aff` if it already existed. Each relationship
+carries one locator, on the line that declares it, or on the entity at the far end when the
+declaration is absent.
+
+**An absent relationship is drawn where the absence is the point** — `st-none`, in ochre, the page's
+colour for something missing. A new table with no inverse association, a foreign key with no
+`dependent:`: those are the findings, and leaving them out because nothing declares them is how a
+structure figure ends up showing only what is fine.
+
+**It is never the schema.** Touched entities and their immediate neighbours, and among those only
+the edges the judgment needs. A whole ERD is the figure this one exists to refuse, and four
+relationships is the cap for that reason.
+
+### What none of them may become
+
+Every rule in § *Chains* about labels and prose holds for all three: labels, not sentences; a
+`figcaption` of one line; an explanation that states the judgment rather than walking the figure.
+None of them has a legend — the node kinds are told apart by border, as in a chain — and none of them
+is a new section, a rail entry or a badge. A figure is part of the checkpoint it explains, sits after
+its explanation and before its `ul.lookat`, and is checked by `evals/checks/figures.rb`, which grades
+shape and locators and can grade nothing about whether the shape was the right one.
+
+When a figure shows a correctness boundary — a path that bypasses what the others run — that boundary
+is usually the checkpoint's question, or its *Open question*: *are there other removal paths that skip
+the destroy callbacks?* The figure supports the agenda; it is never a finding of its own.
 
 ---
 
@@ -1256,6 +1439,7 @@ reading, and everything after that point is wasted regardless of how good it is.
 | The semantic delta, and intent | *What changed* | Nowhere else — a checkpoint assumes it |
 | A judgment the reviewer has to make | Its checkpoint's explanation | The reading path, as one stop's why; *Impact outside the diff*, in one clause |
 | Mechanism inside the change | That checkpoint's `figure.chain`, or its explanation | Nowhere else |
+| An unchanged writer that must keep an invariant the change relies on — a path flowing **in** | That checkpoint's `figure.converge`, with a `ul.lookat` entry carrying its clause | Never an impact card: impact paths flow **out**, to a consequence |
 | A consequence that crosses into unchanged code | *Impact outside the diff* — the figure, and the affected entry beside it | The checkpoint that turns on it, in one clause |
 | Unchanged code the change reaches that no checkpoint turns on | The affected entries beside the panel, or the evidence foot's list | Nowhere else |
 | An open question for the author | The checkpoint's `p.open` line | Nowhere else |
@@ -1549,6 +1733,14 @@ supports.
 dispatch, a string-built template, another repository. Keep it. It is the page telling the reviewer
 where their own checking is owed, which is the opposite of padding.
 
+**A `figure.converge` is the one figure that needs a row here before it may be drawn.** Its list of
+paths claims to be every writer of an invariant, and only the writer search — bulk writes,
+callback-skipping updates, direct constructors, per the lens's recipe — makes that claim checkable.
+The row is ordinary: the command, and *"three writers, one bypasses callbacks"*. § *Topology figures*
+owns the rule; this is where its evidence lives, and under `--update` it is also what `carry-plan.sh`
+replays (its P6), so a new writer in a file no checkpoint cites refuses the update and forces a
+full run.
+
 **A recorded search has to reproduce the entries it is offered for.** This is the half that decays
 quietly. A run listed `rg -n 'account_type' app test` and claimed it returned every reader of the
 column — but the two guards it had just cited read the column through an enum predicate, `steward?`,
@@ -1809,8 +2001,9 @@ checkpoints at thirty words each.** That was the trap in stating the total flat:
 wide agenda under a fixed ceiling forces every checkpoint under its own floor, and the floor rule
 below is what that violates.
 
-**What is never counted:** anything inside a chain — node labels, `.ip-d` details, `.ip-rel` verbs,
-lane labels, the legend, a `figcaption`; anything inside `<code>` or `<pre>`, which includes every
+**What is never counted:** anything inside a figure, of any kind — node labels, `.ip-d` details,
+`.ip-rel` verbs, a `.cv-note`, a relation and its cardinality, a back transition, lane labels, the
+legend, a `figcaption`; anything inside `<code>` or `<pre>`, which includes every
 probe and every command; anything inside a collapsed `<details>`; and the masthead. A page is never
 over budget by a figure or a quotation.
 
