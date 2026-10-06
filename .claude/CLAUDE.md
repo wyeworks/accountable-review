@@ -50,7 +50,11 @@ software with right answers, so it has ordinary tests: `skills/setup-ci/tests/` 
 beside a `self-test.sh` that breaks the things `run.sh` claims to check and asserts the suite notices
 each one, for the reason `evals/checks/self-test.rb` does: a check that passes because it never
 looked is worse than no check. `setup-ci` had one too and it was removed: it re-ran `run.sh` once per
-break, 52 of them, about ten minutes a push. When you edit either template, or any script under
+break, 52 of them, about ten minutes a push. `review-map`'s grew the same shape — 53 rows at six and
+a half minutes — and was cut rather than removed: **a row earns its `run.sh` pass only where the
+sanity row cannot vouch for the assertion** (one expecting zero, a range, an order, or a script's
+logic), and each row runs only the section of `run.sh` its mutation can reach. `self-test.sh`'s
+header owns that rule. When you edit either template, or any script under
 `skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them — `bin/evals offline` runs
 every suite together, which is what CI does too.
 
@@ -250,8 +254,8 @@ Editing one of these means checking the others still agree.
   half, seven `data-rail` entries: four numbered sections and three checkpoint sub-entries. That used
   to be filtered per level by `SKELETON:ONLY:level=` markers and a validator that failed closed, all
   of which is deleted with the level. What replaced the filter is nothing, which is the right amount
-  of machinery for a page with one shape: `tests/run.sh` counts the entries and `self-test.sh`
-  duplicates one to prove the count fires.
+  of machinery for a page with one shape: `tests/run.sh` counts the entries, and the sanity row of
+  `self-test.sh` is what proves that count looked.
 - **`--mentor` is the only flag that puts anything on the page, and subtraction is what keeps it from
   being a level.** It admits one component — the primer callout, `aside.primer`, the third framework
   anchor — inside the checkpoints that earn one, for a reviewer new to the *stack* rather than to the
@@ -293,7 +297,7 @@ Editing one of these means checking the others still agree.
   carries the demo exception in its hard rules; `page-template.html` holds the CSS in the head range
   and the callout assembled inside checkpoint A; `evals/checks/rails-anchors.rb` § 8 grades it on the
   **comment-stripped** copy, behind eight `golden/anchors-primer-*` fixtures and `anchors-demo-loose`;
-  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it six
+  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it three
   ways; and the CI half is `ci/generate-review-map.sh`, `read-config.sh`, `references/config.md` and
   `setup-ci/tests/`, where **off is the absence of the flag** rather than `--mentor off`, because the
   skill parses no such value.
@@ -840,7 +844,7 @@ Editing one of these means checking the others still agree.
   markup comment saying not to type one, `report-format.md` § *Every off-page link opens in a new
   tab* owns the rule, `SKILL.md` step 9 forbids the attribute beside the colour and the `<script>`,
   and `tests/run.sh` asserts the pair (the rule in the tail, zero `target=` in the markup half) with
-  four `self-test.sh` rows behind it.
+  a `self-test.sh` row behind the zero.
 
   And the guard this repository has now paid for three times, which `diff-render.sh` carries in its
   refs handling: **asked and unable to answer is not an empty diff.** A `git diff` feeding a pipeline

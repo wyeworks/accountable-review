@@ -1,7 +1,7 @@
 #!/bin/sh
 # evals — one command per thing you actually do to the evals.
 #
-#   bin/evals offline                        every no-model suite. What CI checks. About a minute.
+#   bin/evals offline                        every no-model suite. What CI checks. About a minute and a half.
 #   bin/evals offline frozen                 just one: self-test | unit | frozen | frontmatter | codex-plugin | review-map | setup-ci | manifest
 #   bin/evals e2e [id] [-n N -j N]           generate, check and judge a real PR (evals/e2e/prs.yml)
 #   bin/evals calibrate [judge]              each judge against its gold page and planted defects

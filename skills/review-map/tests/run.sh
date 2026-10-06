@@ -2,6 +2,7 @@
 # run.sh — the deterministic tests for review-map's scripts.
 #
 #   Usage: tests/run.sh
+#          REVIEW_MAP_SECTION=skeleton|diff-render|carry-plan tests/run.sh   one section only
 #
 # Whether a Review Map is any good is a model run and cannot be asserted on. The scripts underneath
 # it are ordinary software with right answers, and this is where that half is held to account.
@@ -46,9 +47,22 @@ bad() { fail=$((fail + 1)); echo "FAIL  $1"; }
 assert_eq() { if [ "$1" = "$2" ]; then ok "$3"; else bad "$3 (got '$1', wanted '$2')"; fi; }
 count() { c=$(grep -c -F -e "$2" "$1" 2>/dev/null) || c=0; printf %s "$c"; }
 
+# REVIEW_MAP_SECTION narrows a run to the one script a self-test mutation touched — skeleton,
+# diff-render or carry-plan. The three sections share nothing but the helpers above, and a mutation
+# of one script cannot turn another section red, so self-test.sh running all three per mutation
+# was paying for two git repositories it could not use, 54 times. Unset, everything runs, which is
+# what CI and a person get.
+SECTION=${REVIEW_MAP_SECTION:-all}
+case $SECTION in
+  all|skeleton|diff-render|carry-plan) ;;
+  *) echo "run.sh: unknown REVIEW_MAP_SECTION: $SECTION (skeleton | diff-render | carry-plan)" >&2; exit 2 ;;
+esac
+section() { [ "$SECTION" = all ] || [ "$SECTION" = "$1" ]; }
+
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
 
+if section skeleton; then
 echo "template  $TEMPLATE"
 echo ""
 
@@ -355,8 +369,10 @@ rc=0; "$SKELETON" --template "$TEMPLATE" --out "$WORK/n.html" >/dev/null 2>&1 ||
 assert_eq "$rc" "2" "a missing --title is refused rather than written as a placeholder"
 rc=0; "$SKELETON" --template "$TEMPLATE" --title 'x' >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "2" "a missing --out is refused"
+fi
 
 # ================================================================ diff-render.sh
+if section diff-render; then
 # The verdict here decides whether a citation gets a diff anchor or a blob permalink
 # (report-format.md § When the diff will not render), and being wrong is invisible on the page:
 # an anchor into a file GitHub keeps behind "Load diff" lands on a stub, and the reader sees a
@@ -478,7 +494,10 @@ rc=0; out=$( (cd "$REPO" && "$DIFF_RENDER" 0000000000000000000000000000000000000
 assert_eq "$rc" "4" "an unresolvable BASE exits 4 rather than reporting an empty diff"
 assert_eq "$(printf '%s' "$out" | grep -c . || true)" "0" "and prints nothing that could be read as a verdict"
 
+fi
+
 # ================================================================ carry-plan.sh
+if section carry-plan; then
 # The carry decision is the one place in this repository where being wrong is SILENT: a
 # checkpoint wrongly carried is a claim nobody re-read, sitting on a page whose masthead says it
 # describes the current head. Every row below is a way that happens. The repository is built
@@ -714,7 +733,11 @@ assert_eq "$rc" "2" "an unreadable page is refused"
 rc=0; out=$( (cd "$CREPO" && "$CARRY_PLAN" "$WORK/cpage.html" --prev-head 0000000000000000000000000000000000000000 --base "$CBASE" --head "$CHEAD") 2>/dev/null ) || rc=$?
 assert_eq "$rc" "4" "an unresolvable ref exits 4 rather than reporting an empty delta"
 assert_eq "$(printf '%s' "$out" | grep -c . || true)" "0" "and prints nothing that could be read as a plan"
+fi
 
 echo ""
 echo "run.sh: $pass passed, $fail failed"
+# A narrowed run that asserted nothing has not passed. It is the shape a mistyped section name in
+# the gate above would take if the case statement ever lost a branch.
+[ "$pass" -gt 0 ] || { echo "run.sh: no assertion ran in section $SECTION" >&2; exit 1; }
 [ "$fail" -eq 0 ]
