@@ -1,0 +1,27 @@
+<!-- NO DEFECT. Two probe forms that rust.md tells a run to write and that this check would
+     otherwise report as invented constants, kept in ONE clean fixture for the reason
+     anchors-probe-legit-forms.html gives: a fixture that must PASS catches a regression in
+     either, where a fixture that must FAIL keeps failing while one of them breaks.
+
+     1. `Cargo.toml` named as a file. The constant rule reads every capitalised word in a probe
+        as something this repository must define, and no repository defines `Cargo`.
+
+     2. A Rust type named as a test filter. The definition search used to know `class` and
+        `module` only, so a struct this repository plainly declares read as invented.
+        searches-repo carries src/archive.rs for exactly this, so the type is checked against a
+        real declaration rather than asserted.
+
+     Run with --repo @GOLD@/searches-repo. Two checkpoints for two probes, because the ration is
+     one each. -->
+<section class="cp" id="cp-a">
+  <h3>Does the crate still build without its default features?</h3>
+  <p>The new code path sits outside every feature gate. <span class="path">src/archive.rs:3</span></p>
+  <span class="lbl">cargo check &middot; compiles, so it runs build scripts &middot; whether the no-default build still compiles</span>
+<pre class="probe">cargo check --locked --manifest-path crates/api/Cargo.toml --no-default-features</pre>
+</section>
+<section class="cp" id="cp-b">
+  <h3>Is there a test that exercises the archive policy?</h3>
+  <p>The policy changed and no test file did. <span class="path">src/archive.rs:3</span></p>
+  <span class="lbl">cargo test &middot; compiles the tests, runs none &middot; which tests name the policy</span>
+<pre class="probe">cargo test --locked -p api ArchivePolicy -- --list</pre>
+</section>

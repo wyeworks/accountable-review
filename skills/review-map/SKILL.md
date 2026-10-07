@@ -1,7 +1,7 @@
 ---
 name: review-map
 description: >-
-  Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails and Elixir/Phoenix — a Phoenix LiveView app or a Rails or Phoenix JSON API, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $accountable-review:review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+  Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails, Elixir/Phoenix and Rust — a Phoenix LiveView app, a Rails, Phoenix or Rust JSON or gRPC API, or a Rust library, CLI or workspace that serves nothing, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $accountable-review:review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -47,17 +47,21 @@ not the repository being reviewed. User instructions take precedence over skill 
 The procedure below relies on ten bundled files. Read each at the step that needs it rather than up
 front — the procedure itself is the only part that has to be in context the whole way through.
 
-Three of the ten come in pairs, and **you read one of each pair, never both.** Step 2's stack
-detection picks the lens file and the catalogue: a Rails run reads the Rails pair, a Phoenix run the
-Phoenix pair, and reading the other stack's file costs context and teaches the wrong searches. The
-host reference is the same rule one level up — yours, not the other host's.
+Three of the ten are chosen per run, and **you read your own and never another's.** Step 2's stack
+detection picks the lens and the catalogue: a Rails run reads the Rails pair, a Phoenix run the
+Phoenix pair, a Rust run the Rust lens and the Rust catalogue — and reading another stack's file costs
+context and teaches the wrong searches. **The one stack whose lens is two files is the Rust
+backend**: it reads `references/rust.md`, the lens every Rust run gets, and then
+`references/rust-backend.md` on top of it, because a server is still a crate and the backend file
+restates none of the language. A Rust run that is not a backend reads `rust.md` alone. The host
+reference is the same rule one level up — yours, not the other host's.
 
 | File | Read at | For |
 |---|---|---|
 | `references/hosts/claude-code.md` *or* `references/hosts/generic.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
 | `references/report-format.md` | steps 1, 7, 8, 9 | The five sections, the review checkpoint, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
-| `references/rails-nextjs.md` *or* `references/phoenix-liveview.md` | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
-| `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
+| `references/rails-nextjs.md`, `references/phoenix-liveview.md` *or* `references/rust.md` (+ `references/rust-backend.md` for a Rust backend) | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
+| `references/rails-docs.md`, `references/elixir-docs.md` *or* `references/rust-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
 | `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, two assembled checkpoints, the chain and the impact panel — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
 | `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
 | `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
@@ -132,12 +136,12 @@ point of putting them in a separate context. The host reference owns how the rea
   earn one. `references/report-format.md` § *Mentor mode* owns every rule about it, and step 7g is
   where a checkpoint earns one.
 
-  **It may carry a stack name — `--mentor rails`, `--mentor elixir`, `--mentor phoenix` — and the
-  name is checked, never used to choose.** Step 2 detects the stack from the repository; a name on
+  **It may carry a stack name — `--mentor rails`, `--mentor elixir`, `--mentor phoenix`,
+  `--mentor rust` — and the name is checked, never used to choose.** Step 2 detects the stack from the repository; a name on
   the command line that disagrees with what is in front of you is **reported, not obeyed**. Taking
   it as an override would reintroduce the worst regression this skill has: a Rails lens over a
   service that is not Rails, inventing findings confidently. A bare `--mentor` is the ordinary form
-  and the one to prefer, and a value that is none of those three names is reported like any other
+  and the one to prefer, and a value that is none of those four names is reported like any other
   unknown flag.
 
   **Hold it, and hold the subtraction rule with it.** Everything else about the page is the page a
@@ -248,17 +252,34 @@ point of putting them in a separate context. The host reference owns how the rea
 
 Assume nothing about layout or conventions — this skill travels between repos.
 
-**Detect the stack first**, because it decides which two of the bundled files the rest of the run
+**Detect the stack first**, because it decides which of the bundled files the rest of the run
 reads:
 
 - `config/application.rb`, or a `Gemfile`, → **Rails**: the lens file is `references/rails-nextjs.md`,
   the catalogue `references/rails-docs.md`.
 - `mix.exs` → **Elixir/Phoenix**: the lens file is `references/phoenix-liveview.md`, the catalogue
   `references/elixir-docs.md`.
+- `Cargo.toml` → **Rust**, and then one more question decides which of the two Rust stacks: **does
+  the code this diff touches serve requests?** It does when a crate the diff changes — or a crate
+  that one is a path dependency of, inside this workspace — lists a server framework among its
+  `[dependencies]`: `axum`, `actix-web`, `rocket`, `warp`, `poem`, `salvo`, `tonic` or `loco-rs`.
+  Then it is a **Rust backend**: the lens is `references/rust.md` *and then*
+  `references/rust-backend.md`. Otherwise it is **Rust in general** — a library, a CLI, an embedded
+  target, a WASM module — and the lens is `references/rust.md` alone. Either way the catalogue is
+  `references/rust-docs.md`.
+
+  **A workspace is one root, not several.** A `Cargo.toml` with a `[workspace]` table and a dozen
+  members is one Rust project, and the members are where step 5's consumers live; it is never the
+  "more than one root" case below. Neither is a workspace that holds one server crate and several
+  libraries — the backend question above is answered by what the diff touches, so a change confined
+  to a library the server does not depend on is Rust in general even in a repository that serves
+  requests. The name of the framework is evidence and its absence is too: a crate depending on
+  `hyper` or `reqwest` alone is a client, not a backend.
 - **More than one root, or one of each** — a monorepo with an `api/` and a `services/`, engines, an
-  umbrella — **ask which to cover** rather than picking. Same rule as several Rails roots, and for the
-  same reason: covering the wrong half produces a page that is confidently about code the reviewer is
-  not reading.
+  umbrella, or a Rails or Phoenix app carrying a Rust crate for a native extension (`rb-sys`,
+  `magnus`, `rustler`) — **ask which to cover** rather than picking. Same rule as several Rails
+  roots, and for the same reason: covering the wrong half produces a page that is confidently about
+  code the reviewer is not reading.
 
   **Look at the diff before asking, and answer it from there when you can.** If every changed
   application path sits under one root, that root is detected rather than chosen and there is no
@@ -268,15 +289,16 @@ reads:
   the diff does not settle it, **stop** and say which roots were found and that the run needs one
   named — a missing map is reported by the caller and a confidently wrong one is not. This is the
   case CI meets most often, which is why it is spelled out rather than left to the general rule.
-- **Neither** — say so plainly, cover the diff with the stack-independent material (the five
+- **None of these** — say so plainly, cover the diff with the stack-independent material (the five
   sections, the checkpoints, the tiers, the impact chains, the evidence foot), and **emit no documentation link and no
   probe.** Do not default to Rails: a Rails lens applied to a Go service invents findings, and a
-  catalogue that does not describe this application is the failure both catalogues fail closed to
+  catalogue that does not describe this application is the failure every catalogue fails closed to
   avoid.
 
 **If `--mentor` named a stack, check it here and nowhere else.** The detection above is the answer;
 the name on the command line is a claim to test against it. Agreement is silent. A disagreement —
-`--mentor rails` in a repository whose only root is `mix.exs` — **stops the run**, names both
+`--mentor rails` in a repository whose only root is `mix.exs`, or `--mentor rust` in a Rails app
+with no `Cargo.toml` — **stops the run**, names both
 readings and says to re-run with a bare `--mentor`. It is never correct input, which is why it is
 handled like any other flag value that cannot apply rather than resolved in the run's favour: the
 likeliest cause is the wrong checkout, and a page confidently about the wrong repository is the
@@ -287,7 +309,7 @@ uses. The lens is read at step 5, where its search recipes are the work; the cat
 when a claim first asks for a URL. Nothing between here and there needs either, and both are large —
 a run that opens them now carries them through the whole of steps 3 to 6, which is where the
 consumer tracing happens and where the context is already largest. The versions this step records
-come out of `Gemfile.lock` or `mix.lock`, not out of the catalogue.
+come out of `Gemfile.lock`, `mix.lock` or `Cargo.lock`, not out of the catalogue.
 
 **Backend, Rails.** Locate the Rails root by finding `config/application.rb`. It may be at the repo
 root, under a subdirectory such as `api/`, or there may be several (engines, monorepo). Detect, don't
@@ -302,6 +324,24 @@ responses, `@derive {Jason.Encoder, …}` or a `…JSON` render module); how aut
 (`on_mount` inside a `live_session`, or a plug in a `pipe_through` pipeline) — the two are different
 mechanisms and a route can miss either; whether Oban, Broadway or bare `Task` does background work;
 whether `assets/` holds JS hooks; and whether a separate frontend application exists at all.
+
+**Rust.** Read the root `Cargo.toml` first: a `[workspace]` table and its `members` say where the
+crates are, and each member's own manifest says what it is — a `[lib]`, one or more `[[bin]]`s, a
+`proc-macro = true`. Record each crate's **package name**, because that is what `-p` and every probe
+takes and it is not always the directory's. Detect, don't assume: the edition and `rust-version`;
+whether `rust-toolchain.toml` pins a toolchain; the features each changed crate declares and its
+`default` set; whether a crate is published (`publish = false` says it is not, and an unpublished
+crate's public API has no consumers outside this workspace); whether there is a `build.rs`; the test
+runner CI invokes — `cargo test` or `cargo nextest`, which skips doc tests — and the feature
+combinations it builds; and whether the crate root carries `#![forbid(unsafe_code)]`.
+
+On a **Rust backend**, also: the server framework and its version; the database layer — `sqlx` (and
+whether `.sqlx/` holds offline query data), `diesel` (and where `schema.rs` lives), `sea-orm`, or
+none; where migrations live and whether they are embedded in the binary; how authentication is
+attached — a layer on the router, an extractor in the handler signature, or both, which are different
+mechanisms and a route can miss either; the async runtime; and whether a separate frontend exists,
+and if so whether its types are generated from the Rust ones (`ts-rs`, `specta`, `typeshare`, or an
+OpenAPI document from `utoipa` or `aide`).
 
 **Record the versions the documentation links are pinned to.** This is not bookkeeping: **every
 documentation link on the page is pinned with them**, so a run that skipped this step cannot emit a
@@ -318,6 +358,13 @@ step 7's. What to record differs by stack, and so does its shape:
   correct rather than broken. The catalogue carries a few packages beyond that list; if step 7 asks
   for one of them, `grep` its line out of `mix.lock` then — opening the catalogue here to find out
   which names to look for is the read this step is trying not to do.
+- **Rust** — the **exact locked version of each crate** the changed code uses from the framework
+  layer (`tokio`, and on a backend the server framework, `tower`, `sqlx` or `diesel`), read from
+  `Cargo.lock`'s `[[package]]` entries; plus the **toolchain version**: the `channel` in
+  `rust-toolchain.toml` when it names a release, otherwise the manifest's `rust-version`, otherwise
+  none. Like Elixir there is no series, and two traps are Cargo's own: `Cargo.lock` can hold the same
+  crate at two versions, and a `stable` channel names no version at all. `references/rust-docs.md`
+  § *Pinning* says what to do with each — in both cases the answer can be *no link*.
 
 Each catalogue's § *Pinning* owns the emitted forms. The same versions also decide what the page may
 **claim**, because two marks in each catalogue turn a version-sensitive behaviour into a probe rather
@@ -326,7 +373,7 @@ than a sentence.
 **At `--mentor`, a closed catalogue also decides whether the flag can do anything.** A primer is what
 a doc link escalates into and is gated on carrying one, so while `elixir-docs.md` § *Version*
 withholds every link a Phoenix run at `--mentor` writes no primers at all and produces the ordinary
-page. Say that to the user, in chat, when the run starts — a flag that silently did nothing is worse
+page — and the same holds for a Rust run while `rust-docs.md` § *Version* does. Say that to the user, in chat, when the run starts — a flag that silently did nothing is worse
 than one that says why it could not. Do **not** say it on the page: a line explaining the absence of
 primers is the mentor badge § *Mentor mode* refuses, with an apology attached.
 
@@ -334,7 +381,10 @@ primers is the mentor badge § *Mentor mode* refuses, with an apology attached.
 `.heex` templates and whatever sits in `assets/` — there is no second application and no generated
 type to reconcile, so skip to *Conventions* and let § *LiveView* in the lens file carry the seam. A
 LiveView app's boundary is the `phx-*` attribute and the callback that answers it, not a JSON contract.
-Otherwise locate the client the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
+**Rust in general has no frontend to find** — a library's boundary is its public API, which
+`references/rust.md` covers — so skip to *Conventions*. A Rust backend may have one, and
+`references/rust-backend.md` § *When the client is a separate app* says how much of what follows
+applies. Otherwise locate the client the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
 find the seam between the two sides, because that is what a contract judgment is built from:
 
 - the API client or fetch wrapper, and where base URLs and error handling live;
@@ -348,7 +398,8 @@ find the seam between the two sides, because that is what a contract judgment is
 **Conventions.** Look for the project's own in `CLAUDE.md`, `AGENTS.md`, `docs/`, `README`,
 `CONTRIBUTING.md`. If found, check the PR against them. If not, infer the house style from adjacent
 unchanged code of the same kind — often more accurate than a stale document. Note which top-level
-directories under `app/` (or `lib/<app>/`) exist and what each holds: that inventory is the evidence
+directories under `app/` (or `lib/<app>/`, or a Rust crate's `src/` and the workspace's crate
+list) exist and what each holds: that inventory is the evidence
 step 7b needs to ask whether a coding decision in this diff departs from one, and a departure it
 cannot cite — from this inventory, a convention doc, or the lens file's stack conventions — is a
 question it may not ask. A written decision found here is worth noting with its line.
@@ -439,17 +490,21 @@ Work outward from each changed thing to its consumers:
 
 | Changed thing | Who you have to go find |
 |---|---|
-| A method, class or context function | Its callers, and anything that subclasses, includes or imports it |
+| A method, class, context function or Rust function | Its callers, and anything that subclasses, includes, imports or re-exports it — in Rust, across every member of the workspace |
+| A Rust trait, a `pub` item, or an enum a downstream `match` covers | Every implementor and every downstream crate; a new enum variant reaches only the `match`es with a wildcard arm, silently — the exhaustive ones were already fixed for the diff to compile |
 | A column or schema field | Whatever exposes it (a serializer, a `Jason.Encoder` derive list, a JSON render module), scopes and queries filtering on it, factories and fixtures setting it, forms writing it |
-| A validation, callback or changeset | Every write path that now behaves differently — `update_all` and `insert_all` bypass it in both stacks, and a second changeset function on the same schema is a second write path |
+| A validation, callback or changeset | Every write path that now behaves differently — `update_all` and `insert_all` bypass it in Rails and Ecto alike, and a second changeset function on the same schema is a second write path |
 | An enum or status value | Every branch on that value, on both sides of the boundary, including every exhaustive `case` |
 | A JSON key or response shape | The API client, the TS type, and every component reading it |
 | A LiveView event name | Its `handle_event/3` clause, **and** every `.heex` template and JS hook that fires it. Either half can be the stale one, and no diff shows the two together |
 | A route | Anything constructing that URL, including the client and any external caller — and, for a `live` route, which `live_session` block it landed in |
 | A job or its arguments | Every enqueue site, plus in-flight jobs already queued with the old shape |
+| A migration, on a Rust backend | Every query on the changed columns — and, where queries are compile-time checked, whether the offline query data (`.sqlx/`) moved with it, because an unchanged query checked against stale data compiles |
+| A Cargo feature or a dependency's version | Every crate in the workspace that enables it, every `#[cfg(feature = …)]` it gates, and which combinations CI builds |
 
-The lens file the stack selected in step 2 — `references/rails-nextjs.md` or
-`references/phoenix-liveview.md` — carries the concrete search patterns per artifact kind. Use them;
+The lens file the stack selected in step 2 — `references/rails-nextjs.md`,
+`references/phoenix-liveview.md`, or `references/rust.md` with `references/rust-backend.md` on a Rust
+backend — carries the concrete search patterns per artifact kind. Use them;
 do not improvise a grep and call the area clear.
 
 **Record what you searched, not just what you found — but the finding goes in the open prose and the
@@ -806,8 +861,8 @@ run reaches for when it is unsure the figure landed.
   subject: those behaviours changed inside the supported range, so no paragraph about one is true of
   every app. `references/report-format.md` § *Mentor mode* owns the rest.
 
-**The catalogue opens here** — `references/rails-docs.md` or `references/elixir-docs.md`, whichever
-step 2 named, and not before. It is a lookup table: you go to it with a concept a claim already
+**The catalogue opens here** — `references/rails-docs.md`, `references/elixir-docs.md` or
+`references/rust-docs.md`, whichever step 2 named, and not before. It is a lookup table: you go to it with a concept a claim already
 needs, never read it to find concepts. Read its § *Version* first; a closed catalogue returns *no
 link* for every concept, and a page with no doc link is narrower rather than wrong.
 
@@ -1205,11 +1260,12 @@ Everything else about writing holds at every stage:
   they live there only — an earlier version of this bullet restated the cap in slightly different
   words and the two drifted apart within one run.
 - **Pin every documentation URL to the version this app runs**, using the versions recorded in step 2.
-  Both catalogues store paths with no version segment; a link that reaches the page without one
+  Every catalogue stores paths with no version segment; a link that reaches the page without one
   silently means *current stable*, which is how a 7.1 app gets handed 8.1 documentation. What gets
   substituted differs: Rails pins **one series** for the framework and an exact tag per gem, while
-  Elixir pins **each package's exact locked version independently**, so a correct Elixir page carries
-  several different version segments and that is not a defect. Where the catalogue has no verified path
+  Elixir pins **each package's exact locked version independently**, and Rust pins each crate the
+  same way and the toolchain's own documentation to the toolchain release — so a correct Elixir or
+  Rust page carries several different version segments and that is not a defect. Where the catalogue has no verified path
   for this app's version, **emit no link** — explain it in prose and cite the repo line. Each
   catalogue's § *Pinning* owns the forms and the overrides.
 - **A `‡ probe` row may not be asserted.** Those are behaviours that changed inside the supported
@@ -1223,14 +1279,15 @@ Everything else about writing holds at every stage:
   with the repo citation it applies to; that is the ordinary outcome, not a failure. The rules and the
   budget are in `references/report-format.md` § *Framework anchors*, and they live there only.
 
-  **A catalogue can also be closed as a whole**, and one currently is: `references/elixir-docs.md`
-  § *Version* withholds every link until a verification run dates it. Read that section before
-  emitting an Elixir doc link — while it is closed, the answer for every concept is *no link*, and an
-  Elixir run anchors with probes and prose instead. This is the fail-closed rule at file scope, not a
-  bug to work around.
+  **A catalogue can also be closed as a whole**, and two currently are: `references/elixir-docs.md`
+  and `references/rust-docs.md` each withhold every link in their § *Version* until a verification
+  run dates it. Read that section before emitting an Elixir or a Rust doc link — while it is closed,
+  the answer for every concept is *no link*, and the run anchors with probes and prose instead. This
+  is the fail-closed rule at file scope, not a bug to work around.
 - **At `--mentor`, take the primer's markup from the template like any other component.** It is
   assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header, which names the
-  stack in words and not the component — *Understanding Ruby on Rails*, *Understanding Phoenix*, or
+  stack in words and not the component — *Understanding Ruby on Rails*, *Understanding Phoenix*,
+  *Understanding Rust*, or
   the library a gem-level primer is about — with the API on the right; then the two paragraphs, the
   `.item` citation, the pinned `a.doc` and the `pre.demo` beside them.
   Copy the composition and replace every string — the specimen explains `ActiveModel::Dirty` about a
@@ -1250,9 +1307,14 @@ Everything else about writing holds at every stage:
   command; it never shows output, because there is none to show — and a fabricated `=>` or
   `{:ok, %Project{}}` line is the most concrete-looking thing on the page and the one part of it that
   is fiction. Name which runner the snippet wants — `bin/rails runner` or `bin/rails console --sandbox`
-  in Rails, `mix run -e` or `iex -S mix` in Elixir — and say when a write needs wrapping, because
-  **Elixir has no sandbox console**: anything that writes goes inside
-  `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it changes the reviewer's database.
+  in Rails, `mix run -e` or `iex -S mix` in Elixir, a `cargo` subcommand in Rust — and say when a
+  write needs wrapping, because **Elixir has no sandbox console**: anything that writes goes inside
+  `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it changes the reviewer's database. **Rust
+  has no console at all**, so a probe there reads the build — `cargo tree`, `cargo metadata`,
+  `cargo test -- --list` — always with `--locked`, says when it compiles (which runs build scripts and
+  macros), and names any tool that is not part of Cargo; a probe that would have to call the changed
+  code is an existing test, never a scratch file. `references/rust.md` § *Runtime probes* owns those
+  rules.
   Use the project's real constants and module names: a probe naming a scope or a context this repo does
   not have is an invented command.
 - Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
@@ -1597,7 +1659,8 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   ticked. Three ordered states beside a question is a severity scale wearing different words, and
   an update is the one thing in this procedure that makes writing one feel like helpfulness.
 - **Never invent a URL, and never invent output.** Documentation links come from the catalogue the
-  stack detected in step 2 — `references/rails-docs.md` or `references/elixir-docs.md` — and from
+  stack detected in step 2 — `references/rails-docs.md`, `references/elixir-docs.md` or
+  `references/rust-docs.md` — and from
   nowhere else, including when that catalogue is closed and the answer is no link at all. Console
   probes are proposed unrun, with no transcript beneath them. The page never shows the result of
   running anything, because the run never booted the application, and a fabricated `=> …` is the most

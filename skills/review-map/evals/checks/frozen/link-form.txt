@@ -58,6 +58,42 @@ SKIP  citation spans: no linked file:line citations in this input
 SKIP  diff anchors: this input has none
 SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
 SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment anchors-docsrs-clean.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page anchors-docsrs-clean.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment anchors-docsrs-unpinned.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page anchors-docsrs-unpinned.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  citation spans: no linked file:line citations in this input
@@ -293,6 +329,18 @@ SKIP  diff anchors: this input has none
 SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
 SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
 ## --page anchors-probe-lens-forms.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment anchors-probe-rust-forms.html
+exit=0
+SKIP  citation spans: no linked file:line citations in this input
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page anchors-probe-rust-forms.html
 exit=0
 SKIP  citation spans: no linked file:line citations in this input
 SKIP  diff anchors: this input has none

@@ -77,8 +77,8 @@ nothing crosses into unchanged code.
 - Every excerpt is earned by a load-bearing citation, and the page reads complete with every
   `details` shut, judged field by field.
 - Probes can be answered in a fresh checkout, and the label says what the output would settle.
-- **On a Phoenix page, zero doc links is expected**, because `elixir-docs.md` is closed. A rubric
-  that asks for a doc link fails every correct Phoenix page.
+- **On a Phoenix or a Rust page, zero doc links is expected**, because `elixir-docs.md` and
+  `rust-docs.md` are closed. A rubric that asks for a doc link fails every correct page of either.
 
 ## Voice and economy
 
@@ -99,13 +99,15 @@ following the citation rules.
 
 # The eval set (one PR so far)
 
-`prs.yml` has one eval PR, `discourse-44196`, chosen as the calibration PR's sibling. The eval set should be four to
-six merged, public PRs of different shapes, none of them the calibration PR:
+`prs.yml` has one eval PR, `discourse-44196`, chosen as the calibration PR's sibling. The eval set should be five to
+eight merged, public PRs of different shapes, none of them the calibration PR:
 
 - a small Rails bugfix
 - a migration-heavy Rails change
 - a large feature spanning a Rails API and a Next.js client (the boundary seam)
 - a Phoenix LiveView change (the `phx-*` to `handle_event` seam)
+- a Rust backend change (a migration with compile-time-checked queries, or a route added after an
+  auth layer) and a Rust library change (a new variant on a public enum), one per lens
 - a docs-only or trivial PR, where the right output is a refusal
 - a multi-commit PR run at `update_from`, then `--update` at head
 

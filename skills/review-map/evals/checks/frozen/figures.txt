@@ -34,6 +34,24 @@ SKIP  no checkpoint figure in this input
 ## --page anchors-demo-loose.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-docsrs-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-docsrs-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-docsrs-unpinned.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-docsrs-unpinned.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-docsrs-wrong-crate.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  no checkpoint figure in this input
@@ -152,6 +170,12 @@ PASS  no checkpoint carries a figure — a valid result, and most checkpoints ea
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page anchors-probe-lens-forms.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-probe-rust-forms.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-probe-rust-forms.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-probe-sandbox-lie.html

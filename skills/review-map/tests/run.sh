@@ -740,6 +740,13 @@ plan --prev-head "$CHEAD" --base "$CBASE" --head "$CLOCK"
 assert_eq "$cprc" "3" "a lock file in the delta refuses the update"
 assert_eq "$(printf '%s\n' "$out" | grep -c 'lock file')" "1" "and names that as the reason"
 
+# Cargo.lock is the Rust form of the same precondition: every docs.rs link is pinned from it.
+(cd "$CREPO" && git checkout -q -B cargolock "$CHEAD" && mkdir -p crates/core && echo 'version = 3' > crates/core/Cargo.lock && git add -A && git commit -qm cargolock && git rev-parse HEAD > "$WORK/ccargo") >/dev/null 2>&1
+CCARGO=$(cat "$WORK/ccargo")
+cpage "$NOHIT" "" "$sh_head"
+plan --prev-head "$CHEAD" --base "$CBASE" --head "$CCARGO"
+assert_eq "$cprc" "3" "a Cargo.lock in the delta refuses the update too"
+
 # -- called wrongly, and asked-but-unable ---------------------------------------------------------
 cpage "$NOHIT"
 rc=0; (cd "$CREPO" && "$CARRY_PLAN" "$WORK/cpage.html" --prev-head "$CPREV" --base "$CBASE" >/dev/null 2>&1) || rc=$?

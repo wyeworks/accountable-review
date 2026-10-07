@@ -28,6 +28,24 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-demo-loose.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-docsrs-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-docsrs-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-docsrs-unpinned.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-docsrs-unpinned.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-docsrs-wrong-crate.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-docsrs-wrong-crate.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-fabricated-output.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -146,6 +164,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-probe-lens-forms.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-probe-rust-forms.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-probe-rust-forms.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-probe-sandbox-lie.html

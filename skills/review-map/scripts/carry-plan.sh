@@ -178,9 +178,10 @@ fi
 
 # -- P5 · no lockfile in the delta -----------------------------------------------------------
 #
-# Gemfile.lock and mix.lock are what every documentation link on the page is pinned from, and a
-# Rails series moving re-pins all of them. There is no way to carry a pinned link across that.
-if awk -F/ '{ print $NF }' "$TMP/delta" | grep -qxE 'Gemfile\.lock|mix\.lock'; then
+# Gemfile.lock, mix.lock and Cargo.lock are what every documentation link on the page is pinned
+# from, and a Rails series or a crate moving re-pins them. There is no way to carry a pinned link
+# across that.
+if awk -F/ '{ print $NF }' "$TMP/delta" | grep -qxE 'Gemfile\.lock|mix\.lock|Cargo\.lock'; then
   full "a lock file moved in the delta — every pinned documentation link is derived from it"
 fi
 

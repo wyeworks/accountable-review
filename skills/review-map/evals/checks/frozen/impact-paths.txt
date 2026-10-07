@@ -160,6 +160,24 @@ SKIP  no .impact panel in this input
 ## --page anchors-demo-loose.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-docsrs-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-docsrs-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-docsrs-unpinned.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-docsrs-unpinned.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-docsrs-wrong-crate.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  no .impact panel in this input
@@ -278,6 +296,12 @@ WARN  no .impact panel on this page — right only if nothing the change does re
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-lens-forms.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-probe-rust-forms.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-probe-rust-forms.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment anchors-probe-sandbox-lie.html

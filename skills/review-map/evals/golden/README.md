@@ -44,6 +44,11 @@ rule must **not** fire on it. Generalizing that rule is the likeliest future edi
 every other row here while failing every correct Phoenix page — so the guard has to be a page that
 would only break if someone did.
 
+The three `anchors-docsrs-*` fragments are the Rust arms, and `anchors-docsrs-clean.html` does the same
+job for the same reason: two crates and the toolchain, three different version segments, on one
+page. `anchors-probe-rust-forms.html` is the probe half — `Cargo.toml` named as a file, and a struct
+named as a test filter — and it is the reason `searches-repo` carries a `src/archive.rs`.
+
 `start-here-orphan-checkpoint.html` is the same argument for a rule that sits beside an older one
 measuring nearly the same thing. Section 03 has always been checked for linking *into* the
 checkpoints, and that rule counts links: the fixture keeps three stops, three why-clauses, three

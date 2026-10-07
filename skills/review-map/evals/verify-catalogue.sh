@@ -1,14 +1,15 @@
 #!/bin/sh
 # verify-catalogue.sh — opens every URL in a catalogue, in the pinned form a run actually
-# emits: references/rails-docs.md for every Rails series it claims to serve, and
-# references/elixir-docs.md at each package's newest release.
+# emits: references/rails-docs.md for every Rails series it claims to serve,
+# references/elixir-docs.md at each package's newest release, and references/rust-docs.md at
+# each crate's newest release and the newest toolchain.
 #
-# THE ELIXIR CATALOGUE IS CLOSED UNTIL THIS SCRIPT OPENS IT. elixir-docs.md § Version
-# withholds every link in the file — a run emits none, and anchors with probes instead —
+# THE ELIXIR AND RUST CATALOGUES ARE CLOSED UNTIL THIS SCRIPT OPENS THEM. Each file's
+# § Version withholds every link in it — a run emits none, and anchors with probes instead —
 # because no row in it has been opened. That is the fail-closed rule at file scope rather
 # than row scope, and this script is the whole of what lifts it: a clean run prints a dated
 # line, and that line replaces the withhold in § Version in the same commit. So this is not
-# optional maintenance for that file the way it is for the Rails one; it is the file's
+# optional maintenance for those files the way it is for the Rails one; it is each file's
 # release gate.
 #
 # WHY THIS EXISTS, AND WHY IT IS NOT A CHECK UNDER checks/
@@ -60,6 +61,15 @@
 # 404 that reads as correct, and keeping the package in the path is what makes it checkable
 # here and in checks/rails-anchors.rb.
 #
+# RUST ROWS ARE THE SAME AXIS AGAIN, with two hosts. A stored path keeps its host, because
+# `cargo` is both a crate on docs.rs and a book on doc.rust-lang.org and nothing else in the
+# path tells them apart: `docs.rs/<crate>/<ident>/…` pins the crate to its newest stable
+# release from crates.io, and `doc.rust-lang.org/<book or std>/…` pins to the newest
+# toolchain, which comes from rust-lang's own releases with --rust-version as the override —
+# the same reasoning as --elixir-version below. The crate NAME (hyphens) and the crate
+# IDENTIFIER (underscores) are both in a docs.rs path, and getting the second one wrong is a
+# 404 that reads as correct; that is why the identifier is part of the stored path.
+#
 # Usage:
 #   ./verify-catalogue.sh                          # the whole floor
 #   ./verify-catalogue.sh --series "8.1 8.0"       # just these
@@ -67,6 +77,8 @@
 #   ./verify-catalogue.sh --catalogue <path>       # another catalogue, or for testing this
 #   ./verify-catalogue.sh --catalogue ../references/elixir-docs.md   # the Elixir one
 #   ./verify-catalogue.sh --catalogue ... --elixir-version 1.18.3    # when the GitHub API is blocked
+#   ./verify-catalogue.sh --catalogue ../references/rust-docs.md     # the Rust one
+#   ./verify-catalogue.sh --catalogue ... --rust-version 1.90.0      # when the GitHub API is blocked
 #
 # Exit status: 1 if anything fails to resolve.
 set -eu
@@ -90,6 +102,12 @@ SERIES=$ALL_SERIES
 # goes stale silently and stale-and-silent is the failure this whole script exists to catch.
 STDLIB_PKGS=" elixir eex ex_unit iex logger mix "
 ELIXIR_VERSION=""
+# The Rust toolchain's documentation — std and the books — is versioned by the toolchain
+# release, not by any crate, so it needs a version of its own. Same override, same reason.
+RUST_VERSION=""
+# crates.io refuses requests with no User-Agent, and its policy asks for one that names the
+# caller. Sent to crates.io only.
+CRATES_UA="accountable-review verify-catalogue.sh (https://github.com/wyeworks/accountable-review)"
 
 JOBS=12
 CACHE=""
@@ -99,11 +117,12 @@ while [ $# -gt 0 ]; do
   case $1 in
     --series) SERIES=$2; shift 2 ;;
     --elixir-version) ELIXIR_VERSION=$2; shift 2 ;;
+    --rust-version) RUST_VERSION=$2; shift 2 ;;
     --catalogue) CATALOGUE=$2; shift 2 ;;
     -j|--jobs) JOBS=$2; shift 2 ;;
     --cache) CACHE=$2; shift 2 ;;
     -q|--quiet) QUIET=1; shift ;;
-    -h|--help) sed -n '2,47p' "$0"; exit 0 ;;
+    -h|--help) awk 'NR > 1 { if ($0 !~ /^#/) exit; sub(/^# ?/, ""); print }' "$0"; exit 0 ;;
     *) echo "verify-catalogue.sh: unknown argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -133,7 +152,7 @@ CAT_NAME=$(basename "$CATALOGUE")
 # check an override against the wrong series and call the row clean.
 awk -F'|' '
   function trim(s) { gsub(/^[[:space:]]+|[[:space:]]+$/, "", s); return s }
-  /^\|/ && !/^\|[[:space:]]*-/ && !/^\|[[:space:]]*(Concept|Gem|Anchor|Mark|Row|Concept the reviewer meets)[[:space:]]*\|/ {
+  /^\|/ && !/^\|[[:space:]]*-/ && !/^\|[[:space:]]*(Concept|Gem|Anchor|Mark|Row|Item|Concept the reviewer meets)[[:space:]]*\|/ {
     concept = trim($2); gsub(/`/, "", concept); gsub(/ ‡.*$/, "", concept)
     for (i = 3; i <= NF; i++) {
       n = split($i, seg, "·")
@@ -147,6 +166,10 @@ awk -F'|' '
         tok = substr(part, RSTART + 1, RLENGTH - 2)
         kind = ""
         if (tok ~ /^https:\/\//)                                           kind = "gem"
+        # The two Rust hosts are stored WITH the host, which is a dotted first segment no
+        # other kind has, so they are tested first and cannot be mistaken for anything else.
+        else if (tok ~ /^docs\.rs\/[A-Za-z0-9_-]+\/[A-Za-z0-9_]+\/.+$/)      kind = "docsrs"
+        else if (tok ~ /^doc\.rust-lang\.org\/[a-z_-]+\/.+$/)              kind = "rustdoc"
         else if (tok ~ /^[a-z_]+\.html(#.*)?$/)                            kind = "guide"
         else if (tok ~ /^[A-Z][A-Za-z0-9]*(\/[A-Za-z0-9]+)*\.html(#.*)?$/) kind = "api"
         # A hexdocs path leads with its PACKAGE, lowercase, then a slash: the one shape that
@@ -170,10 +193,10 @@ say "$CAT_NAME: $npaths path(s) across $nrows row(s), $novr per-series override(
 # it and say why, rather than leaving the reader to reconcile "series: 8.1 8.0 7.2 7.1" with
 # a file that pins per package.
 nrails=$(awk -F'|' '$3=="guide" || $3=="api"' "$TMP/rows" | wc -l | tr -d ' ')
-nhex=$(awk -F'|' '$3=="hex"' "$TMP/rows" | wc -l | tr -d ' ')
+nhex=$(awk -F'|' '$3=="hex" || $3=="docsrs" || $3=="rustdoc"' "$TMP/rows" | wc -l | tr -d ' ')
 if [ "$nrails" -eq 0 ] && [ "$nhex" -gt 0 ]; then
   SERIES=${SERIES%% *}
-  say "no Rails rows: the series axis does not apply, and each hexdocs row is checked once at"
+  say "no Rails rows: the series axis does not apply, and each package row is checked once at"
   say "its package's newest stable release. Per-package floors are prose in the catalogue."
 else
   say "series: $SERIES"
@@ -225,6 +248,29 @@ while IFS= read -r pkg; do
   if [ -n "$v" ]; then echo "$pkg $v" >> "$TMP/hexver"
   else say "  ! hex.pm knows no stable release of '$pkg' — its rows cannot be checked"; fi
 done < "$TMP/pkgs"
+
+# ------------------------------------------------------- 2c · crate and toolchain versions
+#
+# The same shape for Rust: one request per crate, to crates.io, keyed by the crate NAME (the
+# second segment of a docs.rs path). The toolchain is one more entry under the key `rust`,
+# which no crate path can collide with because rustdoc rows are keyed by host, not by name.
+awk -F'|' '$3=="docsrs" {print $5}' "$TMP/rows" | sed 's|^docs\.rs/||; s|/.*||' | sort -u > "$TMP/crates"
+while IFS= read -r crate; do
+  [ -n "$crate" ] || continue
+  v=$(curl -sS -m 25 -A "$CRATES_UA" "https://crates.io/api/v1/crates/$crate" 2>/dev/null \
+      | grep -o '"max_stable_version":"[^"]*"' | head -1 | sed 's/.*:"//; s/"$//')
+  if [ -n "$v" ]; then echo "$crate $v" >> "$TMP/hexver"
+  else say "  ! crates.io knows no stable release of '$crate' — its rows cannot be checked"; fi
+done < "$TMP/crates"
+if awk -F'|' '$3=="rustdoc"' "$TMP/rows" | grep -q .; then
+  if [ -z "$RUST_VERSION" ]; then
+    RUST_VERSION=$(curl -sS -m 25 "https://api.github.com/repos/rust-lang/rust/releases/latest" 2>/dev/null \
+      | grep -o '"tag_name":"[^"]*"' | head -1 | sed 's/.*:"v\{0,1\}//; s/"$//')
+  fi
+  if [ -n "$RUST_VERSION" ]; then echo "rust $RUST_VERSION" >> "$TMP/hexver"
+  else say "  ! could not reach the GitHub API for the Rust release — pass --rust-version X to"
+       say "    check the doc.rust-lang.org rows"; fi
+fi
 [ -s "$TMP/hexver" ] && say "packages: $(awk '{printf "%s@%s ", $1, $2}' "$TMP/hexver")"
 
 # ---------------------------------------------------------------- 3 · the work list
@@ -271,6 +317,23 @@ for s in $SERIES; do
         # that is the series; for a hexdocs row the series is meaningless and the package
         # version is the thing a reader needs in order to go and look.
         echo "$pkg@$hv|$line|$concept|$kind|$url" >> "$TMP/work"
+        continue
+        ;;
+      docsrs)
+        # docs.rs/<crate>/<version>/<ident>/… — the version goes in after the crate NAME, and
+        # the identifier stays exactly as stored, which is what this run is checking.
+        [ "$s" = "${SERIES%% *}" ] || continue
+        rest=${path#docs.rs/}; crate=${rest%%/*}; rest=${rest#*/}
+        cv=$(awk -v c="$crate" '$1==c{print $2}' "$TMP/hexver")
+        [ -n "$cv" ] || continue                              # unresolvable, already warned
+        echo "$crate@$cv|$line|$concept|$kind|https://docs.rs/$crate/$cv/$rest" >> "$TMP/work"
+        continue
+        ;;
+      rustdoc)
+        [ "$s" = "${SERIES%% *}" ] || continue
+        rv=$(awk '$1=="rust"{print $2}' "$TMP/hexver")
+        [ -n "$rv" ] || continue                              # unresolvable, already warned
+        echo "rust@$rv|$line|$concept|$kind|https://doc.rust-lang.org/$rv/${path#doc.rust-lang.org/}" >> "$TMP/work"
         continue
         ;;
     esac
@@ -344,8 +407,8 @@ if [ "$fail" -eq 0 ]; then
     say ""
     say "verify-catalogue.sh: clean ($(date +%Y-%m-%d)) · packages: $(awk '{printf "%s@%s ", $1, $2}' "$TMP/hexver")"
     say "  Record the date and these versions in $CAT_NAME § Version."
-    say "  For elixir-docs.md that record REPLACES the withhold: until it is there, a run emits"
-    say "  no link from the file at all. Opening it is the point of this run."
+    say "  For elixir-docs.md and rust-docs.md that record REPLACES the withhold: until it is"
+    say "  there, a run emits no link from the file at all. Opening it is the point of this run."
   else
     say "$nok/$nwork resolve, fragments included — every row is good for every series in the floor"
     say ""
