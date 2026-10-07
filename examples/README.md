@@ -13,7 +13,7 @@ which is most of what makes an example worth reading.
 
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
-| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 3 checkpoints · 1 converge figure, no impact section |
+| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 5 checkpoints · 1 converge figure · 2 impact paths |
 | `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 6 checkpoints · 1 converge and 2 chain figures · 1 impact path |
 
 `index.html` is the front door to the two. It is not a Review Map and follows none of the page
@@ -21,11 +21,16 @@ rules — it borrows the design language and the theme rule, and nothing else.
 
 ## Provenance
 
-Both pages were generated on **2026-10-06** with **`accountable-review` 1.1.0**, at the default
-`--effort high` and without `--mentor`. The plugin checkout was `22a1b5b`, the commit that set the
-current rule for a converge figure's notes and locators. Both pull requests are mapped at the head
-they had on that date — Discourse's is merged, so its revision is final; RubyGems' is still open,
-and may have moved on since.
+Both pages were generated on **2026-10-06**, at the default `--effort high` and without
+`--mentor`, by different versions:
+
+- **Discourse** by **`accountable-review` 1.1.0**, plugin checkout `22a1b5b`, the commit that set
+  the current rule for a converge figure's notes and locators.
+- **RubyGems** by **`accountable-review` 1.2.0**, plugin checkout `4649289`, the commit that lets a
+  page ask one coding-decision checkpoint per departure rather than one per page.
+
+Both pull requests are mapped at the head they had on that date — Discourse's is merged, so its
+revision is final; RubyGems' is still open, and may have moved on since.
 
 Neither page was edited after the run produced it. That is the point of keeping them: a hand-tuned
 example demonstrates what someone could write, not what the skill does.
@@ -61,18 +66,21 @@ They fail in opposite directions, which is what a pair is for.
 **RubyGems** is eleven files that all look safe. It is the first slice of a larger change: a new
 table, the callbacks that keep it in step with the live one, and a backfill task — nothing reads
 the new table yet, and every line of it is an addition. What a reviewer has to decide is therefore
-almost entirely about code the diff never opened, and the page's one figure is that question drawn:
-every path that ends an ownership, converging on the history row each one must close — three
-through callbacks in code this PR never touched, and `Rubygem#disown`, which deletes ownerships
-without running theirs and closes history by hand. It is also a small page on purpose: three
-checkpoints, and no impact section, because the one crossing into unchanged code ran through a file
-the diff had changed.
+almost entirely about code the diff never opened, and the page's converge figure is that question
+drawn: every path that starts or ends an ownership — the callbacks, a re-push that disowns a gem
+without running them, an account merge that moves ownerships under them, the backfill — converging
+on the one rule they must all keep, one open history row per owner and gem. Its two impact paths
+are the crossings the diff cannot show: moving a gem into an organization destroys its members'
+ownerships in code this PR never touched, so people who keep working on the gem are recorded as
+former owners; and a deleted account's history rows load with no user behind them. It ends on a
+checkpoint about how the change was built — a second ordering of roles beside the one `lib/access.rb`
+already keeps.
 
 **Discourse** is the case for a large diff. Thirty-six files, and most of what a reviewer has to
 decide is not in any of them: whether every request that creates an account still passes the
 CAPTCHA — drawn as the paths converging on that rule — and whether the site's username rules still
-bind a name the server generated. It also carries the one checkpoint per page that may judge how a
-change was built rather than what it now does, and earns the slot the only way that is allowed: by
-pointing at the services that already own this flow's rules, and at the project's own guide.
+bind a name the server generated. It also ends on a checkpoint that judges how a change was built
+rather than what it now does, and earns it the only way that is allowed: by pointing at the services
+that already own this flow's rules, and at the project's own guide.
 
 Neither page grades its pull request, and this directory does not rank the two.

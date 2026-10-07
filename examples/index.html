@@ -179,14 +179,15 @@ code {
       <h2><a href="rubygems-6699/">Record every stint a user spends owning or maintaining a gem</a></h2>
       <p>
         Eleven files that all look safe: a new table, the callbacks that keep it in step with the
-        live one, and a backfill task. The page's one figure is the question the change turns on —
-        every path that ends an ownership, drawn converging on the history row each one must
-        close, including the one that deletes ownerships without running their callbacks.
+        live one, and a backfill task. What a reviewer has to judge is in code the diff never
+        opened — every path that starts or ends an ownership, drawn converging on the one history
+        row each must keep, and an organization onboarding that records its own members as former
+        owners.
       </p>
       <div class="meta">
         <span><b>11</b> files</span>
-        <span><b>3</b> checkpoints</span>
-        <span><b>1</b> figure</span>
+        <span><b>5</b> checkpoints</span>
+        <span><b>2</b> impact paths</span>
         <span>PR <a href="https://github.com/rubygems/rubygems.org/pull/6699">rubygems.org#6699</a></span>
       </div>
       <a class="go" href="rubygems-6699/">Open the map</a>
@@ -215,7 +216,8 @@ code {
   <div class="foot">
     <span class="lbl">How these were made</span>
     <p class="note">
-      Both generated on 2026-10-06 with <code>accountable-review</code> 1.1.0, at the default
+      Both generated on 2026-10-06 — RubyGems with <code>accountable-review</code> 1.2.0,
+      Discourse with 1.1.0 — at the default
       <code>--effort high</code> and without <code>--mentor</code>. The page format moves between
       releases, so the version is recorded rather than implied: a map produced by a later release
       may not look like these. <a href="https://github.com/wyeworks/accountable-review/blob/main/examples/README.md">Provenance for each page</a>.
