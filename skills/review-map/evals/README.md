@@ -72,9 +72,10 @@ bin/evals report                           # the HTML report
 bin/evals catalogue elixir                 # the maintenance pass. Needs network.
 ```
 
-`offline` is about a minute on this machine, and it is not evenly spread: `setup-ci` is 48s of it
-because its self-test re-runs the whole suite once per deliberate break (issue #71 is the port that
-fixes that), `frozen` is 11s over 1,873 cases, and the Ruby suites together are 3s. It runs every
+`offline` is about a minute on this machine, and it is not evenly spread: `frozen` is 11s over
+1,873 cases, `setup-ci` is about 7s and its self-test about 20s on four cores — every break runs only
+the section of `suite.rb` it can reach, in parallel, where the shell version re-ran the whole suite
+once per break — and the other Ruby suites together are 3s. It runs every
 suite even after one fails and exits non-zero if any suite **did not run** — a suite whose
 interpreter is missing is named in the tally rather than silently absent. Its `parity` line fails
 when `.github/workflows/validate.yml` names a suite the dispatcher's table does not cover.

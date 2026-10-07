@@ -45,16 +45,18 @@ matters there.
 **The scripts are the exception, in both skills, and the boundary is prose versus software rather
 than one skill versus the other.** `setup-ci` produces a YAML file and four shell scripts; `review-map`
 has `page-skeleton.sh`, `excerpt.sh`, `ledger-rows.sh` and `coverage-gate.sh`. All of it is ordinary
-software with right answers, so it has ordinary tests: `skills/setup-ci/tests/` and
-`skills/review-map/tests/`, each a `run.sh` (no model, no network, seconds). `review-map`'s sits
-beside a `self-test.sh` that breaks the things `run.sh` claims to check and asserts the suite notices
-each one, for the reason `evals/checks/self-test.rb` does: a check that passes because it never
-looked is worse than no check. `setup-ci` had one too and it was removed: it re-ran `run.sh` once per
-break, 52 of them, about ten minutes a push. `review-map`'s grew the same shape — 53 rows at six and
-a half minutes — and was cut rather than removed: **a row earns its `run.sh` pass only where the
-sanity row cannot vouch for the assertion** (one expecting zero, a range, an order, or a script's
-logic), and each row runs only the section of `run.sh` its mutation can reach. `self-test.sh`'s
-header owns that rule. When you edit either template, or any script under
+software with right answers, so it has ordinary tests: `skills/review-map/tests/run.sh` and
+`skills/setup-ci/tests/run.rb` (no model, no network, seconds). Each sits beside a self-test that
+breaks the things the suite claims to check and asserts it notices each one, for the reason
+`evals/checks/self-test.rb` does: a check that passes because it never looked is worse than no check.
+Both self-tests once re-ran the whole suite per break — `setup-ci`'s 51 of them at about ten minutes a
+push, and it was deleted; `review-map`'s 53 rows at six and a half, and it was cut. **What fixed both is
+that a row runs only the section its mutation can reach.** `review-map/tests/self-test.sh`'s header
+owns its rule — a row earns its `run.sh` pass only where the sanity row cannot vouch for the
+assertion. `setup-ci`'s came back as `self-test.rb` when the suite was ported to Ruby (`suite.rb`,
+one method per section): every row runs, in parallel, and names the one assertion it must turn red,
+so a break that fails for an unrelated reason is reported rather than counted. Only the tests are
+Ruby; the scripts they call stay shell, because shell is what runs on a team's runner. When you edit either template, or any script under
 `skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them — `bin/evals offline` runs
 every suite together, which is what CI does too.
 
@@ -195,7 +197,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/setup-ci/references/delivery.md` | The delivery contract, the providers that exist and the ones only designed for, and why `command` is opt-in in CI |
 | `skills/setup-ci/templates/workflow.yml` | The workflow itself. Version substitutions, the four when-decisions behind `SETUP:IF:` blocks, and nothing else configurable by design |
 | `skills/setup-ci/scripts/` | `inspect-repo.sh` reports, `render-workflow.sh` renders deterministically and resolves the `SETUP:` blocks, `install-workflow.sh` writes idempotently, refuses to clobber, and recovers the when-decisions from the file it is about to replace, `read-config.sh` is the only thing that knows the config file's shape |
-| `skills/setup-ci/tests/` | The deterministic tests, and the self-test that proves they fire |
+| `skills/setup-ci/tests/` | The deterministic tests, in Ruby: `suite.rb` holds them one method per section, `run.rb` runs every section, and `self-test.rb` breaks each rule on a copy of the plugin and runs only the section that should notice. The scripts they test stay shell and are called as subprocesses |
 | `ci/generate-review-map.sh` | The CI adapter: runs `review-map` non-interactively, then checks the three things a person would have noticed by looking at the page. It passes no level — there is one page, and a page-shape argument is an unknown argument here rather than a silent no-op |
 | `ci/map-still-current.sh` | The second range — does the map we already have still describe this head? Composes `application-code.sh` over the delta with `carry-plan.sh` over the restored page, and adds no rule of its own |
 | `ci/application-code.sh` | The scope gate, in two rules: does this diff change application code at all, and is what it changes more than trivial? Both counted over application paths only, the trivial thresholds joined by **and**, and it fails open, so an unrecognised path is code |
@@ -229,7 +231,7 @@ Editing one of these means checking the others still agree.
   or a config key taken silently and mapped onto this page is a name that quietly changed meaning,
   and the reader has nothing on the page to tell them which they got — so the skill reports it, the
   CI adapter exits 2 on it, and `read-config.sh` falls through to its unknown-key rule. That is one
-  rule in three places rather than three aliases, and `setup-ci/tests/run.sh` pins the last two.
+  rule in three places rather than three aliases, and `setup-ci/tests/suite.rb` pins the last two.
 
   **What the narrowing replaced is worth knowing, because the pressure to reintroduce it will come
   back as generosity.** There were two shapes, a short one merging four sections into one and
@@ -814,7 +816,7 @@ Editing one of these means checking the others still agree.
   *The review checkpoint* (delete, never tick) and *Source excerpts* (never carried across its
   file's delta); `page-template.html` (refuses the carry badge); `read-config.sh`'s `update` key and
   `references/config.md`; `ci/generate-review-map.sh` (conditional pass-through, manifest `@3`);
-  `templates/workflow.yml`'s two cache steps; `setup-ci/tests/run.sh`.
+  `templates/workflow.yml`'s two cache steps; `setup-ci/tests/suite.rb`.
   Graded by `page-invariants.rb` §§ 2b, 2c and 2e (the last unconditional: no recency marker on any page) and
   `build-state.rb --updated` (the disclosure, once), behind three `golden/invariants-update-*`
   fixtures — `-clean` must stay green, because a rule that fails a page for admitting its limits
@@ -1146,7 +1148,7 @@ Same rule as above: editing one of these means checking the others still agree.
   `<name>.sh` reading `AR_*` and printing `key=value`, `references/delivery.md` owns the contract
   **alone**, the workflow template guards its upload step with
   `if: steps.delivery.outputs.provider == 'github-artifact'` so a different provider makes it stand
-  aside, and `tests/run.sh` asserts the four canonical fields.
+  aside, and `tests/suite.rb` asserts the four canonical fields.
 
   **The seam is also what decided how a re-run finds the previous map.** Downloading the last
   artifact is the obvious carrier and was refused for this bullet's reason: the workflow would
@@ -1189,7 +1191,7 @@ Same rule as above: editing one of these means checking the others still agree.
   `templates/workflow.yml` the `scope` step and the guards; `references/workflow.md` § *The
   application-code gate* owns the reasoning **alone** — polarity, payload, fail-open, the default's
   trade, the second range; `SKILL.md`'s hard rules forbid counting anything but application code or
-  baking a number into the YAML; `tests/run.sh` covers each threshold either side (`bulky`, `spread`,
+  baking a number into the YAML; `tests/suite.rb` covers each threshold either side (`bulky`, `spread`,
   `masked`) and both halves of the second question; `docs/ci.md` restates it.
   either side of each threshold and both halves of the second question, and `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
@@ -1217,7 +1219,7 @@ Same rule as above: editing one of these means checking the others still agree.
   write access — which is the thing the setup exists to prevent. Everything a team configures **about
   the map** is still read from `.accountable-review.yml` at **run** time, so changing it never means
   regenerating the file; that split is what makes "the workflow respects `retention_days: 14`" true
-  without a second setup run, and why `tests/run.sh` checks retention through `deliver.sh` rather
+  without a second setup run, and why `tests/suite.rb` checks retention through `deliver.sh` rather
   than by grepping YAML.
 
   What is rendered from flags is the decisions about **when a Review Map is generated** — the push
@@ -1250,7 +1252,7 @@ Same rule as above: editing one of these means checking the others still agree.
   Six files agree: `templates/workflow.yml` holds the `SETUP:IF:`/`SETUP:END:` blocks and the line,
   `render-workflow.sh` resolves them, `install-workflow.sh` recovers them, `SKILL.md` step 3 confirms
   them, `references/workflow.md` §§ *Triggers*, *The guard* and *The line that records the decisions*
-  own the rules **alone**, and `tests/run.sh` checks that each knob changes bytes — a knob that
+  own the rules **alone**, and `tests/suite.rb` checks that each knob changes bytes — a knob that
   renders the same file either way makes the confirmation theatre.
 
   **Two ways to write the guard expression produce a workflow GitHub rejects outright**, and neither
@@ -1258,13 +1260,15 @@ Same rule as above: editing one of these means checking the others still agree.
   so `(additions + deletions) > 50` is an invalid-file error rather than a sum — the two counts are
   compared separately against the same number. And in a folded scalar a **more-indented line is not
   folded**, so its newline survives into the expression; every line sits at six spaces and the
-  operators lead their lines to remove the thing anyone would align. `tests/run.sh` asserts both
+  operators lead their lines to remove the thing anyone would align. `tests/suite.rb` asserts both
   structurally, because no offline tool validates the expression grammar and the only reliable signal
   is GitHub's own validation on push.
 - **Idempotency is decided by comparing bytes, so nothing rendered may vary.** No timestamp, no run
   id, no randomness, no "generated on" comment — `install-workflow.sh` tells "already set up" from
-  "edited by hand" by `cmp`, and a date would make every second run report drift. `tests/run.sh`
-  asserts the rendered file contains today's date nowhere.
+  "edited by hand" by `cmp`, and a date would make every second run report drift. `tests/suite.rb`
+  asserts the rendered file holds nothing shaped like a date, and renders it under a stubbed `date`
+  answering two different days and requires the same bytes — the first catches a date typed into the
+  template, the second one computed while rendering, and neither reads the machine's clock.
 
   The `# Decisions:` line is not an exception to this and the distinction is the whole reason it
   is allowed: it is a pure function of the flags, so two renders with the same flags produce the same
@@ -1274,7 +1278,7 @@ Same rule as above: editing one of these means checking the others still agree.
   **That assertion has to run against the whole file, comments included.** It did not, briefly: the
   negative assertions run against a comment-stripped copy so the workflow may explain in a comment why
   it does not use `pull_request_target`, and a timestamp added as a comment sailed straight through
-  a test whose entire purpose was to catch it. `tests/run.sh` now reads the whole file for it.
+  a test whose entire purpose was to catch it. `tests/suite.rb` reads the whole file for it.
 - **Drift is reported, never resolved.** A hand-edited Accountable Review workflow is a file a team
   owns, and setup reverting their pinned action or tightened timeout is the worst thing this command
   can do. `install-workflow.sh` prints the diff and exits 3; `--update` is the only way past it, and
@@ -1283,7 +1287,7 @@ Same rule as above: editing one of these means checking the others still agree.
   and never runs them — the reason no probe output ever appears — and a workflow that booted the app
   "so the map could be better" would be that decision made by the back door, with its own safety
   design skipped. The template starts no service, runs no migration, and executes no script from the
-  pull request; `tests/run.sh` asserts all three against the comment-stripped file.
+  pull request; `tests/suite.rb` asserts all three against the comment-stripped file.
 - **The workflow posts one comment, and that is the entire write surface.** A link to the Review Map
   and the revision it describes, upserted against `<!-- accountable-review -->` so a reopen or a
   ready/draft toggle updates it rather than adding a second. It is what `pull-requests: write` is
@@ -1305,7 +1309,7 @@ Same rule as above: editing one of these means checking the others still agree.
 
   **Actions has no per-step permissions, so containment is by injection rather than by scope.**
   `GITHUB_TOKEN` reaches only the step that names it in `env:`, and the step that runs a model over a
-  contributor's branch does not. `tests/run.sh` asserts that exactly one step in the whole file names
+  contributor's branch does not. `tests/suite.rb` asserts that exactly one step in the whole file names
   the token, because that is the fact making the scope acceptable and it is one careless `env:` away
   from gone.
 
@@ -1318,7 +1322,7 @@ Same rule as above: editing one of these means checking the others still agree.
   `SETUP:IF:comment` blocks, `render-workflow.sh` renders both or neither, `SKILL.md` step 3 names
   the write scope out loud and its hard rules bound what may be posted, `references/workflow.md`
   § *The comment* owns the rules **alone**, `references/delivery.md` owns what it reads, and
-  `tests/run.sh` executes the step against a stubbed `gh` on both the create and the upsert path —
+  `tests/suite.rb` executes the step against a stubbed `gh` on both the create and the upsert path —
   the one piece of shell in this repository that writes to someone else's repository, so it is run
   rather than read.
 - **The product principle reaches the artifact, not just the page.** `manifest.json` is provenance —

@@ -56,7 +56,8 @@ skills/review-map/tests/frontmatter.rb
 skills/review-map/tests/codex-plugin.rb
 skills/review-map/tests/run.sh
 skills/review-map/tests/self-test.sh
-skills/setup-ci/tests/run.sh"
+skills/setup-ci/tests/run.rb
+skills/setup-ci/tests/self-test.rb"
 
 TALLY=
 npass=0; nfail=0; nskip=0
@@ -93,7 +94,8 @@ run_suite() {
     codex-plugin) suite codex-plugin ruby ruby "$SKILL/tests/codex-plugin.rb" ;;
     review-map) suite review-map sh sh "$SKILL/tests/run.sh"
                suite review-map-self sh sh "$SKILL/tests/self-test.sh" ;;
-    setup-ci)  suite setup-ci  sh   sh "$SETUP/tests/run.sh" ;;
+    setup-ci)  suite setup-ci  ruby ruby "$SETUP/tests/run.rb"
+               suite setup-ci-self ruby ruby "$SETUP/tests/self-test.rb" ;;
     manifest)  suite manifest  claude claude plugin validate . --strict ;;
     *) die "unknown suite: $1 ($(echo $SUITES | tr '\n' ' '))" ;;
   esac

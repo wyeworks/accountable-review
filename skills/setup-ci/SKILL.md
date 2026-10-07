@@ -382,7 +382,7 @@ skipped, or what the job is allowed to do:
   only when the comment step is rendered, and never a scope beyond those two. The rule did not
   loosen — it is the same rule, and the comment is now a thing the job does. A workflow carrying a
   write scope for a step that is not there is the failure, which is why `--no-pr-comment` removes
-  both together and `tests/run.sh` checks that it does.
+  both together and `tests/suite.rb` checks that it does.
 
   `pull_request_target`, which would hand this job the repository's secrets on a branch a stranger
   controls, is still not an option to weigh.
