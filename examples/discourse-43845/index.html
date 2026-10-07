@@ -1,4 +1,4 @@
-<title>FIX: Separate email-code signup details from completion · PR #43845 Review</title>
+<title>FIX: Separate email-code signup details from completion Review</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--
   accountable-review · review-map page template
@@ -63,10 +63,10 @@
   each one is the badge shape coming back through the one door that looks open.
 
   AND NOTHING MARKS A CODING-DECISION CHECKPOINT AS ONE, which is the fifth and
-  the one that hides inside a component rather than beside it. At most one
-  checkpoint per page judges how the change was built rather than what it now does
-  — see report-format.md § Coding decisions — and it is an ordinary section.cp in
-  the last position. No label, no eyebrow, no section of its own, and no sentence
+  the one that hides inside a component rather than beside it. A checkpoint that
+  judges how the change was built rather than what it now does — see
+  report-format.md § Coding decisions — is an ordinary section.cp in the last
+  positions. No label, no eyebrow, no section of its own, and no sentence
   announcing that the page also checks conventions. Announcing it is how it turns
   into a style review: a reader who is told a convention section exists expects it
   filled every time, and a run that knows the reader expects it will fill it.
@@ -99,6 +99,10 @@
     section furniture ..... .eyebrow — a label and a rule that fills the row
     before / after ........ dl.ba — two rows, never one paragraph. Section 01
                             only, and only when a workflow fundamentally changed
+    context ............... dl.ctx — section 02, earned per concept: what a
+                            piece of THIS repository is, a citation, and
+                            span.ctx-used pointing at the checkpoints that rely
+                            on it. Prose only — no figure, no tier, no grade
     evidence tier ......... .tier — neutral by default, .tier-unc teal for
                             `from unchanged code`, .tier-inf ochre for an
                             inference. .tag is an excerpt's state, in plum,
@@ -138,7 +142,7 @@
                             cannot draw. Converge and structure MAY hold .ip-aff:
                             an unchanged writer of an invariant is upstream of the
                             change, not a consequence of it
-    impact paths .......... .impact — section 04. 1-3 directed chains + .legend,
+    impact paths .......... .impact — section 05. 1-3 directed chains + .legend,
                             ONE PATH PER .ip-card, so three diagrams read as three.
                             Each node past a path's first carries its INCOMING
                             relation in .ip-rel, so an edge is labelled or it is
@@ -153,11 +157,11 @@
     grid tables ........... .gt (gap:1px over --rule), .gt-meta, .gt-paths — the
                             inventory, paths with no classification. data-path stays
                             on a div.c, so the gate runs wherever the inventory sits
-    evidence foot ......... details.evidence — section 05, below the last section.
+    evidence foot ......... details.evidence — section 06, below the last section.
                             Not a section: no number, no rail entry, shut
     build state ........... .buildstate banner and .pending markers — deleted at the
                             final publish, never left on a finished page
-    body skeleton ......... rail, sections 01 -> 04, two checkpoints assembled whole
+    body skeleton ......... rail, sections 01 -> 05, two checkpoints assembled whole
                             and one pending stub, the impact panel, the evidence foot
     script ................ scroll progress, rail scroll-spy, and the syntax tint on
                             unchanged excerpts. Nothing else — no state, no
@@ -633,6 +637,27 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
   .ba > dd { padding-top: 0; border-top: 0; }
 }
 
+/* Context — section 02. The repository concepts a checkpoint relies on,
+   one dt/dd pair each. It borrows dl.ba's grid on purpose: both are a term
+   beside its explanation, and a second grid geometry for the same shape
+   would be a decision nobody made. What differs is that every row is equal
+   — there is no "now" row — and that each dd ends in span.ctx-used, which
+   names the checkpoints the entry was earned by. That pointer is set small
+   and quiet, like a reading-path .ptr, because it is navigation rather than
+   content. No colour of its own: Context is not a meaning, and slate on the
+   link already says "you can click it". */
+.ctx { display: grid; grid-template-columns: 180px 1fr; gap: 0 28px; margin-top: 8px; border-top: 1px solid var(--rule); }
+.ctx > dt { min-width: 0; overflow-wrap: anywhere; padding: 18px 0 0; font-size: 14.5px; font-weight: 600; line-height: 1.5; color: var(--ink); }
+.ctx > dd { min-width: 0; overflow-wrap: anywhere; margin: 0; padding: 18px 0 20px; max-width: 62ch; font-size: 15.5px; line-height: 1.66; color: var(--ink-2); }
+.ctx > dt:not(:first-of-type), .ctx > dd:not(:first-of-type) { border-top: 1px solid var(--rule); }
+.ctx .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.ctx .ctx-used a { color: inherit; }
+@media (max-width: 700px) {
+  .ctx { grid-template-columns: minmax(0, 1fr); }
+  .ctx > dd { padding-top: 4px; }
+  .ctx > dd:not(:first-of-type) { border-top: 0; }
+}
+
 /* ============================================================
 /* ============================================================
    Evidence tier and the neutral tag. Neither grades the change.
@@ -937,7 +962,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt--source .ex-body span[class^="hljs-"] { font-weight: inherit; background: none; }
 
 /* ============================================================
-   Section 3 · start here. ONE list: the route through the code
+   Section 4 · start here. ONE list: the route through the code
    and what on it needs judgment are the same question.
    ============================================================ */
 .begin { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
@@ -959,7 +984,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 @media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
 
 /* ============================================================
-   Section 02 · THE REVIEW CHECKPOINT. One judgment the reviewer
+   Section 03 · THE REVIEW CHECKPOINT. One judgment the reviewer
    has to make: the question as the h3, why it is a question in
    the paragraph, and where to look below that. It is NOT a card
    — a hairline between checkpoints is the whole frame, because a
@@ -1016,7 +1041,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
 
 /* ============================================================
-   Section 4 · IMPACT PATHS. Replaces the .blast box grid, which
+   Section 5 · IMPACT PATHS. Replaces the .blast box grid, which
    carried membership of two sets and nothing else — so it read
    as a word cloud, and the one thing it could not express is the
    one thing this section is about: a directed edge.
@@ -1217,7 +1242,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
 /* ============================================================
    figure.chain — the same vertical chain inside a CHECKPOINT,
-   where the job is different. Section 04 shows a consequence
+   where the job is different. Section 05 shows a consequence
    crossing into code the change did not touch; a chain in a
    checkpoint shows a mechanism INSIDE the change — a request
    path, a value derived over several hops, the order guards run
@@ -1227,7 +1252,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
    That last one is a rule rather than a style. A hop that lands
    in unchanged code whose meaning the change altered IS an impact
-   path: it belongs in section 04, drawn once, and the checkpoint
+   path: it belongs in section 05, drawn once, and the checkpoint
    that turns on it says so in a clause. Drawing it here as well
    is the same consequence drawn twice at conversational distance,
    which reads as thoroughness.
@@ -1369,7 +1394,7 @@ figure.structure .st-e > * { grid-column: auto; }
 }
 
 /* ============================================================
-   The evidence foot — section 05, and not a section: no number,
+   The evidence foot — section 06, and not a section: no number,
    no rail entry, shut. It holds the diff inventory, what was
    grepped, and the affected code no checkpoint turns on.
 
@@ -1391,7 +1416,7 @@ details.evidence[open] .chev { transform: rotate(90deg); }
 .evidence .gt { margin-top: 20px; }
 .evidence .eyebrow { margin: 30px 0 14px; }
 /* NOT scoped to .evidence: this list appears twice, once beside the impact panel
-   in section 04 and once in the foot, and the scoped version left the first one
+   in section 05 and once in the foot, and the scoped version left the first one
    unstyled. The teal rule is the third place the page says "not in the diff", and
    it is the same hue as the .ip-aff node the entry is often standing in for. */
 .ev-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
@@ -1406,7 +1431,7 @@ details.evidence[open] .chev { transform: rotate(90deg); }
    leaving a .pending behind is worse than publishing late.
 
    .pending attaches at two granularities: a whole <section>, and a
-   CHECKPOINT, since section 02 is delivered one checkpoint at a
+   CHECKPOINT, since section 03 is delivered one checkpoint at a
    time. The second needs no markup of its own — a checkpoint is
    already its own <section class="cp" id="cp-x">, so the generic
    pending section IS the checkpoint stub with the question on it,
@@ -1439,7 +1464,7 @@ details.evidence[open] .chev { transform: rotate(90deg); }
 /* ============================================================
    Figures. None of them is a drawing: figure.chain, .converge,
    .lifecycle and .structure inside a checkpoint, figure.impact in
-   section 04, all built out of the same .ip-* boxes. Nothing on
+   section 05, all built out of the same .ip-* boxes. Nothing on
    this page is an <svg>.
    ============================================================ */
 figure { margin: 0; }
@@ -1462,15 +1487,15 @@ figcaption strong { color: var(--ink-3); }
 
     <div class="rail-links">
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
-      <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
-      <a class="sub" data-rail="cp-a" href="#cp-a">Is every account-creating request CAPTCHA-checked?</a>
-      <a class="sub" data-rail="cp-b" href="#cp-b">Does a rejected name keep the code usable?</a>
-      <a class="sub" data-rail="cp-c" href="#cp-c">What does generated mode trust?</a>
-      <a class="sub" data-rail="cp-d" href="#cp-d">Random usernames off on deploy?</a>
-      <a class="sub" data-rail="cp-e" href="#cp-e">Can a chosen avatar drop silently?</a>
-      <a class="sub" data-rail="cp-f" href="#cp-f">Generated-name state in the controller?</a>
-      <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
-      <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
+      <a data-rail="context" href="#context"><span class="n">02</span>Context</a>
+      <a data-rail="attention" href="#attention"><span class="n">03</span>Needs your attention</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">Every creating request passes CAPTCHA?</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">The details step works before login?</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">A rejected name on a staged account?</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">Random usernames off for beta sites?</a>
+      <a class="sub" data-rail="cp-e" href="#cp-e">What the generated-username flag changes?</a>
+      <a data-rail="start" href="#start"><span class="n">04</span>Read in this order</a>
+      <a data-rail="impact" href="#impact"><span class="n">05</span>Impact outside the diff</a>
     </div>
   </nav>
 
@@ -1481,15 +1506,15 @@ figcaption strong { color: var(--ink-3); }
         <span>discourse</span><span style="color:var(--rule-strong)">/</span><span>discourse</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/discourse/discourse/pull/43845">PR #43845</a><span style="color:var(--rule-strong)">&middot;</span><span>keegangeorge</span>
       </div>
 
-      <h1>FIX: Separate email-code signup details from completion</h1>
+      <h1>Email-code signup asks for a username before it creates the account</h1>
 
-      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">Email-code signup stops creating
-        the account on code verification. The person picks a username first, and the account is created
-        on that submission, along with the CAPTCHA check and the chosen avatar.</p>
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">FIX: Separate email-code signup details
+        from completion. The account now comes into existence one request later than it did, and CAPTCHA,
+        avatar choice and invite redemption move with it.</p>
 
       <div class="gt gt-meta" style="margin-top:44px">
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">fix/email-code-signup-completion <span style="color:var(--fainter)">&rarr;</span> main</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">320f173 <span>&rarr;</span> 64358ac</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">mixed</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">bugfix</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">6</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">36</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">20 / 16</div></div>
@@ -1498,71 +1523,101 @@ figcaption strong { color: var(--ink-3); }
 
     <section id="changed">
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
-      <h2 style="max-width:30ch;margin-bottom:18px">Email-code signups now ask for a username before the account exists</h2>
+      <h2 style="max-width:30ch;margin-bottom:18px">The account is created by the request that carries a chosen username</h2>
 
-      <p>Before this change, verifying an email code created the account straight away with a generated
-        username, and the person could rename it afterwards on an "account ready" step. Now the verify
-        endpoint answers <code>username_required</code> with a suggested name. The account is created
-        only by a second submission that carries a username, for open signups and for invite
-        redemptions alike. A rejected name comes back as a field error and the code stays unspent. The
-        avatar picked on that step is uploaded once the account exists. CAPTCHA is checked on the
-        submission that creates the account, and random usernames are now off by default. The description says this restores an
-        earlier change that was reverted, now with a separate details state.</p>
-      <ul>
-        <li>A new visitor or an invitee chooses a username before their account is created, and CAPTCHA,
-          the avatar and the random-username default move with that step.</li>
-        <li>A plugin can switch a signup into a "generated username" mode. The server picks the name and
-          remembers it for that login code, and the client submits it without asking.</li>
-      </ul>
+      <p>Verifying an email code no longer creates an account. The verify request now answers
+        <code>username_required</code>, leaves the code unconsumed and the visitor logged out, and a second
+        verify request carrying the username the visitor picked creates the account; a chosen avatar is
+        applied after that. CAPTCHA moves to that second request, and on approval sites to the
+        account-details submit. Invite redemption by code takes the chosen username too.</p>
+      <p>The description says this restores the change the base commit reverted (#43783), with a distinct
+        details state and a server-controlled generated-username flow; the branch re-applies #43783 and adds
+        five follow-up commits. Three smaller changes ride along: <code>enable_random_usernames</code> now
+        defaults to off, <code>/u/check-username</code> refuses <code>for_user_id</code> unless the caller
+        may edit that username, and a plugin modifier can switch on generated usernames.</p>
 
       <dl class="ba">
-        <dt>Before</dt><dd>Code verified, then the account was created with a generated name, then an optional rename on the "account ready" step.</dd>
+        <dt>Before</dt><dd>The code verify created the account with a generated name and logged the visitor
+          in; an "account ready" step then let them rename it and pick an avatar.</dd>
         <dt class="now">After</dt>
-        <dd class="now">Code verified, then a username is chosen, then the account is created and the chosen avatar applied.</dd>
+        <dd class="now">A "signup details" step collects the username and avatar while the visitor is still
+          anonymous; submitting it creates the account and logs them in.</dd>
+      </dl>
+    </section>
+
+    <section id="context">
+      <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
+      <h2 style="margin-bottom:18px">What the judgments below rely on</h2>
+      <dl class="ctx">
+        <dt>Email-code signup</dt>
+        <dd>A sequence of requests to <code>SessionController</code>: one emails a six-digit code, then
+          <code>verify_login_code</code> checks it. The client can post to verify several times with the
+          same code, adding fields each time; the request on which <code>EmailLoginCode::Redeem</code> reaches
+          its creation step consumes the code.
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L542-L553">app/controllers/session_controller.rb:542-553</a>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a>, <a href="#cp-e">Checkpoint E</a></span></dd>
+        <dt>discourse-captcha</dt>
+        <dd>A plugin in this repository that prepends <code>DiscourseCaptcha::SessionControllerPatch</code>
+          onto <code>SessionController</code>, wrapping its login-code methods. On the client it supplies a
+          <code>create-account</code> behaviour transformer and a connector for the
+          <code>code-login-after-code</code> outlet.
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/plugin.rb#L24-L28">plugins/discourse-captcha/plugin.rb:24-28</a>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
+        <dt>Approval signup</dt>
+        <dd>When <code>must_approve_users</code> is on and the address is not auto-approvable, verify stores
+          a signup token in the server session, and a later verify carrying that token creates the account,
+          which then waits for staff approval.
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1049-L1075">app/controllers/session_controller.rb:1049-1075</a>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a></span></dd>
+        <dt>Staged user</dt>
+        <dd>A placeholder <code>User</code> row held for an address whose owner has not signed up. Signup
+          converts it into a real account with <code>unstage!</code> rather than creating a new row.
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L523-L533">app/models/user.rb:523-533</a>
+          <span class="ctx-used">Used by <a href="#cp-c">Checkpoint C</a></span></dd>
       </dl>
     </section>
 
     <section id="attention" style="padding-top:48px">
       <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
       <h2 style="margin-bottom:18px">What needs your attention</h2>
-      <p>Each asks what email-code signup now does or relies on. The order is the order to think about
-        them.</p>
+      <p>Each of these turns on the account now being created one request later, by a visitor who is not
+        yet logged in. The order is the order to think about them.</p>
 
       <section class="cp" id="cp-a">
         <span class="lbl lbl-wide">Checkpoint A</span>
-        <h3>Does every request that creates an email-code account still pass CAPTCHA?</h3>
+        <h3>Does every request that can create a non-invite email-code account still pass CAPTCHA?</h3>
 
-        <p>The CAPTCHA plugin used to check the code-verify request. It now requires CAPTCHA only when that
-          request carries a <code>username</code> param and the site does not need approval. Approval
-          signups are checked on their completion request instead. This holds only because
-          <code>Redeem</code> refuses to create an account without a username, so the gate depends on
-          a policy in another file. You need to decide whether that dependency is acceptable. A later
-          path that creates an account without the client sending <code>username</code> would get past
-          the gate without anything failing. Impact path A shows the widget moving to the final step.</p>
+        <p>The CAPTCHA wrapper now demands a solved challenge only on a verify request that carries a
+          username and is not an approval signup. Approval signups are checked when the account-details form
+          is submitted instead, because the stored proof no longer records a CAPTCHA. The first verify has
+          no CAPTCHA at all, and is safe only because no account is created without a username. Decide
+          whether the predicate covers every condition under which a request reaches creation.</p>
 
         <figure class="converge">
           <div class="cv-grid">
             <ol class="cv-paths">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>open signup, username submitted</b><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R42-R43">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:42-43</a></span></li>
-              <li class="ip-n ip-chg"><span class="ip-box"><b>generated name submitted</b><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-a224a02b8e833db9828d79d0c7c0afc620c5f8e6a8488bee988980c08d0cca78R23">plugins/discourse-captcha/assets/javascripts/pre-initializers/h-captcha.js:23</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-box"><b>approval signup completed</b><span class="cv-note">skips the verify-step check</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L25">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>username submitted</b><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R42-R43">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:42-43</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>no username yet</b><span class="cv-note">no CAPTCHA; username policy stops it</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R136-R138">app/services/email_login_code/redeem.rb:136-138</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>signup fields still missing</b><span class="cv-note">no CAPTCHA; returns before Redeem</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L970-L976">app/controllers/session_controller.rb:970-976</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>approval details submitted</b><span class="cv-note">trusts the stored CAPTCHA flag</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L22">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-22</a></span></li>
             </ol>
-            <div class="cv-target"><span class="ip-box"><b>no non-invite account without a verified CAPTCHA</b><span class="ip-d">must hold on every path</span></span></div>
+            <div class="cv-target"><span class="ip-box"><b>non-invite account created only after CAPTCHA</b><span class="ip-d">must hold on every path</span></span></div>
           </div>
-          <figcaption>Which account-creating requests have to carry a solved CAPTCHA (invites are exempt by design).</figcaption>
+          <figcaption>Which verify requests must keep account creation behind CAPTCHA.</figcaption>
         </figure>
 
         <ul class="lookat">
           <li>
-            <b>The new gate condition</b>
-            <span>skips approval signups and any request without a username</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R42-R43">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:42-43</a>
-<details class="excerpt excerpt--diff">
+            <b>The CAPTCHA predicate</b>
+            <span>now requires a username and excludes approval signups; its field and name terms mirror the
+              controller's early return</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R38-R44">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:38-44</a>
+            <details class="excerpt excerpt--diff">
   <summary>
     <span class="chev">&#9656;</span>
     <span class="ex-loc">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:39-46</span>
     <span class="tag">Changed</span>
-    <span class="ex-why">the gate now keys on a submitted username and skips approval signups</span>
+    <span class="ex-why">The predicate now requires a username and excludes approval signups</span>
   </summary>
   <div class="ex-body">
 <pre data-src="plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb" style="counter-reset: exl 38"><span class="l"><span class="sig"> </span>      return false if matched_user.present? || params[:invite_key].present?</span>
@@ -1576,63 +1631,170 @@ figcaption strong { color: var(--ink-3); }
 <span class="l"><span class="sig"> </span></span>
 <span class="l"><span class="sig"> </span>    include CaptchaVerification</span>
 </pre>
-    <p class="ex-src">Changed at <a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R39-R46">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:39-46</a></p>
+    <p class="ex-src">Changed at <a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:39-46</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>The policy the gate leans on</b>
-            <span>now unconditional and checked last, so the gate is only as complete as this</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R136-R138">app/services/email_login_code/redeem.rb:136-138</a>
+            <b>Approval completion gate</b>
+            <span>is now the only CAPTCHA point for approval signups, relying on the begin step leaving
+              <code>captcha_verified</code> unset <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L22">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-22</a>
+            <details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-22</span>
+    <span class="tag">At head</span>
+    <span class="ex-why">Approval completion checks CAPTCHA unless the stored proof says it was done</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb" data-lang="ruby" style="counter-reset: exl 16"><span class="l">    def complete_verified_login_code_signup</span>
+<span class="l">      proof = verified_login_code_signup_proof_for(params[:signup_token].to_s)</span>
+<span class="l">      if proof.is_a?(Hash) &amp;&amp; !proof[:captcha_verified] &amp;&amp; (error = captcha_verification_error)</span>
+<span class="l">        render json: { error: I18n.t(error) }</span>
+<span class="l">        return</span>
+<span class="l">      end</span>
+</pre>
+    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L22">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-22</a></p>
+  </div>
+</details>
           </li>
           <li>
-            <b>Approval completion check</b>
-            <span>unchanged lines that are now the only CAPTCHA an approval signup meets, because the first step no longer records <code>captcha_verified</code> <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L25">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</a>
+            <b>Missing-fields early return</b>
+            <span>answers <code>user_fields_required</code> before Redeem runs, which is why the predicate can
+              skip those requests <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L970-L976">app/controllers/session_controller.rb:970-976</a>
           </li>
           <li>
-            <b>Final-request specs</b>
-            <span>pin CAPTCHA on the generated-name request here and on the approval request at <code>:180</code></span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-fef7ca716d6cf5fc8229851c3c50e6ede1d2bfdcc2af47148016e0cdb27f9f68R48">plugins/discourse-captcha/spec/requests/discourse_captcha/session_controller_spec.rb:48</a>
+            <b>Final-request CAPTCHA spec</b>
+            <span>pins CAPTCHA on the generated-username creation without consuming the code</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-fef7ca716d6cf5fc8229851c3c50e6ede1d2bfdcc2af47148016e0cdb27f9f68R48-R75">plugins/discourse-captcha/spec/requests/discourse_captcha/session_controller_spec.rb:48-75</a>
           </li>
         </ul>
       </section>
 
       <section class="cp" id="cp-b">
         <span class="lbl lbl-wide">Checkpoint B</span>
-        <h3>Does a rejected username always leave the code, and the invite, usable for another try?</h3>
+        <h3>Does everything the signup-details step calls still work before the visitor is logged in?</h3>
 
-        <p>A taken or invalid name used to be rare. It is now an ordinary outcome, and the person has one
-          ten-minute code. On the open path, spending the code and saving the user happen in one
-          transaction, so an invalid user rolls the spend back. On the invite path,
-          <code>InviteRedeemer</code> now takes a verified-email username as given and lets
-          <code>save!</code> raise, and <code>RedeemWithEmailCode</code>'s <code>try</code> turns that
-          into a field error. You need to decide whether both rollbacks undo everything an attempt
-          touches. A staged user's <code>unstage!</code> fires <code>:user_unstaged</code> before the
-          save, and a fired event is not rolled back <span class="tier tier-unc">from unchanged code</span>.</p>
-
-        <figure class="chain">
-          <ol class="ip-path">
-            <li class="ip-n ip-chg"><span class="ip-box"><b>ensure_user</b><span class="ip-d">passes the chosen name</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R146-R158">app/services/email_login_code/redeem.rb:146-158</a></span></li>
-            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>calls</span><span class="ip-box"><b>CreateFromVerifiedEmail</b><span class="ip-d">username taken as given</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R21">app/services/user/action/create_from_verified_email.rb:21</a></span></li>
-            <li class="ip-n ip-step"><span class="ip-rel"><i></i>returns</span><span class="ip-box"><b>model step</b><span class="ip-d">invalid user, fail! raises</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/service/base/model_step.rb#L21-L23">lib/service/base/model_step.rb:21-23</a></span></li>
-            <li class="ip-n ip-step"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>transaction rollback</b><span class="ip-d">consume_code undone</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/service/base/transaction_step.rb#L17-L19">lib/service/base/transaction_step.rb:17-19</a></span></li>
-            <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>field error, code still redeemable</b><span class="ip-d">observable behaviour</span></span></li>
-          </ol>
-          <figcaption>How a rejected name on the open path ends without spending the code.</figcaption>
-        </figure>
+        <p>The username-and-avatar step used to run after the account existed, so its requests came from a
+          logged-in user; now the visitor is anonymous. <code>/u/check-username</code> already serves anonymous
+          callers, this form no longer sends <code>for_user_id</code>, and the server now refuses that
+          parameter unless the caller may edit the username. The dice button is the exception: it sends a
+          signup token that only approval signups set, and on a login-required site that endpoint refuses an
+          anonymous caller without one <span class="tier tier-unc">from unchanged code</span>. Decide whether
+          each request on this step works before login. Impact path A draws the dice case.</p>
 
         <ul class="lookat">
           <li>
-            <b>Verified invite username taken as given</b>
-            <span>the format and availability checks, and the fallback to a suggestion, no longer run for this case</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R102-R105">app/models/invite_redeemer.rb:102-105</a>
-<details class="excerpt excerpt--diff">
+            <b>The dice request</b>
+            <span>sends <code>this.signupToken</code>, which only the approval continuation assigns</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L604-L617">frontend/discourse/app/components/code-login-form.gjs:604-617</a>
+            <details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">frontend/discourse/app/components/code-login-form.gjs:604-617</span>
+    <span class="tag">At head</span>
+    <span class="ex-why">The dice sends this.signupToken, which only the approval path sets</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="frontend/discourse/app/components/code-login-form.gjs" style="counter-reset: exl 603"><span class="l">  async regenerateUsername() {</span>
+<span class="l">    if (this.regenerating) {</span>
+<span class="l">      return;</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    this.regenerating = true;</span>
+<span class="l">    try {</span>
+<span class="l">      const before = this.username;</span>
+<span class="l">      // Hold the rolling state for at least one animation cycle so a fast</span>
+<span class="l">      // response doesn't cut the dice spin (and the text fade) short.</span>
+<span class="l">      const [result] = await Promise.all([</span>
+<span class="l">        ajax("/u/random-username.json", {</span>
+<span class="l">          headers: { "X-Discourse-Signup-Token": this.signupToken },</span>
+<span class="l">        }),</span>
+</pre>
+    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L604-L617">frontend/discourse/app/components/code-login-form.gjs:604-617</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>Random-username access guard</b>
+            <span>on a login-required site, an anonymous caller without a stored signup proof gets
+              <code>InvalidAccess</code> <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2194-L2205">app/controllers/users_controller.rb:2194-2205</a>
+            <details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/controllers/users_controller.rb:2194-2205</span>
+    <span class="tag">At head</span>
+    <span class="ex-why">On a login-required site an anonymous caller needs a signup-token proof</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/users_controller.rb" data-lang="ruby" style="counter-reset: exl 2193"><span class="l">  def ensure_random_username_access</span>
+<span class="l">    raise Discourse::NotFound if !SiteSetting.enable_random_usernames</span>
+<span class="l">    return redirect_to_login_if_required if current_user</span>
+<span class="l">    return if !SiteSetting.login_required?</span>
+<span class="l"></span>
+<span class="l">    signup_token = request.headers["X-Discourse-Signup-Token"].to_s</span>
+<span class="l">    signup_proof =</span>
+<span class="l">      if signup_token.match?(/\A[0-9a-f]{64}\z/)</span>
+<span class="l">        server_session["#{SessionController::LOGIN_CODE_SIGNUP_KEY_PREFIX}#{signup_token}"]</span>
+<span class="l">      end</span>
+<span class="l">    raise Discourse::InvalidAccess if !signup_proof.is_a?(Hash)</span>
+<span class="l">  end</span>
+</pre>
+    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2194-L2205">app/controllers/users_controller.rb:2194-2205</a></p>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The <code>for_user_id</code> guard</b>
+            <span>now needs a logged-in caller who can edit that username; the profile username editor is the
+              only remaining sender</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-cfdccd0a9d5df5a43aaad2a35d36ebbe187c52ad5fdc9846fa189d04537adb6eR714-R721">app/controllers/users_controller.rb:714-721</a>
+          </li>
+          <li>
+            <b>Deferred avatar save</b>
+            <span>runs after creation with a refreshed CSRF token and swallows every failure, so a lost avatar
+              is silent</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1010-L1041">frontend/discourse/app/components/code-login-form.gjs:1010-1041</a>
+          </li>
+        </ul>
+
+        <div class="gap"><b>GAP</b><span>Login-required sites are exercised only on the approval path, which
+          has a signup token (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-fedef9b61868d7b763baea2a2f0cb99f349bb14cc7ff81b1fd77eaf56fe325bfR240">spec/system/code_signup_spec.rb:240</a>).</span></div>
+      </section>
+
+      <section class="cp" id="cp-c">
+        <span class="lbl lbl-wide">Checkpoint C</span>
+        <h3>When a staged account's chosen username is rejected, is everything before the failed save undone?</h3>
+
+        <p>Both creation paths now save the username the visitor typed, so the save can fail on it: the invite
+          path skips its own format and availability check when the email is verified, and the plain path
+          drops its fallback name. On a staged account both call <code>unstage!</code> first. The specs show
+          the rows roll back and the code survives, but <code>unstage!</code> also fires
+          <code>:user_unstaged</code> after its own commit, and the narrative bot answers by queuing a welcome
+          job that a rollback cannot recall <span class="tier tier-unc">from unchanged code</span>. Decide
+          whether unstaging before a save that can now fail is acceptable. Impact path B draws it.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>Unstage, then save</b>
+            <span>the staged lookup and <code>unstage!</code> run before the chosen username is assigned and
+              saved</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R15-R21">app/services/user/action/create_from_verified_email.rb:15-21</a>
+          </li>
+          <li>
+            <b>Verified username taken verbatim</b>
+            <span>the invite redeemer's new first branch; only the email-code invite service passes
+              <code>email_verified: true</code></span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R102-R103">app/models/invite_redeemer.rb:102-103</a>
+            <details class="excerpt excerpt--diff">
   <summary>
     <span class="chev">&#9656;</span>
     <span class="ex-loc">app/models/invite_redeemer.rb:99-108</span>
     <span class="tag">Changed</span>
-    <span class="ex-why">a verified-email username is now taken as given, with no fallback</span>
+    <span class="ex-why">A verified email now takes the username verbatim</span>
   </summary>
   <div class="ex-body">
 <pre data-src="app/models/invite_redeemer.rb" style="counter-reset: exl 98"><span class="l"><span class="sig"> </span>  )</span>
@@ -1648,253 +1810,189 @@ figcaption strong { color: var(--ink-3); }
 <span class="l"><span class="sig"> </span>    elsif email_verified</span>
 <span class="l"><span class="sig"> </span>      available_username =</span>
 </pre>
-    <p class="ex-src">Changed at <a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R99-R108">app/models/invite_redeemer.rb:99-108</a></p>
+    <p class="ex-src">Changed at <a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2">app/models/invite_redeemer.rb:99-108</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>The transaction that has to roll back</b>
-            <span>wraps <code>consume_code</code> and the user model step; a raised failure is what undoes the spend <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/service/base/transaction_step.rb#L17-L19">lib/service/base/transaction_step.rb:17-19</a>
-<details class="excerpt excerpt--source">
+            <b>The unstage event</b>
+            <span>fires after <code>unstage!</code>'s inner transaction, inside the caller's outer one
+              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L523-L534">app/models/user.rb:523-534</a>
+            <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">lib/service/base/transaction_step.rb:17-19</span>
+    <span class="ex-loc">app/models/user.rb:523-534</span>
     <span class="tag">Unchanged</span>
-    <span class="ex-why">the rollback that un-consumes the code when the user fails to save</span>
+    <span class="ex-why">The event fires after unstage's own transaction, before the caller's save</span>
   </summary>
   <div class="ex-body">
-<pre data-src="lib/service/base/transaction_step.rb" data-lang="ruby" style="counter-reset: exl 16"><span class="l">      def run_step</span>
-<span class="l">        ActiveRecord::Base.transaction { steps.each { |step| step.call(instance, context) } }</span>
+<pre data-src="app/models/user.rb" data-lang="ruby" style="counter-reset: exl 522"><span class="l">  def unstage!</span>
+<span class="l">    if staged</span>
+<span class="l">      ActiveRecord::Base.transaction do</span>
+<span class="l">        self.staged = false</span>
+<span class="l">        custom_fields[FROM_STAGED] = true</span>
+<span class="l">        notifications.destroy_all</span>
+<span class="l">        save!</span>
 <span class="l">      end</span>
-</pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/service/base/transaction_step.rb#L17-L19">lib/service/base/transaction_step.rb:17-19</a></p>
-  </div>
-</details>
-          </li>
-          <li>
-            <b>Unstaging announces itself first</b>
-            <span>fires the event inside the transaction. The ordering predates this PR, but every rejected try now reaches it. The one listener in this repository defers its job to commit <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L523-L533">app/models/user.rb:523-533</a>
-          </li>
-          <li>
-            <b>Staged-user retry spec</b>
-            <span>pins that the staged account and the code survive an invalid name; the event is not asserted</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-071066618551b8a890c5e089631f5357d1379f05c5ee1e7be6c8d36fe3bf2511R332">spec/services/email_login_code/redeem_spec.rb:332</a>
-          </li>
-        </ul>
-      </section>
-
-      <section class="cp" id="cp-c">
-        <span class="lbl lbl-wide">Checkpoint C</span>
-        <h3>What does "generated" mode actually trust, when nothing in core turns it on?</h3>
-
-        <p>A modifier chooses the mode, core never registers it, and so every core site runs
-          <code>:required</code>. When a plugin chooses generated mode, the server stores its pick in
-          <code>server_session</code>. It accepts that name back only if the login code, email, username
-          and signup context all match. The resulting flag reaches <code>CreateFromVerifiedEmail</code>
-          and is never read there, so a generated name goes through the same model validation as a typed
-          one. Its only effect is in the controller, where a rejected generated name gets replaced
-          instead of returning an error. You need to decide whether that unread option is unfinished
-          work or room left on purpose.</p>
-
-        <figure class="chain">
-          <ol class="ip-path">
-            <li class="ip-n ip-chg"><span class="ip-box"><b>pick remembered</b><span class="ip-d">per login code, expires with it</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1378-R1394">app/controllers/session_controller.rb:1378-1394</a></span></li>
-            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>generated_username_signup?</b><span class="ip-d">code, email, name, context match</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1336-R1345">app/controllers/session_controller.rb:1336-1345</a></span></li>
-            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>passes</span><span class="ip-box"><b>Redeem#ensure_user</b><span class="ip-d">flag kept if code id matches</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R147-R148">app/services/email_login_code/redeem.rb:147-148</a></span></li>
-            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>CreateFromVerifiedEmail</b><span class="ip-d">option declared, never read</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R6">app/services/user/action/create_from_verified_email.rb:6</a></span></li>
-            <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>same rules as a typed name</b><span class="ip-d">observable behaviour</span></span></li>
-          </ol>
-          <figcaption>Where the server's trust in its own pick stops.</figcaption>
-        </figure>
-
-        <ul class="lookat">
-          <li>
-            <b>The mode switch</b>
-            <span>a modifier whose default is <code>:required</code>; it is registered only in specs. It also receives <code>server_session</code> and the destination cookie</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1347-R1356">app/controllers/session_controller.rb:1347-1356</a>
-          </li>
-          <li>
-            <b>The unread option</b>
-            <span>declared at <code>:6</code>. The restriction toggle at <code>:32</code> still depends only on whether a username is present</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R3-R12">app/services/user/action/create_from_verified_email.rb:3-12</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/services/user/action/create_from_verified_email.rb:3-12</span>
-    <span class="tag">At head</span>
-    <span class="ex-why">generated_username is declared here and read nowhere below</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/services/user/action/create_from_verified_email.rb" data-lang="ruby" style="counter-reset: exl 2"><span class="l">class User::Action::CreateFromVerifiedEmail &lt; Service::ActionBase</span>
-<span class="l">  option :email</span>
-<span class="l">  option :username</span>
-<span class="l">  option :generated_username, default: -&gt; { false }</span>
-<span class="l">  option :ip_address, optional: true</span>
-<span class="l">  option :user_fields, optional: true</span>
-<span class="l">  option :name, optional: true</span>
-<span class="l">  option :password, optional: true</span>
 <span class="l"></span>
-<span class="l">  def call</span>
+<span class="l">      DiscourseEvent.trigger(:user_unstaged, self)</span>
+<span class="l">    end</span>
+<span class="l">  end</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R3-R12">app/services/user/action/create_from_verified_email.rb:3-12</a></p>
+    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L523-L534">app/models/user.rb:523-534</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>Clearing and the new event</b>
-            <span>every login drops the stored picks and fires <code>:email_login_code_authenticated</code> with the session; nothing in this repository listens for it</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1400-R1406">app/controllers/session_controller.rb:1400-1406</a>
-          </li>
-          <li>
-            <b>Client cannot opt in spec</b>
-            <span>pins that a client cannot switch the mode on by sending a name</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/spec/requests/session_controller_spec.rb#L1420">spec/requests/session_controller_spec.rb:1420</a>
+            <b>Staged-user rollback spec</b>
+            <span>checks username, staged flag and code, and nothing about events or jobs</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-071066618551b8a890c5e089631f5357d1379f05c5ee1e7be6c8d36fe3bf2511R326-R338">spec/services/email_login_code/redeem_spec.rb:326-338</a>
           </li>
         </ul>
 
-        <p class="open"><b>Open question</b> What was <code>generated_username</code> on
-          <code>CreateFromVerifiedEmail</code> meant to change? It was added in 752f441 and nothing in this PR reads it.</p>
+        <div class="gap"><b>GAP</b><span>Neither staged-user spec, here or in
+          <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-04917fe3dd168f1726cd66d6e8e93263d84e8b439ed4eab1aaf2872cfd1aee3aR250-R265">spec/services/invite/redeem_with_email_code_spec.rb:250-265</a>,
+          asserts on <code>:user_unstaged</code> or enqueued jobs.</span></div>
       </section>
 
       <section class="cp" id="cp-d">
         <span class="lbl lbl-wide">Checkpoint D</span>
-        <h3>Should sites already running code signup lose random usernames on deploy?</h3>
+        <h3>Should sites already on the beta keep random usernames after the default flips off?</h3>
 
-        <p><code>enable_random_usernames</code> came in with 1df32987f9 on 27 August with a default of
-          true. This PR changes the default to false, and no migration keeps the old value for sites that
-          never set it. On those sites the dice button disappears from both signup steps and the
-          random-name endpoint returns 404. When email-based suggestion finds nothing, the username field
-          starts empty. The setting depends on <code>enable_local_logins_via_code</code>, so only sites
-          running code login are affected. You need to decide whether the new default should reach them
-          without notice.</p>
+        <p><code>enable_random_usernames</code> changes default from on to off, with no migration. It was added
+          on 2026-08-27 (#41954) and depends on the beta email-code login, so it reaches every site that turned
+          that beta on and never touched this setting. On those sites the dice disappears,
+          <code>/u/random-username</code> returns 404, and suggestions come from the email address or nothing;
+          only the generated-username mode ignores the setting
+          (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1364">app/controllers/session_controller.rb:1364</a>).
+          Impact path C draws the approval form's case.</p>
 
         <ul class="lookat">
           <li>
-            <b>The flipped default</b>
-            <span>true becomes false, under <code>depends_on: enable_local_logins_via_code</code></span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R697-R699">config/site_settings.yml:697-699</a>
+            <b>The default</b>
+            <span>flipped to false under <code>depends_on: enable_local_logins_via_code</code></span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R697-R702">config/site_settings.yml:697-702</a>
           </li>
           <li>
-            <b>Random-name endpoint guard</b>
-            <span>raises <code>NotFound</code> while the setting is off <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2194-L2195">app/controllers/users_controller.rb:2194-2195</a>
+            <b>Generator's opt-out</b>
+            <span>returns nil when the setting is off unless the caller passes
+              <code>allow_when_disabled</code></span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-e2b1a0a649599ae548d1d65afd05dcd62b20280b82693ef2f8c0644d834c3e3cR10-R11">lib/random_username_generator.rb:10-11</a>
           </li>
           <li>
-            <b>Dice button condition</b>
-            <span>hidden on the signup-details step here, and on the approval step at <code>:1282</code></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1472">frontend/discourse/app/components/code-login-form.gjs:1472</a>
-          </li>
-          <li>
-            <b>Suggestion fallback</b>
-            <span>falls back to the generator, which now returns nil by default. The approval path at <code>:1065-1067</code> has the same fallback</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1305-R1309">app/controllers/session_controller.rb:1305-1309</a>
+            <b>Approval suggestion</b>
+            <span>falls back to the generator when no email-derived name is available
+              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1063-L1068">app/controllers/session_controller.rb:1063-1068</a>
+            <details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc">app/controllers/session_controller.rb:1063-1068</span>
+    <span class="tag">At head</span>
+    <span class="ex-why">The approval step's suggestion falls back to the generator, now off by default</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/session_controller.rb" data-lang="ruby" style="counter-reset: exl 1062"><span class="l">    server_session.set("#{LOGIN_CODE_SIGNUP_KEY_PREFIX}#{token}", proof, expires: expires_in)</span>
+<span class="l"></span>
+<span class="l">    username =</span>
+<span class="l">      UserNameSuggester.suggest(login_code.email, allow_generic_fallback: false) ||</span>
+<span class="l">        RandomUsernameGenerator.generate</span>
+</pre>
+    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1063-L1068">app/controllers/session_controller.rb:1063-1068</a></p>
+  </div>
+</details>
           </li>
         </ul>
 
-        <p class="open"><b>Open question</b> Should existing code-signup sites keep the old value of
-          <code>true</code>, for example through a migration, or is reaching them silently intended?</p>
+        <p class="open"><b>Open question</b> Was the new default meant for sites that already enabled the
+          beta, or should a migration keep it on for them?</p>
       </section>
 
       <section class="cp" id="cp-e">
         <span class="lbl lbl-wide">Checkpoint E</span>
-        <h3>Is it acceptable that a chosen avatar can be dropped silently after the account exists?</h3>
+        <h3>Is the generated-username flag meant to change anything when the account is created?</h3>
 
-        <p>The avatar is no longer saved when it is picked. The browser holds it and applies it after the
-          account is created, and any failure is swallowed so signup still completes. The commit message
-          says the swallow is intended. The upload option on the details step is a guess made before the
-          user exists. It uses the default trust-level groups, plus <code>everyone</code> unless granular
-          group permissions are on, plus the invite's groups. After creation, the check uses the user's
-          real groups and gates only file uploads. Where the guess and the real check disagree, the picked
-          file is skipped and nothing is shown. You need to decide whether quietly keeping the letter
-          avatar is the outcome you want.</p>
+        <p>A plugin can return <code>:generated</code> from the <code>email_login_code_username_mode</code>
+          modifier, and nothing in this repository registers one. The server then proposes a name, binds it to
+          the code in the server session, and passes <code>generated_username</code> down to account creation,
+          which declares the option and never reads it. So the mode changes error handling (a fresh name
+          instead of <code>username_errors</code>) and the client's auto-submit, which the CAPTCHA plugin turns
+          off. Decide whether an unread option is the contract the flag's author intends
+          <span class="tier tier-inf">inferred</span>.</p>
+
+        <figure class="chain">
+          <ol class="ip-path">
+            <li class="ip-n ip-chg"><span class="ip-box"><b>generated proof stored</b><span class="ip-d">keyed by login-code id</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1378-R1394">app/controllers/session_controller.rb:1378-1394</a></span></li>
+            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>proof matched on resubmit</b><span class="ip-d">code, email, name, context, mode</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1336-R1345">app/controllers/session_controller.rb:1336-1345</a></span></li>
+            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>passes</span><span class="ip-box"><b>Redeem#ensure_user</b><span class="ip-d">re-checks the code id</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R146-R148">app/services/email_login_code/redeem.rb:146-148</a></span></li>
+            <li class="ip-n ip-chg"><span class="ip-rel"><i></i>passes</span><span class="ip-box"><b>CreateFromVerifiedEmail</b><span class="ip-d">option declared, not read</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R6">app/services/user/action/create_from_verified_email.rb:6</a></span></li>
+            <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>account saved as for a typed name</b><span class="ip-d">observable behaviour</span></span></li>
+          </ol>
+          <figcaption>Where the generated-username flag travels, and where it stops mattering.</figcaption>
+        </figure>
 
         <ul class="lookat">
           <li>
-            <b>The deferred save</b>
-            <span>uploads and picks after login; the empty <code>catch</code> keeps any failure out of sight</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1017-L1040">frontend/discourse/app/components/code-login-form.gjs:1017-1040</a>
-<details class="excerpt excerpt--source">
+            <b>The mode modifier</b>
+            <span>defaults to <code>:required</code>; it is applied here and registered only in specs</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1347-R1356">app/controllers/session_controller.rb:1347-1356</a>
+          </li>
+          <li>
+            <b>Account creation body</b>
+            <span>assigns the username and saves; <code>generated_username</code> appears nowhere in it</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/user/action/create_from_verified_email.rb#L12-L39">app/services/user/action/create_from_verified_email.rb:12-39</a>
+            <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">frontend/discourse/app/components/code-login-form.gjs:1017-1040</span>
+    <span class="ex-loc">app/services/user/action/create_from_verified_email.rb:12-39</span>
     <span class="tag">At head</span>
-    <span class="ex-why">the post-creation avatar save and the catch that swallows its failure</span>
+    <span class="ex-why">The call body never reads generated_username</span>
   </summary>
   <div class="ex-body">
-<pre data-src="frontend/discourse/app/components/code-login-form.gjs" style="counter-reset: exl 1016"><span class="l">    try {</span>
-<span class="l">      await updateCsrfToken();</span>
-<span class="l">      if (selection.file &amp;&amp; result.can_upload_avatar) {</span>
-<span class="l">        const data = new FormData();</span>
-<span class="l">        data.append("type", "avatar");</span>
-<span class="l">        data.append("user_id", user.id);</span>
-<span class="l">        data.append("files[]", selection.file);</span>
-<span class="l">        const upload = await ajax("/uploads.json", {</span>
-<span class="l">          type: "POST",</span>
-<span class="l">          data,</span>
-<span class="l">          processData: false,</span>
-<span class="l">          contentType: false,</span>
-<span class="l">          timeout: 30000,</span>
-<span class="l">          ignoreUnsent: false,</span>
-<span class="l">        });</span>
-<span class="l">        if (upload?.id) {</span>
-<span class="l">          await user.pickAvatar(upload.id, "custom");</span>
-<span class="l">        }</span>
-<span class="l">      } else if (selection.url) {</span>
-<span class="l">        await user.selectAvatar(selection.url);</span>
-<span class="l">      }</span>
-<span class="l">    } catch {</span>
-<span class="l">      // Avatar customization must not block an account that was successfully created.</span>
+<pre data-src="app/services/user/action/create_from_verified_email.rb" data-lang="ruby" style="counter-reset: exl 11"><span class="l">  def call</span>
+<span class="l">    raise Discourse::SiteArchived if SiteSetting.site_archived</span>
+<span class="l"></span>
+<span class="l">    user = User.where(staged: true).with_email(email).first</span>
+<span class="l">    user&amp;.unstage!</span>
+<span class="l">    user ||= User.new</span>
+<span class="l"></span>
+<span class="l">    user.attributes = {</span>
+<span class="l">      email: email,</span>
+<span class="l">      username: username,</span>
+<span class="l">      name: name.presence || user.name,</span>
+<span class="l">      active: false,</span>
+<span class="l">      locale: I18n.locale,</span>
+<span class="l">      ip_address: ip_address,</span>
+<span class="l">      registration_ip_address: ip_address,</span>
 <span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    assign_user_fields(user)</span>
+<span class="l">    user.password = password if password.present?</span>
+<span class="l"></span>
+<span class="l">    user.enforce_username_restrictions = username.present?</span>
+<span class="l"></span>
+<span class="l">    if SiteSetting.must_approve_users? &amp;&amp; EmailValidator.can_auto_approve_user?(email)</span>
+<span class="l">      ReviewableUser.set_approved_fields!(user, Discourse.system_user)</span>
+<span class="l">    end</span>
+<span class="l"></span>
+<span class="l">    user.tap(&amp;:save)</span>
+<span class="l">  end</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1017-L1040">frontend/discourse/app/components/code-login-form.gjs:1017-1040</a></p>
+    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/user/action/create_from_verified_email.rb#L12-L39">app/services/user/action/create_from_verified_email.rb:12-39</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>The upload guess</b>
-            <span>built from the groups the user should end up in, not the ones they actually have</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1316-R1332">app/controllers/session_controller.rb:1316-1332</a>
-          </li>
-          <li>
-            <b>The real check after creation</b>
-            <span><code>in_any_groups?</code> on the saved user, sent back as <code>can_upload_avatar</code> <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1193-L1194">app/controllers/session_controller.rb:1193-1194</a>
+            <b>Proof cleanup and event</b>
+            <span>clears every stored proof on any code login and triggers
+              <code>:email_login_code_authenticated</code>, which nothing here subscribes to</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1400-R1406">app/controllers/session_controller.rb:1400-1406</a>
           </li>
         </ul>
 
-        <div class="gap"><b>GAP</b><span>No test in <code>code-login-form-test.gjs</code> covers a failed deferred upload or a guess that disagrees with the real check.</span></div>
-      </section>
-
-      <section class="cp" id="cp-f">
-        <span class="lbl lbl-wide">Checkpoint F</span>
-        <h3>Does the generated-username state belong in <code>SessionController</code>?</h3>
-
-        <p>About a hundred new private lines in <code>SessionController</code> pick, store, match and
-          clear the generated name in <code>server_session</code>. The rest of the email-code signup
-          rules live in services: <code>EmailLoginCode::Redeem</code>, <code>Request</code>,
-          <code>Verify</code> and <code>Invite::RedeemWithEmailCode</code>. The project guide asks for
-          business logic to be moved out of controllers. Is keeping this in the controller
-          deliberate?</p>
-
-        <ul class="lookat">
-          <li>
-            <b>The new controller block</b>
-            <span>username choice, proof storage, matching and clearing, all private to the controller</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1299-R1406">app/controllers/session_controller.rb:1299-1406</a>
-          </li>
-          <li>
-            <b>Where its siblings live</b>
-            <span>the email-code signup service that already owns the username policies</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/email_login_code/redeem.rb#L1-L4">app/services/email_login_code/redeem.rb:1-4</a>
-          </li>
-          <li>
-            <b>The project's own rule</b>
-            <span>"Extract business logic (validation, models, permissions) from controllers"</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/CLAUDE.md#L64">CLAUDE.md:64</a>
-          </li>
-        </ul>
+        <p class="open"><b>Open question</b> Which plugin registers the modifier and the event, and should
+          <code>CreateFromVerifiedEmail</code> act on <code>generated_username</code> or drop it?</p>
       </section>
     </section>
 
@@ -1905,58 +2003,64 @@ figcaption strong { color: var(--ink-3); }
         <li>
           <span class="n">01</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R42-R49">app/services/email_login_code/redeem.rb:42-49</a>
-            <span class="why">The policy list and its new order. Everything downstream assumes no account is created without a username.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R43-R52">app/services/email_login_code/redeem.rb:43-52</a>
+            <span class="why">Every policy runs before the code is consumed, so this list is what decides when an
+              account can exist.</span>
           </span>
-          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">02</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R978-R1038">app/controllers/session_controller.rb:978-1038</a>
-            <span class="why">How each policy failure becomes a response. A missing username returns the details payload rather than an error, which is what the client steps are built on.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1299-R1334">app/controllers/session_controller.rb:1299-1334</a>
+            <span class="why">The <code>username_required</code> response the client builds its new step from; its
+              generated branch is what Checkpoint E follows.</span>
           </span>
-          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+          <a class="ptr" href="#cp-e">Checkpoint E &rarr;</a>
         </li>
         <li>
           <span class="n">03</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R42-R43">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:42-43</a>
-            <span class="why">Read with stop 01 open. This gate is correct only if that policy list is complete.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R38-R44">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:38-44</a>
+            <span class="why">Read against stop 01: the predicate has to match the requests that reach
+              creation.</span>
           </span>
           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">04</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1299-R1406">app/controllers/session_controller.rb:1299-1406</a>
-            <span class="why">The new helpers: the details payload, the avatar guess and generated-mode storage that Checkpoint C traces. Here the question is whether the block belongs in a controller.</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L588-L603">frontend/discourse/app/components/code-login-form.gjs:588-603</a>
+            <span class="why">The client side of the new step, and the starting point for which requests an
+              anonymous visitor now makes.</span>
           </span>
-          <a class="ptr" href="#cp-f">Checkpoint F &rarr;</a>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
         <li>
           <span class="n">05</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R102-R105">app/models/invite_redeemer.rb:102-105</a>
-            <span class="why">The invite side of the same rule, which depends on <code>save!</code> raising inside the service's <code>try</code>.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-cfdccd0a9d5df5a43aaad2a35d36ebbe187c52ad5fdc9846fa189d04537adb6eR714-R721">app/controllers/users_controller.rb:714-721</a>
+            <span class="why">The new guard, read with the unchanged random-username guard further down the same
+              file.</span>
           </span>
           <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
         <li>
           <span class="n">06</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R697-R699">config/site_settings.yml:697-699</a>
-            <span class="why">One line, but every existing code-signup site that never set it gets the new value.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R12-R24">app/services/user/action/create_from_verified_email.rb:12-24</a>
+            <span class="why">Where a typed username meets a staged account; the invite redeemer does the same
+              at its own line 102.</span>
           </span>
-          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
         </li>
         <li>
           <span class="n">07</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L588-L601">frontend/discourse/app/components/code-login-form.gjs:588-601</a>
-            <span class="why">The client half: how the details step is set up from the payload in stop 04. Read last, because it only uses what the server decided.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R697-R702">config/site_settings.yml:697-702</a>
+            <span class="why">Last, because it changes existing sites the moment it deploys.</span>
           </span>
-          <a class="ptr" href="#cp-e">Checkpoint E &rarr;</a>
+          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
         </li>
       </ol>
     </section>
@@ -1969,17 +2073,46 @@ figcaption strong { color: var(--ink-3); }
         <span class="lbl">Impact paths</span>
 
         <div class="ip-card">
-          <span class="ip-hd">A &middot; The CAPTCHA widget moves to the final step</span>
-          <p class="ip-why">Anything attached to <code>code-login-after-code</code> now renders on the
-            approval and signup-details steps instead of under the code input. In this repository that is
-            the CAPTCHA widget, and it is what lets someone pass the check on the final submission.
-            <a href="#cp-a">Checkpoint A</a></p>
+          <span class="ip-hd">A &middot; The dice on a login-required site</span>
+          <p class="ip-why">A visitor signing up on a login-required site who presses the dice before their
+            account exists gets an error instead of a new name. <a href="#cp-b">Checkpoint B</a></p>
           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>code-login-after-code</b><span class="ip-d">outlet moved to details steps</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1497-L1502">frontend/discourse/app/components/code-login-form.gjs:1497-1502</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>rendered by</span><span class="ip-box"><b>CaptchaFieldsConnector</b><span class="ip-d">hCaptcha or reCAPTCHA widget</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs#L10-L21">plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs:10-21</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>CAPTCHA solved at account creation</b><span class="ip-d">observable behaviour</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>signup-details dice</b><span class="ip-d">shown before login</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1472-L1480">frontend/discourse/app/components/code-login-form.gjs:1472-1480</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>calls</span><span class="ip-box"><b>regenerateUsername</b><span class="ip-d">sends an unset token</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L614-L617">frontend/discourse/app/components/code-login-form.gjs:614-617</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>calls</span><span class="ip-box"><b>ensure_random_username_access</b><span class="ip-d">needs a proof when anonymous</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2197-L2204">app/controllers/users_controller.rb:2197-2204</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>error dialog, no new name</b><span class="ip-d">observable behaviour</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="ip-card">
+          <span class="ip-hd">B &middot; A staged account picks a rejected name</span>
+          <p class="ip-why">A staged account whose chosen name fails validation stays staged, but a welcome job
+            has already been queued for it, and another on the retry. <a href="#cp-c">Checkpoint C</a></p>
+          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <div class="ip-body">
+            <ol class="ip-path">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>CreateFromVerifiedEmail</b><span class="ip-d">saves the typed name as-is</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R15-R21">app/services/user/action/create_from_verified_email.rb:15-21</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>calls</span><span class="ip-box"><b>User#unstage!</b><span class="ip-d">event after its own commit</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L523-L533">app/models/user.rb:523-533</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>subscribed by</span><span class="ip-box"><b>narrative bot</b><span class="ip-d">queues a welcome job</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-narrative-bot/plugin.rb#L59-L79">plugins/discourse-narrative-bot/plugin.rb:59-79</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>welcome job for a still-staged account</b><span class="ip-d">observable behaviour</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="ip-card">
+          <span class="ip-hd">C &middot; The approval form's suggested name</span>
+          <p class="ip-why">On a beta site that never set the option, the approval account-details form opens
+            with an email-derived name or an empty field. <a href="#cp-d">Checkpoint D</a></p>
+          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <div class="ip-body">
+            <ol class="ip-path">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>enable_random_usernames</b><span class="ip-d">defaults to false</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R699">config/site_settings.yml:699</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>RandomUsernameGenerator.generate</b><span class="ip-d">returns nil</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-e2b1a0a649599ae548d1d65afd05dcd62b20280b82693ef2f8c0644d834c3e3cR10-R11">lib/random_username_generator.rb:10-11</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>begin_verified_login_code_signup</b><span class="ip-d">falls back to it</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1065-L1067">app/controllers/session_controller.rb:1065-1067</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>no generated suggestion</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
         </div>
@@ -1990,38 +2123,19 @@ figcaption strong { color: var(--ink-3); }
           <span><i class="key-out"></i>Behaviour</span>
         </div>
 
-        <p class="note" style="margin-top:16px">Theme components and plugins outside this repository that
-          attach to the same outlet were not searched.</p>
+        <p class="note" style="margin-top:16px">Name-based searches cannot see plugins or themes outside this
+          repository that register the username-mode modifier, subscribe to the new event, or call
+          <code>/u/check-username</code> with <code>for_user_id</code>.</p>
       </figure>
 
       <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs#L10-L21">plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs:10-21</a> &mdash; the only connector on the moved outlet; it renders wherever the outlet now sits. <a href="#cp-a">Checkpoint A</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs:10-21</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">renders the widget wherever the outlet sits</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs" style="counter-reset: exl 9"><span class="l">  &lt;template&gt;</span>
-<span class="l">    &lt;div class="code-login-after-code-outlet captcha-fields-connector"&gt;</span>
-<span class="l">      &lt;div class="input-group"&gt;</span>
-<span class="l">        {{#if (eq this.siteSettings.discourse_captcha_provider "hcaptcha")}}</span>
-<span class="l">          &lt;HCaptcha @siteKey={{this.siteSettings.hcaptcha_site_key}} /&gt;</span>
-<span class="l">        {{else if</span>
-<span class="l">          (eq this.siteSettings.discourse_captcha_provider "recaptcha")</span>
-<span class="l">        }}</span>
-<span class="l">          &lt;ReCaptcha @siteKey={{this.siteSettings.recaptcha_site_key}} /&gt;</span>
-<span class="l">        {{/if}}</span>
-<span class="l">      &lt;/div&gt;</span>
-<span class="l">    &lt;/div&gt;</span>
-</pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs#L10-L21">plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs:10-21</a></p>
-  </div>
-</details>
-        </li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2194-L2205">app/controllers/users_controller.rb:2194-2205</a> &mdash; unchanged guard that refuses anonymous callers on login-required sites without a signup proof. <a href="#cp-b">Checkpoint B</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L604-L617">frontend/discourse/app/components/code-login-form.gjs:604-617</a> &mdash; unchanged dice handler, now reachable before login. <a href="#cp-b">Checkpoint B</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/username-preference.gjs#L115-L121">frontend/discourse/app/components/username-preference.gjs:115-121</a> &mdash; always sends <code>for_user_id</code>; the new guard uses the same guardian check as the serializer flag that shows this editor. <a href="#cp-b">Checkpoint B</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L523-L533">app/models/user.rb:523-533</a> &mdash; triggers <code>:user_unstaged</code> outside the caller's transaction. <a href="#cp-c">Checkpoint C</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-narrative-bot/plugin.rb#L59">plugins/discourse-narrative-bot/plugin.rb:59</a> &mdash; the one subscriber to that event. <a href="#cp-c">Checkpoint C</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1065-L1067">app/controllers/session_controller.rb:1065-1067</a> &mdash; approval suggestion that falls back to the generator. <a href="#cp-d">Checkpoint D</a></li>
       </ul>
     </section>
 
@@ -2101,39 +2215,40 @@ figcaption strong { color: var(--ink-3); }
 <div class="c" data-path="spec/system/page_objects/pages/code_signup.rb"><a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-c988dffc60f2d06c2507bbee6eff6793ac2c105224abdcb389efcef6bd1fcc88">spec/system/page_objects/pages/code_signup.rb</a></div>
 <!-- M +1/-1 -->
 <div class="c" data-path="spec/system/page_objects/pages/invite_form.rb"><a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-76e39fcf69fc6e3634c13eeecedcabfec5637cbebb18d11a52f4be5cbc5036f7">spec/system/page_objects/pages/invite_form.rb</a></div>
-<!-- 36 rows, generated from git diff --numstat 8dabd61dbe9ce3c0ac573f12b9da0b75a032787a...320f1738fa65d1ed8d5728d274ed8965b5152846 -->
+<!-- 36 rows, generated from git diff --numstat 64358ac0d0c189aee4214d66fb0b9b7dc34fb4ed...320f1738fa65d1ed8d5728d274ed8965b5152846 -->
       </div>
 
       <details class="searched">
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>git grep -n "EmailLoginCode::Redeem.call\|Invite::RedeemWithEmailCode.call" -- app</code> <span class="sr-r">three account-creating call sites, <code>session_controller.rb:986</code>, <code>:1087</code>, <code>:1245</code>; the paths in Checkpoint A's figure</span></li>
-            <li><code>git grep -n "CreateFromVerifiedEmail" -- app lib plugins ':!*spec*'</code> <span class="sr-r">one caller, <code>redeem.rb:150</code></span></li>
-            <li><code>git grep -n "generated_username" -- app lib plugins ':!*spec*'</code> <span class="sr-r">read in the controller and <code>redeem.rb:147-148</code>; declared and unread in <code>create_from_verified_email.rb:6</code></span></li>
-            <li><code>git grep -n "email_login_code_username_mode\|email_login_code_authenticated"</code> <span class="sr-r">only the controller and specs</span></li>
-            <li><code>git grep -n "code-login-after-code\|code-login-auto-create-account" -- plugins frontend/discourse/app</code> <span class="sr-r">one connector, one value-transformer registration</span></li>
-            <li><code>git grep -n "RandomUsernameGenerator.generate\|enable_random_usernames" -- app lib plugins frontend</code> <span class="sr-r">controller <code>:1067</code>, <code>:1308</code>, <code>:1364</code>; <code>users_controller.rb:662</code>, <code>:2195</code>; <code>invite_redeemer.rb:110</code>; three template conditions</span></li>
-            <li><code>git grep -n "email_verified" -- app lib ':!*spec*'</code> <span class="sr-r">only <code>redeem_with_email_code.rb:135</code>, <code>:143</code> pass <code>true</code> into invite redemption</span></li>
-            <li><code>git grep -n "checkUsername(" -- frontend plugins</code> <span class="sr-r">only <code>username-preference.gjs:117</code> passes <code>for_user_id</code></span></li>
-            <li><code>git grep -n "prefill_username\|account_ready_title\|account_ready_edit\|complete-step"</code> <span class="sr-r">no remaining reader; one screenshot label in a system spec</span></li>
-            <li><code>git grep -n "invite.redeem\|InviteRedeemer.new" -- app lib</code> <span class="sr-r">redeem callers <code>invites_controller.rb:414</code>, <code>session_controller.rb:1560</code>, <code>invite.rb:251</code>, <code>:269</code>; none passes <code>email_verified</code></span></li>
-            <li><code>git grep -n "login_code.verify\|def verify" -- app/models/email_login_code.rb app/services/email_login_code</code> <span class="sr-r"><code>email_login_code.rb:60</code>, called from <code>redeem.rb:70</code> and <code>verify.rb:30</code></span></li>
-            <li><code>grep -rn ":user_unstaged" app lib plugins</code> <span class="sr-r">one listener, <code>discourse-narrative-bot/plugin.rb:59</code></span></li>
+            <li><code>git grep -n -E "EmailLoginCode::Redeem|CreateFromVerifiedEmail|Invite::RedeemWithEmailCode" -- app lib plugins ':!*spec*'</code> <span class="sr-r">three creation calls, <code>session_controller.rb</code> :986, :1087, :1245</span></li>
+            <li><code>git grep -n "code-login-after-code" -- plugins frontend/discourse/app</code> <span class="sr-r">one CAPTCHA connector, two outlets in the form (:1403, :1499)</span></li>
+            <li><code>git grep -n "signupToken" -- frontend/discourse/app/components/code-login-form.gjs</code> <span class="sr-r">assigned only by the approval continuation (:949, :983), cleared at :999</span></li>
+            <li><code>git grep -n -E "for_user_id|checkUsername\(" -- frontend/discourse/app plugins ':!*tests*'</code> <span class="sr-r">the profile username editor is the only <code>for_user_id</code> sender</span></li>
+            <li><code>git grep -n "email_verified" -- app lib plugins ':!*spec*'</code> <span class="sr-r">only <code>Invite::RedeemWithEmailCode</code> passes true</span></li>
+            <li><code>git grep -n -E "InviteRedeemer.new|invite.redeem\(" -- app</code> <span class="sr-r">other invite redemptions at <code>app/controllers/invites_controller.rb:414</code> and <code>app/controllers/session_controller.rb:1560</code>, neither passing <code>email_verified</code></span></li>
+            <li><code>grep -n -A 15 "def verify" app/models/email_login_code.rb</code> <span class="sr-r">attempt refunded on success, <code>app/models/email_login_code.rb:60-75</code></span></li>
+            <li><code>git grep -n "on(:user_unstaged)" -- app lib plugins ':!*spec*'</code> <span class="sr-r">one subscriber, the narrative bot</span></li>
+            <li><code>git grep -n -E "email_login_code_username_mode|email_login_code_authenticated|code-login-auto-create-account|generated_username" -- ':!spec' ':!*/spec/*' ':!*tests*'</code> <span class="sr-r">modifier applied once and never registered; event triggered with no subscriber; transformer overridden only by <code>h-captcha.js:23</code></span></li>
+            <li><code>git grep -n -E "RandomUsernameGenerator.generate|enable_random_usernames" -- app lib frontend/discourse/app config</code> <span class="sr-r">generator called at <code>session_controller.rb</code> :1067, :1308, :1364, <code>users_controller.rb:662</code>, <code>invite_redeemer.rb:110</code>; three template gates</span></li>
+            <li><code>git log -S enable_random_usernames -- config/site_settings.yml</code> <span class="sr-r">added 2026-08-27 in #41954</span></li>
+            <li><code>git diff --name-only BASE...HEAD | grep db/migrate</code> <span class="sr-r">no migration</span></li>
+            <li><code>grep -n login_required spec/system/code_signup_spec.rb</code> <span class="sr-r">set only in the approval-path example</span></li>
           </ul>
-          <p class="sr-limit"><strong>Out of reach.</strong> Plugins and themes outside this repository
-            that register the new modifier, listen for the new event, or attach to the moved outlet; and
-            API clients calling <code>/u/check_username</code> with <code>for_user_id</code>.</p>
+          <p class="sr-limit"><strong>Out of reach.</strong> Plugins and themes outside this repository, which
+            could register the username-mode modifier or the new event; and whether the narrative bot's job
+            runs before a rolled-back save is retried, which depends on queue timing.</p>
         </div>
       </details>
 
       <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/username-preference.gjs#L115-L120">frontend/discourse/app/components/username-preference.gjs:115-120</a> &mdash; the one caller sending <code>for_user_id</code>; it renders only when <code>can_edit_username</code>, the check <code>users_controller.rb:714-721</code> now enforces.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/invites_controller.rb#L392-L414">app/controllers/invites_controller.rb:392-414</a> &mdash; never passes <code>email_verified</code>, so the invite-link path keeps the old username fallback.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/invite_redeemer.rb#L107-L110">app/models/invite_redeemer.rb:107-110</a> &mdash; the verified-email suggestion fallback no longer has a caller that reaches it with a blank username.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/email_login_code.rb#L60-L80">app/models/email_login_code.rb:60-80</a> &mdash; a successful verify resets attempts, so re-sending the code with each username try does not exhaust it.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-narrative-bot/plugin.rb#L59">plugins/discourse-narrative-bot/plugin.rb:59</a> &mdash; listens for <code>:user_unstaged</code>; its job is pushed after commit (<code>app/jobs/base.rb:417</code>), so a rolled-back try enqueues nothing.</li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/email_login_code.rb#L60-L75">app/models/email_login_code.rb:60-75</a> &mdash; <code>verify</code> refunds the attempt on success, which is what lets one code verify on both requests.</li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/invite_redeemer.rb#L107-L110">app/models/invite_redeemer.rb:107-110</a> &mdash; the generated fallback for a verified email, now reached only without a username.</li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L660-L665">app/controllers/users_controller.rb:660-665</a> &mdash; <code>generate_random_username</code>, behind the guard that 404s when the setting is off.</li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/invites_controller.rb#L414">app/controllers/invites_controller.rb:414</a> &mdash; invite redemption that never passes <code>email_verified</code>, so it keeps the old username checks.</li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1560">app/controllers/session_controller.rb:1560</a> &mdash; DiscourseConnect invite redemption, same as above.</li>
       </ul>
     </details>
 
