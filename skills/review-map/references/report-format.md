@@ -76,7 +76,7 @@ refusals that hold that line.
 
 - *One page shape* — above: no level, and what effort and stack do not change
 - *The review checkpoint* — the page's primitive: one judgment, framed as a question
-- *Coding decisions* — the second kind of checkpoint, its citation bar and its three caps
+- *Coding decisions* — the second kind of checkpoint, its citation bar and the limits on how many
 - *Chains* — the one figure vocabulary, in two places with two jobs
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
 - *Framework anchors* — the doc link and the runtime probe, and why neither is evidence
@@ -296,11 +296,11 @@ step 7b:
 - **Background jobs** — safe to run twice, in-flight jobs carrying the old argument shape. Feature
   flags and their default. An environment variable, and **what happens when it is unset**. External
   calls, and whether they block a request. Transaction boundaries, and what sits outside them.
-- **One coding decision that departs from something this repository already does** — a value object
+- **Coding decisions that depart from something this repository already does** — a value object
   under `app/models` where `app/services/` holds four of its kind, a query built in a controller where
-  `app/queries/` exists, a hand-rolled guard where a policy class was waiting. Ask it last, ask it
-  once, and only where you can cite the sibling it departs from. § *Coding decisions* owns the bar and
-  the caps.
+  `app/queries/` exists, a hand-rolled guard where a policy class was waiting. Ask them last, ask one
+  per departure, and only where you can cite what each departs from — a decision in this repository
+  or a convention on the stack's list. § *Coding decisions* owns the bar and the limits.
 
 Each is a checkpoint only if it is a judgment for *this* diff. The list is a prompt, not a form.
 
@@ -332,11 +332,33 @@ around, what it was named, whether it is a second way to do something the app al
 `SKILL.md` step 7b is where it is found and the stack's lens file has the search recipes; this section
 owns the rule.
 
-**Name the departure, and cite it.** The form is *the PR chose X; this codebase already does Y for the
-same job; is X deliberate?* The `Y` is not optional and it is not general knowledge about the
-framework: it is a **path in this repository** — a sibling file, a populated directory, a line in the
-project's own convention doc — and it goes on the page beside the question, as a *Look at* entry like
-any other citation.
+**Name the departure, and cite what it departs from.** The form is *the PR chose X; Y is the settled
+answer for the same job; is X deliberate?* The `Y` is not optional, and it comes from exactly one of
+two sources:
+
+- **This repository's own decision** — a line in the project's convention doc (`CLAUDE.md`,
+  `AGENTS.md`, a style guide, an ADR), or, where nothing is written down, the answer the code has
+  already settled on: a populated directory, a sibling file. Cited as a **path in this repository**,
+  on the page beside the question as a *Look at* entry like any other citation. A written decision
+  is the stronger form and is cited ahead of a sibling when both exist.
+- **A stack convention the lens file lists** — the stack's own § *Coding decisions* carries a short,
+  closed list of conventions that hold across apps of that stack, each with the catalogue row that
+  documents it where the catalogue has one. Cited as that row's doc link in the explanation — the
+  checkpoint's one `a.doc`, § *Framework anchors*' budget unchanged — with the PR's own choice as the
+  `file:line` it rests on. Only conventions on that list qualify: a practice the run knows but the
+  lens does not name is general knowledge, and general knowledge is taste. **A list exists only
+  where the catalogue is open**, so a Phoenix run has the first source alone until `elixir-docs.md`
+  is verified.
+
+**The repository outranks the stack.** Where this codebase has settled on the PR's choice — a
+convention doc that says so, or a dozen siblings doing the same — there is no departure, whatever the
+stack convention says: the team decided, and asking again is the page overruling them. Where the
+repository is silent, the stack convention stands. Where both point the same way, cite both — a guard
+repeated inline across three actions, in an app whose convention doc says shared preconditions go in
+a `before_action`, which the controller guide documents for the same job, is the strongest form of the
+question. A practice the stack list does not carry still asks through the first source alone: a
+controller doing a service's work is a question when the repository has written down *extract
+business logic from controllers*, and taste when it has not.
 
 > Does `MembershipMark` belong in `app/models`?
 >
@@ -346,36 +368,47 @@ any other citation.
 > **Look at** · Where its siblings live · four value objects, none of them under `app/models` ·
 > `app/services/trial_offer.rb:1`
 
-**No in-repo citation, no question.** This is the whole bar, and it is what makes the difference
-between a review map and a style guide. A reviewer who knows the codebase can ask *why is this one
-different?*; a linter cannot, because the answer is four files away and was never written down. If the
-repository has no settled answer to point at, the change has departed from nothing and there is no
-judgment to make — a preference stated in its absence is the page grading the author's taste, which it
-does not do.
+**No citation from either source, no question.** This is the whole bar, and it is what makes the
+difference between a review map and a style guide. A reviewer who knows the codebase can ask *why is
+this one different?*; a linter cannot, because the answer is four files away and was never written
+down. The stack list is the same bar one level up: written down once, in this plugin, closed, and
+backed by the manual — never the run's sense of what a good Rails app looks like. If neither source
+has an answer to point at, the change has departed from nothing and there is no judgment to make — a
+preference stated in its absence is the page grading the author's taste, which it does not do.
 
 **Ask; never answer.** No *should have been*, no *unidiomatic*, no *the Rails way*, no *consider
-moving*. The reviewer knows why the codebase is shaped the way it is; the page knows only that the
+moving*. A stack convention is stated as what the manual documents, linked, never as a standard the
+PR failed. The reviewer knows why the codebase is shaped the way it is; the page knows only that the
 shapes differ. Where the run cannot resolve it — and it usually cannot — the *Open question* line is
 where that goes.
 
-**Three caps, and the middle one is the product:**
+**No fixed count — every one that clears the bar, within three limits:**
 
-- **One per page — not one per delta.** Every other count in § *Section 2* scales with the number of
-  independent changes the PR ships; this one does not. Three deltas still buy one question about how
-  the code was built. A second is the page becoming a style review, and it will arrive looking
-  thorough. The departure that does not get the slot is not written anywhere else — an observation
-  about shape with nowhere to go is noise, not a finding, and a page is not obliged to report every
-  observation it made.
-- **It never displaces a behavioural judgment, and it never justifies going past seven.** If the
-  behavioural agenda already fills the page, there is no slot, and that is the right outcome. A page
-  that dropped *is nil safe for every consumer?* in order to ask where a class lives has traded the
-  product for a preference; a page that reached an eighth checkpoint to fit one in has bought a
-  preference with the reviewer's attention.
-- **Ranked last**, per `SKILL.md` step 7d, whatever the four ranking criteria say. Misreading where a
-  class lives costs a conversation; misreading a behavioural judgment costs production.
+- **One per departure, and the bar is per checkpoint.** Each coding-decision checkpoint names its own
+  departure and cites its own answer. There is no quota in either direction: a PR that puts a class
+  in the wrong directory *and* builds a second way to do something the app already does one way asks
+  both, because a reviewer who knows the codebase would ask both. What keeps this from becoming a
+  style review is not a count but the citation — every question still has to point at a decision in
+  this repository or a convention on the stack's list, so a page can only ask as many as those two
+  sources have settled answers for. **Merge before counting**, as step 7c does for any judgment: three new files that all went around the same
+  `app/services/` convention are one question with three *Look at* entries, not three questions. A
+  departure that did not clear the bar is not written anywhere else — an observation about shape with
+  nothing to cite is noise, not a finding.
+- **They never displace a behavioural judgment, and they never justify going past seven.** They sit
+  outside the per-delta three to five — that range is for what the system now does — and inside the
+  page's ceiling of seven, filling only the room the behavioural agenda leaves. A page that dropped
+  *is nil safe for every consumer?* in order to ask where a class lives has traded the product for a
+  preference; a page that reached an eighth checkpoint to fit one in has bought a preference with the
+  reviewer's attention. When the room runs out before the departures do, keep the ones whose answer
+  is most settled — backed by both sources, then a written repository decision, then a populated
+  directory or a stack convention, then a single counter-example.
+- **Ranked last**, per `SKILL.md` step 7d, whatever the four ranking criteria say — after every
+  behavioural checkpoint, and among themselves in that same order of how settled their answer is.
+  Misreading where a class lives costs a conversation; misreading a behavioural judgment costs
+  production.
 
-**Unless the diff is a refactor**, where the coding decision may be the only judgment there is — and
-then it is the page. Say so plainly in *What changed* rather than manufacturing a behavioural
+**Unless the diff is a refactor**, where coding decisions may be the only judgments there are — and
+then they are the page. Say so plainly in *What changed* rather than manufacturing a behavioural
 checkpoint to stand in front of it.
 
 **Nothing marks it as the second kind.** No label, no chip, no section of its own, no sentence
