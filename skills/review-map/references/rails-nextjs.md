@@ -62,13 +62,31 @@ finding is reported by absence, not by a green tick.
 - Enum or status columns: is the transition legal set enforced anywhere, or can any caller write any
   value?
 
-## Coding decisions, against this codebase's own answers
+## Coding decisions, against this codebase's own answers and the stack's
 
-Every other lens here asks what the change *does*. This one asks how it was **built**, and it is the
-only lens whose evidence is a file the diff never touched: the sibling that solved the same problem a
-different way. `report-format.md` § *Coding decisions* owns when this may become a checkpoint — one per
-page, ranked last, never displacing a behavioural judgment, and **never without a path in this
-repository to cite**. What follows is what to look at; the recipes below are how you find the `Y`.
+Every other lens here asks what the change *does*. This one asks how it was **built**, and its evidence
+is something the diff never touched: the project's written decision or the sibling that solved the
+same problem a different way, or one of the Rails conventions listed below. `report-format.md`
+§ *Coding decisions* owns when this may become a checkpoint — one per departure, ranked last, never
+displacing a behavioural judgment, the repository outranking the stack, and **never without a citation
+from one of the two sources**. What follows is what to look at; the recipes below are how you find
+the `Y`.
+
+**Stack conventions — the closed list.** These hold across Rails apps because Rails itself documents
+them, which is what admits them as a source when the repository is silent. Nothing outside this list
+qualifies; adding to it means adding the catalogue row that documents it, through
+`evals/verify-catalogue.sh`, never a URL written from memory. The row named is `rails-docs.md`'s, and
+it is the checkpoint's one doc link.
+
+| Convention | The PR departs when it… | Catalogue row |
+|---|---|---|
+| Resourceful routes are the default shape | adds `get`/`post`/`match` routes for what a `resources` member or collection route expresses | *Routing: `resources`, member and collection routes* |
+| Request input is filtered with strong parameters | reads `params[...]` into a write by hand, or calls `permit!` | *Strong parameters, and what `permit!` gives up* |
+| A precondition shared by actions is a controller callback | repeats the same guard inline at the top of several actions | *`before_action` order, `only`/`except`, and `skip_before_action`* |
+| Slow or external work in a request goes to Active Job | adds a blocking external call, mailer delivery or bulk loop inside an action | *`perform_later` enqueue timing…* |
+| Side effects that must see committed data use transaction callbacks | enqueues or calls out from `after_save` where the effect needs the row committed | *`after_commit` vs `after_save`* |
+| A form or input object that is not a table includes Active Model | hand-rolls `attr_accessor`, an `errors` hash and `valid?` on a class handed to `form_with` or a controller | *`ActiveModel::Model` gives a non-persisted object validations…* |
+| Behaviour shared across models or controllers is a concern | writes `self.included(base)` and `base.extend ClassMethods` by hand, or orders `include`s to satisfy a dependency between modules | *`ActiveSupport::Concern` for a shared module…* |
 
 - **A class under `app/models` with no `ApplicationRecord` behind it.** It has no `validates`, no
   callbacks, no `find_by`, no `where`, no `dependent:` — and Rails autoloads the directory either way,
@@ -86,6 +104,12 @@ repository to cite**. What follows is what to look at; the recipes below are how
   already has one. The maintenance cost is the two diverging, and that is the consequence worth naming.
 - **A name that departs from its siblings** — a `*Manager` in an app of `*Service`s, a `Fetcher` among
   `Repository`s. Thin on its own; worth a clause inside a question that has more behind it.
+
+**Look for a written decision first.** Step 2 read the project's convention docs; a line there that
+names the choice — *"extract business logic from controllers"*, *"form objects live in
+`app/forms`"* — is the strongest `Y` there is, and it is what makes a stack convention a question
+this team has already answered. It cuts the other way too: a doc that blesses the PR's choice closes
+the question, whatever the list above says.
 
 **The register is the whole thing here.** *Is it deliberate that X, given Y?* is a question. *X should
 be Y* is a verdict, and this page does not carry one. The reviewer knows why their codebase is shaped

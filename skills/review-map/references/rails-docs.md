@@ -106,8 +106,8 @@ series*.
 
 ## Version
 
-**Verified 2026-09-02 against series 7.1, 7.2, 8.0 and 8.1** by `evals/verify-catalogue.sh`: 92 paths
-across 57 rows, which is 322 pinned URLs once each is expanded per series and the gem rows resolved to
+**Verified 2026-10-06 against series 7.1, 7.2, 8.0 and 8.1** by `evals/verify-catalogue.sh`: 107 paths
+across 59 rows, which is 334 pinned URLs once each is expanded per series and the gem rows resolved to
 a release. Every fragment opened, in every series.
 
 **The path cannot rot; the anchor and the class can, and that is the failure this file has actually
@@ -118,6 +118,8 @@ three classes that want three different fixes:
 - **Drift.** 7.2 moved `insert_all` off `Persistence::ClassMethods` to `Relation` and pluralised the
   validations guide's `#conditional-validation`; the controller guide renamed *Filters* twice, to
   `#action-callbacks` in 7.2 and `#controller-callbacks` in 8.0. Every one of these returned 200.
+  The 2026-10-06 sweep found four more of the same class, all from 8.1 renaming sections of the
+  querying and Active Job guides.
 - **Never existed.** `active_record_nested_attributes.html` 404s in every series back to 6.1. That is
   not rot — it is a plausible URL constructed once and then admitted to the allowlist, which is the
   exact thing the top of this file forbids. Reading carefully is what catches this one; nothing else
@@ -136,7 +138,7 @@ that fits: every row, every series in the floor, dated.
 
 ## Rows that differ by series
 
-Three rows out of 57 do not resolve to the same path in every series. Each carries its override
+Seven rows out of 59 do not resolve to the same path in every series. Each carries its override
 inline, in the cell, as `· <series>: <path>` — right where a run is already looking, rather than in a
 cross-referenced table it has to remember to consult. The run takes the override when the app's series
 matches, and the bare path otherwise.
@@ -146,6 +148,10 @@ matches, and the bare path otherwise.
 | `insert_all` / `upsert_all` | 7.2 and up | 7.1 documents it on `Persistence::ClassMethods` |
 | `before_action` order | 8.0 and up | 7.2 calls the section `#action-callbacks`, 7.1 `#filters` |
 | Conditional validation | 7.2 and up | 7.1 uses the singular `#conditional-validation` |
+| `find_each` batches | 8.1 and up | 8.0 and earlier call the section `#retrieving-multiple-objects-in-batches` |
+| An explicit `select` list | 8.1 and up | 8.0 and earlier call the section `#selecting-specific-fields` |
+| Job arguments are serialized | 8.1 and up | 8.0 and earlier call the section `#supported-types-for-arguments` |
+| `retry_on` / `discard_on` | 8.1 and up | 8.0 and earlier call the section `#exceptions` |
 
 A row with no override for the app's series yields **no link**, per § *Pinning*.
 
@@ -212,6 +218,13 @@ version-sensitive rows carried no mark — including strong parameters, where 8.
 | `save` vs `save!` vs `update` — what each returns and raises | `active_record_validations.html` | `ActiveRecord/Persistence.html#method-i-save` |
 | Conditional validation with `:if` / `:on` | `active_record_validations.html#conditional-validations` · 7.1: `active_record_validations.html#conditional-validation` | — |
 
+## Objects that are not tables
+
+| Concept | Guide | API |
+|---|---|---|
+| `ActiveModel::Model` gives a non-persisted object validations and the interface forms and controllers expect | `active_model_basics.html#model` | `ActiveModel/Model.html` |
+| `ActiveSupport::Concern` for a shared module: `included` blocks, `class_methods`, and module dependencies | — | `ActiveSupport/Concern.html` |
+
 ## Associations, scopes and queries
 
 | Concept | Guide | API |
@@ -221,8 +234,8 @@ version-sensitive rows carried no mark — including strong parameters, where 8.
 | `default_scope` applies to `new` and `create`, not only to reads | `active_record_querying.html#scopes` | `ActiveRecord/Scoping/Default/ClassMethods.html#method-i-default_scope` |
 | A scope is composable and lazy; a class method may not be | `active_record_querying.html#scopes` | `ActiveRecord/Scoping/Named/ClassMethods.html#method-i-scope` |
 | `includes` vs `preload` vs `eager_load` | `active_record_querying.html#eager-loading-associations` | `ActiveRecord/QueryMethods.html#method-i-includes` |
-| `find_each` batches, and overrides your `order` | `active_record_querying.html#retrieving-multiple-objects-in-batches` | `ActiveRecord/Batches.html#method-i-find_each` |
-| An explicit `select` list omits columns, and reading one raises | `active_record_querying.html#selecting-specific-fields` | `ActiveRecord/QueryMethods.html#method-i-select` |
+| `find_each` batches, and overrides your `order` | `active_record_querying.html#retrieving-multiple-records-in-batches` · 8.0: `active_record_querying.html#retrieving-multiple-objects-in-batches` · 7.2: `active_record_querying.html#retrieving-multiple-objects-in-batches` · 7.1: `active_record_querying.html#retrieving-multiple-objects-in-batches` | `ActiveRecord/Batches.html#method-i-find_each` |
+| An explicit `select` list omits columns, and reading one raises | `active_record_querying.html#selecting-fields` · 8.0: `active_record_querying.html#selecting-specific-fields` · 7.2: `active_record_querying.html#selecting-specific-fields` · 7.1: `active_record_querying.html#selecting-specific-fields` | `ActiveRecord/QueryMethods.html#method-i-select` |
 | Counter caches drift unless backfilled | — | `ActiveRecord/CounterCache/ClassMethods.html#method-i-reset_counters` |
 | `enum` generates predicates, scopes and a values map ‡ probe | — | `ActiveRecord/Enum.html` |
 | Nested attributes, and what `_destroy` permits | — | `ActiveRecord/NestedAttributes/ClassMethods.html` |
@@ -254,8 +267,8 @@ version-sensitive rows carried no mark — including strong parameters, where 8.
 | Concept | Guide | API |
 |---|---|---|
 | `perform_later` enqueue timing is decided by `enqueue_after_transaction_commit` ‡ probe | `active_job_basics.html` | `ActiveJob/Enqueuing/ClassMethods.html#method-i-perform_later` |
-| Arguments are serialized, so a deployed change can meet an old payload ‡ since 7.2 | `active_job_basics.html#supported-types-for-arguments` | `ActiveJob/Serializers.html` |
-| `retry_on` / `discard_on`, and what happens on the last attempt ‡ since 7.2 | `active_job_basics.html#exceptions` | `ActiveJob/Exceptions/ClassMethods.html#method-i-retry_on` |
+| Arguments are serialized, so a deployed change can meet an old payload ‡ since 7.2 | `active_job_basics.html#supported-argument-types-for-perform` · 8.0: `active_job_basics.html#supported-types-for-arguments` · 7.2: `active_job_basics.html#supported-types-for-arguments` · 7.1: `active_job_basics.html#supported-types-for-arguments` | `ActiveJob/Serializers.html` |
+| `retry_on` / `discard_on`, and what happens on the last attempt ‡ since 7.2 | `active_job_basics.html#retrying-or-discarding-failed-jobs` · 8.0: `active_job_basics.html#exceptions` · 7.2: `active_job_basics.html#exceptions` · 7.1: `active_job_basics.html#exceptions` | `ActiveJob/Exceptions/ClassMethods.html#method-i-retry_on` |
 | Testing enqueues rather than running them | `testing.html#testing-jobs` | `ActiveJob/TestHelper.html` |
 
 ## Time, zones and types

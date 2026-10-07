@@ -101,8 +101,14 @@ finding is reported by absence, not by a green tick.
 
 The Elixir half of the same lens. Every other section here asks what the change *does*; this one asks
 how it was built, and its evidence is always a module the diff never touched.
-`report-format.md` § *Coding decisions* owns when this becomes a checkpoint — one per page, ranked
-last, never displacing a behavioural judgment, and **never without a path in this repository to cite**.
+`report-format.md` § *Coding decisions* owns when this becomes a checkpoint — one per departure, ranked
+last, never displacing a behavioural judgment, and **never without a citation**.
+
+**The repository is the only source here for now.** The Rails lens carries a closed list of stack
+conventions, each backed by a catalogue row; this one carries none, because `elixir-docs.md` withholds
+every link until it is verified, and a stack convention with no documentation behind it is the run's
+taste. When that catalogue opens, the list goes here in the same form. Until then the `Y` is this
+repository's own: a line in its convention doc first, a sibling module or populated directory second.
 
 - **A plain `defstruct` module sitting among schemas**, or an `embedded_schema` where a persisted
   `schema` is assumed. `Ecto.Changeset.cast/4` works on both, so the code reads the same; no `Repo`
