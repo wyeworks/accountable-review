@@ -34,6 +34,15 @@
 #   A .cv-note that grades. It is a free-text slot on a node — the third place on this page a
 #   severity word can get in, after GAP and Open question, and the only one with no fixed label.
 #   It says what the path skips. Why that matters is the checkpoint's to say.
+#
+# AND ONE FIGURE THAT IS NOT A CHECKPOINT'S. figure.lifecycle.lc-shift is Context's — the request
+# sequence before and after, drawn once because several checkpoints stand on it. This check reads
+# section 02 for it, because before it did, a figure arriving there was the one on the page nothing
+# looked at. Its rules are the lifecycle's twice plus the three that make the comparison true: the
+# columns start at the same state, exactly one state is lc-moved in each with the same label, and
+# it sits at a different position — a shift where nothing moved has drawn one list twice. The
+# cases that differ and the two-checkpoint earning test are WARNs: both are about what the figure
+# claims, and a page may honestly have one case and a draft may point at a stub.
 
 require_relative "lib/review_map/check"
 require_relative "lib/review_map/vocabulary"
@@ -41,8 +50,11 @@ require_relative "lib/review_map/vocabulary"
 KINDS_DRAWN = %w[chain converge lifecycle structure].freeze
 CP_OPEN  = /<section class="cp/
 CP_CLOSE = %r{</section>}
-# Any figure in a checkpoint, by its FIRST class — a variant class must not hide a kind.
-FIGURE   = %r{<figure class="([^" ]+)[^"]*"[^>]*>(.*?)</figure>}m
+# Any figure, by its FIRST class — a variant class must not hide a kind. The variants follow it.
+FIGURE   = %r{<figure class="([^" ]+)([^"]*)"[^>]*>(.*?)</figure>}m
+CONTEXT  = /<section id="context"/
+SHIFT    = "lc-shift"
+MAX_CASES = 4
 LOC      = /class="path ip-loc"/
 ITEM     = %r{<li\b[^>]*class="([^"]*)"[^>]*>(.*?)</li>}m
 
@@ -62,6 +74,31 @@ def text(html) = ReviewMap.unescape(html.to_s.gsub(/<[^>]*>/, " ")).split.join("
 def first_word(html) = text(html).split.first.to_s.downcase
 def kind_of(classes) = classes.split.find { |c| c.start_with?("ip-") && c != "ip-n" }
 
+# One column of states: the lifecycle's own rules, shared by the plain figure and by each column
+# of the shift. Returns the states so the shift can compare its two columns.
+def lifecycle_states(check, where, body, faults, label: "")
+  states = body.scan(ITEM).select { |cls, _| cls.split.include?("lc-s") }
+  faults << "#{label}#{states.size} state(s) — a lifecycle is #{NODE_CAPS['lifecycle'].minmax.join('–')}" unless NODE_CAPS["lifecycle"].cover?(states.size)
+  states.each_with_index do |(_, inner), n|
+    rel = inner[%r{class="ip-rel"[^>]*>(.*?)</span>}m, 1]
+    faults << "#{label}state 1 carries a transition — it is where the lifecycle starts" if n.zero? && rel
+    next if n.zero?
+
+    if rel.nil?
+      faults << "#{label}state #{n + 1} has no incoming transition"
+      next
+    end
+    faults << "#{label}the transition into state #{n + 1} has no locator — the line that performs it is what shows whether it is guarded" unless rel.scan(LOC).size == 1
+    name = text(rel.sub(%r{<a\b.*?</a>}m, ""))
+    if name.match?(METHOD_NAME)
+      check.maybe("#{where}: #{label}the transition into state #{n + 1} is labelled \"#{name}\" — name the domain action, and leave the method to the locator")
+    end
+  end
+  states
+end
+
+def state_label(inner) = text(inner[%r{<span class="ip-box"[^>]*>(.*?)</span>\s*\z}m, 1] || inner[%r{<b>(.*?)</b>}m, 1])
+
 check = ReviewMap::Check.new(ARGV)
 check.require_input
 
@@ -76,14 +113,26 @@ checkpoints.each_with_index do |cp, i|
   id = html[/<section class="cp[^"]*" id="([^"]+)"/, 1] || "checkpoint #{i + 1}"
   # figure.impact is section 05's and impact-paths.rb grades it; it only reaches here through a
   # fragment with no checkpoint around it.
-  found = html.scan(FIGURE).reject { |kind, _| kind == "impact" }.map { |kind, body| [id, kind, body] }
+  found = html.scan(FIGURE).reject { |kind, _, _| kind == "impact" }.map { |kind, variants, body| [id, kind, variants.split, body] }
   if found.size > 1
-    check.bad("#{id} carries #{found.size} figures (#{found.map { |_, k, _| k }.join(', ')}) — one per checkpoint, of any kind, because two figures for one judgment are two answers to which shape it has")
+    check.bad("#{id} carries #{found.size} figures (#{found.map { |_, k, _, _| k }.join(', ')}) — one per checkpoint, of any kind, because two figures for one judgment are two answers to which shape it has")
   end
   figures.concat(found)
 end
 
-if figures.empty?
+# Context's figure, read from section 02 only. A checkpoint inside it is impossible by the page's
+# order, so nothing here is graded twice.
+context_figures = []
+if source.has?(CONTEXT)
+  ctx = source.section_from(CONTEXT).lines.join
+  context_figures = ctx.scan(FIGURE).map { |kind, variants, body| ["Context", kind, variants.split, body] }
+  if context_figures.size > 1
+    check.bad("Context carries #{context_figures.size} figures — one at most, the request sequence before and after")
+  end
+end
+cp_ids = checkpoints.filter_map { |cp| cp.lines.join[/<section class="cp[^"]*" id="([^"]+)"/, 1] }
+
+if figures.empty? && context_figures.empty?
   if check.kind == "page"
     check.ok("no checkpoint carries a figure — a valid result, and most checkpoints earn none")
   else
@@ -93,13 +142,28 @@ if figures.empty?
   exit
 end
 
-check.ok("at most one figure per checkpoint") if figures.group_by(&:first).values.none? { |fs| fs.size > 1 }
+check.ok("at most one figure per checkpoint") if !figures.empty? && figures.group_by(&:first).values.none? { |fs| fs.size > 1 }
 
 page_has_search = source.has?(/<details class="searched/)
 
-figures.each do |id, kind, body|
-  where = "#{id}'s #{kind}"
+context_figures.each do |id, kind, variants, body|
+  where = "Context's #{kind}"
+  unless kind == "lifecycle" && variants.include?(SHIFT)
+    check.bad("#{where}: figure.#{([kind] + variants).join('.')} is not Context's figure — the one it may hold is figure.lifecycle.#{SHIFT}, and every other figure belongs to the checkpoint whose judgment earned it")
+    next
+  end
+  figures << [id, kind, variants, body]
+end
+
+figures.each do |id, kind, variants, body|
+  shift = kind == "lifecycle" && variants.include?(SHIFT)
+  where = shift ? "#{id}'s shift" : "#{id}'s #{kind}"
   faults = []
+
+  if shift && id != "Context"
+    check.bad("#{where}: figure.lifecycle.#{SHIFT} is Context's figure — a sequence only one checkpoint turns on is that checkpoint's plain lifecycle, and one several turn on is drawn once, above them")
+    next
+  end
 
   unless KINDS_DRAWN.include?(kind)
     check.bad("#{where}: figure.#{kind} is not a checkpoint figure — the four are #{KINDS_DRAWN.join(', ')}, and figure.impact lives in section 05")
@@ -159,27 +223,49 @@ figures.each do |id, kind, body|
     end
 
   when "lifecycle"
-    states = body.scan(ITEM).select { |cls, _| cls.split.include?("lc-s") }
-    faults << "#{states.size} state(s) — a lifecycle is #{NODE_CAPS['lifecycle'].minmax.join('–')}" unless NODE_CAPS["lifecycle"].cover?(states.size)
     faults << "an .ip-aff node — a state is not a file, so unchanged-code has nothing to mean here" if body.match?(/class="[^"]*\bip-aff\b/)
-    states.each_with_index do |(_, inner), n|
-      rel = inner[%r{class="ip-rel"[^>]*>(.*?)</span>}m, 1]
-      faults << "state 1 carries a transition — it is where the lifecycle starts" if n.zero? && rel
-      next if n.zero?
-
-      if rel.nil?
-        faults << "state #{n + 1} has no incoming transition"
-        next
+    if shift
+      columns = body.scan(%r{<div class="lc-row"[^>]*>(.*?)</ol>}m).map(&:first)
+      faults << "#{columns.size} column(s) — a shift is a Before and an After, exactly two" unless columns.size == 2
+      faults << "a back transition — a retry is a case, and goes in ul.lc-cases" if body.include?('class="lc-back"')
+      cols = columns.first(2).each_with_index.map do |col, c|
+        name = text(col[%r{<span class="lc-when"[^>]*>(.*?)</span>}m, 1])
+        faults << "column #{c + 1} has no .lc-when label" if name.empty?
+        lifecycle_states(check, where, col, faults, label: "#{name.empty? ? "column #{c + 1}" : name}: ")
       end
-      faults << "the transition into state #{n + 1} has no locator — the line that performs it is what shows whether it is guarded" unless rel.scan(LOC).size == 1
-      label = text(rel.sub(%r{<a\b.*?</a>}m, ""))
-      if label.match?(METHOD_NAME)
-        check.maybe("#{where}: the transition into state #{n + 1} is labelled \"#{label}\" — name the domain action, and leave the method to the locator")
+      if cols.size == 2
+        firsts = cols.map { |st| st.first ? state_label(st.first[1]) : "" }
+        faults << "the columns start at different states (#{firsts.map { |f| "\"#{f}\"" }.join(' and ')}) — two answers to one question start from the same place" unless firsts.uniq.size == 1
+        moved = cols.map { |st| st.each_index.select { |n| st[n][0].split.include?("lc-moved") } }
+        if moved.any? { |m| m.size != 1 }
+          faults << "#{moved.map(&:size).join(' and ')} moved state(s) — exactly one in each column, because that state is the point of the figure"
+        else
+          labels = moved.each_with_index.map { |(n), c| state_label(cols[c][n][1]) }
+          faults << "the moved state is \"#{labels[0]}\" before and \"#{labels[1]}\" after — it is one state, so one label" unless labels.uniq.size == 1
+          faults << "the moved state sits at position #{moved[0][0] + 1} in both columns — a shift where nothing moved has drawn one list twice" if moved[0][0] == moved[1][0]
+        end
       end
+      cases = body[%r{<ul class="lc-cases"[^>]*>(.*?)</ul>}m, 1]
+      if cases.nil?
+        check.maybe("#{where}: no ul.lc-cases — the figure draws the main path, and a sequence drawn once reads as the only one; say the cases that differ, a line each")
+      elsif (n = cases.scan(/<li\b/).size) > MAX_CASES
+        check.maybe("#{where}: #{n} cases that differ — at most #{MAX_CASES}, one line each; a case needing more is a checkpoint's concern")
+      end
+      caption = body[%r{<figcaption[^>]*>(.*?)</figcaption>}m, 1].to_s
+      pointed = caption.include?('class="ctx-used"') ? caption.scan(/href="#(cp-[^"]+)"/).flatten.uniq : []
+      if pointed.empty?
+        check.maybe("#{where}: no span.ctx-used naming the checkpoints that rely on it — the shift is earned by them, like every Context entry")
+      elsif pointed.size < 2
+        check.maybe("#{where}: only #{pointed.first} relies on it — a sequence one checkpoint turns on is that checkpoint's lifecycle, and Context draws only the shared one")
+      elsif check.kind == "page" && !(dead = pointed - cp_ids).empty?
+        check.maybe("#{where}: points at #{dead.join(', ')}, which this page does not carry")
+      end
+    else
+      lifecycle_states(check, where, body, faults)
+      backs = body.scan(%r{<p class="lc-back"[^>]*>(.*?)</p>}m)
+      faults << "#{backs.size} back transitions — two at most, or the lifecycle is a graph this figure cannot draw" if backs.size > MAX_BACK
+      faults << "a back transition with no locator" if backs.any? { |(b)| !b.match?(LOC) }
     end
-    backs = body.scan(%r{<p class="lc-back"[^>]*>(.*?)</p>}m)
-    faults << "#{backs.size} back transitions — two at most, or the lifecycle is a graph this figure cannot draw" if backs.size > MAX_BACK
-    faults << "a back transition with no locator" if backs.any? { |(b)| !b.match?(LOC) }
 
   when "structure"
     head = body.split('<ul class="st-edges"').first.to_s

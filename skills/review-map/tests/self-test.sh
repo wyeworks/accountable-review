@@ -231,12 +231,19 @@ case_runs_red "the primer header names the component again instead of the stack"
 # Every row here expects zero or reads an order, which is why each one earns a pass: a misspelled
 # pattern also counts zero, and a section in the wrong place still counts one.
 
-# 18. A figure in Context. The before/after flow figure is designed and deferred, and figures.rb
-#     grades only checkpoint figures — so a figure that arrived here would be the one on the page
-#     nothing looks at. Planted as a kind no other row counts, so only the zero can catch it.
+# 18. A second figure in Context. The shift is the one figure it holds, and every other kind
+#     belongs to the checkpoint that earned it — so a chain arriving beside it is a judgment's
+#     mechanism drawn above the judgment. Planted as a kind no other row counts, so only the
+#     count of one can catch it.
 awk '/<dl class="ctx">/ && !d { print "      <figure class=\"flow\"><figcaption>x</figcaption></figure>"; d = 1 } { print }' \
   "$TEMPLATE" > "$WORK/ctx-figure.html"
-case_runs_red "a figure is drawn inside Context" "$WORK/ctx-figure.html" "$SKELETON"
+case_runs_red "a second figure is drawn inside Context" "$WORK/ctx-figure.html" "$SKELETON"
+
+# 18b. An unchanged node in the shift. Same defect as #12, in the one lifecycle the checkpoint
+#      range does not reach, and only the zero can notice it.
+sed 's|<li class="lc-s lc-new"><span class="ip-rel"><i></i>{{REQUEST}}|<li class="lc-s ip-aff"><span class="ip-rel"><i></i>{{REQUEST}}|' \
+  "$TEMPLATE" > "$WORK/shift-aff.html"
+case_runs_red "a state in the shift is drawn as unchanged code" "$WORK/shift-aff.html" "$SKELETON"
 
 # 19. A tier in Context. An entry says what a thing is, not what the change did, so a label on it
 #     says the page is grading how it knows a fact about the repository rather than the change.

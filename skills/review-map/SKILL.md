@@ -861,6 +861,17 @@ into `agenda.md` under `## Context`, each with its one-sentence *is*, its citati
 checkpoint letters that use it; at most five. **No entry is the expected result on most pages**, and
 then the section is omitted rather than stubbed — say *none earned* in `agenda.md` and nowhere else.
 
+**Then ask whether the change moved which request does what** — the request that creates or commits
+something moved, a step was inserted or removed, a check moved from one request to another — **and
+whether two or more checkpoints turn on that sequence.** Both yes, and Context draws it before and
+after as `figure.lifecycle.lc-shift`, in place of the entry that would have said it in words; one
+checkpoint relying on it leaves it to that checkpoint's own figure slot, which 7f already settled. Settle it in
+`agenda.md` the way 7f settles a figure: the shared first state, each column's states with the
+request and the `path:line` behind every transition (the Before column at the base), the one state
+that moved, the case the figure draws, and each case that differs in a clause. A sequence you cannot
+cite a line for at every step is not drawn. `references/report-format.md` § *Topology figures* owns
+the shape.
+
 The trap is a list of what the diff touched. *The controller*, *the plugin*, *the spec* is
 inventory, and the per-layer page arriving under a new heading; an entry no checkpoint letter can be
 written beside was not earned. The other trap is the judgment arriving early: an entry says what a
@@ -1131,8 +1142,10 @@ Everything else about writing holds at every stage:
 - **Figures are components, and there is no `<svg>` on this page.** The template assembles every one:
   the vertical labelled chain — `figure.impact` in section 05, `figure.chain` inside a checkpoint —
   the three topology figures a checkpoint may carry instead of a chain (`figure.converge`,
-  `figure.lifecycle`, `figure.structure`, in checkpoints C to E), and the `dl.ba` before/after pair.
-  Build them from the template's markup, and type a topology figure only from its `agenda.md` block.
+  `figure.lifecycle`, `figure.structure`, in checkpoints C to E), *Context*'s one figure
+  (`figure.lifecycle.lc-shift`, the request sequence before and after), and the `dl.ba` before/after
+  pair. Build them from the template's markup, and type a topology figure only from its `agenda.md`
+  block — the shift from the one step 7k wrote.
   `report-format.md` § *Chains* owns the node kinds, the causal vocabulary and the rule that decides
   which of the two chain figures a given chain is; § *Topology figures* owns the other three; § *Impact
   paths* owns the panel's own caps and owns them alone.

@@ -155,13 +155,19 @@ end
 # a line on every one of them saying so would be the "no context needed" sentence in check form.
 context = check.page.without_comments
 if context.has?(/<section id="context"/)
-  entries = context.section_from(/<section id="context"/).regions(open: /<dd[ >]/, close: %r{</dd>})
+  section = context.section_from(/<section id="context"/)
+  entries = section.regions(open: /<dd[ >]/, close: %r{</dd>})
+  # The shift can stand in for the entry that would have said the sequence in words, so a Context
+  # holding only that figure is earned. figures.rb grades the figure and its own pointer.
+  shift = section.has?(/<figure class="lifecycle[^"]*\blc-shift\b/)
   unpointed = entries.count { |dd| !(dd.has?(/class="ctx-used"/) && dd.has?(/href="#cp-/)) }
   targets = entries.flat_map { |dd| dd.scan(/href="#cp-[^"]+"/) }
                    .filter_map { |m| m[/#(cp-[^"]+)"/, 1] }.uniq
   dead = targets - defined_cps
-  if entries.empty?
-    check.bad("a Context section with no entries — an earned section has at least one; an unearned one is omitted, never left as a heading")
+  if entries.empty? && shift
+    check.ok("Context holds only the request sequence before and after — figures.rb grades it")
+  elsif entries.empty?
+    check.bad("a Context section with no entries — an earned section has at least one, or the shift that replaces one; an unearned one is omitted, never left as a heading")
   elsif unpointed.positive?
     check.maybe("#{unpointed} of #{entries.size} Context entr(ies) name no checkpoint that relies on them — an entry is earned by a checkpoint, and one with no pointer is inventory")
   elsif defined_cps.empty?

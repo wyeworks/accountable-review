@@ -929,10 +929,18 @@ Editing one of these means checking the others still agree.
   rely on it — is that last rule made checkable.
 
   **It renumbered the page**, attention to 03 through the foot to 06, and the rail does not close up
-  when Context is omitted: *01, 03* says a section went, which is true. The before/after flow figure
-  the issue proposed is **deferred**, because `figures.rb` grades only checkpoint figures and a figure
-  here would be the one nothing looks at; `tests/run.sh` counts zero figures inside Context to keep
-  that honest.
+  when Context is omitted: *01, 03* says a section went, which is true.
+
+  **It holds one figure, and only one kind: the shift.** `figure.lifecycle.lc-shift` draws the
+  request sequence before and after, when the change moved *which request does what* and two or more
+  checkpoints turn on that — one checkpoint makes it that checkpoint's plain lifecycle. It is the
+  only figure not owned by a checkpoint, and it waited until `figures.rb` read section 02, because a
+  figure there would otherwise have been the one nothing looks at. **The moved state is filled in
+  both columns**, which is what keeps the comparison when the columns stack on a phone; and **it
+  draws the main path and says so**, with the cases that differ a line each, because a sequence
+  drawn once reads as the only one. `report-format.md` § *Topology figures* owns its shape,
+  `figures.rb` grades it behind six `golden/figures-shift-*` fixtures and `figures-context-chain`,
+  and `tests/run.sh` counts exactly one figure in Context.
 
   Seven files agree: `report-format.md` § *Section 2* owns the rules **alone**, with § *One canonical
   home*, § *The agenda budget*, § *Build state*, § *Mentor mode* and § *A future full mode* pointing

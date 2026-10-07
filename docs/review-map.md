@@ -23,7 +23,10 @@ does not earn omitted outright.
   setting introduces. One to five entries, each a sentence or two on what the thing **is**, a
   citation, and a pointer at the checkpoints that rely on it. It never says what the change did to
   the thing — that is the checkpoint's — and it is not `--mentor`: a primer teaches the framework,
-  Context names the repository, and no flag turns it on or off.
+  Context names the repository, and no flag turns it on or off. When the change moved *which request
+  does what* and several checkpoints turn on it, Context also draws that sequence before and after,
+  two columns over the same states with the one that moved filled in both, and lists, a line each,
+  the cases that run differently from the path it draws.
 - **What needs your attention** — the page's core. Three to five **review checkpoints** for each
   independent change the PR makes — seven on the page at the outside — each one
   judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the

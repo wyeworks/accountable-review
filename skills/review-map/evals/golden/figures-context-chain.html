@@ -1,0 +1,31 @@
+<!-- PLANTED: a checkpoint's chain drawn in Context, where nothing earned it. -->
+<section id="context">
+  <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
+  <h2>What the judgments below rely on</h2>
+  <figure class="chain">
+    <ol class="ip-path">
+      <li class="ip-n ip-chg"><span class="ip-box"><b>code verified</b><a class="path ip-loc" href="#">app/services/email_login_code/redeem.rb:42</a></span></li>
+      <li class="ip-n ip-step"><span class="ip-rel"><i></i>calls</span><span class="ip-box"><b>username policy</b><a class="path ip-loc" href="#">app/services/email_login_code/redeem.rb:136</a></span></li>
+      <li class="ip-n ip-out"><span class="ip-rel"><i></i>returns</span><span class="ip-box"><b>username required</b></span></li>
+    </ol>
+    <figcaption>What the first code request now does.</figcaption>
+  </figure>
+  <dl class="ctx">
+    <dt>discourse-captcha</dt>
+    <dd>A plugin that wraps the session controller's code-login action and refuses the request when no CAPTCHA was solved.
+      <a class="path" href="#">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:5-15</a>
+      <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
+  </dl>
+</section>
+<section id="attention">
+  <section class="cp" id="cp-a">
+    <span class="lbl lbl-wide">Checkpoint A</span>
+    <h3>Does every request that creates an email-code account still pass CAPTCHA?</h3>
+    <p>The plugin now checks only the request that carries a username.</p>
+  </section>
+  <section class="cp" id="cp-b">
+    <span class="lbl lbl-wide">Checkpoint B</span>
+    <h3>Does a rejected username leave the code unspent?</h3>
+    <p>The code is redeemed on the request that creates the account.</p>
+  </section>
+</section>
