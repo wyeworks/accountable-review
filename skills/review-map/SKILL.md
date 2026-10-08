@@ -617,7 +617,15 @@ the departure.**
 The form is *the PR chose X; this codebase already does Y for the same job; is X deliberate?* — a
 value object under `app/models` where `app/services/` already holds four of its kind, a query built in
 a controller where `app/queries/` exists, a hand-rolled guard where a policy class was waiting, a
-`*Manager` among a dozen `*Service`s. Step 2 collected the conventions; this is where they are spent.
+`*Manager` among a dozen `*Service`s, a ranking or lookup table re-declared beside the module that
+already owns it. Step 2 collected the conventions; this is where they are spent.
+
+**Placement is one axis of three, and the one a run checks first and stops at.** The definition
+above names three: where a thing was put, what kind of object it is, and which existing abstraction
+it went around. A run that confirms the new code sits where its siblings sit has answered the first
+and asked nothing about the third — and the third is the departure a reviewer who knows the codebase
+spots, because it is a second source of truth for a fact the app already defines. When a note
+already cites the module that owns that fact, the departure is in front of you.
 
 **The bar is a citation, from one of two sources.** The question exists only if you can point at
 the answer it departs from: **this repository's decision** — a line in its convention doc, else a
@@ -1496,6 +1504,7 @@ delta     app/queries/active.rb          the paths the new commits touched
 cp        cp-a   carry   -               no delta path appears inside that checkpoint
 cp        cp-b   redo    cites app/...   it does, so the judgment is re-derived
 ctx       Approval signup  redo  cites app/...   a Context entry's one citation moved, so its *is* is re-read
+ctx       lc-shift         carry -               the before-and-after figure, when Context draws one
 excerpt   app/queries/active.rb  regen   quoted from a file the delta moved
 excerpt   app/models/project.rb  keep    quoted from one it did not
 ```
@@ -1515,7 +1524,7 @@ longer carried and goes through step 8 like anything else.
 | 4 · Derive what changed | **Narrowed**: ask only whether the delta moves the semantic delta or a stated limit. The metric strip is recomputed from step 3 |
 | 5 · Trace | **Narrowed to the delta.** No re-tracing of carried flows. This is the whole saving |
 | 6 · Notes and falsifiers | **Narrowed**: notes for delta-touched flows only, falsifiers only at those notes, cap of six unchanged |
-| 7 · Synthesise | 7a re-asked cheaply; 7b and 7c over delta candidates only; **7d re-ranks the whole agenda** and **7e enforces the caps over the whole agenda**; 7f–7j for touched checkpoints only; **7k over the whole agenda**, re-opening only the entries the plan marks `redo`. *Read the code in this order* is rewritten whole if the agenda moved at all |
+| 7 · Synthesise | 7a re-asked cheaply; 7b and 7c over delta candidates only; **7d re-ranks the whole agenda** and **7e enforces the caps over the whole agenda**; 7f–7j for touched checkpoints only; **7k over the whole agenda**, re-opening only the entries and figure the plan marks `redo`. *Read the code in this order* is rewritten whole if the agenda moved at all |
 | 8 · Verify | **In full and unconditionally, for everything written or re-derived.** Never for carried material |
 | 9 · Write | `Edit`s only. No skeleton, no banner, `Revision` cell last |
 | 10 · Complete and gate | **In full, always** |
@@ -1532,6 +1541,12 @@ four conditions in `references/report-format.md` § *Section 2*, applied to the 
 stands: an entry whose every checkpoint was deleted goes; an entry a redone checkpoint now explains
 in its own clause goes, because condition 2 fails; a new or redone checkpoint may earn an entry the
 previous page did not have; and five is still the cap over the whole section.
+
+The before-and-after figure is decided the same way and has its own plan row, `lc-shift`. Marked
+`redo`, a transition it draws cites a file the delta moved, so its columns are re-derived from the
+lines rather than kept. Carried or not, it stands only while two or more checkpoints still turn on
+the sequence: below two it leaves Context, and the one checkpoint left relying on it takes the
+sequence in its own figure slot, which makes that checkpoint re-derived rather than carried.
 
 Step 5's narrowing is the one place to be honest with yourself. The delta is the set of files the
 new commits touched, and tracing what *those* reach is the work — not re-confirming what the
@@ -1553,7 +1568,7 @@ previous map already traced.
   entry, and nothing marks where it was. § *The review checkpoint* owns that rule. **Its pointer
   goes with it**: every `span.ctx-used` that named it drops that link, and a Context entry left
   naming no checkpoint is deleted, because a pointer at an id the page no longer carries is an entry
-  this page did not earn.
+  this page did not earn. The before-and-after figure's caption pointer loses it the same way.
 - **Sections 02 and 05 may need adding rather than filling, and 02 may need removing.** If the
   previous page omitted 05 and the delta now crosses into unchanged code, or omitted 02 and step 7k
   now earns an entry, the section and its rail entry are new — omitted is not pending, so there is

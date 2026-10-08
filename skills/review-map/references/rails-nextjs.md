@@ -101,7 +101,8 @@ it is the checkpoint's one doc link.
   raise at load, or do nothing at all if the concern guards on `respond_to?`.
 - **A mechanism the app already has.** A hand-rolled authorization check where a policy class exists,
   a bespoke query object where a scope would compose, a second serializer shape for a resource that
-  already has one. The maintenance cost is the two diverging, and that is the consequence worth naming.
+  already has one, an ordering of roles or statuses declared again beside the module that already
+  ranks them. The maintenance cost is the two diverging, and that is the consequence worth naming.
 - **A name that departs from its siblings** — a `*Manager` in an app of `*Service`s, a `Fetcher` among
   `Repository`s. Thin on its own; worth a clause inside a question that has more behind it.
 

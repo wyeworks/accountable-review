@@ -381,11 +381,19 @@ done < "$TMP/cps"
 # <section class="cp">, so the loop above never sees it. Each entry is one dt/dd pair with one
 # citation, and what it says the thing IS can stop being true when the delta moves that file —
 # while every checkpoint pointing at it carries, because none of them cites the file itself.
-# Keyed by the dt text: an entry has no id, and its name is what a run finds it by.
+# Keyed by the dt text: an entry has no id, and its name is what a run finds it by. The
+# before-and-after figure, when Context draws one, is one more row keyed lc-shift.
 awk '
   /<section id="context"/ { inside = 1; buf = "" }
   inside { gsub(/\t/, " "); buf = buf " " $0 }
   inside && /<\/section>/ {
+    # The before-and-after figure is Context too, and its locators are outside every entry. One
+    # row for it, and cut out of the buffer first, so an entry written after it does not inherit
+    # its citations.
+    if (match(buf, /<figure[^>]*lc-shift.*<\/figure>/)) {
+      print "lc-shift\t" substr(buf, RSTART, RLENGTH)
+      buf = substr(buf, 1, RSTART - 1) " " substr(buf, RSTART + RLENGTH)
+    }
     n = split(buf, parts, /<dt/)
     for (i = 2; i <= n; i++) {
       entry = parts[i]; sub(/^[^>]*>/, "", entry)

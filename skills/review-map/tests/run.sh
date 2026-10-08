@@ -619,7 +619,10 @@ cpage() {
 <dt>Lock &amp; bundle</dt>
 <dd>What it is. <a class="path" href="#">api/Gemfile.lock:1</a>
   <span class="ctx-used">Used by <a href="#cp-c">Checkpoint C</a></span></dd>
-</dl></section>
+</dl>
+<figure class="lifecycle lc-shift"><div class="lc-pair">
+  <a class="path ip-loc" href="#">app/queries/active.rb:1</a></div></figure>
+</section>
 <details class="searched"><ul class="sr-list">
 <li><code>$1</code> <span class="sr-r">a clause</span></li>
 </ul></details>
@@ -665,6 +668,9 @@ assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-c	carry	-$')" "1" "a checkpo
 # here while the entry it relies on cites the file the delta moved. Keyed by the entry's name.
 assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Active scope	redo	cites app/queries/active.rb$')" "1" "a Context entry citing a delta path is re-derived, though the checkpoint using it carries"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Lock & bundle	carry	-$')" "1" "a Context entry citing nothing in the delta is carried, named by its unescaped dt"
+# The figure sits after the last entry and cites the delta path: it is its own row, and the entry
+# before it does not inherit its citation — which the Lock & bundle row above already asserts.
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	lc-shift	redo	cites app/queries/active.rb$')" "1" "Context's before-and-after figure citing a delta path is re-derived"
 
 # And the trap itself, which needs a delta that is a PREFIX of a cited path rather than merely
 # unrelated to it: api/Gemfile changed, and cp-c cites api/Gemfile.lock. A substring test marks

@@ -354,6 +354,11 @@ case_carry_red "the path test is a substring match rather than a whole token" "$
 sed 's|^  plan_row ctx "\$name"$|  reason=-; plan_row ctx "$name"|' "$CARRY_PLAN" > "$WORK/ctx-always-carry.sh"
 case_carry_red "a Context entry citing a delta path is carried" "$WORK/ctx-always-carry.sh"
 
+# 31b. The figure's citations stay in the buffer, so the entry written above it inherits them and
+#      is re-derived for a file it never cites.
+sed 's|^      buf = substr(buf, 1, RSTART - 1) " " substr(buf, RSTART + RLENGTH)$||' "$CARRY_PLAN" > "$WORK/ctx-figure-leaks.sh"
+case_carry_red "the before-and-after figure's citations leak into the last Context entry" "$WORK/ctx-figure-leaks.sh"
+
 # 32. P1. A rebased branch's "delta" is a diff between two histories rather than the commits
 #     someone pushed, and every carry decision downstream is then made against the wrong set.
 awk '/^if ! git merge-base --is-ancestor/ { skip = 3 } skip { skip--; next } { print }' \
