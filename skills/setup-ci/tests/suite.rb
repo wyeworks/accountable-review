@@ -596,6 +596,28 @@ class SetupCiSuite
     write(File.join(c, "mentor-bad.yml"), "review_map:\n  mentor: nope\n")
     assert_eq sh(@read_cfg, File.join(c, "mentor-bad.yml")).code, 1, "a mentor value that is not a stack is an error"
 
+    # The theme is how the page looks and nothing about what is on it, so it is never a flag on the
+    # skill: page-skeleton.sh reads it from the checkout, and the adapter passes it through the
+    # environment only so a --config file kept elsewhere still counts.
+    assert_not_in default, "ACCOUNTABLE_REVIEW_THEME", "no theme is passed when the config names none"
+    assert_not_in default, "--theme",               "and the theme is never a flag on the skill"
+    write(File.join(c, "theme.yml"), "review_map:\n  theme: field-notes\n")
+    themed = inv.call("--repo-dir", c, "--config", File.join(c, "theme.yml"), chdir: c).out
+    assert_in themed, "ACCOUNTABLE_REVIEW_THEME=field-notes", "a theme in the config file reaches the run's environment"
+    assert_not_in themed, "--theme",                "still as the environment, never as a flag"
+    write(File.join(c, "theme-bad.yml"), "review_map:\n  theme: dark\n")
+    assert_eq sh(@read_cfg, File.join(c, "theme-bad.yml")).code, 1, "a theme that is not one of the three is an error"
+    # read-config.sh lists the names, and the skill's themes directory holds the files. Two places
+    # for one list, because the skill ships without this script — so the two are compared here.
+    have = Dir.children(File.join(@root, "skills/review-map/references/themes"))
+              .filter_map { |f| f.delete_suffix(".html") if f.end_with?(".html") }.sort
+    listed = read(@read_cfg)[/^#     theme: daylight *# (.*)  \(default daylight\)$/, 1].to_s.delete("|").split.sort
+    assert_eq listed, have,                         "read-config.sh names exactly the theme files the skill ships"
+    have.each do |t|
+      write(File.join(c, "theme-each.yml"), "review_map:\n  theme: #{t}\n")
+      assert_eq sh(@read_cfg, File.join(c, "theme-each.yml")).code, 0, "read-config.sh accepts the theme file #{t}"
+    end
+
     write(File.join(c, "bad.yml"), "review_map:\n  retention_day: 14\n")
     assert_eq sh(@read_cfg, File.join(c, "bad.yml")).code, 1, "a misspelled key is an error, not a shrug"
     # There is no page-shape key either. `mode` is not read, not validated and not tolerated — it

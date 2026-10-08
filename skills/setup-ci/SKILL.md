@@ -217,6 +217,16 @@ bother under about fifty lines* is asking for `trivial_lines: 0` or `trivial_lin
 how big a change has to be is run-time configuration, not one of step 3's when-decisions, and
 `references/config.md` says why. Write the key, and only the one they moved.
 
+**Offer the look, once.** The page comes in three themes — **Daylight** (the default: cool, quiet,
+sans-serif), **Workshop** (square and bold, hard frames, highlighter tints) and **Field Notes** (warm
+paper, a serif display, handwritten labels). Every page carries all three and each reader can switch
+from the page's *Aa* menu, so this only picks the one a page opens in. Ask which one the team wants, in the same block as
+anything else you are confirming, and write `theme: workshop` or `theme: field-notes` under
+`review_map:` only if they pick one of those. Daylight is the absence of the key, by the rule above.
+The skill reads this key itself from the repository, so the choice applies to a person's own
+`/accountable-review:review-map` runs as well as to CI's — say so, because it is the one setting in
+the file that reaches past the workflow.
+
 The config is read **at run time**, by the CI scripts, from the repository — so changing it later
 does not mean regenerating the workflow. That is worth telling the user in step 6.
 

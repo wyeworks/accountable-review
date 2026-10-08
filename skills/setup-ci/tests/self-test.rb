@@ -121,6 +121,19 @@ CASES = [
            edit: sub('else fail("unknown key `" key "` under `review_map:`")', "else next"),
            sections: %i[config], expect: "a misspelled key is an error, not a shrug"),
 
+  # New with the themes, which arrived after the port: the parser's list of names and the skill's
+  # themes directory are two places for one list, and a theme dropped from the first is a theme a
+  # team can pick in the skill and never in CI.
+  Case.new(desc: "the config parser stops accepting a theme the skill ships", file: READ_CONFIG,
+           edit: sub(' && val != "field-notes")', ")"),
+           sections: %i[config], expect: "read-config.sh accepts the theme file field-notes"),
+
+  # And a theme read from a --config file kept outside the checkout, parsed and then dropped: the
+  # skill reads the checkout's file by itself, so the environment is the only way that one arrives.
+  Case.new(desc: "a theme in a --config file never reaches the run", file: GENERATE,
+           edit: sub(/^  set -- env "ACCOUNTABLE_REVIEW_THEME=\$THEME" "\$@"$/, "  :"),
+           sections: %i[config], expect: "a theme in the config file reaches the run's environment"),
+
   Case.new(desc: "the artifact is not named for the revision", file: "ci/delivery/github-artifact.sh",
            edit: sub('name="accountable-review-pr-$AR_PR-$short"', 'name="accountable-review-pr-$AR_PR"'),
            sections: %i[delivery], expect: "the artifact is named for the PR and the revision"),

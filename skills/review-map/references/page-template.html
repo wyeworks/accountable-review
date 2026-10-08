@@ -2,7 +2,9 @@
      Four SKELETON markers below divide it in two. Everything inside the HEAD and TAIL
      ranges is emitted verbatim into the page by scripts/page-skeleton.sh, so a run never
      reads it and never types it: every colour on a published page lives in there, which is
-     why no model declares one. Everything between HEAD:END and TAIL:START is the markup a
+     why no model declares one. A fifth marker, the THEME line inside the HEAD range, is
+     replaced by one file from references/themes/ — so the colours live in that file, and
+     reach the page the same way, emitted rather than typed. Everything between HEAD:END and TAIL:START is the markup a
      run does read, with page-skeleton.sh --markup.
 
      Each marker is ONE line and its own comment, because extraction is a line range over
@@ -28,9 +30,11 @@
   horizontal overflow, wide blocks scroll in their own container, and all three
   theme states resolve.
 
-  Design language: "PR review interface redesign". Warm paper ground, Fraunces
-  at weight 400 for display, and FOUR semantic colour families over one shared
-  five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
+  Design language: "PR review interface redesign", in one of three themes —
+  Daylight (the default), Workshop or Field Notes — chosen by review_map.theme
+  in the repository's .accountable-review.yml. A theme decides typefaces, radii,
+  hues and a few label treatments; every theme keeps FOUR semantic colour
+  families over one shared five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
   the diff does not touch, plum for provenance. Each one means one thing and the
   token block says which; a family used outside its rule stops carrying meaning
   everywhere else. A fifth ramp, --primer-*, is the exception that proves that
@@ -49,7 +53,7 @@
   classic unreadable-artifact bug. The three
   states are: explicit dark, explicit light, and the unstamped default that most
   viewers actually get, where only prefers-color-scheme applies.
-  The source design is light-only; the dark half below is ours, and the pair
+  The source designs are light-only; each theme's dark half is ours, and the pair
   that inverts (.ip-out, the filled node that ends a chain) is written against
   tokens precisely so it keeps inverting relative to the page.
 
@@ -186,26 +190,26 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..600,0,0;1,9..144,400,0,0&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap">
 
 <style>
 /* ============================================================
-   Tokens. Warm paper neutrals, and FOUR SEMANTIC FAMILIES that
-   share one ramp shape: every family is a single hue at fixed
-   lightness and chroma per slot, so no two can drift apart in
-   weight, and the dark half is one arithmetic reflection of the
-   light rather than a second hand-picked set.
-
-     light   bg .975/.014   bg-2 .955/.028   rule .885/.045
-             rule-2 .79/.065   ink .45/.105
-     dark    bg .235/.028   bg-2 .275/.045   rule .42/.055
-             rule-2 .52/.075   ink .80/.09
+   Tokens. NONE ARE DECLARED IN THIS BLOCK: every token — the
+   neutrals, the type stacks, the radii and the colour families —
+   comes from the theme page-skeleton.sh writes in at the theme
+   marker below this style block. What a theme may not
+   change is the rule that follows. Every theme carries FOUR
+   SEMANTIC FAMILIES that share one ramp shape: each family is a
+   single hue at fixed lightness and chroma per slot, so no two can
+   drift apart in weight, and the dark half is a reflection of the
+   light rather than a second hand-picked set. The hue numbers below
+   are approximate and move a few degrees between themes; what each
+   family means does not move at all.
 
    WHAT EACH FAMILY IS ALLOWED TO MEAN. The rule is the system —
    a family used outside it stops carrying meaning everywhere
    else on the page, which is the only thing colour is doing here.
 
-     --nav-*        slate 252   You can click it. Rail links,
+     --nav-*        slate        You can click it. Rail links,
                                 citations, paths, the progress bar,
                                 in-page anchors. Nothing that is not
                                 a link may be slate, which is why
@@ -213,11 +217,11 @@
                                 selection colour any more: they were
                                 two off-system hex values doing what
                                 two slots of this ramp already do.
-     --gap-*        ochre  72   Something is missing and the page is
+     --gap-*        ochre        Something is missing and the page is
                                 saying so: p.open, the inferred tier,
                                 the build-state banner. NEVER a
                                 severity and never a grade.
-     --unchanged-*  teal  200   This code is not in the diff. The
+     --unchanged-*  teal         This code is not in the diff. The
                                 `from unchanged code` tier, the
                                 dashed .ip-aff node and its legend
                                 key, the "Affected, not changed"
@@ -227,7 +231,7 @@
                                 to add to a page with no severity
                                 vocabulary. Never on a link, so it
                                 never competes with slate.
-     --prov-*       plum  318   How a thing is known, never what it
+     --prov-*       plum         How a thing is known, never what it
                                 means: the excerpt .tag, the searches
                                 block, the evidence foot, the probe
                                 label. The quietest family on purpose
@@ -237,7 +241,7 @@
    AND ONE RAMP THAT IS NOT A FAMILY, because it has no meaning to
    spend:
 
-     --primer-*     red    28   The frame of aside.primer, and of
+     --primer-*     red          The frame of aside.primer, and of
                                 nothing else on this page. Not a
                                 fifth meaning — a reminder of which
                                 framework is speaking, in the red
@@ -268,218 +272,6 @@
    answer is a variant class on the aside — never a colour a run
    types, and never a second component.
    ============================================================ */
-:root {
-  --ground:      #f6f5f1;
-  --surface:     #faf9f6;
-  --surface-hi:  #ffffff;
-  --surface-2:   #f1efe9;
-  --surface-3:   #fbfaf7;
-  --chip:        #eceae3;
-
-  --ink:         #1b1a17;
-  --ink-2:       #26251f;
-  --ink-3:       #3d3b36;
-  --muted:       #6f6c65;
-  --faint:       #8d8a82;
-  --fainter:     #a5a29a;
-  --on-ink:      #f2f0ea;
-  --on-ink-code: #dcd8cd;
-
-  --rule:        #e5e1d8;
-  --rule-soft:   #ece8e0;
-  --rule-strong: #cec9be;
-  --rule-dash:   #b9b4a8;
-  --rule-card:   #d8d3c8;
-
-  --nav-bg:            oklch(0.975 0.014 252);
-  --nav-bg-2:          oklch(0.955 0.028 252);
-  --nav-rule:          oklch(0.885 0.045 252);
-  --nav-rule-2:        oklch(0.79  0.065 252);
-  --nav-ink:           oklch(0.45  0.105 252);
-  --nav-ink-hi:        oklch(0.36  0.12  252);
-
-  --gap-bg:            oklch(0.975 0.014 72);
-  --gap-bg-2:          oklch(0.955 0.028 72);
-  --gap-rule:          oklch(0.885 0.045 72);
-  --gap-rule-2:        oklch(0.79  0.065 72);
-  --gap-ink:           oklch(0.45  0.105 72);
-
-  --unchanged-bg:      oklch(0.975 0.014 200);
-  --unchanged-bg-2:    oklch(0.955 0.028 200);
-  --unchanged-rule:    oklch(0.885 0.045 200);
-  --unchanged-rule-2:  oklch(0.79  0.065 200);
-  --unchanged-ink:     oklch(0.45  0.105 200);
-
-  --prov-bg:           oklch(0.975 0.014 318);
-  --prov-bg-2:         oklch(0.955 0.028 318);
-  --prov-rule:         oklch(0.885 0.045 318);
-  --prov-rule-2:       oklch(0.79  0.065 318);
-  --prov-ink:          oklch(0.45  0.105 318);
-
-  --primer-bg:         oklch(0.975 0.014 28);
-  --primer-bg-2:       oklch(0.955 0.028 28);
-  --primer-rule:       oklch(0.885 0.045 28);
-  --primer-rule-2:     oklch(0.79  0.065 28);
-  --primer-ink:        oklch(0.45  0.105 28);
-
-  --ex-add:      #e6efe6;
-  --add-sig:     #3f6b45;
-  --ex-del:      #f6e7e3;
-  --del-sig:     #a4453a;
-
-  /* Syntax tint for an unchanged excerpt. Applied at runtime by the page's
-     script — see the excerpt block below. Low chroma on purpose: this page
-     already spends colour on meaning (accent = navigation, ochre = a stated
-     gap, green/red = added and removed), and code that glows competes with
-     all three. Comments stay the quietest thing in the block. */
-  --syn-key:     oklch(0.44 0.12 318);
-  --syn-str:     oklch(0.46 0.09 150);
-  --syn-com:     oklch(0.60 0.02 80);
-  --syn-name:    oklch(0.45 0.09 235);
-  --syn-num:     oklch(0.50 0.10 50);
-
-  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
-  --mono:    'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-/* The unstamped default most viewers get: only prefers-color-scheme applies,
-   and an explicit light choice must still beat a dark OS. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground:      #14130f;
-    --surface:     #1b1a16;
-    --surface-hi:  #201f1a;
-    --surface-2:   #26241f;
-    --surface-3:   #191814;
-    --chip:        #2b2924;
-
-    --ink:         #ece9e1;
-    --ink-2:       #ddd9cf;
-    --ink-3:       #c2bdb1;
-    --muted:       #9c968a;
-    --faint:       #837d72;
-    --fainter:     #6b665c;
-    --on-ink:      #14130f;
-    --on-ink-code: #3d3b36;
-
-    --rule:        #302e27;
-    --rule-soft:   #292720;
-    --rule-strong: #423f36;
-    --rule-dash:   #4d4940;
-    --rule-card:   #383529;
-
-    --nav-bg:            oklch(0.235 0.028 252);
-    --nav-bg-2:          oklch(0.275 0.045 252);
-    --nav-rule:          oklch(0.42  0.055 252);
-    --nav-rule-2:        oklch(0.52  0.075 252);
-    --nav-ink:           oklch(0.80  0.09  252);
-    --nav-ink-hi:        oklch(0.88  0.075 252);
-
-    --gap-bg:            oklch(0.235 0.028 72);
-    --gap-bg-2:          oklch(0.275 0.045 72);
-    --gap-rule:          oklch(0.42  0.055 72);
-    --gap-rule-2:        oklch(0.52  0.075 72);
-    --gap-ink:           oklch(0.80  0.09  72);
-
-    --unchanged-bg:      oklch(0.235 0.028 200);
-    --unchanged-bg-2:    oklch(0.275 0.045 200);
-    --unchanged-rule:    oklch(0.42  0.055 200);
-    --unchanged-rule-2:  oklch(0.52  0.075 200);
-    --unchanged-ink:     oklch(0.80  0.09  200);
-
-    --prov-bg:           oklch(0.235 0.028 318);
-    --prov-bg-2:         oklch(0.275 0.045 318);
-    --prov-rule:         oklch(0.42  0.055 318);
-    --prov-rule-2:       oklch(0.52  0.075 318);
-    --prov-ink:          oklch(0.80  0.09  318);
-
-    --primer-bg:         oklch(0.235 0.028 28);
-    --primer-bg-2:       oklch(0.275 0.045 28);
-    --primer-rule:       oklch(0.42  0.055 28);
-    --primer-rule-2:     oklch(0.52  0.075 28);
-    --primer-ink:        oklch(0.80  0.09  28);
-
-    --ex-add:      #1b2a1d;
-    --add-sig:     #7fbf8c;
-    --ex-del:      #33201d;
-    --del-sig:     #e0918a;
-
-    --syn-key:     oklch(0.79 0.10 318);
-    --syn-str:     oklch(0.79 0.09 150);
-    --syn-com:     oklch(0.63 0.02 80);
-    --syn-name:    oklch(0.80 0.08 235);
-    --syn-num:     oklch(0.79 0.09 50);
-  }
-}
-
-/* The explicit toggle, so it wins in the other direction too. */
-:root[data-theme="dark"] {
-  --ground:      #14130f;
-  --surface:     #1b1a16;
-  --surface-hi:  #201f1a;
-  --surface-2:   #26241f;
-  --surface-3:   #191814;
-  --chip:        #2b2924;
-
-  --ink:         #ece9e1;
-  --ink-2:       #ddd9cf;
-  --ink-3:       #c2bdb1;
-  --muted:       #9c968a;
-  --faint:       #837d72;
-  --fainter:     #6b665c;
-  --on-ink:      #14130f;
-  --on-ink-code: #3d3b36;
-
-  --rule:        #302e27;
-  --rule-soft:   #292720;
-  --rule-strong: #423f36;
-  --rule-dash:   #4d4940;
-  --rule-card:   #383529;
-
-  --nav-bg:            oklch(0.235 0.028 252);
-  --nav-bg-2:          oklch(0.275 0.045 252);
-  --nav-rule:          oklch(0.42  0.055 252);
-  --nav-rule-2:        oklch(0.52  0.075 252);
-  --nav-ink:           oklch(0.80  0.09  252);
-  --nav-ink-hi:        oklch(0.88  0.075 252);
-
-  --gap-bg:            oklch(0.235 0.028 72);
-  --gap-bg-2:          oklch(0.275 0.045 72);
-  --gap-rule:          oklch(0.42  0.055 72);
-  --gap-rule-2:        oklch(0.52  0.075 72);
-  --gap-ink:           oklch(0.80  0.09  72);
-
-  --unchanged-bg:      oklch(0.235 0.028 200);
-  --unchanged-bg-2:    oklch(0.275 0.045 200);
-  --unchanged-rule:    oklch(0.42  0.055 200);
-  --unchanged-rule-2:  oklch(0.52  0.075 200);
-  --unchanged-ink:     oklch(0.80  0.09  200);
-
-  --prov-bg:           oklch(0.235 0.028 318);
-  --prov-bg-2:         oklch(0.275 0.045 318);
-  --prov-rule:         oklch(0.42  0.055 318);
-  --prov-rule-2:       oklch(0.52  0.075 318);
-  --prov-ink:          oklch(0.80  0.09  318);
-
-  --primer-bg:         oklch(0.235 0.028 28);
-  --primer-bg-2:       oklch(0.275 0.045 28);
-  --primer-rule:       oklch(0.42  0.055 28);
-  --primer-rule-2:     oklch(0.52  0.075 28);
-  --primer-ink:        oklch(0.80  0.09  28);
-
-  --ex-add:      #1b2a1d;
-  --add-sig:     #7fbf8c;
-  --ex-del:      #33201d;
-  --del-sig:     #e0918a;
-
-  --syn-key:     oklch(0.79 0.10 318);
-  --syn-str:     oklch(0.79 0.09 150);
-  --syn-com:     oklch(0.63 0.02 80);
-  --syn-name:    oklch(0.80 0.08 235);
-  --syn-num:     oklch(0.79 0.09 50);
-}
-
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -496,12 +288,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 }
 
 /* ============================================================
-   Type. Fraunces is variable: SOFT and WONK are pinned off —
-   WONK gives it a swashy single-storey g, which is the wrong
-   register for a review document and is on by default at some
-   weights. opsz follows the size, which is the whole point of
-   the face. Display weight is 400 everywhere; the design rests
-   on that not reading as decorative, so do not reach for 700.
+   Type. The faces are the theme's — --display, --body, --mono —
+   and so is the display weight: each theme sets its own on the
+   headings in its overrides. The variation settings below are
+   for a variable display face with SOFT and WONK axes (WONK gives
+   a swashy single-storey g, the wrong register for a review
+   document); a theme whose face has neither resets them to
+   normal. opsz follows the size wherever the face has it.
    ============================================================ */
 h1, h2, h3, h4 {
   font-family: var(--display); font-weight: 400; margin: 0; text-wrap: pretty;
@@ -777,7 +570,7 @@ pre.probe {
    for this component alone. The reason is the reader it is for:
    someone new to the stack, who needs to recognise the block that
    was written for them before reading a word of it. A hue does
-   that and a heading does not. The token block owns why a page
+   that and a heading does not. The Tokens comment owns why a page
    with no severity vocabulary can afford a red — it is attached to
    no claim, so it cannot be read as a verdict — and the rule that
    keeps it honest is that the frame may never spread. Red on
@@ -1466,8 +1259,83 @@ figure { margin: 0; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
 figcaption strong { color: var(--ink-3); }
 
+/* ============================================================
+   The appearance menu. Built by the tail script into the masthead's
+   first line, never typed by a run: a reader's control over how
+   the page looks — which theme, and light, dark or the system's
+   choice. It changes no content, and it is not a badge: it names
+   the three looks because it offers them, the way a font menu names
+   fonts. Hidden in print, absent without JavaScript.
+
+   The swatches are the one place colour literals sit outside a
+   theme file, and deliberately: each previews ONE theme and must
+   look the same whichever theme is active and in either mode, so a
+   token — which changes with both — is exactly the wrong tool.
+   ============================================================ */
+.rc { margin-left: auto; position: relative; text-transform: none; letter-spacing: 0; }
+.rc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; font-family: var(--body); font-size: 13px; line-height: 1; color: var(--ink); background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); cursor: pointer; }
+.rc-btn b { font-weight: 700; }
+.rc-btn .rc-i { color: var(--ink-3); font-size: 12px; }
+.rc-btn:hover { background: var(--surface-2); }
+.rc-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 90; width: 260px; max-width: calc(100vw - 32px); padding: 12px; display: none; flex-direction: column; gap: 10px; background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); box-shadow: 0 12px 32px rgba(0,0,0,.16); }
+.rc.rc-on .rc-pop { display: flex; }
+.rc-h { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.rc-styles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rc-styles button { display: flex; flex-direction: column; gap: 6px; padding: 6px; font-family: var(--body); font-size: 12px; line-height: 1.2; text-align: left; color: var(--ink-3); background: none; border: 1px solid var(--rule); border-radius: var(--r); cursor: pointer; }
+.rc-styles button:hover { border-color: var(--ink-3); color: var(--ink); }
+.rc-styles button.on { border: 2px solid var(--ink); padding: 5px; color: var(--ink); font-weight: 600; }
+.rc-sw { display: block; height: 30px; }
+.rc-sw[data-sw="daylight"] { background: linear-gradient(135deg, #f7f8fa 50%, #3b6ef5 50%); border-radius: 5px; box-shadow: inset 0 0 0 1px #d3d9e2; }
+.rc-sw[data-sw="workshop"] { background: linear-gradient(135deg, #fdfdfb 50%, oklch(0.91 0.15 95) 50%); box-shadow: inset 0 0 0 1.5px #0a0a0a; }
+.rc-sw[data-sw="field-notes"] { background: linear-gradient(135deg, #f5efe0 50%, oklch(0.84 0.09 340) 50%); border-radius: 3px; box-shadow: inset 0 0 0 1px #cfc3a6; }
+.rc-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--rule-strong); border-radius: var(--r); overflow: hidden; }
+.rc-seg button { padding: 8px 0; font-family: var(--body); font-size: 12px; line-height: 1; color: var(--ink-3); background: none; border: 0; cursor: pointer; }
+.rc-seg button + button { border-left: 1px solid var(--rule); }
+.rc-seg button:hover { color: var(--ink); background: var(--surface-2); }
+.rc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+@media print { .rc { display: none; } }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
+
+<!--
+  THE THEMES. The next line is replaced by every file in references/themes/:
+  each a font link and one style block holding its tokens and its overrides.
+  They sit AFTER the base styles because an override has to win the cascade,
+  and tokens resolve wherever they are declared. ONE is active — the
+  repository's choice: --theme, else ACCOUNTABLE_REVIEW_THEME, else
+  review_map.theme in its .accountable-review.yml, else daylight — and the
+  others arrive with media="not all", which keeps their bytes on the page and
+  their rules off it. The appearance menu switches the attribute, so a reader
+  can change the look without a second file. A theme file must keep every rule
+  above: each colour on bare :root and in both dark blocks, the five families
+  meaning what this file says they mean, and no hue, glyph or label treatment
+  that reads as a grade. A theme changes how the page looks, never what is on it.
+-->
+<!-- SKELETON:THEME -- page-skeleton.sh replaces this line with the themes. -->
+<!--
+  The reader's saved appearance, applied here rather than in the tail script
+  so the page never paints in one look and then jumps to another. Two keys,
+  both a viewer's own convenience: which theme (only if this page carries a
+  file of that name) and light or dark (absent means follow the system).
+  Every storage call is guarded — a private window or blocked site data
+  throws, and then the page is simply the repository's choice.
+-->
+<script>
+(function () {
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var s = get('review-style'), els = document.querySelectorAll('[data-style]'), i, known = false;
+  for (i = 0; i < els.length; i++) { if (els[i].getAttribute('data-style') === s) { known = true; } }
+  if (known) {
+    for (i = 0; i < els.length; i++) {
+      if (els[i].getAttribute('data-style') === s) { els[i].removeAttribute('media'); }
+      else { els[i].setAttribute('media', 'not all'); }
+    }
+  }
+  var t = get('review-theme');
+  if (t === 'light' || t === 'dark') { document.documentElement.setAttribute('data-theme', t); }
+})();
+</script>
 
 <!-- Scroll progress. The only decoration on the page that moves. -->
 <div class="progress"><i id="bar"></i></div>
@@ -2357,16 +2225,18 @@ post.saved_change_to_title?  # =&gt; true</pre>
   </main>
 </div>
 
-<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, and
-     the syntax tint on unchanged excerpts.
-     This is the ONLY script the page carries: no state, no localStorage, no
-     counters. All four are presentation, and the page reads correctly with the
-     whole block removed — the excerpts simply render in one ink, as they did
+<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, the
+     appearance menu, and the syntax tint on unchanged excerpts.
+     Apart from the few lines in the head that apply a saved appearance before
+     first paint, this is the ONLY script the page carries, and its one piece of
+     state is that appearance: two localStorage keys, a viewer's own convenience,
+     never anything about the change. No counters. All five jobs are presentation,
+     and the page reads correctly with the whole block removed — the excerpts simply render in one ink, as they did
      before the tint existed, and a citation lands in the tab it was clicked from.
 
      highlight.js comes from cdnjs because that is the one script host a published
      artifact may load; its stylesheets are NOT loadable, which is why the theme
-     for it lives in our token block above. Two grammars are loaded beside the
+     for it lives in the theme's token block above. Two grammars are loaded beside the
      core bundle because neither is in it and both are code this page quotes:
      erb for Rails views, elixir for Elixir modules. Carry all three lines.
      There is deliberately no heex grammar — highlight.js ships none, and
@@ -2446,6 +2316,112 @@ post.saved_change_to_title?  # =&gt; true</pre>
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
   });
+
+  /* ---- The appearance menu ------------------------------------------------
+     Built here, into the right end of the masthead's first line, so the markup
+     half carries no control for a run to copy. Its styles are the style
+     elements page-skeleton.sh emitted, read off the page rather than listed
+     here, so a theme added under references/themes/ appears without touching
+     this block. Choosing one switches media between "all" and "not all"; the
+     light/dark/auto segment sets or clears data-theme, which every theme's
+     tokens already answer. Both choices are saved for the next visit by the
+     head script's two keys. With one theme or no masthead there is nothing to
+     offer, and nothing is drawn. */
+  (function () {
+    var line = document.querySelector('main > header > .lbl-wide');
+    var sheets = document.querySelectorAll('style[data-style]');
+    if (!line || sheets.length < 2) { return; }
+    var root = document.documentElement;
+    function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) { e.className = cls; }
+      if (text) { e.textContent = text; }
+      return e;
+    }
+
+    var rc = el('div', 'rc'), btn = el('button', 'rc-btn'), icon = el('span', 'rc-i');
+    btn.type = 'button';
+    btn.title = 'Appearance';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'rc-pop');
+    btn.appendChild(el('b', '', 'Aa'));
+    icon.setAttribute('aria-hidden', 'true');
+    btn.appendChild(icon);
+    var pop = el('div', 'rc-pop');
+    pop.id = 'rc-pop';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Appearance');
+
+    pop.appendChild(el('div', 'rc-h', 'Style'));
+    var list = el('div', 'rc-styles'), choices = [];
+    function active() {
+      for (var i = 0; i < sheets.length; i++) {
+        if (sheets[i].getAttribute('media') !== 'not all') { return sheets[i].getAttribute('data-style'); }
+      }
+      return '';
+    }
+    function useStyle(name) {
+      var all = document.querySelectorAll('[data-style]');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].getAttribute('data-style') === name) { all[i].removeAttribute('media'); }
+        else { all[i].setAttribute('media', 'not all'); }
+      }
+      choices.forEach(function (c) {
+        var on = c.getAttribute('data-s') === name;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+    }
+    Array.prototype.forEach.call(sheets, function (sh) {
+      var name = sh.getAttribute('data-style');
+      var b = el('button'), sw = el('span', 'rc-sw');
+      b.type = 'button';
+      b.setAttribute('data-s', name);
+      sw.setAttribute('data-sw', name);
+      b.appendChild(sw);
+      b.appendChild(document.createTextNode(sh.getAttribute('data-style-label') || name));
+      b.onclick = function () { useStyle(name); save('review-style', name); };
+      list.appendChild(b);
+      choices.push(b);
+    });
+    pop.appendChild(list);
+
+    pop.appendChild(el('div', 'rc-h', 'Theme'));
+    var seg = el('div', 'rc-seg'), modes = [];
+    seg.setAttribute('role', 'group');
+    seg.setAttribute('aria-label', 'Theme');
+    var glyph = { light: '\u2600', auto: '\u25D0', dark: '\u263E' };
+    function useMode(m) {
+      if (m === 'auto') { root.removeAttribute('data-theme'); } else { root.setAttribute('data-theme', m); }
+      icon.textContent = glyph[m];
+      modes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-t') === m)); });
+    }
+    [['light', 'Light'], ['auto', 'Auto'], ['dark', 'Dark']].forEach(function (m) {
+      var b = el('button', '', glyph[m[0]] + ' ' + m[1]);
+      b.type = 'button';
+      b.setAttribute('data-t', m[0]);
+      b.onclick = function () { useMode(m[0]); save('review-theme', m[0]); };
+      seg.appendChild(b);
+      modes.push(b);
+    });
+    pop.appendChild(seg);
+
+    rc.appendChild(btn);
+    rc.appendChild(pop);
+    line.appendChild(rc);
+    useStyle(active());
+    var t = root.getAttribute('data-theme');
+    useMode(t === 'light' || t === 'dark' ? t : 'auto');
+
+    function close() { rc.classList.remove('rc-on'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.onclick = function () { btn.setAttribute('aria-expanded', String(rc.classList.toggle('rc-on'))); };
+    document.addEventListener('click', function (e) { if (!rc.contains(e.target)) { close(); } });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && rc.classList.contains('rc-on')) { close(); btn.focus(); }
+    });
+  })();
 
   /* ---- Syntax tint, .excerpt--source only -------------------------------
      The rule this obeys: an excerpt is a quotation, so the script may change
