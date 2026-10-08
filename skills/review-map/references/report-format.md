@@ -1964,8 +1964,9 @@ facts about one repository.
 4. **It is about the repository, not the framework.** What the framework does is a primer's subject
    under `--mentor`, and § *Mentor mode* draws that line.
 
-Most pages earn none, and that is the intended result. A small change in an area every reviewer
-knows has nothing to introduce, and the section is then **omitted** with its rail entry, by the same
+A page with no entry is a correct result, and the four conditions decide it rather than any
+expectation of how often it happens. A small change in an area every reviewer knows has nothing to
+introduce, and the section is then **omitted** with its rail entry, by the same
 rule as *Impact outside the diff* — never a stub saying the page needs no context, which reads as
 *this change is easy* and is therefore a grade.
 
@@ -2019,6 +2020,10 @@ components has a home that a judgment earns, and *Context* holds none.
 **Staging.** Pending from stage 1, decided at `SKILL.md` step 7k once the agenda exists, and written
 in stage 3 beside *Impact outside the diff* — after the agenda's stubs have published, so orientation
 never delays the questions. § *Build state* has the omitted case.
+
+**On an update** the section is re-decided against the re-ranked agenda, and an entry citing a file
+the new commits moved is re-read rather than carried; `SKILL.md` § *Re-running over new commits*
+owns the procedure, including when the section is added or removed.
 
 ---
 

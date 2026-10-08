@@ -17,7 +17,7 @@ does not earn omitted outright.
   that was not, who is affected. Derived from tests, code and commits rather than copied from a
   possibly-stale PR description. A limit the run hit — a region it had to skim, a client it could not
   read — is stated here and nowhere else.
-- **Context** — only when earned, and most pages earn none. The pieces of *this repository* the
+- **Context** — only when a checkpoint earns it. The pieces of *this repository* the
   checkpoints talk about, named before the checkpoints talk about them: which request in a sequence
   does what, code that is a plugin wrapping a core method rather than core code, a domain term a
   setting introduces. One to five entries, each a sentence or two on what the thing **is**, a

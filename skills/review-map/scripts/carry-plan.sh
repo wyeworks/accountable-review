@@ -21,7 +21,7 @@
 # the page carries a file:line, so a checkpoint that turns on a file cites it. Therefore:
 #
 #   a checkpoint is carried iff no path in the delta appears among the path tokens inside its
-#   own <section class="cp">
+#   own <section class="cp">, and a Context entry iff none appears inside its own dt/dd pair
 #
 # WHAT THIS CANNOT KNOW, and what therefore stays with the run. Effort and mentor are invisible
 # on the page by design, the plugin version is recorded only in CI's manifest, and the deep-link
@@ -34,6 +34,7 @@
 #   delta<TAB>app/models/project.rb
 #   cp<TAB>cp-a<TAB>carry<TAB>-
 #   cp<TAB>cp-b<TAB>redo<TAB>cites app/models/project.rb
+#   ctx<TAB>Email-code signup<TAB>redo<TAB>cites app/models/project.rb
 #   excerpt<TAB>app/models/project.rb<TAB>regen
 #   search<TAB>rg -n 'archived_at' app<TAB>safe<TAB>no delta path among its hits
 #   verdict: update
@@ -349,23 +350,60 @@ awk '
 # there it fails a page loudly, here it would carry a checkpoint that cites the changed file.
 BOUND='[^A-Za-z0-9._/-]'
 
-while IFS="$(printf '\t')" read -r id body; do
-  [ -n "$id" ] || continue
+# Sets $reason to "cites <path>" for the first delta path among $1's path tokens, or to "-".
+first_cited() {
   reason=-
   while IFS= read -r p; do
     esc=$(printf '%s' "$p" | sed 's/[][\.*^$+?(){}|]/\\&/g')
-    if printf '%s' "$body" | grep -qE "(^|$BOUND)$esc($BOUND|\$)"; then
+    if printf '%s' "$1" | grep -qE "(^|$BOUND)$esc($BOUND|\$)"; then
       reason="cites $p"
       break
     fi
   done < "$TMP/delta"
+}
 
+# $1 the row kind, $2 its key.
+plan_row() {
   if [ "$reason" = "-" ]; then
-    printf 'cp\t%s\tcarry\t-\n' "$id"
+    printf '%s\t%s\tcarry\t-\n' "$1" "$2"
   else
-    printf 'cp\t%s\tredo\t%s\n' "$id" "$reason"
+    printf '%s\t%s\tredo\t%s\n' "$1" "$2" "$reason"
   fi
+}
+
+while IFS="$(printf '\t')" read -r id body; do
+  [ -n "$id" ] || continue
+  first_cited "$body"
+  plan_row cp "$id"
 done < "$TMP/cps"
+
+# A Context entry carries the same rule for the same reason, and sits outside every
+# <section class="cp">, so the loop above never sees it. Each entry is one dt/dd pair with one
+# citation, and what it says the thing IS can stop being true when the delta moves that file —
+# while every checkpoint pointing at it carries, because none of them cites the file itself.
+# Keyed by the dt text: an entry has no id, and its name is what a run finds it by.
+awk '
+  /<section id="context"/ { inside = 1; buf = "" }
+  inside { gsub(/\t/, " "); buf = buf " " $0 }
+  inside && /<\/section>/ {
+    n = split(buf, parts, /<dt/)
+    for (i = 2; i <= n; i++) {
+      entry = parts[i]; sub(/^[^>]*>/, "", entry)
+      name = entry; sub(/<\/dt>.*/, "", name); gsub(/<[^>]*>/, "", name)
+      gsub(/^ +| +$/, "", name)
+      print name "\t" entry
+    }
+    inside = 0
+  }
+' "$PAGE" \
+  | sed -e 's/&amp;/\&/g' -e 's/&lt;/</g' -e 's/&gt;/>/g' -e 's/&quot;/"/g' -e "s/&#39;/'/g" \
+  > "$TMP/ctx"
+
+while IFS="$(printf '\t')" read -r name body; do
+  [ -n "$name" ] || continue
+  first_cited "$body"
+  plan_row ctx "$name"
+done < "$TMP/ctx"
 
 # An excerpt is a verbatim quotation and its state tag is computed from base...head, so a file
 # entering the diff in the delta changes the tag as well as the lines. Both are bounded by the

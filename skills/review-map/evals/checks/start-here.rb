@@ -151,8 +151,8 @@ end
 #
 # WARN, for the coverage rule's reason: a draft carries Context while the checkpoints it points at
 # are still stubs, and a stub is a section with an id, so a dead pointer on a draft is the one case
-# that may yet resolve. A page with no Context says nothing here, because most pages earn none and
-# a line on every one of them saying so would be the "no context needed" sentence in check form.
+# that may yet resolve. A page with no Context says nothing here, because omitting it is a correct
+# result and a line on every such page saying so would be the "no context needed" sentence in check form.
 context = check.page.without_comments
 if context.has?(/<section id="context"/)
   entries = context.section_from(/<section id="context"/).regions(open: /<dd[ >]/, close: %r{</dd>})

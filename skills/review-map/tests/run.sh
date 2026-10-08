@@ -604,6 +604,14 @@ cpage() {
 <section class="cp" id="cp-c"><h3>Q3</h3>
   <a class="path" href="#">api/Gemfile.lock:1</a></section>
 </section>
+<section id="context"><dl class="ctx">
+<dt>Active scope</dt>
+<dd>What it is. <a class="path" href="#">app/queries/active.rb:1</a>
+  <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
+<dt>Lock &amp; bundle</dt>
+<dd>What it is. <a class="path" href="#">api/Gemfile.lock:1</a>
+  <span class="ctx-used">Used by <a href="#cp-c">Checkpoint C</a></span></dd>
+</dl></section>
 <details class="searched"><ul class="sr-list">
 <li><code>$1</code> <span class="sr-r">a clause</span></li>
 </ul></details>
@@ -645,6 +653,11 @@ assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-b	redo	cites app/queries/act
 # api/Gemfile: a substring test carries neither and a reversed one carries both.
 assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-c	carry	-$')" "1" "a checkpoint citing a path unrelated to the delta is carried"
 
+# A Context entry sits outside every checkpoint, so the cp rule cannot see it — and cp-a carries
+# here while the entry it relies on cites the file the delta moved. Keyed by the entry's name.
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Active scope	redo	cites app/queries/active.rb$')" "1" "a Context entry citing a delta path is re-derived, though the checkpoint using it carries"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Lock & bundle	carry	-$')" "1" "a Context entry citing nothing in the delta is carried, named by its unescaped dt"
+
 # And the trap itself, which needs a delta that is a PREFIX of a cited path rather than merely
 # unrelated to it: api/Gemfile changed, and cp-c cites api/Gemfile.lock. A substring test marks
 # cp-c redo here, which is the cheap direction of the error; the same missing boundary in the
@@ -656,6 +669,7 @@ cpage "$NOHIT" "" "$sh_head"
 plan --prev-head "$CHEAD" --base "$CBASE" --head "$CGEM"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^delta	api/Gemfile$')" "1" "the prefix case reaches the carry rule at all"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-c	carry	-$')" "1" "api/Gemfile in the delta does not match api/Gemfile.lock on the page"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Lock & bundle	carry	-$')" "1" "and a Context entry citing api/Gemfile.lock is carried by the same boundary"
 
 # Back to the first scenario, because the rows below read the plan in $out.
 cpage "$NOHIT"
@@ -717,7 +731,7 @@ assert_eq "$cprc" "3" "a head that is not a descendant of the previous one refus
 assert_eq "$(printf '%s\n' "$out" | grep -c 'force-pushed')" "1" "and says the branch moved rather than reporting an empty delta"
 
 # A refusal prints the reason and the verdict and nothing else: half a plan reads as a plan.
-assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	\|^delta	\|^excerpt	')" "0" "a refusal prints no plan rows at all"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	\|^ctx	\|^delta	\|^excerpt	')" "0" "a refusal prints no plan rows at all"
 assert_eq "$(printf '%s\n' "$out" | grep -c .)" "2" "only the reason and the verdict"
 
 # -- P2 · the page is not the page we think it is -----------------------------------------------

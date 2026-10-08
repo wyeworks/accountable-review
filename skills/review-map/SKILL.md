@@ -858,7 +858,7 @@ A concept gets an entry only when **all four** of `references/report-format.md` 
 conditions hold: a checkpoint uses it, that checkpoint would otherwise assume it, a newcomer to this
 repository would lack it, and it is the repository's rather than the framework's. Write the entries
 into `agenda.md` under `## Context`, each with its one-sentence *is*, its citation, and the
-checkpoint letters that use it; at most five. **No entry is the expected result on most pages**, and
+checkpoint letters that use it; at most five. **No entry is a correct result** when nothing meets all four, and
 then the section is omitted rather than stubbed — say *none earned* in `agenda.md` and nowhere else.
 
 The trap is a list of what the diff touched. *The controller*, *the plugin*, *the spec* is
@@ -1482,6 +1482,7 @@ rather than leaving a figure that claims to list every path and no longer does.
 delta     app/queries/active.rb          the paths the new commits touched
 cp        cp-a   carry   -               no delta path appears inside that checkpoint
 cp        cp-b   redo    cites app/...   it does, so the judgment is re-derived
+ctx       Approval signup  redo  cites app/...   a Context entry's one citation moved, so its *is* is re-read
 excerpt   app/queries/active.rb  regen   quoted from a file the delta moved
 excerpt   app/models/project.rb  keep    quoted from one it did not
 ```
@@ -1501,7 +1502,7 @@ longer carried and goes through step 8 like anything else.
 | 4 · Derive what changed | **Narrowed**: ask only whether the delta moves the semantic delta or a stated limit. The metric strip is recomputed from step 3 |
 | 5 · Trace | **Narrowed to the delta.** No re-tracing of carried flows. This is the whole saving |
 | 6 · Notes and falsifiers | **Narrowed**: notes for delta-touched flows only, falsifiers only at those notes, cap of six unchanged |
-| 7 · Synthesise | 7a re-asked cheaply; 7b and 7c over delta candidates only; **7d re-ranks the whole agenda** and **7e enforces the caps over the whole agenda**; 7f–7j for touched checkpoints only. *Read the code in this order* is rewritten whole if the agenda moved at all |
+| 7 · Synthesise | 7a re-asked cheaply; 7b and 7c over delta candidates only; **7d re-ranks the whole agenda** and **7e enforces the caps over the whole agenda**; 7f–7j for touched checkpoints only; **7k over the whole agenda**, re-opening only the entries the plan marks `redo`. *Read the code in this order* is rewritten whole if the agenda moved at all |
 | 8 · Verify | **In full and unconditionally, for everything written or re-derived.** Never for carried material |
 | 9 · Write | `Edit`s only. No skeleton, no banner, `Revision` cell last |
 | 10 · Complete and gate | **In full, always** |
@@ -1509,6 +1510,15 @@ longer carried and goes through step 8 like anything else.
 Step 7d is cheap and is never skipped: ranking is reasoning over a handful of one-line questions
 with no file reads. An update that appended its new checkpoints to the end instead would have
 turned a ranked agenda into a changelog, which is the failure this table exists to prevent.
+
+Step 7k is whole for 7d's reason: its input is the finished agenda, and the agenda was re-ranked
+whole. Reading the checkpoints for what they assume costs no file reads. The exception is an entry
+the plan marks `redo` — its one citation is in the delta, so what it says the thing *is* may no
+longer be true, and that file is opened before the entry is kept. Everything else follows from the
+four conditions in `references/report-format.md` § *Section 2*, applied to the agenda as it now
+stands: an entry whose every checkpoint was deleted goes; an entry a redone checkpoint now explains
+in its own clause goes, because condition 2 fails; a new or redone checkpoint may earn an entry the
+previous page did not have; and five is still the cap over the whole section.
 
 Step 5's narrowing is the one place to be honest with yourself. The delta is the set of files the
 new commits touched, and tracing what *those* reach is the work — not re-confirming what the
@@ -1527,11 +1537,17 @@ previous map already traced.
   adapter's check that it names its head rather than being delivered as a current map of an old
   revision. Add the disclosure sentence to *What changed* in the same edit.
 - **A checkpoint the new commits answered is deleted**, with its reading-path stop and its rail
-  entry, and nothing marks where it was. § *The review checkpoint* owns that rule.
-- **Section 05 may need adding rather than filling.** If the previous page omitted it and the delta
-  now crosses into unchanged code, the section and its rail entry are new — omitted is not pending,
-  so there is no stub to replace. This is the one place an update writes where the page does not
-  already carry a marker.
+  entry, and nothing marks where it was. § *The review checkpoint* owns that rule. **Its pointer
+  goes with it**: every `span.ctx-used` that named it drops that link, and a Context entry left
+  naming no checkpoint is deleted, because a pointer at an id the page no longer carries is an entry
+  this page did not earn.
+- **Sections 02 and 05 may need adding rather than filling, and 02 may need removing.** If the
+  previous page omitted 05 and the delta now crosses into unchanged code, or omitted 02 and step 7k
+  now earns an entry, the section and its rail entry are new — omitted is not pending, so there is
+  no stub to replace. These are the places an update writes where the page does not already carry a
+  marker. The reverse is 02's alone: when step 7k leaves no entry standing, the section and its rail
+  entry are deleted rather than emptied, since a Context with no entries is a stub saying the change
+  needs none.
 - **Every excerpt the plan marks `regen` is regenerated**, in one `excerpt.sh` call with any new
   ones. § *Source excerpts* says why a carried one is the component's single way of lying.
 - **Do not read the whole page.** `grep -n` for the checkpoint ids, the questions and the citations

@@ -341,6 +341,12 @@ case_carry_red "a search that cannot be replayed is skipped instead of refusing 
 sed "s|^BOUND='\[^A-Za-z0-9._/-\]'$|BOUND=''|" "$CARRY_PLAN" > "$WORK/substring.sh"
 case_carry_red "the path test is a substring match rather than a whole token" "$WORK/substring.sh"
 
+# 31a. A Context entry is outside every checkpoint, so the cp rule never reaches it. Carry every
+#      entry and the page keeps saying what a file IS after the delta changed that file, while
+#      every checkpoint pointing at the entry carries because none of them cites the file.
+sed 's|^  plan_row ctx "\$name"$|  reason=-; plan_row ctx "$name"|' "$CARRY_PLAN" > "$WORK/ctx-always-carry.sh"
+case_carry_red "a Context entry citing a delta path is carried" "$WORK/ctx-always-carry.sh"
+
 # 32. P1. A rebased branch's "delta" is a diff between two histories rather than the commits
 #     someone pushed, and every carry decision downstream is then made against the wrong set.
 awk '/^if ! git merge-base --is-ancestor/ { skip = 3 } skip { skip--; next } { print }' \
