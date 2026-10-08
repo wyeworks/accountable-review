@@ -407,10 +407,12 @@ know, the page stops linking to the manual and states the rule: a short primer i
 checkpoint, with the API named, the behaviour explained, a worked example on a generic class, the
 line in *your* repository that made it relevant, and the pinned documentation link it came from.
 
-> **Phoenix and Rust today:** a primer is gated on the documentation link it escalates from, and the
-> Elixir and Rust catalogues ship closed until a verification run has opened every row in them. So
-> `--mentor` on a Phoenix or a Rust project currently produces no primers and says so. That is the fail-closed rule doing its
-> job — a page with no primer is narrower, a page with an invented link is wrong.
+> **Phoenix today:** a primer is gated on the documentation link it escalates from, and the Elixir
+> catalogue ships closed until a verification run has opened every row in it. So `--mentor` on a
+> Phoenix project currently produces no primers and says so. That is the fail-closed rule doing its
+> job — a page with no primer is narrower, a page with an invented link is wrong. The Rust catalogue
+> shipped closed the same way and has since been opened, so a Rust page can carry primers, framed in
+> graphite rather than Rails red.
 
 ### When the branch keeps moving
 

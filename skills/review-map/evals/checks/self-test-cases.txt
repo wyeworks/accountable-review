@@ -206,6 +206,13 @@
  rails-anchors      | anchors-primer-over-budget.html | 1 | the budget is at most 3 a page
  rails-anchors      | anchors-primer-probe-nested.html | 1 | runtime probe(s) inside a primer
  rails-anchors      | anchors-primer-marked.html    | 1 | carry a mark
+# The frame is the stack's, read off the doc link's host. Both directions are a defect, so both have
+# a fixture, and each clean fragment pins the PASS so 8g cannot quietly stop firing on good input.
+ rails-anchors      | anchors-primer-clean.html     | 0 | every primer's frame matches the host of its doc link
+ rails-anchors      | anchors-primer-rust-clean.html | 0 | every primer's frame matches the host of its doc link
+ rails-anchors      | anchors-primer-rust-clean.html | 0 | every primer cites the line in this repository
+ rails-anchors      | anchors-primer-rust-unframed.html | 1 | framed for the wrong stack
+ rails-anchors      | anchors-primer-rails-framed.html | 1 | framed for the wrong stack
 # And the arm that runs on every page that took no flag at all. It ASSERTS rather than skipping,
 # because the demo rule still has something to say there — a loose demo on a page with no primer is
 # the worst version of that defect, not an inapplicable one. Two rows: the ordinary page, and the

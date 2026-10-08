@@ -465,6 +465,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-clean.html
 exit=0
@@ -485,6 +486,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-doubled.html
 exit=1
@@ -505,6 +507,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-doubled.html
 exit=1
@@ -525,6 +528,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-marked.html
 exit=1
@@ -545,6 +549,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-marked.html
 exit=1
@@ -565,6 +570,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-orphan.html
 exit=1
@@ -585,6 +591,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-orphan.html
 exit=1
@@ -605,6 +612,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-over-budget.html
 exit=1
@@ -625,6 +633,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-over-budget.html
 exit=1
@@ -645,6 +654,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-probe-nested.html
 exit=1
@@ -665,6 +675,7 @@ PASS  every primer cites the line in this repository that earned it
 FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -689,11 +700,134 @@ PASS  every primer cites the line in this repository that earned it
 FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-primer-rails-framed.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --page anchors-primer-rails-framed.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --page anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-unframed.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --page anchors-primer-rust-unframed.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-uncited.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
@@ -713,6 +847,7 @@ FAIL  1 primer(s) carry no file:line of their own — framework prose with no st
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-uncited.html
 exit=1
@@ -733,6 +868,7 @@ FAIL  1 primer(s) carry no file:line of their own — framework prose with no st
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-ungated.html
 exit=1
@@ -745,6 +881,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-ungated.html
 exit=1
@@ -757,6 +894,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-probe-label-thin.html
 exit=0
@@ -1812,6 +1950,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1835,6 +1974,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -2244,6 +2384,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-clean.html
 exit=0
@@ -2264,6 +2405,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-clean.html
 exit=0
@@ -2284,6 +2426,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-clean.html
 exit=0
@@ -2304,6 +2447,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-orphan.html
 exit=1
@@ -2324,6 +2468,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-ungated.html
 exit=1
@@ -2336,6 +2481,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-uncited.html
 exit=1
@@ -2356,6 +2502,7 @@ FAIL  1 primer(s) carry no file:line of their own — framework prose with no st
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-doubled.html
 exit=1
@@ -2376,6 +2523,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-over-budget.html
 exit=1
@@ -2396,6 +2544,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-probe-nested.html
 exit=1
@@ -2416,6 +2565,7 @@ PASS  every primer cites the line in this repository that earned it
 FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -2440,6 +2590,109 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-unframed.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rails-framed.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
 SKIP  runtime probes: none on this input
 ## --fragment agenda-clean.html
 exit=0

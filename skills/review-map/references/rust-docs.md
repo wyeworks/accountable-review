@@ -10,48 +10,69 @@ reader discovers on your behalf — and one dead link costs the same trust as on
 `references/report-format.md` § *Framework anchors* owns what a doc link is *for*, when a claim earns
 one, and the budget. This file is only the lookup: concept in, URL out.
 
-**Read § *Version* before using this file.** It is not yet verified, and until it is, the answer this
-file returns for every concept is *no link*.
+**Read § *Version* before using this file.** It says what the rows were verified against, and the
+floor below which no row may be emitted.
 
 ## Version
 
-**Not yet verified. No row in this file has been opened.**
+**Verified 2026-10-08** by `evals/verify-catalogue.sh` at each crate's newest release and the newest
+toolchain: `actix-web` 4.15.0, `anyhow` 1.0.104, `axum` 0.8.9, `diesel` 2.3.14, `serde` 1.0.229,
+`sqlx` 0.9.0, `thiserror` 2.0.21, `tokio` 1.53.2, `tower` 0.5.3, `tracing` 0.1.44, Rust 1.99.0 —
+62 paths across 62 rows, every fragment opened.
 
-Until a dated verification line appears in this section, **emit no link from this catalogue.** Explain
-the mechanism in prose, cite the repo line, and propose a probe from `references/rust.md`
-§ *Runtime probes* (or `references/rust-backend.md` § *Runtime probes*, on a backend).
+**And across the floor, by hand, the same day**, because the script checks the newest release only and
+this file promises every version from the floor up: each docs.rs row at the floor, at every minor
+boundary for the 0.x crates and at a midpoint for the rest (`axum` 0.7.0, 0.7.9, 0.8.0; `sqlx` 0.7.0,
+0.7.4, 0.8.0, 0.8.6; `tokio` 1.28.0, 1.40.0; `actix-web` 4.0.0, 4.9.0; `tower` 0.4.1, 0.4.13, 0.5.0;
+`diesel` 2.0.0, 2.1.6, 2.2.12; `thiserror` 1.0.0, 1.0.69; `anyhow` 1.0.0; `tracing` 0.1.11, 0.1.20;
+`serde` 1.0.0), and each doc.rust-lang.org row at 1.70.0, 1.80.0 and 1.90.0 — 206 pinned URLs with
+the newest releases included, page and fragment.
 
-**That also costs the primer callout.** An `aside.primer` is what a doc link escalates into, so it
-cannot exist without one — `report-format.md` § *Mentor mode* and `evals/checks/rails-anchors.rb` § 8
-both say so. While this file is closed, `--mentor` on a Rust project produces **no primer at all**,
-and the flag is worth saying so about in chat rather than on the page. When it opens, the primer's
-header names the stack in words — *Understanding Rust* — and nothing about the callout's shape changes.
+**The file was written closed, and the sweep is why that was right.** Every row was written from
+knowledge of rustdoc's naming scheme on a machine that could not reach either host — the way the Rails
+catalogue's `active_record_nested_attributes.html` was — and the first verification found one defect
+of each kind this file warns about:
 
-This is the fail-closed rule of `rails-docs.md` § *Pinning* applied to a whole file, for the reason
-`elixir-docs.md` § *Version* gives at length: the Rails catalogue's worst defect was a plausible URL
-constructed once and admitted to the allowlist, the one class of defect no script catches and no care
-while writing prevents. Every row below was written that way — from knowledge of rustdoc's naming
-scheme and of the books' layout, on a machine that could not reach either host. So they are held
-closed until a machine with egress has opened them.
+- **The re-export trap.** `ResponseError` is imported as `actix_web::ResponseError` and documented at
+  `actix_web::error::ResponseError`. The root path 404s in every 4.x release. The row now names the
+  defining module, which is what § *Shapes* says to do and what writing from memory got wrong.
+- **An anchor renamed under a fixed path.** The Reference renamed *The question mark operator* to *The
+  try propagation expression* between 1.88 and 1.99. The page is unchanged, so the row keeps the page
+  and drops the fragment — a fragment right for only one side of a rename is not one this file can be
+  certain of, and the toolchain has no per-series override to carry two.
+- **A floor that was never a floor.** docs.rs holds no documentation for `tower` 0.4.0, and `tracing`
+  has no `instrument` page before 0.1.9 and documents `skip` from 0.1.11. Both floors moved up rather
+  than either row going.
 
-What lifts it:
+**The marks were spot-checked, not audited.** The ones that matter most held: axum's path syntax moved
+from `/:id` to `/{id}` at 0.8, which is what the route row's `‡ probe` says, and `query!`'s offline mode
+is the `‡ probe` it already carried. No CHANGELOG was read end to end, so prefer the probe wherever a
+sentence would have to be version-specific.
+
+**The primer callout is earned the same way as on a Rails page.** An `aside.primer` is what a doc link
+escalates into, and now that this file emits links a Rust run at `--mentor` may write one. Its header
+names the stack in words — *Understanding Rust* — and the aside carries one more class, `pr-rust`,
+which frames it in graphite rather than Rails red. That class is the stack's, read off the doc link's
+host, and `evals/checks/rails-anchors.rb` § 8 fails a primer whose class and link disagree in either
+direction. `report-format.md` § *Mentor mode* owns the rest.
+
+**Re-verify before relying on a release you have not seen.** A new crate release can rename a section
+the way the Reference did, and the page will still return 200:
 
 ```sh
-evals/verify-catalogue.sh --catalogue references/rust-docs.md
+evals/verify-catalogue.sh --catalogue references/rust-docs.md --rust-version <newest stable>
 ```
 
-A clean run prints a dated line with every crate's version and the toolchain's; that line replaces
-this section's first paragraph, and the links go live in the same commit. A run with failures is the
-more likely outcome and is the point of running it.
+`--rust-version` is needed wherever the GitHub API is blocked; the newest stable is the `[pkg.rust]`
+version in `static.rust-lang.org/dist/channel-rust-stable.toml`.
 
-**The probe is unaffected, and it is the better anchor anyway.** `cargo tree` and `cargo metadata`
-interrogate the resolved build instead of describing it, so they cannot be out of date and they cannot
-404. While this catalogue is closed they are the whole of what a Rust run offers. That is a narrower
-page, not a broken one.
+**The probe is unaffected, and it is still the better anchor where the behaviour moved.** `cargo tree`
+and `cargo metadata` interrogate the resolved build instead of describing it, so they cannot be out of
+date and they cannot 404.
 
-**The floor these rows are written against**, and below which no link is emitted even once the file
-opens: Rust 1.70, `tokio` 1.28, `axum` 0.7, `actix-web` 4.0, `tower` 0.4, `sqlx` 0.7, `diesel` 2.0,
-`anyhow` 1.0, `thiserror` 1.0, `tracing` 0.1. Below any of those, explain in prose and propose a probe.
+**The floor these rows are verified against**, and below which no link is emitted: Rust 1.70, `tokio`
+1.28, `axum` 0.7, `actix-web` 4.0, `tower` 0.4.1, `sqlx` 0.7, `diesel` 2.0, `anyhow` 1.0, `thiserror`
+1.0, `tracing` 0.1.11, `serde` 1.0. Below any of those, explain in prose and propose a probe.
 
 ## Shapes
 
@@ -166,11 +187,11 @@ here unchanged.
 | `‡ probe` | The behaviour **changed** inside the range, so no single sentence is true of every codebase | Not assert it. Ask the build: propose a probe, and name the setting or version that decides it |
 | `‡ since X` | Surface was added in X; the default this row describes still holds | State it *as the default*, and name X where a reader could meet the new surface |
 
-**The marks below were reasoned from knowledge of the crates, not from a CHANGELOG audit.** The Rails
-file's came from reading the CHANGELOGs across three series; no equivalent audit has been done for any
-crate here. So these marks are a first pass and are owed the same treatment — most sharply across
-`axum` `0.7 → 0.8`, which changed the route syntax, and `sqlx` `0.7 → 0.8`. Until then, prefer the
-probe wherever a sentence would have to be version-specific.
+**The marks below were reasoned from knowledge of the crates and spot-checked against the docs, not
+taken from a CHANGELOG audit.** The Rails file's came from reading the CHANGELOGs across three series;
+no equivalent audit has been done for any crate here, so these are owed the same treatment — most
+sharply across `sqlx` `0.7 → 0.9`, whose two minor releases moved more than its docs pages show. Until
+then, prefer the probe wherever a sentence would have to be version-specific.
 
 ---
 
@@ -180,7 +201,7 @@ probe wherever a sentence would have to be version-specific.
 |---|---|
 | Integer overflow: a panic in debug, wrapping in release | `doc.rust-lang.org/reference/expressions/operator-expr.html#overflow` |
 | `as` casts truncate and saturate rather than fail | `doc.rust-lang.org/reference/expressions/operator-expr.html#type-cast-expressions` |
-| The `?` operator, and the `From` conversion it applies | `doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator` |
+| The `?` operator, and the `From` conversion it applies | `doc.rust-lang.org/reference/expressions/operator-expr.html` |
 | `let _ =` binds nothing, so the value drops on that line | `doc.rust-lang.org/reference/patterns.html#wildcard-pattern` |
 | Drop order: locals in reverse, fields in declaration order | `doc.rust-lang.org/reference/destructors.html` |
 | `#[non_exhaustive]`, and what it requires of downstream matches | `doc.rust-lang.org/reference/attributes/type_system.html#the-non_exhaustive-attribute` |
@@ -240,6 +261,7 @@ probe wherever a sentence would have to be version-specific.
 | Extractor order — the body extractor comes last | `docs.rs/axum/axum/extract/index.html#the-order-of-extractors` |
 | `State`, checked at compile time | `docs.rs/axum/axum/extract/struct.State.html` |
 | `Extension`, which is not | `docs.rs/axum/axum/struct.Extension.html` |
+| Sharing state with handlers — `State` preferred, as the more type safe | `docs.rs/axum/axum/index.html#sharing-state-with-handlers` |
 | `Json` as an extractor, and the statuses it rejects with | `docs.rs/axum/axum/struct.Json.html` |
 | `IntoResponse`, which is where an error becomes a status | `docs.rs/axum/axum/response/trait.IntoResponse.html` |
 | Error handling, and why a handler cannot fail the service | `docs.rs/axum/axum/error_handling/index.html` |
@@ -247,7 +269,7 @@ probe wherever a sentence would have to be version-specific.
 | `ServiceBuilder` applies layers top to bottom | `docs.rs/tower/tower/struct.ServiceBuilder.html#order` |
 | `App::wrap` — the last registered runs first | `docs.rs/actix-web/actix_web/struct.App.html#method.wrap` |
 | `web::Data`, and the runtime error when it was never added | `docs.rs/actix-web/actix_web/web/struct.Data.html` |
-| `ResponseError`, where an error becomes a status | `docs.rs/actix-web/actix_web/trait.ResponseError.html` |
+| `ResponseError`, where an error becomes a status | `docs.rs/actix-web/actix_web/error/trait.ResponseError.html` |
 
 ## Persistence · `sqlx`, `diesel`
 
@@ -287,7 +309,7 @@ pins them.
 `‡ probe` and `‡ since X` are about the sentence, never the link. § *What the marks mean*.
 
 Every path above is stored **without** a version segment and **with** its host and, for docs.rs, its
-crate name. § *Pinning* has the emitted form, and § *Version* is why none of them is emitted yet.
+crate name. § *Pinning* has the emitted form, and § *Version* the floor below which none is emitted.
 
 ## Adding a row
 
@@ -302,5 +324,4 @@ pinned to. It cannot tell you the page documents the concept in the row — that
 above comes first and is not replaceable by the script.
 
 A concept nobody has verified a URL for is still usable: explain it in prose, cite the repo line it
-applies to, and propose a probe. That is the normal case, not a degraded one — and while § *Version*
-holds this file closed, it is the **only** case.
+applies to, and propose a probe. That is the normal case, not a degraded one.

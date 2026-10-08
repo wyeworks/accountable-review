@@ -136,6 +136,24 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-primer-probe-nested.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-rails-framed.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-rails-framed.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-rust-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-rust-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-primer-rust-unframed.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-primer-rust-unframed.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-primer-uncited.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

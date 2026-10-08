@@ -190,9 +190,9 @@ an absent finding is reported by absence, not by a green tick.
 
 ## Coding decisions, against this codebase's own answers
 
-`references/rust.md` § *Coding decisions* owns the rule and the register — repository-only citations
-while `rust-docs.md` is closed, one per departure, *is it deliberate that X, given Y?* What a backend
-adds is shapes to look for:
+`references/rust.md` § *Coding decisions* owns the rule, the register and the closed list of stack
+conventions — one per departure, *is it deliberate that X, given Y?* What a backend adds is shapes to
+look for:
 
 - **A handler that reaches past the layer its siblings go through** — straight to the pool or the
   query builder where every other handler calls a service or repository function.

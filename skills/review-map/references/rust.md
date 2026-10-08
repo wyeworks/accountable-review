@@ -233,12 +233,30 @@ is always a module, a crate or a convention doc the diff never touched. `report-
 § *Coding decisions* owns when this becomes a checkpoint — one per departure, ranked last, never
 displacing a behavioural judgment, and **never without a citation**.
 
-**The repository is the only source here for now.** The Rails lens carries a closed list of stack
-conventions, each backed by a catalogue row; this one carries none, because `rust-docs.md` withholds
-every link until it is verified, and a stack convention with no documentation behind it is the run's
-taste. When that catalogue opens, the list goes here in the same form — the API guidelines and the
-Cargo book's SemVer page are its likeliest sources. Until then the `Y` is this repository's own: a
-line in its convention doc first, a sibling module, crate or populated directory second.
+**Stack conventions — the closed list.** These hold across Rust codebases because the toolchain or the
+crate documents them, which is what admits them as a source when the repository is silent. Nothing
+outside this list qualifies; adding to it means adding the catalogue row that documents it, through
+`evals/verify-catalogue.sh`, never a URL written from memory. The row named is `rust-docs.md`'s, and
+it is the checkpoint's one doc link. The Rust API Guidelines are the source a Rust reviewer would
+reach for first and are not on the list, because they live on neither catalogue host and are not
+versioned.
+
+| Convention | The PR departs when it… | Catalogue row |
+|---|---|---|
+| Cargo features are additive | adds a feature that turns behaviour *off*, or two features that cannot both be enabled — a `compile_error!` on the pair, or a `cfg(not(feature = …))` path the other feature replaces | *Mutually exclusive features, and why features must be additive* |
+| A published crate's breaking change moves the major version — the minor, below 1.0 | changes or removes a `pub` item, adds a required trait method or a field to an exhaustive public struct, and leaves the version where it was | *Which changes are breaking for a published crate* |
+| Blocking work in async code goes to `spawn_blocking` | calls `std::fs`, a synchronous client or a long CPU loop straight inside an `async fn` that runs on the tokio runtime | *`spawn_blocking` for work that would stall the runtime* |
+| A lock not held across an `.await` is a `std` mutex | introduces `tokio::sync::Mutex` for data whose guard never crosses an await, or the reverse — a `std::sync::Mutex` guard held across one | *Which mutex to hold across an `.await`* |
+| Application state reaches an `axum` handler through `State` | adds an `Extension` layer for state the router could pass with `with_state`, trading a compile error for a runtime 500 | *Sharing state with handlers — `State` preferred, as the more type safe* |
+
+A row applies only where its stack is in the build: the two `tokio` rows where `tokio` is, the `axum`
+row where `axum` is, the SemVer row only for a crate this repository publishes — `publish = false`, or
+no release history, and it is not a question.
+
+**Look for a written decision first.** Step 2 read the project's convention docs; a line there that
+names the choice is the strongest `Y` there is, and a doc that blesses the PR's choice closes the
+question whatever the list above says. Otherwise the `Y` is this repository's own: a sibling module,
+crate or populated directory.
 
 - **A second error strategy in a crate that has one.** A `Box<dyn Error>` or `anyhow::Result` in a
   library whose every other function returns its own `thiserror` enum, or a hand-written `Display`

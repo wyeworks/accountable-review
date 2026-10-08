@@ -596,6 +596,24 @@ else
   else
     check.bad("#{marked} primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it")
   end
+
+  # 8g · The frame is the stack's, and the stack is the doc link's host. A Rust primer carries
+  #      `pr-rust`, which re-points the frame from Rails red to graphite; nothing else may, and it
+  #      may not be missing. Read off the link rather than the header, because the link is what the
+  #      catalogue vouched for and the header is words. Both directions fail: a Rust lesson in Rails
+  #      red is the defect the variant exists to end, and the class on a Rails primer is a colour
+  #      chosen rather than derived — which is how a frame starts to mean something.
+  rust_link = %r{class="doc"[^>]*href="https://(?:docs\.rs|doc\.rust-lang\.org)/}
+  framed = primers.count do |pr|
+    rust = pr.has?(rust_link)
+    variant = pr.lines.first.to_s[/<aside class="([^"]*)"/, 1].to_s.split.include?("pr-rust")
+    rust != variant
+  end
+  if framed.zero?
+    check.ok("every primer's frame matches the host of its doc link")
+  else
+    check.bad("#{framed} primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other")
+  end
 end
 
 # ---------------------------------------------------------------- runtime probes

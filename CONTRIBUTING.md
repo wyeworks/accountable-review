@@ -55,7 +55,7 @@ skills/review-map/
 │   ├── rust-backend.md            Rust backend: read on top of rust.md — routes, layers, the wire, the schema
 │   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
-│   ├── rust-docs.md               the docs.rs and doc.rust-lang.org paths, pinned per crate — closed pending verification
+│   ├── rust-docs.md               the docs.rs and doc.rust-lang.org paths, pinned per crate and toolchain
 │   ├── page-template.html         design system and components — no svg, by design
 │   └── themes/                    daylight (default), workshop, field-notes — fonts, tokens, overrides
 ├── scripts/
@@ -174,7 +174,9 @@ One script needs the network and is maintenance rather than part of a run:
 Rails series the version floor admits, `references/elixir-docs.md` at each package's newest release,
 and `references/rust-docs.md` at each crate's newest release and the newest toolchain — and reports
 dead pages, dead anchors, and rows that differ by version. A catalogue is the one thing a run cannot
-verify for itself, and the Elixir and Rust ones stay closed until this script opens them.
+verify for itself, and the Elixir one stays closed until this script opens it. The Rust one is open;
+the script checks it at newest releases only, so a change to it also wants the floor sweep its
+§ *Version* describes.
 
 ## Releasing
 

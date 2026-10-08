@@ -349,7 +349,7 @@ two sources:
   `file:line` it rests on. Only conventions on that list qualify: a practice the run knows but the
   lens does not name is general knowledge, and general knowledge is taste. **A list exists only
   where the catalogue is open**, so a Phoenix run has the first source alone until `elixir-docs.md`
-  is verified, and a Rust run until `rust-docs.md` is.
+  is verified.
 
 **The repository outranks the stack.** Where this codebase has settled on the PR's choice — a
 convention doc that says so, or a dozen siblings doing the same — there is no departure, whatever the
@@ -781,10 +781,10 @@ commonly blocked. A concept the catalogue does not carry gets explained in prose
 which is the ordinary case and not a degraded one. Constructing a plausible URL is the failure this
 rule exists to prevent: it looks like diligence and it lands the reader on a 404.
 
-**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` and
-`rust-docs.md` each currently withhold every link in their § *Version* until a verification run has
-opened their rows, so an Elixir or a Rust run anchors with probes and prose and emits no doc link at
-all. That is the same fail-closed rule applied
+**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` currently
+withholds every link in its § *Version* until a verification run has opened its rows, so an Elixir
+run anchors with probes and prose and emits no doc link at all. `rust-docs.md` was closed the same
+way and is open since its 2026-10-08 sweep. That is the same fail-closed rule applied
 at file scope rather than at row scope, and the page is shorter rather than wrong. Read the
 catalogue's § *Version* before reaching for a link from it.
 
@@ -966,7 +966,7 @@ Two things follow from that gate, and both are deliberate.
 
 - **A closed catalogue means no primers for that stack.** While `elixir-docs.md` § *Version*
   withholds every link, a Phoenix run at `--mentor` carries none of these and anchors with probes and
-  prose — and so does a Rust run while `rust-docs.md` § *Version* does. Narrower, not wrong: the same trade the withhold already makes, arriving at the heaviest
+  prose. Narrower, not wrong: the same trade the withhold already makes, arriving at the heaviest
   component rather than the lightest, and lifted by the same one command. Say so in chat rather than
   on the page — a line explaining why the page has no primers is a mentor badge with an apology
   attached.
@@ -1004,7 +1004,7 @@ arrive looking generous.
 rests on its repo `file:line` at the tier it already carried. There is no sixth tier, and a primer is
 not one: what it adds is why the framework consequence follows, which is provenance.
 
-**The header names the stack, and the frame is that stack's red.** `Understanding Ruby on Rails`, in
+**The header names the stack, and the frame is that stack's colour.** `Understanding Ruby on Rails`, in
 the display serif at the page's own near-black ink, with the API the primer is about on the right; the
 panel around it is `--primer-*`, a ramp that exists for this component and reaches nothing else.
 Both halves answer the same reader. Someone new to the stack has to find the block written for them
@@ -1019,10 +1019,17 @@ arriving as a palette, and `page-template.html`'s token block owns the rest of t
 including why the ramp is named for its component rather than for a meaning. The green and red inside
 an excerpt are untouched and still mean added and removed there and nowhere else.
 
-**Rails is the only stack that earns a primer today**, because `elixir-docs.md` and `rust-docs.md`
-withhold every link and a primer is gated on one. If either catalogue opens, a Phoenix or a Rust
-primer in Rails red is wrong; the answer then is a variant class on the aside, never a colour a run
-types and never a second component.
+**A Rust primer takes its own frame, and the frame is one class.** `rust-docs.md` is open, so Rust is
+the second stack that can earn a primer, and a Rust lesson in Rails red would be wrong. The aside
+carries `pr-rust` beside `primer`, which re-points every `--primer-*` slot at a graphite ramp — Rust's
+own mark is black — and changes nothing else; its header is *Understanding Rust*. **The class is the
+stack's, never a choice**: it goes on a primer whose doc link is a `docs.rs` or `doc.rust-lang.org`
+row and on no other, and `rails-anchors.rb` § 8 fails the page in either direction, because a frame a
+run picks is how a colour starts to mean something. Graphite rather than Ferris orange because orange
+sits between the red frame and the ochre that says something is missing, and would be read as the
+second. Phoenix still earns no primer, because `elixir-docs.md` withholds every link; when it opens
+the answer is the same shape — a variant class, never a colour a run types, never a second
+component.
 
 **No mark, and therefore no trademark line.** The version of this callout that the agenda put down
 carried an inlined logotype and a notice saying whose it was. This page has no `<svg>` anywhere, so

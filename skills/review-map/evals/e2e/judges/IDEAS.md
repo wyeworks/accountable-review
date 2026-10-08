@@ -77,8 +77,8 @@ nothing crosses into unchanged code.
 - Every excerpt is earned by a load-bearing citation, and the page reads complete with every
   `details` shut, judged field by field.
 - Probes can be answered in a fresh checkout, and the label says what the output would settle.
-- **On a Phoenix or a Rust page, zero doc links is expected**, because `elixir-docs.md` and
-  `rust-docs.md` are closed. A rubric that asks for a doc link fails every correct page of either.
+- **On a Phoenix page, zero doc links is expected**, because `elixir-docs.md` is closed. A rubric
+  that asks for a doc link fails every correct page of it.
 
 ## Voice and economy
 

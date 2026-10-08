@@ -177,7 +177,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/rust.md` | Domain knowledge, **Rust of any kind** — the same three parts, organised around what the compiler was told not to check or cannot see: the wildcard arm, the `pub` item, the unbuilt feature combination, the module whose safe code keeps an `unsafe` block sound. The whole lens for Rust in general, and the first layer for a Rust backend. Its probes read the build — `--locked` always — because Rust has no console |
 | `references/rust-backend.md` | Domain knowledge, **Rust backend** — read **after** `rust.md`, never instead of it, and restating none of it: routes and layers (an `axum` layer covers only the routes added before it), extractors, the wire contract, migrations against compile-time-checked queries, and the request whose future is dropped when the client leaves. Points at `rails-nextjs.md`'s client sections the way the Phoenix file does |
-| `references/rust-docs.md` | The documentation catalogue, **Rust** — docs.rs paths pinned per crate and doc.rust-lang.org paths pinned to the toolchain, each stored **with its host** because `cargo` is both a crate and a book. Closed exactly as `elixir-docs.md` is, for the same reason |
+| `references/rust-docs.md` | The documentation catalogue, **Rust** — docs.rs paths pinned per crate and doc.rust-lang.org paths pinned to the toolchain, each stored **with its host** because `cargo` is both a crate and a book. Written closed like `elixir-docs.md`, **opened** by the 2026-10-08 sweep |
 | `references/page-template.html` | Design system — the rules every theme's tokens keep (it declares none of its own), component classes, the assembled checkpoint, the chain, one of each topology figure and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads. A fifth, `SKELETON:THEME`, inside the head, is where the theme goes |
 | `references/themes/` | The three looks — `daylight` (the default), `workshop`, `field-notes` — each one file: a font link and one `<style>` holding its tokens in all three theme states and its overrides, every element carrying `data-style`. All three emitted at the `SKELETON:THEME` line, the unchosen ones `media="not all"`; never read by a run |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
@@ -302,8 +302,8 @@ Editing one of these means checking the others still agree.
   checks the stack name and the catalogue at step 2, earns one at step 7g, writes it at step 9 and
   carries the demo exception in its hard rules; `page-template.html` holds the CSS in the head range
   and the callout assembled inside checkpoint A; `evals/checks/rails-anchors.rb` § 8 grades it on the
-  **comment-stripped** copy, behind eight `golden/anchors-primer-*` fixtures and `anchors-demo-loose`;
-  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it three
+  **comment-stripped** copy, behind eleven `golden/anchors-primer-*` fixtures and `anchors-demo-loose`;
+  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it four
   ways; and the CI half is `ci/generate-review-map.sh`, `read-config.sh`, `references/config.md` and
   `setup-ci/tests/`, where **off is the absence of the flag** rather than `--mentor off`, because the
   skill parses no such value.
@@ -1139,13 +1139,15 @@ Editing one of these means checking the others still agree.
   available — it is attached to no claim at all, since what it frames is a quotation of the manual —
   and the ramp is named for its component rather than for a meaning precisely so it has nowhere to
   spread. **Red on anything the page asserts about the change is the severity chip arriving as a
-  palette**, and that is the direction to watch. One open question is recorded rather than guessed at:
-  Rails is the only stack that earns a primer today, because `elixir-docs.md` and `rust-docs.md`
-  withhold every link and a primer is gated on one, so if either opens the answer is a variant class
-  on the aside
-  — never a colour a run types, and never the branded/unbranded split already deleted once.
-  `tests/run.sh` counts `--primer-ink` by name in all three theme states, and `report-format.md`
-  § *Mentor mode* owns the page-level rule.
+  palette**, and that is the direction to watch. **Rust was the open question, and the answer was the
+  one recorded for it: a variant class.** `aside.primer.pr-rust` re-points every `--primer-*` slot at
+  `--primer-rust-*`, graphite — Rust's own mark is black, and Ferris orange would sit between the red
+  frame and ochre and read as the second. The class is the stack's rather than a run's choice, read
+  off the doc link's host, and `rails-anchors.rb` § 8g fails a mismatch either way, because a frame a
+  run picks is how a colour starts to mean something. Never a colour a run types, and never the
+  branded/unbranded split already deleted once. Phoenix earns no primer until `elixir-docs.md` opens,
+  and then gets the same shape. `tests/run.sh` counts `--primer-ink` and `--primer-rust-ink` by name
+  across every theme, and `report-format.md` § *Mentor mode* owns the page-level rule.
 
   **Teal is the one that had to be argued, and the argument is why it is safe on this page.** The
   changed/unchanged distinction is the most load-bearing one the page draws and it was carried by a
@@ -1400,10 +1402,13 @@ script catches and no care while writing prevents.
 URL was, so the file withholds every link until a dated verification line replaces its § *Version*
 paragraph — the fail-closed rule at file scope. An Elixir run anchors with probes and prose, and
 `--mentor` on Phoenix produces no primer. `verify-catalogue.sh --catalogue references/elixir-docs.md`
-is that file's **release gate**, not optional maintenance. **`rust-docs.md` is closed the same way and
-for the same reason**, and was written on a machine that could reach crates.io but not docs.rs — so
-its rows are rustdoc's naming scheme applied from memory, which is exactly the class of row the Elixir
-paragraph above describes.
+is that file's **release gate**, not optional maintenance. **`rust-docs.md` shipped closed the same
+way and is now open, which is the gate working rather than the rule relaxing.** Its rows were
+rustdoc's naming scheme applied from memory, and the sweep that opened it found one defect of each
+kind that habit produces — a re-exported item linked at its import path, a fragment renamed under a
+fixed page, and a floor docs.rs never built — so the closed default paid for itself on its first run.
+The verifier checks newest releases only, so its § *Version* also records a hand sweep across the
+floor; a Rust catalogue change is re-verified the same way.
 
 **Every doc link is pinned, for checkability rather than precision**: a pinned page names its
 version, so the reader can hold it against their lock file. Below the floor, or with no verified

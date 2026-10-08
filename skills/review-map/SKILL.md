@@ -374,7 +374,7 @@ than a sentence.
 **At `--mentor`, a closed catalogue also decides whether the flag can do anything.** A primer is what
 a doc link escalates into and is gated on carrying one, so while `elixir-docs.md` § *Version*
 withholds every link a Phoenix run at `--mentor` writes no primers at all and produces the ordinary
-page — and the same holds for a Rust run while `rust-docs.md` § *Version* does. Say that to the user, in chat, when the run starts — a flag that silently did nothing is worse
+page. Say that to the user, in chat, when the run starts — a flag that silently did nothing is worse
 than one that says why it could not. Do **not** say it on the page: a line explaining the absence of
 primers is the mentor badge § *Mentor mode* refuses, with an apology attached.
 
@@ -1285,17 +1285,20 @@ Everything else about writing holds at every stage:
   with the repo citation it applies to; that is the ordinary outcome, not a failure. The rules and the
   budget are in `references/report-format.md` § *Framework anchors*, and they live there only.
 
-  **A catalogue can also be closed as a whole**, and two currently are: `references/elixir-docs.md`
-  and `references/rust-docs.md` each withhold every link in their § *Version* until a verification
-  run dates it. Read that section before emitting an Elixir or a Rust doc link — while it is closed,
-  the answer for every concept is *no link*, and the run anchors with probes and prose instead. This
-  is the fail-closed rule at file scope, not a bug to work around.
+  **A catalogue can also be closed as a whole**, and one currently is: `references/elixir-docs.md`
+  withholds every link in its § *Version* until a verification run dates it. Read that section before
+  emitting an Elixir doc link — while it is closed, the answer for every concept is *no link*, and the
+  run anchors with probes and prose instead. This is the fail-closed rule at file scope, not a bug to
+  work around. `references/rust-docs.md` is open; read its § *Version* for the floor below which it
+  emits nothing.
 - **At `--mentor`, take the primer's markup from the template like any other component.** It is
   assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header, which names the
   stack in words and not the component — *Understanding Ruby on Rails*, *Understanding Phoenix*,
   *Understanding Rust*, or
   the library a gem-level primer is about — with the API on the right; then the two paragraphs, the
-  `.item` citation, the pinned `a.doc` and the `pre.demo` beside them.
+  `.item` citation, the pinned `a.doc` and the `pre.demo` beside them. **A Rust primer** — one whose
+  `a.doc` is a `docs.rs` or `doc.rust-lang.org` row — adds `pr-rust` to the aside's class and nothing
+  else; that class is the stack's, never a choice, and no other primer carries it.
   Copy the composition and replace every string — the specimen explains `ActiveModel::Dirty` about a
   `Post`, and a specimen's prose inherited onto a different API is a false claim nothing catches.
 

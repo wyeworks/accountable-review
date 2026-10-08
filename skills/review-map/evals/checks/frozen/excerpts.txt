@@ -208,6 +208,24 @@ SKIP  no excerpts in this input
 ## --page anchors-primer-probe-nested.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-primer-rails-framed.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rails-framed.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rust-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-rust-unframed.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rust-unframed.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-primer-uncited.html
 exit=0
 SKIP  no excerpts in this input

@@ -4,13 +4,20 @@
 # references/elixir-docs.md at each package's newest release, and references/rust-docs.md at
 # each crate's newest release and the newest toolchain.
 #
-# THE ELIXIR AND RUST CATALOGUES ARE CLOSED UNTIL THIS SCRIPT OPENS THEM. Each file's
-# § Version withholds every link in it — a run emits none, and anchors with probes instead —
-# because no row in it has been opened. That is the fail-closed rule at file scope rather
-# than row scope, and this script is the whole of what lifts it: a clean run prints a dated
-# line, and that line replaces the withhold in § Version in the same commit. So this is not
-# optional maintenance for those files the way it is for the Rails one; it is each file's
-# release gate.
+# THE ELIXIR CATALOGUE IS CLOSED UNTIL THIS SCRIPT OPENS IT, and the Rust one was. A closed
+# file's § Version withholds every link in it — a run emits none, and anchors with probes
+# instead — because no row in it has been opened. That is the fail-closed rule at file scope
+# rather than row scope, and this script is the whole of what lifts it: a clean run prints a
+# dated line, and that line replaces the withhold in § Version in the same commit. So this is
+# not optional maintenance for those files the way it is for the Rails one; it is each file's
+# release gate. rust-docs.md was opened on 2026-10-08, and its first run found a re-exported
+# item linked at its import path and a Reference section renamed under an unchanged page —
+# the two classes a row written from rustdoc's naming scheme produces.
+#
+# ONE AXIS THIS DOES NOT COVER: a hexdocs or docs.rs row is checked at the package's NEWEST
+# release only, while the catalogue promises every release from its floor up. For Rust that
+# gap was closed by hand — rust-docs.md § Version records the sweep — and a row added there
+# owes the same.
 #
 # WHY THIS EXISTS, AND WHY IT IS NOT A CHECK UNDER checks/
 #
@@ -407,8 +414,8 @@ if [ "$fail" -eq 0 ]; then
     say ""
     say "verify-catalogue.sh: clean ($(date +%Y-%m-%d)) · packages: $(awk '{printf "%s@%s ", $1, $2}' "$TMP/hexver")"
     say "  Record the date and these versions in $CAT_NAME § Version."
-    say "  For elixir-docs.md and rust-docs.md that record REPLACES the withhold: until it is"
-    say "  there, a run emits no link from the file at all. Opening it is the point of this run."
+    say "  For a closed catalogue that record REPLACES the withhold: until it is there, a run"
+    say "  emits no link from the file at all. Opening it is the point of this run."
   else
     say "$nok/$nwork resolve, fragments included — every row is good for every series in the floor"
     say ""
