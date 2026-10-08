@@ -505,7 +505,7 @@ if nprimer.zero?
 else
   primers = markup.regions(open: /<aside class="primer/, close: %r{</aside>})
 
-  # 8a · Inside a checkpoint, and one each. A primer in § 03, § 04 or the evidence foot is a
+  # 8a · Inside a checkpoint, and one each. A primer in § 04, § 05 or the evidence foot is a
   #      framework lesson with no judgment attached to it. Attribution is by the nearest enclosing
   #      <section>, which is how the rest of this directory reads nesting: a checkpoint contains no
   #      nested section, so a </section> closes whatever was open.

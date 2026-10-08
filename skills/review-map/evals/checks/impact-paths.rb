@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# impact-paths.rb — the section 04 figure, and the only check that reads inside it.
+# impact-paths.rb — the section 05 figure, and the only check that reads inside it.
 #
 # IT GRADES figure.impact AND NOTHING ELSE. A checkpoint's figure.chain is built out of the
 # same ol.ip-path and the same node kinds, and every extraction below is scoped inside
@@ -123,7 +123,7 @@ panels = region.regions(open: PANEL_OPEN, close: PANEL_CLOSE)
 
 # A fragment with no panel has nothing to read and says so — a check that reports a pass on an
 # input it never looked at is the failure mode this whole suite is built against. A PAGE with
-# no panel is different: section 04 is omitted only when nothing crosses into unchanged code,
+# no panel is different: section 05 is omitted only when nothing crosses into unchanged code,
 # which is legitimate and rare, so it warns rather than failing. Silence would let a page that
 # simply never looked for a consequence read as one that looked and found none.
 if panels.empty?
@@ -139,7 +139,7 @@ end
 if panels.size == 1
   check.ok("one impact panel")
 else
-  check.bad("#{panels.size} .impact panels in section 04 — the panel IS the section's one figure, and a second competes with it for the same reading")
+  check.bad("#{panels.size} .impact panels in section 05 — the panel IS the section's one figure, and a second competes with it for the same reading")
 end
 
 panel = panels.first

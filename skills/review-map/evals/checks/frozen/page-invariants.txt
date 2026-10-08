@@ -1228,6 +1228,126 @@ SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment context-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page context-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment context-dead-pointer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page context-dead-pointer.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment context-no-pointer.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page context-no-pointer.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment context-shift-only.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page context-shift-only.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  no severity chips
@@ -1528,6 +1648,36 @@ SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment figures-context-chain.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page figures-context-chain.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
 ## --fragment figures-converge-grading-note.html
 exit=1
 PASS  no severity chips
@@ -1724,6 +1874,186 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 ## --page figures-lifecycle-no-loc.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment figures-shift-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page figures-shift-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment figures-shift-in-checkpoint.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page figures-shift-in-checkpoint.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment figures-shift-no-cases.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page figures-shift-no-cases.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment figures-shift-not-moved.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page figures-shift-not-moved.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment figures-shift-one-moved.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page figures-shift-one-moved.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --fragment figures-shift-one-pointer.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+FAIL  no evidence tier labels — inference is being presented as fact, or none was marked
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+## --page figures-shift-one-pointer.html
 exit=1
 PASS  no severity chips
 PASS  no verdict or approval language

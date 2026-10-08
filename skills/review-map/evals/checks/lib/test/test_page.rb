@@ -96,7 +96,7 @@ class TestRegions < Minitest::Test
     refute_includes regions.first.lines.join, "decisions"
   end
 
-  # dl.rows is SHARED with section 4, so the flow census narrows on id="flow-" first. This
+  # dl.rows is SHARED with section 5, so the flow census narrows on id="flow-" first. This
   # is the false positive flows-reach-rows.html pins, expressed directly.
   def test_narrow_keeps_document_order_and_drops_unmatched_sections
     narrowed = page(<<~HTML).narrow(open: /<section [^>]*id="flow-/, close: SEC_END)

@@ -170,7 +170,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | File | Owns |
 |---|---|
 | `SKILL.md` | The procedure — ten ordered steps from resolving the target to publishing, step 7 being the synthesis that turns analysis into an agenda — plus the product principle and the hard rules |
-| `references/report-format.md` | Page structure — the five sections and what triggers each, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, **the three topology figures** and the order a shape is chosen in, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/report-format.md` | Page structure — the six sections and what triggers each, **Context** and its earning test, **the review checkpoint** and the coding-decision kind of it, **chains** and the rule that decides which figure a chain is, **the three topology figures** and the order a shape is chosen in, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus § *Coding decisions*, the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the Phoenix file points at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
@@ -188,7 +188,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the evidence foot's inventory cells and their deep links, so the gate checks the page rather than someone's typing. `--paths-only` is the only mode the page uses |
 | `scripts/coverage-gate.sh` | The one mechanical check — set equality between the inventory and the diff |
-| `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
+| `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git rather than of a fixture. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` passed an unquoted `: ` that Pi's loader rejects without a word |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and the defaults `evals/README.md` argues for and **no rule of its own**; nothing it calls changed to make it work, so old result lines stay comparable. Its `parity` line is what stops its suite table drifting from `validate.yml` |
@@ -207,7 +207,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `ci/application-code.sh` | The scope gate, in two rules: does this diff change application code at all, and is what it changes more than trivial? Both counted over application paths only, the trivial thresholds joined by **and**, and it fails open, so an unrecognised path is code |
 | `ci/delivery/` | The delivery seam. `deliver.sh` dispatches; a provider is one file that reads `AR_*` and prints `key=value` |
 | `README.md` | The public face — why comprehension debt is the problem, what a Review Map is, install, usage, CI setup, and the technical overview. Written for someone deciding whether to use this, so depth past that decision belongs in `docs/` |
-| `docs/review-map.md` | The page anatomy for a reader who already wants it: the five sections, the checkpoint, staging, excerpts, the framework anchors, the evidence tiers, and what the skill assumes about a repository. It **restates** `report-format.md` for the public and owns nothing — where the two disagree, the reference wins and this file is the one that is wrong |
+| `docs/review-map.md` | The page anatomy for a reader who already wants it: the six sections, the checkpoint, staging, excerpts, the framework anchors, the evidence tiers, and what the skill assumes about a repository. It **restates** `report-format.md` for the public and owns nothing — where the two disagree, the reference wins and this file is the one that is wrong |
 | `docs/ci.md` | The public half of `setup-ci/references/delivery.md` — artifacts as a default rather than a contract, the DeliveryResult, and how a team adds a provider. Same rule: it restates, the reference owns |
 | `CONTRIBUTING.md` | How to work on the plugin from a checkout — the layout, the eval loop, the self-tests, and the release process. Why a rule exists stays in this file; `CONTRIBUTING.md` is only how to run things |
 | `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in a catalogue — `rails-docs.md` across every Rails series the floor admits, `elixir-docs.md` at each package's newest release — and reports dead pages, dead anchors, and the rows that differ by version. Maintenance for the first, the **release gate** for the second, never part of a run — see § *The catalogue is the one thing a run cannot verify* |
@@ -257,7 +257,7 @@ Editing one of these means checking the others still agree.
   budget forbids.
 
   **The rail is emitted, not edited down.** `page-skeleton.sh --markup` hands a run the whole markup
-  half, seven `data-rail` entries: four numbered sections and three checkpoint sub-entries. That used
+  half, eleven `data-rail` entries: five numbered sections and six checkpoint sub-entries. That used
   to be filtered per level by `SKELETON:ONLY:level=` markers and a validator that failed closed, all
   of which is deleted with the level. What replaced the filter is nothing, which is the right amount
   of machinery for a page with one shape: `tests/run.sh` counts the entries, and the sanity row of
@@ -346,7 +346,7 @@ Editing one of these means checking the others still agree.
   a flat ceiling of five is the observation that the ceiling contradicted a hard rule**: a sixth
   judgment had to go to a clause or to the evidence foot, and the foot is where
   promotion-by-omission forbids a judgment to live. Five files agree — `report-format.md` § *The
-  review checkpoint* owns it alone and § *Section 3* owns the routing that bounds it, `SKILL.md`
+  review checkpoint* owns it alone and § *Section 4* owns the routing that bounds it, `SKILL.md`
   step 7e and § *How big should the page be?* carry it into the procedure, and `start-here.rb` warns
   on a checkpoint no stop points at. Nothing grades the count; `rails-anchors.rb` pins its
   per-checkpoint denominators at five so a wider agenda cannot quietly loosen the anchor budget.
@@ -408,12 +408,12 @@ Editing one of these means checking the others still agree.
   any of it — like the category test, whether a departure was real and whether the page asked rather
   than answered are judged, and `evals/e2e/judges/IDEAS.md` records the judge that would ask them.
 - **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is
-  mechanical.** `figure.impact` in section 04 and `figure.chain` inside a checkpoint are the same
+  mechanical.** `figure.impact` in section 05 and `figure.chain` inside a checkpoint are the same
   `ol.ip-path` with the same node kinds and the same causal verbs. `report-format.md` § *Chains* owns
   what they share; § *Impact paths* owns the panel's own caps and owns them alone.
 
   **The rule: a chain that crosses from changed code into unchanged code whose meaning the change
-  altered is an impact path.** It lives in section 04, drawn once, and a checkpoint that turns on it
+  altered is an impact path.** It lives in section 05, drawn once, and a checkpoint that turns on it
   says so in a clause. A chain inside a checkpoint shows mechanism *within* the change and therefore
   carries **no `.ip-aff`** — which makes the rule checkable rather than a matter of taste, and
   `tests/run.sh` checks it on the template with an awk range over the assembled chain. `.ip-step` is
@@ -614,7 +614,7 @@ Editing one of these means checking the others still agree.
   work is entirely judgment, and the one place where the falsifiers' challenges arrive while it runs.
 - **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the search recipes in
   `rails-nextjs.md` are how, and it surfaces at three depths on the page. The **checkpoint** that
-  turns on it explains it, with the line in its *Look at* list. **Section 04** shows the crossings
+  turns on it explains it, with the line in its *Look at* list. **Section 05** shows the crossings
   whole — one to three chains, with the entries the chains run through cited beneath the figure and
   pointing back at the checkpoint in a clause. The **evidence foot** holds what is real, found and
   cited but not something the reviewer has to decide about.
@@ -647,7 +647,7 @@ Editing one of these means checking the others still agree.
   **That check needed one edit and it is worth knowing why.** It scopes its affected-entry region on
   the verbatim `Affected, not changed` eyebrow and resets on a small set of closing tags. The label
   now appears twice — beside the impact panel and again in the foot — with `details.searched` between
-  them, so without `</ul>` and `</section>` among the resets the region opened in section 04 ran
+  them, so without `</ul>` and `</section>` among the resets the region opened in section 05 ran
   straight into the foot and read **every recorded search as a claim that needed a recorded search**.
   The check keys on text nodes beginning with a search tool rather than on a class, which is why
   nothing else about it moved.
@@ -665,7 +665,7 @@ Editing one of these means checking the others still agree.
   first. `ledger-rows.sh` still emits the four-cell form without `--paths-only`; nothing calls it, and
   `report-format.md` § *A future full mode* is where it is written down.
 
-  **The carrier is not section 04, and the gate never noticed it move.** *Impact outside the diff*
+  **The carrier is not section 05, and the gate never noticed it move.** *Impact outside the diff*
   used to hold the whole diff too, which made it the second inventory its own closing rule forbids.
   On a 24-file PR that rendered as 24 links above a caption explaining that the eight worth opening
   were ranked elsewhere. `coverage-gate.sh` is a raw-byte page-wide grep, so it cannot tell whether
@@ -687,7 +687,7 @@ Editing one of these means checking the others still agree.
   enforced in step 10 by `scripts/coverage-gate.sh`. Four files have to agree for that check to work:
   the script reads a `data-path` attribute, the template emits it on the inventory's grid cell
   (`<div class="c" data-path="…">`, not a `<td>` — the inventory is a CSS grid), `report-format.md`
-  § *Section 5* requires it, and `SKILL.md` step 10 runs the script. Break any one and the gate stops
+  § *Section 6* requires it, and `SKILL.md` step 10 runs the script. Break any one and the gate stops
   checking. Note the asymmetry in the invariant itself: the page-wide rule is a subset test (the page
   cites unchanged files everywhere by design), while the gate is exact set equality against
   `git diff --name-only`, compared as whole strings — never substring matching, because `api/Gemfile`
@@ -702,7 +702,7 @@ Editing one of these means checking the others still agree.
   form lives in `report-format.md` § *Build state*, the components are `.buildstate` and `.pending`,
   and `evals/check.rb --draft` / `--final` check both ends of it.
 
-  **Omitted and pending is where the agenda makes that harder, and section 04 is the case.** A diff
+  **Omitted and pending is where the agenda makes that harder, and section 05 is the case.** A diff
   whose consequences all stay inside it earns no impact section: the section and its rail entry go,
   and what must not appear is a stub saying nothing reaches unchanged code. That sentence is a clean
   bill of health with a marker on it.
@@ -724,13 +724,13 @@ Editing one of these means checking the others still agree.
   23 KB byte for byte, 56% of everything that run spent streaming. Staging is only cheap if a stage
   writes what is new, so `SKILL.md` step 9 says fill in with `Edit`, never rewrite.
 
-  **The checkpoint — not section 02 — is the unit of staging.** Section 02 is the bulk, so a stage
+  **The checkpoint — not section 03 — is the unit of staging.** Section 03 is the bulk, so a stage
   that delivered it whole would put the longest wait of the run behind one arrival, which is the thing
   staging exists to prevent. It costs no markup: `<section id="attention">` is the heading and the
   caveat, each checkpoint is already its own nested `<section class="cp" id="cp-x">`, and the rail
   renders a per-checkpoint marker.
 
-  **That makes section 04 the last thing to publish rather than the first, and the ordering is a
+  **That makes section 05 the last thing to publish rather than the first, and the ordering is a
   dependency rather than a preference.** Every impact card's `p.ip-why` ends in a pointer at the
   checkpoint that judges it, so there is no `#cp-x` to point at until the agenda's stubs have landed.
   It published after step 5 for two versions, which bought a card that either carried a dead fragment
@@ -848,7 +848,7 @@ Editing one of these means checking the others still agree.
   certain, and it is the direction to watch.
 
   Seven files agree: `SKILL.md`'s hard rules own the prohibition and the redirect, `report-format.md`
-  § *The review checkpoint* records what the caveat was and why it went while § *Section 2* and the
+  § *The review checkpoint* records what the caveat was and why it went while § *Section 3* and the
   section table carry the consequence, `page-template.html` refuses it in a comment where the line
   used to be, `README.md` and `docs/review-map.md` are the public wording, and the mechanical half
   inverted with it — `start-here.rb` used to require the sentence page-wide and now checks nothing
@@ -910,7 +910,7 @@ Editing one of these means checking the others still agree.
   leaves the exit status at 0 and prints no rows, which reads as *no file is withheld* — the most
   reassuring thing it can say and the one with the least behind it. `excerpts.rb`'s state-tag rule
   shipped with exactly that bug, and `page-invariants.rb` § 5 with its sibling.
-- **Five sections, and each fact has one home.** The format is deliberately *not* one section per
+- **Six sections, and each fact has one home.** The format is deliberately *not* one section per
   architectural layer. It was, and that guaranteed restatement: one behaviour crosses persistence, the
   API, the boundary and its cohort, so it got described four times, and three further parts existed
   only to restate. A 21-page page condensed to 9 with nothing of value removed, which measures the
@@ -924,6 +924,45 @@ Editing one of these means checking the others still agree.
   like coverage: *ProjectSearcher implementation*, *Migration*, *Tests*. Five of those is the per-layer
   format with the section shells taken off, and it is cheaper to write than four merged judgments,
   which is exactly why a run reaches for it.
+- **Context is earned per concept, names the repository rather than the framework, and is not a
+  flag.** Section 02 sits between *What changed* and the agenda and introduces the pieces of *this
+  repository* a checkpoint relies on and a newcomer would lack — a sequence of requests, a plugin
+  wrapping a core method, a domain term a setting introduces. It exists because a correct, cited
+  checkpoint on discourse#43845 was unfollowable to a reviewer new to Discourse, and none of what it
+  assumed was about Rails, so `--mentor` could not have helped (issue #81).
+
+  **Three lines hold it, and each will be crossed by something that looks like helpfulness.** It is
+  **always on and earned**, so most pages carry none and the section is omitted with its rail entry
+  — never a stub saying no context is needed, which grades the change as easy; a flag would have
+  made it a second document. It says **what a thing is, never what the change did to it** — the
+  canonical-home line against the checkpoint, and the restatement regression one section early when
+  crossed. And its entries are **concepts the checkpoints need, never the layers the diff touched**:
+  *Models*, *The plugin*, *Tests* as entries is the per-layer page arriving a third time under a
+  friendlier heading. The pointer each entry ends in — `span.ctx-used`, naming the checkpoints that
+  rely on it — is that last rule made checkable.
+
+  **It renumbered the page**, attention to 03 through the foot to 06, and the rail does not close up
+  when Context is omitted: *01, 03* says a section went, which is true.
+
+  **It holds one figure, and only one kind: the shift.** `figure.lifecycle.lc-shift` draws the
+  request sequence before and after, when the change moved *which request does what* and two or more
+  checkpoints turn on that — one checkpoint makes it that checkpoint's plain lifecycle. It is the
+  only figure not owned by a checkpoint, and it waited until `figures.rb` read section 02, because a
+  figure there would otherwise have been the one nothing looks at. **The moved state is filled in
+  both columns**, which is what keeps the comparison when the columns stack on a phone; and **it
+  draws the main path and says so**, with the cases that differ a line each, because a sequence
+  drawn once reads as the only one. `report-format.md` § *Topology figures* owns its shape,
+  `figures.rb` grades it behind six `golden/figures-shift-*` fixtures and `figures-context-chain`,
+  and `tests/run.sh` counts exactly one figure in Context.
+
+  Seven files agree: `report-format.md` § *Section 2* owns the rules **alone**, with § *One canonical
+  home*, § *The agenda budget*, § *Build state*, § *Mentor mode* and § *A future full mode* pointing
+  at it; `SKILL.md` step 7k decides it and step 9 publishes it in stage 3, after the agenda's stubs;
+  `page-template.html` holds `dl.ctx` and its rail entry; `tests/run.sh` and `self-test.sh` assert its
+  place, pointers and absences; `checks/start-here.rb` warns on an entry with no pointer or a dead one,
+  behind three `golden/context-*` fixtures; `README.md` and `docs/review-map.md` are the public
+  wording. Whether an entry was worth writing is judged, and `evals/e2e/judges/IDEAS.md` § *§ 02
+  context* records the judge that would ask it.
 - **The order is the reviewer's path, and the checkpoint owns the explanation.** *What needs your
   attention* teaches the judgments; *Read the code in this order* is the moment they open the code;
   *Impact outside the diff* is the same change seen through one lens. Everything after the attention
@@ -994,7 +1033,7 @@ Editing one of these means checking the others still agree.
   Watch for pages whose excerpts are all `--source`. A per-flow `--diff` floor used to prevent that
   and went with the flows; seeing the hunk is very often what a judgment turns on, and nothing warns
   when it is missing any more.
-- **Impact paths are section 04's figure, and the edge is the point of them.** A path runs from changed
+- **Impact paths are section 05's figure, and the edge is the point of them.** A path runs from changed
   code, through the affected-but-unchanged code that gives the change its consequence, to an
   observable behaviour, every hop past the first carrying its incoming relation as a causal verb.
   1–3 paths, 3–5 nodes each, one path per `.ip-card`, at least one `.ip-aff`, one `.ip-out` last, and
@@ -1022,7 +1061,7 @@ Editing one of these means checking the others still agree.
 
   What no script settles: whether these are the right 2–3 paths and whether each edge is **true**.
   The tighter cap makes that sharper, not softer — choosing three consequences out of six is part of
-  the work — and the § 04 judge in `evals/e2e/judges/IDEAS.md` is where it would be asked.
+  the work — and the § 05 judge in `evals/e2e/judges/IDEAS.md` is where it would be asked.
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four `SKELETON:`
   markers. Everything in the head and tail ranges — the `<head>`, the theme's token block, the three
   highlight.js tags and the tint script, about 55 KB of it — is written straight into the page by
@@ -1176,7 +1215,7 @@ Editing one of these means checking the others still agree.
   fixture describing its own defect would pass for the wrong reason.
 
   One more thing moved with the teal. `.ev-list` was scoped `.evidence .ev-list`, and that list
-  appears **twice** — beside the impact panel in section 04 and again in the foot — so the section-04
+  appears **twice** — beside the impact panel in section 05 and again in the foot — so the section-05
   copy had no rules at all. Unscoping it is what lets both carry the teal rule, and it is a bug the
   palette found rather than one the palette caused.
 - **A published example is regenerated, never edited, and it names the version that produced it.**

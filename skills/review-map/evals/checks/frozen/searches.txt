@@ -244,6 +244,30 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page build-state-updated-twice.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-dead-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-no-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-no-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-shift-only.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-shift-only.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -304,6 +328,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page figures-clean.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-context-chain.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-context-chain.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment figures-converge-grading-note.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -344,6 +374,42 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page figures-lifecycle-no-loc.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-shift-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-shift-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-shift-in-checkpoint.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-shift-in-checkpoint.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-shift-no-cases.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-shift-no-cases.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-shift-not-moved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-shift-not-moved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-shift-one-moved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-shift-one-moved.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-shift-one-pointer.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-shift-one-pointer.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment figures-structure-erd.html

@@ -122,7 +122,8 @@ repository's own: a line in its convention doc first, a sibling module or popula
   choice someone made; whether it was deliberate is the reviewer's to say.
 - **A second way to do a job the app already does one way** — a hand-rolled `Plug` where an
   `on_mount` chain exists, a bespoke JSON shape beside a `@derive {Jason.Encoder}`, a `GenServer`
-  holding state a table already holds.
+  holding state a table already holds, a list of roles or statuses ordered again beside the module
+  attribute that already ranks them.
 
 **Ask; never answer**, exactly as in Rails: *is it deliberate that X, given Y?* and never *X should be
 Y*. The probe that settles what a module actually is needs no rows — `MyApp.Thing.__schema__(:source)`

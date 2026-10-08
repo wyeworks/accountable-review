@@ -1,0 +1,50 @@
+<!-- PLANTED: the moved state sits at the same position in both columns, so nothing moved. -->
+<section id="context">
+  <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
+  <h2>What the judgments below rely on</h2>
+  <figure class="lifecycle lc-shift">
+    <div class="lc-pair">
+      <div class="lc-row">
+        <span class="lc-when">Before</span>
+        <ol class="lc-states">
+          <li class="lc-s"><span class="ip-box"><b>email entered</b></span></li>
+          <li class="lc-s"><span class="ip-rel"><i></i>request code<a class="path ip-loc" href="#">app/controllers/session_controller.rb:12</a></span><span class="ip-box"><b>code sent</b></span></li>
+          <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="#">app/services/email_login_code/redeem.rb:102</a></span><span class="ip-box"><b>account created</b></span></li>
+          <li class="lc-s"><span class="ip-rel"><i></i>rename<a class="path ip-loc" href="#">frontend/account-ready.gjs:40</a></span><span class="ip-box"><b>username required</b></span></li>
+        </ol>
+      </div>
+      <div class="lc-row">
+        <span class="lc-when">After</span>
+        <ol class="lc-states">
+          <li class="lc-s"><span class="ip-box"><b>email entered</b></span></li>
+          <li class="lc-s"><span class="ip-rel"><i></i>request code<a class="path ip-loc" href="#">app/controllers/session_controller.rb:12</a></span><span class="ip-box"><b>code sent</b></span></li>
+          
+          <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code and username<a class="path ip-loc" href="#">app/services/email_login_code/redeem.rb:49</a></span><span class="ip-box"><b>account created</b></span></li>
+        </ol>
+      </div>
+    </div>
+    <ul class="lc-cases">
+      <li>Existing users: one request, the account already exists<a class="path" href="#">redeem.rb:136</a></li>
+      <li>Approval sites: finish on a separate completion endpoint<a class="path" href="#">session_controller_patch.rb:17</a></li>
+    </ul>
+    <figcaption>Which request creates the account, for a new user on an open site. <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a></span></figcaption>
+  </figure>
+  <dl class="ctx">
+    <dt>discourse-captcha</dt>
+    <dd>A plugin that wraps the session controller's code-login action and refuses the request when no CAPTCHA was solved.
+      <a class="path" href="#">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:5-15</a>
+      <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
+  </dl>
+</section>
+<section id="attention">
+  <section class="cp" id="cp-a">
+    <span class="lbl lbl-wide">Checkpoint A</span>
+    <h3>Does every request that creates an email-code account still pass CAPTCHA?</h3>
+    <p>The plugin now checks only the request that carries a username.</p>
+  </section>
+  <section class="cp" id="cp-b">
+    <span class="lbl lbl-wide">Checkpoint B</span>
+    <h3>Does a rejected username leave the code unspent?</h3>
+    <p>The code is redeemed on the request that creates the account.</p>
+  </section>
+</section>

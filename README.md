@@ -182,10 +182,12 @@ A normal diff cannot show those relationships. A Review Map can.
 A Review Map is a **review agenda**: the smallest set of things you have to judge before you can
 approve a change, with the code that settles each one attached.
 
-Four parts, and a shut evidence block at the foot:
+Five parts, and a shut evidence block at the foot:
 
 ```text
 What changed                    one paragraph: what is now true that was not
+Context                         when earned: the pieces of this repository the judgments rely
+                                on, for a reader who knows the stack but not the codebase
 What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the
                                 outside; each one judgment, framed as a question, and at
                                 most one small figure where its shape is clearer than prose:
@@ -548,8 +550,8 @@ Two, against real pull requests in public Rails codebases:
 
 | | |
 | --- | --- |
-| [**RubyGems.org #6699**](https://wyeworks.github.io/accountable-review/rubygems-6699/) — *Record every stint a user spends owning or maintaining a gem* | 11 files, 5 checkpoints. An additive diff that all looks safe — a new table, its callbacks, a backfill — where the judgments are about unchanged callers. Its figure draws every path that starts or ends an ownership converging on the one history row each must keep, and its impact section shows an organization onboarding, in code the PR never touched, recording the gem's own members as former owners. |
-| [**Discourse #43845**](https://wyeworks.github.io/accountable-review/discourse-43845/) — *Email-code signup collects its details before it creates the account* | 36 files, 6 checkpoints. The case the format exists for: most of what a reviewer has to decide is not in the diff — whether every request that creates an account still passes the CAPTCHA, which of the site's username rules still bind a server-generated name. It also ends on a checkpoint that asks how a change was built, earning its place by pointing at where the codebase already answered the same question. |
+| [**RubyGems.org #6699**](https://wyeworks.github.io/accountable-review/rubygems-6699/) — *Record every stint a user spends owning or maintaining a gem* | 11 files, 4 checkpoints, no *Context*. An additive diff that all looks safe — a new table, its callbacks, a backfill — where the judgments are about unchanged callers. Its figure draws every path that ends an ownership converging on the one history row each must close, and its impact section shows a bulk demotion, in code the PR never touched, leaving `owner` in the history it writes. |
+| [**Discourse #43845**](https://wyeworks.github.io/accountable-review/discourse-43845/) — *Email-code signup collects its details before it creates the account* | 36 files, 6 checkpoints. The case the format exists for: most of what a reviewer has to decide is not in the diff — whether every request that creates an account still passes the CAPTCHA, and what the new signup step does for a visitor who is not logged in yet. Its *Context* section draws the signup requests before and after, so the account-creating request is seen moving before any checkpoint relies on it. |
 
 They are public repositories on purpose: every `file:line` citation on those pages resolves, so you
 can follow any claim into the code it is about. Both are ordinary output at the default settings,

@@ -244,6 +244,30 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page build-state-updated-twice.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment context-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page context-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment context-dead-pointer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page context-dead-pointer.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment context-no-pointer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page context-no-pointer.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment context-shift-only.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page context-shift-only.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment excerpt-at-head.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -304,6 +328,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page figures-clean.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment figures-context-chain.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-context-chain.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment figures-converge-grading-note.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -344,6 +374,42 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page figures-lifecycle-no-loc.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-shift-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-shift-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-shift-in-checkpoint.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-shift-in-checkpoint.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-shift-no-cases.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-shift-no-cases.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-shift-not-moved.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-shift-not-moved.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-shift-one-moved.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-shift-one-moved.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-shift-one-pointer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-shift-one-pointer.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment figures-structure-erd.html

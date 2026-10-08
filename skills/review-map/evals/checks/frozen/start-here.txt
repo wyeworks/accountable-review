@@ -1,7 +1,7 @@
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -9,7 +9,7 @@ PASS  3 entries, within the shape of a reading order
 ## --page agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -17,7 +17,7 @@ PASS  3 entries, within the shape of a reading order
 ## --fragment agenda-probe-unlabelled.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -25,7 +25,7 @@ PASS  3 entries, within the shape of a reading order
 ## --page agenda-probe-unlabelled.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -33,7 +33,7 @@ PASS  3 entries, within the shape of a reading order
 ## --fragment agenda-probes-over-budget.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -41,1307 +41,1475 @@ PASS  3 entries, within the shape of a reading order
 ## --page agenda-probes-over-budget.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --fragment anchors-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-demo-loose.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-demo-loose.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-docsrs-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-docsrs-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-docsrs-unpinned.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-docsrs-unpinned.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-docsrs-wrong-crate.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-docsrs-wrong-crate.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-fabricated-output.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-fabricated-output.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-hexdocs-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-hexdocs-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-hexdocs-unpinned.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-hexdocs-unpinned.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-hexdocs-wrong-package.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-hexdocs-wrong-package.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-invented-attribute.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-invented-attribute.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-invented-scope.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-invented-scope.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-link-alone.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-link-alone.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-link-in-excerpt.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-link-in-excerpt.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-mixed-series.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-mixed-series.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-doubled.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-doubled.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-marked.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-marked.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-orphan.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-orphan.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-over-budget.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-over-budget.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-probe-nested.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-probe-nested.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-rails-framed.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-rails-framed.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-rust-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-rust-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-rust-unframed.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-rust-unframed.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-uncited.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-uncited.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-primer-ungated.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-primer-ungated.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-probe-label-thin.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-probe-label-thin.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-probe-legit-forms.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-probe-legit-forms.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-probe-lens-forms.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-probe-lens-forms.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-probe-rust-forms.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-probe-rust-forms.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-probe-sandbox-lie.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-probe-sandbox-lie.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-probe-unlabelled.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-probe-unlabelled.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-runner-mutates.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-runner-mutates.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-uncatalogued-url.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-uncatalogued-url.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment anchors-unpinned-link.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page anchors-unpinned-link.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment build-state-updated-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page build-state-updated-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment build-state-updated-missing.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page build-state-updated-missing.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment build-state-updated-nosha.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page build-state-updated-nosha.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment build-state-updated-twice.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page build-state-updated-twice.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment context-clean.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
+## --page context-clean.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
+## --fragment context-dead-pointer.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+WARN  Context points at cp-c, which this page does not carry — the checkpoint that earned the entry was merged or cut after it
+## --page context-dead-pointer.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+WARN  Context points at cp-c, which this page does not carry — the checkpoint that earned the entry was merged or cut after it
+## --fragment context-no-pointer.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+WARN  1 of 2 Context entr(ies) name no checkpoint that relies on them — an entry is earned by a checkpoint, and one with no pointer is inventory
+## --page context-no-pointer.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+WARN  1 of 2 Context entr(ies) name no checkpoint that relies on them — an entry is earned by a checkpoint, and one with no pointer is inventory
+## --fragment context-shift-only.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  Context holds only the request sequence before and after — figures.rb grades it
+## --page context-shift-only.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  Context holds only the request sequence before and after — figures.rb grades it
 ## --fragment excerpt-at-head.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-at-head.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-diff-lang.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-diff-lang.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-duplicate.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-duplicate.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-open.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-open.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-typed-highlight.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-typed-highlight.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-typed-tag.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-typed-tag.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-unchanged-changed-file.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page excerpt-unchanged-changed-file.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-chain-aff.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-chain-aff.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 3 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 3 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 3 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 3 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment figures-context-chain.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-context-chain.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
 ## --fragment figures-converge-grading-note.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-converge-grading-note.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-converge-one-path.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-converge-one-path.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-converge-rel.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-converge-rel.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-converge-target-loc.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-converge-target-loc.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-lifecycle-aff.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-lifecycle-aff.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-lifecycle-method-label.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-lifecycle-method-label.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-lifecycle-no-loc.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-lifecycle-no-loc.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment figures-shift-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-in-checkpoint.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page figures-shift-in-checkpoint.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment figures-shift-no-cases.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-no-cases.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-not-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-not-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-one-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-one-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-one-pointer.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-one-pointer.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
 ## --fragment figures-structure-erd.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-structure-erd.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-two-figures.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-two-figures.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment figures-unknown-kind.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page figures-unknown-kind.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-card-no-lanes.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-card-no-lanes.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-entities-vocab-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-entities-vocab-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-four-paths.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 4 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 4 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-four-paths.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 4 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 4 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-loc-not-last.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-loc-not-last.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-loc-on-outcome.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-loc-on-outcome.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-missing-loc.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-missing-loc.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-no-affected.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-no-affected.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-no-outcome.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-no-outcome.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-no-why.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-no-why.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-prose-nodes.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-prose-nodes.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-shared-card.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-shared-card.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-two-locators.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-two-locators.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-unlabelled-edge.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-unlabelled-edge.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-why-citation.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-why-citation.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-why-variant-class.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page impact-why-variant-class.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-assurance.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-assurance.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-bill-in-comment.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-bill-in-comment.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-bill-in-prose.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-bill-in-prose.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-draft-narration.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-draft-narration.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-flow-designator.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-flow-designator.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-loose-data-path.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-loose-data-path.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-no-tier.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-no-tier.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-risk-score-leading.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-risk-score-leading.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-risk-score-trailing.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-risk-score-trailing.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-risk-score.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-risk-score.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-section-sign-quoted.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-section-sign-quoted.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-section-sign.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-section-sign.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-severity-chip.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-severity-chip.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-standing-disclaimer.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-standing-disclaimer.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-tier-modifier-only.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-tier-modifier-only.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-update-assurance.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-update-assurance.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-update-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-update-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-update-narration.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-update-narration.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-update-recency.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-update-recency.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-update-resolved.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-update-resolved.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment invariants-verdict.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page invariants-verdict.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment links-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page links-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment links-collapsed-anchor.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page links-collapsed-anchor.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment links-collapsed-no-excerpt.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page links-collapsed-no-excerpt.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment links-range-truncated.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page links-range-truncated.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment links-unknown-anchor.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page links-unknown-anchor.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment reach-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page reach-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment searches-bre-dialect.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page searches-bre-dialect.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment searches-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page searches-clean.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment searches-git-grep.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page searches-git-grep.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment searches-unreachable.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --page searches-unreachable.html
 exit=1
-FAIL  no ol.begin — section 3 is one ordered list, and this fragment has none
-PASS  section 03 is a single list
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
 ## --fragment start-here-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --page start-here-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-no-why.html
 exit=1
 FAIL  start here has 3 entr(ies) but 0 why-clause(s) — a path list in an order is not a reading order
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --page start-here-no-why.html
 exit=1
 FAIL  start here has 3 entr(ies) but 0 why-clause(s) — a path list in an order is not a reading order
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-orphan-checkpoint.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
@@ -1349,7 +1517,7 @@ PASS  3 entries, within the shape of a reading order
 ## --page start-here-orphan-checkpoint.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
@@ -1357,7 +1525,7 @@ PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-style-comment.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -1365,7 +1533,7 @@ PASS  3 entries, within the shape of a reading order
 ## --page start-here-style-comment.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -1373,63 +1541,65 @@ PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-two-lists.html
 exit=1
 PASS  start here: 4 entr(ies), each with a why
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 PASS  entries link into the checkpoints that explain them (4)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (4)
 PASS  4 entries, within the shape of a reading order
 ## --page start-here-two-lists.html
 exit=1
 PASS  start here: 4 entr(ies), each with a why
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 PASS  entries link into the checkpoints that explain them (4)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (4)
 PASS  4 entries, within the shape of a reading order
 ## --fragment page-template.html
 exit=0
 PASS  start here: 2 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (2)
 SKIP  the reading path's checkpoint links are unsubstituted placeholders — this is the template, not a page
 PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
 ## --page page-template.html
 exit=0
 PASS  start here: 2 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (2)
 SKIP  the reading path's checkpoint links are unsubstituted placeholders — this is the template, not a page
 PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
 ## --fragment start-here-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-no-why.html
 exit=1
 FAIL  start here has 3 entr(ies) but 0 why-clause(s) — a path list in an order is not a reading order
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-two-lists.html
 exit=1
 PASS  start here: 4 entr(ies), each with a why
-FAIL  section 03 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 PASS  entries link into the checkpoints that explain them (4)
-SKIP  no checkpoint sections in this input — coverage needs section 02 beside section 03
+SKIP  no checkpoint sections in this input — coverage needs section 03 beside section 04
 PASS  citations present alongside the entries (4)
 PASS  4 entries, within the shape of a reading order
 ## --fragment start-here-orphan-checkpoint.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
@@ -1437,7 +1607,7 @@ PASS  3 entries, within the shape of a reading order
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -1445,7 +1615,51 @@ PASS  3 entries, within the shape of a reading order
 ## --fragment start-here-style-comment.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --fragment context-clean.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
+## --fragment context-no-pointer.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+WARN  1 of 2 Context entr(ies) name no checkpoint that relies on them — an entry is earned by a checkpoint, and one with no pointer is inventory
+## --fragment context-dead-pointer.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+WARN  Context points at cp-c, which this page does not carry — the checkpoint that earned the entry was merged or cut after it
+## --fragment context-shift-only.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  Context holds only the request sequence before and after — figures.rb grades it
+## --fragment agenda-clean.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
@@ -1453,15 +1667,7 @@ PASS  3 entries, within the shape of a reading order
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
-PASS  entries link into the checkpoints that explain them (3)
-PASS  every checkpoint is reachable from the reading path (2)
-PASS  citations present alongside the entries (3)
-PASS  3 entries, within the shape of a reading order
-## --fragment agenda-clean.html
-exit=0
-PASS  start here: 3 entr(ies), each with a why
-PASS  section 03 is a single list
+PASS  section 04 is a single list
 PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)

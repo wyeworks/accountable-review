@@ -13,24 +13,28 @@ which is most of what makes an example worth reading.
 
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
-| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 5 checkpoints · 1 converge figure · 2 impact paths |
-| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 6 checkpoints · 1 converge and 2 chain figures · 1 impact path |
+| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 3 context entries · 4 checkpoints · 1 converge figure · no impact path |
+| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 3 context entries and the before-and-after figure · 7 checkpoints · 1 converge figure · 2 impact paths |
 
 `index.html` is the front door to the two. It is not a Review Map and follows none of the page
 rules — it borrows the design language and the theme rule, and nothing else.
 
 ## Provenance
 
-Both pages were generated on **2026-10-06**, at the default `--effort high` and without
-`--mentor`, by different versions:
+Both pages were generated on **2026-10-08** by **`accountable-review` 1.2.0**, at the default
+`--effort high` and without `--mentor`: Discourse from plugin checkout `a9f1673`, which keeps a tier
+chip inline in a *Look at* entry, and RubyGems from `5f8b758`, which adds the third kind of
+coding decision — an abstraction the change went around — to step 7b. Without that example two
+RubyGems runs asked no coding decision; with it, three of three asked whether
+re-ranking roles beside `lib/access.rb` is deliberate. The Discourse page already asks its coding
+decision, which is about placement.
 
-- **Discourse** by **`accountable-review` 1.1.0**, plugin checkout `22a1b5b`, the commit that set
-  the current rule for a converge figure's notes and locators.
-- **RubyGems** by **`accountable-review` 1.2.0**, plugin checkout `4649289`, the commit that lets a
-  page ask one coding-decision checkpoint per departure rather than one per page.
+The RubyGems page draws no impact path: nothing reads the new table yet, so the unchanged code it
+reaches is writers flowing into it, drawn in its first checkpoint's converge figure instead.
 
-Both pull requests are mapped at the head they had on that date — Discourse's is merged, so its
-revision is final; RubyGems' is still open, and may have moved on since.
+Both pull requests are mapped at the revisions in the table, the same ones the previous versions of
+these pages described, so the two versions differ only by what the skill does. Discourse's is
+merged, so its revision is final; RubyGems' is still open, and may have moved on since.
 
 Neither page was edited after the run produced it. That is the point of keeping them: a hand-tuned
 example demonstrates what someone could write, not what the skill does.
@@ -68,19 +72,20 @@ table, the callbacks that keep it in step with the live one, and a backfill task
 the new table yet, and every line of it is an addition. What a reviewer has to decide is therefore
 almost entirely about code the diff never opened, and the page's converge figure is that question
 drawn: every path that starts or ends an ownership — the callbacks, a re-push that disowns a gem
-without running them, an account merge that moves ownerships under them, the backfill — converging
-on the one rule they must all keep, one open history row per owner and gem. Its two impact paths
-are the crossings the diff cannot show: moving a gem into an organization destroys its members'
-ownerships in code this PR never touched, so people who keep working on the gem are recorded as
-former owners; and a deleted account's history rows load with no user behind them. It ends on a
-checkpoint about how the change was built — a second ordering of roles beside the one `lib/access.rb`
-already keeps.
+without running them, an organization onboarding that moves ownerships under them, an account
+deletion — converging on the one rule they must all keep, an open history row exactly while a
+confirmed ownership exists. It earns **no** *Context*: every checkpoint is followable by someone who
+knows Rails and has never opened this repository, which is the section being earned rather than
+always on. Its two impact paths are the crossings the diff cannot show: owner removal now writes a
+second table inside its own transaction, and contributors demoted in bulk keep `owner` in their
+history row, because nothing on that path lowers the role it recorded.
 
 **Discourse** is the case for a large diff. Thirty-six files, and most of what a reviewer has to
 decide is not in any of them: whether every request that creates an account still passes the
-CAPTCHA — drawn as the paths converging on that rule — and whether the site's username rules still
-bind a name the server generated. It also ends on a checkpoint that judges how a change was built
-rather than what it now does, and earns it the only way that is allowed: by pointing at the services
-that already own this flow's rules, and at the project's own guide.
+CAPTCHA — drawn as the verify requests converging on that rule — and what the new signup step does
+for a visitor who is not logged in yet. Its *Context* section is the one this format added for
+pages like it: the request sequence drawn before and after, with the account-creating request
+moving one step later and the cases that run differently listed beneath it, then the CAPTCHA plugin
+and *approval signup* introduced before any checkpoint relies on them.
 
 Neither page grades its pull request, and this directory does not rank the two.

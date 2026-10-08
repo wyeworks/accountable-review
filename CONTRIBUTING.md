@@ -48,7 +48,7 @@ examples/                          published example maps, served at wyeworks.gi
 skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
-│   ├── report-format.md           the five sections, the checkpoint, chains, tiers, deep links
+│   ├── report-format.md           the six sections, Context, the checkpoint, chains, tiers, deep links
 │   ├── rails-nextjs.md            Rails: what to look for per layer, runtime probes, search recipes
 │   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the second stack
 │   ├── rust.md                    Rust, any kind of crate: the same, and the whole lens for Rust in general

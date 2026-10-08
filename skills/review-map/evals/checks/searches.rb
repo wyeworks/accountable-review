@@ -167,7 +167,7 @@ module Searches
   end
 
   # Scoped by the template's own markers rather than by a section id, which is what lets one
-  # rule read both places the label appears: section 04 carries
+  # rule read both places the label appears: section 05 carries
   # <p class="eyebrow">Affected, not changed</p> beside the panel and the evidence foot carries
   # it again over the lower-priority list. That label is verbatim in both, and it has to sit
   # directly after the class attribute for this to open on it. The Changed column, the end of a
@@ -198,7 +198,7 @@ module Searches
       affected = true if line.match?(/class="eyebrow"[^>]*>[^<]*[Aa]ffected/)
       affected = true if line.match?(/<dt[^>]*>[^<]*[Aa]ffected/)
       # </ul> and </section> joined the resets when the affected list stopped being a dl field.
-      # Without them the region opened in section 04 stays open through the evidence foot, and
+      # Without them the region opened in section 05 stays open through the evidence foot, and
       # the <li> rows inside details.searched are collected as affected entries — every recorded
       # search read as a claim that needed a recorded search.
       affected = false if line.match?(%r{</dd>|<h3|</dl>|</ul>|</section>})
@@ -363,7 +363,7 @@ end
 if recorded.zero?
   # Nothing recorded means provenance is UNVERIFIABLE, not false. The warning above is the
   # whole verdict: failing every entry here would punish § 2, which has no rule requiring a
-  # every claim to record its searches inline, for a rule only section 04 states.
+  # every claim to record its searches inline, for a rule only section 05 states.
   unless checked.zero?
     check.skip("#{checked} cited entr(ies) left unchecked: with no search recorded there is nothing to check them against")
   end
