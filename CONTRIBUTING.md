@@ -42,6 +42,7 @@ docs/                              the public documentation the README links out
 examples/                          published example maps, served at wyeworks.github.io by pages.yml
 ├── index.html                     the front door — borrows the design language, not the page rules
 ├── README.md                      which PR, which revision and which version produced each page
+├── assets/                        the logo, light and dark — the repository README uses these too
 ├── rubygems-6699/                 11 additive files, 5 judgments, the last a coding decision
 └── discourse-43845/               34 files: most of the judgment sits outside the diff
 skills/review-map/
@@ -55,9 +56,10 @@ skills/review-map/
 │   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
 │   ├── rust-docs.md               the docs.rs and doc.rust-lang.org paths, pinned per crate — closed pending verification
-│   └── page-template.html         design system and components — no svg, by design
+│   ├── page-template.html         design system and components — no svg, by design
+│   └── themes/                    daylight (default), workshop, field-notes — fonts, tokens, overrides
 ├── scripts/
-│   ├── page-skeleton.sh           emits the head, the token block and the tint script into the page
+│   ├── page-skeleton.sh           emits the head, the theme and the tint script into the page
 │   ├── diff-render.sh             says which files GitHub will not render, which decides the link form
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
 │   ├── ledger-rows.sh             generates the evidence foot's inventory from the diff

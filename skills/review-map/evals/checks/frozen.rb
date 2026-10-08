@@ -28,6 +28,8 @@
 # replaces the other.
 
 require "etc"
+require "fileutils"
+require "tmpdir"
 
 require_relative "lib/review_map/fixture"
 require_relative "lib/review_map/page"
@@ -57,12 +59,33 @@ def checks
   end
 end
 
+# The template as a page carries it: every theme where its theme marker is, Daylight on and the
+# others switched off, the way page-skeleton.sh writes them. Since
+# the tokens moved into references/themes/, the raw file has no colour of its own, and grading
+# it bare would record three FAILs about theme states that no published page can have. Spliced
+# here rather than by page-skeleton.sh, so the corpus does not depend on the script it would be
+# used to catch; tests/run.sh owns proving the two agree. Same basename, so the records' labels
+# did not move.
+def template_page
+  @template_page ||= begin
+    refs = File.expand_path(File.join(EVALS, "..", "references"))
+    theme = %w[daylight workshop field-notes].map do |name|
+      text = File.read(File.join(refs, "themes", "#{name}.html"), encoding: "UTF-8")
+      name == "daylight" ? text : text.gsub(%(data-style="#{name}"), %(data-style="#{name}" media="not all"))
+    end.join
+    text = File.read(File.join(refs, "page-template.html"), encoding: "UTF-8")
+    lines = text.lines.flat_map { |l| l.include?("SKELETON:THEME") ? theme.lines : [l] }
+    dir = Dir.mktmpdir("frozen-template")
+    at_exit { FileUtils.rm_rf(dir) }
+    File.join(dir, "page-template.html").tap { |p| File.write(p, lines.join) }
+  end
+end
+
 # The same two case sources equivalence.rb used, so the frozen corpus is the corpus it graded:
 # the whole of golden/ and the real template in both kinds, plus every self-test row replayed
 # with its own arguments — which is where --repo and --base live.
 def cases_for(check)
-  inputs = Dir[File.join(GOLD, "*.html")].sort +
-           [File.expand_path(File.join(EVALS, "..", "references", "page-template.html"))]
+  inputs = Dir[File.join(GOLD, "*.html")].sort + [template_page]
   sweep = inputs.select { |i| File.file?(i) }.flat_map { |i| [["--fragment", i], ["--page", i]] }
 
   rows = File.readlines(File.join(HERE, "self-test-cases.txt"), encoding: "UTF-8").filter_map do |line|

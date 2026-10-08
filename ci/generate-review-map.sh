@@ -8,6 +8,7 @@
 #                                 [--mentor [rails|elixir|phoenix|rust]]
 #                                 [--update | --no-update]
 #                                 [--config FILE] [--repo-dir DIR]
+#                                 (the page's theme is review_map.theme in the config, never a flag)
 #                                 [--plugin-dir DIR] [--claude-bin claude]
 #                                 [--strict-gate] [--print-invocation]
 #                                 [--verify-only]
@@ -66,7 +67,7 @@ while [ $# -gt 0 ]; do
     --strict-gate)       STRICT_GATE=1;      shift ;;
     --print-invocation)  PRINT_INVOCATION=1; shift ;;
     --verify-only)       VERIFY_ONLY=1;      shift ;;
-    -h|--help) sed -n '2,33p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,35p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "generate-review-map.sh: unknown argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -87,6 +88,7 @@ fi
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 [ -n "$MENTOR" ] || MENTOR=${CFG_mentor:-off}
 [ -n "$UPDATE" ] || UPDATE=${CFG_update:-true}
+THEME=${CFG_theme:-}
 
 # THE PAGE HAS ONE SHAPE, and nothing here selects one. There is no flag and no config key
 # that names a length or a depth, so this script passes the skill nothing about the page's
@@ -167,6 +169,14 @@ set -- "$CLAUDE_BIN" -p "$PROMPT" \
   --add-dir "$OUTPUT_ABS" \
   --permission-mode bypassPermissions \
   --disallowed-tools "WebFetch,WebSearch"
+
+# The theme is not an argument to the skill: it decides how the page looks and nothing about what
+# is on it, so the run is never told one. page-skeleton.sh reads review_map.theme from the
+# checkout's .accountable-review.yml by itself; the environment is only how a --config file kept
+# somewhere else reaches it, and it is set only when that file names a theme.
+if [ -n "$THEME" ]; then
+  set -- env "ACCOUNTABLE_REVIEW_THEME=$THEME" "$@"
+fi
 
 if [ "$PRINT_INVOCATION" = 1 ]; then
   for a in "$@"; do printf '%s\n' "$a"; done
@@ -277,7 +287,8 @@ cat > "$OUTPUT_ABS/manifest.json" <<JSON
   "review_map": {
     "entry": "index.html",
     "effort": "$EFFORT",
-    "mentor": "$MENTOR"
+    "mentor": "$MENTOR",
+    "theme": "${THEME:-daylight}"
   },
   "revision": {
     "repository": "$REPOSITORY",
