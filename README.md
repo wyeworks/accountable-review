@@ -1,4 +1,9 @@
-# accountable-review 🧭
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="examples/assets/logo-dark.png">
+    <img src="examples/assets/logo.png" alt="accountable-review" width="560">
+  </picture>
+</h1>
 
 > **AI-assisted code review for teams that want to move faster with coding agents without losing control of their codebase.**
 
