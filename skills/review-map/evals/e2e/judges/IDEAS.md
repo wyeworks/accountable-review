@@ -11,7 +11,38 @@ Each candidate lists what it would grade and what a planted defect for it would 
 because a judge nobody can plant a defect for can't be calibrated. The rule that applies to
 all of them: **grade the page, never the PR.**
 
-## § 02 checkpoints
+## § 02 context
+
+The question the section exists to answer, and the one only a reader can grade: **could a reviewer
+new to this repository follow checkpoint A after reading Context?** The specimen is
+discourse#43845, whose first checkpoint asked whether every request creating an email-code account
+still passes CAPTCHA and was unfollowable without three things the page never said — signup as a
+sequence of requests, CAPTCHA as a plugin wrapping a controller method, and what an approval signup
+is. A judge here reads Context and the checkpoints as that reader, and asks:
+
+- **Followable.** Each checkpoint can be understood with only *What changed* and Context in hand.
+  Defect: delete the entry a checkpoint relies on most; the page still passes every mechanical rule.
+- **What it is, never what the change did.** No entry previews a judgment. Defect: append the
+  checkpoint's own claim to the entry it relies on — *"and this PR moved the check to the later
+  request"*.
+- **Earned, not inventory.** Every entry is a concept a checkpoint needs, not a layer the diff
+  touched. Defect: add an entry called *The session controller* that only restates the file's role.
+  `start-here.rb` warns on an entry with no checkpoint pointer; a judge catches one that points at
+  a checkpoint which never needed it.
+- **Absent when it should be.** On a small, domain-obvious change — rubygems.org#6699 is the
+  candidate — the page carries little or no Context. Defect: add two entries explaining concepts any
+  Rails reviewer of that repository would know.
+- **The repository, not the framework.** An entry that explains a Rails rule belongs in a primer
+  under `--mentor`. Defect: an entry explaining `before_destroy`.
+
+- **The shift shows the move.** When Context carries `figure.lifecycle.lc-shift`, does it show
+  which request moved, is every transition a request a reviewer will meet in the code, and does it
+  name the cases it does not draw? `figures.rb` holds the shape — two columns, one moved state at
+  different positions — and can say nothing about whether the move drawn is the one the
+  checkpoints turn on. Defect: a shift whose moved state is a UI step rather than a request, or
+  one with no `ul.lc-cases` on a flow the reviewer's question shows has several.
+
+## § 03 checkpoints
 
 The one most likely to be wrong, and the most expensive to judge. It probably needs to be two
 judges, because one judge asked to check thirty things checks each of them less carefully.
@@ -34,7 +65,7 @@ judges, because one judge asked to check thirty things checks each of them less 
   not list, or one that recommends the fix.
 - **The count scales on the deltas § 01 names**, never on the file count.
 
-## § 02 figures
+## § 03 figures
 
 `figures.rb` holds the shape and the locators. Everything below is what it cannot hold, and the
 first item is the one that makes the feature worth having or not.
@@ -57,13 +88,13 @@ first item is the one that makes the feature worth having or not.
 - **No figure grades.** No *critical* in a `.cv-note`, no figure caption that ranks. `figures.rb`
   warns on the common words; a judge reads the rest.
 
-## § 03 reading path
+## § 04 reading path
 
 - It is one list, each stop links into a checkpoint, and the order has reasons.
 - A stop re-explains nothing the checkpoint owns. Defect: a `span.why` restating the
   checkpoint's explanation.
 
-## § 04 impact outside the diff
+## § 05 impact outside the diff
 
 This is the check `CLAUDE.md` tells a person to do on every run, and the strongest reason to
 automate one. The judge opens every entry and confirms the cited file really consumes the

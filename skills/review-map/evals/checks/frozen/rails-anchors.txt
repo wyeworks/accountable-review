@@ -922,6 +922,46 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment context-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-dead-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment context-no-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-no-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment context-shift-only.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-shift-only.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  doc links: none on this input
@@ -1022,6 +1062,16 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment figures-context-chain.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-context-chain.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment figures-converge-grading-note.html
 exit=0
 SKIP  doc links: none on this input
@@ -1088,6 +1138,66 @@ SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page figures-lifecycle-no-loc.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-in-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-in-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-no-cases.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-no-cases.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-not-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-not-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-one-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-one-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-one-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-one-pointer.html
 exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor

@@ -334,6 +334,30 @@ SKIP  no .impact panel in this input
 ## --page build-state-updated-twice.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-dead-pointer.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-no-pointer.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-no-pointer.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-shift-only.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-shift-only.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  no .impact panel in this input
@@ -394,6 +418,12 @@ SKIP  no .impact panel in this input
 ## --page figures-clean.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-context-chain.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-context-chain.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment figures-converge-grading-note.html
 exit=0
 SKIP  no .impact panel in this input
@@ -434,6 +464,42 @@ WARN  no .impact panel on this page — right only if nothing the change does re
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-lifecycle-no-loc.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-shift-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-shift-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-shift-in-checkpoint.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-shift-in-checkpoint.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-shift-no-cases.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-shift-no-cases.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-shift-not-moved.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-shift-not-moved.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-shift-one-moved.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-shift-one-moved.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-shift-one-pointer.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-shift-one-pointer.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment figures-structure-erd.html
