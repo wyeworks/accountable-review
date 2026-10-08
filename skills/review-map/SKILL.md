@@ -60,6 +60,7 @@ host reference is the same rule one level up — yours, not the other host's.
 | `references/rails-docs.md` *or* `references/elixir-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
 | `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, two assembled checkpoints, the chain and the impact panel — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
 | `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
+| `references/themes/` | never | The three looks — Daylight (default), Workshop, Field Notes — each a font link, a token block and its overrides. `page-skeleton.sh` writes all three into the head with the repository's choice switched on, and the tail script builds the reader's *Aa* menu that switches them; a run never reads one, never chooses one, and never types the menu |
 | `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
@@ -1065,7 +1066,7 @@ Everything else about writing holds at every stage:
 - Follow `references/report-format.md` for the five sections, when each appears, how deep it goes,
   and the rule that each fact has one home. Follow `references/page-template.html` for the design
   system and the components — read with `scripts/page-skeleton.sh --markup`, which prints the
-  component half and leaves out the 54 KB you are about to be given for free.
+  component half and leaves out the 55 KB you are about to be given for free.
 
   **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 04 entry
   only when step 7i found nothing crossing into unchanged code, and then remove the section with it.
@@ -1075,7 +1076,12 @@ Everything else about writing holds at every stage:
   <skill base directory>/scripts/page-skeleton.sh --out "$W/page.html" --title "<PR title or branch>"
   ```
 
-  That puts the head, the entire token block and the page's one script into the file already. Then
+  That puts the head, the entire token block and the page's one script into the file already. The
+  token block is the repository's **theme** — `review_map.theme` in its `.accountable-review.yml`,
+  Daylight when there is none — which the script finds by itself. **Pass no `--theme`**: the look is
+  the team's setting, not the run's, and a page that came out in another theme than the repository
+  asked for is a page somebody has to explain. If the script refuses a theme name (exit 2), stop and
+  report the name and the file it came from — never retry with a theme of your own choosing. Then
   the first `Edit` replaces its one-line body placeholder with the rail, `<main>`, the build banner,
   the masthead and section 1. It refuses with exit 3 if the page already has content, which is the
   guard against re-running it over a page a reader is already looking at.

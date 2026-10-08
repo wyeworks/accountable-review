@@ -670,6 +670,7 @@ What you choose per run:
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
+| **Theme** | Daylight by default; `workshop` or `field-notes` via `review_map.theme` in `.accountable-review.yml`. A setting of the repository, not a flag — and only the default: readers switch from the page's *Aa* menu. |
 | **Update** | Off by default; `--update` re-reads only the commits since the existing page and edits it in place. |
 | **Output** | A published artifact in Claude Code, a local HTML file in Codex; `--output <dir>` writes static HTML to a chosen directory instead. |
 
@@ -680,10 +681,18 @@ optional:
 review_map:
   effort: high           # high | low
   mentor: false          # true | false | rails | elixir | phoenix
+  theme: daylight        # daylight | workshop | field-notes
   delivery:
     provider: github-artifact
     retention_days: 14
 ```
+
+`theme` is the one key read outside CI too: the skill looks for it in the repository it is reviewing,
+so a team's choice of look applies to every Review Map of that repository, whoever generates it.
+Daylight is the default; Workshop and Field Notes are the alternatives. The key sets the look a page
+opens in, and every page carries all three: a reader can switch theme, and light, dark or the
+system's choice, from the *Aa* menu in the masthead, and their browser remembers it. A theme changes
+typefaces, radii and hues — never what is on the page.
 
 There is no key for the page's shape, because there is no shape to choose. A key the reader does not
 recognise is an error rather than a shrug — a misspelling that parsed as nothing would silently give

@@ -52,9 +52,10 @@ skills/review-map/
 │   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the other stack
 │   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
-│   └── page-template.html         design system and components — no svg, by design
+│   ├── page-template.html         design system and components — no svg, by design
+│   └── themes/                    daylight (default), workshop, field-notes — fonts, tokens, overrides
 ├── scripts/
-│   ├── page-skeleton.sh           emits the head, the token block and the tint script into the page
+│   ├── page-skeleton.sh           emits the head, the theme and the tint script into the page
 │   ├── diff-render.sh             says which files GitHub will not render, which decides the link form
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
 │   ├── ledger-rows.sh             generates the evidence foot's inventory from the diff
