@@ -603,9 +603,11 @@ else
   #      catalogue vouched for and the header is words. Both directions fail: a Rust lesson in Rails
   #      red is the defect the variant exists to end, and the class on a Rails primer is a colour
   #      chosen rather than derived — which is how a frame starts to mean something.
-  rust_link = %r{class="doc"[^>]*href="https://(?:docs\.rs|doc\.rust-lang\.org)/}
+  #      Matched per opening tag, in either attribute order, so a run that writes href before
+  #      class is judged on its host and not on its typing.
+  rust_host = %r{href="https://(?:docs\.rs|doc\.rust-lang\.org)/}
   framed = primers.count do |pr|
-    rust = pr.has?(rust_link)
+    rust = pr.scan(/<a [^>]*>/).any? { |tag| tag.include?('class="doc"') && tag.match?(rust_host) }
     variant = pr.lines.first.to_s[/<aside class="([^"]*)"/, 1].to_s.split.include?("pr-rust")
     rust != variant
   end

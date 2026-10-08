@@ -1115,12 +1115,14 @@ Editing one of these means checking the others still agree.
   rather than literals precisely so it keeps inverting *relative to the page* rather than flipping to
   an unreadable combination in one theme.
 
-- **Four semantic colour families, a fifth ramp that means nothing, one ramp shape, and a rule about
-  what each is allowed to mean.** `--nav-*` (slate), `--gap-*` (ochre), `--unchanged-*`
+- **Four semantic colour families, a frame ramp per stack that means nothing, one ramp shape, and a
+  rule about what each is allowed to mean.** `--nav-*` (slate), `--gap-*` (ochre), `--unchanged-*`
   (teal), `--prov-*` (plum) and `--primer-*` (red) — hues that move a few degrees between themes,
   meanings that do not — each carry the same five slots — `bg`,
   `bg-2`, `rule`, `rule-2`, `ink` — at fixed lightness and chroma per slot, so no two can drift apart
-  in weight, and the dark half is the light ramp reflected rather than a second hand-picked set. All
+  in weight, and the dark half is the light ramp reflected rather than a second hand-picked set.
+  `--primer-rust-*` (graphite) keeps the red ramp's lightness per slot at almost no chroma, and breaks
+  it once on purpose: its `rule-2` is near-black, because that top rule is the frame's identity. All
   of it is in the theme files under `references/themes/`, which reach the page at the head range's
   theme marker and are therefore **emitted by `page-skeleton.sh`**: a run never types a colour.
 
