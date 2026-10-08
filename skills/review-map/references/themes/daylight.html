@@ -1,0 +1,215 @@
+<!-- Theme · Daylight. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. The rules every theme
+     keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Tokens · Daylight direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Instrument Sans', system-ui, sans-serif;
+  --body: 'Instrument Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --r: 12px;
+  --r-sm: 5px;
+  --r-tag: 999px;
+  --r-box: 10px;
+  --ground: #f7f8fa;
+  --surface: #fbfbfc;
+  --surface-hi: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #fafbfc;
+  --chip: #eceff3;
+  --ink: #161a22;
+  --ink-2: #232833;
+  --ink-3: #3a404c;
+  --muted: #6a7180;
+  --faint: #858b97;
+  --fainter: #a6abb5;
+  --on-ink: #f7f8fa;
+  --on-ink-code: #d5d9e0;
+  --rule: #e3e6ec;
+  --rule-soft: #eceef2;
+  --rule-strong: #c9ced8;
+  --rule-dash: #b3b9c4;
+  --rule-card: #d6dae2;
+  --ex-add: oklch(0.96 0.04 150);
+  --add-sig: oklch(0.45 0.12 150);
+  --ex-del: oklch(0.96 0.03 25);
+  --del-sig: oklch(0.50 0.15 25);
+  --syn-key: oklch(0.45 0.13 330);
+  --syn-str: oklch(0.46 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.47 0.12 262);
+  --syn-num: oklch(0.52 0.11 55);
+  --nav-bg: oklch(0.975 0.018 262);
+  --nav-bg-2: oklch(0.955 0.035 262);
+  --nav-rule: oklch(0.885 0.055 262);
+  --nav-rule-2: oklch(0.78 0.08 262);
+  --nav-ink: oklch(0.47 0.13 262);
+  --nav-ink-hi: oklch(0.38 0.14 262);
+  --gap-bg: oklch(0.975 0.018 70);
+  --gap-bg-2: oklch(0.955 0.035 70);
+  --gap-rule: oklch(0.885 0.055 70);
+  --gap-rule-2: oklch(0.78 0.08 70);
+  --gap-ink: oklch(0.47 0.13 70);
+  --gap-ink-hi: oklch(0.38 0.14 70);
+  --unchanged-bg: oklch(0.975 0.018 195);
+  --unchanged-bg-2: oklch(0.955 0.035 195);
+  --unchanged-rule: oklch(0.885 0.055 195);
+  --unchanged-rule-2: oklch(0.78 0.08 195);
+  --unchanged-ink: oklch(0.47 0.13 195);
+  --unchanged-ink-hi: oklch(0.38 0.14 195);
+  --prov-bg: oklch(0.975 0.018 330);
+  --prov-bg-2: oklch(0.955 0.035 330);
+  --prov-rule: oklch(0.885 0.055 330);
+  --prov-rule-2: oklch(0.78 0.08 330);
+  --prov-ink: oklch(0.47 0.13 330);
+  --prov-ink-hi: oklch(0.38 0.14 330);
+  --primer-bg: oklch(0.975 0.018 25);
+  --primer-bg-2: oklch(0.955 0.035 25);
+  --primer-rule: oklch(0.885 0.055 25);
+  --primer-rule-2: oklch(0.78 0.08 25);
+  --primer-ink: oklch(0.47 0.13 25);
+  --primer-ink-hi: oklch(0.38 0.14 25);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+}
+
+/* ---- Daylight overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:600;letter-spacing:-0.022em;font-variation-settings:normal}
+h1{letter-spacing:-0.032em;max-width:20ch}
+.rail-id .tick{font-weight:600;letter-spacing:-0.01em}
+.tier,.tag{font-family:var(--body);font-size:11.5px;font-weight:500;letter-spacing:0;text-transform:none;padding:2px 10px;border-color:transparent;vertical-align:1px}
+.open{border:1px solid var(--gap-rule)}
+.open>b,.gap>b{font-family:var(--body);font-weight:600;font-size:12.5px;letter-spacing:0}
+details.searched>summary,details.evidence>summary{font-weight:500}
+</style>

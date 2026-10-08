@@ -329,6 +329,36 @@ sed 's|^  echo "verdict: full"$|  sed "s/^/delta\\t/" "$TMP/delta" 2>/dev/null; 
   "$CARRY_PLAN" > "$WORK/leaky-refusal.sh"
 case_carry_red "a refusal prints plan rows alongside its verdict" "$WORK/leaky-refusal.sh"
 
+# ---- themes: three files, one marker, and a lookup in the repository's config ----
+#
+# The partition proves the default theme. These are what it cannot: that the other themes are
+# checked at all, and that the script's choice of theme is the repository's.
+
+# 32. A colour dropped from one dark block of one non-default theme. Every page in that theme still
+#     renders — in light — and the token check counting names would still find it twice, so this
+#     is the row that proves the per-selector rule looked.
+cp -R "$SKILL_DIR/references/themes" "$WORK/themes-half"
+awk '/^:root\[data-theme="dark"\] \{$/ { d = 1 } d && /^  --syn-key:/ { d = 0; next } { print }' \
+  "$SKILL_DIR/references/themes/workshop.html" > "$WORK/themes-half/workshop.html"
+if REVIEW_MAP_SECTION=skeleton REVIEW_MAP_THEMES="$WORK/themes-half" "$RUN" >/dev/null 2>&1 </dev/null; then
+  bad=$((bad + 1)); echo "BAD   run.sh stayed green when: a theme declares a colour on :root and in only one dark block"
+else
+  ok=$((ok + 1));  echo "ok    run.sh fails when: a theme declares a colour on :root and in only one dark block"
+fi
+
+# 33. The script stops reading the repository's config. Every page is still a correct Daylight page,
+#     which is exactly why it needs a row: the team's choice is ignored and nothing looks wrong.
+sed 's|^    THEME=$(config_theme "$REPO/.accountable-review.yml")$|    THEME=|' "$SKELETON" > "$WORK/no-config.sh"
+chmod 755 "$WORK/no-config.sh"
+case_runs_red "the script ignores review_map.theme in the repository's config" "$TEMPLATE" "$WORK/no-config.sh"
+
+# 34. An unknown theme falls back to the default instead of refusing. A typo then reads as a team
+#     that never chose, and nobody is told.
+sed 's|^\[ -n "$THEME" \] \|\| { THEME=daylight; SOURCE=default; }$|[ -r "$THEMES/$THEME.html" ] \|\| { THEME=daylight; SOURCE=default; }|' \
+  "$SKELETON" > "$WORK/lenient.sh"
+chmod 755 "$WORK/lenient.sh"
+case_runs_red "a theme name with no file behind it quietly becomes daylight" "$TEMPLATE" "$WORK/lenient.sh"
+
 echo ""
 echo "self-test: $ok ok, $bad bad"
 [ "$bad" -eq 0 ]

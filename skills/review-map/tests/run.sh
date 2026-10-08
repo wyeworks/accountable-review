@@ -18,7 +18,8 @@
 # THE ORACLE PROBLEM, and how this avoids it. Extracting the head with awk on the markers and
 # comparing it against the script's own awk on the markers would test the script against itself and
 # pass for any consistent pair of bugs. So the assertion here is a PARTITION: strip the four marker
-# lines and the maintainer preamble from the template, and what remains must be exactly
+# lines and the maintainer preamble from the template, put the theme file where the fifth marker
+# was (with sed's `r`, not the script's awk), and what remains must be exactly
 # head + markup + tail, concatenated, byte for byte. Move a marker and it fails. Inline a line of
 # CSS into the script and it fails. Edit the CSS in the template and it passes, which is correct —
 # that is the one source of truth doing its job.
@@ -38,8 +39,12 @@ HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 SKILL_DIR=$(dirname "$HERE")
 SKELETON=${REVIEW_MAP_SKELETON:-$SKILL_DIR/scripts/page-skeleton.sh}
 TEMPLATE=${REVIEW_MAP_TEMPLATE:-$SKILL_DIR/references/page-template.html}
+THEMES=${REVIEW_MAP_THEMES:-$SKILL_DIR/references/themes}
 DIFF_RENDER=${REVIEW_MAP_DIFF_RENDER:-$SKILL_DIR/scripts/diff-render.sh}
 CARRY_PLAN=${REVIEW_MAP_CARRY_PLAN:-$SKILL_DIR/scripts/carry-plan.sh}
+
+# A theme set in the caller's environment would change every page this file emits.
+unset ACCOUNTABLE_REVIEW_THEME
 
 pass=0; fail=0
 ok()  { pass=$((pass + 1)); echo "PASS  $1"; }
@@ -69,16 +74,20 @@ echo ""
 # ---------------------------------------------------------------- the partition
 # The title is passed as the placeholder itself, so the emitted head comes back with the template's
 # own bytes on that line and the comparison needs no un-substitution step.
-"$SKELETON" --template "$TEMPLATE" --out "$WORK/page.html" --title '{{PR_TITLE_OR_BRANCH}}' >/dev/null
-"$SKELETON" --template "$TEMPLATE" --markup > "$WORK/markup"
+"$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --out "$WORK/page.html" --title '{{PR_TITLE_OR_BRANCH}}' >/dev/null
+"$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --markup > "$WORK/markup"
 
 # head and tail, taken off the emitted page by splitting on the body placeholder — one operation,
 # and not the one the script used to build it.
 awk '/SKELETON:BODY/ { exit } { print }' "$WORK/page.html" > "$WORK/head"
 awk 'f { print } /SKELETON:BODY/ { f = 1 }' "$WORK/page.html" > "$WORK/tail"
 
-# The template as one stream: drop everything through HEAD:START, then drop the marker lines.
-sed '1,/SKELETON:HEAD:START/d' "$TEMPLATE" | grep -v 'SKELETON:' > "$WORK/expected"
+# The template as one stream: drop everything through HEAD:START, put the default theme's bytes
+# where the theme marker was, then drop the marker lines. No --theme and no config file in $WORK,
+# so what was emitted is the default — which is why this names daylight rather than asking.
+sed '1,/SKELETON:HEAD:START/d' "$TEMPLATE" \
+  | sed -e "/SKELETON:THEME/r $THEMES/daylight.html" -e '/SKELETON:THEME/d' \
+  | grep -v 'SKELETON:' > "$WORK/expected"
 cat "$WORK/head" "$WORK/markup" "$WORK/tail" > "$WORK/actual"
 
 if cmp -s "$WORK/actual" "$WORK/expected"; then
@@ -304,7 +313,7 @@ begin_ex=$(awk '/<ol class="begin">/ { f = 1 } f { print } /<\/ol>/ { f = 0 }' "
 assert_eq "$begin_ex" "1" "a reading-path stop is assembled carrying its excerpt"
 
 # ---------------------------------------------------------------- markers
-for m in SKELETON:HEAD:START SKELETON:HEAD:END SKELETON:TAIL:START SKELETON:TAIL:END; do
+for m in SKELETON:HEAD:START SKELETON:HEAD:END SKELETON:TAIL:START SKELETON:TAIL:END SKELETON:THEME; do
   assert_eq "$(count "$TEMPLATE" "$m")" "1" "template has exactly one $m"
 done
 assert_eq "$(count "$WORK/markup" 'SKELETON:')" "0" "no marker survives into the markup half"
@@ -325,6 +334,77 @@ assert_eq "$(count "$WORK/head" 'prefers-color-scheme: dark')" "1" "the media da
 assert_eq "$(count "$WORK/head" '[data-theme="dark"]')"     "2" "the explicit dark block is in the skeleton"
 assert_eq "$(count "$WORK/head" '[data-theme="light"]')"    "1" "the explicit light block is in the skeleton"
 assert_eq "$(count "$WORK/markup" '--syn-key:')"            "0" "no colour is left in the half a model reads"
+assert_eq "$(count "$TEMPLATE" '--syn-key:')"               "0" "the template declares no token of its own — every one comes from a theme"
+
+# ---------------------------------------------------------------- every theme, every state
+# The partition above proves the default. These prove the other two reach the page the same way,
+# and that each theme file keeps the theme rule on its own: every COLOUR token it declares on bare
+# :root is declared again in the media dark block and in the explicit dark one. Counting a name
+# three times is not that — a theme that redeclared a token on :root three times would pass — so
+# the file is split on braces and each declaration is tagged with the selector it sits under.
+# Type stacks and radii are exempt: a typeface needs no dark value.
+theme_states() {
+  tr '{};' '\n\n\n' < "$1" | awk '
+    /prefers-color-scheme: dark/                        { ctx = "media"; next }
+    /^[[:space:]]*:root\[data-theme="dark"\][[:space:]]*$/ { ctx = "dark";  next }
+    /^[[:space:]]*:root[[:space:]]*$/                    { ctx = "light"; next }
+    /^[[:space:]]*:root:not\(\[data-theme="light"\]\)[[:space:]]*$/ { next }
+    /^[[:space:]]*--[a-z0-9-]+:/ {
+      v = $0; n = $0; sub(/:.*/, "", n); sub(/^[[:space:]]*/, "", n)
+      if (v !~ /#[0-9a-fA-F]|oklch\(|rgb/) next
+      seen[n, ctx] = 1; names[n] = 1
+    }
+    END {
+      for (n in names) if (seen[n, "light"] && !(seen[n, "media"] && seen[n, "dark"])) print n
+      for (n in names) if (!seen[n, "light"]) print n " (never on bare :root)"
+    }'
+}
+for th in "$THEMES"/*.html; do
+  name=$(basename "$th" .html)
+  rm -f "$WORK/th.html"
+  "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --theme "$name" --out "$WORK/th.html" --title t >/dev/null
+  awk '/SKELETON:BODY/ { exit } { print }' "$WORK/th.html" > "$WORK/th.head"
+  sed '1,/SKELETON:HEAD:START/d; /SKELETON:HEAD:END/,$d' "$TEMPLATE" \
+    | sed -e "/SKELETON:THEME/r $th" -e '/SKELETON:THEME/d' \
+    | sed 's|{{PR_TITLE_OR_BRANCH}}|t|' > "$WORK/th.expected"
+  if cmp -s "$WORK/th.head" "$WORK/th.expected"; then
+    ok "theme $name: the emitted head is the template's head with $name.html where the marker was"
+  else
+    bad "theme $name: the emitted head is the template's head with $name.html where the marker was"
+  fi
+  assert_eq "$(count "$th" 'SKELETON:')" "0" "theme $name carries no marker of its own"
+  assert_eq "$(theme_states "$th" | tr '\n' ' ')" "" "theme $name declares every colour on bare :root and in both dark blocks"
+  assert_eq "$(count "$th" '<link rel="stylesheet" href="https://fonts.googleapis.com/')" \
+    "$(count "$th" '<link rel="stylesheet"')" "theme $name loads its stylesheets from Google Fonts only"
+  assert_eq "$(count "$th" '<script')" "0" "theme $name carries no script — the page has one, in the tail"
+done
+
+# ---------------------------------------------------------------- which theme
+# The repository decides, through .accountable-review.yml; the CI adapter can say so from a config
+# file elsewhere; --theme beats both; a name with no file behind it is refused, never defaulted.
+mkdir -p "$WORK/cfg"
+printf 'review_map:\n  effort: low\n  delivery:\n    provider: github-artifact\n  theme: workshop   # the look\n' \
+  > "$WORK/cfg/.accountable-review.yml"
+rm -f "$WORK/c.html"
+"$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null
+assert_eq "$(count "$WORK/c.html" 'Theme · Workshop.')" "1" "review_map.theme in the repository's config picks the theme"
+rm -f "$WORK/c.html"
+ACCOUNTABLE_REVIEW_THEME=field-notes "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null
+assert_eq "$(count "$WORK/c.html" 'Theme · Field Notes.')" "1" "ACCOUNTABLE_REVIEW_THEME beats the repository's config"
+rm -f "$WORK/c.html"
+ACCOUNTABLE_REVIEW_THEME=field-notes "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --theme daylight --out "$WORK/c.html" --title t >/dev/null
+assert_eq "$(count "$WORK/c.html" 'Theme · Daylight.')" "1" "--theme beats both"
+printf 'review_map:\n  delivery:\n    theme: workshop\n' > "$WORK/cfg/.accountable-review.yml"
+rm -f "$WORK/c.html"
+"$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null
+assert_eq "$(count "$WORK/c.html" 'Theme · Daylight.')" "1" "a theme: nested under delivery: is not review_map.theme, so the default holds"
+printf 'review_map:\n  theme: workshp\n' > "$WORK/cfg/.accountable-review.yml"
+rm -f "$WORK/c.html"
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2" "a theme name with no file behind it is refused, not defaulted"
+assert_eq "$([ -e "$WORK/c.html" ] && echo written || echo absent)" "absent" "and nothing is written"
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --theme ../themes/daylight --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2" "a theme name is a name, never a path"
 
 # ---------------------------------------------------------------- the tint's three grammars
 # template says "carry all three lines"; this is that sentence as a test. A language added to
@@ -350,7 +430,7 @@ assert_eq "$(count "$WORK/markup" 'target=')"                    "0" "no citatio
 assert_eq "$(count "$WORK/tail" 'if (there === here) { return; }')" "1" "a link to this same page is left in this tab"
 
 # ---------------------------------------------------------------- the title
-"$SKELETON" --template "$TEMPLATE" --out "$WORK/t.html" --title 'Fix A & B <thing>' >/dev/null
+"$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --out "$WORK/t.html" --title 'Fix A & B <thing>' >/dev/null
 if grep -Fq '<title>Fix A &amp; B &lt;thing&gt; Review</title>' "$WORK/t.html"; then
   ok "the title is HTML-escaped by the script, so an & in a PR title is not a defect"
 else
@@ -366,7 +446,7 @@ esac
 
 # ---------------------------------------------------------------- idempotency, and the refusal
 cp "$WORK/t.html" "$WORK/t.first"
-"$SKELETON" --template "$TEMPLATE" --out "$WORK/t.html" --title 'Fix A & B <thing>' >/dev/null
+"$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --out "$WORK/t.html" --title 'Fix A & B <thing>' >/dev/null
 if cmp -s "$WORK/t.first" "$WORK/t.html"; then
   ok "running it twice over an untouched skeleton is byte-identical"
 else
@@ -375,20 +455,20 @@ fi
 
 sed 's|.*SKELETON:BODY.*|  <main>a section somebody is already reading</main>|' "$WORK/t.html" > "$WORK/written.html"
 cp "$WORK/written.html" "$WORK/written.before"
-rc=0; "$SKELETON" --template "$TEMPLATE" --out "$WORK/written.html" --title 'x' >/dev/null 2>&1 || rc=$?
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --out "$WORK/written.html" --title 'x' >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "3" "it refuses to overwrite a page that has content in it, and exits 3"
 if cmp -s "$WORK/written.before" "$WORK/written.html"; then
   ok "the refused page is left byte-unchanged"
 else
   bad "the refused page is left byte-unchanged"
 fi
-rc=0; "$SKELETON" --template "$TEMPLATE" --out "$WORK/written.html" --title 'x' --force >/dev/null 2>&1 || rc=$?
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --out "$WORK/written.html" --title 'x' --force >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "0" "--force is the way past the refusal"
 
 # ---------------------------------------------------------------- required arguments
-rc=0; "$SKELETON" --template "$TEMPLATE" --out "$WORK/n.html" >/dev/null 2>&1 || rc=$?
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --out "$WORK/n.html" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "2" "a missing --title is refused rather than written as a placeholder"
-rc=0; "$SKELETON" --template "$TEMPLATE" --title 'x' >/dev/null 2>&1 || rc=$?
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --title 'x' >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "2" "a missing --out is refused"
 fi
 

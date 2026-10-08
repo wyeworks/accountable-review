@@ -72,6 +72,13 @@ same reading path, same budget on every other part — so deleting the primers f
 gives you back the ordinary page. That subtraction is the test, and it is why there is no badge
 saying which one you are holding: you can see.
 
+**It comes in three looks, and the look is the repository's setting rather than a flag.**
+Daylight is the default; Workshop and Field Notes are the alternatives, chosen with
+`review_map.theme` in `.accountable-review.yml`. A theme changes typefaces, corner radii, hues and
+how a few labels are drawn. It never changes what is on the page, and all three keep the same
+colour meanings — teal for code outside the diff, ochre for a stated absence — so the paragraphs
+below hold whichever one you are reading. Nothing on the page names the theme.
+
 ## Each fact has one home
 
 Persistence, endpoint contracts and the frontend boundary have no sections of their own, on purpose.

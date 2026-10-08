@@ -532,6 +532,31 @@ rc=0; printf 'review_map:\n  mentor: nope\n' > "$C/mentor-bad.yml"
 "$READ_CONFIG" "$C/mentor-bad.yml" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "1"                                    "a mentor value that is not a stack is an error"
 
+# The theme is how the page looks and nothing about what is on it, so it is never a flag on the
+# skill: page-skeleton.sh reads it from the checkout, and the adapter passes it through the
+# environment only so a --config file kept elsewhere still counts.
+assert_not_in "$TMP/inv-def" "ACCOUNTABLE_REVIEW_THEME" "no theme is passed when the config names none"
+assert_not_in "$TMP/inv-def" "--theme"                  "and the theme is never a flag on the skill"
+printf 'review_map:\n  theme: field-notes\n' > "$C/theme.yml"
+( cd "$C" && "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
+    --head-sha a93bd21deadbeef --repo-dir "$C" --config "$C/theme.yml" ) > "$TMP/inv-theme-cfg"
+assert_in "$TMP/inv-theme-cfg" "ACCOUNTABLE_REVIEW_THEME=field-notes" "a theme in the config file reaches the run's environment"
+assert_not_in "$TMP/inv-theme-cfg" "--theme"            "still as the environment, never as a flag"
+rc=0; printf 'review_map:\n  theme: dark\n' > "$C/theme-bad.yml"
+"$READ_CONFIG" "$C/theme-bad.yml" >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "1"                                    "a theme that is not one of the three is an error"
+# read-config.sh lists the names, and the skill's themes directory holds the files. Two places
+# for one list, because the skill ships without this script — so the two are compared here.
+themes_dir=$(CDPATH= cd -- "$HERE/../../review-map/references/themes" && pwd)
+have=$(ls "$themes_dir" | sed -n 's/\.html$//p' | sort | tr '\n' ' ')
+listed=$(sed -n 's/.*#     theme: daylight *# \(.*\)  (default daylight)$/\1/p' "$READ_CONFIG" | tr -d '|' | tr -s ' ' '\n' | sort | tr '\n' ' ')
+assert_eq "$listed" "$have"                            "read-config.sh names exactly the theme files the skill ships"
+for t in $have; do
+  printf 'review_map:\n  theme: %s\n' "$t" > "$C/theme-each.yml"
+  rc=0; "$READ_CONFIG" "$C/theme-each.yml" >/dev/null 2>&1 || rc=$?
+  assert_eq "$rc" "0"                                  "read-config.sh accepts the theme file $t"
+done
+
 rc=0; printf 'review_map:\n  retention_day: 14\n' > "$C/bad.yml"
 "$READ_CONFIG" "$C/bad.yml" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "1"                                    "a misspelled key is an error, not a shrug"
