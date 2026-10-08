@@ -717,7 +717,7 @@ relationships is the cap for that reason.
         <li class="lc-s"><span class="ip-box"><b>email entered</b></span></li>
         <li class="lc-s"><span class="ip-rel"><i></i>request code<a class="path ip-loc" href="{{BLOB}}#L12">app/controllers/session_controller.rb:12</a></span><span class="ip-box"><b>code sent</b></span></li>
         <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="{{DIFF}}L102">app/services/email_login_code/redeem.rb:102</a></span><span class="ip-box"><b>account created</b></span></li>
-        <li class="lc-s"><span class="ip-rel"><i></i>rename<a class="path ip-loc" href="{{DIFF}}L40">…/account-ready.gjs:40</a></span><span class="ip-box"><b>username chosen</b></span></li>
+        <li class="lc-s"><span class="ip-rel"><i></i>rename<a class="path ip-loc" href="{{DIFF}}L40">frontend/discourse/app/components/account-ready.gjs:40</a></span><span class="ip-box"><b>username chosen</b></span></li>
       </ol>
     </div>
     <div class="lc-row">
@@ -731,8 +731,8 @@ relationships is the cap for that reason.
     </div>
   </div>
   <ul class="lc-cases">
-    <li>Existing users: one request, the account already exists<a class="path" href="{{DIFF}}R136">redeem.rb:136</a></li>
-    <li>Approval sites: finish on a separate completion endpoint<a class="path" href="{{BLOB}}#L17">…/session_controller_patch.rb:17</a></li>
+    <li>Existing users: one request, the account already exists<a class="path" href="{{DIFF}}R136-R138">app/services/email_login_code/redeem.rb:136-138</a></li>
+    <li>Approval sites: finish on a separate completion endpoint<a class="path" href="{{BLOB}}#L17-L25">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</a></li>
   </ul>
   <figcaption>Which request creates the account, for a new user on an open site. <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a></span></figcaption>
 </figure>
@@ -775,7 +775,12 @@ the one section a reader reads before deciding to.
 Each column is two to five states, each transition a **request** named for the action (*submit code*,
 not `create`), carrying the line that performs it — the endpoint, or the policy that decides what the
 request does. The Before column cites the base: `{{DIFF}}L` for a line the change removed or
-rewrote, a blob at the base SHA for one it left alone. `lc-new` marks a state only the After column
+rewrote, a blob at the base SHA for one it left alone. Every locator and every case line is a
+citation like any other, under § *Deep links*: the full path, and **the text and the anchor name
+the same lines** — a policy that spans three lines is cited `redeem.rb:136-138` and linked
+`R136-R138`, never written as `:136` over a ranged link. The first real shift did exactly that on all
+three of its citations to one policy, because a figure's labels are short and the path shrinks with
+them. `lc-new` marks a state only the After column
 has, as in any lifecycle. **No `p.lc-back`**: a retry loop is a case, and goes in `ul.lc-cases`.
 **No `.ip-aff`**, for the lifecycle's reason. The `figcaption` ends in the same `span.ctx-used` every
 *Context* entry ends in, pointing at the checkpoints the figure was earned by.

@@ -1793,7 +1793,9 @@ figcaption strong { color: var(--ink-3); }
          that performs it, and the ONE state that moved is lc-moved in both, at
          different positions. It draws the main path, so the figcaption names that
          case and ul.lc-cases says, a line each, the cases that differ (at most
-         four). The Before column cites the base: {{DIFF}}L for a line the change
+         four). Locators and case lines are citations: full path, and the text names
+         the lines the anchor selects — :136-138 over R136-R138, never :136 over a
+         range. The Before column cites the base: {{DIFF}}L for a line the change
          removed or rewrote, {{BLOB}} at the base SHA for one it left alone. It is
          delete-whole like everything else here: a change that kept the sequence
          earns no shift. ===== -->
@@ -1821,7 +1823,7 @@ figcaption strong { color: var(--ink-3); }
           </div>
         </div>
         <ul class="lc-cases">
-          <li>{{A_CASE_THAT_DIFFERS}}: {{HOW_ITS_SEQUENCE_DIFFERS_IN_A_CLAUSE}}<a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a></li>
+          <li>{{A_CASE_THAT_DIFFERS}}: {{HOW_ITS_SEQUENCE_DIFFERS_IN_A_CLAUSE}}<a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></li>
         </ul>
         <figcaption>{{WHICH_REQUEST_DOES_WHAT_FOR_THE_MAIN_PATH_NAMED}} <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-c">Checkpoint C</a></span></figcaption>
       </figure>
