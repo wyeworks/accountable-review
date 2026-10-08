@@ -1259,23 +1259,83 @@ figure { margin: 0; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
 figcaption strong { color: var(--ink-3); }
 
+/* ============================================================
+   The appearance menu. Built by the tail script into the masthead's
+   first line, never typed by a run: a reader's control over how
+   the page looks — which theme, and light, dark or the system's
+   choice. It changes no content, and it is not a badge: it names
+   the three looks because it offers them, the way a font menu names
+   fonts. Hidden in print, absent without JavaScript.
+
+   The swatches are the one place colour literals sit outside a
+   theme file, and deliberately: each previews ONE theme and must
+   look the same whichever theme is active and in either mode, so a
+   token — which changes with both — is exactly the wrong tool.
+   ============================================================ */
+.rc { margin-left: auto; position: relative; text-transform: none; letter-spacing: 0; }
+.rc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; font-family: var(--body); font-size: 13px; line-height: 1; color: var(--ink); background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); cursor: pointer; }
+.rc-btn b { font-weight: 700; }
+.rc-btn .rc-i { color: var(--ink-3); font-size: 12px; }
+.rc-btn:hover { background: var(--surface-2); }
+.rc-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 90; width: 260px; max-width: calc(100vw - 32px); padding: 12px; display: none; flex-direction: column; gap: 10px; background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); box-shadow: 0 12px 32px rgba(0,0,0,.16); }
+.rc.rc-on .rc-pop { display: flex; }
+.rc-h { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.rc-styles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rc-styles button { display: flex; flex-direction: column; gap: 6px; padding: 6px; font-family: var(--body); font-size: 12px; line-height: 1.2; text-align: left; color: var(--ink-3); background: none; border: 1px solid var(--rule); border-radius: var(--r); cursor: pointer; }
+.rc-styles button:hover { border-color: var(--ink-3); color: var(--ink); }
+.rc-styles button.on { border: 2px solid var(--ink); padding: 5px; color: var(--ink); font-weight: 600; }
+.rc-sw { display: block; height: 30px; }
+.rc-sw[data-sw="daylight"] { background: linear-gradient(135deg, #f7f8fa 50%, #3b6ef5 50%); border-radius: 5px; box-shadow: inset 0 0 0 1px #d3d9e2; }
+.rc-sw[data-sw="workshop"] { background: linear-gradient(135deg, #fdfdfb 50%, oklch(0.91 0.15 95) 50%); box-shadow: inset 0 0 0 1.5px #0a0a0a; }
+.rc-sw[data-sw="field-notes"] { background: linear-gradient(135deg, #f5efe0 50%, oklch(0.84 0.09 340) 50%); border-radius: 3px; box-shadow: inset 0 0 0 1px #cfc3a6; }
+.rc-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--rule-strong); border-radius: var(--r); overflow: hidden; }
+.rc-seg button { padding: 8px 0; font-family: var(--body); font-size: 12px; line-height: 1; color: var(--ink-3); background: none; border: 0; cursor: pointer; }
+.rc-seg button + button { border-left: 1px solid var(--rule); }
+.rc-seg button:hover { color: var(--ink); background: var(--surface-2); }
+.rc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+@media print { .rc { display: none; } }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 
 <!--
-  THE THEME. The next line is replaced by references/themes/<name>.html: the
-  theme's font link and one style block holding its tokens and its overrides.
-  It sits AFTER the base styles because an override has to win the cascade,
-  and tokens resolve wherever they are declared. page-skeleton.sh picks the
-  theme — --theme, else ACCOUNTABLE_REVIEW_THEME, else review_map.theme in the
-  repository's .accountable-review.yml, else daylight — and refuses a name with
-  no file. A theme file must keep every rule above: each colour on bare :root
-  and in both dark blocks, the five families meaning what this file says they
-  mean, and no hue, glyph or label treatment that reads as a grade. A theme
-  changes how the page looks, never what is on it, so nothing on the page
-  names the theme.
+  THE THEMES. The next line is replaced by every file in references/themes/:
+  each a font link and one style block holding its tokens and its overrides.
+  They sit AFTER the base styles because an override has to win the cascade,
+  and tokens resolve wherever they are declared. ONE is active — the
+  repository's choice: --theme, else ACCOUNTABLE_REVIEW_THEME, else
+  review_map.theme in its .accountable-review.yml, else daylight — and the
+  others arrive with media="not all", which keeps their bytes on the page and
+  their rules off it. The appearance menu switches the attribute, so a reader
+  can change the look without a second file. A theme file must keep every rule
+  above: each colour on bare :root and in both dark blocks, the five families
+  meaning what this file says they mean, and no hue, glyph or label treatment
+  that reads as a grade. A theme changes how the page looks, never what is on it.
 -->
-<!-- SKELETON:THEME -- page-skeleton.sh replaces this line with the chosen theme. -->
+<!-- SKELETON:THEME -- page-skeleton.sh replaces this line with the themes. -->
+<!--
+  The reader's saved appearance, applied here rather than in the tail script
+  so the page never paints in one look and then jumps to another. Two keys,
+  both a viewer's own convenience: which theme (only if this page carries a
+  file of that name) and light or dark (absent means follow the system).
+  Every storage call is guarded — a private window or blocked site data
+  throws, and then the page is simply the repository's choice.
+-->
+<script>
+(function () {
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var s = get('review-style'), els = document.querySelectorAll('[data-style]'), i, known = false;
+  for (i = 0; i < els.length; i++) { if (els[i].getAttribute('data-style') === s) { known = true; } }
+  if (known) {
+    for (i = 0; i < els.length; i++) {
+      if (els[i].getAttribute('data-style') === s) { els[i].removeAttribute('media'); }
+      else { els[i].setAttribute('media', 'not all'); }
+    }
+  }
+  var t = get('review-theme');
+  if (t === 'light' || t === 'dark') { document.documentElement.setAttribute('data-theme', t); }
+})();
+</script>
 
 <!-- Scroll progress. The only decoration on the page that moves. -->
 <div class="progress"><i id="bar"></i></div>
@@ -2165,11 +2225,13 @@ post.saved_change_to_title?  # =&gt; true</pre>
   </main>
 </div>
 
-<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, and
-     the syntax tint on unchanged excerpts.
-     This is the ONLY script the page carries: no state, no localStorage, no
-     counters. All four are presentation, and the page reads correctly with the
-     whole block removed — the excerpts simply render in one ink, as they did
+<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, the
+     appearance menu, and the syntax tint on unchanged excerpts.
+     Apart from the few lines in the head that apply a saved appearance before
+     first paint, this is the ONLY script the page carries, and its one piece of
+     state is that appearance: two localStorage keys, a viewer's own convenience,
+     never anything about the change. No counters. All five jobs are presentation,
+     and the page reads correctly with the whole block removed — the excerpts simply render in one ink, as they did
      before the tint existed, and a citation lands in the tab it was clicked from.
 
      highlight.js comes from cdnjs because that is the one script host a published
@@ -2254,6 +2316,112 @@ post.saved_change_to_title?  # =&gt; true</pre>
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
   });
+
+  /* ---- The appearance menu ------------------------------------------------
+     Built here, into the right end of the masthead's first line, so the markup
+     half carries no control for a run to copy. Its styles are the style
+     elements page-skeleton.sh emitted, read off the page rather than listed
+     here, so a theme added under references/themes/ appears without touching
+     this block. Choosing one switches media between "all" and "not all"; the
+     light/dark/auto segment sets or clears data-theme, which every theme's
+     tokens already answer. Both choices are saved for the next visit by the
+     head script's two keys. With one theme or no masthead there is nothing to
+     offer, and nothing is drawn. */
+  (function () {
+    var line = document.querySelector('main > header > .lbl-wide');
+    var sheets = document.querySelectorAll('style[data-style]');
+    if (!line || sheets.length < 2) { return; }
+    var root = document.documentElement;
+    function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) { e.className = cls; }
+      if (text) { e.textContent = text; }
+      return e;
+    }
+
+    var rc = el('div', 'rc'), btn = el('button', 'rc-btn'), icon = el('span', 'rc-i');
+    btn.type = 'button';
+    btn.title = 'Appearance';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'rc-pop');
+    btn.appendChild(el('b', '', 'Aa'));
+    icon.setAttribute('aria-hidden', 'true');
+    btn.appendChild(icon);
+    var pop = el('div', 'rc-pop');
+    pop.id = 'rc-pop';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Appearance');
+
+    pop.appendChild(el('div', 'rc-h', 'Style'));
+    var list = el('div', 'rc-styles'), choices = [];
+    function active() {
+      for (var i = 0; i < sheets.length; i++) {
+        if (sheets[i].getAttribute('media') !== 'not all') { return sheets[i].getAttribute('data-style'); }
+      }
+      return '';
+    }
+    function useStyle(name) {
+      var all = document.querySelectorAll('[data-style]');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].getAttribute('data-style') === name) { all[i].removeAttribute('media'); }
+        else { all[i].setAttribute('media', 'not all'); }
+      }
+      choices.forEach(function (c) {
+        var on = c.getAttribute('data-s') === name;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+    }
+    Array.prototype.forEach.call(sheets, function (sh) {
+      var name = sh.getAttribute('data-style');
+      var b = el('button'), sw = el('span', 'rc-sw');
+      b.type = 'button';
+      b.setAttribute('data-s', name);
+      sw.setAttribute('data-sw', name);
+      b.appendChild(sw);
+      b.appendChild(document.createTextNode(sh.getAttribute('data-style-label') || name));
+      b.onclick = function () { useStyle(name); save('review-style', name); };
+      list.appendChild(b);
+      choices.push(b);
+    });
+    pop.appendChild(list);
+
+    pop.appendChild(el('div', 'rc-h', 'Theme'));
+    var seg = el('div', 'rc-seg'), modes = [];
+    seg.setAttribute('role', 'group');
+    seg.setAttribute('aria-label', 'Theme');
+    var glyph = { light: '\u2600', auto: '\u25D0', dark: '\u263E' };
+    function useMode(m) {
+      if (m === 'auto') { root.removeAttribute('data-theme'); } else { root.setAttribute('data-theme', m); }
+      icon.textContent = glyph[m];
+      modes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-t') === m)); });
+    }
+    [['light', 'Light'], ['auto', 'Auto'], ['dark', 'Dark']].forEach(function (m) {
+      var b = el('button', '', glyph[m[0]] + ' ' + m[1]);
+      b.type = 'button';
+      b.setAttribute('data-t', m[0]);
+      b.onclick = function () { useMode(m[0]); save('review-theme', m[0]); };
+      seg.appendChild(b);
+      modes.push(b);
+    });
+    pop.appendChild(seg);
+
+    rc.appendChild(btn);
+    rc.appendChild(pop);
+    line.appendChild(rc);
+    useStyle(active());
+    var t = root.getAttribute('data-theme');
+    useMode(t === 'light' || t === 'dark' ? t : 'auto');
+
+    function close() { rc.classList.remove('rc-on'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.onclick = function () { btn.setAttribute('aria-expanded', String(rc.classList.toggle('rc-on'))); };
+    document.addEventListener('click', function (e) { if (!rc.contains(e.target)) { close(); } });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && rc.classList.contains('rc-on')) { close(); btn.focus(); }
+    });
+  })();
 
   /* ---- Syntax tint, .excerpt--source only -------------------------------
      The rule this obeys: an excerpt is a quotation, so the script may change

@@ -219,7 +219,8 @@ how big a change has to be is run-time configuration, not one of step 3's when-d
 
 **Offer the look, once.** The page comes in three themes — **Daylight** (the default: cool, quiet,
 sans-serif), **Workshop** (square and bold, hard frames, highlighter tints) and **Field Notes** (warm
-paper, a serif display, handwritten labels). Ask which one the team wants, in the same block as
+paper, a serif display, handwritten labels). Every page carries all three and each reader can switch
+from the page's *Aa* menu, so this only picks the one a page opens in. Ask which one the team wants, in the same block as
 anything else you are confirming, and write `theme: workshop` or `theme: field-notes` under
 `review_map:` only if they pick one of those. Daylight is the absence of the key, by the rule above.
 The skill reads this key itself from the repository, so the choice applies to a person's own

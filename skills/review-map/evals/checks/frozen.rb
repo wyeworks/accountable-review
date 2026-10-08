@@ -59,7 +59,8 @@ def checks
   end
 end
 
-# The template as a page carries it: with the default theme where its theme marker is. Since
+# The template as a page carries it: every theme where its theme marker is, Daylight on and the
+# others switched off, the way page-skeleton.sh writes them. Since
 # the tokens moved into references/themes/, the raw file has no colour of its own, and grading
 # it bare would record three FAILs about theme states that no published page can have. Spliced
 # here rather than by page-skeleton.sh, so the corpus does not depend on the script it would be
@@ -68,7 +69,10 @@ end
 def template_page
   @template_page ||= begin
     refs = File.expand_path(File.join(EVALS, "..", "references"))
-    theme = File.read(File.join(refs, "themes", "daylight.html"), encoding: "UTF-8")
+    theme = %w[daylight workshop field-notes].map do |name|
+      text = File.read(File.join(refs, "themes", "#{name}.html"), encoding: "UTF-8")
+      name == "daylight" ? text : text.gsub(%(data-style="#{name}"), %(data-style="#{name}" media="not all"))
+    end.join
     text = File.read(File.join(refs, "page-template.html"), encoding: "UTF-8")
     lines = text.lines.flat_map { |l| l.include?("SKELETON:THEME") ? theme.lines : [l] }
     dir = Dir.mktmpdir("frozen-template")

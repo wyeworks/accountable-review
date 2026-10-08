@@ -82,11 +82,22 @@ echo ""
 awk '/SKELETON:BODY/ { exit } { print }' "$WORK/page.html" > "$WORK/head"
 awk 'f { print } /SKELETON:BODY/ { f = 1 }' "$WORK/page.html" > "$WORK/tail"
 
-# The template as one stream: drop everything through HEAD:START, put the default theme's bytes
-# where the theme marker was, then drop the marker lines. No --theme and no config file in $WORK,
-# so what was emitted is the default — which is why this names daylight rather than asking.
+# Every theme goes onto the page, in the menu's order, with the ones not chosen switched off by
+# media="not all" on each element that names them. Built here with sed's `&`, not with the
+# script's awk, so a consistent pair of bugs cannot agree with itself.
+themes_for() {
+  for n in daylight workshop field-notes; do
+    if [ "$n" = "$1" ]; then cat "$THEMES/$n.html"
+    else sed "s/data-style=\"$n\"/& media=\"not all\"/g" "$THEMES/$n.html"; fi
+  done > "$WORK/themes.$1"
+}
+themes_for daylight
+
+# The template as one stream: drop everything through HEAD:START, put the themes where the theme
+# marker was, then drop the marker lines. No --theme and no config file in $WORK, so what was
+# emitted is the default — which is why this names daylight rather than asking.
 sed '1,/SKELETON:HEAD:START/d' "$TEMPLATE" \
-  | sed -e "/SKELETON:THEME/r $THEMES/daylight.html" -e '/SKELETON:THEME/d' \
+  | sed -e "/SKELETON:THEME/r $WORK/themes.daylight" -e '/SKELETON:THEME/d' \
   | grep -v 'SKELETON:' > "$WORK/expected"
 cat "$WORK/head" "$WORK/markup" "$WORK/tail" > "$WORK/actual"
 
@@ -327,14 +338,33 @@ assert_eq "$(count "$WORK/page.html" 'SKELETON:BODY')" "1" "the emitted page car
 # EXISTING is not the same as a colour being declared in all three, and the tints are the tokens
 # nothing on the page needs in order to be readable, so a missing one is invisible until someone
 # opens an excerpt with the OS in dark mode.
-assert_eq "$(count "$WORK/head" '--syn-key:')"              "3" "--syn-key is declared in all three theme states, in the skeleton"
-assert_eq "$(count "$WORK/head" '--ex-add:')"               "3" "--ex-add is declared in all three theme states, in the skeleton"
-assert_eq "$(count "$WORK/head" '--primer-ink:')"           "3" "--primer-ink is declared in all three theme states, in the skeleton"
-assert_eq "$(count "$WORK/head" 'prefers-color-scheme: dark')" "1" "the media dark block is in the skeleton"
-assert_eq "$(count "$WORK/head" '[data-theme="dark"]')"     "2" "the explicit dark block is in the skeleton"
-assert_eq "$(count "$WORK/head" '[data-theme="light"]')"    "1" "the explicit light block is in the skeleton"
+# Each theme file's own three states are checked per selector below; here the point is that every
+# declaration in every theme file reached the skeleton, and none reached the half a model reads.
+for tok in '--syn-key:' '--ex-add:' '--primer-ink:'; do
+  want=0; for th in "$THEMES"/*.html; do want=$((want + $(count "$th" "$tok"))); done
+  assert_eq "$(count "$WORK/head" "$tok")" "$want" "every theme's $tok declarations are in the skeleton"
+done
+ntheme=$(ls "$THEMES" | grep -c '\.html$')
+assert_eq "$(count "$WORK/head" '<style data-style="')"                "$ntheme" "every theme's style block is on the page"
+assert_eq "$(count "$WORK/head" '" media="not all" data-style-label=')" "$((ntheme - 1))" "and all but one arrive switched off"
 assert_eq "$(count "$WORK/markup" '--syn-key:')"            "0" "no colour is left in the half a model reads"
 assert_eq "$(count "$TEMPLATE" '--syn-key:')"               "0" "the template declares no token of its own — every one comes from a theme"
+
+# ---------------------------------------------------------------- the appearance menu
+# A reader's control, and none of it is a run's to type: its CSS is in the head range, its markup
+# is built by the tail script, and the half a model reads carries no trace of either. That last
+# pair is the whole token argument — a menu typed per page is bytes every run pays for twice.
+assert_eq "$(count "$WORK/head" '.rc-pop { position: absolute')" "1" "the menu's CSS is in the skeleton"
+assert_eq "$(count "$WORK/markup" 'rc-')"                     "0" "the markup half carries none of the menu for a run to copy"
+assert_eq "$(count "$WORK/markup" 'data-style')"              "0" "nor any theme switch"
+assert_eq "$(count "$WORK/tail" "line.appendChild(rc);")"     "1" "the tail script builds the menu into the masthead"
+assert_eq "$(count "$WORK/tail" "save('review-style', name)")" "1" "a reader's theme is remembered"
+assert_eq "$(count "$WORK/tail" "save('review-theme', m[0])")" "1" "and their light or dark"
+assert_eq "$(count "$WORK/head" "get('review-style')")"       "1" "the head applies a saved theme before first paint"
+# Storage throws in a private window or with site data blocked, and then the page must still be
+# the repository's choice rather than a script error that stops the tint and the rail with it.
+assert_eq "$(grep -c 'localStorage\.' "$WORK/page.html")" \
+  "$(grep -c 'try { [a-z ]*localStorage\.' "$WORK/page.html")" "every storage call is inside a try"
 
 # ---------------------------------------------------------------- every theme, every state
 # The partition above proves the default. These prove the other two reach the page the same way,
@@ -364,17 +394,20 @@ for th in "$THEMES"/*.html; do
   rm -f "$WORK/th.html"
   "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --theme "$name" --out "$WORK/th.html" --title t >/dev/null
   awk '/SKELETON:BODY/ { exit } { print }' "$WORK/th.html" > "$WORK/th.head"
+  themes_for "$name"
   sed '1,/SKELETON:HEAD:START/d; /SKELETON:HEAD:END/,$d' "$TEMPLATE" \
-    | sed -e "/SKELETON:THEME/r $th" -e '/SKELETON:THEME/d' \
+    | sed -e "/SKELETON:THEME/r $WORK/themes.$name" -e '/SKELETON:THEME/d' \
     | sed 's|{{PR_TITLE_OR_BRANCH}}|t|' > "$WORK/th.expected"
   if cmp -s "$WORK/th.head" "$WORK/th.expected"; then
-    ok "theme $name: the emitted head is the template's head with $name.html where the marker was"
+    ok "theme $name: the emitted head carries every theme, with $name the one switched on"
   else
-    bad "theme $name: the emitted head is the template's head with $name.html where the marker was"
+    bad "theme $name: the emitted head carries every theme, with $name the one switched on"
   fi
+  assert_eq "$(count "$th" "data-style=\"$name\"")" "$(count "$th" '<link rel="stylesheet"' | awk -v n="$(count "$th" '<style')" '{ print $1 + n }')" \
+    "theme $name names itself on every link and style element, so the menu can switch all of it"
   assert_eq "$(count "$th" 'SKELETON:')" "0" "theme $name carries no marker of its own"
   assert_eq "$(theme_states "$th" | tr '\n' ' ')" "" "theme $name declares every colour on bare :root and in both dark blocks"
-  assert_eq "$(count "$th" '<link rel="stylesheet" href="https://fonts.googleapis.com/')" \
+  assert_eq "$(count "$th" 'href="https://fonts.googleapis.com/')" \
     "$(count "$th" '<link rel="stylesheet"')" "theme $name loads its stylesheets from Google Fonts only"
   assert_eq "$(count "$th" '<script')" "0" "theme $name carries no script — the page has one, in the tail"
 done
@@ -387,17 +420,17 @@ printf 'review_map:\n  effort: low\n  delivery:\n    provider: github-artifact\n
   > "$WORK/cfg/.accountable-review.yml"
 rm -f "$WORK/c.html"
 "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null
-assert_eq "$(count "$WORK/c.html" 'Theme · Workshop.')" "1" "review_map.theme in the repository's config picks the theme"
+assert_eq "$(count "$WORK/c.html" '<style data-style="workshop" data-style-label')" "1" "review_map.theme in the repository's config picks the theme"
 rm -f "$WORK/c.html"
 ACCOUNTABLE_REVIEW_THEME=field-notes "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null
-assert_eq "$(count "$WORK/c.html" 'Theme · Field Notes.')" "1" "ACCOUNTABLE_REVIEW_THEME beats the repository's config"
+assert_eq "$(count "$WORK/c.html" '<style data-style="field-notes" data-style-label')" "1" "ACCOUNTABLE_REVIEW_THEME beats the repository's config"
 rm -f "$WORK/c.html"
 ACCOUNTABLE_REVIEW_THEME=field-notes "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --theme daylight --out "$WORK/c.html" --title t >/dev/null
-assert_eq "$(count "$WORK/c.html" 'Theme · Daylight.')" "1" "--theme beats both"
+assert_eq "$(count "$WORK/c.html" '<style data-style="daylight" data-style-label')" "1" "--theme beats both"
 printf 'review_map:\n  delivery:\n    theme: workshop\n' > "$WORK/cfg/.accountable-review.yml"
 rm -f "$WORK/c.html"
 "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null
-assert_eq "$(count "$WORK/c.html" 'Theme · Daylight.')" "1" "a theme: nested under delivery: is not review_map.theme, so the default holds"
+assert_eq "$(count "$WORK/c.html" '<style data-style="daylight" data-style-label')" "1" "a theme: nested under delivery: is not review_map.theme, so the default holds"
 printf 'review_map:\n  theme: workshp\n' > "$WORK/cfg/.accountable-review.yml"
 rm -f "$WORK/c.html"
 rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?

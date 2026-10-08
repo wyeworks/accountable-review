@@ -359,6 +359,25 @@ sed 's|^\[ -n "$THEME" \] \|\| { THEME=daylight; SOURCE=default; }$|[ -r "$THEME
 chmod 755 "$WORK/lenient.sh"
 case_runs_red "a theme name with no file behind it quietly becomes daylight" "$TEMPLATE" "$WORK/lenient.sh"
 
+# 35. The menu typed into the masthead instead of built by the script. It renders exactly the same,
+#     which is why the assertion expects zero — and every run would then pay to read it and again
+#     to type it, on every page, for a control no run has any business writing.
+awk '/<header style=/ && !d { print; getline; print; print "        <div class=\"rc\"><button class=\"rc-btn\">Aa</button></div>"; d = 1; next } { print }' \
+  "$TEMPLATE" > "$WORK/typed-menu.html"
+case_runs_red "the appearance menu is typed into the markup half" "$WORK/typed-menu.html" "$SKELETON"
+
+# 36. A storage call outside a try. In a private window it throws, and an exception in the tail
+#     script stops the rail, the tint and the link pass along with the menu.
+awk '/^  \/\* ---- The appearance menu ----/ && !d { print "  localStorage.getItem(\x27review-style\x27);"; d = 1 } { print }' \
+  "$TEMPLATE" > "$WORK/bare-storage.html"
+case_runs_red "a localStorage call sits outside a try" "$WORK/bare-storage.html" "$SKELETON"
+
+# 37. Only the chosen theme reaches the page. Every page still looks right — in the repository's
+#     theme — and the menu offers nothing, which is the failure nobody would notice.
+sed 's|^  if \[ "$name" = "$THEME" \]; then$|  [ "$name" = "$THEME" ] \|\| continue; if true; then|' "$SKELETON" > "$WORK/one-theme.sh"
+chmod 755 "$WORK/one-theme.sh"
+case_runs_red "only the chosen theme is emitted, so the menu has nothing to switch to" "$TEMPLATE" "$WORK/one-theme.sh"
+
 echo ""
 echo "self-test: $ok ok, $bad bad"
 [ "$bad" -eq 0 ]

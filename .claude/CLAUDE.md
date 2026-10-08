@@ -174,7 +174,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/page-template.html` | Design system — the rules every theme's tokens keep (it declares none of its own), component classes, the assembled checkpoint, the chain, one of each topology figure and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads. A fifth, `SKELETON:THEME`, inside the head, is where the theme goes |
-| `references/themes/` | The three looks — `daylight` (the default), `workshop`, `field-notes` — each one file: a font link and one `<style>` holding its tokens in all three theme states and its overrides. Emitted at the `SKELETON:THEME` line, never read by a run |
+| `references/themes/` | The three looks — `daylight` (the default), `workshop`, `field-notes` — each one file: a font link and one `<style>` holding its tokens in all three theme states and its overrides, every element carrying `data-style`. All three emitted at the `SKELETON:THEME` line, the unchosen ones `media="not all"`; never read by a run |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
@@ -1041,20 +1041,32 @@ Editing one of these means checking the others still agree.
   is applied at read time and a hand-coloured quotation is a quotation someone edited. That is why the
   template's excerpt comment describes that class rather than spelling it — the rule and the prose
   about the rule would otherwise be the same bytes.
-- **Three themes, one page, and the repository chooses.** Daylight (default), Workshop and Field
-  Notes share every byte of markup and every base rule; a theme is one file under
-  `references/themes/` — fonts, tokens, overrides — that `page-skeleton.sh` writes in at the
-  template's `SKELETON:THEME` line, **after** the base styles so its overrides win the cascade.
-  The choice is `review_map.theme` in the reviewed repository's `.accountable-review.yml`, read by
-  the script itself (precedence `--theme` > `ACCOUNTABLE_REVIEW_THEME` > the file > `daylight`), so a
-  person's run and CI's produce the same look.
+- **Three themes on every page; the repository picks the default and the reader picks theirs.**
+  Daylight, Workshop and Field Notes share every byte of markup and every base rule; a theme is one
+  file under `references/themes/` — fonts, tokens, overrides — and `page-skeleton.sh` writes **all**
+  of them in at the template's `SKELETON:THEME` line, **after** the base styles so overrides win the
+  cascade, with every one but the default carrying `media="not all"`. The default is
+  `review_map.theme` in the reviewed repository's `.accountable-review.yml`, read by the script
+  itself (precedence `--theme` > `ACCOUNTABLE_REVIEW_THEME` > the file > `daylight`). The *Aa* menu
+  the tail script builds into the masthead switches the attribute, and light/dark/auto with it; a
+  head script applies the saved choice before first paint. Two `localStorage` keys, every call in a
+  `try` — a viewer's convenience, never anything about the change.
+
+  **Every byte of it is emitted, none of it typed, and that is a cost rule as much as a design
+  one.** The menu's CSS is in the head range and its markup is built at load, so `--markup` is the
+  same size it was before themes existed and a run neither reads nor writes any of it;
+  `tests/run.sh` counts the menu at zero in the markup half, with a `self-test.sh` row behind the
+  zero. Carrying three themes costs the page about 32 KB of CSS a reader downloads and no model
+  ever sees.
 
   **A theme is a look, never a page shape, and that is what keeps it out of § *One page shape*.**
-  No skill flag names it, the run never chooses it, nothing on the page names it, and the content
-  of a page is identical in all three. Two themes carry a highlighter and Workshop puts a glyph on
-  `p.open` and `.gap`: **each is applied to every instance of its component alike**, which is the
-  distance between a treatment and a scale — a theme that tinted one checkpoint differently from
-  another, or used red on a claim, would be the severity chip arriving as a palette.
+  No skill flag names it, the run never chooses it, and the content of a page is identical in all
+  three. The menu names the themes because it offers them — a control, not a badge.
+
+  Two themes carry a highlighter and Workshop puts a glyph on `p.open` and `.gap`: **each is
+  applied to every instance of its component alike**, which is the distance between a treatment
+  and a scale — a theme that tinted one checkpoint differently from another, or used red on a
+  claim, would be the severity chip arriving as a palette.
 
   **The skill reads one config key, and that is a second reader on purpose.** `read-config.sh` owns
   the schema, but `npx skills add` and Codex install `review-map` without `setup-ci`, so
@@ -1063,11 +1075,14 @@ Editing one of these means checking the others still agree.
   `setup-ci/tests/run.sh` compares `read-config.sh`'s names with the directory.
 
   These agree: the theme files; the template's marker and the comment beside it;
-  `page-skeleton.sh`; `tests/run.sh` (the partition with the default spliced in by `sed`, and every
-  theme's colours on bare `:root` and in both dark blocks, tagged by selector rather than counted);
+  `page-skeleton.sh`; the tail script's menu and the head script before it; `tests/run.sh` (the
+  partition with every theme spliced in by `sed`, the menu's absence from the markup half, the
+  guarded storage, and every theme's colours on bare `:root` and in both dark blocks, tagged by
+  selector rather than counted);
   `read-config.sh` and `references/config.md`; `ci/generate-review-map.sh`, which passes a
   `--config` file's theme through the environment; and `evals/checks/frozen.rb`, which grades the
-  template with Daylight spliced in, because the bare template declares no colour.
+  template with the themes spliced in as a page carries them, because the bare template declares no
+  colour.
 - **Theme tokens.** Every colour is defined on bare `:root` *and* redefined in both dark blocks
   (`prefers-color-scheme` and `[data-theme="dark"]`). A colour declared only inside a media query is
   the classic unreadable-artifact bug. `evals/checks/page-invariants.rb` § 6 enforces the three

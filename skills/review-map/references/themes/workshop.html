@@ -1,10 +1,12 @@
 <!-- Theme · Workshop. Emitted into the page by page-skeleton.sh in place of the template's
      theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
-     states, then the overrides that give the direction its shape. The rules every theme
-     keeps are written beside that line in page-template.html. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
-<style>
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="workshop" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" data-style="workshop" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style data-style="workshop" data-style-label="Workshop">
 /* Tokens · Workshop direction. Same five ramps and the same rule about what each
    may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
    prov = how it is known, primer = the framework's own frame); only hue, ramp
@@ -256,4 +258,13 @@ details.excerpt,details.searched,.gt,.primer{border:2px solid var(--frame)}
 .open::before,.gap::before{border-radius:0;border:2px solid var(--frame);width:30px;height:30px}
 .tier,.tag{border:1.5px solid var(--frame)}
 .ip-box{border-width:2px !important}
+
+/* ---- The appearance menu, framed like everything else here ---- */
+.rc-btn{border:2px solid var(--frame);box-shadow:3px 3px 0 var(--shadow);font-weight:600}
+.rc-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.rc-pop{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
+.rc-h{display:inline-block;align-self:flex-start;background:var(--hl-yellow);color:var(--hl-ink);padding:3px 6px;font-weight:600}
+.rc-styles button.on{border-color:var(--frame)}
+.rc-seg{border:2px solid var(--frame)}
+.rc-seg button[aria-pressed="true"]{background:var(--hl-yellow);color:var(--hl-ink);font-weight:600}
 </style>

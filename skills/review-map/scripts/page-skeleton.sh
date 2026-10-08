@@ -28,8 +28,9 @@
 # eats trailing newlines. The bytes must come out the way they went in.
 #
 # THE THEME. Three designs share one markup and differ only in fonts, tokens and a block of
-# overrides, and each is a file under references/themes/ that replaces the template's one
-# SKELETON:THEME line. Which one is decided here, in this order: --theme, then
+# overrides, and each is a file under references/themes/. All of them replace the template's one
+# SKELETON:THEME line, so the reader's appearance menu can switch between them, and ONE is active
+# when the page opens — the repository's default. Which one is decided here, in this order: --theme, then
 # ACCOUNTABLE_REVIEW_THEME (how ci/generate-review-map.sh passes the value it read from a --config
 # file somewhere else), then review_map.theme in the repository's .accountable-review.yml, then
 # daylight. The run is never asked: a theme is a team's choice of look, so it lives in the
@@ -167,11 +168,35 @@ fi
 esc=$(printf '%s' "$TITLE" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
 
 tmp=$OUT.skeleton.$$
-trap 'rm -f "$tmp"' EXIT INT HUP TERM
+themes=$OUT.themes.$$
+trap 'rm -f "$tmp" "$themes"' EXIT INT HUP TERM
+
+# EVERY theme goes onto the page, so the appearance menu can switch without a second file; the
+# chosen one is active and the rest carry media="not all" on each element that names them. The
+# order is the menu's: the three this repository ships first, as the design lays them out, then
+# any other file in the directory alphabetically, so a theme added later appears without an edit
+# here. A theme file's elements are found by their data-style attribute and nothing else.
+: > "$themes"; done_names=
+for name in daylight workshop field-notes $(ls "$THEMES" | sed -n 's/\.html$//p' | sort); do
+  case " $done_names " in *" $name "*) continue ;; esac
+  [ -r "$THEMES/$name.html" ] || continue
+  done_names="$done_names $name"
+  if [ "$name" = "$THEME" ]; then
+    cat "$THEMES/$name.html" >> "$themes"
+  else
+    awk -v a="data-style=\"$name\"" '
+      { out = ""; rest = $0
+        while ((p = index(rest, a)) > 0) {
+          out = out substr(rest, 1, p - 1 + length(a)) " media=\"not all\""
+          rest = substr(rest, p + length(a))
+        }
+        print out rest }' "$THEMES/$name.html" >> "$themes"
+  fi
+done
 
 # Substituted by index rather than by gsub, because an & in a title is ordinary and awk's gsub
 # would read it as "the whole match".
-extract "$HEAD_S" "$HEAD_E" "$TEMPLATE" | awk -v t="$esc" -v m="$THEME_M" -v theme="$THEME_FILE" '
+extract "$HEAD_S" "$HEAD_E" "$TEMPLATE" | awk -v t="$esc" -v m="$THEME_M" -v theme="$themes" '
   index($0, m) { while ((getline l < theme) > 0) print l; close(theme); next }
   { k = "{{PR_TITLE_OR_BRANCH}}"; p = index($0, k)
     if (p > 0) $0 = substr($0, 1, p - 1) t substr($0, p + length(k))
@@ -189,5 +214,6 @@ printf '%s\n' "$PLACEHOLDER" >> "$tmp"
 extract "$TAIL_S" "$TAIL_E" "$TEMPLATE" >> "$tmp"
 
 mv "$tmp" "$OUT"
+rm -f "$themes"
 trap - EXIT INT HUP TERM
 echo "page-skeleton.sh: wrote $(wc -c < "$OUT" | tr -d ' ') bytes to $OUT (theme: $THEME)"

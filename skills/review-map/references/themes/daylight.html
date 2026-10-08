@@ -1,9 +1,11 @@
 <!-- Theme · Daylight. Emitted into the page by page-skeleton.sh in place of the template's
      theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
-     states, then the overrides that give the direction its shape. The rules every theme
-     keeps are written beside that line in page-template.html. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<style>
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="daylight" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style data-style="daylight" data-style-label="Daylight">
 /* Tokens · Daylight direction. Same five ramps and the same rule about what each
    may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
    prov = how it is known, primer = the framework's own frame); only hue, ramp

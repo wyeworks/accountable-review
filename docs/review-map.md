@@ -72,12 +72,13 @@ same reading path, same budget on every other part — so deleting the primers f
 gives you back the ordinary page. That subtraction is the test, and it is why there is no badge
 saying which one you are holding: you can see.
 
-**It comes in three looks, and the look is the repository's setting rather than a flag.**
-Daylight is the default; Workshop and Field Notes are the alternatives, chosen with
-`review_map.theme` in `.accountable-review.yml`. A theme changes typefaces, corner radii, hues and
-how a few labels are drawn. It never changes what is on the page, and all three keep the same
-colour meanings — teal for code outside the diff, ochre for a stated absence — so the paragraphs
-below hold whichever one you are reading. Nothing on the page names the theme.
+**It comes in three looks, and you pick yours.** Daylight, Workshop and Field Notes are all on every
+page; the *Aa* menu at the right of the masthead switches between them, and between light, dark and
+your system's setting, and your browser remembers the choice. The repository decides only which one
+a page opens in — `review_map.theme` in `.accountable-review.yml`, Daylight when unset. A theme
+changes typefaces, corner radii, hues and how a few labels are drawn. It never changes what is on
+the page, and all three keep the same colour meanings — teal for code outside the diff, ochre for a
+stated absence — so the paragraphs below hold whichever one you are reading.
 
 ## Each fact has one home
 
