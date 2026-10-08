@@ -13,17 +13,23 @@ which is most of what makes an example worth reading.
 
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
-| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 4 context entries · 3 checkpoints · 1 converge figure · 2 impact paths |
-| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 4 context entries · 5 checkpoints · 1 converge and 1 chain figure · 3 impact paths |
+| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · no context · 4 checkpoints · 1 converge and 1 structure figure · 2 impact paths |
+| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 2 context entries and the before-and-after figure · 6 checkpoints · 1 converge and 1 chain figure · 1 impact path |
 
 `index.html` is the front door to the two. It is not a Review Map and follows none of the page
 rules — it borrows the design language and the theme rule, and nothing else.
 
 ## Provenance
 
-Both pages were generated on **2026-10-07** by **`accountable-review` 1.2.0**, plugin checkout
-`3bfa16e`, the one that adds the *Context* section, at the default `--effort high` and
-without `--mentor`.
+Both pages were generated on **2026-10-08** by **`accountable-review` 1.2.0**, at the default
+`--effort high` and without `--mentor`: RubyGems from plugin checkout `3c282aa`, the one that adds
+*Context*'s before-and-after figure, and Discourse from `c1ddb13`, which makes that figure's
+citations name the lines they link. The second commit touches only that figure, which the RubyGems
+page does not earn.
+
+Neither run could read its pull request's title or description — `gh` had no access to either
+repository from the machine that ran them — so both pages say so in *What changed* and take intent
+from the code, the tests and the commit messages.
 
 Both pull requests are mapped at the revisions in the table, the same ones the previous versions of
 these pages described, so the two versions differ only by what the skill does. Discourse's is
@@ -67,16 +73,18 @@ almost entirely about code the diff never opened, and the page's converge figure
 drawn: every path that starts or ends an ownership — the callbacks, a re-push that disowns a gem
 without running them, an organization onboarding that moves ownerships under them, an account
 deletion — converging on the one rule they must all keep, an open history row exactly while a
-confirmed ownership exists. Its *Context* section names those four paths before the checkpoints
-rely on them. Its two impact paths are the crossings the diff cannot show: moving a gem into an
-organization records people who can still publish it as former owners; and a deleted account's
-history rows load with no user behind them.
+confirmed ownership exists. It earns **no** *Context*: every checkpoint is followable by someone who
+knows Rails and has never opened this repository, which is the section being earned rather than
+always on. Its two impact paths are the crossings the diff cannot show: owner removal now writes a
+second table inside its own transaction, and contributors demoted in bulk keep `owner` in their
+history row, because nothing on that path lowers the role it recorded.
 
 **Discourse** is the case for a large diff. Thirty-six files, and most of what a reviewer has to
 decide is not in any of them: whether every request that creates an account still passes the
-CAPTCHA — drawn as the verify requests converging on that rule, through a plugin the *Context*
-section introduces before any checkpoint needs it — and what the new signup step does for a visitor
-who is not logged in yet, a staged account whose chosen name is rejected, and a beta site whose
-default flips without a migration.
+CAPTCHA — drawn as the verify requests converging on that rule — and what the new signup step does
+for a visitor who is not logged in yet. Its *Context* section is the one this format added for
+pages like it: the request sequence drawn before and after, with the account-creating request
+moving one step later and the cases that run differently listed beneath it, then the CAPTCHA plugin
+and *approval signup* introduced before any checkpoint relies on them.
 
 Neither page grades its pull request, and this directory does not rank the two.
