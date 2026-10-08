@@ -13,7 +13,7 @@ which is most of what makes an example worth reading.
 
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
-| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · no context · 4 checkpoints · 1 converge and 1 structure figure · 2 impact paths |
+| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 3 context entries · 4 checkpoints · 1 converge figure · no impact path |
 | `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 3 context entries and the before-and-after figure · 7 checkpoints · 1 converge figure · 2 impact paths |
 
 `index.html` is the front door to the two. It is not a Review Map and follows none of the page
@@ -22,14 +22,15 @@ rules — it borrows the design language and the theme rule, and nothing else.
 ## Provenance
 
 Both pages were generated on **2026-10-08** by **`accountable-review` 1.2.0**, at the default
-`--effort high` and without `--mentor`: RubyGems from plugin checkout `3c282aa`, the one that adds
-*Context*'s before-and-after figure, and Discourse from `a9f1673`, two commits later, which make
-that figure's citations name the lines they link and keep a tier chip inline in a *Look at* entry.
-Neither touches anything the RubyGems page draws.
+`--effort high` and without `--mentor`: Discourse from plugin checkout `a9f1673`, which keeps a tier
+chip inline in a *Look at* entry, and RubyGems from `5f8b758`, which adds the third kind of
+coding decision — an abstraction the change went around — to step 7b. Without that example two
+RubyGems runs asked no coding decision; with it, three of three asked whether
+re-ranking roles beside `lib/access.rb` is deliberate. The Discourse page already asks its coding
+decision, which is about placement.
 
-The RubyGems run could not read its pull request's title or description — `gh` had no access to
-the repository from the machine that ran it — so its page says so in *What changed* and takes intent
-from the code, the tests and the commit messages.
+The RubyGems page draws no impact path: nothing reads the new table yet, so the unchanged code it
+reaches is writers flowing into it, drawn in its first checkpoint's converge figure instead.
 
 Both pull requests are mapped at the revisions in the table, the same ones the previous versions of
 these pages described, so the two versions differ only by what the skill does. Discourse's is
