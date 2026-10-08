@@ -1044,11 +1044,16 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    the whole separation, and shrinking the gap towards the internal spacing is what
    makes four entries read as one block. The list's own top rule stays — it is what
    separates the list from the explanation above it. An excerpt sits under the
-   entry it confirms, full width. */
+   entry it confirms, full width.
+
+   The clause span is a block and a tier chip is not, so the selector excludes
+   .tier. The markup nests the tier inside the clause, but a run that places it
+   as a sibling of the path is legal markup too, and a bare li > span rule turned
+   that chip into a full-width bar on a published page. */
 .lookat { list-style: none; margin: 22px 0 24px; padding: 18px 0 0; border-top: 1px solid var(--rule); display: grid; gap: 26px; }
 .lookat > li { min-width: 0; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
 .lookat > li > b { display: block; font-weight: 600; color: var(--ink); }
-.lookat > li > span { display: block; }
+.lookat > li > span:not(.tier) { display: block; }
 .lookat > li > .path { display: block; margin-top: 4px; }
 .lookat .excerpt { margin: 10px 0 0; }
 
