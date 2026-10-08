@@ -152,12 +152,27 @@ code {
   display: flex; flex-direction: column; gap: 8px;
 }
 .foot > .lbl { color: var(--prov-ink); }
+
+/* The logo follows the same three states as the tokens: light on bare :root, dark in BOTH
+   dark blocks, so a forced data-theme wins over the OS in either direction. */
+.logo { display: inline-block; margin-bottom: 20px; }
+.logo img { display: block; max-width: 100%; height: auto; }
+.logo-dark { display: none !important; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .logo-light { display: none; }
+  :root:not([data-theme="light"]) .logo-dark  { display: block !important; }
+}
+:root[data-theme="dark"] .logo-light { display: none; }
+:root[data-theme="dark"] .logo-dark  { display: block !important; }
 </style>
 </head>
 <body>
 <main>
 
-  <span class="lbl">accountable-review</span>
+  <a class="logo" href="https://github.com/wyeworks/accountable-review">
+    <img class="logo-light" src="assets/logo.png" alt="accountable-review" width="340">
+    <img class="logo-dark" src="assets/logo-dark.png" alt="accountable-review" width="340">
+  </a>
   <h1>Two Review Maps, from real pull requests</h1>
 
   <p class="lede">
