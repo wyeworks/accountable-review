@@ -122,7 +122,10 @@
     context ............... dl.ctx — section 02, earned per concept: what a
                             piece of THIS repository is, a citation, and
                             span.ctx-used pointing at the checkpoints that rely
-                            on it. Prose only — no figure, no tier, no grade
+                            on it. No tier, no grade, and one figure at most:
+                            figure.lifecycle.lc-shift, the request sequence
+                            before and after, when the change moved which
+                            request does what
     evidence tier ......... .tier — neutral by default, .tier-unc teal for
                             `from unchanged code`, .tier-inf ochre for an
                             inference. .tag is an excerpt's state, in plum,
@@ -670,8 +673,8 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 .ctx > dt { min-width: 0; overflow-wrap: anywhere; padding: 18px 0 0; font-size: 14.5px; font-weight: 600; line-height: 1.5; color: var(--ink); }
 .ctx > dd { min-width: 0; overflow-wrap: anywhere; margin: 0; padding: 18px 0 20px; max-width: 62ch; font-size: 15.5px; line-height: 1.66; color: var(--ink-2); }
 .ctx > dt:not(:first-of-type), .ctx > dd:not(:first-of-type) { border-top: 1px solid var(--rule); }
-.ctx .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.ctx .ctx-used a { color: inherit; }
+.ctx .ctx-used, .lc-shift .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.ctx .ctx-used a, .lc-shift .ctx-used a { color: inherit; }
 @media (max-width: 700px) {
   .ctx { grid-template-columns: minmax(0, 1fr); }
   .ctx > dd { padding-top: 4px; }
@@ -1041,11 +1044,16 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    the whole separation, and shrinking the gap towards the internal spacing is what
    makes four entries read as one block. The list's own top rule stays — it is what
    separates the list from the explanation above it. An excerpt sits under the
-   entry it confirms, full width. */
+   entry it confirms, full width.
+
+   The clause span is a block and a tier chip is not, so the selector excludes
+   .tier. The markup nests the tier inside the clause, but a run that places it
+   as a sibling of the path is legal markup too, and a bare li > span rule turned
+   that chip into a full-width bar on a published page. */
 .lookat { list-style: none; margin: 22px 0 24px; padding: 18px 0 0; border-top: 1px solid var(--rule); display: grid; gap: 26px; }
 .lookat > li { min-width: 0; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
 .lookat > li > b { display: block; font-weight: 600; color: var(--ink); }
-.lookat > li > span { display: block; }
+.lookat > li > span:not(.tier) { display: block; }
 .lookat > li > .path { display: block; margin-top: 4px; }
 .lookat .excerpt { margin: 10px 0 0; }
 
@@ -1345,6 +1353,27 @@ figure.converge .ip-n > *, figure.structure .ip-n > * { grid-column: 1; }
 .lc-back { margin-top: 12px; padding-top: 10px; border-top: 1px dotted var(--rule-dash); font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted); }
 .lc-back .ip-loc { margin-left: 8px; }
 
+/* THE SHIFT — figure.lifecycle.lc-shift, Context's one figure. The same states drawn twice, a
+   BEFORE column and an AFTER column, so that the one state that moved (lc-moved: the request
+   that creates the account, now one step later) is seen moving by alignment rather than read.
+   The pair is one grid and each column is a subgrid over its rows, so state n of one column sits
+   level with state n of the other however long a locator wraps — which is the comparison the
+   figure exists to make. Six tracks: the column label plus the lifecycle's cap of five states;
+   an unused track is auto and collapses to nothing.
+   The moved state is FILLED in ink in both columns, like the outcome a chain ends at, and that
+   is what keeps the shift readable on a phone, where the columns stack and alignment is gone:
+   the filled box is found in each column on its own. Not ochre — nothing is missing — and not a
+   new hue, because "moved" is a fact about the sequence, not a meaning. */
+.lc-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: repeat(6, auto); column-gap: 28px; }
+.lc-row { display: grid; grid-row: 1 / span 6; grid-template-rows: subgrid; align-content: start; min-width: 0; }
+.lc-row > .lc-states { display: contents; }
+.lc-when { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--rule); margin-bottom: 4px; }
+.lc-s.lc-moved > .ip-box { border-color: var(--ink); background: var(--ink); }
+.lc-s.lc-moved > .ip-box b { color: var(--ground); }
+.lc-cases { list-style: none; margin: 14px 0 0; padding: 10px 0 0; border-top: 1px dotted var(--rule-dash); font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+.lc-cases > li + li { margin-top: 4px; }
+.lc-cases .path { margin-left: 6px; }
+
 /* STRUCTURE. The entity the change is about on top, and a spine down from it with one
    relationship per row: the relation and its cardinality, then the entity at the other end.
    Hub and spoke rather than a grid of tables, because the question is what this entity is now
@@ -1374,6 +1403,10 @@ figure.structure .st-e > * { grid-column: auto; }
   .cv-target::before { left: 0; top: 0; width: 1px; height: 16px; }
   .cv-target::after { left: 0; top: 16px; transform: translateX(-50%); border: 4px solid transparent; border-top: 6px solid var(--rule-strong); border-bottom: 0; }
   .st-e { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
+  /* The shift stacks: Before above After, and the filled box carries the comparison alone. */
+  .lc-pair { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; row-gap: 22px; }
+  .lc-row { display: block; grid-row: auto; }
+  .lc-row > .lc-states { display: block; }
 }
 
 /* PRINT. Browsers drop backgrounds when printing, and the filled outcome and target boxes are
@@ -1753,11 +1786,52 @@ figcaption strong { color: var(--ink-3); }
          entry called "Models" or "The plugin" is the per-layer page with a new
          heading. Every dd ends in span.ctx-used naming the checkpoints that rely
          on it — an entry no checkpoint letter can be written beside was not
-         earned. No figure, no excerpt, no probe, no primer, and no tier unless the
-         description is inferred rather than read. ===== -->
+         earned. No excerpt, no probe, no primer, and no tier unless the
+         description is inferred rather than read.
+
+         THE SHIFT, at most one, and only when the change moved WHICH REQUEST DOES
+         WHAT — the request that creates or commits something moved, a step was
+         inserted or removed, a check moved from one request to another — and two
+         or more checkpoints turn on that sequence. One checkpoint is not shared
+         ground: its own figure slot holds a plain lifecycle instead. Both columns
+         start at the same state, each transition is a request carrying the line
+         that performs it, and the ONE state that moved is lc-moved in both, at
+         different positions. It draws the main path, so the figcaption names that
+         case and ul.lc-cases says, a line each, the cases that differ (at most
+         four). Locators and case lines are citations: full path, and the text names
+         the lines the anchor selects — :136-138 over R136-R138, never :136 over a
+         range. The Before column cites the base: {{DIFF}}L for a line the change
+         removed or rewrote, {{BLOB}} at the base SHA for one it left alone. It is
+         delete-whole like everything else here: a change that kept the sequence
+         earns no shift. ===== -->
     <section id="context">
       <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
       <h2 style="margin-bottom:18px">What the judgments below rely on</h2>
+      <figure class="lifecycle lc-shift">
+        <div class="lc-pair">
+          <div class="lc-row">
+            <span class="lc-when">Before</span>
+            <ol class="lc-states">
+              <li class="lc-s"><span class="ip-box"><b>{{FIRST_STATE}}</b></span></li>
+              <li class="lc-s"><span class="ip-rel"><i></i>{{REQUEST}}<a class="path ip-loc" href="{{DIFF}}L{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{A_STATE}}</b></span></li>
+              <li class="lc-s lc-moved"><span class="ip-rel"><i></i>{{REQUEST}}<a class="path ip-loc" href="{{DIFF}}L{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{THE_STATE_THAT_MOVED}}</b></span></li>
+            </ol>
+          </div>
+          <div class="lc-row">
+            <span class="lc-when">After</span>
+            <ol class="lc-states">
+              <li class="lc-s"><span class="ip-box"><b>{{FIRST_STATE}}</b></span></li>
+              <li class="lc-s"><span class="ip-rel"><i></i>{{REQUEST}}<a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{A_STATE}}</b></span></li>
+              <li class="lc-s lc-new"><span class="ip-rel"><i></i>{{REQUEST}}<a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{A_NEW_STATE}}</b></span></li>
+              <li class="lc-s lc-moved"><span class="ip-rel"><i></i>{{REQUEST}}<a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span><span class="ip-box"><b>{{THE_STATE_THAT_MOVED}}</b></span></li>
+            </ol>
+          </div>
+        </div>
+        <ul class="lc-cases">
+          <li>{{A_CASE_THAT_DIFFERS}}: {{HOW_ITS_SEQUENCE_DIFFERS_IN_A_CLAUSE}}<a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></li>
+        </ul>
+        <figcaption>{{WHICH_REQUEST_DOES_WHAT_FOR_THE_MAIN_PATH_NAMED}} <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-c">Checkpoint C</a></span></figcaption>
+      </figure>
       <dl class="ctx">
         <dt>{{CONCEPT_IN_THE_REPOSITORYS_OWN_WORDS}}</dt>
         <dd>{{WHAT_IT_IS_IN_ONE_OR_TWO_SENTENCES_NOT_WHAT_THE_CHANGE_DID_TO_IT}}

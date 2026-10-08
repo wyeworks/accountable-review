@@ -226,6 +226,12 @@ SKIP  no checkpoint figure in this input
 ## --page context-no-pointer.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment context-shift-only.html
+exit=0
+PASS  Context's shift holds its shape and carries its locators
+## --page context-shift-only.html
+exit=0
+PASS  Context's shift holds its shape and carries its locators
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  no checkpoint figure in this input
@@ -297,6 +303,12 @@ WARN  cp-b's converge: no details.searched on the page — a converge claims its
 PASS  cp-b's converge holds its shape and carries its locators
 PASS  cp-c's lifecycle holds its shape and carries its locators
 PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-context-chain.html
+exit=1
+FAIL  Context's chain: figure.chain is not Context's figure — the one it may hold is figure.lifecycle.lc-shift, and every other figure belongs to the checkpoint whose judgment earned it
+## --page figures-context-chain.html
+exit=1
+FAIL  Context's chain: figure.chain is not Context's figure — the one it may hold is figure.lifecycle.lc-shift, and every other figure belongs to the checkpoint whose judgment earned it
 ## --fragment figures-converge-grading-note.html
 exit=0
 PASS  at most one figure per checkpoint
@@ -361,6 +373,48 @@ FAIL  cp-a's lifecycle: the transition into state 2 has no locator — the line 
 exit=1
 PASS  at most one figure per checkpoint
 FAIL  cp-a's lifecycle: the transition into state 2 has no locator — the line that performs it is what shows whether it is guarded
+## --fragment figures-shift-clean.html
+exit=0
+PASS  Context's shift holds its shape and carries its locators
+## --page figures-shift-clean.html
+exit=0
+PASS  Context's shift holds its shape and carries its locators
+## --fragment figures-shift-in-checkpoint.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-z's shift: figure.lifecycle.lc-shift is Context's figure — a sequence only one checkpoint turns on is that checkpoint's plain lifecycle, and one several turn on is drawn once, above them
+## --page figures-shift-in-checkpoint.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-z's shift: figure.lifecycle.lc-shift is Context's figure — a sequence only one checkpoint turns on is that checkpoint's plain lifecycle, and one several turn on is drawn once, above them
+## --fragment figures-shift-no-cases.html
+exit=0
+WARN  Context's shift: no ul.lc-cases — the figure draws the main path, and a sequence drawn once reads as the only one; say the cases that differ, a line each
+PASS  Context's shift holds its shape and carries its locators
+## --page figures-shift-no-cases.html
+exit=0
+WARN  Context's shift: no ul.lc-cases — the figure draws the main path, and a sequence drawn once reads as the only one; say the cases that differ, a line each
+PASS  Context's shift holds its shape and carries its locators
+## --fragment figures-shift-not-moved.html
+exit=1
+FAIL  Context's shift: the moved state sits at position 3 in both columns — a shift where nothing moved has drawn one list twice
+## --page figures-shift-not-moved.html
+exit=1
+FAIL  Context's shift: the moved state sits at position 3 in both columns — a shift where nothing moved has drawn one list twice
+## --fragment figures-shift-one-moved.html
+exit=1
+FAIL  Context's shift: 0 and 1 moved state(s) — exactly one in each column, because that state is the point of the figure
+## --page figures-shift-one-moved.html
+exit=1
+FAIL  Context's shift: 0 and 1 moved state(s) — exactly one in each column, because that state is the point of the figure
+## --fragment figures-shift-one-pointer.html
+exit=0
+WARN  Context's shift: only cp-a relies on it — a sequence one checkpoint turns on is that checkpoint's lifecycle, and Context draws only the shared one
+PASS  Context's shift holds its shape and carries its locators
+## --page figures-shift-one-pointer.html
+exit=0
+WARN  Context's shift: only cp-a relies on it — a sequence one checkpoint turns on is that checkpoint's lifecycle, and Context draws only the shared one
+PASS  Context's shift holds its shape and carries its locators
 ## --fragment figures-structure-erd.html
 exit=1
 PASS  at most one figure per checkpoint
@@ -712,6 +766,7 @@ FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{
 FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
 FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
 FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
+FAIL  Context's shift: 13 unsubstituted placeholder(s): {{FIRST_STATE}}, {{REQUEST}}, {{DIFF}}, {{START}}, {{PATH}}, {{A_STATE}}, {{THE_STATE_THAT_MOVED}}, {{A_NEW_STATE}}, {{A_CASE_THAT_DIFFERS}}, {{HOW_ITS_SEQUENCE_DIFFERS_IN_A_CLAUSE}}, {{BLOB}}, {{END}}, {{WHICH_REQUEST_DOES_WHAT_FOR_THE_MAIN_PATH_NAMED}}
 ## --page page-template.html
 exit=1
 PASS  at most one figure per checkpoint
@@ -720,6 +775,7 @@ FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{
 FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
 FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
 FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
+FAIL  Context's shift: 13 unsubstituted placeholder(s): {{FIRST_STATE}}, {{REQUEST}}, {{DIFF}}, {{START}}, {{PATH}}, {{A_STATE}}, {{THE_STATE_THAT_MOVED}}, {{A_NEW_STATE}}, {{A_CASE_THAT_DIFFERS}}, {{HOW_ITS_SEQUENCE_DIFFERS_IN_A_CLAUSE}}, {{BLOB}}, {{END}}, {{WHICH_REQUEST_DOES_WHAT_FOR_THE_MAIN_PATH_NAMED}}
 ## --fragment figures-clean.html
 exit=0
 PASS  at most one figure per checkpoint
@@ -802,6 +858,30 @@ PASS  cp-a's lifecycle holds its shape and carries its locators
 exit=1
 PASS  at most one figure per checkpoint
 FAIL  cp-a's structure: 5 relationship(s) — a structure is 1–4, and a whole schema is the ERD this figure refuses
+## --fragment figures-shift-clean.html
+exit=0
+PASS  Context's shift holds its shape and carries its locators
+## --fragment figures-shift-not-moved.html
+exit=1
+FAIL  Context's shift: the moved state sits at position 3 in both columns — a shift where nothing moved has drawn one list twice
+## --fragment figures-shift-one-moved.html
+exit=1
+FAIL  Context's shift: 0 and 1 moved state(s) — exactly one in each column, because that state is the point of the figure
+## --fragment figures-shift-in-checkpoint.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-z's shift: figure.lifecycle.lc-shift is Context's figure — a sequence only one checkpoint turns on is that checkpoint's plain lifecycle, and one several turn on is drawn once, above them
+## --fragment figures-context-chain.html
+exit=1
+FAIL  Context's chain: figure.chain is not Context's figure — the one it may hold is figure.lifecycle.lc-shift, and every other figure belongs to the checkpoint whose judgment earned it
+## --fragment figures-shift-one-pointer.html
+exit=0
+WARN  Context's shift: only cp-a relies on it — a sequence one checkpoint turns on is that checkpoint's lifecycle, and Context draws only the shared one
+PASS  Context's shift holds its shape and carries its locators
+## --fragment figures-shift-no-cases.html
+exit=0
+WARN  Context's shift: no ul.lc-cases — the figure draws the main path, and a sequence drawn once reads as the only one; say the cases that differ, a line each
+PASS  Context's shift holds its shape and carries its locators
 ## --fragment agenda-clean.html
 exit=0
 PASS  at most one figure per checkpoint

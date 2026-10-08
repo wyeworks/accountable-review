@@ -110,7 +110,7 @@ refusals that hold that line.
 | | Section | Appears | Owns |
 |---|---|---|---|
 | 01 | What changed | always | The masthead, the semantic delta, intent and its tier |
-| 02 | Context | when a checkpoint relies on a repository concept a newcomer would not know | One to five concepts, each what a thing *is*, cited, and pointing at the checkpoints that use it. No judgment |
+| 02 | Context | when a checkpoint relies on a repository concept a newcomer would not know | One to five concepts, each what a thing *is*, cited, and pointing at the checkpoints that use it; and at most one before-and-after figure, when the change moved which request does what. No judgment |
 | 03 | What needs your attention | always | Three to five checkpoints per delta *What changed* names, seven at the outside. No standing caveat |
 | 04 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
 | 05 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
@@ -706,12 +706,98 @@ structure figure ends up showing only what is fine.
 the edges the judgment needs. A whole ERD is the figure this one exists to refuse, and four
 relationships is the cap for that reason.
 
+### `figure.lifecycle.lc-shift` — the sequence, before and after
+
+```html
+<figure class="lifecycle lc-shift">
+  <div class="lc-pair">
+    <div class="lc-row">
+      <span class="lc-when">Before</span>
+      <ol class="lc-states">
+        <li class="lc-s"><span class="ip-box"><b>email entered</b></span></li>
+        <li class="lc-s"><span class="ip-rel"><i></i>request code<a class="path ip-loc" href="{{BLOB}}#L12">app/controllers/session_controller.rb:12</a></span><span class="ip-box"><b>code sent</b></span></li>
+        <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="{{DIFF}}L102">app/services/email_login_code/redeem.rb:102</a></span><span class="ip-box"><b>account created</b></span></li>
+        <li class="lc-s"><span class="ip-rel"><i></i>rename<a class="path ip-loc" href="{{DIFF}}L40">frontend/discourse/app/components/account-ready.gjs:40</a></span><span class="ip-box"><b>username chosen</b></span></li>
+      </ol>
+    </div>
+    <div class="lc-row">
+      <span class="lc-when">After</span>
+      <ol class="lc-states">
+        <li class="lc-s"><span class="ip-box"><b>email entered</b></span></li>
+        <li class="lc-s"><span class="ip-rel"><i></i>request code<a class="path ip-loc" href="{{BLOB}}#L12">app/controllers/session_controller.rb:12</a></span><span class="ip-box"><b>code sent</b></span></li>
+        <li class="lc-s lc-new"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="{{DIFF}}R136">app/services/email_login_code/redeem.rb:136</a></span><span class="ip-box"><b>username required</b></span></li>
+        <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code and username<a class="path ip-loc" href="{{DIFF}}R49">app/services/email_login_code/redeem.rb:49</a></span><span class="ip-box"><b>account created</b></span></li>
+      </ol>
+    </div>
+  </div>
+  <ul class="lc-cases">
+    <li>Existing users: one request, the account already exists<a class="path" href="{{DIFF}}R136-R138">app/services/email_login_code/redeem.rb:136-138</a></li>
+    <li>Approval sites: finish on a separate completion endpoint<a class="path" href="{{BLOB}}#L17-L25">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</a></li>
+  </ul>
+  <figcaption>Which request creates the account, for a new user on an open site. <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a></span></figcaption>
+</figure>
+```
+
+**The one figure that is not a checkpoint's, and the reason is the trigger.** When a change moves
+**which request does what** — the request that creates or commits something moved, a step was inserted
+or removed, a check moved from one request to another — the sequence is the ground several
+checkpoints stand on at once: on the Discourse page that produced this figure, the CAPTCHA question,
+the rejected-names question and the avatar question all turned on *which request now creates the
+account*. Drawing it inside one of them gives it the wrong home and leaves the others assuming it, so
+it lives in *Context* (§ *Section 2*), above the agenda. **Two or more checkpoints relying on it is
+the test**; when only one does, the sequence is that checkpoint's, and its own figure slot takes a
+plain `figure.lifecycle` instead. A change that alters what a request does without changing the
+sequence earns none — that is a checkpoint's sentence, not a shifted sequence.
+
+**It is not `dl.ba` grown a figure, and *What changed* keeps its before and after.** The two say
+different things: `dl.ba` says what is now true *in product terms* — someone signing up now picks a
+username before the account exists — and a reader who knows nothing of the code can follow it. The
+shift says it *as the requests a reviewer will meet in the code*, with the line behind each, which is
+what *Context* is for. Folding them would make *What changed* the section that cites code, and it is
+the one section a reader reads before deciding to.
+
+**The rules are the lifecycle's, twice, plus three that make the comparison true:**
+
+- **Both columns start at the same state**, so they are two answers to one question rather than two
+  sequences that happen to sit side by side.
+- **Exactly one state is `lc-moved` in each column, with the same label in both and at a different
+  position.** That state is the point of the figure. A shift where nothing moved has drawn the same
+  list twice; a shift with two moved states is two changes, and the second one is a checkpoint's
+  sentence or the figure is the wrong shape.
+- **The figure draws the main path, and says so.** A sequence stated once reads as *the* sequence:
+  the reviewer whose question forced this rule asked whether signup always fires two requests, and it
+  does not — an existing user sends one, a site requiring user fields sends three, an approval site
+  finishes elsewhere. So the `figcaption` names the case it draws, and `ul.lc-cases` gives each case
+  that differs **one line** — the case, how its sequence differs in a clause, and its citation — at
+  most four. A case that needs more than a line is either its own checkpoint's concern or not
+  Context's.
+
+Each column is two to five states, each transition a **request** named for the action (*submit code*,
+not `create`), carrying the line that performs it — the endpoint, or the policy that decides what the
+request does. The Before column cites the base: `{{DIFF}}L` for a line the change removed or
+rewrote, a blob at the base SHA for one it left alone. Every locator and every case line is a
+citation like any other, under § *Deep links*: the full path, and **the text and the anchor name
+the same lines** — a policy that spans three lines is cited `redeem.rb:136-138` and linked
+`R136-R138`, never written as `:136` over a ranged link. The first real shift did exactly that on all
+three of its citations to one policy, because a figure's labels are short and the path shrinks with
+them. `lc-new` marks a state only the After column
+has, as in any lifecycle. **No `p.lc-back`**: a retry loop is a case, and goes in `ul.lc-cases`.
+**No `.ip-aff`**, for the lifecycle's reason. The `figcaption` ends in the same `span.ctx-used` every
+*Context* entry ends in, pointing at the checkpoints the figure was earned by.
+
+**Alignment is what the figure buys, and the phone is where it is lost.** At desktop width the
+columns sit side by side on one grid, so state *n* of each is level and the moved state is *seen*
+moving. Below 780px they stack, and the comparison has to survive without alignment — which is why
+the moved state is **filled** in both columns rather than marked in one: each column on its own
+still shows where the account is created.
+
 ### What none of them may become
 
 Every rule in § *Chains* about labels and prose holds for all three: labels, not sentences; a
 `figcaption` of one line; an explanation that states the judgment rather than walking the figure.
 None of them has a legend — the node kinds are told apart by border, as in a chain — and none of them
-is a new section, a rail entry or a badge. A figure is part of the checkpoint it explains, sits after
+is a new section, a rail entry or a badge. A figure is part of the checkpoint it explains — the shift
+alone is *Context*'s, for the reason its own section gives — sits after
 its explanation and before its `ul.lookat`, and is checked by `evals/checks/figures.rb`, which grades
 shape and locators and can grade nothing about whether the shape was the right one.
 
@@ -1491,6 +1577,7 @@ reading, and everything after that point is wasted regardless of how good it is.
 |---|---|---|
 | The semantic delta, and intent | *What changed* | Nowhere else — a checkpoint assumes it |
 | What a repository concept *is* — an endpoint sequence, a plugin hooking core, a domain term a setting introduces | Its *Context* entry | The checkpoint that relies on it names it and moves on; it never re-explains it |
+| How the request sequence changed, when two or more checkpoints turn on it | *Context*'s `figure.lifecycle.lc-shift` | Each of those checkpoints, in one clause naming the request; *What changed*'s `dl.ba` says it in product terms, never as requests |
 | A judgment the reviewer has to make | Its checkpoint's explanation | The reading path, as one stop's why; *Impact outside the diff*, in one clause |
 | Mechanism inside the change | That checkpoint's `figure.chain`, or its explanation | Nowhere else |
 | An unchanged writer that must keep an invariant the change relies on — a path flowing **in** | That checkpoint's `figure.converge`, with a `ul.lookat` entry carrying its clause | Never an impact card: impact paths flow **out**, to a consequence |
@@ -1844,17 +1931,11 @@ room for. § *Mentor mode* owns it now. What it demonstrates is the shape a retu
 repo citation, the demo's receiver) kept and the half that belonged to the old page (the per-flow
 budget, the mark, the variant split) dropped.
 
-**A before-and-after flow figure for *Context* is designed and not built.** When a change moves
-*which request does what* — the request that creates an account moving one step later, a check
-moving from one request to another — the sequence is shared ground for several checkpoints, so it
-belongs in *Context* rather than inside any one of them, and a two-row `figure.lifecycle` (a before
-row and an after row over the same states, the moved state marked in both) is the shape proposed for
-it. Three things are unsettled and are why it waits: whether it is a lifecycle variant or `dl.ba`
-grown a figure per row, which decides which section owns *how the sequence changed*; how two rows
-stay comparable at phone width once they stack; and the shape rules `figures.rb` would need, which
-today grades only checkpoint figures and would not see one here. Until then *Context* says the
-sequence in order in a sentence, says which case that is — the main path — and names the cases that
-differ in a clause each, since a sequence stated once reads as *the* sequence.
+**A before-and-after flow figure for *Context* was recorded here as designed and not built**, and it
+is built now: § *`figure.lifecycle.lc-shift`* owns it. Its three open questions were settled the
+way that section says — a lifecycle variant in *Context* rather than `dl.ba` grown a figure, a filled
+moved state so two stacked columns stay comparable on a phone, and `figures.rb` reading *Context* as
+well as the checkpoints.
 
 **And a level, if one returns, is emitted rather than described.** The rail once shipped in its
 seven-entry form with a comment telling the shorter shape to cut it to four and renumber — a
@@ -1973,8 +2054,10 @@ rule as *Impact outside the diff* — never a stub saying the page needs no cont
 **What earns one, typically:**
 
 - **A sequence of requests or calls** a judgment turns on — which endpoint is called first, which one
-  commits, which one a later step depends on. Said in order, in a sentence or two; the figure that
-  would draw a before and after of it is not part of this format yet (§ *A future full mode*).
+  commits, which one a later step depends on. Said in order, in a sentence or two. When the change
+  **moved** a step in that sequence and two or more checkpoints turn on it, the sequence is drawn
+  instead, before and after, as § *`figure.lifecycle.lc-shift`* says; the figure then replaces the
+  entry rather than sitting beside one that says the same thing.
 - **Code that is not where a reader would look for it** — a plugin or engine wrapping a core method,
   a concern mixed into a model, a decorator registered at boot. A path under `plugins/` does not tell
   a reader that the code there *intercepts* the code they are reading.
@@ -1997,7 +2080,7 @@ names is inventory.
   earning condition made visible, and a mechanical check holds it: an entry that points at nothing,
   or at a checkpoint the page does not carry, was not earned by this page.
 
-One to five entries, 15–60 words each, about 250 words for the section — § *The agenda budget* adds
+One to five entries, 15–60 words each — a shift counts as one of the five — about 250 words for the section — § *The agenda budget* adds
 them to the page total rather than taking them out of a checkpoint. A sixth concept means the agenda
 leans on more unexplained machinery than a page can introduce, which is a limit to state in *What
 changed*, not a longer *Context*.
@@ -2014,8 +2097,13 @@ description the run inferred rather than read — a plugin's purpose guessed fro
 carries the inferred tier like any other inference. And nothing in an entry assesses: *a fragile
 coupling*, *an unusual design*, *well isolated* are judgments, and a judgment's home is a checkpoint.
 
-**No figure, no excerpt, no probe, no primer.** The section is prose and citations. Each of those
-components has a home that a judgment earns, and *Context* holds none.
+**One figure at most, and no excerpt, no probe, no primer.** The section is prose and citations,
+plus the shift when the sequence moved — `figure.lifecycle.lc-shift`, above the `dl.ctx`, because
+the flow is what the entries below it name the parts of. Its earning test, its shape and its rules are
+§ *Topology figures*'; what this section adds is that it is the only figure here and that it counts
+against the entries' cap of five — a page with a shift and five entries has introduced more machinery than a
+reader can hold before the first question. **Every other figure** has a home that a judgment
+earns, and so do the excerpt, the probe and the primer; *Context* holds none of them.
 
 **Staging.** Pending from stage 1, decided at `SKILL.md` step 7k once the agenda exists, and written
 in stage 3 beside *Impact outside the diff* — after the agenda's stubs have published, so orientation
@@ -2149,7 +2237,7 @@ outside one of them is a page to read again, not a page that is wrong.
 | Part | Words |
 |---|---|
 | *What changed* | 80–160 |
-| *Context*, when earned — one to five entries of 15–60 words each | 0–250 |
+| *Context*, when earned — one to five entries of 15–60 words each, and a shift's `ul.lc-cases` lines | 0–250 |
 | A checkpoint — question, explanation, *Look at* clauses, open line | 50–140 |
 | A reading-path stop's `span.why` | ≤ 40 |
 | An affected entry's clause | ≤ 30 |
@@ -2173,7 +2261,8 @@ below is what that violates.
 
 **What is never counted:** anything inside a figure, of any kind — node labels, `.ip-d` details,
 `.ip-rel` verbs, a `.cv-note`, a relation and its cardinality, a back transition, lane labels, the
-legend, a `figcaption`; anything inside `<code>` or `<pre>`, which includes every
+legend, a `figcaption` — but not a shift's `ul.lc-cases`, whose lines are sentences and count
+toward *Context*; anything inside `<code>` or `<pre>`, which includes every
 probe and every command; anything inside a collapsed `<details>`; and the masthead. A page is never
 over budget by a figure or a quotation.
 

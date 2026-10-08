@@ -292,6 +292,12 @@ SKIP  no excerpts in this input
 ## --page context-no-pointer.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment context-shift-only.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-shift-only.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -496,6 +502,12 @@ SKIP  no excerpts in this input
 ## --page figures-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment figures-context-chain.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-context-chain.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment figures-converge-grading-note.html
 exit=0
 SKIP  no excerpts in this input
@@ -536,6 +548,42 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page figures-lifecycle-no-loc.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-in-checkpoint.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-in-checkpoint.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-no-cases.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-no-cases.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-not-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-not-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-one-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-one-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-one-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-one-pointer.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment figures-structure-erd.html

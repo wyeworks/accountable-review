@@ -472,6 +472,24 @@ PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (2)
 PASS  2 entries, within the shape of a reading order
 WARN  1 of 2 Context entr(ies) name no checkpoint that relies on them — an entry is earned by a checkpoint, and one with no pointer is inventory
+## --fragment context-shift-only.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  Context holds only the request sequence before and after — figures.rb grades it
+## --page context-shift-only.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  Context holds only the request sequence before and after — figures.rb grades it
 ## --fragment excerpt-at-head.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -592,6 +610,20 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 FAIL  section 04 carries 3 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment figures-context-chain.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-context-chain.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
 ## --fragment figures-converge-grading-note.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -676,6 +708,88 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment figures-shift-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-in-checkpoint.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page figures-shift-in-checkpoint.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment figures-shift-no-cases.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-no-cases.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-not-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-not-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-one-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-one-moved.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --fragment figures-shift-one-pointer.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
+## --page figures-shift-one-pointer.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+PASS  every Context entry points at a checkpoint on this page (1)
 ## --fragment figures-structure-erd.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -1449,6 +1563,15 @@ PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (2)
 PASS  2 entries, within the shape of a reading order
 WARN  Context points at cp-c, which this page does not carry — the checkpoint that earned the entry was merged or cut after it
+## --fragment context-shift-only.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  Context holds only the request sequence before and after — figures.rb grades it
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why

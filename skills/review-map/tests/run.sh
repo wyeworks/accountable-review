@@ -251,10 +251,9 @@ assert_eq "$(count "$WORK/markup" '06</span>')"  "0" "and stops there — the ev
 # CONTEXT — section 02, the repository concepts the checkpoints rely on. It sits BEFORE the agenda,
 # because a judgment about a piece the reader cannot name is a sentence they can read and not
 # follow. Every entry ends in a pointer at the checkpoints that use it, which is the earning test
-# made visible. And it is prose: the before/after flow figure is designed and deferred, and
-# figures.rb grades only checkpoint figures, so a figure here would arrive with nothing looking at
-# it — zero is the assertion that keeps the deferral honest. No tier either: an entry asserts
-# nothing about the change.
+# made visible. It is prose plus at most ONE figure, the shift — the request sequence before and
+# after — which figures.rb reads section 02 for; any other figure here would be a checkpoint's
+# drawn above its judgment. No tier either: an entry asserts nothing about the change.
 ctx_range() { awk '/^ *<section id="context">/ { f = 1 } f { print } f && /^ *<\/section>/ { exit }' "$WORK/markup"; }
 assert_eq "$(count "$WORK/markup" '<dl class="ctx">')" "1" "one Context list is assembled"
 ctx_line=$(grep -n '^ *<section id="context">' "$WORK/markup" | head -1 | cut -d: -f1)
@@ -264,13 +263,22 @@ if [ -n "$ctx_line" ] && [ -n "$att_line" ] && [ "$ctx_line" -lt "$att_line" ]; 
 else
   bad "Context comes before the agenda"
 fi
-assert_eq "$(ctx_range | grep -c '<dd>' || true)" "$(ctx_range | grep -c 'class="ctx-used">Used by <a href="#cp-' || true)" "every Context entry points at a checkpoint that uses it"
+assert_eq "$(ctx_range | grep -c '<dd>' || true)" "$(ctx_range | grep -v '<figcaption>' | grep -c 'class="ctx-used">Used by <a href="#cp-' || true)" "every Context entry points at a checkpoint that uses it"
 if [ "$(ctx_range | grep -c '<dd>' || true)" -ge 1 ]; then
   ok "the Context list carries at least one entry"
 else
   bad "the Context list carries at least one entry"
 fi
-assert_eq "$(ctx_range | grep -c '<figure' || true)" "0" "no figure inside Context — the flow figure is deferred, and nothing would grade one here"
+# THE SHIFT — Context's one figure, the request sequence before and after. One figure and no
+# other kind: every other figure belongs to the checkpoint that earned it. Two columns, the one
+# moved state filled in each, and no .ip-aff, for the lifecycle's reason.
+assert_eq "$(ctx_range | grep -c '<figure' || true)" "1" "Context holds one figure at most"
+assert_eq "$(ctx_range | grep -c '<figure class="lifecycle lc-shift">' || true)" "1" "Context's one figure is the shift"
+assert_eq "$(ctx_range | grep -c '<div class="lc-row">' || true)" "2" "the shift draws a Before and an After column"
+assert_eq "$(ctx_range | grep -c 'class="lc-s lc-moved"' || true)" "2" "the moved state is marked in both columns"
+assert_eq "$(ctx_range | grep -c 'ip-aff' || true)" "0" "no .ip-aff inside the shift — a state is not a file"
+assert_eq "$(ctx_range | grep -c 'data-path' || true)" "0" "no data-path inside Context"
+assert_eq "$(ctx_range | grep '<figcaption>' | grep -c 'class="ctx-used">Used by <a href="#cp-' || true)" "1" "the shift's caption points at the checkpoints that earned it"
 assert_eq "$(ctx_range | grep -c 'class="tier' || true)" "0" "no evidence tier inside Context — an entry asserts nothing about the change"
 assert_eq "$(ctx_range | grep -c 'class="primer' || true)" "0" "no primer inside Context — the framework is --mentor's, the repository is Context's"
 

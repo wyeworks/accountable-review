@@ -35,9 +35,12 @@ is. A judge here reads Context and the checkpoints as that reader, and asks:
 - **The repository, not the framework.** An entry that explains a Rails rule belongs in a primer
   under `--mentor`. Defect: an entry explaining `before_destroy`.
 
-**The before/after flow figure is designed and not built** — `report-format.md` § *A future full
-mode* records the shape and the three open questions. When it is built its judge goes here: *does
-the figure show which request moved, and does it name the cases it does not draw?*
+- **The shift shows the move.** When Context carries `figure.lifecycle.lc-shift`, does it show
+  which request moved, is every transition a request a reviewer will meet in the code, and does it
+  name the cases it does not draw? `figures.rb` holds the shape — two columns, one moved state at
+  different positions — and can say nothing about whether the move drawn is the one the
+  checkpoints turn on. Defect: a shift whose moved state is a UI step rather than a request, or
+  one with no `ul.lc-cases` on a flow the reviewer's question shows has several.
 
 ## § 03 checkpoints
 
