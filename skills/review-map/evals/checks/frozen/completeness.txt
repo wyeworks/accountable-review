@@ -100,6 +100,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-mixed-series.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-nextjs-wrong-router.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-nextjs-wrong-router.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-clean.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -166,6 +172,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-ungated.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-probe-js-forms.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-probe-js-forms.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-probe-label-thin.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -200,6 +212,18 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-probe-unlabelled.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-reactdocs-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-reactdocs-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-reactdocs-unpinned.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-reactdocs-unpinned.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-runner-mutates.html

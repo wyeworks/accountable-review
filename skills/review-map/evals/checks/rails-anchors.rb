@@ -18,9 +18,10 @@
 #   file:line of its own           framework prose with nothing to check it against
 #
 # The catalogue is the allowlist, and this script derives it from the files rather than
-# hard-coding hosts: references/rails-docs.md, references/elixir-docs.md and
-# references/rust-docs.md are the single home for what may be cited, so a row added to any of
-# them is immediately legal here and a URL invented in a run is not. All three are read on
+# hard-coding hosts: references/rails-docs.md, references/elixir-docs.md,
+# references/rust-docs.md and references/react-docs.md are the single home for what may be cited,
+# so a row added to any of them is immediately legal here and a URL invented in a run is not.
+# All four are read on
 # every page, not the one the page's stack suggests: a page cites from one catalogue, but
 # nothing in the markup says which, and guessing the stack here would be a rule that fails on
 # a monorepo touching two.
@@ -72,12 +73,21 @@ module RailsAnchors
   # pinned link is one whose version segment starts with a digit, and nothing else is.
   RUST_HOST = %r{\Ahttps://(?:docs\.rs|doc\.rust-lang\.org)/}
   RUST_PINNED = %r{\Ahttps://(?:docs\.rs/[^/]+/[0-9][^/]*/|doc\.rust-lang\.org/[0-9]+\.[0-9]+\.[0-9]+/)}
+  # The two React hosts, and the coarsest pin any catalogue carries: both publish one page per API
+  # per MAJOR, so the version is a major and nothing finer. react.dev carries it as a subdomain
+  # (`18.react.dev`), nextjs.org as the segment after `docs/` (`docs/15/app/…`). The unversioned
+  # forms — bare `react.dev`, `docs/app/…` — silently mean the newest major. react-docs.md
+  # § Version records that whether each host answers its CURRENT major at a versioned address is
+  # the first thing its verification sweep settles; if it does not, this arm and that file change
+  # in the same commit.
+  REACT_HOST = %r{\Ahttps://(?:(?:[0-9]+\.)?react\.dev|nextjs\.org)/}
+  REACT_PINNED = %r{\Ahttps://(?:[0-9]+\.react\.dev/|nextjs\.org/docs/[0-9]+/)}
 
   # A repository citation with no anchor on it — the rung-3 and rung-4 form. TWO rules read it: the
   # doc link's "not alone" test, and the primer's "earned by a line in this repo" test, which is the
   # same question asked of a bigger block. One copy, because two would drift the first time a
   # language was added.
-  FILE_LINE = %r{[A-Za-z0-9_./-]+\.(?:rb|rake|erb|ex|exs|heex|rs|toml|ts|tsx|js|jsx|yml|yaml|sql|json|proto):[0-9]+}
+  FILE_LINE = %r{[A-Za-z0-9_./-]+\.(?:rb|rake|erb|ex|exs|heex|rs|toml|ts|tsx|js|jsx|mjs|cjs|prisma|yml|yaml|sql|json|proto):[0-9]+}
 
   # Constants that are the framework's own or Ruby's, so they say nothing about this repository.
   # ONE list, because two rules need it: rule 7 skips these when asking whether a constant
@@ -190,6 +200,11 @@ module RailsAnchors
   # crate on one and a book on the other. docs.rs also keeps the crate NAME and the crate
   # IDENTIFIER, so `actix-web/…/actix-web/` — the name where the identifier belongs — matches no
   # row, which is the Rust form of the wrong-package 404.
+  #
+  # The React hosts keep their host too, and nextjs.org keeps its ROUTER: the major comes out and
+  # `docs/app/` or `docs/pages/` stays, so a Pages Router link to an API the catalogue documents
+  # only under the App Router matches no row — a page that resolves and describes code the app
+  # does not run, which is the React form of the wrong-package 404 and the worse one.
   def self.needle(url)
     url.sub(%r{\Ahttps://guides\.rubyonrails\.org/v[0-9][0-9.]*/}, "")
        .sub(%r{\Ahttps://guides\.rubyonrails\.org/}, "")
@@ -201,6 +216,9 @@ module RailsAnchors
        .sub(%r{\Ahttps://docs\.rs/}, "docs.rs/")
        .sub(%r{\Ahttps://doc\.rust-lang\.org/(?:[0-9][0-9.]*|stable|beta|nightly)/}, "doc.rust-lang.org/")
        .sub(%r{\Ahttps://doc\.rust-lang\.org/}, "doc.rust-lang.org/")
+       .sub(%r{\Ahttps://(?:[0-9]+\.)?react\.dev/}, "react.dev/")
+       .sub(%r{\Ahttps://nextjs\.org/docs/[0-9]+/}, "nextjs.org/docs/")
+       .sub(%r{\Ahttps://nextjs\.org/}, "nextjs.org/")
        .sub(%r{/tree/v[0-9][0-9A-Za-z.-]*}, "/tree/v{version}")
   end
 
@@ -230,12 +248,20 @@ module RailsAnchors
   end
 
   # Defined anywhere in the repository, as a class or module — or, in Rust, as a struct, an
-  # enum, a trait, a type alias or a union, under any visibility. Neither language's file naming
-  # is assumed: a search for the definition is what a reviewer would do.
+  # enum, a trait, a type alias or a union, under any visibility — or, in JavaScript and
+  # TypeScript, as a function, a const, a class, an interface, a type or an enum, exported or not.
+  # No language's file naming is assumed: a search for the definition is what a reviewer would do.
+  #
+  # The JavaScript arm exists because a React probe names a component as a test filter
+  # (`vitest list ProjectCard`), and a component is a function or a const — neither of which the
+  # Ruby and Rust keywords cover — so a component this repository plainly declares read as invented.
   def self.defined_in?(check, constant)
     leaf = constant.split("::").last
     _out, found = check.shell("grep", "-rEq",
-                              "^[[:space:]]*((pub(\\([^)]*\\))?[[:space:]]+)?(struct|enum|trait|type|union)|class|module)[[:space:]]+([A-Za-z0-9_:]*::)?#{leaf}\\b",
+                              "^[[:space:]]*((pub(\\([^)]*\\))?[[:space:]]+)?(struct|enum|trait|type|union)|class|module|" \
+                              "(export[[:space:]]+(default[[:space:]]+)?)?(declare[[:space:]]+)?(async[[:space:]]+)?" \
+                              "(function\\*?|const|let|var|class|abstract[[:space:]]+class|interface|type|enum))" \
+                              "[[:space:]]+([A-Za-z0-9_:]*::)?#{leaf}\\b",
                               check.repo)
     found
   end
@@ -286,9 +312,9 @@ end
 check = ReviewMap::Check.new(ARGV)
 check.require_input
 page = check.page
-# Both catalogues, always — see the header. A page cites from one, and nothing in the markup
+# Every catalogue, always — see the header. A page cites from one, and nothing in the markup
 # says which.
-catalogue_paths = %w[rails-docs.md elixir-docs.md rust-docs.md]
+catalogue_paths = %w[rails-docs.md elixir-docs.md rust-docs.md react-docs.md]
                   .map { |name| File.join(ReviewMap::Check::SKILL_DIR, "references", name) }
                   .select { |path| File.readable?(path) }
 
@@ -297,7 +323,7 @@ external = RailsAnchors.external_links(page)
 if external.empty?
   check.skip("doc links: none on this input")
 elsif catalogue_paths.empty?
-  check.bad("doc links: no catalogue readable at references/rails-docs.md, elixir-docs.md or rust-docs.md — nothing can be checked against it")
+  check.bad("doc links: no catalogue readable at references/rails-docs.md, elixir-docs.md, rust-docs.md or react-docs.md — nothing can be checked against it")
 else
   # Every catalogue parsed into ONE allowlist. A path is legal because some row offers it;
   # which file the row lives in is the run's business, not this check's, and a monorepo page can
@@ -380,6 +406,22 @@ else
     end
   end
 
+  # Pinning, rule 1d: the React arm, the same rule a fourth time and at the coarsest grain. Both
+  # hosts answer an unversioned form that silently means the newest major, and that form is the one
+  # a person copies out of the address bar. Like hexdocs and docs.rs, the majors are NOT required to
+  # agree: `react` and `next` pin separately, and Next.js 15 on React 19 is the ordinary page.
+  react_links = external.select { |u| u.match?(RailsAnchors::REACT_HOST) }
+  if react_links.empty?
+    check.skip("pinning: no react.dev or nextjs.org links on this input")
+  else
+    react_unpinned = react_links.reject { |u| u.match?(RailsAnchors::REACT_PINNED) }
+    if react_unpinned.empty?
+      check.ok("all #{react_links.size} React or Next.js doc link(s) carry a major version")
+    else
+      check.bad("#{react_unpinned.size} unpinned React or Next.js doc link(s) — no major silently means the newest one: #{react_unpinned.join(" ")} ")
+    end
+  end
+
   # Pinning, rule 3: an unsubstituted placeholder. `tree/v{version}` is the literal the
   # catalogue stores, so it matches its own row perfectly and is invisible to the allowlist
   # test — while being a guaranteed 404.
@@ -420,7 +462,7 @@ else
   if bad_urls.empty?
     check.ok("#{external.size} documentation link(s), all from the catalogue")
   else
-    check.bad("#{bad_urls.size} documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: #{bad_urls.join(" ")} ")
+    check.bad("#{bad_urls.size} documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md, react-docs.md) — a URL nobody opened is a 404 the reader finds: #{bad_urls.join(" ")} ")
   end
 
   if wrong_series.empty?
@@ -741,7 +783,13 @@ else
   # uses. The rule is about a scope on one of THIS app's models; a framework constant's methods
   # are not the app's to define, and reading them as such failed a correct probe —
   # `pp Rails.application.routes.routes` was reported as calling an undefined `application`.
-  scopes = probe_body.flat_map { |l| l.scan(/\b[A-Z][A-Za-z0-9]*\.[a-z_]+[a-z_0-9]*/) }
+  #
+  # And a capitalised word inside a PATH is a file name rather than a receiver. A React probe names
+  # `src/components/ProjectCard.test.tsx`, which read as a call of `test` on `ProjectCard` and
+  # failed the probe react.md tells a run to write. Only the slash is taken as the sign: a bare
+  # `ProjectCard.test.tsx` with no directory is indistinguishable from a chained scope, and a
+  # chained scope is exactly what this rule exists to check.
+  scopes = probe_body.flat_map { |l| l.scan(%r{(?<!/)\b[A-Z][A-Za-z0-9]*\.[a-z_]+[a-z_0-9]*}) }
                      .reject { |call| call.match?(RailsAnchors::FRAMEWORK_RECEIVER) }
                      .map { |call| call.sub(/\A[^.]*\./, "") }
                      .sort.uniq

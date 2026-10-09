@@ -11,10 +11,11 @@
 reviewer through what changed, how the new behaviour works, what existing code is affected, and what
 to understand before merge.
 
-It ships two skills: **`review-map`**, which produces the page for a Rails or a
-Rust codebase — a Rust backend or Rust in general — with or without a separate client such as
-Next.js, with Elixir/Phoenix support still in development; and **`setup-ci`**, which arranges for
-one to be produced automatically on every review-ready pull request.
+It ships two skills: **`review-map`**, which produces the page for a Rails or a Rust codebase — a
+Rust backend or Rust in general — with or without a separate client such as Next.js, with
+Elixir/Phoenix and React (a Next.js app or React in general) support still in development; and
+**`setup-ci`**, which arranges for one to be produced automatically on every review-ready pull
+request.
 
 Built by **WyeWorks**.
 
@@ -41,7 +42,7 @@ Built by **WyeWorks**.
 - [What to expect from a map](#what-to-expect-from-a-map-)
   - [Evidence over confidence](#evidence-over-confidence)
   - [What a Review Map cannot do](#what-a-review-map-cannot-do)
-  - [Ruby on Rails first, then Rust and Phoenix](#ruby-on-rails-first-then-rust-and-phoenix)
+  - [Ruby on Rails first, then Rust, Phoenix and React](#ruby-on-rails-first-then-rust-phoenix-and-react)
   - [Example Review Map](#example-review-map)
 - [CI integration](#ci-integration-)
   - [What you get](#what-you-get)
@@ -132,7 +133,7 @@ A **Review Map** adds that layer.
 
 A diff is organized by files.
 
-A Rails, Rust or Phoenix feature is not.
+A Rails, Rust, Phoenix or Next.js feature is not.
 
 One behaviour may cross:
 
@@ -154,8 +155,9 @@ frontend contract
 
 On a Rust backend the hops are different — router and its layers, extractor, handler, error
 mapping, query, migration — and on Phoenix different again — router, controller or LiveView,
-context, changeset, `Repo`, worker, template — and the point is the same: no directory contains the
-behaviour.
+context, changeset, `Repo`, worker, template — and on Next.js different again — page, server
+component, client component, server action, cache tag, route handler — and the point is the same: no
+directory contains the behaviour.
 
 `accountable-review` traces the PR around the **behaviour being implemented**, not the order of
 files in the diff — and then publishes the part of that work you have to act on: the handful of
@@ -409,16 +411,17 @@ A third axis, and the only one that puts anything on the page:
 ```
 
 A Review Map normally assumes you know the framework and are meeting *this change* for the first
-time. `--mentor` is for the other case — a reviewer new to Rails, to Rust or to Phoenix, on their first
-pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
+time. `--mentor` is for the other case — a reviewer new to Rails, to Rust, to Phoenix or to React,
+on their first pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
 know, the page stops linking to the manual and states the rule: a short primer inside that
 checkpoint, with the API named, the behaviour explained, a worked example on a generic class, the
 line in *your* repository that made it relevant, and the pinned documentation link it came from.
 
-> **Phoenix today:** a primer is gated on the documentation link it escalates from, and the Elixir
-> catalogue ships closed until a verification run has opened every row in it. So `--mentor` on a
-> Phoenix project currently produces no primers and says so. That is the fail-closed rule doing its
-> job — a page with no primer is narrower, a page with an invented link is wrong. The Rust catalogue
+> **Phoenix and React today:** a primer is gated on the documentation link it escalates from, and
+> the Elixir and React catalogues ship closed until a verification run has opened every row in them.
+> So `--mentor` on a Phoenix, React or Next.js project currently produces no primers and says so.
+> That is the fail-closed rule doing its job — a page with no primer is narrower, a page with an
+> invented link is wrong. The Rust catalogue
 > shipped closed the same way and has since been opened, so a Rust page can carry primers, framed in
 > graphite rather than Rails red.
 
@@ -502,7 +505,7 @@ into code the diff never opened, and it is also the honest limit on the page.
 is what the page's depth is calibrated against. Other models will trade cost for reach differently —
 try a few against your own codebase and keep the one whose maps you actually trust.
 
-### Ruby on Rails first, then Rust and Phoenix
+### Ruby on Rails first, then Rust, Phoenix and React
 
 The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
 behaviour often emerges from several pieces working together:
@@ -543,12 +546,26 @@ compile against stale offline query data.
 that catches the same kind of thing: `Repo.update_all` builds no changeset, a `unique_constraint`
 does nothing without the index behind it, and a `phx-click` renamed in a template without its
 `handle_event` clause crashes the LiveView the first time someone clicks it. Parts of it are not
-finished yet, such as a Phoenix backend with a ReactJS frontend, and it has had far less testing
+finished yet, such as a Phoenix backend with a React frontend, and it has had far less testing
 than Rails or Rust.
 
-Which you get is detected from the repository — a `Gemfile`, a `mix.exs` or a `Cargo.toml`, and for
-Rust whether the code the diff touches depends on a server framework — not configured; a repo holding
-more than one asks which to cover.
+**React support is still in development too, and it comes in two lenses, built the way Rust's are.**
+**React in general** — a Vite single-page app, a component library, a React Router app — is reviewed
+against what TypeScript cannot see: an effect whose dependency array stopped naming what it reads, a
+wrapper `<div>` that resets a form's state on every toggle, a context value rebuilt on every render,
+and every place a component, a hook or a query key is consumed outside the files the diff touched. A
+**Next.js app** gets that lens and a second one on top of it: a server action that is a public
+endpoint with no authorization of its own, a `cookies()` read that turns every route rendering a
+shared header dynamic, per-user data cached for everyone, and a mutation that revalidates the page it
+changed and not the dashboard that lists it. Its documentation catalogue ships closed like Elixir's,
+so a React page anchors with probes — `npm ls`, `tsc --noEmit`, a test runner's list mode, `next
+build`'s route table — rather than links, and it has had less testing than Rails or Rust.
+
+Which you get is detected from the repository — a `Gemfile`, a `mix.exs`, a `Cargo.toml` or a
+`package.json` that depends on `react`, and for Rust and React whether the code the diff touches
+depends on a server framework or on `next` — not configured; a repo holding more than one asks which
+to cover. A Rails, Phoenix or Rust repository with a React client is reviewed as the backend when the
+diff touches it, and as React when the diff is only the client.
 
 ### Example Review Map
 
@@ -680,12 +697,13 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | --- | --- |
 | **Supported agents** | Claude Code and Codex, each installable as a plugin from its own marketplace or into either with `npx skills add wyeworks/accountable-review`. In Codex the plugin ships `review-map` only. Claude ships two skills — `review-map`, which produces the page, and `setup-ci`, which configures CI — plus one subagent, `claim-falsifier`, sent at each of the run's own analysis notes at `--effort high`. Deliberately single-context otherwise: an earlier version fanned work out to helper agents and paid 41% of its wall clock in a single stalled turn. |
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
-| **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair; a `Cargo.toml` selects the Rust lens and catalogue, plus the backend lens when the crates the diff touches depend on a server framework. A repo with more than one asks; a repo with none says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
+| **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair; a `Cargo.toml` selects the Rust lens and catalogue, plus the backend lens when the crates the diff touches depend on a server framework; a `package.json` depending on `react` selects the React lens and catalogue, plus the Next.js lens when the package the diff touches depends on `next`. A repo with more than one asks; a repo with none says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
 | **Rust discovery** | The workspace and its members from `Cargo.toml`, each crate's package name, kind and features, whether it is published, the test runner CI uses, and on a backend the framework, the database layer and how authentication is attached. Each crate's exact version comes from `Cargo.lock` and the toolchain's from `rust-toolchain.toml` or `rust-version` — docs.rs serves exact versions, so there is no series. |
 | **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
-| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Contract judgments need both sides in the diff; with no client, or a PR that does not touch one, none is raised rather than raised emptily. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
-| **Test frameworks** | RSpec, Minitest, ExUnit and Cargo's own harness (with nextest and snapshot crates), detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
+| **React discovery** | The package the diff touches and its workspace, the package manager from the lock file, TypeScript or not, Strict Mode and the React Compiler, the state, data-fetching, form and routing libraries, and the test runner. On Next.js, which router the changed files use, the middleware or proxy and its matcher, how authentication is attached, and the database layer. The locked majors of `react` and `next` — react.dev and nextjs.org publish per major, so that is what a link pins. |
+| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Contract judgments need both sides in the diff; with no client, or a PR that does not touch one, none is raised rather than raised emptily. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. On a React stack the frontend is the application, so what is looked for is the API it talks to, if any, and whether its types are generated from the server's or written by hand. |
+| **Test frameworks** | RSpec, Minitest, ExUnit, Cargo's own harness (with nextest and snapshot crates), and Vitest or Jest with Testing Library and Playwright or Cypress, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
 | **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
 | **Publishing** | In Codex or any other agent, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
@@ -714,7 +732,7 @@ optional:
 ```yaml
 review_map:
   effort: high           # high | low
-  mentor: false          # true | false | rails | elixir | phoenix | rust
+  mentor: false          # true | false | rails | elixir | phoenix | rust | react | nextjs
   theme: daylight        # daylight | workshop | field-notes
   delivery:
     provider: github-artifact
@@ -738,9 +756,10 @@ than aspirational: the config reader emits a line only for a key the file actual
 file that only restates the defaults — a file nobody chose is one more thing to keep in sync, and a
 later reader treats `retention_days: 30` as load-bearing when nobody picked it.
 
-Everything else is discovered instead of configured: which stack this is, the Rails root or the Mix
-project, the test framework, whether the app is API-only or LiveView, how authorization is attached,
-the frontend location, the framework and package versions, and the project's own conventions. Where
+Everything else is discovered instead of configured: which stack this is, the Rails root, the Mix
+project, or the Cargo or JavaScript workspace, the test framework and package manager, whether the
+app is API-only or LiveView, which Next.js router it uses, how authorization is attached, the
+frontend location, the framework and package versions, and the project's own conventions. Where
 a project documents conventions — `CLAUDE.md`, a style guide — the skill reads them; where it does
 not, house style is inferred from adjacent unchanged code, which is usually more accurate than a
 stale document anyway.

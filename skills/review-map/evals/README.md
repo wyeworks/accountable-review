@@ -69,7 +69,7 @@ bin/evals e2e                              # the PRs in e2e/prs.yml
 bin/evals e2e discourse-43002 -n 3 -j 3    # three whole runs of one, at once
 bin/evals calibrate                        # every judge against its gold page
 bin/evals report                           # the HTML report
-bin/evals catalogue elixir                 # the maintenance pass, per catalogue (rails | elixir | rust). Needs network.
+bin/evals catalogue elixir                 # the maintenance pass, per catalogue (rails | elixir | rust | react). Needs network.
 ```
 
 `offline` is about a minute on this machine, and it is not evenly spread: `frozen` is 11s over

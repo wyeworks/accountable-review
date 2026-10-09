@@ -596,6 +596,11 @@ class SetupCiSuite
     write(File.join(c, "mentor-rust.yml"), "review_map:\n  mentor: rust\n")
     assert_in inv.call("--repo-dir", c, "--config", File.join(c, "mentor-rust.yml"), chdir: c).out, "--mentor rust",
               "rust is a stack name the config file and the adapter both accept"
+    write(File.join(c, "mentor-nextjs.yml"), "review_map:\n  mentor: nextjs\n")
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "mentor-nextjs.yml"), chdir: c).out, "--mentor nextjs",
+              "nextjs is a stack name the config file and the adapter both accept"
+    assert_in inv.call("--repo-dir", @tmp, "--mentor", "react").out, "--mentor react",
+              "react is a stack name the adapter takes as --mentor's value"
     write(File.join(c, "mentor-bad.yml"), "review_map:\n  mentor: nope\n")
     assert_eq sh(@read_cfg, File.join(c, "mentor-bad.yml")).code, 1, "a mentor value that is not a stack is an error"
 
@@ -744,6 +749,12 @@ class SetupCiSuite
     gate.call("rustfmt", "skip", "a Rust formatter or linter config change gets none") do
       write(f["rustfmt.toml"], "x\n")
       write(f["clippy.toml"], "x\n")
+    end
+    # The flat-config names ESLint and Prettier moved to. `.eslintrc*` was already tooling; the file
+    # that replaced it is the same decision, and in a workspace it sits in each package.
+    gate.call("eslint-flat", "skip", "an ESLint or Prettier flat config change gets none") do
+      write(f["eslint.config.mjs"], "x\n")
+      write(f["apps/web/prettier.config.js"], "x\n")
     end
     assert_in logs["docs"], "verdict: skip (no-application-code)", "rule 1 names itself in the log, not only in a step output"
 

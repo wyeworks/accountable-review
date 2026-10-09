@@ -106,6 +106,12 @@ SKIP  no checkpoint figure in this input
 ## --page anchors-mixed-series.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-nextjs-wrong-router.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-nextjs-wrong-router.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-primer-clean.html
 exit=0
 SKIP  no checkpoint figure in this input
@@ -172,6 +178,12 @@ SKIP  no checkpoint figure in this input
 ## --page anchors-primer-ungated.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-probe-js-forms.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-probe-js-forms.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-probe-label-thin.html
 exit=0
 SKIP  no checkpoint figure in this input
@@ -206,6 +218,18 @@ PASS  no checkpoint carries a figure — a valid result, and most checkpoints ea
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page anchors-probe-unlabelled.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-reactdocs-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-reactdocs-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-reactdocs-unpinned.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-reactdocs-unpinned.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-runner-mutates.html

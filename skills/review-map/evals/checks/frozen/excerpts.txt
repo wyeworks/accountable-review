@@ -172,6 +172,12 @@ SKIP  no excerpts in this input
 ## --page anchors-mixed-series.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-nextjs-wrong-router.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-nextjs-wrong-router.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-primer-clean.html
 exit=0
 SKIP  no excerpts in this input
@@ -238,6 +244,12 @@ SKIP  no excerpts in this input
 ## --page anchors-primer-ungated.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-probe-js-forms.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-probe-js-forms.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-probe-label-thin.html
 exit=0
 SKIP  no excerpts in this input
@@ -272,6 +284,18 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page anchors-probe-unlabelled.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-reactdocs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-reactdocs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-reactdocs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-reactdocs-unpinned.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment anchors-runner-mutates.html

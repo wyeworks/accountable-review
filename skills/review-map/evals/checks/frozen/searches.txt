@@ -100,6 +100,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-mixed-series.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-nextjs-wrong-router.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-nextjs-wrong-router.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-primer-clean.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -166,6 +172,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-primer-ungated.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-probe-js-forms.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-probe-js-forms.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-probe-label-thin.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -200,6 +212,18 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-probe-unlabelled.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-reactdocs-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-reactdocs-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-reactdocs-unpinned.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-reactdocs-unpinned.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-runner-mutates.html

@@ -47,11 +47,11 @@ reading path, same budget on every other part. Nothing moves to make room. That 
 difference from a second document reached by a flag, which would leave the reader nothing on the page
 to tell them which they had been handed.
 
-**The stack is not a level either, and it is invisible for the same reason.** Rails, Phoenix and
-the two Rust stacks change which lens and which catalogue the run reads (`SKILL.md` step 2), what a
+**The stack is not a level either, and it is invisible for the same reason.** Rails, Phoenix,
+the two Rust stacks and the two React stacks change which lens and which catalogue the run reads (`SKILL.md` step 2), what a
 chain's nodes are called, and what a probe's command looks like. They change **no section, no field,
-no tier, no component and no marker.** There is no stack chip and no "reviewed as a Phoenix app" or
-"reviewed as a Rust library" line: two pages of equivalent changes in two stacks differ in their
+no tier, no component and no marker.** There is no stack chip and no "reviewed as a Phoenix app",
+"reviewed as a Rust library" or "reviewed as a Next.js app" line: two pages of equivalent changes in two stacks differ in their
 content and not in their shape. What the stack is
 belongs in the sentences that cite this repository, which say it by naming real files.
 
@@ -129,7 +129,8 @@ never expected to open.
 mode*, the four-rung degradation ladder. Settle the rung once, in step 1 of the procedure; the form
 then follows the line, not the run's taste. A documentation link is not one of those forms and the
 ladder does not reach it: see *Framework anchors*, and take the URL from the catalogue the stack
-selected — `references/rails-docs.md`, `references/elixir-docs.md` or `references/rust-docs.md`.
+selected — `references/rails-docs.md`, `references/elixir-docs.md`, `references/rust-docs.md` or
+`references/react-docs.md`.
 
 ---
 
@@ -362,7 +363,7 @@ two sources:
   `file:line` it rests on. Only conventions on that list qualify: a practice the run knows but the
   lens does not name is general knowledge, and general knowledge is taste. **A list exists only
   where the catalogue is open**, so a Phoenix run has the first source alone until `elixir-docs.md`
-  is verified.
+  is verified, and a React or Next.js run until `react-docs.md` is.
 
 **The repository outranks the stack.** Where this codebase has settled on the PR's choice — a
 convention doc that says so, or a dozen siblings doing the same — there is no departure, whatever the
@@ -873,16 +874,17 @@ claim rests on the citation to the call site, at whatever tier it already carrie
   security consequence, state it, cite the line, and let the link explain the mechanism.
 
 **Cite only from the catalogue the stack selected** — `references/rails-docs.md` for Rails,
-`references/elixir-docs.md` for Elixir, `references/rust-docs.md` for either Rust stack, and never
-another one. That file is the allowlist, and the
+`references/elixir-docs.md` for Elixir, `references/rust-docs.md` for either Rust stack,
+`references/react-docs.md` for either React stack, and never another one. That file is the allowlist, and the
 reason is that the run cannot check a URL: there is no fetch step, and egress to those hosts is
 commonly blocked. A concept the catalogue does not carry gets explained in prose with a repo citation,
 which is the ordinary case and not a degraded one. Constructing a plausible URL is the failure this
 rule exists to prevent: it looks like diligence and it lands the reader on a 404.
 
-**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` currently
-withholds every link in its § *Version* until a verification run has opened its rows, so an Elixir
-run anchors with probes and prose and emits no doc link at all. `rust-docs.md` was closed the same
+**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` and
+`react-docs.md` currently withhold every link in their § *Version* until a verification run has
+opened their rows, so an Elixir, React or Next.js run anchors with probes and prose and emits no doc
+link at all. `rust-docs.md` was closed the same
 way and is open since its 2026-10-08 sweep. That is the same fail-closed rule applied
 at file scope rather than at row scope, and the page is shorter rather than wrong. Read the
 catalogue's § *Version* before reaching for a link from it.
@@ -902,8 +904,10 @@ than this repo's lock file — one app, one series. An Elixir app pins **each pa
 from `mix.lock`, and hexdocs serves exact versions rather than a series prefix, so **a correct Elixir
 page carries several different version segments** and that is not a defect. A Rust codebase is the
 same shape again — each crate pinned from `Cargo.lock`, the toolchain's own documentation pinned to
-the toolchain release — so a correct Rust page carries several too.
-`evals/checks/rails-anchors.rb` encodes all three: every doc link must carry a version segment in any
+the toolchain release — so a correct Rust page carries several too. React is the coarsest of the
+four: both of its sites publish one page per API per *major*, so a link pins the major of `react` or
+of `next`, and a Next.js page carrying one of each is correct.
+`evals/checks/rails-anchors.rb` encodes all four: every doc link must carry a version segment in any
 stack, and only the Rails links must agree on one series.
 
 **A row with no verified path for this app's version yields no link.** Not a nearest-neighbour link,
@@ -912,8 +916,8 @@ without it, exactly as it does with every excerpt closed. Failing closed is the 
 unlinked explanation is never misleading, and a link to the wrong version is.
 
 **Two marks in the catalogue constrain the sentence, not the link.** In `rails-docs.md` they are the
-outcome of an audit of the Rails CHANGELOGs across the supported series; in `elixir-docs.md` and
-`rust-docs.md` they are a first pass that no such audit has yet confirmed, which each file says of
+outcome of an audit of the Rails CHANGELOGs across the supported series; in `elixir-docs.md`,
+`rust-docs.md` and `react-docs.md` they are a first pass that no such audit has yet confirmed, which each file says of
 itself. Each catalogue's
 § *What the marks mean* owns their definitions:
 
@@ -935,7 +939,9 @@ step 2 selected has the probes and the rule for running them safely — in Rails
 `iex -S mix`, and that there is **no sandbox console at all**, so a write is wrapped in
 `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it is not proposed; in Rust, that there is
 no console of any kind, so a probe reads the build with `cargo` and `--locked`, says when it compiles,
-and a write is a test rather than a command. Every constant, scope,
+and a write is a test rather than a command; in React, that there is no console either, so a probe
+reads the toolchain in the project's own package manager, never installs, carries `--no-install` on
+every `npx`, and says when it runs the project's configuration. Every constant, scope,
 context and module a probe names must exist in this repository — the same rule as *validation steps
 must exist in this repo*, and it fails the same way when broken.
 
@@ -960,7 +966,8 @@ number — a primer *holds* the checkpoint's link rather than adding one, which 
 turning into a licence to cite. **At most one probe per
 checkpoint** as well, and probes are scarcer than links besides: a checkpoint earns one where its
 judgment is framework-shaped — ActiveRecord in Rails, a changeset, a query, an association or an
-`on_mount` chain in Elixir, a feature set, a derive's expansion or a migration's queries in Rust — and
+`on_mount` chain in Elixir, a feature set, a derive's expansion or a migration's queries in Rust,
+a duplicated dependency, a hooks-lint verdict or a route's rendering mode in React — and
 a second wants a reason. The one exemption is the `‡ probe` row
 above, which is not rationed at all.
 
@@ -1072,7 +1079,7 @@ Two things follow from that gate, and both are deliberate.
 
 - **A closed catalogue means no primers for that stack.** While `elixir-docs.md` § *Version*
   withholds every link, a Phoenix run at `--mentor` carries none of these and anchors with probes and
-  prose. Narrower, not wrong: the same trade the withhold already makes, arriving at the heaviest
+  prose — and so does a React or Next.js run while `react-docs.md` does. Narrower, not wrong: the same trade the withhold already makes, arriving at the heaviest
   component rather than the lightest, and lifted by the same one command. Say so in chat rather than
   on the page — a line explaining why the page has no primers is a mentor badge with an apology
   attached.
@@ -1133,9 +1140,9 @@ stack's, never a choice**: it goes on a primer whose doc link is a `docs.rs` or 
 row and on no other, and `rails-anchors.rb` § 8 fails the page in either direction, because a frame a
 run picks is how a colour starts to mean something. Graphite rather than Ferris orange because orange
 sits between the red frame and the ochre that says something is missing, and would be read as the
-second. Phoenix still earns no primer, because `elixir-docs.md` withholds every link; when it opens
-the answer is the same shape — a variant class, never a colour a run types, never a second
-component.
+second. Phoenix and React still earn no primer, because `elixir-docs.md` and `react-docs.md`
+withhold every link; when either opens the answer is the same shape — a variant class, never a colour
+a run types, never a second component.
 
 **No mark, and therefore no trademark line.** The version of this callout that the agenda put down
 carried an inlined logotype and a notice saying whose it was. This page has no `<svg>` anywhere, so

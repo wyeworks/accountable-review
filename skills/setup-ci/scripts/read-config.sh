@@ -14,7 +14,7 @@
 #
 #   review_map:
 #     effort: high           # high | low  (`normal` accepted, means `low`)
-#     mentor: rails          # true | false | rails | elixir | phoenix | rust  (default false)
+#     mentor: rails          # true | false | rails | elixir | phoenix | rust | react | nextjs  (default false)
 #     theme: daylight        # daylight | workshop | field-notes  (default daylight)
 #     trivial_files: 2       # skip when application files <= this AND
 #     trivial_lines: 20      #   application lines <= this; either at 0 disables it
@@ -108,8 +108,8 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       # so a team that moved from Rails to Elixir gets told, rather than quietly lensed.
       if (val == "yes") val = "true"
       if (val == "no") val = "false"
-      if (val != "true" && val != "false" && val != "rails" && val != "elixir" && val != "phoenix" && val != "rust") \
-        fail("mentor must be true, false, or one of rails, elixir, phoenix, rust, got `" val "`")
+      if (val != "true" && val != "false" && val != "rails" && val != "elixir" && val != "phoenix" && val != "rust" && val != "react" && val != "nextjs") \
+        fail("mentor must be true, false, or one of rails, elixir, phoenix, rust, react, nextjs, got `" val "`")
       emit("mentor", val)
     } else if (key == "theme") {
       # How the page LOOKS, and nothing about what is on it: typefaces, radii, hues. Read here so
