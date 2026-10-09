@@ -100,6 +100,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-mixed-series.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-nextjs-wrong-router.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-nextjs-wrong-router.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-primer-clean.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -166,6 +172,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-primer-ungated.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-probe-js-forms.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-probe-js-forms.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-probe-label-thin.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -200,6 +212,18 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-probe-unlabelled.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-reactdocs-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-reactdocs-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-reactdocs-unpinned.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-reactdocs-unpinned.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-runner-mutates.html

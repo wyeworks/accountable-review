@@ -175,8 +175,8 @@ your app already does one way. Those come last, one per departure, and each exis
 can cite the settled answer it departs from, from one of two sources: **your codebase's own decision**
 — the line in your `CLAUDE.md`, the four value objects in `app/services`, the policy class the new
 guard went around — or **a convention the framework itself documents**, from a short, closed list
-with a link to the manual (Rails today; Phoenix and Rust once their documentation catalogues are
-verified). Your
+with a link to the manual (Rails today; Phoenix, Rust and React once their documentation catalogues
+are verified). Your
 codebase wins: if it has settled on the PR's choice, there is no question, whatever the framework
 says. With nothing to cite there is no departure and no question, which is what keeps it from
 becoming a style guide — and even with something to cite it asks whether the choice was deliberate
@@ -231,11 +231,14 @@ confidence. Where the catalogue has no verified page for your version, you get n
 mechanism is explained in prose against a line of your code instead, because an unlinked explanation
 cannot mislead and a link to the wrong version can.
 
-**On Elixir, that "no link at all" is currently the whole answer, and it is worth being plain
-about.** The catalogue ships complete — every path, pinned per package, with the same rules — but not
+**On Elixir and on React, that "no link at all" is currently the whole answer, and it is worth
+being plain about.** The catalogue ships complete — every path, pinned per package, with the same rules — but not
 one of its rows has been opened yet, and its release gate is a verification run that opens all of
 them. Until that run happens the file withholds every link: an Elixir page anchors with probes and
-prose, and emits no documentation URL. That is a narrower page, not a broken one, and it is the same
+prose, and emits no documentation URL. The React catalogue is in the same state, with one question
+of its own for that run to settle first: react.dev and nextjs.org publish documentation per major,
+and whether each answers a versioned address for its *current* major decides whether a page on the
+newest React or Next.js can carry a pinned link at all. That is a narrower page, not a broken one, and it is the same
 fail-closed rule as above applied to a whole file rather than one row. Shipping an allowlist nobody
 had opened would have been the more impressive-looking choice and the wrong one — a URL constructed
 from a naming pattern is the one defect class no script catches.
@@ -253,7 +256,7 @@ Pinning fixes the link, not the sentence, so a handful of concepts get no senten
 introduced `params.expect`, 8.0 removed `enum`'s keyword syntax — and no single claim about them is
 true of every app. For those the page names the setting that decides it and proposes a probe rather
 than telling you what Rails does. The Rails marks came out of reading four CHANGELOGs across three
-series; the Elixir and Rust ones are a first pass that no equivalent audit has confirmed yet, and each
+series; the Elixir, Rust and React ones are a first pass that no equivalent audit has confirmed yet, and each
 file says so of itself rather than letting a reader assume otherwise.
 
 **A console probe** — `bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'`,
@@ -261,12 +264,16 @@ file says so of itself rather than letting a reader assume otherwise.
 `mix run -e 'IO.inspect MyApp.Project.changeset(%MyApp.Project{}, %{}).errors'`,
 `Ecto.Adapters.SQL.to_sql(:all, MyApp.Repo, query)`, `mix phx.routes`; or, on Rust,
 `cargo tree --locked -e features -i serde`, `cargo test --locked -p api -- --list`,
-`cargo sqlx prepare --check`. For a framework-shaped change
+`cargo sqlx prepare --check`; or, on React, `npm ls react react-dom`,
+`npx --no-install tsc --noEmit -p .`, `npx --no-install vitest list`, and on Next.js
+`npx --no-install next build` for the route table that says which routes are static and which are
+rendered per request. For a framework-shaped change
 this is usually better than a paragraph, because the behaviour is assembled from things a diff cannot
 show you together: in Rails at boot, from the class, its concerns, its parents and the schema; in
 Phoenix at compile time, from macros and from the `live_session` block your new route may or may not
 have landed inside; in Rust from the feature set Cargo resolved across the whole workspace, which no
-manifest states. A probe goes inside the checkpoint it settles, after the explanation; where it
+manifest states; in Next.js from what every component a route renders reads at request time, which no
+single file states. A probe goes inside the checkpoint it settles, after the explanation; where it
 would only make a mechanism legible, a clause in that explanation does the job and the probe is not
 earned.
 
@@ -282,8 +289,8 @@ touches`, rather than the instrument and nothing more. That third part is what y
 deciding whether to paste the command, and it is the page's own check on itself: a probe whose label
 cannot be completed is a probe that was not earned.
 
-**And a probe cannot be out of date**, which is why it is the anchor the Elixir half leans on while
-its catalogue is closed, and the one a Rust page reaches for where a crate's behaviour moved. It interrogates the installed code instead of describing it.
+**And a probe cannot be out of date**, which is why it is the anchor the Elixir and React halves
+lean on while their catalogues are closed, and the one a Rust page reaches for where a crate's behaviour moved. It interrogates the installed code instead of describing it.
 
 Probes are **proposed, not run**. The skill never boots your app, so the page shows the command and
 never its output — an invented `=> true` would be the most concrete-looking thing on the page and the
@@ -293,6 +300,9 @@ no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.
 Phoenix. Rust has no console of any kind, so a Rust probe reads the build — always with `--locked`, so
 it cannot rewrite your `Cargo.lock` — says when it compiles (which runs build scripts and macros) and
 names any tool that is not part of Cargo; anything that would have to call the changed code is a test.
+React has none either: a React probe is written in your own package manager, never installs, carries
+`--no-install` on every `npx` so a mistyped one cannot download and run a package, and says when it
+loads your configuration and what it writes.
 The page says which, because a reviewer should not be able to change a database or a lock file by
 pasting what it told them to.
 
@@ -307,7 +317,8 @@ look, so you meet the unfamiliar API before you are sent to the code rather than
 Two things about it are worth knowing. **It holds that checkpoint's one documentation link rather
 than adding a second**, so the flag buys explanation and never more citations. And **it is gated on
 that link**, which is why a stack whose catalogue is closed gets no primers at all: while the Elixir
-rows are unopened, `--mentor` on a Phoenix project produces the ordinary page and tells you why. A
+and React rows are unopened, `--mentor` on a Phoenix, React or Next.js project produces the ordinary
+page and tells you why. A
 Rust primer is the same callout framed in graphite rather than Rails red. One
 per checkpoint, three per page, and a run that finds nothing worth teaching writes none.
 
@@ -381,21 +392,26 @@ checkpoint.
 ## What it assumes
 
 Only that it is running in Claude Code or Codex, against a git repository containing a Rails or
-a Phoenix application, or a Rust crate or workspace. Codex delivery and delegation are described in [Codex support](codex.md).
+a Phoenix application, a Rust crate or workspace, or a React or Next.js application. Codex delivery and delegation are described in [Codex support](codex.md).
 
 **Which one is detected, not configured** — a `Gemfile` or `config/application.rb` for Rails, a
-`mix.exs` for Elixir, a `Cargo.toml` for Rust — and it decides which lens and which doc catalogue the
+`mix.exs` for Elixir, a `Cargo.toml` for Rust, a `package.json` that depends on `react` for React —
+and it decides which lens and which doc catalogue the
 run reads. Rust has two lenses: **Rust in general**, for a library, a CLI or anything else that serves
 nothing, and **Rust backend**, which a run reads on top of the first when the crates the diff touches
-depend on a server framework such as `axum`, `actix-web` or `tonic`. A Cargo workspace is one project,
-however many members it has. A repo holding more than one stack asks you which to cover rather than
+depend on a server framework such as `axum`, `actix-web` or `tonic`. React has two the same way:
+**React in general**, for a single-page app or a component library, and **Next.js**, read on top of
+the first when the package the diff touches depends on `next`. A Cargo workspace is one project,
+however many members it has, and so is a JavaScript workspace. A Rails, Phoenix or Rust repository
+carrying a React client is reviewed as the backend when the diff touches the backend — whose lens
+already covers its client — and as React when the diff touches only the client. A repo holding more than one stack asks you which to cover rather than
 guessing. A repo holding none says so and covers
 the diff with the parts of the page that do not depend on a stack, rather than applying a Rails lens
 to something that is not Rails and inventing findings.
 
 Everything else is discovered too: where the Rails root is (repo root, a subdirectory, an engine) or
-where `lib/<app>` and `lib/<app>_web` are, RSpec or Minitest or ExUnit, API-only or server-rendered or
-LiveView, how authorization is attached, whether there is a separate frontend at all and where its API
+where `lib/<app>` and `lib/<app>_web` are, RSpec or Minitest or ExUnit or Vitest or Jest, API-only or
+server-rendered or LiveView, the App Router or the Pages Router, the package manager, how authorization is attached, whether there is a separate frontend at all and where its API
 client and types live, and whether the project documents its own conventions. Where a project has no
 convention docs, the skill infers house style from adjacent unchanged code — usually more accurate than
 a stale document anyway.

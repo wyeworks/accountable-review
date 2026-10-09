@@ -4,6 +4,8 @@
   {"query": "our new dev is picking up the project-archival PR tomorrow. can you write up what it does and what order she should read the files in", "should_trigger": true},
   {"query": "does the web app actually handle every error the api can return after this branch? i want to see both sides of the contract for the archive endpoint", "should_trigger": true},
   {"query": "this PR adds a variant to the Status enum in our core crate and touches the axum router — which other crates in the workspace does it actually reach, and is anything still behind the auth layer?", "should_trigger": true},
+  {"query": "the next.js PR moves the dashboard to server components and adds a server action for archiving — what does it actually change, which pages can now show stale data, and where should i start reading?", "should_trigger": true},
+  {"query": "our react app's ProjectList now uses a new useProjectFilters hook — can you fix the eslint exhaustive-deps warning in it", "should_trigger": false},
   {"query": "review this PR and leave inline comments on anything that looks wrong to you", "should_trigger": false},
   {"query": "cargo clippy is complaining about a needless borrow in src/handlers/projects.rs, can you fix it", "should_trigger": false},
   {"query": "spec/requests/projects_spec.rb has been failing on main since the archived_at migration landed. can you work out why", "should_trigger": false},

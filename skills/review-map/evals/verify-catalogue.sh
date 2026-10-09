@@ -1,10 +1,11 @@
 #!/bin/sh
 # verify-catalogue.sh — opens every URL in a catalogue, in the pinned form a run actually
 # emits: references/rails-docs.md for every Rails series it claims to serve,
-# references/elixir-docs.md at each package's newest release, and references/rust-docs.md at
-# each crate's newest release and the newest toolchain.
+# references/elixir-docs.md at each package's newest release, references/rust-docs.md at
+# each crate's newest release and the newest toolchain, and references/react-docs.md at the
+# newest major of react and of next.
 #
-# THE ELIXIR CATALOGUE IS CLOSED UNTIL THIS SCRIPT OPENS IT, and the Rust one was. A closed
+# THE ELIXIR AND REACT CATALOGUES ARE CLOSED UNTIL THIS SCRIPT OPENS THEM, and the Rust one was. A closed
 # file's § Version withholds every link in it — a run emits none, and anchors with probes
 # instead — because no row in it has been opened. That is the fail-closed rule at file scope
 # rather than row scope, and this script is the whole of what lifts it: a clean run prints a
@@ -17,7 +18,15 @@
 # ONE AXIS THIS DOES NOT COVER: a hexdocs or docs.rs row is checked at the package's NEWEST
 # release only, while the catalogue promises every release from its floor up. For Rust that
 # gap was closed by hand — rust-docs.md § Version records the sweep — and a row added there
-# owes the same.
+# owes the same. A react.dev or nextjs.org row is checked at the newest MAJOR, which is the only
+# grain those sites publish; the older majors in react-docs.md's floor are owed the same hand
+# sweep before that file opens.
+#
+# REACT ROWS ARE PINNED IN A FORM THIS SCRIPT IS THE FIRST TO TEST. react-docs.md § Pinning
+# writes `<major>.react.dev/…` and `nextjs.org/docs/<major>/…`, and § Version says the first
+# thing a sweep settles is whether each host answers its CURRENT major at that address. A run
+# where every React row is a dead page is that question answered no, not forty broken rows —
+# and the fix is § Pinning and rails-anchors.rb's React arm, changed together.
 #
 # WHY THIS EXISTS, AND WHY IT IS NOT A CHECK UNDER checks/
 #
@@ -86,6 +95,8 @@
 #   ./verify-catalogue.sh --catalogue ... --elixir-version 1.18.3    # when the GitHub API is blocked
 #   ./verify-catalogue.sh --catalogue ../references/rust-docs.md     # the Rust one
 #   ./verify-catalogue.sh --catalogue ... --rust-version 1.90.0      # when the GitHub API is blocked
+#   ./verify-catalogue.sh --catalogue ../references/react-docs.md    # the React and Next.js one
+#   ./verify-catalogue.sh --catalogue ... --react-major 19 --next-major 16   # when the npm registry is blocked
 #
 # Exit status: 1 if anything fails to resolve.
 set -eu
@@ -112,6 +123,10 @@ ELIXIR_VERSION=""
 # The Rust toolchain's documentation — std and the books — is versioned by the toolchain
 # release, not by any crate, so it needs a version of its own. Same override, same reason.
 RUST_VERSION=""
+# React and Next.js publish documentation per major, so the version a row is pinned to is a
+# major, read from the npm registry's `latest` dist-tag. Same override, same reason.
+REACT_MAJOR=""
+NEXT_MAJOR=""
 # crates.io refuses requests with no User-Agent, and its policy asks for one that names the
 # caller. Sent to crates.io only.
 CRATES_UA="accountable-review verify-catalogue.sh (https://github.com/wyeworks/accountable-review)"
@@ -125,6 +140,8 @@ while [ $# -gt 0 ]; do
     --series) SERIES=$2; shift 2 ;;
     --elixir-version) ELIXIR_VERSION=$2; shift 2 ;;
     --rust-version) RUST_VERSION=$2; shift 2 ;;
+    --react-major) REACT_MAJOR=$2; shift 2 ;;
+    --next-major) NEXT_MAJOR=$2; shift 2 ;;
     --catalogue) CATALOGUE=$2; shift 2 ;;
     -j|--jobs) JOBS=$2; shift 2 ;;
     --cache) CACHE=$2; shift 2 ;;
@@ -177,6 +194,10 @@ awk -F'|' '
         # other kind has, so they are tested first and cannot be mistaken for anything else.
         else if (tok ~ /^docs\.rs\/[A-Za-z0-9_-]+\/[A-Za-z0-9_]+\/.+$/)      kind = "docsrs"
         else if (tok ~ /^doc\.rust-lang\.org\/[a-z_-]+\/.+$/)              kind = "rustdoc"
+        # The two React hosts, stored with the host for the same reason. A nextjs.org path keeps
+        # its router (`docs/app/` or `docs/pages/`), and a path with neither is not a row shape.
+        else if (tok ~ /^react\.dev\/(reference|learn)\/.+$/)                kind = "reactdev"
+        else if (tok ~ /^nextjs\.org\/docs\/(app|pages)\/.+$/)               kind = "nextjs"
         else if (tok ~ /^[a-z_]+\.html(#.*)?$/)                            kind = "guide"
         else if (tok ~ /^[A-Z][A-Za-z0-9]*(\/[A-Za-z0-9]+)*\.html(#.*)?$/) kind = "api"
         # A hexdocs path leads with its PACKAGE, lowercase, then a slash: the one shape that
@@ -200,7 +221,7 @@ say "$CAT_NAME: $npaths path(s) across $nrows row(s), $novr per-series override(
 # it and say why, rather than leaving the reader to reconcile "series: 8.1 8.0 7.2 7.1" with
 # a file that pins per package.
 nrails=$(awk -F'|' '$3=="guide" || $3=="api"' "$TMP/rows" | wc -l | tr -d ' ')
-nhex=$(awk -F'|' '$3=="hex" || $3=="docsrs" || $3=="rustdoc"' "$TMP/rows" | wc -l | tr -d ' ')
+nhex=$(awk -F'|' '$3=="hex" || $3=="docsrs" || $3=="rustdoc" || $3=="reactdev" || $3=="nextjs"' "$TMP/rows" | wc -l | tr -d ' ')
 if [ "$nrails" -eq 0 ] && [ "$nhex" -gt 0 ]; then
   SERIES=${SERIES%% *}
   say "no Rails rows: the series axis does not apply, and each package row is checked once at"
@@ -278,6 +299,26 @@ if awk -F'|' '$3=="rustdoc"' "$TMP/rows" | grep -q .; then
   else say "  ! could not reach the GitHub API for the Rust release — pass --rust-version X to"
        say "    check the doc.rust-lang.org rows"; fi
 fi
+
+# ------------------------------------------------------- 2d · React and Next.js majors
+#
+# One request per package to the npm registry, and only the major is kept: that is the grain
+# both documentation sites publish at. Keyed `react` and `next`, which no other kind's key can
+# collide with because hex and crate keys only ever come from their own rows.
+npm_major() {
+  curl -sS -m 25 "https://registry.npmjs.org/$1/latest" 2>/dev/null \
+    | grep -o '"version":"[^"]*"' | head -1 | sed 's/.*:"//; s/"$//; s/\..*//'
+}
+if awk -F'|' '$3=="reactdev"' "$TMP/rows" | grep -q .; then
+  [ -n "$REACT_MAJOR" ] || REACT_MAJOR=$(npm_major react)
+  if [ -n "$REACT_MAJOR" ]; then echo "react $REACT_MAJOR" >> "$TMP/hexver"
+  else say "  ! could not reach the npm registry for react — pass --react-major N to check its rows"; fi
+fi
+if awk -F'|' '$3=="nextjs"' "$TMP/rows" | grep -q .; then
+  [ -n "$NEXT_MAJOR" ] || NEXT_MAJOR=$(npm_major next)
+  if [ -n "$NEXT_MAJOR" ]; then echo "next $NEXT_MAJOR" >> "$TMP/hexver"
+  else say "  ! could not reach the npm registry for next — pass --next-major N to check its rows"; fi
+fi
 [ -s "$TMP/hexver" ] && say "packages: $(awk '{printf "%s@%s ", $1, $2}' "$TMP/hexver")"
 
 # ---------------------------------------------------------------- 3 · the work list
@@ -341,6 +382,23 @@ for s in $SERIES; do
         rv=$(awk '$1=="rust"{print $2}' "$TMP/hexver")
         [ -n "$rv" ] || continue                              # unresolvable, already warned
         echo "rust@$rv|$line|$concept|$kind|https://doc.rust-lang.org/$rv/${path#doc.rust-lang.org/}" >> "$TMP/work"
+        continue
+        ;;
+      reactdev)
+        # <major>.react.dev/<rest> — the major is a subdomain, which is react-docs.md § Pinning's
+        # form and the one this run exists to test.
+        [ "$s" = "${SERIES%% *}" ] || continue
+        rm_=$(awk '$1=="react"{print $2}' "$TMP/hexver")
+        [ -n "$rm_" ] || continue                             # unresolvable, already warned
+        echo "react@$rm_|$line|$concept|$kind|https://$rm_.react.dev/${path#react.dev/}" >> "$TMP/work"
+        continue
+        ;;
+      nextjs)
+        # nextjs.org/docs/<major>/<router>/… — the major goes in after `docs/`, the router stays.
+        [ "$s" = "${SERIES%% *}" ] || continue
+        nm_=$(awk '$1=="next"{print $2}' "$TMP/hexver")
+        [ -n "$nm_" ] || continue                             # unresolvable, already warned
+        echo "next@$nm_|$line|$concept|$kind|https://nextjs.org/docs/$nm_/${path#nextjs.org/docs/}" >> "$TMP/work"
         continue
         ;;
     esac

@@ -1,0 +1,15 @@
+<!-- One defect, and the one react-docs.md warns about hardest: the API is right and the ROUTER is
+     wrong. revalidatePath is catalogued under docs/app/ only; the same name under docs/pages/ is a
+     page about a different router — one that resolves, so nothing tells the reader they are
+     reading about code this app does not run. It is caught because the needle keeps the router,
+     so this one matches no row. Pinned, so only the allowlist rule may fire. -->
+<section class="cp" id="cp-a">
+  <h3>Does archiving refresh the dashboard that lists the project?</h3>
+  <p>The action revalidates the project page and nothing else.</p>
+
+  <ul class="lookat">
+    <li>The action at <span class="path">app/projects/actions.ts:18</span> &mdash;
+      <a class="doc" href="https://nextjs.org/docs/15/pages/api-reference/functions/revalidatePath">revalidatePath</a>
+      invalidates the one path it names. <span class="tier">from unchanged code</span></li>
+  </ul>
+</section>

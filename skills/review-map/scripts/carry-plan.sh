@@ -182,6 +182,13 @@ fi
 # Gemfile.lock, mix.lock and Cargo.lock are what every documentation link on the page is pinned
 # from, and a Rails series or a crate moving re-pins them. There is no way to carry a pinned link
 # across that.
+#
+# NOT the JavaScript lock files, and React does not change that. A react.dev or nextjs.org link
+# pins a MAJOR, and a major moves only with the range in package.json, which this list does not
+# need to name: a yarn.lock bump re-pins nothing on any page, and refusing on one would cost a
+# full run on every dependency bump of a Rails app's Next.js client. The day react-docs.md opens,
+# a package.json that moved `react` or `next` across a major is what this precondition owes a
+# rule for; while it is closed no page carries a React link to re-pin.
 if awk -F/ '{ print $NF }' "$TMP/delta" | grep -qxE 'Gemfile\.lock|mix\.lock|Cargo\.lock'; then
   full "a lock file moved in the delta — every pinned documentation link is derived from it"
 fi

@@ -232,6 +232,12 @@ SKIP  no .impact panel in this input
 ## --page anchors-mixed-series.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-nextjs-wrong-router.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-nextjs-wrong-router.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment anchors-primer-clean.html
 exit=0
 SKIP  no .impact panel in this input
@@ -298,6 +304,12 @@ SKIP  no .impact panel in this input
 ## --page anchors-primer-ungated.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-probe-js-forms.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-probe-js-forms.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment anchors-probe-label-thin.html
 exit=0
 SKIP  no .impact panel in this input
@@ -332,6 +344,18 @@ WARN  no .impact panel on this page — right only if nothing the change does re
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-unlabelled.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-reactdocs-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-reactdocs-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-reactdocs-unpinned.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-reactdocs-unpinned.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment anchors-runner-mutates.html
