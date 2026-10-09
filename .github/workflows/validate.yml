@@ -67,11 +67,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Same pin as the checks job, for the same reasons.
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
       # The deterministic half of the CI setup: what the generated workflow contains, that
       # setup leaves other people's workflows alone, that running it twice is safe, that the
-      # config file is respected, and that the delivery seam returns its contract. No mutation
-      # suite here: it re-ran this one once per break and cost minutes on every push.
-      - run: skills/setup-ci/tests/run.sh
+      # config file is respected, and that the delivery seam returns its contract. The tests
+      # are Ruby; the scripts they call stay shell, because that is what runs on a runner.
+      - run: ruby skills/setup-ci/tests/run.rb
+      # And the proof they fire: every break the suite claims to catch, each running only the
+      # section it can reach, in parallel. The shell version re-ran the whole suite per break
+      # and was deleted for costing minutes; this one costs seconds, so it runs on every push.
+      - run: ruby skills/setup-ci/tests/self-test.rb
 
   review-map-scripts:
     runs-on: ubuntu-latest

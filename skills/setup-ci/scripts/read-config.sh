@@ -116,7 +116,7 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       # CI fails on a typo before a model is spent, and passed on by generate-review-map.sh; the
       # skill page-skeleton.sh reads the same key itself, because it ships without this script.
       # The names are the files under skills/review-map/references/themes/, and the setup-ci
-      # tests/run.sh fails when this list and that directory disagree.
+      # tests/suite.rb fails when this list and that directory disagree.
       if (val != "daylight" && val != "workshop" && val != "field-notes") \
         fail("theme must be daylight, workshop or field-notes, got `" val "`")
       emit("theme", val)

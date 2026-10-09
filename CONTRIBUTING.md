@@ -161,10 +161,11 @@ ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner,
 skills/review-map/evals/checks/frozen.rb                # ~1000 cases against their recorded output
 skills/review-map/tests/run.sh                          # page-skeleton.sh, diff-render.sh, carry-plan.sh
 skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
-skills/setup-ci/tests/run.sh                            # what the generated workflow contains
+ruby skills/setup-ci/tests/run.rb                       # what the generated workflow contains
+ruby skills/setup-ci/tests/self-test.rb                 # every break run.rb claims to catch
 ```
 
-A check script that always passes is worse than none, which is what the two self-tests are for: each
+A check script that always passes is worse than none, which is what the three self-tests are for: each
 plants a defect and asserts that the rule fires. `frozen.rb` is the corpus that replaced the
 shell-versus-Ruby equivalence oracle when the shell implementation was deleted — it is what notices a
 rule quietly changing what it says.

@@ -107,14 +107,14 @@ repositories that had set a threshold. The renderer says so on stderr and points
 
 Both shipped, in a real repository, and each cost a pull request to undo. Neither is visible to a
 YAML parse — the file parses locally and is rejected upstream, with no job created and an error
-naming neither the line nor the reason — which is why `tests/run.sh` asserts both structurally and
+naming neither the line nor the reason — which is why `tests/suite.rb` asserts both structurally and
 why the template carries the warning inline.
 
 **There is no arithmetic in a GitHub Actions expression.** The grammar is `()`, `[]`, `.`, `!`, the
 comparisons, `==`, `!=`, `&&` and `||`. `(additions + deletions) > 50` is an invalid-file error, not
 a sum. That expression is no longer in the guard — the counts moved to a step, where shell can add —
 but the rule is what makes putting them back here impossible rather than merely wrong, and
-`tests/run.sh` still asserts it against whatever the expression holds.
+`tests/suite.rb` still asserts it against whatever the expression holds.
 
 **In a folded scalar (`>-`), a more-indented line is not folded.** Its newline survives into the
 expression string and invalidates the file. Every line of the expression sits at exactly six spaces,
@@ -270,7 +270,7 @@ label and cannot set a check.
 **Actions has no per-step permissions, so the scope is the job.** What keeps it away from the step
 that runs a model over a contributor's branch is a different mechanism: Actions injects
 `GITHUB_TOKEN` into no step that does not name it, and only the comment step puts it in its `env`.
-`tests/run.sh` asserts that exactly one step in the whole file names the token, because that
+`tests/suite.rb` asserts that exactly one step in the whole file names the token, because that
 containment is the reason the scope is acceptable and it is one careless `env:` away from gone.
 
 Treat the checked-out pull request as untrusted input, because it is: a contributor's branch can
@@ -401,7 +401,7 @@ prints both along with every path and its line count.
 A skip needs **both** measurements small. So a 900-line change in one file is generated, and so is a
 9-line change across six files — each clears one threshold and not the other. Read from the
 generating side that is an OR, which is the same rule seen from the other end; both halves are in
-`tests/run.sh` as `bulky` and `spread`.
+`tests/suite.rb` as `bulky` and `spread`.
 
 The reason for AND rather than OR is the asymmetry of being wrong. A map generated for a change that
 did not need one costs a model run somebody ignores. A map *not* generated is invisible — nobody
@@ -414,7 +414,7 @@ This is what makes them mean anything, and it is the whole reason the gate canno
 the job. A three-line model change beside a five-thousand-line lockfile is a three-line change here.
 The `pull_request` event payload offers `additions`, `deletions` and `changed_files` over the entire
 diff, so a threshold written there would call that pull request enormous — and with the lockfile
-counted, the trivial rule would essentially never fire. `tests/run.sh` has that case as `masked`.
+counted, the trivial rule would essentially never fire. `tests/suite.rb` has that case as `masked`.
 
 The payload also has no file list, so the first rule could not live there either. Hence a step, after
 the checkout, with the plugin clone moved ahead of the Node install so a pull request that turns out
@@ -425,7 +425,7 @@ to need no Review Map never installs a toolchain.
 Unlike the triggers and the guards, these are numbers a team should own. They live in
 `.accountable-review.yml` as `review_map.trivial_files` and `review_map.trivial_lines`, read from the
 checkout at **run** time, so changing one never means regenerating the workflow — and there is no
-number in the rendered YAML to edit. `tests/run.sh` asserts the absence of both the payload fields
+number in the rendered YAML to edit. `tests/suite.rb` asserts the absence of both the payload fields
 and the flag names.
 
 **Either at `0` switches the second rule off**, because no change containing application code has
