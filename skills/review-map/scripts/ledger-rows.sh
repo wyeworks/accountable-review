@@ -17,7 +17,7 @@
 # ONE CELL PER PATH, which is what --paths-only emits and what the page carries: no
 # section, no attention level, no group. The page has no classified ledger any more —
 # where a reviewer's attention goes is said by what is on the reading path, and saying
-# it again in a column beside every file was the second ledger section 04 is told not
+# it again in a column beside every file was the second ledger section 05 is told not
 # to become. What survives is the accounting, and the reason the cell is still a .gt
 # grid cell rather than a list item is that data-path has to stay on a `div class="c"`:
 # that is what coverage-gate.sh compares and what page-invariants.rb checks it sits on.
@@ -25,7 +25,7 @@
 # Pass --paths-only. It is the only documented mode; the four-cell form it switches off
 # is kept for a future level that classifies again, and nothing in the page reads it.
 #
-# LINKS. report-format.md § Section 5 wants a deep link per row, and at rungs 1 and 2
+# LINKS. report-format.md § Section 6 wants a deep link per row, and at rungs 1 and 2
 # that link is a diff-page anchor, whose fragment is the SHA-256 of the path. Pass
 # --pr or --compare and the rows come out linked. This exists because a run without
 # the flag hand-inserted seven anchors into the very <td> that carries data-path —

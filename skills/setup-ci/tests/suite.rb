@@ -593,6 +593,9 @@ class SetupCiSuite
     write(File.join(c, "mentor.yml"), "review_map:\n  mentor: rails\n")
     assert_in inv.call("--repo-dir", c, "--config", File.join(c, "mentor.yml"), chdir: c).out, "--mentor rails",
               "mentor is read from the config file"
+    write(File.join(c, "mentor-rust.yml"), "review_map:\n  mentor: rust\n")
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "mentor-rust.yml"), chdir: c).out, "--mentor rust",
+              "rust is a stack name the config file and the adapter both accept"
     write(File.join(c, "mentor-bad.yml"), "review_map:\n  mentor: nope\n")
     assert_eq sh(@read_cfg, File.join(c, "mentor-bad.yml")).code, 1, "a mentor value that is not a stack is an error"
 
@@ -737,6 +740,10 @@ class SetupCiSuite
     gate.call("tooling", "skip", "a CI or linter config change gets none") do
       write(f[".github/workflows/tests.yml"], "x\n")
       write(f[".rubocop.yml"], "x\n")
+    end
+    gate.call("rustfmt", "skip", "a Rust formatter or linter config change gets none") do
+      write(f["rustfmt.toml"], "x\n")
+      write(f["clippy.toml"], "x\n")
     end
     assert_in logs["docs"], "verdict: skip (no-application-code)", "rule 1 names itself in the log, not only in a step output"
 

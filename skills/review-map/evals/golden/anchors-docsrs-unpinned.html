@@ -1,0 +1,15 @@
+<!-- One defect: the docs.rs link says `latest` where a version belongs, so it silently means the
+     crate's newest release — the form a person copies out of a browser's address bar. Same
+     failure as an unpinned Rails guide, arriving from the crate axis: a codebase on tokio 1.28
+     handed whatever tokio ships today, with nothing on the page to notice it with. The path
+     itself is catalogued, so only the pinning rule may fire here. -->
+<section class="cp" id="cp-a">
+  <h3>Can a timed-out archive leave half its writes behind?</h3>
+  <p>The handler races the write against a timeout.</p>
+
+  <ul class="lookat">
+    <li>The race at <span class="path">crates/api/src/handlers/projects.rs:88</span> &mdash;
+      <a class="doc" href="https://docs.rs/tokio/latest/tokio/macro.select.html#cancellation-safety">select!</a>
+      drops the losing branch at its next await. <span class="tier">from unchanged code</span></li>
+  </ul>
+</section>

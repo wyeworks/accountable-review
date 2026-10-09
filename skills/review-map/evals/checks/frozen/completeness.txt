@@ -28,6 +28,24 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-demo-loose.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-docsrs-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-docsrs-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-docsrs-unpinned.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-docsrs-unpinned.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-docsrs-wrong-crate.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-docsrs-wrong-crate.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-fabricated-output.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -118,6 +136,24 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-primer-probe-nested.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-primer-rails-framed.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-primer-rails-framed.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-primer-rust-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-primer-rust-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-primer-rust-unframed.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-primer-rust-unframed.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-primer-uncited.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -146,6 +182,12 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-probe-lens-forms.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-probe-rust-forms.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-probe-rust-forms.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-probe-sandbox-lie.html
@@ -200,6 +242,30 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page build-state-updated-twice.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment context-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page context-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment context-dead-pointer.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page context-dead-pointer.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment context-no-pointer.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page context-no-pointer.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment context-shift-only.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page context-shift-only.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-at-head.html
@@ -262,6 +328,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page figures-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-context-chain.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-context-chain.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment figures-converge-grading-note.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -302,6 +374,42 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page figures-lifecycle-no-loc.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-shift-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-shift-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-shift-in-checkpoint.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-shift-in-checkpoint.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-shift-no-cases.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-shift-no-cases.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-shift-not-moved.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-shift-not-moved.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-shift-one-moved.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-shift-one-moved.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-shift-one-pointer.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-shift-one-pointer.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment figures-structure-erd.html

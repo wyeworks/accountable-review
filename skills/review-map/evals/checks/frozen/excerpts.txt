@@ -82,6 +82,24 @@ SKIP  no excerpts in this input
 ## --page anchors-demo-loose.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-docsrs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-docsrs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-docsrs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-docsrs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  no excerpts in this input
@@ -190,6 +208,24 @@ SKIP  no excerpts in this input
 ## --page anchors-primer-probe-nested.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-primer-rails-framed.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rails-framed.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rust-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-rust-unframed.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rust-unframed.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-primer-uncited.html
 exit=0
 SKIP  no excerpts in this input
@@ -218,6 +254,12 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page anchors-probe-lens-forms.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-probe-rust-forms.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-probe-rust-forms.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment anchors-probe-sandbox-lie.html
@@ -272,6 +314,30 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page build-state-updated-twice.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment context-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-dead-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment context-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-no-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment context-shift-only.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-shift-only.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment excerpt-at-head.html
@@ -478,6 +544,12 @@ SKIP  no excerpts in this input
 ## --page figures-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment figures-context-chain.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-context-chain.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment figures-converge-grading-note.html
 exit=0
 SKIP  no excerpts in this input
@@ -518,6 +590,42 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page figures-lifecycle-no-loc.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-in-checkpoint.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-in-checkpoint.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-no-cases.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-no-cases.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-not-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-not-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-one-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-one-moved.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-shift-one-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-shift-one-pointer.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment figures-structure-erd.html

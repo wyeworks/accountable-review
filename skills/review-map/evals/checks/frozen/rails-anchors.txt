@@ -59,6 +59,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -75,6 +76,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -96,11 +98,84 @@ exit=1
 SKIP  doc links: none on this input
 FAIL  1 pre.demo on a page carrying no primer callout — a demo may show a result line only because its receiver is a class this repository does not have, and outside a primer nothing constrains the receiver
 SKIP  runtime probes: none on this input
+## --fragment anchors-docsrs-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 3 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  3 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page anchors-docsrs-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 3 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  3 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment anchors-docsrs-unpinned.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+FAIL  1 unpinned Rust doc link(s) — `latest`, `stable` or no version silently means the newest release: https://docs.rs/tokio/latest/tokio/macro.select.html#cancellation-safety 
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page anchors-docsrs-unpinned.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+FAIL  1 unpinned Rust doc link(s) — `latest`, `stable` or no version silently means the newest release: https://docs.rs/tokio/latest/tokio/macro.select.html#cancellation-safety 
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment anchors-docsrs-wrong-crate.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://docs.rs/actix-web/4.9.0/actix-web/struct.App.html#method.wrap 
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page anchors-docsrs-wrong-crate.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://docs.rs/actix-web/4.9.0/actix-web/struct.App.html#method.wrap 
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment anchors-fabricated-output.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -117,6 +192,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -132,6 +208,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=0
 SKIP  pinning: no Rails documentation links on this input
 PASS  all 2 hexdocs link(s) carry a version segment
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -143,6 +220,7 @@ SKIP  runtime probes: none on this input
 exit=0
 SKIP  pinning: no Rails documentation links on this input
 PASS  all 2 hexdocs link(s) carry a version segment
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -154,6 +232,7 @@ SKIP  runtime probes: none on this input
 exit=1
 SKIP  pinning: no Rails documentation links on this input
 FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/Ecto.Repo.html#c:update_all/3 
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -165,6 +244,7 @@ SKIP  runtime probes: none on this input
 exit=1
 SKIP  pinning: no Rails documentation links on this input
 FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/Ecto.Repo.html#c:update_all/3 
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -176,8 +256,9 @@ SKIP  runtime probes: none on this input
 exit=1
 SKIP  pinning: no Rails documentation links on this input
 PASS  all 1 hexdocs link(s) carry a version segment
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -187,8 +268,9 @@ SKIP  runtime probes: none on this input
 exit=1
 SKIP  pinning: no Rails documentation links on this input
 PASS  all 1 hexdocs link(s) carry a version segment
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -199,6 +281,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -215,6 +298,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -231,6 +315,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -247,6 +332,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -263,6 +349,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -279,6 +366,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -295,6 +383,7 @@ exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -311,6 +400,7 @@ exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -327,6 +417,7 @@ exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 FAIL  doc links pinned to 2 different Rails series — one app has one version: 7.1 8.0 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -343,6 +434,7 @@ exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 FAIL  doc links pinned to 2 different Rails series — one app has one version: 7.1 8.0 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -359,6 +451,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -372,12 +465,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -391,12 +486,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-doubled.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -410,12 +507,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-doubled.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -429,12 +528,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-marked.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -448,12 +549,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-marked.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -467,12 +570,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-orphan.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -486,12 +591,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-orphan.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -505,12 +612,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-over-budget.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -524,12 +633,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-over-budget.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -543,12 +654,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-probe-nested.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -562,6 +675,7 @@ PASS  every primer cites the line in this repository that earned it
 FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -572,6 +686,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -585,16 +700,140 @@ PASS  every primer cites the line in this repository that earned it
 FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-primer-rails-framed.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --page anchors-primer-rails-framed.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --page anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-unframed.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --page anchors-primer-rust-unframed.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-uncited.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -608,12 +847,14 @@ FAIL  1 primer(s) carry no file:line of their own — framework prose with no st
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-uncited.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -627,6 +868,7 @@ FAIL  1 primer(s) carry no file:line of their own — framework prose with no st
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-ungated.html
 exit=1
@@ -639,6 +881,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --page anchors-primer-ungated.html
 exit=1
@@ -651,12 +894,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-probe-label-thin.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -674,6 +919,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -722,11 +968,30 @@ PASS  4 probe(s), none showing output the run did not observe
 PASS  no probe targets production
 PASS  every probe is read-only
 SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment anchors-probe-rust-forms.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  2 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page anchors-probe-rust-forms.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  2 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment anchors-probe-sandbox-lie.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -744,6 +1009,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -761,6 +1027,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -777,6 +1044,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -793,6 +1061,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -809,6 +1078,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -825,8 +1095,9 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -841,8 +1112,9 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -856,6 +1128,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -871,6 +1144,7 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -918,6 +1192,46 @@ SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page build-state-updated-twice.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment context-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment context-dead-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-dead-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment context-no-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-no-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment context-shift-only.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page context-shift-only.html
 exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
@@ -1022,6 +1336,16 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment figures-context-chain.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-context-chain.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment figures-converge-grading-note.html
 exit=0
 SKIP  doc links: none on this input
@@ -1088,6 +1412,66 @@ SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page figures-lifecycle-no-loc.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-in-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-in-checkpoint.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-no-cases.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-no-cases.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-not-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-not-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-one-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-one-moved.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment figures-shift-one-pointer.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page figures-shift-one-pointer.html
 exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
@@ -1662,8 +2046,9 @@ SKIP  runtime probes: none on this input
 exit=1
 FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  2 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  2 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -1675,6 +2060,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1684,8 +2070,9 @@ SKIP  probe identifiers: needs --repo to ask whether the constants exist
 exit=1
 FAIL  2 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  2 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
+FAIL  2 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/AttributeMethods/Dirty.html https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -1697,6 +2084,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -1707,6 +2095,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1724,8 +2113,9 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://api.rubyonrails.org/v8.0/classes/ActiveRecord/BulkWrites.html#method-i-update_all 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
@@ -1740,6 +2130,7 @@ PASS  1 attribute/association name(s) in probes appear in the repository
 exit=1
 FAIL  1 unpinned Rails doc link(s) — an unpinned path silently means current stable: https://api.rubyonrails.org/classes/ActiveRecord/Relation.html#method-i-update_all 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1757,6 +2148,7 @@ exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 FAIL  doc links pinned to 2 different Rails series — one app has one version: 7.1 8.0 
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1774,6 +2166,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1791,6 +2184,7 @@ exit=1
 PASS  all 2 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1808,6 +2202,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1835,6 +2230,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1851,6 +2247,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1868,6 +2265,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1895,6 +2293,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1913,6 +2312,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1939,6 +2339,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1985,6 +2386,7 @@ PASS  1 scope(s) or method(s) called by a probe are defined in the repository
 exit=0
 SKIP  pinning: no Rails documentation links on this input
 PASS  all 2 hexdocs link(s) carry a version segment
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  2 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -1996,6 +2398,7 @@ SKIP  runtime probes: none on this input
 exit=1
 SKIP  pinning: no Rails documentation links on this input
 FAIL  1 unpinned hexdocs link(s) — an unpinned path silently means the package's newest release: https://hexdocs.pm/ecto/Ecto.Repo.html#c:update_all/3 
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2007,18 +2410,77 @@ SKIP  runtime probes: none on this input
 exit=1
 SKIP  pinning: no Rails documentation links on this input
 PASS  all 1 hexdocs link(s) carry a version segment
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
-FAIL  1 documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://hexdocs.pm/ecto/3.12.5/Ecto.Migration.html#index/3 
 PASS  no doc link uses another series' override path
 PASS  every documentation link sits beside a repository citation
 PASS  no documentation link hidden inside an excerpt
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment anchors-docsrs-clean.html --repo searches-repo
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 3 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  3 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment anchors-docsrs-clean.html --repo searches-repo
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 3 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  3 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment anchors-docsrs-unpinned.html --repo searches-repo
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+FAIL  1 unpinned Rust doc link(s) — `latest`, `stable` or no version silently means the newest release: https://docs.rs/tokio/latest/tokio/macro.select.html#cancellation-safety 
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment anchors-docsrs-wrong-crate.html --repo searches-repo
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+FAIL  1 documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: https://docs.rs/actix-web/4.9.0/actix-web/struct.App.html#method.wrap 
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment anchors-probe-rust-forms.html --repo searches-repo
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  2 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+PASS  all 1 constant(s) named by a probe exist in the repository
 ## --fragment anchors-primer-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2032,12 +2494,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2051,12 +2515,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2070,12 +2536,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-clean.html
 exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2089,12 +2557,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-orphan.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2108,6 +2578,7 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-ungated.html
 exit=1
@@ -2120,12 +2591,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-uncited.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2139,12 +2612,14 @@ FAIL  1 primer(s) carry no file:line of their own — framework prose with no st
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-doubled.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2158,12 +2633,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-over-budget.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2177,12 +2654,14 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 SKIP  runtime probes: none on this input
 ## --fragment anchors-primer-probe-nested.html
 exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2196,6 +2675,7 @@ PASS  every primer cites the line in this repository that earned it
 FAIL  1 runtime probe(s) inside a primer — a probe asks this application and may never show output, and nesting it under the block that may is how the exception stops being one
 PASS  every pre.demo sits inside a primer
 PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
 PASS  every probe carries a label
 PASS  1 probe(s), none showing output the run did not observe
 PASS  no probe targets production
@@ -2206,6 +2686,7 @@ exit=1
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path
@@ -2219,6 +2700,109 @@ PASS  every primer cites the line in this repository that earned it
 PASS  no runtime probe inside a primer — the two anchors sit beside each other
 PASS  every pre.demo sits inside a primer
 FAIL  1 primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-clean.html
+exit=0
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+PASS  every primer's frame matches the host of its doc link
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rust-unframed.html
+exit=1
+SKIP  pinning: no Rails documentation links on this input
+SKIP  pinning: no hexdocs links on this input
+PASS  all 1 Rust doc link(s) carry an exact version segment
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
+SKIP  runtime probes: none on this input
+## --fragment anchors-primer-rails-framed.html
+exit=1
+PASS  all 1 Rails doc link(s) carry a version segment
+PASS  all doc links pinned to one series (v8.0)
+SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
+PASS  no unsubstituted {version} placeholder
+PASS  1 documentation link(s), all from the catalogue
+PASS  no doc link uses another series' override path
+PASS  every documentation link sits beside a repository citation
+PASS  no documentation link hidden inside an excerpt
+PASS  1 primer callout(s), each inside the checkpoint it explains
+PASS  no checkpoint carries a second primer
+PASS  1 primer callout(s), within the budget of 3
+PASS  every primer carries exactly one documentation link
+PASS  every primer cites the line in this repository that earned it
+PASS  no runtime probe inside a primer — the two anchors sit beside each other
+PASS  every pre.demo sits inside a primer
+PASS  no primer carries a logotype or a trademark line
+FAIL  1 primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other
 SKIP  runtime probes: none on this input
 ## --fragment agenda-clean.html
 exit=0
@@ -2239,6 +2823,7 @@ exit=0
 PASS  all 1 Rails doc link(s) carry a version segment
 PASS  all doc links pinned to one series (v8.0)
 SKIP  pinning: no hexdocs links on this input
+SKIP  pinning: no docs.rs or doc.rust-lang.org links on this input
 PASS  no unsubstituted {version} placeholder
 PASS  1 documentation link(s), all from the catalogue
 PASS  no doc link uses another series' override path

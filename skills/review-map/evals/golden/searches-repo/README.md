@@ -5,8 +5,12 @@ Deliberately **not** a git repo and deliberately tiny: the check reads lines and
 never asks git anything, so `self-test.rb` can point at this directory with `--repo` and stay at
 about a second with no fixture build.
 
-The two files are shaped to plant the exact defect the check exists for. `project.rb:2` names the
+The two Ruby files are shaped to plant the exact defect the check exists for. `project.rb:2` names the
 column, so `rg 'archived_at' app` reaches it. `projects_controller.rb:5` reads that same column
 through the predicate `archived?`, so the same search misses it — which is the shape that produced
 this check: a run recorded a grep for `account_type` and offered it as provenance for two guards
 that read the column through `steward?`.
+
+`src/archive.rs` is not for this check. It is the one Rust declaration in the stub, so that
+`rails-anchors.rb` can be shown a probe naming a struct and find it defined, which is what
+`anchors-probe-rust-forms.html` pins.

@@ -91,7 +91,7 @@ ASSURE = /(independently|adversarially|externally) verified|verification pass|fa
 
 # The standing disclaimer, which is the OPPOSITE leak from ASSURE and therefore its own rule:
 # that one is the page overclaiming its coverage, this one is the page hedging it in a sentence
-# no reviewer acts on. "These are what this pass surfaced, not an audit" used to open section 02
+# no reviewer acts on. "These are what this pass surfaced, not an audit" used to open section 03
 # and has been removed — it is true of every Review Map rather than of this one, so README.md
 # § "What a Review Map cannot do" states it once for the tool and the page states it never. A
 # disclaimer a reader has met before is a line they skip, and the next line they skip is the

@@ -18,11 +18,12 @@
 #   file:line of its own           framework prose with nothing to check it against
 #
 # The catalogue is the allowlist, and this script derives it from the files rather than
-# hard-coding hosts: references/rails-docs.md and references/elixir-docs.md are the single
-# home for what may be cited, so a row added to either is immediately legal here and a URL
-# invented in a run is not. Both are read on every page, not the one the page's stack
-# suggests: a page cites from one catalogue, but nothing in the markup says which, and
-# guessing the stack here would be a rule that fails on a monorepo touching both.
+# hard-coding hosts: references/rails-docs.md, references/elixir-docs.md and
+# references/rust-docs.md are the single home for what may be cited, so a row added to any of
+# them is immediately legal here and a URL invented in a run is not. All three are read on
+# every page, not the one the page's stack suggests: a page cites from one catalogue, but
+# nothing in the markup says which, and guessing the stack here would be a rule that fails on
+# a monorepo touching two.
 #
 # The name is Rails-shaped and the scope is not, deliberately: renaming it would churn
 # check.rb, self-test-cases.txt and the frozen corpus for no behavioural gain.
@@ -65,19 +66,29 @@ module RailsAnchors
   # the host and the version, so a pinned link and an unpinned one differ in their SECOND
   # segment and nowhere else.
   HEXDOCS_PINNED = %r{\Ahttps://hexdocs\.pm/[^/]+/[0-9][^/]*/}
+  # The two Rust hosts. docs.rs puts the version between the crate and the crate's identifier,
+  # exactly where hexdocs puts it, and both hosts answer an unpinned form — `latest` on docs.rs,
+  # `stable` (or no segment at all) on doc.rust-lang.org — that silently means "newest". So a
+  # pinned link is one whose version segment starts with a digit, and nothing else is.
+  RUST_HOST = %r{\Ahttps://(?:docs\.rs|doc\.rust-lang\.org)/}
+  RUST_PINNED = %r{\Ahttps://(?:docs\.rs/[^/]+/[0-9][^/]*/|doc\.rust-lang\.org/[0-9]+\.[0-9]+\.[0-9]+/)}
 
   # A repository citation with no anchor on it — the rung-3 and rung-4 form. TWO rules read it: the
   # doc link's "not alone" test, and the primer's "earned by a line in this repo" test, which is the
   # same question asked of a bigger block. One copy, because two would drift the first time a
   # language was added.
-  FILE_LINE = %r{[A-Za-z0-9_./-]+\.(?:rb|rake|erb|ts|tsx|js|jsx|yml|yaml|sql|json):[0-9]+}
+  FILE_LINE = %r{[A-Za-z0-9_./-]+\.(?:rb|rake|erb|ex|exs|heex|rs|toml|ts|tsx|js|jsx|yml|yaml|sql|json|proto):[0-9]+}
 
   # Constants that are the framework's own or Ruby's, so they say nothing about this repository.
   # ONE list, because two rules need it: rule 7 skips these when asking whether a constant
   # exists, and the scope rule skips them as RECEIVERS. When only the constant rule had it,
   # `Rails.application` sailed past rule 7 and then failed the scope rule for calling an
   # "undefined method" named `application`.
-  FW = "ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|I18n|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP"
+  #
+  # `Cargo` is here for the same reason `Rails` is: a Rust probe names `Cargo.toml` and
+  # `Cargo.lock` as files, and reading those as constants this repository failed to define was a
+  # false accusation against the probe rust.md tells a run to write.
+  FW = "ActiveRecord|ActiveJob|ActiveSupport|ActionController|ActionDispatch|ActionMailer|Rails|I18n|JSON|Base|Time|Date|DateTime|Logger|STDOUT|Hash|Array|String|Integer|Float|Object|Kernel|GC|ENV|PP|Cargo"
   FRAMEWORK = /\A(#{FW})/
   FRAMEWORK_RECEIVER = /\A(#{FW})\./
   FRAMEWORK_NS = /\A(ActiveRecord|ActiveJob|ActiveSupport)::/
@@ -174,6 +185,11 @@ module RailsAnchors
   # right-module-wrong-package URL fail here instead of passing: the two differ in the needle.
   # The unpinned form is reduced too, so it is still tested against the allowlist; the hexdocs
   # pinning rule is what fails it for being unpinned.
+  #
+  # The Rust hosts keep their HOST in the needle, because rust-docs.md stores it: `cargo` is a
+  # crate on one and a book on the other. docs.rs also keeps the crate NAME and the crate
+  # IDENTIFIER, so `actix-web/…/actix-web/` — the name where the identifier belongs — matches no
+  # row, which is the Rust form of the wrong-package 404.
   def self.needle(url)
     url.sub(%r{\Ahttps://guides\.rubyonrails\.org/v[0-9][0-9.]*/}, "")
        .sub(%r{\Ahttps://guides\.rubyonrails\.org/}, "")
@@ -181,6 +197,10 @@ module RailsAnchors
        .sub(%r{\Ahttps://api\.rubyonrails\.org/classes/}, "")
        .sub(%r{\Ahttps://hexdocs\.pm/([^/]+)/[0-9][^/]*/}, "\\1/")
        .sub(%r{\Ahttps://hexdocs\.pm/}, "")
+       .sub(%r{\Ahttps://docs\.rs/([^/]+)/(?:[0-9][^/]*|latest)/}, "docs.rs/\\1/")
+       .sub(%r{\Ahttps://docs\.rs/}, "docs.rs/")
+       .sub(%r{\Ahttps://doc\.rust-lang\.org/(?:[0-9][0-9.]*|stable|beta|nightly)/}, "doc.rust-lang.org/")
+       .sub(%r{\Ahttps://doc\.rust-lang\.org/}, "doc.rust-lang.org/")
        .sub(%r{/tree/v[0-9][0-9A-Za-z.-]*}, "/tree/v{version}")
   end
 
@@ -209,12 +229,13 @@ module RailsAnchors
     blocks.select { |b| b.include?('class="doc"') }.map { |b| ReviewMap.unescape(b) }
   end
 
-  # Defined anywhere in the repository, as a class or module. Ruby's own file naming is not
-  # assumed: a search for the definition is what a reviewer would do.
+  # Defined anywhere in the repository, as a class or module — or, in Rust, as a struct, an
+  # enum, a trait, a type alias or a union, under any visibility. Neither language's file naming
+  # is assumed: a search for the definition is what a reviewer would do.
   def self.defined_in?(check, constant)
     leaf = constant.split("::").last
     _out, found = check.shell("grep", "-rEq",
-                              "^[[:space:]]*(class|module)[[:space:]]+([A-Za-z0-9_:]*::)?#{leaf}\\b",
+                              "^[[:space:]]*((pub(\\([^)]*\\))?[[:space:]]+)?(struct|enum|trait|type|union)|class|module)[[:space:]]+([A-Za-z0-9_:]*::)?#{leaf}\\b",
                               check.repo)
     found
   end
@@ -267,7 +288,7 @@ check.require_input
 page = check.page
 # Both catalogues, always — see the header. A page cites from one, and nothing in the markup
 # says which.
-catalogue_paths = %w[rails-docs.md elixir-docs.md]
+catalogue_paths = %w[rails-docs.md elixir-docs.md rust-docs.md]
                   .map { |name| File.join(ReviewMap::Check::SKILL_DIR, "references", name) }
                   .select { |path| File.readable?(path) }
 
@@ -276,13 +297,14 @@ external = RailsAnchors.external_links(page)
 if external.empty?
   check.skip("doc links: none on this input")
 elsif catalogue_paths.empty?
-  check.bad("doc links: no catalogue readable at references/rails-docs.md or references/elixir-docs.md — nothing can be checked against it")
+  check.bad("doc links: no catalogue readable at references/rails-docs.md, elixir-docs.md or rust-docs.md — nothing can be checked against it")
 else
-  # Both catalogues parsed into ONE allowlist. A path is legal because some row offers it;
+  # Every catalogue parsed into ONE allowlist. A path is legal because some row offers it;
   # which file the row lives in is the run's business, not this check's, and a monorepo page can
   # legitimately cite from both. The per-series override syntax is Rails-only in practice —
-  # elixir-docs.md ships none, because hexdocs pins per package rather than per series — so
-  # every Elixir row parses as `*` and the series rule below never fires on one.
+  # elixir-docs.md and rust-docs.md ship none, because hexdocs and docs.rs pin per package
+  # rather than per series — so every Elixir and Rust row parses as `*` and the series rule
+  # below never fires on one.
   rows = catalogue_paths.flat_map { |path| RailsAnchors.catalogue(path) }
                         .uniq { |r| [r.applies, r.path] }
   rails_links = external.select { |u| u.match?(RailsAnchors::RAILS_HOST) }
@@ -341,6 +363,23 @@ else
     end
   end
 
+  # Pinning, rule 1c: the Rust arm, the same rule a third time. `latest` on docs.rs and
+  # `stable` on doc.rust-lang.org are the forms a person copies out of a browser, and both mean
+  # whatever is newest the day the reader clicks — a codebase on tokio 1.28 handed 1.4x docs.
+  # Like hexdocs, the segments are NOT required to agree: every crate and the toolchain pin
+  # independently, so several versions on one Rust page is the correct output.
+  rust_links = external.select { |u| u.match?(RailsAnchors::RUST_HOST) }
+  if rust_links.empty?
+    check.skip("pinning: no docs.rs or doc.rust-lang.org links on this input")
+  else
+    rust_unpinned = rust_links.reject { |u| u.match?(RailsAnchors::RUST_PINNED) }
+    if rust_unpinned.empty?
+      check.ok("all #{rust_links.size} Rust doc link(s) carry an exact version segment")
+    else
+      check.bad("#{rust_unpinned.size} unpinned Rust doc link(s) — `latest`, `stable` or no version silently means the newest release: #{rust_unpinned.join(" ")} ")
+    end
+  end
+
   # Pinning, rule 3: an unsubstituted placeholder. `tree/v{version}` is the literal the
   # catalogue stores, so it matches its own row perfectly and is invisible to the allowlist
   # test — while being a guaranteed 404.
@@ -381,7 +420,7 @@ else
   if bad_urls.empty?
     check.ok("#{external.size} documentation link(s), all from the catalogue")
   else
-    check.bad("#{bad_urls.size} documentation link(s) in neither references/rails-docs.md nor references/elixir-docs.md — a URL nobody opened is a 404 the reader finds: #{bad_urls.join(" ")} ")
+    check.bad("#{bad_urls.size} documentation link(s) in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) — a URL nobody opened is a 404 the reader finds: #{bad_urls.join(" ")} ")
   end
 
   if wrong_series.empty?
@@ -466,7 +505,7 @@ if nprimer.zero?
 else
   primers = markup.regions(open: /<aside class="primer/, close: %r{</aside>})
 
-  # 8a · Inside a checkpoint, and one each. A primer in § 03, § 04 or the evidence foot is a
+  # 8a · Inside a checkpoint, and one each. A primer in § 04, § 05 or the evidence foot is a
   #      framework lesson with no judgment attached to it. Attribution is by the nearest enclosing
   #      <section>, which is how the rest of this directory reads nesting: a checkpoint contains no
   #      nested section, so a </section> closes whatever was open.
@@ -556,6 +595,26 @@ else
     check.ok("no primer carries a logotype or a trademark line")
   else
     check.bad("#{marked} primer(s) carry a mark — this page draws nothing, and a logotype on a callout is an attribution that brings its own disclosure with it")
+  end
+
+  # 8g · The frame is the stack's, and the stack is the doc link's host. A Rust primer carries
+  #      `pr-rust`, which re-points the frame from Rails red to graphite; nothing else may, and it
+  #      may not be missing. Read off the link rather than the header, because the link is what the
+  #      catalogue vouched for and the header is words. Both directions fail: a Rust lesson in Rails
+  #      red is the defect the variant exists to end, and the class on a Rails primer is a colour
+  #      chosen rather than derived — which is how a frame starts to mean something.
+  #      Matched per opening tag, in either attribute order, so a run that writes href before
+  #      class is judged on its host and not on its typing.
+  rust_host = %r{href="https://(?:docs\.rs|doc\.rust-lang\.org)/}
+  framed = primers.count do |pr|
+    rust = pr.scan(/<a [^>]*>/).any? { |tag| tag.include?('class="doc"') && tag.match?(rust_host) }
+    variant = pr.lines.first.to_s[/<aside class="([^"]*)"/, 1].to_s.split.include?("pr-rust")
+    rust != variant
+  end
+  if framed.zero?
+    check.ok("every primer's frame matches the host of its doc link")
+  else
+    check.bad("#{framed} primer(s) framed for the wrong stack — pr-rust goes on a primer whose doc link is docs.rs or doc.rust-lang.org, and on no other")
   end
 end
 

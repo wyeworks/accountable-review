@@ -1,0 +1,15 @@
+<!-- One defect, and the one rust-docs.md warns about hardest: the item is right and the crate
+     IDENTIFIER is wrong. A crate published as actix-web is documented under actix_web, so
+     docs.rs/actix-web/4.9.0/actix-web/... is a 404 that reads as correct — the Rust form of
+     Ecto.Migration under ecto. It is caught because the stored path keeps both the name and the
+     identifier, so they are both in the needle and this one matches no row. -->
+<section class="cp" id="cp-a">
+  <h3>Which middleware sees the archive request first?</h3>
+  <p>A new logging middleware is registered after the auth one.</p>
+
+  <ul class="lookat">
+    <li>The registration at <span class="path">src/main.rs:30</span> &mdash;
+      <a class="doc" href="https://docs.rs/actix-web/4.9.0/actix-web/struct.App.html#method.wrap">App::wrap</a>
+      runs the last-registered middleware first. <span class="tier">explicitly changed</span></li>
+  </ul>
+</section>

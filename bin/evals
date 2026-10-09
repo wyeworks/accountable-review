@@ -8,7 +8,7 @@
 #   bin/evals judge <judge> --page P ...     one judge on one page, by hand
 #   bin/evals report [--history VERSION]     results/e2e.jsonl as an HTML report
 #   bin/evals fragment <file> --scope <slug> check.rb on a fragment you wrote by hand
-#   bin/evals catalogue [rails|elixir]       the maintenance pass. Needs network.
+#   bin/evals catalogue [rails|elixir|rust]  the maintenance pass. Needs network.
 #   bin/evals profile [--session S]          where one run's wall clock went
 #   bin/evals freeze [check...]              re-record checks/frozen after an intended change
 #
@@ -157,8 +157,9 @@ cmd_catalogue() {
   case $which in
     rails)  exec "$EVALS/verify-catalogue.sh" "$@" ;;
     elixir) exec "$EVALS/verify-catalogue.sh" --catalogue "$SKILL/references/elixir-docs.md" "$@" ;;
+    rust)   exec "$EVALS/verify-catalogue.sh" --catalogue "$SKILL/references/rust-docs.md" "$@" ;;
     -*)     exec "$EVALS/verify-catalogue.sh" "$which" "$@" ;;
-    *)      die "unknown catalogue: $which (rails | elixir)" ;;
+    *)      die "unknown catalogue: $which (rails | elixir | rust)" ;;
   esac
 }
 

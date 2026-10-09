@@ -1,0 +1,36 @@
+<!-- Clean, Rust: three catalogued Rust doc links, one per checkpoint and each beside its own citation, pinned to THREE
+     DIFFERENT versions — tokio at one, axum at another, the toolchain's std at a third. That is
+     the point of this fragment, for the reason anchors-hexdocs-clean.html gives: Rails' "one
+     app, one series" rule must not fire here, because every crate pins independently from
+     Cargo.lock and the toolchain pins separately again. Several version segments on one Rust
+     page is the correct output, not a defect.
+
+     The third item cites its file in the bare rung-3 form, with no span around it, so the
+     ".rs" arm of FILE_LINE is what keeps that link from reading as one with nothing beside it. -->
+<section class="cp" id="cp-a">
+  <h3>Does the archive route still sit behind the auth layer?</h3>
+  <p>The route is registered after the layer that guards its siblings.</p>
+  <ul class="lookat">
+    <li>The registration at <span class="path">crates/api/src/routes.rs:41</span> &mdash;
+      <a class="doc" href="https://docs.rs/axum/0.7.9/axum/struct.Router.html#method.layer">Router::layer</a>
+      wraps only the routes added before it. <span class="tier">explicitly changed</span></li>
+  </ul>
+</section>
+<section class="cp" id="cp-b">
+  <h3>Can a timed-out archive leave half its writes behind?</h3>
+  <p>The handler races the write against a timeout.</p>
+  <ul class="lookat">
+    <li>The race at <span class="path">crates/api/src/handlers/projects.rs:88</span> &mdash;
+      <a class="doc" href="https://docs.rs/tokio/1.40.0/tokio/macro.select.html#cancellation-safety">select!</a>
+      drops the losing branch at its next await. <span class="tier">from unchanged code</span></li>
+  </ul>
+</section>
+<section class="cp" id="cp-c">
+  <h3>What happens to the cache after a handler panics while holding it?</h3>
+  <p>The new code path can panic inside the critical section.</p>
+  <ul class="lookat">
+    <li>The cache lock at crates/api/src/state.rs:12 is a std mutex &mdash;
+      <a class="doc" href="https://doc.rust-lang.org/1.82.0/std/sync/struct.Mutex.html#poisoning">Mutex</a>
+      poisons on a panicked holder. <span class="tier">from unchanged code</span></li>
+  </ul>
+</section>

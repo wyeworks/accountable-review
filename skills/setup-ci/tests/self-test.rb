@@ -134,6 +134,13 @@ CASES = [
            edit: sub(/^  set -- env "ACCOUNTABLE_REVIEW_THEME=\$THEME" "\$@"$/, "  :"),
            sections: %i[config], expect: "a theme in the config file reaches the run's environment"),
 
+  # New with Rust, which also arrived after the port: the stack names are listed in the parser and
+  # in the adapter, and a stack dropped from the parser is a --mentor a team can pass by hand and
+  # never set in CI.
+  Case.new(desc: "the config parser stops accepting rust as a mentor stack", file: READ_CONFIG,
+           edit: sub(' && val != "rust")', ")"),
+           sections: %i[config], expect: "rust is a stack name the config file and the adapter both accept"),
+
   Case.new(desc: "the artifact is not named for the revision", file: "ci/delivery/github-artifact.sh",
            edit: sub('name="accountable-review-pr-$AR_PR-$short"', 'name="accountable-review-pr-$AR_PR"'),
            sections: %i[delivery], expect: "the artifact is named for the PR and the revision"),
@@ -225,7 +232,7 @@ CASES = [
   # And the peek that reads --mentor's optional value. Consuming ANY next argument turns
   # `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
   Case.new(desc: "the optional stack name swallows whatever flag follows --mentor", file: GENERATE,
-           edit: sub("case ${2:-} in rails|elixir|phoenix) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
+           edit: sub("case ${2:-} in rails|elixir|phoenix|rust) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
            sections: %i[config], expect: "a bare --mentor does not swallow the flag after it"),
 
   # The application-code gate. Two rules, and the cases below break each of them in the way a

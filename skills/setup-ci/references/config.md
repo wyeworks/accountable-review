@@ -5,7 +5,7 @@ The repository's configuration for Accountable Review. Optional, small, and mean
 ```yaml
 review_map:
   effort: high           # high | low
-  mentor: rails          # true | false | rails | elixir | phoenix
+  mentor: rails          # true | false | rails | elixir | phoenix | rust
   theme: daylight        # daylight | workshop | field-notes
   update: true           # re-read only the new commits on a second run
   trivial_files: 2       # skip when application files <= this AND

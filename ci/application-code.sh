@@ -218,6 +218,7 @@ classify() {
     .github/*|.gitignore|.gitattributes|.editorconfig|.dockerignore|\
     .tool-versions|.ruby-version|.node-version|.nvmrc|.rspec|\
     .rubocop.yml|.rubocop_todo.yml|.credo.exs|.formatter.exs|\
+    rustfmt.toml|.rustfmt.toml|clippy.toml|.clippy.toml|\
     .prettierrc*|.prettierignore|.eslintrc*|.eslintignore|\
     CODEOWNERS|.github/CODEOWNERS|renovate.json|.dependabot/*)
       printf 'skip\ttooling\t%s\t%s\n' "$_path" "$_lines" ;;

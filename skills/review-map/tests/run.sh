@@ -129,7 +129,7 @@ assert_eq "$(count "$WORK/markup" 'hljs-')"   "0" "the markup half carries no ti
 # ---------------------------------------------------------------- the page has one shape
 # There is one page now, and no flag names another one. So the markup half is the whole page, and
 # what these rows assert is that every section a run has to write is assembled in front of it.
-for sec in changed attention start impact; do
+for sec in changed context attention start impact; do
   assert_eq "$(grep -c "^ *<section id=\"$sec\"" "$WORK/markup" || true)" "1" "the markup half carries <section id=\"$sec\">"
 done
 assert_eq "$(count "$WORK/markup" '<details class="evidence">')" "1" "the evidence foot is assembled"
@@ -144,19 +144,19 @@ assert_eq "$(grep -c 'class="eyebrow"[^>]*>Affected, not changed' "$WORK/markup"
 # THE CHECKPOINT, ASSEMBLED. Five written and one pending stub: a run copies the composition, and a
 # composition described but never shown assembled does not survive a weaker reader. A and B are the
 # composition, one with every optional part and one without; C, D and E exist to show one topology
-# figure each. The pending one is counted too, because a half-written section 02 has to be
+# figure each. The pending one is counted too, because a half-written section 03 has to be
 # distinguishable from a flattened one.
 assert_eq "$(count "$WORK/markup" 'class="cp"')"    "6" "five checkpoints assembled whole and one pending stub"
 assert_eq "$(count "$WORK/markup" 'id="cp-a"')"     "1" "the first checkpoint is anchored for the rail and the reading path"
 assert_eq "$(count "$WORK/markup" 'class="lookat"')" "5" "each written checkpoint carries its own where-to-look list"
 assert_eq "$(count "$WORK/markup" 'class="open"')"   "1" "the open-question line is assembled once"
 
-# THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 04. A chain inside a checkpoint shows
+# THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 05. A chain inside a checkpoint shows
 # mechanism inside the change, so it holds .ip-step and never .ip-aff: a hop into unchanged code is
 # an impact path and belongs in the panel, drawn once. This is the assertion that fails when the
 # two figures blur into each other.
 assert_eq "$(count "$WORK/markup" '<figure class="chain">')" "1" "one chain is assembled inside a checkpoint"
-assert_eq "$(count "$WORK/markup" '<figure class="impact">')" "1" "one impact panel is assembled, in section 04"
+assert_eq "$(count "$WORK/markup" '<figure class="impact">')" "1" "one impact panel is assembled, in section 05"
 if [ "$(count "$WORK/markup" 'class="ip-n ip-step"')" -ge 1 ]; then
   ok "the chain uses .ip-step, the neutral hop that exists only there"
 else
@@ -228,6 +228,14 @@ assert_eq "$(count "$WORK/markup" 'class="pr-title"')" "1" "the primer header is
 assert_eq "$(count "$WORK/markup" 'Understanding Ruby on Rails')" "1" "and it says what the block teaches, in words"
 assert_eq "$(count "$WORK/markup" 'pr-sep')" "0" "no separator survives — there is nothing left to divide"
 
+# A RUST PRIMER IS THE SAME COMPONENT IN A DIFFERENT FRAME, and the frame is one class. The rule
+# that holds it is that .pr-rust re-points every --primer-* slot and declares nothing else: a slot it
+# misses stays Rails red inside a graphite frame, which renders, and reads as a mistake nobody made
+# on purpose. The class is in the head range, so a run never types it as a colour.
+assert_eq "$(count "$WORK/head" '.primer.pr-rust {')" "1" "the Rust frame is a variant of the one primer, in the skeleton"
+assert_eq "$(awk '/^\.primer\.pr-rust \{/ { f = 1 } f { print } f && /^\}/ { exit }' "$WORK/head" | grep -o 'var(--primer-rust-[a-z0-9-]*)' | sort -u | wc -l | tr -d ' ')" \
+  "6" "and it re-points all six primer slots at the graphite ramp"
+
 # A primer is gated on its doc link and earned by a repo citation, and BOTH live inside the aside:
 # rails-anchors.rb judges it as one block, so a primer borrowing the citation of the paragraph above
 # it is the rule working backwards. The link is pinned with the placeholder, never a literal series —
@@ -247,7 +255,7 @@ assert_eq "$(count "$PRIMER" 'class="probe"')" "0" "no probe inside a primer —
 assert_eq "$(count "$PRIMER" '<pre class="demo">')" "1" "the primer quotes the manual in one pre.demo"
 assert_eq "$(count "$WORK/markup" '<pre class="demo">')" "1" "and no demo sits anywhere else in the markup"
 
-# AND IT IS INSIDE A CHECKPOINT, before that checkpoint's ul.lookat. A primer in section 04 or in the
+# AND IT IS INSIDE A CHECKPOINT, before that checkpoint's ul.lookat. A primer in section 05 or in the
 # evidence foot is a framework lesson with no judgment attached to it; one below the lookat list is a
 # lesson arriving after the reader has already been sent to the code.
 cp_region=$(awk '/<section class="cp" id="cp-a">/ { f = 1 } f { print } /<ul class="lookat">/ { if (f) exit }' "$WORK/markup" | grep -c 'class="primer"' || true)
@@ -262,11 +270,45 @@ for gone in 'class="mech"' 'class="rows"' 'class="pipe"' 'class="checkpoint"' \
   assert_eq "$(count "$WORK/markup" "$gone")" "0" "the markup half has no $gone"
 done
 
-# The rail is assembled, never derived. Four numbered entries and one sub-entry per checkpoint.
+# The rail is assembled, never derived. Five numbered entries and one sub-entry per checkpoint.
 assert_eq "$(count "$WORK/markup" 'class="rail-links"')" "1" "exactly one rail"
-assert_eq "$(count "$WORK/markup" 'data-rail=')" "10" "the rail is four entries and six checkpoint sub-entries"
-assert_eq "$(count "$WORK/markup" '04</span>')"  "1" "the rail numbers up to 04"
-assert_eq "$(count "$WORK/markup" '05</span>')"  "0" "and stops there"
+assert_eq "$(count "$WORK/markup" 'data-rail=')" "11" "the rail is five entries and six checkpoint sub-entries"
+assert_eq "$(count "$WORK/markup" '05</span>')"  "1" "the rail numbers up to 05"
+assert_eq "$(count "$WORK/markup" '06</span>')"  "0" "and stops there — the evidence foot has no number"
+
+# CONTEXT — section 02, the repository concepts the checkpoints rely on. It sits BEFORE the agenda,
+# because a judgment about a piece the reader cannot name is a sentence they can read and not
+# follow. Every entry ends in a pointer at the checkpoints that use it, which is the earning test
+# made visible. It is prose plus at most ONE figure, the shift — the request sequence before and
+# after — which figures.rb reads section 02 for; any other figure here would be a checkpoint's
+# drawn above its judgment. No tier either: an entry asserts nothing about the change.
+ctx_range() { awk '/^ *<section id="context">/ { f = 1 } f { print } f && /^ *<\/section>/ { exit }' "$WORK/markup"; }
+assert_eq "$(count "$WORK/markup" '<dl class="ctx">')" "1" "one Context list is assembled"
+ctx_line=$(grep -n '^ *<section id="context">' "$WORK/markup" | head -1 | cut -d: -f1)
+att_line=$(grep -n '^ *<section id="attention"' "$WORK/markup" | head -1 | cut -d: -f1)
+if [ -n "$ctx_line" ] && [ -n "$att_line" ] && [ "$ctx_line" -lt "$att_line" ]; then
+  ok "Context comes before the agenda"
+else
+  bad "Context comes before the agenda"
+fi
+assert_eq "$(ctx_range | grep -c '<dd>' || true)" "$(ctx_range | grep -v '<figcaption>' | grep -c 'class="ctx-used">Used by <a href="#cp-' || true)" "every Context entry points at a checkpoint that uses it"
+if [ "$(ctx_range | grep -c '<dd>' || true)" -ge 1 ]; then
+  ok "the Context list carries at least one entry"
+else
+  bad "the Context list carries at least one entry"
+fi
+# THE SHIFT — Context's one figure, the request sequence before and after. One figure and no
+# other kind: every other figure belongs to the checkpoint that earned it. Two columns, the one
+# moved state filled in each, and no .ip-aff, for the lifecycle's reason.
+assert_eq "$(ctx_range | grep -c '<figure' || true)" "1" "Context holds one figure at most"
+assert_eq "$(ctx_range | grep -c '<figure class="lifecycle lc-shift">' || true)" "1" "Context's one figure is the shift"
+assert_eq "$(ctx_range | grep -c '<div class="lc-row">' || true)" "2" "the shift draws a Before and an After column"
+assert_eq "$(ctx_range | grep -c 'class="lc-s lc-moved"' || true)" "2" "the moved state is marked in both columns"
+assert_eq "$(ctx_range | grep -c 'ip-aff' || true)" "0" "no .ip-aff inside the shift — a state is not a file"
+assert_eq "$(ctx_range | grep -c 'data-path' || true)" "0" "no data-path inside Context"
+assert_eq "$(ctx_range | grep '<figcaption>' | grep -c 'class="ctx-used">Used by <a href="#cp-' || true)" "1" "the shift's caption points at the checkpoints that earned it"
+assert_eq "$(ctx_range | grep -c 'class="tier' || true)" "0" "no evidence tier inside Context — an entry asserts nothing about the change"
+assert_eq "$(ctx_range | grep -c 'class="primer' || true)" "0" "no primer inside Context — the framework is --mentor's, the repository is Context's"
 
 # AND THE ENTRY'S HANGING INDENT STOPS AT THE ENTRY. text-indent inherits and an inline-flex box
 # lays out its own line, so .rail-links a's -24px reached inside the pending chip and pulled the
@@ -278,7 +320,7 @@ assert_eq "$(awk '/^\.pending \{/,/^}/' "$WORK/head" | grep -c 'text-indent: 0')
   "the pending chip resets the rail entry's hanging indent"
 
 # AND A READING-PATH STOP SPANS ITS EXCERPT. report-format.md § Source excerpts permits an excerpt
-# on a § 03 stop, and .begin li is a three-column grid, so a details with no span auto-places into
+# on a § 04 stop, and .begin li is a three-column grid, so a details with no span auto-places into
 # the 26px number column — where .ex-loc's overflow-wrap: anywhere renders the path one character
 # per line, hundreds of pixels down. A published page did exactly that. Both halves are asserted:
 # the rule has to be in the emitted head AND the composition has to be shown assembled, because
@@ -340,8 +382,10 @@ assert_eq "$(count "$WORK/page.html" 'SKELETON:BODY')" "1" "the emitted page car
 # opens an excerpt with the OS in dark mode.
 # Each theme file's own three states are checked per selector below; here the point is that every
 # declaration in every theme file reached the skeleton, and none reached the half a model reads.
-for tok in '--syn-key:' '--ex-add:' '--primer-ink:'; do
-  want=0; for th in "$THEMES"/*.html; do want=$((want + $(count "$th" "$tok"))); done
+# The template's own lines are added to the expected count: .primer.pr-rust re-points --primer-ink
+# at the Rust ramp, a var() rather than a colour, and it lives in the head range by design.
+for tok in '--syn-key:' '--ex-add:' '--primer-ink:' '--primer-rust-ink:'; do
+  want=$(count "$TEMPLATE" "$tok"); for th in "$THEMES"/*.html; do want=$((want + $(count "$th" "$tok"))); done
   assert_eq "$(count "$WORK/head" "$tok")" "$want" "every theme's $tok declarations are in the skeleton"
 done
 ntheme=$(ls "$THEMES" | grep -c '\.html$')
@@ -691,6 +735,17 @@ cpage() {
 <section class="cp" id="cp-c"><h3>Q3</h3>
   <a class="path" href="#">api/Gemfile.lock:1</a></section>
 </section>
+<section id="context"><dl class="ctx">
+<dt>Active scope</dt>
+<dd>What it is. <a class="path" href="#">app/queries/active.rb:1</a>
+  <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
+<dt>Lock &amp; bundle</dt>
+<dd>What it is. <a class="path" href="#">api/Gemfile.lock:1</a>
+  <span class="ctx-used">Used by <a href="#cp-c">Checkpoint C</a></span></dd>
+</dl>
+<figure class="lifecycle lc-shift"><div class="lc-pair">
+  <a class="path ip-loc" href="#">app/queries/active.rb:1</a></div></figure>
+</section>
 <details class="searched"><ul class="sr-list">
 <li><code>$1</code> <span class="sr-r">a clause</span></li>
 </ul></details>
@@ -732,6 +787,14 @@ assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-b	redo	cites app/queries/act
 # api/Gemfile: a substring test carries neither and a reversed one carries both.
 assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-c	carry	-$')" "1" "a checkpoint citing a path unrelated to the delta is carried"
 
+# A Context entry sits outside every checkpoint, so the cp rule cannot see it — and cp-a carries
+# here while the entry it relies on cites the file the delta moved. Keyed by the entry's name.
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Active scope	redo	cites app/queries/active.rb$')" "1" "a Context entry citing a delta path is re-derived, though the checkpoint using it carries"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Lock & bundle	carry	-$')" "1" "a Context entry citing nothing in the delta is carried, named by its unescaped dt"
+# The figure sits after the last entry and cites the delta path: it is its own row, and the entry
+# before it does not inherit its citation — which the Lock & bundle row above already asserts.
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	lc-shift	redo	cites app/queries/active.rb$')" "1" "Context's before-and-after figure citing a delta path is re-derived"
+
 # And the trap itself, which needs a delta that is a PREFIX of a cited path rather than merely
 # unrelated to it: api/Gemfile changed, and cp-c cites api/Gemfile.lock. A substring test marks
 # cp-c redo here, which is the cheap direction of the error; the same missing boundary in the
@@ -743,6 +806,7 @@ cpage "$NOHIT" "" "$sh_head"
 plan --prev-head "$CHEAD" --base "$CBASE" --head "$CGEM"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^delta	api/Gemfile$')" "1" "the prefix case reaches the carry rule at all"
 assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	cp-c	carry	-$')" "1" "api/Gemfile in the delta does not match api/Gemfile.lock on the page"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^ctx	Lock & bundle	carry	-$')" "1" "and a Context entry citing api/Gemfile.lock is carried by the same boundary"
 
 # Back to the first scenario, because the rows below read the plan in $out.
 cpage "$NOHIT"
@@ -804,7 +868,7 @@ assert_eq "$cprc" "3" "a head that is not a descendant of the previous one refus
 assert_eq "$(printf '%s\n' "$out" | grep -c 'force-pushed')" "1" "and says the branch moved rather than reporting an empty delta"
 
 # A refusal prints the reason and the verdict and nothing else: half a plan reads as a plan.
-assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	\|^delta	\|^excerpt	')" "0" "a refusal prints no plan rows at all"
+assert_eq "$(printf '%s\n' "$out" | grep -c '^cp	\|^ctx	\|^delta	\|^excerpt	')" "0" "a refusal prints no plan rows at all"
 assert_eq "$(printf '%s\n' "$out" | grep -c .)" "2" "only the reason and the verdict"
 
 # -- P2 · the page is not the page we think it is -----------------------------------------------
@@ -829,7 +893,7 @@ cpage "$NOHIT" '<span class="pending">pending</span>'
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "a pending marker refuses for the same reason"
 
-cpage "$NOHIT" '<p>Section 4 was not written.</p>'
+cpage "$NOHIT" '<p>Section 5 was not written.</p>'
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "3" "and a stopped run is finished deliberately, never updated"
 
@@ -852,6 +916,13 @@ cpage "$NOHIT" "" "$sh_head"
 plan --prev-head "$CHEAD" --base "$CBASE" --head "$CLOCK"
 assert_eq "$cprc" "3" "a lock file in the delta refuses the update"
 assert_eq "$(printf '%s\n' "$out" | grep -c 'lock file')" "1" "and names that as the reason"
+
+# Cargo.lock is the Rust form of the same precondition: every docs.rs link is pinned from it.
+(cd "$CREPO" && git checkout -q -B cargolock "$CHEAD" && mkdir -p crates/core && echo 'version = 3' > crates/core/Cargo.lock && git add -A && git commit -qm cargolock && git rev-parse HEAD > "$WORK/ccargo") >/dev/null 2>&1
+CCARGO=$(cat "$WORK/ccargo")
+cpage "$NOHIT" "" "$sh_head"
+plan --prev-head "$CHEAD" --base "$CBASE" --head "$CCARGO"
+assert_eq "$cprc" "3" "a Cargo.lock in the delta refuses the update too"
 
 # -- called wrongly, and asked-but-unable ---------------------------------------------------------
 cpage "$NOHIT"
