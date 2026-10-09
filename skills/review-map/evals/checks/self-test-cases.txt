@@ -128,7 +128,7 @@
  excerpts           | excerpt-open.html             | 1 | open by default
  excerpts           | excerpt-duplicate.html        | 1 | same range is excerpted more than once
  rails-anchors      | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-uncatalogued-url.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-uncatalogued-url.html | 1 | in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-unpinned-link.html    | 1 | unpinned Rails doc link           | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-mixed-series.html     | 1 | different Rails series            | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-link-alone.html       | 1 | with no file:line beside them     | --repo @GOLD@/searches-repo
@@ -185,7 +185,18 @@
 # keeps the package, which is the only reason a right-module-wrong-package 404 fails at all.
  rails-anchors      | anchors-hexdocs-clean.html    | 0 | hexdocs link(s) carry a version segment | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-hexdocs-unpinned.html | 1 | unpinned hexdocs link(s)          | --repo @GOLD@/searches-repo
- rails-anchors      | anchors-hexdocs-wrong-package.html | 1 | in neither references/rails-docs.md nor references/elixir-docs.md | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-hexdocs-wrong-package.html | 1 | in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) | --repo @GOLD@/searches-repo
+# The Rust arms, the same three again. The clean fragment carries three different versions — two
+# crates and the toolchain — and cites one file in the bare rung-3 form, so the ".rs" arm of
+# FILE_LINE is pinned by a PASS rather than assumed. The wrong-crate row is the identifier trap:
+# actix-web where actix_web belongs, which only fails because the needle keeps both.
+ rails-anchors      | anchors-docsrs-clean.html     | 0 | Rust doc link(s) carry an exact version segment | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-docsrs-clean.html     | 0 | every documentation link sits beside a repository citation | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-docsrs-unpinned.html  | 1 | unpinned Rust doc link(s)         | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-docsrs-wrong-crate.html | 1 | in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) | --repo @GOLD@/searches-repo
+# And the Rust probe forms the lens tells a run to write: `Cargo.toml` as a file, and a struct as a
+# test filter. Both read as invented constants until the rule learned them.
+ rails-anchors      | anchors-probe-rust-forms.html | 0 | constant(s) named by a probe exist in the repository | --repo @GOLD@/searches-repo
 # THE PRIMER CALLOUT — the third anchor, and the only component on this page a flag admits. Every
 # one of its rules guards something that can be dropped while the callout still renders beautifully,
 # which is why there are this many rows for one component.
@@ -204,6 +215,13 @@
  rails-anchors      | anchors-primer-over-budget.html | 1 | the budget is at most 3 a page
  rails-anchors      | anchors-primer-probe-nested.html | 1 | runtime probe(s) inside a primer
  rails-anchors      | anchors-primer-marked.html    | 1 | carry a mark
+# The frame is the stack's, read off the doc link's host. Both directions are a defect, so both have
+# a fixture, and each clean fragment pins the PASS so 8g cannot quietly stop firing on good input.
+ rails-anchors      | anchors-primer-clean.html     | 0 | every primer's frame matches the host of its doc link
+ rails-anchors      | anchors-primer-rust-clean.html | 0 | every primer's frame matches the host of its doc link
+ rails-anchors      | anchors-primer-rust-clean.html | 0 | every primer cites the line in this repository
+ rails-anchors      | anchors-primer-rust-unframed.html | 1 | framed for the wrong stack
+ rails-anchors      | anchors-primer-rails-framed.html | 1 | framed for the wrong stack
 # And the arm that runs on every page that took no flag at all. It ASSERTS rather than skipping,
 # because the demo rule still has something to say there — a loose demo on a page with no primer is
 # the worst version of that defect, not an inapplicable one. Two rows: the ordinary page, and the

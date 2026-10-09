@@ -10,10 +10,12 @@ ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the on
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
 a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
 what changed, the judgments the reviewer has to make with the lines that settle each
-one, the order to read the code in, and what the change reaches in code it did not touch. Two stacks
-are supported: a Rails API with a Next.js client, which came first, and Elixir/Phoenix — a LiveView
-app or a JSON API. Step 2 detects which, and the run reads that stack's lens file and its doc
-catalogue, never both. `setup-ci` writes the GitHub Actions workflow that produces one automatically
+one, the order to read the code in, and what the change reaches in code it did not touch. Three stacks
+are supported: a Rails API with a Next.js client, which came first; Elixir/Phoenix — a LiveView app
+or a JSON API; and Rust, in two lenses — **Rust in general** (a library, a CLI, a workspace that
+serves nothing) and **Rust backend** (an HTTP or gRPC server), which reads the general lens and a
+second one on top of it. Step 2 detects which, and the run reads that stack's lens and its doc
+catalogue, never another's. `setup-ci` writes the GitHub Actions workflow that produces one automatically
 on every review-ready pull request, and `ci/` is what that workflow runs.
 
 **`review-map` is the product; `setup-ci` is plumbing for it.** The second exists so a team gets the
@@ -173,6 +175,9 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for the other stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, which is that stack's compiler-free boundary and its richest source of affected-but-unchanged code |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
+| `references/rust.md` | Domain knowledge, **Rust of any kind** — the same three parts, organised around what the compiler was told not to check or cannot see: the wildcard arm, the `pub` item, the unbuilt feature combination, the module whose safe code keeps an `unsafe` block sound. The whole lens for Rust in general, and the first layer for a Rust backend. Its probes read the build — `--locked` always — because Rust has no console |
+| `references/rust-backend.md` | Domain knowledge, **Rust backend** — read **after** `rust.md`, never instead of it, and restating none of it: routes and layers (an `axum` layer covers only the routes added before it), extractors, the wire contract, migrations against compile-time-checked queries, and the request whose future is dropped when the client leaves. Points at `rails-nextjs.md`'s client sections the way the Phoenix file does |
+| `references/rust-docs.md` | The documentation catalogue, **Rust** — docs.rs paths pinned per crate and doc.rust-lang.org paths pinned to the toolchain, each stored **with its host** because `cargo` is both a crate and a book. Written closed like `elixir-docs.md`, **opened** by the 2026-10-08 sweep |
 | `references/page-template.html` | Design system — the rules every theme's tokens keep (it declares none of its own), component classes, the assembled checkpoint, the chain, one of each topology figure and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads. A fifth, `SKELETON:THEME`, inside the head, is where the theme goes |
 | `references/themes/` | The three looks — `daylight` (the default), `workshop`, `field-notes` — each one file: a font link and one `<style>` holding its tokens in all three theme states and its overrides, every element carrying `data-style`. All three emitted at the `SKELETON:THEME` line, the unchosen ones `media="not all"`; never read by a run |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
@@ -281,7 +286,7 @@ Editing one of these means checking the others still agree.
   **A primer holds its checkpoint's one doc link rather than adding a second**, so the anchor budget
   is relocated and never raised: mentor buys explanation, never citations. It is also **gated** on
   that link, which is what makes a closed catalogue mean no primers for that stack — Phoenix gets the
-  ordinary page today, and one verification run lifts it.
+  ordinary page today, and so does Rust, and one verification run per catalogue lifts it.
 
   Three things about it look like generosity and are not. **A run that earns no primer writes none**,
   because manufacturing a lesson to honour a flag is how this becomes a framework manual with a diff
@@ -297,8 +302,8 @@ Editing one of these means checking the others still agree.
   checks the stack name and the catalogue at step 2, earns one at step 7g, writes it at step 9 and
   carries the demo exception in its hard rules; `page-template.html` holds the CSS in the head range
   and the callout assembled inside checkpoint A; `evals/checks/rails-anchors.rb` § 8 grades it on the
-  **comment-stripped** copy, behind eight `golden/anchors-primer-*` fixtures and `anchors-demo-loose`;
-  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it three
+  **comment-stripped** copy, behind eleven `golden/anchors-primer-*` fixtures and `anchors-demo-loose`;
+  `tests/run.sh` asserts the template assembles exactly one and `tests/self-test.sh` breaks it four
   ways; and the CI half is `ci/generate-review-map.sh`, `read-config.sh`, `references/config.md` and
   `setup-ci/tests/`, where **off is the absence of the flag** rather than `--mentor off`, because the
   skill parses no such value.
@@ -484,10 +489,17 @@ Editing one of these means checking the others still agree.
   template. `CAUSAL` moved to `checks/lib/review_map/vocabulary.rb` because two checks now read it, and
   `lib/test/test_page.rb` fails when it and § *Impact paths*'s list disagree.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
-  Rails (`Gemfile`, `config/application.rb`) or Elixir (`mix.exs`) and **names** one lens file and
-  one catalogue. Both roots, or neither, are handled explicitly — ask in the first case, degrade
-  to the stack-independent page and emit no anchor in the second. Defaulting to Rails is the
-  regression: a Rails lens over a Go service invents findings, confidently.
+  Rails (`Gemfile`, `config/application.rb`), Elixir (`mix.exs`) or Rust (`Cargo.toml`) and **names**
+  one lens and one catalogue. Two stacks' roots, or none, are handled explicitly — ask in the first
+  case, degrade to the stack-independent page and emit no anchor in the second. Defaulting to Rails is
+  the regression: a Rails lens over a Go service invents findings, confidently.
+
+  **Rust is one stack with two lenses, and the second is a layer, not an alternative.** A Rust
+  backend reads `rust.md` and then `rust-backend.md`; Rust in general reads `rust.md` alone. The split
+  is decided by whether the crates *the diff touches* depend on a server framework — not by whether
+  the repository has one — and a Cargo workspace is one root however many members it has. Layering
+  rather than two self-contained files is § *One canonical home* again: a backend is a crate, and a
+  second copy of the ownership, `unsafe`, feature and serde lenses would drift from the first.
 
   **Naming them is not reading them, and the difference is worth about 43 KB of resident context.**
   The lens is read at step 5, where its search recipes are the work; the catalogue at step 7, when a
@@ -1142,12 +1154,14 @@ Editing one of these means checking the others still agree.
   rather than literals precisely so it keeps inverting *relative to the page* rather than flipping to
   an unreadable combination in one theme.
 
-- **Four semantic colour families, a fifth ramp that means nothing, one ramp shape, and a rule about
-  what each is allowed to mean.** `--nav-*` (slate), `--gap-*` (ochre), `--unchanged-*`
+- **Four semantic colour families, a frame ramp per stack that means nothing, one ramp shape, and a
+  rule about what each is allowed to mean.** `--nav-*` (slate), `--gap-*` (ochre), `--unchanged-*`
   (teal), `--prov-*` (plum) and `--primer-*` (red) — hues that move a few degrees between themes,
   meanings that do not — each carry the same five slots — `bg`,
   `bg-2`, `rule`, `rule-2`, `ink` — at fixed lightness and chroma per slot, so no two can drift apart
-  in weight, and the dark half is the light ramp reflected rather than a second hand-picked set. All
+  in weight, and the dark half is the light ramp reflected rather than a second hand-picked set.
+  `--primer-rust-*` (graphite) keeps the red ramp's lightness per slot at almost no chroma, and breaks
+  it once on purpose: its `rule-2` is near-black, because that top rule is the frame's identity. All
   of it is in the theme files under `references/themes/`, which reach the page at the head range's
   theme marker and are therefore **emitted by `page-skeleton.sh`**: a run never types a colour.
 
@@ -1166,12 +1180,15 @@ Editing one of these means checking the others still agree.
   available — it is attached to no claim at all, since what it frames is a quotation of the manual —
   and the ramp is named for its component rather than for a meaning precisely so it has nowhere to
   spread. **Red on anything the page asserts about the change is the severity chip arriving as a
-  palette**, and that is the direction to watch. One open question is recorded rather than guessed at:
-  Rails is the only stack that earns a primer today, because `elixir-docs.md` withholds every link
-  and a primer is gated on one, so if that catalogue opens the answer is a variant class on the aside
-  — never a colour a run types, and never the branded/unbranded split already deleted once.
-  `tests/run.sh` counts `--primer-ink` by name in all three theme states, and `report-format.md`
-  § *Mentor mode* owns the page-level rule.
+  palette**, and that is the direction to watch. **Rust was the open question, and the answer was the
+  one recorded for it: a variant class.** `aside.primer.pr-rust` re-points every `--primer-*` slot at
+  `--primer-rust-*`, graphite — Rust's own mark is black, and Ferris orange would sit between the red
+  frame and ochre and read as the second. The class is the stack's rather than a run's choice, read
+  off the doc link's host, and `rails-anchors.rb` § 8g fails a mismatch either way, because a frame a
+  run picks is how a colour starts to mean something. Never a colour a run types, and never the
+  branded/unbranded split already deleted once. Phoenix earns no primer until `elixir-docs.md` opens,
+  and then gets the same shape. `tests/run.sh` counts `--primer-ink` and `--primer-rust-ink` by name
+  across every theme, and `report-format.md` § *Mentor mode* owns the page-level rule.
 
   **Teal is the one that had to be argued, and the argument is why it is safe on this page.** The
   changed/unchanged distinction is the most load-bearing one the page draws and it was carried by a
@@ -1426,7 +1443,13 @@ script catches and no care while writing prevents.
 URL was, so the file withholds every link until a dated verification line replaces its § *Version*
 paragraph — the fail-closed rule at file scope. An Elixir run anchors with probes and prose, and
 `--mentor` on Phoenix produces no primer. `verify-catalogue.sh --catalogue references/elixir-docs.md`
-is that file's **release gate**, not optional maintenance.
+is that file's **release gate**, not optional maintenance. **`rust-docs.md` shipped closed the same
+way and is now open, which is the gate working rather than the rule relaxing.** Its rows were
+rustdoc's naming scheme applied from memory, and the sweep that opened it found one defect of each
+kind that habit produces — a re-exported item linked at its import path, a fragment renamed under a
+fixed page, and a floor docs.rs never built — so the closed default paid for itself on its first run.
+The verifier checks newest releases only, so its § *Version* also records a hand sweep across the
+floor; a Rust catalogue change is re-verified the same way.
 
 **Every doc link is pinned, for checkability rather than precision**: a pinned page names its
 version, so the reader can hold it against their lock file. Below the floor, or with no verified
@@ -1439,7 +1462,10 @@ version-proof anchor**, and the reason `‡ probe` routes there rather than to a
 version segments and generalising the one-series rule to hexdocs would fail every correct Phoenix
 page while passing every test. `golden/anchors-hexdocs-clean.html` exists for exactly that edit. A
 hexdocs path keeps its package (`ecto/Ecto.Changeset.html#cast/4`), because `Ecto.Migration` under
-`ecto` is a 404 that reads as correct.
+`ecto` is a 404 that reads as correct. **Rust pins per crate and the toolchain separately**, the same
+shape a third time (`golden/anchors-docsrs-clean.html`), and a docs.rs path keeps the crate's name
+*and* its identifier (`docs.rs/actix-web/actix_web/…`), because the hyphen where the underscore
+belongs is that stack's 404 that reads as correct.
 
 Six files agree. Each catalogue's §§ *Version*, *Pinning* and *What the marks mean* own the forms and
 marks **alone**; `report-format.md` § *Framework anchors* says why the page cares; `SKILL.md` step 2
@@ -1611,13 +1637,14 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
   had no rule found nine calls and seventy seconds spent re-establishing a path and moving excerpt
   files that had been written somewhere else first.
-- It assumes Claude Code or Codex plus a git repo containing a Rails or a Phoenix app. Everything else —
-  which of the two it is, the Rails root location or the `lib/<app>` and `lib/<app>_web` split, RSpec
-  vs Minitest vs ExUnit, API-only vs server-rendered vs LiveView, how authorization is attached,
-  whether a separate frontend exists and where its client and types live — is discovered, never
-  assumed. Adding an assumption about project layout is a regression, and **defaulting to a stack when
-  neither is detected is the same regression wearing a helpful face**: the honest output is the
-  stack-independent page with no anchor on it.
+- It assumes Claude Code or Codex plus a git repo containing a Rails or a Phoenix app or a Rust crate
+  or workspace. Everything else — which of them it is, the Rails root location or the `lib/<app>` and
+  `lib/<app>_web` split, a Cargo workspace's members and whether the changed ones serve requests, RSpec
+  vs Minitest vs ExUnit vs `cargo test` or nextest, API-only vs server-rendered vs LiveView, how
+  authorization is attached, whether a separate frontend exists and where its client and types live —
+  is discovered, never assumed. Adding an assumption about project layout is a regression, and
+  **defaulting to a stack when none is detected is the same regression wearing a helpful face**: the
+  honest output is the stack-independent page with no anchor on it.
 - The frontend is a first-class half of the contract, not a frontend review. The page follows fields
   and error cases across the boundary; it does not critique component design. In a LiveView app the
   boundary is the `phx-*` attribute and the callback answering it rather than a JSON contract, and the

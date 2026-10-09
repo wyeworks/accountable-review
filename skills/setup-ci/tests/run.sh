@@ -528,6 +528,10 @@ printf 'review_map:\n  mentor: rails\n' > "$C/mentor.yml"
 ( cd "$C" && "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
     --head-sha a93bd21deadbeef --repo-dir "$C" --config "$C/mentor.yml" ) > "$TMP/inv-mentor-cfg"
 assert_in "$TMP/inv-mentor-cfg" "--mentor rails"       "mentor is read from the config file"
+printf 'review_map:\n  mentor: rust\n' > "$C/mentor-rust.yml"
+( cd "$C" && "$GENERATE" --print-invocation --output "$TMP/out-cfg" --pr 412 \
+    --head-sha a93bd21deadbeef --repo-dir "$C" --config "$C/mentor-rust.yml" ) > "$TMP/inv-mentor-rust"
+assert_in "$TMP/inv-mentor-rust" "--mentor rust"        "rust is a stack name the config file and the adapter both accept"
 rc=0; printf 'review_map:\n  mentor: nope\n' > "$C/mentor-bad.yml"
 "$READ_CONFIG" "$C/mentor-bad.yml" >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "1"                                    "a mentor value that is not a stack is an error"
@@ -708,6 +712,8 @@ gate specs    skip     "a tests-only pull request gets none" \
   'echo x >> spec/models/order_spec.rb'
 gate tooling  skip     "a CI or linter config change gets none" \
   'echo x > .github/workflows/tests.yml && echo x > .rubocop.yml'
+gate rustfmt  skip     "a Rust formatter or linter config change gets none" \
+  'echo x > rustfmt.toml && echo x > clippy.toml'
 assert_in "$TMP/gate-docs" "verdict: skip (no-application-code)" "rule 1 names itself in the log, not only in a step output"
 
 # Fail open: a path this script has never heard of is application code. The

@@ -82,6 +82,24 @@ SKIP  no excerpts in this input
 ## --page anchors-demo-loose.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-docsrs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-docsrs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-docsrs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-docsrs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  no excerpts in this input
@@ -190,6 +208,24 @@ SKIP  no excerpts in this input
 ## --page anchors-primer-probe-nested.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-primer-rails-framed.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rails-framed.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rust-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-primer-rust-unframed.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-primer-rust-unframed.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-primer-uncited.html
 exit=0
 SKIP  no excerpts in this input
@@ -218,6 +254,12 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page anchors-probe-lens-forms.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-probe-rust-forms.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-probe-rust-forms.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment anchors-probe-sandbox-lie.html

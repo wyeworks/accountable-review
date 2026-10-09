@@ -37,12 +37,23 @@ here" must never be allowed to excuse one.
 the doc link's "not alone" test asks the same question of a smaller block, so one missing `file:line`
 fails twice. Its row pins the substring only the primer rule prints.
 
+Three of them are about the frame rather than the content. `anchors-primer-rust-clean.html` is the
+Rust positive case — a primer on a `docs.rs` row carrying `pr-rust` — and the other two are one
+class away from a clean fragment in opposite directions: `-rust-unframed` drops the class from the
+Rust one, `-rails-framed` adds it to the Rails one. Both fail § 8g and nothing else, because the frame
+is read off the doc link's host and a mismatch either way is a colour somebody chose.
+
 The three `anchors-hexdocs-*` fragments are the Elixir arms of the same rules, and one of them is a
 *clean* fragment pinning something a defect fragment cannot: `anchors-hexdocs-clean.html` carries two
 different package versions deliberately, because hexdocs pins per package and Rails' one-app-one-series
 rule must **not** fire on it. Generalizing that rule is the likeliest future edit, and it would pass
 every other row here while failing every correct Phoenix page — so the guard has to be a page that
 would only break if someone did.
+
+The three `anchors-docsrs-*` fragments are the Rust arms, and `anchors-docsrs-clean.html` does the same
+job for the same reason: two crates and the toolchain, three different version segments, on one
+page. `anchors-probe-rust-forms.html` is the probe half — `Cargo.toml` named as a file, and a struct
+named as a test filter — and it is the reason `searches-repo` carries a `src/archive.rs`.
 
 `start-here-orphan-checkpoint.html` is the same argument for a rule that sits beside an older one
 measuring nearly the same thing. Section 03 has always been checked for linking *into* the

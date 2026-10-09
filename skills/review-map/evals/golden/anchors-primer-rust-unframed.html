@@ -1,0 +1,48 @@
+<!-- ONE DEFECT: a Rust primer in Rails red. anchors-primer-rust-clean.html with the variant class
+     removed from the aside and nothing else changed, so the doc link is still a docs.rs row and
+     every other § 8 rule still passes. Only 8g fires. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Can a timed-out archive leave half its writes behind?</h3>
+
+  <p>The handler at <span class="path">crates/api/src/handlers/projects.rs:88</span> races the
+    write against a timeout inside <code>select!</code>, and the write is two awaits long.
+    <span class="tier tier-unc">from unchanged code</span></p>
+
+  <aside class="primer">
+    <div class="pr-head">
+      <span class="pr-title">Understanding Rust</span>
+      <span class="pr-api">tokio::select!</span>
+    </div>
+    <div class="pr-body">
+      <div class="pr-main">
+        <b>The losing branch is dropped, not paused</b>
+        <p>When one branch of <code>select!</code> completes, every other branch's future is
+          dropped where it stands &mdash; at whichever <code>.await</code> it had reached. Work done
+          before that await has happened; work after it never will. A branch is cancellation safe
+          only if stopping it at any await leaves nothing half-done.</p>
+        <div class="item">The write at <span class="path">crates/api/src/handlers/projects.rs:88</span>
+          awaits twice, so a timeout between them leaves the first write committed alone.</div>
+        <a class="doc" href="https://docs.rs/tokio/1.40.0/tokio/macro.select.html#cancellation-safety">docs.rs</a>
+      </div>
+      <div class="pr-side">
+        <span class="lbl">In practice</span>
+<pre class="demo">tokio::select! {
+    v = rx.recv() =&gt; v,
+    _ = sleep(t)  =&gt; None,
+}  // recv is cancel safe:
+   // no message is lost</pre>
+        <p class="note">The manual marks each method cancel safe or not, and that line is the
+          one to read before putting it in a branch.</p>
+      </div>
+    </div>
+  </aside>
+
+  <ul class="lookat">
+    <li>
+      <b>The raced write</b>
+      <span>which await the timeout can stop it at</span>
+      <span class="path">crates/api/src/handlers/projects.rs:88</span>
+    </li>
+  </ul>
+</section>

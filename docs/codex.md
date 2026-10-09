@@ -1,6 +1,6 @@
 # Review Maps in Codex
 
-Codex runs the shared `review-map` skill locally. The review procedure, Rails/Phoenix lenses,
+Codex runs the shared `review-map` skill locally. The review procedure, Rails, Phoenix and Rust lenses,
 template, source excerpts, and coverage gate are the same files Claude Code uses. The host
 adapter changes how independent readers are launched and where the HTML is delivered.
 

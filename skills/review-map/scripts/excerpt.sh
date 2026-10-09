@@ -145,7 +145,9 @@ close_block() {  # $1 kind word, $2 loc label
 # Extension → highlight.js language. Only names in the library's common bundle,
 # plus erb and elixir, which the page loads separately: Rails views and Elixir
 # modules are exactly the kind of unchanged code this component quotes, and
-# neither grammar is in the common bundle. Anything unlisted emits no
+# neither grammar is in the common bundle. Rust needs no extra line: `rust` is
+# in the common bundle, and TOML (Cargo.toml, Cargo.lock) tints as `ini`, which
+# is the grammar highlight.js registers `toml` under. Anything unlisted emits no
 # data-lang at all: no tint is correct, and a wrong tint is a small lie about
 # code the reader is being asked to trust.
 #
@@ -158,11 +160,13 @@ guess_lang() {
   case $(basename "$1") in
     Gemfile|Rakefile|Brewfile|Podfile|Fastfile|*.rb|*.rake|*.gemspec|*.ru) echo ruby; return ;;
     Makefile|makefile) echo makefile; return ;;
+    Cargo.lock) echo ini; return ;;
     Dockerfile|*.dockerfile) return ;;
   esac
   case $1 in
     *.erb) echo erb ;;
     *.ex|*.exs) echo elixir ;;
+    *.rs) echo rust ;;
     *.heex|*.eex) : ;;
     *.ts|*.tsx|*.mts|*.cts) echo typescript ;;
     *.js|*.jsx|*.mjs|*.cjs) echo javascript ;;

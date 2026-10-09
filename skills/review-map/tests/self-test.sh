@@ -226,6 +226,12 @@ sed 's|<span class="pr-title">Understanding Ruby on Rails</span>|<span class="pr
   "$TEMPLATE" > "$WORK/primer-eyebrow.html"
 case_runs_red "the primer header names the component again instead of the stack" "$WORK/primer-eyebrow.html" "$SKELETON"
 
+# 17b. The Rust frame forgets a slot. The top rule is the one that carries the frame's identity — a
+#      near-black bar where Rails draws a red one — so a variant that stops re-pointing it renders a
+#      graphite callout under a Rails-red bar, which looks deliberate and is neither stack's frame.
+sed 's|--primer-rule-2: var(--primer-rust-rule-2);||' "$TEMPLATE" > "$WORK/rust-frame-slot.html"
+case_runs_red "the Rust primer frame stops re-pointing one of its slots" "$WORK/rust-frame-slot.html" "$SKELETON"
+
 # ---- Context, section 02 ----
 #
 # Every row here expects zero or reads an order, which is why each one earns a pass: a misspelled

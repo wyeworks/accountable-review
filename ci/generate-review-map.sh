@@ -5,7 +5,7 @@
 #   Usage: generate-review-map.sh --output DIR --repository owner/repo
 #                                 --pr N --base-sha SHA --head-sha SHA
 #                                 [--effort high|low]
-#                                 [--mentor [rails|elixir|phoenix]]
+#                                 [--mentor [rails|elixir|phoenix|rust]]
 #                                 [--update | --no-update]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 (the page's theme is review_map.theme in the config, never a flag)
@@ -54,9 +54,9 @@ while [ $# -gt 0 ]; do
     # --mentor takes an OPTIONAL stack name, which is how the skill spells it, and one
     # spelling in both places is worth the peek: a second flag name here would be a second
     # thing to keep in step with SKILL.md. The next argument is consumed only when it is one
-    # of the three names, so `--mentor --effort low` cannot swallow the flag after it.
+    # of the four names, so `--mentor --effort low` cannot swallow the flag after it.
     --mentor)      MENTOR=on
-                   case ${2:-} in rails|elixir|phoenix) MENTOR=$2; shift ;; esac
+                   case ${2:-} in rails|elixir|phoenix|rust) MENTOR=$2; shift ;; esac
                    shift ;;
     --update)      UPDATE=on;     shift ;;
     --no-update)   UPDATE=off;    shift ;;
@@ -106,8 +106,8 @@ case $EFFORT in high|low) ;; *) die "--effort must be high or low, got '$EFFORT'
 case $MENTOR in
   off|false|no) MENTOR=off ;;
   on|true|yes)  MENTOR=on ;;
-  rails|elixir|phoenix) ;;
-  *) die "--mentor takes no value, or one of rails, elixir, phoenix; got '$MENTOR'" ;;
+  rails|elixir|phoenix|rust) ;;
+  *) die "--mentor takes no value, or one of rails, elixir, phoenix, rust; got '$MENTOR'" ;;
 esac
 
 # Whether a second run over the same pull request re-reads only the commits since the previous

@@ -50,9 +50,12 @@ skills/review-map/
 ├── references/
 │   ├── report-format.md           the six sections, Context, the checkpoint, chains, tiers, deep links
 │   ├── rails-nextjs.md            Rails: what to look for per layer, runtime probes, search recipes
-│   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the other stack
+│   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the second stack
+│   ├── rust.md                    Rust, any kind of crate: the same, and the whole lens for Rust in general
+│   ├── rust-backend.md            Rust backend: read on top of rust.md — routes, layers, the wire, the schema
 │   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
+│   ├── rust-docs.md               the docs.rs and doc.rust-lang.org paths, pinned per crate and toolchain
 │   ├── page-template.html         design system and components — no svg, by design
 │   └── themes/                    daylight (default), workshop, field-notes — fonts, tokens, overrides
 ├── scripts/
@@ -77,8 +80,9 @@ skills/setup-ci/
 
 Each reference owns one axis — procedure, page format, per-stack domain knowledge, documentation
 catalogue, design system — and several invariants span more than one file. A Rails run reads the Rails
-lens and the Rails catalogue; a Phoenix run reads the Phoenix pair, and neither should learn about the
-other's contents. `.claude/CLAUDE.md` documents how the
+lens and the Rails catalogue; a Phoenix run reads the Phoenix pair; a Rust run reads `rust.md` and
+`rust-docs.md`, and a Rust backend run `rust-backend.md` on top — and none should learn about another
+stack's contents. `.claude/CLAUDE.md` documents how the
 documents divide the work and which invariants have to stay in agreement; read it before changing
 anything that looks like it is stated in two places.
 
@@ -166,10 +170,13 @@ shell-versus-Ruby equivalence oracle when the shell implementation was deleted �
 rule quietly changing what it says.
 
 One script needs the network and is maintenance rather than part of a run:
-`evals/verify-catalogue.sh` opens every URL in both catalogues — `references/rails-docs.md` across
-every Rails series the version floor admits, and `references/elixir-docs.md` at each package's newest
-release — and reports dead pages, dead anchors, and rows that differ by version. A catalogue is the
-one thing a run cannot verify for itself, and the Elixir one stays closed until this script opens it.
+`evals/verify-catalogue.sh` opens every URL in a catalogue — `references/rails-docs.md` across every
+Rails series the version floor admits, `references/elixir-docs.md` at each package's newest release,
+and `references/rust-docs.md` at each crate's newest release and the newest toolchain — and reports
+dead pages, dead anchors, and rows that differ by version. A catalogue is the one thing a run cannot
+verify for itself, and the Elixir one stays closed until this script opens it. The Rust one is open;
+the script checks it at newest releases only, so a change to it also wants the floor sweep its
+§ *Version* describes.
 
 ## Releasing
 

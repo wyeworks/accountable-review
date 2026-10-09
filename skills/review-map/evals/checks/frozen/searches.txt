@@ -28,6 +28,24 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-demo-loose.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-docsrs-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-docsrs-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-docsrs-unpinned.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-docsrs-unpinned.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-docsrs-wrong-crate.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -118,6 +136,24 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-primer-probe-nested.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-rails-framed.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-rails-framed.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-rust-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-rust-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-primer-rust-unframed.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-primer-rust-unframed.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-primer-uncited.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -146,6 +182,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-probe-lens-forms.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-probe-rust-forms.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-probe-rust-forms.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-probe-sandbox-lie.html

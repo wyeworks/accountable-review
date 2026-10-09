@@ -228,6 +228,14 @@ assert_eq "$(count "$WORK/markup" 'class="pr-title"')" "1" "the primer header is
 assert_eq "$(count "$WORK/markup" 'Understanding Ruby on Rails')" "1" "and it says what the block teaches, in words"
 assert_eq "$(count "$WORK/markup" 'pr-sep')" "0" "no separator survives — there is nothing left to divide"
 
+# A RUST PRIMER IS THE SAME COMPONENT IN A DIFFERENT FRAME, and the frame is one class. The rule
+# that holds it is that .pr-rust re-points every --primer-* slot and declares nothing else: a slot it
+# misses stays Rails red inside a graphite frame, which renders, and reads as a mistake nobody made
+# on purpose. The class is in the head range, so a run never types it as a colour.
+assert_eq "$(count "$WORK/head" '.primer.pr-rust {')" "1" "the Rust frame is a variant of the one primer, in the skeleton"
+assert_eq "$(awk '/^\.primer\.pr-rust \{/ { f = 1 } f { print } f && /^\}/ { exit }' "$WORK/head" | grep -o 'var(--primer-rust-[a-z0-9-]*)' | sort -u | wc -l | tr -d ' ')" \
+  "6" "and it re-points all six primer slots at the graphite ramp"
+
 # A primer is gated on its doc link and earned by a repo citation, and BOTH live inside the aside:
 # rails-anchors.rb judges it as one block, so a primer borrowing the citation of the paragraph above
 # it is the rule working backwards. The link is pinned with the placeholder, never a literal series —
@@ -374,8 +382,10 @@ assert_eq "$(count "$WORK/page.html" 'SKELETON:BODY')" "1" "the emitted page car
 # opens an excerpt with the OS in dark mode.
 # Each theme file's own three states are checked per selector below; here the point is that every
 # declaration in every theme file reached the skeleton, and none reached the half a model reads.
-for tok in '--syn-key:' '--ex-add:' '--primer-ink:'; do
-  want=0; for th in "$THEMES"/*.html; do want=$((want + $(count "$th" "$tok"))); done
+# The template's own lines are added to the expected count: .primer.pr-rust re-points --primer-ink
+# at the Rust ramp, a var() rather than a colour, and it lives in the head range by design.
+for tok in '--syn-key:' '--ex-add:' '--primer-ink:' '--primer-rust-ink:'; do
+  want=$(count "$TEMPLATE" "$tok"); for th in "$THEMES"/*.html; do want=$((want + $(count "$th" "$tok"))); done
   assert_eq "$(count "$WORK/head" "$tok")" "$want" "every theme's $tok declarations are in the skeleton"
 done
 ntheme=$(ls "$THEMES" | grep -c '\.html$')
@@ -906,6 +916,13 @@ cpage "$NOHIT" "" "$sh_head"
 plan --prev-head "$CHEAD" --base "$CBASE" --head "$CLOCK"
 assert_eq "$cprc" "3" "a lock file in the delta refuses the update"
 assert_eq "$(printf '%s\n' "$out" | grep -c 'lock file')" "1" "and names that as the reason"
+
+# Cargo.lock is the Rust form of the same precondition: every docs.rs link is pinned from it.
+(cd "$CREPO" && git checkout -q -B cargolock "$CHEAD" && mkdir -p crates/core && echo 'version = 3' > crates/core/Cargo.lock && git add -A && git commit -qm cargolock && git rev-parse HEAD > "$WORK/ccargo") >/dev/null 2>&1
+CCARGO=$(cat "$WORK/ccargo")
+cpage "$NOHIT" "" "$sh_head"
+plan --prev-head "$CHEAD" --base "$CBASE" --head "$CCARGO"
+assert_eq "$cprc" "3" "a Cargo.lock in the delta refuses the update too"
 
 # -- called wrongly, and asked-but-unable ---------------------------------------------------------
 cpage "$NOHIT"

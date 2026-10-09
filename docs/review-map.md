@@ -175,7 +175,8 @@ your app already does one way. Those come last, one per departure, and each exis
 can cite the settled answer it departs from, from one of two sources: **your codebase's own decision**
 — the line in your `CLAUDE.md`, the four value objects in `app/services`, the policy class the new
 guard went around — or **a convention the framework itself documents**, from a short, closed list
-with a link to the manual (Rails today; Phoenix once its documentation catalogue is verified). Your
+with a link to the manual (Rails today; Phoenix and Rust once their documentation catalogues are
+verified). Your
 codebase wins: if it has settled on the PR's choice, there is no question, whatever the framework
 says. With nothing to cite there is no departure and no question, which is what keeps it from
 becoming a style guide — and even with something to cite it asks whether the choice was deliberate
@@ -230,31 +231,42 @@ confidence. Where the catalogue has no verified page for your version, you get n
 mechanism is explained in prose against a line of your code instead, because an unlinked explanation
 cannot mislead and a link to the wrong version can.
 
-**On Elixir, that "no link at all" is currently the whole answer, and it is worth being plain about.**
-The Elixir catalogue ships complete — every path, pinned per package, with the same rules — but not one
-of its rows has been opened yet, and its own release gate is a verification run that opens all of them.
-Until that run happens the file withholds every link: an Elixir page anchors with probes and prose, and
-emits no documentation URL. That is a narrower page, not a broken one, and it is the same fail-closed
-rule as above applied to a whole file rather than one row. Shipping an allowlist nobody had opened
-would have been the more impressive-looking choice and the wrong one — a URL constructed from a naming
-pattern is the one defect class no script catches.
+**On Elixir, that "no link at all" is currently the whole answer, and it is worth being plain
+about.** The catalogue ships complete — every path, pinned per package, with the same rules — but not
+one of its rows has been opened yet, and its release gate is a verification run that opens all of
+them. Until that run happens the file withholds every link: an Elixir page anchors with probes and
+prose, and emits no documentation URL. That is a narrower page, not a broken one, and it is the same
+fail-closed rule as above applied to a whole file rather than one row. Shipping an allowlist nobody
+had opened would have been the more impressive-looking choice and the wrong one — a URL constructed
+from a naming pattern is the one defect class no script catches.
+
+**The Rust catalogue shipped closed the same way, and its first verification run is the argument.**
+It opened every row at each crate's newest release and swept them across the version floor by hand,
+and found one defect of each kind a naming pattern produces: an item linked at the path it is
+imported by rather than the module that defines it, a section renamed under an unchanged page, and a
+floor release whose documentation was never built. All three fixed, the file is open, and a Rust page
+now cites `docs.rs` and `doc.rust-lang.org`, each link pinned to the crate or toolchain version this
+codebase locks.
 
 Pinning fixes the link, not the sentence, so a handful of concepts get no sentence either. `enum`,
 `perform_later`'s enqueue timing and strong parameters all changed inside the supported range — 8.0
 introduced `params.expect`, 8.0 removed `enum`'s keyword syntax — and no single claim about them is
 true of every app. For those the page names the setting that decides it and proposes a probe rather
 than telling you what Rails does. The Rails marks came out of reading four CHANGELOGs across three
-series; the Elixir ones are a first pass that no equivalent audit has confirmed yet, and the file says
-so of itself rather than letting a reader assume otherwise.
+series; the Elixir and Rust ones are a first pass that no equivalent audit has confirmed yet, and each
+file says so of itself rather than letting a reader assume otherwise.
 
 **A console probe** — `bin/rails runner 'pp Project.validators_on(:slug).map { |v| [v.class, v.options] }'`,
 `puts Project.archived.to_sql`, `connection.indexes(:projects)`; or, on Phoenix,
 `mix run -e 'IO.inspect MyApp.Project.changeset(%MyApp.Project{}, %{}).errors'`,
-`Ecto.Adapters.SQL.to_sql(:all, MyApp.Repo, query)`, `mix phx.routes`. For a framework-shaped change
+`Ecto.Adapters.SQL.to_sql(:all, MyApp.Repo, query)`, `mix phx.routes`; or, on Rust,
+`cargo tree --locked -e features -i serde`, `cargo test --locked -p api -- --list`,
+`cargo sqlx prepare --check`. For a framework-shaped change
 this is usually better than a paragraph, because the behaviour is assembled from things a diff cannot
 show you together: in Rails at boot, from the class, its concerns, its parents and the schema; in
 Phoenix at compile time, from macros and from the `live_session` block your new route may or may not
-have landed inside. A probe goes inside the checkpoint it settles, after the explanation; where it
+have landed inside; in Rust from the feature set Cargo resolved across the whole workspace, which no
+manifest states. A probe goes inside the checkpoint it settles, after the explanation; where it
 would only make a mechanism legible, a clause in that explanation does the job and the probe is not
 earned.
 
@@ -270,16 +282,19 @@ touches`, rather than the instrument and nothing more. That third part is what y
 deciding whether to paste the command, and it is the page's own check on itself: a probe whose label
 cannot be completed is a probe that was not earned.
 
-**And a probe cannot be out of date**, which is why it is the anchor the Elixir half leans on while its
-catalogue is closed. It interrogates the installed code instead of describing it.
+**And a probe cannot be out of date**, which is why it is the anchor the Elixir half leans on while
+its catalogue is closed, and the one a Rust page reaches for where a crate's behaviour moved. It interrogates the installed code instead of describing it.
 
 Probes are **proposed, not run**. The skill never boots your app, so the page shows the command and
 never its output — an invented `=> true` would be the most concrete-looking thing on the page and the
 only part of it that was fiction. Read-only reflection is written for `bin/rails runner` or
 `mix run -e`; a write is written for `bin/rails console --sandbox` in Rails, and — because Elixir has
 no sandbox console at all — for an explicit `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` in
-Phoenix. The page says which, because a reviewer should not be able to change a database by pasting
-what it told them to.
+Phoenix. Rust has no console of any kind, so a Rust probe reads the build — always with `--locked`, so
+it cannot rewrite your `Cargo.lock` — says when it compiles (which runs build scripts and macros) and
+names any tool that is not part of Cargo; anything that would have to call the changed code is a test.
+The page says which, because a reviewer should not be able to change a database or a lock file by
+pasting what it told them to.
 
 **A primer, at `--mentor` only** — the rule itself, stated. It is what a link escalates into, for
 the case where you would judge better knowing the framework's behaviour than knowing where to read
@@ -292,7 +307,8 @@ look, so you meet the unfamiliar API before you are sent to the code rather than
 Two things about it are worth knowing. **It holds that checkpoint's one documentation link rather
 than adding a second**, so the flag buys explanation and never more citations. And **it is gated on
 that link**, which is why a stack whose catalogue is closed gets no primers at all: while the Elixir
-rows are unopened, `--mentor` on a Phoenix project produces the ordinary page and tells you why. One
+rows are unopened, `--mentor` on a Phoenix project produces the ordinary page and tells you why. A
+Rust primer is the same callout framed in graphite rather than Rails red. One
 per checkpoint, three per page, and a run that finds nothing worth teaching writes none.
 
 **There is at most one link and at most one probe per checkpoint, at most three primers a page, and
@@ -365,11 +381,15 @@ checkpoint.
 ## What it assumes
 
 Only that it is running in Claude Code or Codex, against a git repository containing a Rails or
-a Phoenix application. Codex delivery and delegation are described in [Codex support](codex.md).
+a Phoenix application, or a Rust crate or workspace. Codex delivery and delegation are described in [Codex support](codex.md).
 
-**Which of the two is detected, not configured** — a `Gemfile` or `config/application.rb` for Rails, a
-`mix.exs` for Elixir — and it decides which lens file and which doc catalogue the run reads. A repo
-holding both asks you which to cover rather than guessing. A repo holding neither says so and covers
+**Which one is detected, not configured** — a `Gemfile` or `config/application.rb` for Rails, a
+`mix.exs` for Elixir, a `Cargo.toml` for Rust — and it decides which lens and which doc catalogue the
+run reads. Rust has two lenses: **Rust in general**, for a library, a CLI or anything else that serves
+nothing, and **Rust backend**, which a run reads on top of the first when the crates the diff touches
+depend on a server framework such as `axum`, `actix-web` or `tonic`. A Cargo workspace is one project,
+however many members it has. A repo holding more than one stack asks you which to cover rather than
+guessing. A repo holding none says so and covers
 the diff with the parts of the page that do not depend on a stack, rather than applying a Rails lens
 to something that is not Rails and inventing findings.
 

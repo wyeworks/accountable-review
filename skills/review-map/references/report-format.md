@@ -47,11 +47,12 @@ reading path, same budget on every other part. Nothing moves to make room. That 
 difference from a second document reached by a flag, which would leave the reader nothing on the page
 to tell them which they had been handed.
 
-**The stack is not a level either, and it is invisible for the same reason.** Rails and Phoenix change
-which lens file and which catalogue the run reads (`SKILL.md` step 2), what a chain's nodes are
-called, and what a probe's command looks like. They change **no section, no field, no tier, no
-component and no marker.** There is no stack chip and no "reviewed as a Phoenix app" line: two pages of
-equivalent changes in the two stacks differ in their content and not in their shape. What the stack is
+**The stack is not a level either, and it is invisible for the same reason.** Rails, Phoenix and
+the two Rust stacks change which lens and which catalogue the run reads (`SKILL.md` step 2), what a
+chain's nodes are called, and what a probe's command looks like. They change **no section, no field,
+no tier, no component and no marker.** There is no stack chip and no "reviewed as a Phoenix app" or
+"reviewed as a Rust library" line: two pages of equivalent changes in two stacks differ in their
+content and not in their shape. What the stack is
 belongs in the sentences that cite this repository, which say it by naming real files.
 
 **Context is not a flag, and the page it appears on is still this one.** § *Section 2* is earned per
@@ -128,7 +129,7 @@ never expected to open.
 mode*, the four-rung degradation ladder. Settle the rung once, in step 1 of the procedure; the form
 then follows the line, not the run's taste. A documentation link is not one of those forms and the
 ladder does not reach it: see *Framework anchors*, and take the URL from the catalogue the stack
-selected — `references/rails-docs.md` or `references/elixir-docs.md`.
+selected — `references/rails-docs.md`, `references/elixir-docs.md` or `references/rust-docs.md`.
 
 ---
 
@@ -872,24 +873,26 @@ claim rests on the citation to the call site, at whatever tier it already carrie
   security consequence, state it, cite the line, and let the link explain the mechanism.
 
 **Cite only from the catalogue the stack selected** — `references/rails-docs.md` for Rails,
-`references/elixir-docs.md` for Elixir, and never the other one. That file is the allowlist, and the
+`references/elixir-docs.md` for Elixir, `references/rust-docs.md` for either Rust stack, and never
+another one. That file is the allowlist, and the
 reason is that the run cannot check a URL: there is no fetch step, and egress to those hosts is
 commonly blocked. A concept the catalogue does not carry gets explained in prose with a repo citation,
 which is the ordinary case and not a degraded one. Constructing a plausible URL is the failure this
 rule exists to prevent: it looks like diligence and it lands the reader on a 404.
 
-**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` § *Version*
-currently withholds every link in it until a verification run has opened its rows, so an Elixir run
-anchors with probes and prose and emits no doc link at all. That is the same fail-closed rule applied
+**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` currently
+withholds every link in its § *Version* until a verification run has opened its rows, so an Elixir
+run anchors with probes and prose and emits no doc link at all. `rust-docs.md` was closed the same
+way and is open since its 2026-10-08 sweep. That is the same fail-closed rule applied
 at file scope rather than at row scope, and the page is shorter rather than wrong. Read the
 catalogue's § *Version* before reaching for a link from it.
 
-**Every doc link is pinned to the version this app runs.** Both catalogues store paths without a
+**Every doc link is pinned to the version this app runs.** Every catalogue stores paths without a
 version segment; the run inserts one from the versions recorded in step 2. The mechanics, the
 placeholder forms, the overrides and what to do above the verified ceiling are each catalogue's
 § *Pinning*, **and live there only** — what belongs here is why the page cares: a pinned Rails doc page
-states its own version in its header, and a pinned hexdocs page states its own in its version picker,
-so the reader can check the link against their own lock file. An unpinned link silently means *current
+states its own version in its header, a pinned hexdocs page states its own in its version picker, and
+a pinned docs.rs page names its crate and version in its header, so the reader can check the link against their own lock file. An unpinned link silently means *current
 stable* and offers nothing to check, which is how a page ends up explaining 8.1 behaviour to a 7.1 app
 in a tone of complete confidence.
 
@@ -897,8 +900,10 @@ in a tone of complete confidence.
 series for the whole framework, so a page mixing `/v7.1/` and `/v8.0/` has pinned from something other
 than this repo's lock file — one app, one series. An Elixir app pins **each package independently**
 from `mix.lock`, and hexdocs serves exact versions rather than a series prefix, so **a correct Elixir
-page carries several different version segments** and that is not a defect.
-`evals/checks/rails-anchors.rb` encodes both: every doc link must carry a version segment in either
+page carries several different version segments** and that is not a defect. A Rust codebase is the
+same shape again — each crate pinned from `Cargo.lock`, the toolchain's own documentation pinned to
+the toolchain release — so a correct Rust page carries several too.
+`evals/checks/rails-anchors.rb` encodes all three: every doc link must carry a version segment in any
 stack, and only the Rails links must agree on one series.
 
 **A row with no verified path for this app's version yields no link.** Not a nearest-neighbour link,
@@ -907,8 +912,9 @@ without it, exactly as it does with every excerpt closed. Failing closed is the 
 unlinked explanation is never misleading, and a link to the wrong version is.
 
 **Two marks in the catalogue constrain the sentence, not the link.** In `rails-docs.md` they are the
-outcome of an audit of the Rails CHANGELOGs across the supported series; in `elixir-docs.md` they are
-a first pass that no such audit has yet confirmed, which that file says of itself. Each catalogue's
+outcome of an audit of the Rails CHANGELOGs across the supported series; in `elixir-docs.md` and
+`rust-docs.md` they are a first pass that no such audit has yet confirmed, which each file says of
+itself. Each catalogue's
 § *What the marks mean* owns their definitions:
 
 - `‡ probe` — the behaviour changed inside the supported range, so **no sentence about it is true of
@@ -927,7 +933,9 @@ as what the query printed, no invented row count. The § *Runtime probes* sectio
 step 2 selected has the probes and the rule for running them safely — in Rails, `runner` versus
 `console --sandbox` and why a sandbox session cannot see `after_commit`; in Elixir, `mix run -e` versus
 `iex -S mix`, and that there is **no sandbox console at all**, so a write is wrapped in
-`Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it is not proposed. Every constant, scope,
+`Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it is not proposed; in Rust, that there is
+no console of any kind, so a probe reads the build with `cargo` and `--locked`, says when it compiles,
+and a write is a test rather than a command. Every constant, scope,
 context and module a probe names must exist in this repository — the same rule as *validation steps
 must exist in this repo*, and it fails the same way when broken.
 
@@ -952,7 +960,8 @@ number — a primer *holds* the checkpoint's link rather than adding one, which 
 turning into a licence to cite. **At most one probe per
 checkpoint** as well, and probes are scarcer than links besides: a checkpoint earns one where its
 judgment is framework-shaped — ActiveRecord in Rails, a changeset, a query, an association or an
-`on_mount` chain in Elixir — and a second wants a reason. The one exemption is the `‡ probe` row
+`on_mount` chain in Elixir, a feature set, a derive's expansion or a migration's queries in Rust — and
+a second wants a reason. The one exemption is the `‡ probe` row
 above, which is not rationed at all.
 
 **And answerable where the reviewer will run it.** Framework-shaped and answerable are independent
@@ -1101,7 +1110,7 @@ arrive looking generous.
 rests on its repo `file:line` at the tier it already carried. There is no sixth tier, and a primer is
 not one: what it adds is why the framework consequence follows, which is provenance.
 
-**The header names the stack, and the frame is that stack's red.** `Understanding Ruby on Rails`, in
+**The header names the stack, and the frame is that stack's colour.** `Understanding Ruby on Rails`, in
 the display serif at the page's own near-black ink, with the API the primer is about on the right; the
 panel around it is `--primer-*`, a ramp that exists for this component and reaches nothing else.
 Both halves answer the same reader. Someone new to the stack has to find the block written for them
@@ -1116,9 +1125,17 @@ arriving as a palette, and `page-template.html`'s token block owns the rest of t
 including why the ramp is named for its component rather than for a meaning. The green and red inside
 an excerpt are untouched and still mean added and removed there and nowhere else.
 
-**Rails is the only stack that earns a primer today**, because `elixir-docs.md` withholds every link
-and a primer is gated on one. If that catalogue opens, a Phoenix primer in Rails red is wrong; the
-answer then is a variant class on the aside, never a colour a run types and never a second component.
+**A Rust primer takes its own frame, and the frame is one class.** `rust-docs.md` is open, so Rust is
+the second stack that can earn a primer, and a Rust lesson in Rails red would be wrong. The aside
+carries `pr-rust` beside `primer`, which re-points every `--primer-*` slot at a graphite ramp — Rust's
+own mark is black — and changes nothing else; its header is *Understanding Rust*. **The class is the
+stack's, never a choice**: it goes on a primer whose doc link is a `docs.rs` or `doc.rust-lang.org`
+row and on no other, and `rails-anchors.rb` § 8 fails the page in either direction, because a frame a
+run picks is how a colour starts to mean something. Graphite rather than Ferris orange because orange
+sits between the red frame and the ochre that says something is missing, and would be read as the
+second. Phoenix still earns no primer, because `elixir-docs.md` withholds every link; when it opens
+the answer is the same shape — a variant class, never a colour a run types, never a second
+component.
 
 **No mark, and therefore no trademark line.** The version of this callout that the agenda put down
 carried an inlined logotype and a notice saying whose it was. This page has no `<svg>` anywhere, so
