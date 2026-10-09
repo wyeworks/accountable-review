@@ -8,7 +8,8 @@ There is no application code here. The repository is the `accountable-review` Cl
 with Codex support for `review-map` as a plugin from this repository's own Codex marketplace. It
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
-a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
+a skill nor read by one, plus `hooks/`, a Claude Code mod that sets a progress line while
+`review-map` runs and changes nothing about the page. `review-map` turns a pull request into a published HTML **review agenda**:
 what changed, the judgments the reviewer has to make with the lines that settle each
 one, the order to read the code in, and what the change reaches in code it did not touch. Three stacks
 are supported: a Rails API with a Next.js client, which came first; Elixir/Phoenix — a LiveView app
@@ -185,6 +186,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
+| `hooks/` | A Claude Code mod — the status line while `review-map` runs interactively. `progress.ts` reads, `board.ts` formats, `activity.json` is the tool-call-to-purpose table `evals/e2e/progress.rb` reads too, and `skills/review-map/tests/activity.rb` holds that one file to both readers. Inert until the skill expands; `.codex-plugin/plugin.json` names no hooks |
 | `scripts/page-skeleton.sh` | Emits the head, the theme the repository chose and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
@@ -1234,6 +1236,23 @@ Editing one of these means checking the others still agree.
   and the regeneration recipe **alone**, `examples/index.html`'s foot and `README.md`
   § *Example Review Map* restate it, and `CONTRIBUTING.md`'s layout lists the directory.
 
+- **The progress line is read, never guessed — the verification badge's terminal twin.** Two
+  surfaces show a run in progress: the e2e board (`evals/e2e/progress.rb`) and the status line
+  `hooks/progress.ts` sets in an interactive session. Each field comes from something the run
+  produced: an engine event or a transcript line, the staged page, the clock. **Activity is
+  shown by purpose, never as a step**, because steps interleave and cannot be read off a run.
+  **The one estimate is the bar, labelled `~`, and outside the harness it needs a recorded
+  history.** The mod writes its own per-repository generation times to `$.store`, and only for a
+  turn that answered and ran the coverage gate. With nothing recorded it shows elapsed time and
+  no bar. The harness's 25-minute fallback is a documented order of magnitude there; on a
+  person's screen it would be invented progress.
+
+  **One table, two languages.** `hooks/activity.json` is read by Ruby and by JavaScript. Two
+  copies would name the same tool call two ways. One copy can still mean two things, so
+  `tests/activity.rb` refuses a pattern the two engines read differently, and a label that reads
+  as a step counter. **It observes and does nothing else**: every hook passes its event on
+  unchanged behind a `.catch` that still does, so a bug in the line cannot stall a generation.
+
 ## Invariants the CI setup adds
 
 Same rule as above: editing one of these means checking the others still agree.
@@ -1681,8 +1700,12 @@ the project.
 ## Publishing
 
 `.claude-plugin/plugin.json` is the plugin manifest. Its `version` is the update pin: users only
-receive a change once that field moves, so bump it in the same commit as the change and tag the
-release.
+receive a change once that field moves. **A release is the maintainer's decision, not a side effect
+of a change**: do not touch `version` in either manifest unless a bump is explicitly asked for. When
+a change would ship only with one, say so in a line and leave the field alone. Several changes
+routinely go out under one release. A bump made alongside a feature has to be reverted by hand,
+and a stray one tags a version nobody meant to cut. When a release is asked for, bump both
+manifests in one commit and tag it.
 
 ```bash
 claude plugin validate . --strict

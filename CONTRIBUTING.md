@@ -39,6 +39,11 @@ ci/                                what runs in CI, not what a skill reads
 docs/                              the public documentation the README links out to
 ├── review-map.md                  anatomy of the page
 └── ci.md                          the delivery seam, and how to add a provider
+hooks/                             a Claude Code mod: the progress line while review-map runs
+├── progress.ts                    reads the run's events and staged page, sets the status line
+├── board.ts                       turns those readings into the line, and nothing else
+├── activity.json                  tool call → purpose, the one table progress.rb reads too
+└── progress.test.ts               `claude plugin test .`
 examples/                          published example maps, served at wyeworks.github.io by pages.yml
 ├── index.html                     the front door — borrows the design language, not the page rules
 ├── README.md                      which PR, which revision and which version produced each page
@@ -161,6 +166,8 @@ ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner,
 skills/review-map/evals/checks/frozen.rb                # ~1000 cases against their recorded output
 skills/review-map/tests/run.sh                          # page-skeleton.sh, diff-render.sh, carry-plan.sh
 skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
+ruby skills/review-map/tests/activity.rb                # hooks/activity.json, read the same by Ruby and JS
+claude plugin test .                                    # the progress line, against the engine's test kit
 ruby skills/setup-ci/tests/run.rb                       # what the generated workflow contains
 ruby skills/setup-ci/tests/self-test.rb                 # every break run.rb claims to catch
 ```

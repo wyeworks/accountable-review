@@ -30,24 +30,12 @@ module Progress
   MOON = %w[🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘].freeze
 
   # [pattern over the tool call's summary, label]. First match wins, so specific beats general.
-  ACTIVITY = [
-    [/claim-falsifier/,                          "🥊 falsifiers reading"],
-    [/coverage-gate\.sh/,                        "🚪 coverage gate"],
-    [/ledger-rows\.sh/,                          "🧾 listing every file"],
-    [/excerpt\.sh/,                              "✂️  cutting excerpts"],
-    [/page-skeleton\.sh/,                        "🏗️  laying out the page"],
-    [/(rails|elixir)-docs\.md/,                  "📖 pinning doc links"],
-    [/carry-plan\.sh/,                           "♻️  deciding what to carry"],
-    [/diff-render\.sh/,                          "🗺️  mapping the diff"],
-    [/check\.rb|page-invariants/,                "🧪 self-checking"],
-    [/agenda\.md/,                               "🧩 building the agenda"],
-    [/\/analysis\b/,                             "📝 writing analysis notes"],
-    [%r{page/index\.html|body\.html|\bWrite\b.*\.html|\bEdit\b.*\.html}, "✍️  writing the page"],
-    [/references\/|SKILL\.md/,                   "📚 reading the playbook"],
-    [/\bgit (diff|log|show)\b/,                  "🌿 reading the diff"],
-    [/\b(rg|grep|Grep)\b/,                       "🔎 tracing consumers"],
-    [/\b(sed|cat|head|Read)\b/,                  "👀 reading code"],
-  ].freeze
+  # The table lives in the plugin's hooks/activity.json, because the status line hooks/progress.ts
+  # draws in an interactive session reads the same one — two copies would name the same tool call
+  # two ways. skills/review-map/tests/activity.rb holds the file to both readers.
+  ACTIVITY_FILE = File.expand_path("../../../../hooks/activity.json", __dir__)
+  ACTIVITY = JSON.parse(File.read(ACTIVITY_FILE, encoding: "UTF-8"))
+                 .map { |pattern, label| [Regexp.new(pattern), label].freeze }.freeze
 
   # One per repetition. run.rb owns the writes; the board only reads.
   class Rep

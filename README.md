@@ -357,6 +357,11 @@ reading the moment the part you need lands. The checkpoints arrive one at a time
 explanations land. While it is unfinished it says so in a banner, and every part still coming is
 marked pending, so a half-written page can never be mistaken for a finished one.
 
+While it runs, Claude Code's status line shows what it is doing — tracing consumers, cutting
+excerpts, writing the page — with the elapsed time and how many checkpoints are written. Every
+field is read from the run rather than estimated. The one exception is a bar, labelled `~`, which
+appears from the second run in a repository and measures against that repository's earlier runs.
+
 To have one generated for every pull request instead of by hand, see
 [CI integration](#ci-integration-) below.
 
