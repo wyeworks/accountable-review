@@ -11,9 +11,9 @@
 reviewer through what changed, how the new behaviour works, what existing code is affected, and what
 to understand before merge.
 
-It ships two skills: **`review-map`**, which produces the page for a Rails, an Elixir/Phoenix or a
+It ships two skills: **`review-map`**, which produces the page for a Rails or a
 Rust codebase — a Rust backend or Rust in general — with or without a separate client such as
-Next.js; and **`setup-ci`**, which arranges for
+Next.js, with Elixir/Phoenix support still in development; and **`setup-ci`**, which arranges for
 one to be produced automatically on every review-ready pull request.
 
 Built by **WyeWorks**.
@@ -41,7 +41,7 @@ Built by **WyeWorks**.
 - [What to expect from a map](#what-to-expect-from-a-map-)
   - [Evidence over confidence](#evidence-over-confidence)
   - [What a Review Map cannot do](#what-a-review-map-cannot-do)
-  - [Ruby on Rails first, then Phoenix and Rust](#ruby-on-rails-first-then-phoenix-and-rust)
+  - [Ruby on Rails first, then Rust and Phoenix](#ruby-on-rails-first-then-rust-and-phoenix)
   - [Example Review Map](#example-review-map)
 - [CI integration](#ci-integration-)
   - [What you get](#what-you-get)
@@ -132,7 +132,7 @@ A **Review Map** adds that layer.
 
 A diff is organized by files.
 
-A Rails, Phoenix or Rust feature is not.
+A Rails, Rust or Phoenix feature is not.
 
 One behaviour may cross:
 
@@ -152,9 +152,9 @@ serializer
 frontend contract
 ```
 
-On Phoenix the hops are different — router, controller or LiveView, context, changeset, `Repo`,
-worker, template — and on a Rust backend different again — router and its layers, extractor,
-handler, error mapping, query, migration — and the point is the same: no directory contains the
+On a Rust backend the hops are different — router and its layers, extractor, handler, error
+mapping, query, migration — and on Phoenix different again — router, controller or LiveView,
+context, changeset, `Repo`, worker, template — and the point is the same: no directory contains the
 behaviour.
 
 `accountable-review` traces the PR around the **behaviour being implemented**, not the order of
@@ -403,7 +403,7 @@ A third axis, and the only one that puts anything on the page:
 ```
 
 A Review Map normally assumes you know the framework and are meeting *this change* for the first
-time. `--mentor` is for the other case — a reviewer new to Rails, to Phoenix or to Rust, on their first
+time. `--mentor` is for the other case — a reviewer new to Rails, to Rust or to Phoenix, on their first
 pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
 know, the page stops linking to the manual and states the rule: a short primer inside that
 checkpoint, with the API named, the behaviour explained, a worked example on a generic class, the
@@ -496,7 +496,7 @@ into code the diff never opened, and it is also the honest limit on the page.
 is what the page's depth is calibrated against. Other models will trade cost for reach differently —
 try a few against your own codebase and keep the one whose maps you actually trust.
 
-### Ruby on Rails first, then Phoenix and Rust
+### Ruby on Rails first, then Rust and Phoenix
 
 The plugin is optimized and most heavily tested for Rails applications. That matters because Rails
 behaviour often emerges from several pieces working together:
@@ -523,20 +523,22 @@ someone made, and the page will ask whether it was deliberate — with the four 
 without them there is nothing to ask. That question is never a recommendation, never appears more than
 once, and never takes a slot from a judgment about behaviour.
 
-**Elixir/Phoenix is the second stack** — a LiveView app or a JSON API — with its own lens for the same
-job: `Repo.update_all` builds no changeset, a `unique_constraint` does nothing without the index
-behind it, and a `phx-click` renamed in a template without its `handle_event` clause crashes the
-LiveView the first time someone clicks it.
-
-**Rust is the third, and it comes in two lenses**, because what a reviewer looks for in a crate that
-serves requests and in one that does not overlaps less than the language suggests. **Rust in
-general** — a library, a CLI, a workspace that serves nothing — is reviewed against the things the
+**Rust is also supported and tested, and it comes in two lenses**, because what a reviewer looks
+for in a crate that serves requests and in one that does not overlaps less than the language
+suggests. **Rust in general** — a library, a CLI, a workspace that serves nothing — is reviewed against the things the
 compiler was told not to check or cannot see: the `_ =>` arm a new enum variant falls into silently,
 a `pub` item a downstream crate depends on, a feature combination CI never builds, the module whose
 safe code keeps an `unsafe` block sound. A **Rust backend** — `axum`, `actix-web`, `tonic` and the
 rest — gets that lens and a second one on top of it: an auth layer that covers only the routes
 registered before it, an `Extension` nobody added, and a migration whose unchanged queries still
 compile against stale offline query data.
+
+**Elixir/Phoenix support is still in development.** There is a lens for a LiveView app or a JSON API
+that catches the same kind of thing: `Repo.update_all` builds no changeset, a `unique_constraint`
+does nothing without the index behind it, and a `phx-click` renamed in a template without its
+`handle_event` clause crashes the LiveView the first time someone clicks it. Parts of it are not
+finished yet, such as a Phoenix backend with a ReactJS frontend, and it has had far less testing
+than Rails or Rust.
 
 Which you get is detected from the repository — a `Gemfile`, a `mix.exs` or a `Cargo.toml`, and for
 Rust whether the code the diff touches depends on a server framework — not configured; a repo holding
@@ -674,8 +676,8 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Repository analysis** | `git` for the diff, the base and head SHAs, and the searches; `gh` when present, for PR metadata and deep links. Nothing else is required. |
 | **Stack detection** | A `Gemfile` or `config/application.rb` selects the Rails lens and catalogue; a `mix.exs` selects the Phoenix pair; a `Cargo.toml` selects the Rust lens and catalogue, plus the backend lens when the crates the diff touches depend on a server framework. A repo with more than one asks; a repo with none says so and covers the diff with the stack-independent parts of the page rather than applying a Rails lens to something that is not Rails. |
 | **Rails discovery** | Rails root (repo root, a subdirectory, an engine), API-only vs server-rendered, the authorization library, and the Rails series and gem versions from `Gemfile.lock`, which is what documentation links are pinned to. |
-| **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
 | **Rust discovery** | The workspace and its members from `Cargo.toml`, each crate's package name, kind and features, whether it is published, the test runner CI uses, and on a backend the framework, the database layer and how authentication is attached. Each crate's exact version comes from `Cargo.lock` and the toolchain's from `rust-toolchain.toml` or `rust-version` — docs.rs serves exact versions, so there is no series. |
+| **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
 | **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Contract judgments need both sides in the diff; with no client, or a PR that does not touch one, none is raised rather than raised emptily. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
 | **Test frameworks** | RSpec, Minitest, ExUnit and Cargo's own harness (with nextest and snapshot crates), detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
 | **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
