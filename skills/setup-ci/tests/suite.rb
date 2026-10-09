@@ -542,6 +542,26 @@ class SetupCiSuite
     assert_not_in c2_file, "pull-requests: write",  "an upgrade does not re-grant a write scope the team declined"
     assert_not_in c2_file, "GITHUB_TOKEN",          "nor hand back the token that goes with it"
 
+    # Tracking a branch is the one ref that is a decision rather than a version, so it is recorded
+    # and recovered like one: a repository dogfooding the plugin re-runs setup and keeps main.
+    b = path("repo-branch")
+    FileUtils.mkdir_p(b)
+    b_file = File.join(b, ".github/workflows/accountable-review.yml")
+    b1 = sh(@install, "--repo-dir", b, "--", "--plugin-branch", "main").all
+    assert_in b1, "decisions=--no-regenerate-on-push --skip-authors dependabot[bot] --pr-comment --plugin-branch main",
+              "a branch pin is recorded with the decisions"
+    assert_in read(b_file), "PLUGIN_REF: main",     "and the workflow clones that branch"
+    assert_in read(b_file), "rev-parse HEAD",       "printing the commit it resolved, since a branch names no build"
+    assert_in sh(@install, "--repo-dir", b).all, "status=unchanged",
+              "a re-run with no flags keeps the branch rather than re-deriving a release tag"
+    sh(@install, "--repo-dir", b, "--update", "--", "--plugin-release")
+    assert_not_in read(b_file), "PLUGIN_REF: main", "--plugin-release goes back to the release tag"
+    assert_not_in read(b_file), "--plugin-branch",  "and records nothing in its place"
+    sh(@install, "--repo-dir", b, "--update", "--", "--plugin-branch", "main")
+    sh(@install, "--repo-dir", b, "--update", "--", "--plugin-ref", "v3")
+    assert_in read(b_file), "PLUGIN_REF: v3",       "an explicit --plugin-ref wins over a recovered branch"
+    assert_not_in workflow, "--plugin-branch",      "a workflow that never chose a branch records none"
+
     # A file with nothing recorded is compared against the defaults, which is the honest answer
     # rather than a guess at what someone meant.
     File.write(ours, read(ours).lines.grep_v(/^# Decisions: /).join)
@@ -721,6 +741,7 @@ class SetupCiSuite
     assert_in m, '"pull_request": 412',             "the manifest records the pull request"
     assert_in m, '"coverage_gate": "pass"',         "the coverage gate runs and its result is recorded"
     assert_not_in m, "severity",                    "the manifest carries no verdict vocabulary"
+    check m.match?(/"commit": ("[0-9a-f]{40}"|null)/), "the manifest records the plugin's commit, which names a branch build"
 
     o2 = path("out-pending")
     page.call(o2, "<div class=\"buildstate\">Still being written</div>#{filler}")

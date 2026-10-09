@@ -159,6 +159,7 @@ Take their answer as flags rather than as an edit to the file:
 | map the bot's pull requests too | `--no-skip-authors` |
 | skip another bot as well | `--skip-authors 'dependabot[bot],renovate[bot]'` |
 | don't comment on the pull request | `--no-pr-comment` — drops the write scope with it |
+| run the plugin's `main`, not a release (dogfooding) | `--plugin-branch main` — kept on re-runs; `--plugin-release` undoes it |
 
 ```sh
 <skill base directory>/scripts/install-workflow.sh --repo-dir . --print-diff [-- <flags>]

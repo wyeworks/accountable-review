@@ -1354,7 +1354,10 @@ Same rule as above: editing one of these means checking the others still agree.
   ordinary reason to re-run setup — moving the version pin — reports every confirmed decision as
   drift and reverts them all under `--update`, which is setup reverting a team's decision while
   claiming to upgrade them. The line is a pure function of the flags, which is what keeps it clear of
-  the byte-comparison rule in the bullet below.
+  the byte-comparison rule in the bullet below. **One ref is recorded there too**: `--plugin-branch`,
+  because tracking a branch (this repository dogfooding itself) is a choice a re-run must not swap for
+  a tag; a release pin is recorded by its absence, and `manifest.json`'s `plugin.commit` keeps a
+  branch build attributable.
 
   Six files agree: `templates/workflow.yml` holds the `SETUP:IF:`/`SETUP:END:` blocks and the line,
   `render-workflow.sh` resolves them, `install-workflow.sh` recovers them, `SKILL.md` step 3 confirms

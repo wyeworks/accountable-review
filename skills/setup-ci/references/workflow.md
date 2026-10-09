@@ -320,6 +320,19 @@ review — `review-map` inspects the working tree and would report the clone as 
 `render-workflow.sh` defaults the ref to the version of the plugin that generated the file. Upgrading
 means re-running `/accountable-review:setup-ci`, which reports the change as a diff.
 
+**Or a branch, for a repository dogfooding the plugin.** `--plugin-branch main` clones the branch
+instead, so every map comes from whatever was last merged — no release needed for a prose change to
+reach CI. That gives up the pin on purpose, and two things keep what the pin was for. The install step
+prints the commit it resolved, and `manifest.json` records it as `plugin.commit`, so a map still names
+the build that wrote it even though the version no longer does. And the choice is recorded in
+`# Decisions:` as `--plugin-branch main`, so re-running setup to pick up a template change keeps the
+branch rather than re-deriving a tag; `--plugin-release` goes back. It is meant for this repository and
+for a team testing a fork, not as a default — anyone else wants the tag.
+
+The branch is the plugin's, never the pull request's: a pull request that edits the skill is mapped by
+the skill as merged, not by its own edit, which is both the safer and the more useful reading — the
+reviewer sees the change through the tool everyone else already uses.
+
 **The tag has to exist.** Setup cannot check — it has no network — so a workflow generated from an
 unreleased checkout pins a tag nothing resolves, and the failure arrives later, on someone's pull
 request, as a clone error. If you are running from a checkout rather than an installed release, say

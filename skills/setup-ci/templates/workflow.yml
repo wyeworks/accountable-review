@@ -182,6 +182,7 @@ jobs:
         run: |
           git clone --quiet --depth 1 --branch "$PLUGIN_REF" \
             "https://github.com/$PLUGIN_REPO" "$RUNNER_TEMP/accountable-review"
+          echo "Accountable Review $PLUGIN_REF is $(git -C "$RUNNER_TEMP/accountable-review" rev-parse HEAD)"
 
       # A Review Map explains application code. Two ways a pull request can fail
       # to be worth one — it changes no application code at all, or what it

@@ -9,14 +9,14 @@
 # never pushes, never approves, never touches code, sets no check, and never runs
 # your application.
 #
-# Accountable Review: wyeworks/accountable-review @ accountable-review--v1.4.0
+# Accountable Review: wyeworks/accountable-review @ main
 #
 # The line below records the decisions setup confirmed — when a Review Map is
 # generated, and whether the link is commented on the pull request — in the form
 # setup takes them as flags. Re-running setup reads it back, so upgrading the pin
 # above moves the version without reverting the choices someone made. Delete the
 # line and the next run offers you the defaults again, as a diff.
-# Decisions: --no-regenerate-on-push --skip-authors dependabot[bot] --pr-comment
+# Decisions: --no-regenerate-on-push --skip-authors dependabot[bot] --pr-comment --plugin-branch main
 name: Accountable Review
 
 # A Review Map is generated when a pull request first becomes reviewable — and
@@ -135,13 +135,14 @@ jobs:
       # it never appears in the diff under review. It comes before Node because
       # the scope check below runs from it, and a pull request that turns out to
       # need no Review Map should not have installed a toolchain first.
-      - name: Install Accountable Review accountable-review--v1.4.0
+      - name: Install Accountable Review main
         env:
           PLUGIN_REPO: wyeworks/accountable-review
-          PLUGIN_REF: accountable-review--v1.4.0
+          PLUGIN_REF: main
         run: |
           git clone --quiet --depth 1 --branch "$PLUGIN_REF" \
             "https://github.com/$PLUGIN_REPO" "$RUNNER_TEMP/accountable-review"
+          echo "Accountable Review $PLUGIN_REF is $(git -C "$RUNNER_TEMP/accountable-review" rev-parse HEAD)"
 
       # A Review Map explains application code. Two ways a pull request can fail
       # to be worth one — it changes no application code at all, or what it

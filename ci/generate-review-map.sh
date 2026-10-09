@@ -257,6 +257,14 @@ fi
 
 version=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
   "$PLUGIN_ROOT/.claude-plugin/plugin.json" 2>/dev/null | head -n 1)
+# The commit as well as the version, because a workflow tracking a branch runs a
+# build the version does not name: every commit between two releases carries the
+# same one. Null rather than a guess when the plugin is not a git checkout.
+plugin_commit=$(git -C "$PLUGIN_ROOT" rev-parse HEAD 2>/dev/null) || plugin_commit=
+case $plugin_commit in
+  *[!0-9a-f]*|'') plugin_commit_json=null ;;
+  *) plugin_commit_json="\"$plugin_commit\"" ;;
+esac
 
 # WHICH REVISION THE CARRIED PARTS DESCRIBE, READ OFF THE PAGE RATHER THAN TRACKED.
 #
@@ -282,7 +290,8 @@ cat > "$OUTPUT_ABS/manifest.json" <<JSON
   "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "plugin": {
     "name": "accountable-review",
-    "version": "${version:-unknown}"
+    "version": "${version:-unknown}",
+    "commit": $plugin_commit_json
   },
   "review_map": {
     "entry": "index.html",

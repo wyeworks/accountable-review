@@ -290,6 +290,12 @@ CASES = [
            edit: sub('re = re "[^/]*"', 're = re ".*"'),
            sections: %i[gate], expect: "a single * stops at a slash, the way a workflow paths filter does"),
 
+  # A branch pin re-derived as a release tag on the next setup run is a dogfooding repository
+  # quietly moved off main by the command it ran to upgrade.
+  Case.new(desc: "a branch pin is not recorded with the decisions", file: RENDER,
+           edit: sub('[ -z "$PLUGIN_BRANCH" ] || DECISIONS="$DECISIONS --plugin-branch $PLUGIN_BRANCH"', ":"),
+           sections: %i[recovery], expect: "a re-run with no flags keeps the branch rather than re-deriving a release tag"),
+
   Case.new(desc: "generation is no longer guarded by the gate", file: W,
            edit: drop(/if: steps\.scope\.outputs\.verdict == .generate./),
            sections: %i[workflow], expect: "generation is guarded by the scope check"),
