@@ -2,7 +2,7 @@
 # evals — one command per thing you actually do to the evals.
 #
 #   bin/evals offline                        every no-model suite. What CI checks. About a minute and a half.
-#   bin/evals offline frozen                 just one: self-test | unit | frozen | frontmatter | codex-plugin | review-map | setup-ci | manifest
+#   bin/evals offline frozen                 just one: self-test | unit | frozen | frontmatter | codex-plugin | activity | review-map | setup-ci | manifest | hooks
 #   bin/evals e2e [id] [-n N -j N]           generate, check and judge a real PR (evals/e2e/prs.yml)
 #   bin/evals calibrate [judge]              each judge against its gold page and planted defects
 #   bin/evals judge <judge> --page P ...     one judge on one page, by hand
@@ -46,7 +46,7 @@ need() { command -v "$1" >/dev/null 2>&1 || die "needs $1 on PATH"; }
 
 # The suite table. Each row is a name, the command it needs on PATH, and what it runs.
 # Keep it in step with .github/workflows/validate.yml — `parity` below is what notices.
-SUITES="self-test unit frozen frontmatter codex-plugin review-map setup-ci manifest"
+SUITES="self-test unit frozen frontmatter codex-plugin activity review-map setup-ci manifest hooks"
 
 # The scripts under skills/ that this table covers, for the parity check.
 COVERED="skills/review-map/evals/checks/self-test.rb
@@ -54,6 +54,7 @@ skills/review-map/evals/checks/lib/test/test_page.rb
 skills/review-map/evals/checks/frozen.rb
 skills/review-map/tests/frontmatter.rb
 skills/review-map/tests/codex-plugin.rb
+skills/review-map/tests/activity.rb
 skills/review-map/tests/run.sh
 skills/review-map/tests/self-test.sh
 skills/setup-ci/tests/run.rb
@@ -92,11 +93,13 @@ run_suite() {
     frozen)    suite frozen    ruby ruby "$EVALS/checks/frozen.rb" ;;
     frontmatter) suite frontmatter ruby ruby "$SKILL/tests/frontmatter.rb" ;;
     codex-plugin) suite codex-plugin ruby ruby "$SKILL/tests/codex-plugin.rb" ;;
+    activity)  suite activity  ruby ruby "$SKILL/tests/activity.rb" ;;
     review-map) suite review-map sh sh "$SKILL/tests/run.sh"
                suite review-map-self sh sh "$SKILL/tests/self-test.sh" ;;
     setup-ci)  suite setup-ci  ruby ruby "$SETUP/tests/run.rb"
                suite setup-ci-self ruby ruby "$SETUP/tests/self-test.rb" ;;
     manifest)  suite manifest  claude claude plugin validate . --strict ;;
+    hooks)     suite hooks     claude claude plugin test . ;;
     *) die "unknown suite: $1 ($(echo $SUITES | tr '\n' ' '))" ;;
   esac
 }
