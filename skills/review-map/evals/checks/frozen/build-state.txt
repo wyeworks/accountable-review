@@ -250,6 +250,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page context-clean.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment context-collapsed.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page context-collapsed.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment context-dead-pointer.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

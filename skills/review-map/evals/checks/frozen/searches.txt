@@ -250,6 +250,12 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page context-clean.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment context-collapsed.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page context-collapsed.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment context-dead-pointer.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

@@ -284,6 +284,9 @@ assert_eq "$(count "$WORK/markup" '06</span>')"  "0" "and stops there — the ev
 # drawn above its judgment. No tier either: an entry asserts nothing about the change.
 ctx_range() { awk '/^ *<section id="context">/ { f = 1 } f { print } f && /^ *<\/section>/ { exit }' "$WORK/markup"; }
 assert_eq "$(count "$WORK/markup" '<dl class="ctx">')" "1" "one Context list is assembled"
+# --context collapsed wraps that list in a details.ctx-fold the run types; its CSS is emitted, like
+# every other rule, so a collapsed page needs nothing from the run but the element.
+assert_eq "$(grep -c '^details\.ctx-fold {' "$WORK/head" || true)" "1" "the collapsed Context fold is styled in the emitted head"
 ctx_line=$(grep -n '^ *<section id="context">' "$WORK/markup" | head -1 | cut -d: -f1)
 att_line=$(grep -n '^ *<section id="attention"' "$WORK/markup" | head -1 | cut -d: -f1)
 if [ -n "$ctx_line" ] && [ -n "$att_line" ] && [ "$ctx_line" -lt "$att_line" ]; then

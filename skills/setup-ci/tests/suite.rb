@@ -599,6 +599,23 @@ class SetupCiSuite
     write(File.join(c, "mentor-bad.yml"), "review_map:\n  mentor: nope\n")
     assert_eq sh(@read_cfg, File.join(c, "mentor-bad.yml")).code, 1, "a mentor value that is not a stack is an error"
 
+    # --context is how much of section 02 the page carries. `auto` is the default and, like mentor's
+    # off, is the ABSENCE of the flag: the default is what a bare run does, so naming it would be a
+    # second spelling of nothing. The other three travel by name, from the flag or the config file.
+    assert_not_in default, "--context",             "no context flag is passed by default"
+    %w[never always collapsed].each do |v|
+      assert_in inv.call("--repo-dir", @tmp, "--context", v).out, "--context #{v}", "--context #{v} reaches the run"
+    end
+    assert_not_in inv.call("--repo-dir", @tmp, "--context", "auto").out, "--context", "an explicit auto passes nothing"
+    assert_eq inv.call("--repo-dir", @tmp, "--context", "sometimes").code, 1, "a context value that is none of the four is refused"
+    write(File.join(c, "context.yml"), "review_map:\n  context: never\n")
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "context.yml"), chdir: c).out, "--context never",
+              "context is read from the config file"
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "context.yml"), "--context", "always", chdir: c).out,
+              "--context always", "and the flag beats the config file"
+    write(File.join(c, "context-bad.yml"), "review_map:\n  context: needed\n")
+    assert_eq sh(@read_cfg, File.join(c, "context-bad.yml")).code, 1, "a context value that is none of the four is an error"
+
     # The theme is how the page looks and nothing about what is on it, so it is never a flag on the
     # skill: page-skeleton.sh reads it from the checkout, and the adapter passes it through the
     # environment only so a --config file kept elsewhere still counts.
@@ -694,6 +711,7 @@ class SetupCiSuite
     assert_in m, '"pull_request": 412',             "the manifest records the pull request"
     assert_in m, '"coverage_gate": "pass"',         "the coverage gate runs and its result is recorded"
     assert_not_in m, "severity",                    "the manifest carries no verdict vocabulary"
+    assert_in m, '"context": "auto"',               "the manifest records how much Context was asked for"
 
     o2 = path("out-pending")
     page.call(o2, "<div class=\"buildstate\">Still being written</div>#{filler}")

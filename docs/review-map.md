@@ -23,7 +23,11 @@ does not earn omitted outright.
   setting introduces. One to five entries, each a sentence or two on what the thing **is**, a
   citation, and a pointer at the checkpoints that rely on it. It never says what the change did to
   the thing — that is the checkpoint's — and it is not `--mentor`: a primer teaches the framework,
-  Context names the repository, and no flag turns it on or off. When the change moved *which request
+  Context names the repository. `--context` (or `review_map.context`) sets how much of it a team
+  wants: `auto`, the default, is the rule above; `never` leaves it out and changes nothing else;
+  `always` lowers the bar — a concept an impact path relies on, or one a checkpoint already explains
+  in passing, earns an entry too — but still writes none when none qualifies; `collapsed` keeps the
+  `auto` entries behind one shut toggle. When the change moved *which request
   does what* and several checkpoints turn on it, Context also draws that sequence before and after,
   two columns over the same states with the one that moved filled in both, and lists, a line each,
   the cases that run differently from the path it draws.
@@ -74,7 +78,7 @@ act on.
 A future full mode would keep this agenda and add supporting evidence beneath it, rather than making
 you read the evidence to reach the overview.
 
-**`--mentor` is the one flag that puts anything on the page**, and it does not make it a second
+**`--mentor` is the one flag that puts anything inside a checkpoint**, and it does not make it a second
 document. It is for a reviewer new to the *stack* rather than to the change: where a judgment turns
 on a framework rule they may not know, the page states the rule in a primer inside that checkpoint
 instead of linking to it. Nothing else moves — same sections, same checkpoints in the same order,

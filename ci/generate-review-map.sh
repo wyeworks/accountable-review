@@ -6,6 +6,7 @@
 #                                 --pr N --base-sha SHA --head-sha SHA
 #                                 [--effort high|low]
 #                                 [--mentor [rails|elixir|phoenix|rust]]
+#                                 [--context auto|never|always|collapsed]
 #                                 [--update | --no-update]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 (the page's theme is review_map.theme in the config, never a flag)
@@ -39,7 +40,7 @@ set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PLUGIN_ROOT=$(dirname "$HERE")
 
-OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; EFFORT=; MENTOR=; CONFIG=
+OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; EFFORT=; MENTOR=; CONTEXT=; CONFIG=
 REPO_DIR=.; PLUGIN_DIR=; CLAUDE_BIN=${CLAUDE_BIN:-claude}
 STRICT_GATE=0; PRINT_INVOCATION=0; VERIFY_ONLY=0; UPDATE=
 
@@ -58,6 +59,7 @@ while [ $# -gt 0 ]; do
     --mentor)      MENTOR=on
                    case ${2:-} in rails|elixir|phoenix|rust) MENTOR=$2; shift ;; esac
                    shift ;;
+    --context)     CONTEXT=$2;    shift 2 ;;
     --update)      UPDATE=on;     shift ;;
     --no-update)   UPDATE=off;    shift ;;
     --config)      CONFIG=$2;     shift 2 ;;
@@ -87,6 +89,7 @@ if [ -n "$CONFIG" ] && [ -f "$CONFIG" ]; then
 fi
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 [ -n "$MENTOR" ] || MENTOR=${CFG_mentor:-off}
+[ -n "$CONTEXT" ] || CONTEXT=${CFG_context:-auto}
 [ -n "$UPDATE" ] || UPDATE=${CFG_update:-true}
 THEME=${CFG_theme:-}
 
@@ -100,7 +103,7 @@ case $EFFORT in normal) EFFORT=low ;; esac
 case $EFFORT in high|low) ;; *) die "--effort must be high or low, got '$EFFORT'" ;; esac
 
 # --mentor is OFF unless asked for, here as in an interactive run. It is the one flag that puts
-# anything on the page — a framework primer inside the checkpoints that earn one — and everything
+# anything inside a checkpoint — a framework primer inside the checkpoints that earn one — and everything
 # else about the page is what a run without it writes. `false` and `no` are taken as the config
 # file's spellings of off, because a team turning it back off should not have to delete the key.
 case $MENTOR in
@@ -108,6 +111,13 @@ case $MENTOR in
   on|true|yes)  MENTOR=on ;;
   rails|elixir|phoenix|rust) ;;
   *) die "--mentor takes no value, or one of rails, elixir, phoenix, rust; got '$MENTOR'" ;;
+esac
+
+# How much of section 02 Context the page carries. `auto` is the earning rule and the default;
+# the other three are report-format.md § How much Context's, and this script only checks the name.
+case $CONTEXT in
+  auto|never|always|collapsed) ;;
+  *) die "--context must be auto, never, always or collapsed, got '$CONTEXT'" ;;
 esac
 
 # Whether a second run over the same pull request re-reads only the commits since the previous
@@ -151,6 +161,8 @@ case $MENTOR in
   on)  PROMPT="$PROMPT --mentor" ;;
   *)   PROMPT="$PROMPT --mentor $MENTOR" ;;
 esac
+# `auto` is the absence of the flag, for --mentor's reason: the default is what a bare run does.
+[ "$CONTEXT" = auto ] || PROMPT="$PROMPT --context $CONTEXT"
 # --update goes on only when something already put a page where this run writes. That check is
 # mechanical rather than editorial: the adapter reports that a previous map is present, and the
 # skill decides — via carry-plan.sh — whether any of it may be carried. Asking for an update
@@ -288,6 +300,7 @@ cat > "$OUTPUT_ABS/manifest.json" <<JSON
     "entry": "index.html",
     "effort": "$EFFORT",
     "mentor": "$MENTOR",
+    "context": "$CONTEXT",
     "theme": "${THEME:-daylight}"
   },
   "revision": {

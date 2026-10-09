@@ -322,6 +322,12 @@ SKIP  no excerpts in this input
 ## --page context-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment context-collapsed.html
+exit=0
+SKIP  no excerpts in this input
+## --page context-collapsed.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment context-dead-pointer.html
 exit=0
 SKIP  no excerpts in this input

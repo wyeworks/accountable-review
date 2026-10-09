@@ -256,6 +256,12 @@ SKIP  no checkpoint figure in this input
 ## --page context-clean.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment context-collapsed.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page context-collapsed.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment context-dead-pointer.html
 exit=0
 SKIP  no checkpoint figure in this input

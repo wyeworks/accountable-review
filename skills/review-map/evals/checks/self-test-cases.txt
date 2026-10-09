@@ -77,6 +77,7 @@
  start-here         | context-no-pointer.html       | 0 | 1 of 2 Context entr(ies) name no checkpoint
  start-here         | context-dead-pointer.html     | 0 | Context points at cp-c, which this page does not carry
  start-here         | context-shift-only.html       | 0 | Context holds only the request sequence
+ start-here         | context-collapsed.html        | 0 | every Context entry points at a checkpoint on this page (2)
 # The inventory carrier moved to the evidence foot and data-path moved with it. This row is the
 # POSITIVE case: a page that carries the attribute on a div.c passes, which is what an assertion
 # about where it may NOT sit would otherwise never look at.

@@ -16,6 +16,7 @@
 #     effort: high           # high | low  (`normal` accepted, means `low`)
 #     mentor: rails          # true | false | rails | elixir | phoenix | rust  (default false)
 #     theme: daylight        # daylight | workshop | field-notes  (default daylight)
+#     context: auto          # auto | never | always | collapsed  (default auto)
 #     trivial_files: 2       # skip when application files <= this AND
 #     trivial_lines: 20      #   application lines <= this; either at 0 disables it
 #     delivery:
@@ -101,7 +102,7 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "high" && val != "low") fail("effort must be high or low, got `" val "`")
       emit("effort", val)
     } else if (key == "mentor") {
-      # The one key that changes what is ON the page: it admits a framework primer inside
+      # The one key that changes what is inside a CHECKPOINT: it admits a framework primer inside
       # the checkpoints that earn one, for a reviewer new to the stack. Off is the default,
       # and `false` stays legal so turning it back off does not mean deleting the key.
       # A stack name is a claim the run checks against the repository, never an override —
@@ -111,6 +112,14 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "true" && val != "false" && val != "rails" && val != "elixir" && val != "phoenix" && val != "rust") \
         fail("mentor must be true, false, or one of rails, elixir, phoenix, rust, got `" val "`")
       emit("mentor", val)
+    } else if (key == "context") {
+      # How much of section 02 Context the page carries. `auto` is the earning rule; `never`
+      # and `collapsed` subtract from it (the section, or its visibility), and `always` lowers
+      # the bar without ever manufacturing an entry. report-format.md § How much Context owns
+      # the four, and generate-review-map.sh passes nothing for `auto`.
+      if (val != "auto" && val != "never" && val != "always" && val != "collapsed") \
+        fail("context must be auto, never, always or collapsed, got `" val "`")
+      emit("context", val)
     } else if (key == "theme") {
       # How the page LOOKS, and nothing about what is on it: typefaces, radii, hues. Read here so
       # CI fails on a typo before a model is spent, and passed on by generate-review-map.sh; the

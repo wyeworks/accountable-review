@@ -395,7 +395,7 @@ is worth doing when the diff is small enough that a second reader has nothing to
 
 ### Onboarding a reviewer into the stack
 
-A third axis, and the only one that puts anything on the page:
+A third axis, and the only one that puts anything inside a checkpoint:
 
 ```text
 /accountable-review:review-map 412 --mentor          # add framework primers
@@ -698,6 +698,7 @@ What you choose per run:
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
+| **Context** | `--context auto` by default: the repository-orientation section appears only when a checkpoint needs it. `never` drops it, `always` lowers the bar for a team onboarding people into the codebase (it still never invents an entry), `collapsed` puts it behind a toggle. |
 | **Theme** | Daylight by default; `workshop` or `field-notes` via `review_map.theme` in `.accountable-review.yml`. A setting of the repository, not a flag — and only the default: readers switch from the page's *Aa* menu. |
 | **Update** | Off by default; `--update` re-reads only the commits since the existing page and edits it in place. |
 | **Output** | A published artifact in Claude Code, a local HTML file in Codex; `--output <dir>` writes static HTML to a chosen directory instead. |
@@ -709,6 +710,7 @@ optional:
 review_map:
   effort: high           # high | low
   mentor: false          # true | false | rails | elixir | phoenix | rust
+  context: auto          # auto | never | always | collapsed
   theme: daylight        # daylight | workshop | field-notes
   delivery:
     provider: github-artifact

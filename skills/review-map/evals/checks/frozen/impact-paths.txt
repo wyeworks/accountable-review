@@ -382,6 +382,12 @@ SKIP  no .impact panel in this input
 ## --page context-clean.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment context-collapsed.html
+exit=0
+SKIP  no .impact panel in this input
+## --page context-collapsed.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment context-dead-pointer.html
 exit=0
 SKIP  no .impact panel in this input

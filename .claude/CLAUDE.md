@@ -33,7 +33,8 @@ Installed, it is invoked as `/accountable-review:review-map`: plugin skills are 
 the plugin name, so the manifest name and the skill directory name together decide the public
 command. It takes a target, an **effort** — `--effort high` (the default, sending an adversarial
 pass at the run's own analysis before any of it is written) or `--effort low`, which opts out — and
-`--mentor`, off by default, which is the one flag that puts anything on the page. All of it is
+`--mentor`, off by default, which is the one flag that puts anything inside a checkpoint, and
+`--context auto|never|always|collapsed`, which tunes section 02 alone. All of it is
 parsed in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills
 frontmatter allowlist and `claude plugin validate --strict` rejects an unknown key. **There is no
 level flag**, and an unrecognised one is reported rather than guessed at. The "source" is prose that
@@ -264,8 +265,8 @@ Editing one of these means checking the others still agree.
   of which is deleted with the level. What replaced the filter is nothing, which is the right amount
   of machinery for a page with one shape: `tests/run.sh` counts the entries, and the sanity row of
   `self-test.sh` is what proves that count looked.
-- **`--mentor` is the only flag that puts anything on the page, and subtraction is what keeps it from
-  being a level.** It admits one component — the primer callout, `aside.primer`, the third framework
+- **`--mentor` is the only flag that puts anything inside a checkpoint, and subtraction is what keeps
+  it from being a level.** It admits one component — the primer callout, `aside.primer`, the third framework
   anchor — inside the checkpoints that earn one, for a reviewer new to the *stack* rather than to the
   change. **Delete every primer from a mentor page and what remains is the page the same run would
   have written without the flag.** Nothing else moves: same sections, same checkpoints in the same
@@ -926,22 +927,38 @@ Editing one of these means checking the others still agree.
   like coverage: *ProjectSearcher implementation*, *Migration*, *Tests*. Five of those is the per-layer
   format with the section shells taken off, and it is cheaper to write than four merged judgments,
   which is exactly why a run reaches for it.
-- **Context is earned per concept, names the repository rather than the framework, and is not a
-  flag.** Section 02 sits between *What changed* and the agenda and introduces the pieces of *this
+- **Context is earned per concept, names the repository rather than the framework, and its flag
+  tunes the bar rather than choosing a document.** Section 02 sits between *What changed* and the agenda and introduces the pieces of *this
   repository* a checkpoint relies on and a newcomer would lack — a sequence of requests, a plugin
   wrapping a core method, a domain term a setting introduces. It exists because a correct, cited
   checkpoint on discourse#43845 was unfollowable to a reviewer new to Discourse, and none of what it
   assumed was about Rails, so `--mentor` could not have helped (issue #81).
 
   **Three lines hold it, and each will be crossed by something that looks like helpfulness.** It is
-  **always on and earned**, so most pages carry none and the section is omitted with its rail entry
-  — never a stub saying no context is needed, which grades the change as easy; a flag would have
-  made it a second document. It says **what a thing is, never what the change did to it** — the
+  **earned**, so most pages carry none and the section is omitted with its rail entry — never a
+  stub saying no context is needed, which grades the change as easy. It says **what a thing is, never what the change did to it** — the
   canonical-home line against the checkpoint, and the restatement regression one section early when
   crossed. And its entries are **concepts the checkpoints need, never the layers the diff touched**:
   *Models*, *The plugin*, *Tests* as entries is the per-layer page arriving a third time under a
   friendlier heading. The pointer each entry ends in — `span.ctx-used`, naming the checkpoints that
   rely on it — is that last rule made checkable.
+
+  **`--context` (and `review_map.context`) was added later, and the reason it is not a second
+  document is the part to keep.** `auto` is the default and the rule above. `never` and `collapsed`
+  pass `--mentor`'s test by subtraction — delete section 02, or open its fold, and the `auto` page is
+  what remains, so a `never` page must not compensate with a clause in a checkpoint. `always` cannot
+  pass that test and is held to a narrower one: it **lowers the bar and never fills the section** —
+  an impact path's use counts, a clause-explained concept qualifies, the cap stays at five, and
+  nothing qualifying still omits the section. **The pressure on it will be to make `always` mean
+  *always appears***, and an entry written so the section has one is the per-layer inventory this
+  bullet exists to refuse. `collapsed` is the one named exception to the reads-complete-when-shut
+  rule, safe only because an entry says what a thing *is* and carries no claim. No value is
+  announced on the page. `report-format.md` § *How much Context* owns the four **alone**; `SKILL.md`
+  steps 1, 7k and 9 and § *Re-running* (the flag must match the previous run) point at it;
+  `page-template.html` styles `details.ctx-fold` in the head range; `golden/context-collapsed.html`
+  proves `start-here.rb` reads through the fold; and the CI half is `read-config.sh`,
+  `references/config.md`, `ci/generate-review-map.sh` (`auto` is the absence of the flag, as off is
+  for `--mentor`) and `setup-ci/tests/`.
 
   **It renumbered the page**, attention to 03 through the foot to 06, and the rail does not close up
   when Context is omitted: *01, 03* says a section went, which is true.

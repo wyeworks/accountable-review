@@ -39,7 +39,7 @@ be asserting the assurance the format refuses to give — § *Evidence tiers* la
 known, never how hard someone looked, and *findings are a sample* is the rule that would break
 first — the one `README.md` states for every Review Map and the page therefore never has to restate.
 
-**`--mentor` is the one flag that puts anything on the page, and the rule that keeps it from being a
+**`--mentor` is the one flag that puts anything inside a checkpoint, and the rule that keeps it from being a
 level is subtraction.** It admits one component — the primer callout, § *Mentor mode* — inside the
 checkpoints that earn one. Delete every primer from a mentor page and what is left is the page the
 same run would have written without the flag: same sections, same checkpoints, same order, same
@@ -55,13 +55,17 @@ no tier, no component and no marker.** There is no stack chip and no "reviewed a
 content and not in their shape. What the stack is
 belongs in the sentences that cite this repository, which say it by naming real files.
 
-**Context is not a flag, and the page it appears on is still this one.** § *Section 2* is earned per
-concept — a checkpoint has to rely on it and a reader new to the repository has to lack it — so a
-small change in an area every reviewer knows earns none, and the section is omitted exactly as an
-impact section with nothing to show is. No argument turns it on and none turns it off: a reader
-switching *Context* on would be choosing a document, which is the thing § *One page shape* exists
-to refuse. Its counterpart under a flag is the primer, and the line between them is the subject —
-the framework is `--mentor`'s, the repository is everyone's.
+**`--context` is the second flag that changes what is on the page, and it changes one section
+only.** § *Section 2* is earned per concept, and `--context auto` — the default, and what no flag
+means — is that rule unchanged. The other three values are held to the tests the flags above pass,
+one each. `never` and `collapsed` pass `--mentor`'s, by **subtraction**: delete section 02 from an
+`auto` page, or open its fold, and what is left is the page the default writes — same checkpoints,
+same order, same words in every one of them. `always` cannot pass that test, since it can write an
+entry `auto` would not, so it is held to a narrower one: **it lowers the bar and never fills the
+section** — no entry the relaxed conditions do not earn, the same cap, and an omitted section when
+nothing qualifies. None of the four is announced on the page. § *How much Context* owns all of it.
+The line between Context and the primer is unchanged — the framework is `--mentor`'s, the
+repository is everyone's.
 
 **`--update` is the one run mode that puts a sentence on the page, and the reason is not
 generosity.** It re-reads only the commits since the previous map, so parts of the page it leaves
@@ -2122,6 +2126,49 @@ against the entries' cap of five — a page with a shift and five entries has in
 reader can hold before the first question. **Every other figure** has a home that a judgment
 earns, and so do the excerpt, the probe and the primer; *Context* holds none of them.
 
+### How much Context
+
+`SKILL.md` step 1 reads `--context auto|never|always|collapsed`; the CI key is
+`review_map.context`. **`auto` is the default and is everything above, unchanged.** The others are a
+team's standing answer to *how well do our reviewers know this repository* — not a reader choosing a
+document — and each is held to a rule that keeps the page this one.
+
+- **`never` — the section is not written.** No `section#context`, no rail entry 02, no
+  `figure.lifecycle.lc-shift`, no `span.ctx-used`; step 7k is skipped. **And nothing compensates.**
+  A checkpoint does not grow a clause explaining what the omitted entry would have said, because the
+  page with the section deleted is exactly what this value asks for; a checkpoint that already
+  explains a concept in a clause keeps it, as it would under `auto`. The rail does not close up —
+  *01, 03* says a section went, as it does when `auto` earns nothing.
+- **`always` — the bar drops, the cap does not.** Condition 1 widens to *a checkpoint or an
+  impact path uses it* (an impact card's nodes name repository code a reviewer meets in section 05
+  without an introduction), and condition 2 is waived, so a concept a checkpoint already explains in
+  a clause earns an entry too — **the clause stays in the checkpoint**, and the entry says what the
+  thing is rather than repeating it. Conditions 3 and 4 still hold: newcomer to this repository, never
+  the framework. The `span.ctx-used` pointer still names checkpoints only: a concept an impact path
+  uses points at the checkpoint that card's `p.ip-why` already points at, so every entry stays
+  reachable from a judgment and `checks/start-here.rb` reads it unchanged. **Still one to five entries,
+  still about 250 words, and still omitted when nothing qualifies.** The name says the section is
+  always *considered*, never that it always appears: an entry written so the section has one is
+  inventory, which is the per-layer regression this section exists to refuse, and the
+  never-manufacture rule is `--mentor`'s for the same reason.
+- **`collapsed` — the `auto` section, shut.** Same entries, same shift, decided by the same four
+  conditions, wrapped in one `details.ctx-fold` directly under the eyebrow, its `summary` the fixed
+  label *Repository context* and the entry names joined by commas — so a reader sees which concepts
+  are there without opening it. When `auto` earns nothing, the section is omitted exactly as it is
+  there; an empty fold is the stub § *Section 2* forbids.
+
+  **This is the one named exception to *a page reads complete with every block shut***, and it is
+  safe for the reason Context is the section it is: an entry says what a thing **is** and carries no
+  claim about the change, so nothing a reviewer must decide is behind the toggle. A checkpoint that
+  would be wrong without its Context entry was relying on the entry for a claim — which § *Section 2*
+  already forbids, and which `collapsed` merely makes visible.
+
+**No value is announced.** No badge, no line saying Context was turned off, no count of entries a
+lowered bar added — the first is a stub by another name, and the last is the page grading its own
+thoroughness. Say which value you took in chat, as for `--mentor`. **On an update** the value must
+match the previous run's, by `SKILL.md` § *Re-running over new commits*' rule for every
+page-affecting flag.
+
 **Staging.** Pending from stage 1, decided at `SKILL.md` step 7k once the agenda exists, and written
 in stage 3 beside *Impact outside the diff* — after the agenda's stubs have published, so orientation
 never delays the questions. § *Build state* has the omitted case.
@@ -2254,7 +2301,7 @@ outside one of them is a page to read again, not a page that is wrong.
 | Part | Words |
 |---|---|
 | *What changed* | 80–160 |
-| *Context*, when earned — one to five entries of 15–60 words each, and a shift's `ul.lc-cases` lines | 0–250 |
+| *Context*, when earned — one to five entries of 15–60 words each, and a shift's `ul.lc-cases` lines; the same at `--context always`, and 0 at `never` | 0–250 |
 | A checkpoint — question, explanation, *Look at* clauses, open line | 50–140 |
 | A reading-path stop's `span.why` | ≤ 40 |
 | An affected entry's clause | ≤ 30 |

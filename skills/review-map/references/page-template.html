@@ -129,7 +129,8 @@
                             on it. No tier, no grade, and one figure at most:
                             figure.lifecycle.lc-shift, the request sequence
                             before and after, when the change moved which
-                            request does what
+                            request does what; at --context collapsed,
+                            all of it inside one shut details.ctx-fold
     evidence tier ......... .tier — neutral by default, .tier-unc teal for
                             `from unchanged code`, .tier-inf ochre for an
                             inference. .tag is an excerpt's state, in plum,
@@ -483,6 +484,17 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 .ctx > dt:not(:first-of-type), .ctx > dd:not(:first-of-type) { border-top: 1px solid var(--rule); }
 .ctx .ctx-used, .lc-shift .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .ctx .ctx-used a, .lc-shift .ctx-used a { color: inherit; }
+/* --context collapsed: the same section, its entries (and shift) behind one shut
+   details.ctx-fold whose summary is the fixed label and the entry names. Neutral
+   rules, no family colour: plum would say "how a thing is known", and Context is
+   what a thing is. The one fold allowed to hold content rather than provenance —
+   report-format.md § How much Context says why that is safe. */
+details.ctx-fold { margin-top: 8px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+details.ctx-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
+details.ctx-fold > summary::-webkit-details-marker { display: none; }
+details.ctx-fold > summary::marker { content: ""; }
+.ctx-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+details.ctx-fold > .ctx { margin-top: 0; }
 @media (max-width: 700px) {
   .ctx { grid-template-columns: minmax(0, 1fr); }
   .ctx > dd { padding-top: 4px; }
@@ -1695,7 +1707,16 @@ figcaption strong { color: var(--ink-3); }
          range. The Before column cites the base: {{DIFF}}L for a line the change
          removed or rewrote, {{BLOB}} at the base SHA for one it left alone. It is
          delete-whole like everything else here: a change that kept the sequence
-         earns no shift. ===== -->
+         earns no shift.
+
+         --context (report-format.md § How much Context). auto is all of the above.
+         never: delete this section and its rail entry, and add nothing anywhere
+         else to make up for it. always: the same markup, entries earned by the
+         lowered bar, still omitted when none qualifies. collapsed: wrap the shift
+         and the dl in ONE details.ctx-fold, shut, directly under the h2:
+           <details class="ctx-fold"><summary><span class="ctx-fold-lbl">Repository
+           context</span> Name one, Name two</summary> ...figure, dl... </details>
+         The label is fixed and the names are the dt texts; no count, no badge. ===== -->
     <section id="context">
       <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
       <h2 style="margin-bottom:18px">What the judgments below rely on</h2>

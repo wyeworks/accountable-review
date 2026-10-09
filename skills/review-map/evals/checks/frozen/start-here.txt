@@ -520,6 +520,24 @@ PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (2)
 PASS  2 entries, within the shape of a reading order
 PASS  every Context entry points at a checkpoint on this page (2)
+## --fragment context-collapsed.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
+## --page context-collapsed.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
 ## --fragment context-dead-pointer.html
 exit=0
 PASS  start here: 2 entr(ies), each with a why
@@ -1656,6 +1674,15 @@ PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (2)
 PASS  2 entries, within the shape of a reading order
 PASS  Context holds only the request sequence before and after — figures.rb grades it
+## --fragment context-collapsed.html
+exit=0
+PASS  start here: 2 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (2)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (2)
+PASS  2 entries, within the shape of a reading order
+PASS  every Context entry points at a checkpoint on this page (2)
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
