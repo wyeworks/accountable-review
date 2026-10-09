@@ -9,10 +9,10 @@
 //
 //   * engine events — asking for the skill starts the run, each main-loop tool call names the
 //     activity through hooks/activity.json (the table progress.rb reads too), each claim-falsifier
-//     spawn is counted, and the turn ending ends the run;
+//     spawn is counted, and the coverage gate passing then the turn answering ends the run;
 //   * the page the run is staging — checkpoints written against pending ones;
-//   * the clock, against the median of this repository's earlier generations, which this file
-//     records itself. With none recorded there is no bar, only elapsed time.
+//   * the clock, against the median of this repository's earlier generations of the same kind,
+//     which this file records itself. With none recorded there is no bar, only elapsed time.
 //
 // The activity is the latest tool call by purpose, never a step number: steps interleave and
 // cannot be read off a run (evals/README.md § Profiling one run), and this does not pretend
@@ -21,22 +21,42 @@
 
 import type { EngineInterface, Register, Timer } from 'claude-code'
 
-import { type Activity, checkpoints, label, line, median, pagePath, parseActivity, repoKey, summary } from './board'
+import {
+  type Activity,
+  type RunKind,
+  type Vars,
+  assignedW,
+  checkpoints,
+  label,
+  line,
+  median,
+  outputPage,
+  pagePath,
+  parseActivity,
+  repoKey,
+  runKind,
+  runsGate,
+  summary,
+} from './board'
 
 const REVIEW_MAP = /(^|:)review-map$/
 const FALSIFIER = /(^|:)claim-falsifier$/
-const KEEP = 20 // generations remembered per repository
+const KEEP = 20 // generations remembered per repository and kind
 
 type Run = {
   started: number
+  paused: number // milliseconds spent waiting between turns, which are not generation
+  waitingSince?: number
   ended?: 'done' | 'stopped' | 'interrupted'
   endedAt?: number
   activity?: string
   tools: number
   falsifiers: number
   page?: string
+  vars: Vars
   checkpoints?: string
   sawGate: boolean
+  kind: RunKind
   eta?: number
   repo?: string
   tick: number
@@ -47,10 +67,14 @@ type Run = {
 let table: Activity = []
 let run: Run | undefined
 
+function elapsedMs(r: Run, now: number) {
+  return (r.endedAt ?? r.waitingSince ?? now) - r.started - r.paused
+}
+
 async function draw($: EngineInterface) {
   if (!run) return
-  const now = run.endedAt ?? (await $.clock.now())
-  $.ui.status(line({ ...run, elapsed: (now - run.started) / 1000 }))
+  const now = await $.clock.now()
+  $.ui.status(line({ ...run, waiting: run.waitingSince !== undefined, elapsed: elapsedMs(run, now) / 1000 }))
 }
 
 async function recount($: EngineInterface) {
@@ -62,8 +86,16 @@ async function recount($: EngineInterface) {
   }
 }
 
-function historyKey(repo: string) {
-  return `generations:${repo}`
+function tick($: EngineInterface, r: Run) {
+  r.timer?.cancel()
+  r.timer = $.clock.every(1000, () => {
+    r.tick += 1
+    void draw($)
+  })
+}
+
+function historyKey(repo: string, kind: RunKind) {
+  return `generations:${kind}:${repo}`
 }
 
 // The command as typed, or as the engine records a typed skill command; a sentence that merely
@@ -72,28 +104,30 @@ function isCommand(text: string) {
   return /(^\s*|<command-name>)\/(accountable-review:)?review-map(?=\s|<|$)/.test(text)
 }
 
-async function start($: EngineInterface) {
+async function start($: EngineInterface, command: string) {
   run?.timer?.cancel()
   if (table.length === 0) {
     table = parseActivity(await $.fs.read(`${$.plugin.root}/hooks/activity.json`))
   }
+  const kind = runKind(command)
   const repo = await $.session.repo()
   const key = repo ? repoKey(repo.remote, repo.root) : undefined
-  const past = key ? await $.store.get(historyKey(key)) : undefined
+  const past = key ? await $.store.get(historyKey(key, kind)) : undefined
   const mine: Run = {
     started: await $.clock.now(),
+    paused: 0,
     tools: 0,
     falsifiers: 0,
     sawGate: false,
+    kind,
+    page: outputPage(command),
+    vars: { TMPDIR: await $.env.get('TMPDIR') },
     tick: 0,
     repo: key,
     eta: Array.isArray(past) ? median(past.filter((n): n is number => typeof n === 'number')) : undefined,
   }
   run = mine
-  mine.timer = $.clock.every(1000, () => {
-    mine.tick += 1
-    void draw($)
-  })
+  tick($, mine)
   await draw($)
 }
 
@@ -114,7 +148,7 @@ export const register: Register = on => {
       run = undefined
       $.ui.status(undefined)
     }
-    if (e.turnId === undefined && isCommand(e.text)) await start($)
+    if (e.turnId === undefined && isCommand(e.text)) await start($, e.text)
     return next(e)
   }).catch(($, e, next) => next(e))
 
@@ -122,20 +156,24 @@ export const register: Register = on => {
   // its work, not the run's activity. Its spawn is what gets counted, below.
   on('tool.call', async ($, e, next) => {
     if (e.agentId !== undefined) return next(e)
-    const asked = e.tool === 'Skill' && REVIEW_MAP.test(String((e as { skill?: unknown }).skill ?? ''))
+    const args = e as unknown as Record<string, unknown>
+    const asked = e.tool === 'Skill' && REVIEW_MAP.test(String(args.skill ?? ''))
     if (asked && (!run || run.ended)) {
-      await start($)
+      await start($, `/review-map ${String(args.args ?? '')}`)
       return next(e)
     }
     if (!run || run.ended) return next(e)
-    const text = summary(e as unknown as Record<string, unknown>)
-    run.tools += 1
-    run.activity = label(table, text) ?? run.activity
-    if (/coverage-gate\.sh/.test(text)) run.sawGate = true
-    run.page = pagePath(e as unknown as Record<string, unknown>) ?? run.page
+    const mine = run
+    const text = summary(args)
+    mine.tools += 1
+    mine.activity = label(table, text) ?? mine.activity
+    if (typeof args.command === 'string') mine.vars.W = assignedW(args.command, mine.vars) ?? mine.vars.W
+    mine.page = pagePath(args, mine.vars) ?? mine.page
     await draw($)
     const result = await next(e)
-    if (run?.page && /page-skeleton\.sh|\.html\b/.test(text)) {
+    // Passing, not mentioning: the gate exits non-zero when the inventory and the diff disagree.
+    if (runsGate(args) && result.deny === undefined && result.isError !== true) mine.sawGate = true
+    if (mine.page && /page-skeleton\.sh|\.html\b/.test(text)) {
       await recount($)
       await draw($)
     }
@@ -150,21 +188,40 @@ export const register: Register = on => {
     return next(e)
   }).catch(($, e, next) => next(e))
 
-  // The run is the turn the skill expanded in. Its length feeds the next run's ETA only when the
-  // turn answered and the coverage gate ran, so a run that stopped early never shortens the bar.
+  // A run can span turns: the skill stops to ask (two stacks, say), or the main loop ends its turn
+  // while background falsifiers read and is woken by their notifications. So a turn that answers
+  // before the gate has passed pauses the run rather than ending it, and the next main-loop turn
+  // resumes it; the time between is the person's or the notification's, not generation's.
+  on('turn.start', async ($, e, next) => {
+    if (run && !run.ended && run.waitingSince !== undefined) {
+      run.paused += (await $.clock.now()) - run.waitingSince
+      run.waitingSince = undefined
+      tick($, run)
+      await draw($)
+    }
+    return next(e)
+  }).catch(($, e, next) => next(e))
+
+  // Its length feeds the next run's ETA only when the gate passed and the turn answered, so a run
+  // that stopped early never shortens the bar.
   on('turn.complete', async ($, e, next) => {
     if (run && !run.ended && e.agentId === undefined) {
-      run.timer?.cancel()
-      run.endedAt = await $.clock.now()
-      const done = e.reason === 'answer' && run.sawGate
-      run.ended = done ? 'done' : e.isAborted ? 'interrupted' : 'stopped'
+      const mine = run
+      mine.timer?.cancel()
+      const now = await $.clock.now()
+      if (e.reason === 'answer' && !mine.sawGate) {
+        mine.waitingSince = now
+      } else {
+        mine.endedAt = now
+        mine.ended = e.reason === 'answer' ? 'done' : e.isAborted ? 'interrupted' : 'stopped'
+      }
       await recount($)
       await draw($)
-      if (done && run.repo) {
-        const key = historyKey(run.repo)
+      if (mine.ended === 'done' && mine.repo) {
+        const key = historyKey(mine.repo, mine.kind)
         const past = await $.store.get(key)
         const kept = Array.isArray(past) ? past.filter(n => typeof n === 'number') : []
-        await $.store.set(key, [...kept, (run.endedAt - run.started) / 1000].slice(-KEEP))
+        await $.store.set(key, [...kept, elapsedMs(mine, now) / 1000].slice(-KEEP))
       }
     }
     return next(e)

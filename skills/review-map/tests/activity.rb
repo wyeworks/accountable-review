@@ -77,6 +77,11 @@ failures = problems(json, mod, board)
 require_relative "../evals/e2e/progress"
 got = Progress::ACTIVITY.find { |re, _| "Edit   /tmp/review-map/app-pr-7/page.html ".match?(re) }&.last
 failures << "progress.rb does not map an Edit of $W/page.html to writing the page (got #{got.inspect})" unless got&.include?("writing the page")
+# And reading it is not writing it: --update greps an index out of the page and Reads by offset.
+["Read   /tmp/review-map/app-pr-7/page.html ", "Bash  rg -n 'id=\"cp-' /tmp/review-map/app-pr-7/page.html  "].each do |s|
+  got = Progress::ACTIVITY.find { |re, _| s.match?(re) }&.last
+  failures << "progress.rb labels a read of the page as writing it: #{s.strip}" if got&.include?("writing the page")
+end
 
 rows = JSON.parse(json)
 MUTATIONS = {

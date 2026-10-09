@@ -25,19 +25,67 @@ export function label(table: Activity, text: string): string | undefined {
   return table.find(([re]) => re.test(text))?.[1]
 }
 
+// Which kind of run the command asked for. An --update re-run reads only the delta and a low-effort
+// run sends no falsifiers, so each finishes on its own clock and keeps its own history: a median
+// over all three would set a full run's bar by a three-minute update.
+export type RunKind = 'update' | 'low' | 'high'
+
+export function runKind(command: string): RunKind {
+  if (/(^|\s)--update(?=\s|$)/.test(command)) return 'update'
+  if (/(^|\s)--effort[= ]low(?=\s|$)/.test(command)) return 'low'
+  return 'high'
+}
+
+// Where --output puts the page: <dir>/index.html, named in the command and nowhere else.
+export function outputPage(command: string): string | undefined {
+  const m = command.match(/(?:^|\s)--output[= ]+("([^"]+)"|'([^']+)'|(\S+))/)
+  const dir = m && (m[2] ?? m[3] ?? m[4])
+  return dir ? `${dir.replace(/\/+$/, '')}/index.html` : undefined
+}
+
+// The shell variables SKILL.md writes the page path with. Step 1 derives
+// W="${TMPDIR:-/tmp}/review-map/<repo>-pr-<N>" and step 9 runs `page-skeleton.sh --out
+// "$W/page.html"`, so the path is read by expanding what the run itself assigned. Whatever is
+// still a variable after that is unknown, and an unknown path is no path.
+export type Vars = { W?: string; TMPDIR?: string }
+
+export function expand(text: string, vars: Vars): string | undefined {
+  const out = text
+    .replace(/\$\{TMPDIR:-([^}]*)\}/g, (_, fallback: string) => vars.TMPDIR || fallback)
+    .replace(/\$\{?(W|TMPDIR)\}?(?![A-Za-z0-9_])/g, (whole, name: 'W' | 'TMPDIR') => vars[name] ?? whole)
+    .replace(/\/{2,}/g, '/')
+  return out.includes('$') ? undefined : out
+}
+
+// The W a Bash command assigns, expanded, or undefined when it assigns none.
+export function assignedW(command: string, vars: Vars): string | undefined {
+  const m = command.match(/(?:^|[\s;&|])W=("([^"]*)"|'([^']*)'|(\S+))/)
+  const raw = m && (m[2] ?? m[3] ?? m[4])
+  return raw === null || raw === undefined ? undefined : expand(raw, vars)
+}
+
 // The page a run is staging: `page-skeleton.sh --out <path>` names it first, and an Edit or a
-// Write of the derived page names it again. Interactive runs write $W/page.html; --output runs
-// write <dir>/index.html, which only the skeleton command names.
-export function pagePath(e: Record<string, unknown>): string | undefined {
+// Write of the derived page names it again.
+export function pagePath(e: Record<string, unknown>, vars: Vars = {}): string | undefined {
   if (typeof e.command === 'string') {
     const m = e.command.match(/page-skeleton\.sh\b.*?--out[= ]+("([^"]+)"|'([^']+)'|(\S+))/)
     const path = m && (m[2] ?? m[3] ?? m[4])
-    if (path && !path.includes('$')) return path
+    if (path) return expand(path, vars)
   }
   if (typeof e.file_path === 'string' && /\/review-map\/[^/]+\/page\.html$/.test(e.file_path)) {
     return e.file_path
   }
   return undefined
+}
+
+// The coverage gate run, as distinct from read: the script is the command word — first, after a
+// separator, or handed to a shell — rather than the argument of cat, sed or grep.
+export function runsGate(e: Record<string, unknown>): boolean {
+  return (
+    e.tool === 'Bash' &&
+    typeof e.command === 'string' &&
+    /(^|[;&|(]\s*|\b(?:ba)?sh\s+)[^\s;&|]*coverage-gate\.sh(?=\s|$)/m.test(e.command)
+  )
 }
 
 // A pending checkpoint is a <section class="cp"> whose <h3> carries span.pending, so each
@@ -79,9 +127,10 @@ export function bar(frac: number, cells = 20): string {
 
 export type Reading = {
   tick: number
-  elapsed: number // seconds of generation, frozen once the turn ends
+  elapsed: number // seconds of generation: frozen once the run ends, paused while it waits
   eta?: number // the median of this repository's earlier generations; absent with none recorded
   ended?: 'done' | 'stopped' | 'interrupted'
+  waiting?: boolean // the turn ended with the run unfinished; the next turn resumes it
   activity?: string
   tools: number
   falsifiers: number
@@ -93,7 +142,7 @@ export type Reading = {
 // fall back to a documented order of magnitude, but here that would be progress invented.
 export function line(r: Reading): string {
   const icon =
-    r.ended === 'done' ? '✅' : r.ended ? '⏹' : MOON[r.tick % MOON.length]
+    r.ended === 'done' ? '✅' : r.ended ? '⏹' : r.waiting ? '⏸' : MOON[r.tick % MOON.length]
   const status =
     r.ended === 'done'
       ? '✅ done'
@@ -101,7 +150,9 @@ export function line(r: Reading): string {
         ? '⏹ interrupted'
         : r.ended === 'stopped'
           ? '⏹ stopped'
-          : (r.activity ?? '🤔 thinking')
+          : r.waiting
+            ? '💬 waiting for the next turn'
+            : (r.activity ?? '🤔 thinking')
   const bits = [`${icon} review map`]
   if (r.eta !== undefined && r.eta > 0) {
     const frac = r.ended === 'done' ? 1 : Math.min(r.elapsed / r.eta, 0.99)

@@ -10,7 +10,7 @@
   ["check\\.rb|page-invariants", "🧪 self-checking"],
   ["agenda\\.md", "🧩 building the agenda"],
   ["/analysis\\b", "📝 writing analysis notes"],
-  ["page/index\\.html|page\\.html|body\\.html|\\bWrite\\b.*\\.html|\\bEdit\\b.*\\.html", "✍️  writing the page"],
+  ["^(Write|Edit) .*\\.html|>\\s*\\S+\\.html", "✍️  writing the page"],
   ["references/|SKILL\\.md", "📚 reading the playbook"],
   ["\\bgit (diff|log|show)\\b", "🌿 reading the diff"],
   ["\\b(rg|grep|Grep)\\b", "🔎 tracing consumers"],
