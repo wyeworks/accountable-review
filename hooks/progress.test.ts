@@ -203,7 +203,7 @@ describe('progress line', () => {
     await $.prompt.submit({ text: '/review-map 7' } as never)
     await time.advance(60_000)
     await $.turn.complete(finish('answer')) // asks which stack: not finished, not stopped
-    expect(statuses.at(-1)).toContain('💬 waiting for the next turn')
+    expect(statuses.at(-1)).toContain('⏸ review map')
     expect(statuses.at(-1)).toContain('1:00')
 
     await time.advance(300_000) // the person thinks about it
@@ -218,13 +218,13 @@ describe('progress line', () => {
     await $.tool.call(bash(`${GATE} # FAIL`))
     await time.advance(60_000)
     await $.turn.complete(finish('answer'))
-    expect(statuses.at(-1)).toContain('💬 waiting')
+    expect(statuses.at(-1)).toContain('waiting for the next turn')
 
     await $.turn.start({ text: '', turnId: 't3' } as never)
     await $.tool.call(bash(GATE))
     await time.advance(60_000)
     await $.turn.complete(finish('answer'))
-    expect(statuses.at(-1)).toContain('✅ done')
+    expect(statuses.at(-1)).toMatch(/^✅ review map .* done/)
     expect(statuses.at(-1)).toContain('3:00') // generation only, the wait taken out
   })
 
@@ -236,7 +236,7 @@ describe('progress line', () => {
     await $.tool.call(bash(GATE))
     await time.advance(60_000)
     await $.turn.complete(finish('aborted'))
-    expect(statuses.at(-1)).toContain('⏹ interrupted')
+    expect(statuses.at(-1)).toMatch(/^⏹ review map .* interrupted/)
 
     await $.prompt.submit({ text: 'something else' } as never)
     expect(statuses.at(-1)).toBeUndefined()
@@ -254,7 +254,7 @@ describe('progress line', () => {
     await $.tool.call(bash(GATE))
     await time.advance(180_000)
     await $.turn.complete(finish('answer'))
-    expect(statuses.at(-1)).toContain('✅ done')
+    expect(statuses.at(-1)).toMatch(/^✅ review map .* done/)
 
     await $.prompt.submit({ text: '/review-map 9' } as never) // a full run: no update history counts
     expect(statuses.at(-1)).not.toContain('~')

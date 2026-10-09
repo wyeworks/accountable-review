@@ -143,16 +143,8 @@ export type Reading = {
 export function line(r: Reading): string {
   const icon =
     r.ended === 'done' ? '✅' : r.ended ? '⏹' : r.waiting ? '⏸' : MOON[r.tick % MOON.length]
-  const status =
-    r.ended === 'done'
-      ? '✅ done'
-      : r.ended === 'interrupted'
-        ? '⏹ interrupted'
-        : r.ended === 'stopped'
-          ? '⏹ stopped'
-          : r.waiting
-            ? '💬 waiting for the next turn'
-            : (r.activity ?? '🤔 thinking')
+  // The icon carries the state's glyph, so the words beside it carry none.
+  const status = r.ended ?? (r.waiting ? 'waiting for the next turn' : (r.activity ?? '🤔 thinking'))
   const bits = [`${icon} review map`]
   if (r.eta !== undefined && r.eta > 0) {
     const frac = r.ended === 'done' ? 1 : Math.min(r.elapsed / r.eta, 0.99)

@@ -204,7 +204,7 @@ def repetition(pr, opts, stamp, batch, rep)
   end
   live.failed = !row["generated"] || !File.exist?(File.join(rundir, "page", "index.html"))
   live.finished = true
-  live.phase = live.failed ? "💥 no page" : "✅ done"
+  live.phase = live.failed ? "no page" : "done" # the row's icon already says which
   $board.say "#{live.failed ? '💥' : '✅'} #{pr.id} r#{rep}: generated=#{row['generated']} · check #{row['check_passed']}p/#{row['check_failed']}f/" \
        "#{row['check_warning']}w · §01 #{row['changed_words'] || '-'} words · #{judged.join(', ')} · #{rundir}"
 end

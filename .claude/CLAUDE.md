@@ -1242,9 +1242,10 @@ Editing one of these means checking the others still agree.
   produced: an engine event or a transcript line, the staged page, the clock. **Activity is
   shown by purpose, never as a step**, because steps interleave and cannot be read off a run.
   **The one estimate is the bar, labelled `~`, and outside the harness it needs a recorded
-  history.** The mod writes its own per-repository generation times to `$.store`, and only for a
-  turn that answered and ran the coverage gate. With nothing recorded it shows elapsed time and
-  no bar. The harness's 25-minute fallback is a documented order of magnitude there; on a
+  history.** The mod writes its own generation times to `$.store`, per repository and per kind of
+  run (high, low, `--update`), and only for a run whose coverage gate passed before its turn
+  answered. Time spent waiting between turns is left out. With nothing recorded it shows elapsed
+  time and no bar. The harness's 25-minute fallback is a documented order of magnitude there; on a
   person's screen it would be invented progress.
 
   **One table, two languages.** `hooks/activity.json` is read by Ruby and by JavaScript. Two
