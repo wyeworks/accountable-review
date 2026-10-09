@@ -11,11 +11,11 @@
 reviewer through what changed, how the new behaviour works, what existing code is affected, and what
 to understand before merge.
 
-It ships two skills: **`review-map`**, which produces the page for a Rails or a
-Rust codebase — a Rust backend or Rust in general — with or without a separate client such as
-Next.js, with Elixir/Phoenix and React — a Next.js app or React in general — still in
-development; and **`setup-ci`**, which arranges for
-one to be produced automatically on every review-ready pull request.
+It ships two skills: **`review-map`**, which produces the page for a Rails or a Rust codebase — a
+Rust backend or Rust in general — with or without a separate client such as Next.js, with
+Elixir/Phoenix and React (a Next.js app or React in general) support still in development; and
+**`setup-ci`**, which arranges for one to be produced automatically on every review-ready pull
+request.
 
 Built by **WyeWorks**.
 
@@ -405,16 +405,17 @@ A third axis, and the only one that puts anything on the page:
 ```
 
 A Review Map normally assumes you know the framework and are meeting *this change* for the first
-time. `--mentor` is for the other case — a reviewer new to Rails, to Rust, to Phoenix or to React, on their first
-pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
+time. `--mentor` is for the other case — a reviewer new to Rails, to Rust, to Phoenix or to React,
+on their first pull requests in an unfamiliar codebase. Where a judgment turns on a framework rule they may not
 know, the page stops linking to the manual and states the rule: a short primer inside that
 checkpoint, with the API named, the behaviour explained, a worked example on a generic class, the
 line in *your* repository that made it relevant, and the pinned documentation link it came from.
 
 > **Phoenix and React today:** a primer is gated on the documentation link it escalates from, and
 > the Elixir and React catalogues ship closed until a verification run has opened every row in them.
-> So `--mentor` on a Phoenix, React or Next.js project currently produces no primers and says so. That is the fail-closed rule doing its
-> job — a page with no primer is narrower, a page with an invented link is wrong. The Rust catalogue
+> So `--mentor` on a Phoenix, React or Next.js project currently produces no primers and says so.
+> That is the fail-closed rule doing its job — a page with no primer is narrower, a page with an
+> invented link is wrong. The Rust catalogue
 > shipped closed the same way and has since been opened, so a Rust page can carry primers, framed in
 > graphite rather than Rails red.
 
@@ -539,7 +540,7 @@ compile against stale offline query data.
 that catches the same kind of thing: `Repo.update_all` builds no changeset, a `unique_constraint`
 does nothing without the index behind it, and a `phx-click` renamed in a template without its
 `handle_event` clause crashes the LiveView the first time someone clicks it. Parts of it are not
-finished yet, such as a Phoenix backend with a ReactJS frontend, and it has had far less testing
+finished yet, such as a Phoenix backend with a React frontend, and it has had far less testing
 than Rails or Rust.
 
 **React support is still in development too, and it comes in two lenses, built the way Rust's are.**
@@ -695,7 +696,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Rust discovery** | The workspace and its members from `Cargo.toml`, each crate's package name, kind and features, whether it is published, the test runner CI uses, and on a backend the framework, the database layer and how authentication is attached. Each crate's exact version comes from `Cargo.lock` and the toolchain's from `rust-toolchain.toml` or `rust-version` — docs.rs serves exact versions, so there is no series. |
 | **Phoenix discovery** | The Mix project and OTP app name from `mix.exs`, `lib/<app>` against `lib/<app>_web`, LiveView vs JSON API, and each package's exact version from `mix.lock` — hexdocs serves exact versions, so there is no series. |
 | **React discovery** | The package the diff touches and its workspace, the package manager from the lock file, TypeScript or not, Strict Mode and the React Compiler, the state, data-fetching, form and routing libraries, and the test runner. On Next.js, which router the changed files use, the middleware or proxy and its matcher, how authentication is attached, and the database layer. The locked majors of `react` and `next` — react.dev and nextjs.org publish per major, so that is what a link pins. |
-| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Contract judgments need both sides in the diff; with no client, or a PR that does not touch one, none is raised rather than raised emptily. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. |
+| **Frontend discovery** | Whether a separate client exists at all, and where its API client and types live. Contract judgments need both sides in the diff; with no client, or a PR that does not touch one, none is raised rather than raised emptily. A LiveView app has no separate client by design, so the same material goes to the seam it actually has: the `phx-*` attribute and the callback that answers it. On a React stack the frontend is the application, so what is looked for is the API it talks to, if any, and whether its types are generated from the server's or written by hand. |
 | **Test frameworks** | RSpec, Minitest, ExUnit, Cargo's own harness (with nextest and snapshot crates), and Vitest or Jest with Testing Library and Playwright or Cypress, detected rather than assumed. Tests are read as evidence of intent, and the test gap is named per behaviour. |
 | **Review Map generation** | Ten ordered steps, from resolving the target to the completeness gate. The diff is traced and clustered by behaviour, then a synthesis step turns that analysis into a ranked agenda of checkpoints; affected-but-unchanged code comes from search recipes per artifact kind; every claim is anchored to a `file:line`. |
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
@@ -749,9 +750,10 @@ than aspirational: the config reader emits a line only for a key the file actual
 file that only restates the defaults — a file nobody chose is one more thing to keep in sync, and a
 later reader treats `retention_days: 30` as load-bearing when nobody picked it.
 
-Everything else is discovered instead of configured: which stack this is, the Rails root or the Mix
-project, the test framework, whether the app is API-only or LiveView, how authorization is attached,
-the frontend location, the framework and package versions, and the project's own conventions. Where
+Everything else is discovered instead of configured: which stack this is, the Rails root, the Mix
+project, or the Cargo or JavaScript workspace, the test framework and package manager, whether the
+app is API-only or LiveView, which Next.js router it uses, how authorization is attached, the
+frontend location, the framework and package versions, and the project's own conventions. Where
 a project documents conventions — `CLAUDE.md`, a style guide — the skill reads them; where it does
 not, house style is inferred from adjacent unchanged code, which is usually more accurate than a
 stale document anyway.
