@@ -41,6 +41,7 @@ TEMPLATE=$SKILL_DIR/references/page-template.html
 SKELETON=$SKILL_DIR/scripts/page-skeleton.sh
 DIFF_RENDER=$SKILL_DIR/scripts/diff-render.sh
 CARRY_PLAN=$SKILL_DIR/scripts/carry-plan.sh
+EXCERPT=$SKILL_DIR/scripts/excerpt.sh
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
@@ -73,6 +74,15 @@ case_carry_red() {
   what=$1; scr=$2
   chmod 755 "$scr"
   if REVIEW_MAP_SECTION=carry-plan REVIEW_MAP_CARRY_PLAN="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
+    bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
+  else
+    ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
+  fi
+}
+
+case_excerpt_red() {
+  what=$1; scr=$2
+  if REVIEW_MAP_SECTION=excerpt REVIEW_MAP_EXCERPT="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
     bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
   else
     ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
@@ -437,6 +447,35 @@ case_runs_red "a localStorage call sits outside a try" "$WORK/bare-storage.html"
 sed 's|^  if \[ "$name" = "$THEME" \]; then$|  [ "$name" = "$THEME" ] \|\| continue; if true; then|' "$SKELETON" > "$WORK/one-theme.sh"
 chmod 755 "$WORK/one-theme.sh"
 case_runs_red "only the chosen theme is emitted, so the menu has nothing to switch to" "$TEMPLATE" "$WORK/one-theme.sh"
+
+# ---- one citation per Look at entry ----
+#
+# The duplicate this layout removed renders fine and reads as thorough: the path above the excerpt,
+# the same path in its summary, a why under a clause that already said it. The template rows
+# expect zero, which a misspelled pattern would also count; the script rows ask whether the
+# excerpt section's fixtures reach the branch at all.
+
+# 38. An entry keeps its own a.path beside the excerpt whose summary is the link.
+awk '/<ul class="lookat">/ { f = 1 } f && /<details class="excerpt excerpt--diff">/ && !d { print "            <a class=\"path\" href=\"{{DIFF}}R{{START}}-R{{END}}\">{{PATH}}:{{START}}-{{END}}</a>"; d = 1 } { print }' \
+  "$TEMPLATE" > "$WORK/entry-path.html"
+case_runs_red "a Look at entry keeps an a.path beside its excerpt" "$WORK/entry-path.html" "$SKELETON"
+
+# 39. The excerpt in an entry repeats the entry's clause as a summary why.
+awk '/<ul class="lookat">/ { f = 1 } f && /<span class="tag">Unchanged<\/span>/ && !d { print; print "                <span class=\"ex-why\">{{WHY_THIS_MATTERS}}</span>"; d = 1; next } { print }' \
+  "$TEMPLATE" > "$WORK/entry-why.html"
+case_runs_red "a Look at entry's excerpt repeats the clause as a why" "$WORK/entry-why.html" "$SKELETON"
+
+# 40. --in-entry is parsed and then ignored, so every excerpt says its why twice inside an entry.
+sed 's|--in-entry) IN_ENTRY=1; shift ;;|--in-entry) shift ;;|' "$EXCERPT" > "$WORK/no-in-entry.sh"
+case_excerpt_red "excerpt.sh ignores --in-entry" "$WORK/no-in-entry.sh"
+
+# 41. The body-foot citation comes back under the code, the third copy of the address.
+sed 's|^  printf .</pre>\\n.$|&; printf "<p class=\\"ex-src\\">x</p>\\n"|' "$EXCERPT" > "$WORK/ex-src-back.sh"
+case_excerpt_red "excerpt.sh writes a second citation under the code" "$WORK/ex-src-back.sh"
+
+# 42. The link falls off the summary — the closed excerpt is then a citation nobody can click.
+sed 's|^  if \[ -n "\$LINK" \]; then$|  if false; then|' "$EXCERPT" > "$WORK/no-loc-link.sh"
+case_excerpt_red "excerpt.sh --at leaves the summary's location unlinked" "$WORK/no-loc-link.sh"
 
 echo ""
 echo "self-test: $ok ok, $bad bad"

@@ -1264,13 +1264,21 @@ Everything else about writing holds at every stage:
   *Look at* entry it confirms** — never in a block of its own, and never in the evidence foot. What
   earns one is a citation the judgment turns on: the lines a reader would otherwise take on faith,
   above all *affected, not changed*, which no diff view can address, and the changed hunk where
-  seeing it is what makes the judgment possible. Quote inline as collapsed excerpts, from the
-  generator:
+  seeing it is what makes the judgment possible. **In a *Look at* entry, a short citation (about
+  twelve lines or fewer) carries its excerpt by default.** There the excerpt is the entry's citation
+  rather than an addition to it, so a closed one costs nothing. `report-format.md` § *Source
+  excerpts* › *Budget* has the four cases that take a bare `a.path` instead. Quote inline as
+  collapsed excerpts, from the generator, with `--blob` (or `--link`) whenever the rung allows,
+  because the summary's location is the excerpt's only link:
 
   ```sh
-  <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --base BASE --why "..."
-  <skill base directory>/scripts/excerpt.sh --diff app/models/project.rb --base BASE --why "..."
+  <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --base BASE --blob URL --in-entry
+  <skill base directory>/scripts/excerpt.sh --diff app/models/project.rb --base BASE --link DIFF_ANCHOR --why "..."
   ```
+
+  **An entry with an excerpt has no `a.path` of its own.** It is a title, a clause, then the
+  excerpt, generated with `--in-entry` so its summary has no why to repeat the clause. Outside an
+  entry, give `--why`.
 
   An excerpt is a *quotation*, and that is why it is generated. A mistyped ledger row fails the gate
   loudly; a paraphrased quotation is a false quotation, and nothing in the page or in the reader's

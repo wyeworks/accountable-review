@@ -424,6 +424,18 @@ SKIP  no .impact panel in this input
 ## --page excerpt-duplicate.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment excerpt-linked-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page excerpt-linked-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment excerpt-linked-duplicate.html
+exit=0
+SKIP  no .impact panel in this input
+## --page excerpt-linked-duplicate.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment excerpt-open.html
 exit=0
 SKIP  no .impact panel in this input

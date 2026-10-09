@@ -292,6 +292,18 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page excerpt-duplicate.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-linked-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-linked-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-linked-duplicate.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-linked-duplicate.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment excerpt-open.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

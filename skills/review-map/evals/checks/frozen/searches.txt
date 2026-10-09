@@ -292,6 +292,18 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page excerpt-duplicate.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-linked-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-linked-clean.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-linked-duplicate.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-linked-duplicate.html
+exit=0
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment excerpt-open.html
 exit=0
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

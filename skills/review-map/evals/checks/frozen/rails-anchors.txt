@@ -1276,6 +1276,26 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment excerpt-linked-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page excerpt-linked-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment excerpt-linked-duplicate.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page excerpt-linked-duplicate.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment excerpt-open.html
 exit=0
 SKIP  doc links: none on this input

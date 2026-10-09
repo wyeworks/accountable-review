@@ -1035,6 +1035,16 @@ Editing one of these means checking the others still agree.
   Watch for pages whose excerpts are all `--source`. A per-flow `--diff` floor used to prevent that
   and went with the flows; seeing the hunk is very often what a judgment turns on, and nothing warns
   when it is missing any more.
+
+  **An excerpt's summary location is its one link, and in a *Look at* entry it is the entry's
+  citation.** An entry is title, clause, then *either* an `a.path` *or* an excerpt generated with
+  `--in-entry` (no summary why, because the clause is right above it). The pre-change version
+  showed one path three times. Because the excerpt now replaces the link instead of adding to it, a
+  short entry citation carries one by default, and the per-checkpoint ration covers only the
+  excerpts that do add to the prose. Five files agree: `excerpt.sh` links `.ex-loc`,
+  `page-template.html` assembles entries that way, `report-format.md` § *The review checkpoint* and
+  § *Source excerpts* own the rule, `excerpts.rb` reads a linked location, and `tests/run.sh`
+  asserts both the script and the template, with `self-test.sh` rows behind each zero.
 - **Impact paths are section 05's figure, and the edge is the point of them.** A path runs from changed
   code, through the affected-but-unchanged code that gives the change its consequence, to an
   observable behaviour, every hop past the first carrying its incoming relation as a causal verb.

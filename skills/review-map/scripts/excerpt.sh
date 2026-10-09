@@ -1,8 +1,8 @@
 #!/bin/sh
 # excerpt.sh — emit a collapsed source excerpt for the review map.
 #
-#   Usage:  excerpt.sh --at PATH:START-END  [--rev REV]  [--why TEXT]
-#           excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT]
+#   Usage:  excerpt.sh --at PATH:START-END  [--rev REV]  [--why TEXT | --in-entry]
+#           excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT | --in-entry]
 #           …plus one link option: [--blob URL_WITHOUT_FRAGMENT] or [--link FULL_URL]
 #
 # Run it from inside the repository under review. --source is an alias for --at,
@@ -14,8 +14,22 @@
 # #L121-L134 against a hunk the script labelled :118-131, and the summary and the
 # link disagreed on screen with nothing to warn about it. --link still works for a
 # URL form this does not know, but in --diff mode a line anchor inside it is
-# replaced with the computed range and you are told. Give neither at rungs 3 and 4,
+# replaced with the computed range and you are told, and a diff-page anchor
+# (#diff-<sha256>) gets the hunk's R-range appended — pass it with no range. Give neither at rungs 3 and 4,
 # where the citation must render as plain text.
+#
+# THE LINK IS THE SUMMARY'S LOCATION, and there is no second copy. The excerpt used to
+# carry its address three times when it sat in a Look at entry: the entry's own a.path,
+# the plain .ex-loc in the summary, and a linked "Unchanged at …" line at the foot of the
+# body. A reviewer saw the same path twice before opening anything. The summary is
+# visible with the block shut, so a link there is still a citation on the closed page —
+# which is all the closed-page rule asks — and the entry that holds the excerpt drops
+# its own a.path. A link clicked inside a <summary> follows the link and does not toggle.
+#
+# --in-entry leaves the why out of the summary, for an excerpt inside a ul.lookat entry:
+# the entry's clause sits directly above it and says what to see, so a why in the
+# summary is the same sentence twice in slightly different words. Everywhere else the
+# why stays, because nothing else beside the block says why to open it.
 #
 #   --at    quotes the file as it stands at REV (default HEAD). This is the form
 #           for *affected but unchanged* code, which has no diff to show and is the
@@ -76,11 +90,12 @@ WHY=
 LINK=
 BLOB=
 SYNLANG=
+IN_ENTRY=
 SOFT_MAX=24
 
 usage() {
-  echo "usage: excerpt.sh --at PATH:START-END --base BASE [--rev REV] [--head REF] [--why TEXT] [--lang L] [--blob URL|--link URL]" >&2
-  echo "       excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT] [--blob URL|--link URL]" >&2
+  echo "usage: excerpt.sh --at PATH:START-END --base BASE [--rev REV] [--head REF] [--why TEXT|--in-entry] [--lang L] [--blob URL|--link URL]" >&2
+  echo "       excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT|--in-entry] [--blob URL|--link URL]" >&2
   exit 2
 }
 
@@ -96,11 +111,17 @@ while [ $# -gt 0 ]; do
     --link) LINK=${2:-}; shift 2 ;;
     --blob) BLOB=${2:-}; shift 2 ;;
     --lang) SYNLANG=${2:-}; shift 2 ;;
+    --in-entry) IN_ENTRY=1; shift ;;
     *) usage ;;
   esac
 done
 
 [ -n "$MODE" ] && [ -n "$TARGET" ] || usage
+if [ -n "$IN_ENTRY" ] && [ -n "$WHY" ]; then
+  echo "excerpt.sh: --in-entry and --why are exclusive." >&2
+  echo "  Inside a Look at entry the entry's clause is the why; give it there, once." >&2
+  exit 2
+fi
 
 esc() { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
 esc1() { printf '%s' "$1" | esc; }
@@ -108,14 +129,14 @@ escattr() { printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/
 
 WHY_HTML=$( [ -n "$WHY" ] && esc1 "$WHY" || printf '{{WHY_THIS_MATTERS}}' )
 
-# The citation under the code. A link when one was given, plain text otherwise —
+# The location in the summary. A link when one was given, plain text otherwise —
 # which is the rung-3/4 behaviour, and the reason not to default to a URL.
-cite() {
+loc_html() {
   _label=$(esc1 "$1")
   if [ -n "$LINK" ]; then
     printf '<a class="cite" href="%s">%s</a>' "$(escattr "$LINK")" "$_label"
   else
-    printf '<span class="cite">%s</span>' "$_label"
+    printf '%s' "$_label"
   fi
 }
 
@@ -127,18 +148,17 @@ open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state t
   printf '<details class="excerpt excerpt--%s">\n' "$1"
   printf '  <summary>\n'
   printf '    <span class="chev">&#9656;</span>\n'
-  printf '    <span class="ex-loc">%s</span>\n' "$(esc1 "$3")"
+  printf '    <span class="ex-loc">%s</span>\n' "$(loc_html "$3")"
   printf '    <span class="tag">%s</span>\n' "$(esc1 "$5")"
-  printf '    <span class="ex-why">%s</span>\n' "$WHY_HTML"
+  [ -n "$IN_ENTRY" ] || printf '    <span class="ex-why">%s</span>\n' "$WHY_HTML"
   printf '  </summary>\n'
   printf '  <div class="ex-body">\n'
   printf '<pre data-src="%s"%s style="counter-reset: exl %s">' \
     "$(escattr "$2")" "$( [ -n "${6:-}" ] && printf ' data-lang="%s"' "$(escattr "$6")" )" "$4"
 }
 
-close_block() {  # $1 kind word, $2 loc label
+close_block() {
   printf '</pre>\n'
-  printf '    <p class="ex-src">%s %s</p>\n' "$1" "$(cite "$2")"
   printf '  </div>\n</details>\n'
 }
 
@@ -267,21 +287,17 @@ at)
       else if ($2 == p) { print s; exit } }')
 
   case $status in
-    '')    tag="Unchanged";         kind="Unchanged at" ;;
-    A)     tag="Added";             kind="Added at" ;;
-    D)     tag="Removed";           kind="Removed at" ;;
-    R-old) tag="Before the change"; kind="Before the change," ;;
-    *)     if [ "$side" = head ]; then
-             tag="At head";           kind="At head,"
-           else
-             tag="Before the change"; kind="Before the change,"
-           fi ;;
+    '')    tag="Unchanged" ;;
+    A)     tag="Added" ;;
+    D)     tag="Removed" ;;
+    R-old) tag="Before the change" ;;
+    *)     if [ "$side" = head ]; then tag="At head"; else tag="Before the change"; fi ;;
   esac
 
   loc="$path:$start-$end"
   open_block source "$path" "$loc" "$((start - 1))" "$tag" "$lang"
   printf '%s\n' "$body" | esc | awk '{ printf "<span class=\"l\">%s</span>\n", $0 }'
-  close_block "$kind" "$loc"
+  close_block
   ;;
 
 diff)
@@ -294,7 +310,7 @@ diff)
   # is what a reviewer looking at the file after the change will see.
   printf '%s\n' "$raw" | awk \
     -v path="$TARGET" -v why="$WHY_HTML" -v link="$LINK" \
-    -v want="$HUNK" -v softmax="$SOFT_MAX" -v blob="$BLOB" '
+    -v want="$HUNK" -v softmax="$SOFT_MAX" -v blob="$BLOB" -v inentry="$IN_ENTRY" '
     function esc(s) {
       gsub(/&/, "\\&amp;", s); gsub(/</, "\\&lt;", s); gsub(/>/, "\\&gt;", s); return s
     }
@@ -303,17 +319,6 @@ diff)
       if (!open) return
       if (want == "" || want + 0 == idx) {
         loc = path ":" nstart "-" (nstart + nspan - 1)
-        printf "<details class=\"excerpt excerpt--diff\">\n"
-        printf "  <summary>\n"
-        printf "    <span class=\"chev\">&#9656;</span>\n"
-        printf "    <span class=\"ex-loc\">%s</span>\n", esc(loc)
-        printf "    <span class=\"tag\">Changed</span>\n"
-        printf "    <span class=\"ex-why\">%s</span>\n", why
-        printf "  </summary>\n"
-        printf "  <div class=\"ex-body\">\n"
-        printf "<pre data-src=\"%s\" style=\"counter-reset: exl %d\">", escattr(path), nstart - 1
-        printf "%s", buf
-        printf "</pre>\n"
         # The hunk range belongs to the script, so the href has to come from it too. A --link
         # its own #L fragment is the one way to make the summary and the link contradict
         # each other silently, which a run hit: say so and use the computed range.
@@ -325,12 +330,26 @@ diff)
             sub(/#L[0-9].*/, "", href)
             href = href "#L" nstart "-L" (nstart + nspan - 1)
             printf "excerpt.sh: --link carried its own line anchor; replaced with the hunk range %d-%d.\n", nstart, nstart + nspan - 1 | "cat 1>&2"
+          } else if (match(link, /#diff-[0-9a-f]+/)) {
+            # The diff-page anchor, which is the form a changed line takes at rungs 1 and 2.
+            # The summary is the citation of the entry now, so its R-range is the hunk range, always.
+            href = substr(link, 1, RSTART + RLENGTH - 1) "R" nstart "-R" (nstart + nspan - 1)
           }
         }
+        printf "<details class=\"excerpt excerpt--diff\">\n"
+        printf "  <summary>\n"
+        printf "    <span class=\"chev\">&#9656;</span>\n"
         if (href != "")
-          printf "    <p class=\"ex-src\">Changed at <a class=\"cite\" href=\"%s\">%s</a></p>\n", escattr(href), esc(loc)
+          printf "    <span class=\"ex-loc\"><a class=\"cite\" href=\"%s\">%s</a></span>\n", escattr(href), esc(loc)
         else
-          printf "    <p class=\"ex-src\">Changed at <span class=\"cite\">%s</span></p>\n", esc(loc)
+          printf "    <span class=\"ex-loc\">%s</span>\n", esc(loc)
+        printf "    <span class=\"tag\">Changed</span>\n"
+        if (inentry == "") printf "    <span class=\"ex-why\">%s</span>\n", why
+        printf "  </summary>\n"
+        printf "  <div class=\"ex-body\">\n"
+        printf "<pre data-src=\"%s\" style=\"counter-reset: exl %d\">", escattr(path), nstart - 1
+        printf "%s", buf
+        printf "</pre>\n"
         printf "  </div>\n</details>\n"
         if (rows > softmax)
           printf "excerpt.sh: hunk %d is %d lines — past the %d-line budget; consider --at with a tighter range.\n", idx, rows, softmax | "cat 1>&2"

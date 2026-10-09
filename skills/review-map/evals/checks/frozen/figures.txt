@@ -298,6 +298,18 @@ SKIP  no checkpoint figure in this input
 ## --page excerpt-duplicate.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-linked-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-linked-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-linked-duplicate.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-linked-duplicate.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment excerpt-open.html
 exit=0
 SKIP  no checkpoint figure in this input

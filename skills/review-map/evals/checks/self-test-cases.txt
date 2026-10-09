@@ -127,6 +127,8 @@
  excerpts           | excerpt-clean.html            | 0 | collapsed by default
  excerpts           | excerpt-open.html             | 1 | open by default
  excerpts           | excerpt-duplicate.html        | 1 | same range is excerpted more than once
+ excerpts           | excerpt-linked-clean.html     | 0 | no excerpt quotes the same lines twice
+ excerpts           | excerpt-linked-duplicate.html | 1 | same range is excerpted more than once
  rails-anchors      | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-uncatalogued-url.html | 1 | in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md) | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-unpinned-link.html    | 1 | unpinned Rails doc link           | --repo @GOLD@/searches-repo

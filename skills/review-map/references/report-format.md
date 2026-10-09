@@ -167,8 +167,10 @@ change the judgment, and the page carries the judgment.
   <ul class="lookat">
     <li><b>The scope guard</b>
         <span>the branch the filter now skips, and what reaches it instead</span>
-        <a class="path" href="…">app/models/project.rb:41-52</a>
-        <details class="excerpt excerpt--diff">…</details></li>
+        <details class="excerpt excerpt--diff">…</details></li>   <!-- its summary is the link -->
+    <li><b>The callers</b>
+        <span>both still pass a project, so neither reaches the new nil branch</span>
+        <a class="path" href="…">app/controllers/projects_controller.rb:18-60</a></li>
   </ul>
   <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
   <p class="open"><b>Open question</b> Whether archived projects should still appear in
@@ -201,9 +203,17 @@ change the judgment, and the page carries the judgment.
 - **Look at, `ul.lookat`, one to four entries.** Each has **three parts, in this order**: a title
   naming what is at that location, a clause saying what to see in it, and the citation last. An entry
   with no clause is a bare citation, and a bare citation is a location the reader has to open to learn
-  why it is on the list — the deleted-field defect wearing a link. A collapsed excerpt sits beside the
-  entry it confirms when the citation is load-bearing for the judgment; § *Source excerpts* owns the
-  budget. The entry has to read complete with the block shut.
+  why it is on the list — the deleted-field defect wearing a link. The entry has to read complete with
+  the block shut.
+
+  **The citation is one of two things, never both: an `a.path`, or an excerpt.** An excerpt's
+  summary carries its location as the link, and the summary stays visible when the block is closed,
+  so in an entry the excerpt *is* the citation. It is generated with `--in-entry`, which leaves the
+  summary's why out, because the clause directly above it already says what to see. An entry that
+  kept its own `a.path` above an excerpt showed the same path twice before the reader opened
+  anything, and a summary why under the clause said one thing twice in slightly different words. A
+  real page did both in one entry. § *Source excerpts* › *Budget* owns which entries carry one, and
+  for a short citation the answer is most of them.
 
   **The title is what makes a list of four scannable, which is the whole reason the citation moved
   last.** Every entry used to open with a sixty-character monospace address, so finding the one you
@@ -1210,7 +1220,9 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   and `Show code` are not summaries: a closed excerpt has to be informative, because most of them
   stay closed. The clause lives in the summary rather than at the top of the body **because of the
   closed-page rule above** — a why the reader has to open the block to see is exactly the hidden
-  content the rule forbids. `excerpt.sh` emits it there; do not move it.
+  content the rule forbids. `excerpt.sh` emits it there; do not move it. **Inside a *Look at* entry
+  the clause is the entry's own**, directly above the block and just as visible, so `--in-entry`
+  leaves the summary's why out rather than repeating it.
 - **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped inventory cell fails the
   coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
   catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
@@ -1246,13 +1258,22 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   fine — but a reader working through that field with the block shut had nothing to click. Judge the
   rule field by field, not page-wide. `check.rb` cannot catch this: it checks summaries and collapse
   state, never whether a citation survives the block closing.
-- **The excerpt does not replace the link.** It deliberately omits the surrounding context, so the
-  citation stays in the body for a reader who needs more than the quoted lines.
+- **The link is the summary's location, and it appears once.** The excerpt omits the surrounding
+  context on purpose, so a reader who needs more than the quoted lines still needs a link. That link
+  goes on the summary's `path:lines`, which `excerpt.sh` builds from the range it read whenever
+  `--blob` or `--link` is given. It is visible with the block shut, so a closed excerpt is a
+  followable citation, and a click on it follows the link without toggling the block. There is no
+  second copy under the code and no `a.path` beside it in a *Look at* entry. All three used to
+  exist together, so one location appeared twice on screen and a third time inside the block. At
+  rungs 3 and 4 the location is plain text, as every citation is.
 - **Next to a `--diff` excerpt, say which range you mean.** The script labels the block with the
   hunk's new-side span, which is rarely the range the prose wants to cite — the method, or the one
   changed line. All three are correct and on screen together they read as an inconsistency. Leave the
   script's label alone and make the prose citation explicit about what it points at (*"the guard at
   `:128`"*, *"the method at `:121-134`"*), so the reader knows the summary is describing the hunk.
+  In a *Look at* entry there is no second citation to reconcile, because the summary is the
+  citation: if the judgment turns on fewer lines than the hunk, quote those lines with `--at`
+  instead.
 - **`data-path` is reserved to inventory cells.** Excerpts carry `data-src`. `scripts/coverage-gate.sh`
   greps `data-path` across the whole page and compares it to the diff as a set, so an excerpt using it
   would register as a surplus path — and would do so most reliably when citing unchanged code, which
@@ -1307,6 +1328,23 @@ so under that reading every one of them earns an excerpt automatically, three ch
 without a decision being made, and a large PR produces dozens. A cap that is always
 reached is not a cap.
 
+**Inside a *Look at* entry the ration is different, because the cost is different.** The budget
+below was written for an excerpt that came *in addition to* its citation: a second block of chrome
+per quotation, and that is what a ration is for. In an entry, the excerpt's summary *replaces* the
+citation (§ *The review checkpoint*). Closed, it takes the room the link would have taken. Open, it
+saves a trip into a file the reader has never seen. So **a short entry citation carries its excerpt
+by default**: about twelve lines or fewer, `--source` or a `--diff` hunk of that size. The entry
+takes a bare `a.path` instead in four cases: the range is longer than that, the file is on the
+never-excerpt list below, the same lines are already quoted elsewhere on the page, or what the
+entry points at is a region rather than lines (a whole method to read, a file of callers). That
+default came from a real checkpoint whose three entries were one five-line hook and two single
+lines in unchanged code. The judgment turned on all three, and only the first was quoted.
+
+Entries count toward nothing below. The entry count, one to four, is what bounds them. The rest of
+this section rations the excerpts that do add to the prose: one confirming a claim in a
+checkpoint's explanation, one on a reading-path stop, and one beside an affected entry in *Impact
+outside the diff*.
+
 **The test that does work: is the citation load-bearing for a decision the reviewer has to make?**
 Not merely unchanged, not merely interesting — load-bearing. A finding they will act on, ask the
 author about, or have to weigh. Most *affected but unchanged* entries are context; a few are the
@@ -1340,8 +1378,10 @@ Then the mechanical limits:
   is the one nuanced case; see the note under the location table.
 - **A page-wide sense of scale**, since the per-field cap alone does not bound the total: the count
   grows with the number of checkpoints and the number of load-bearing findings, never with the file
-  count, which is a far slower curve. One or two per checkpoint is the ordinary shape — the hunk the
-  judgment turns on, plus the one unchanged citation it rests on — and a third wants a reason.
+  count, which is a far slower curve. Outside the *Look at* entries, one or two per checkpoint is the
+  ordinary shape — the hunk the judgment turns on, plus the one unchanged citation it rests on — and
+  a third wants a reason. Entry excerpts are bounded by the entry count instead, for the reason the
+  paragraph above the test gives.
   **Count per checkpoint, not per section, inside** *What needs your attention*: a section-wide
   limit of two there is a limit of two across the bulk of the page, which is how this format once
   ended up under-quoting the diff. Outside *What needs your attention*, more than two in a section

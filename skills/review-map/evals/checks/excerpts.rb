@@ -42,6 +42,12 @@ DIFF_TAG = "Changed"
 
 Block = Struct.new(:variant, :tag, :src, :loc)
 
+# The summary's location, linked or not. excerpt.sh links it whenever the rung allows — the
+# summary is the excerpt's one citation — so the text sits inside an <a class="cite">; reading
+# up to the first "<" would see an empty string for every linked excerpt, and the duplicate
+# check below would then call every pair of them the same range.
+EX_LOC = /class="ex-loc">(?:<a\b[^>]*>)?([^<]*)/
+
 # One row per excerpt: variant, state tag, quoted path, location.
 #
 # The tag is read only BETWEEN a <details> and its </details>, because .tag is shared with
@@ -63,7 +69,7 @@ def blocks_in(page)
     next unless current
 
     current.tag = line.sub(/.*class="tag">/, "").sub(/<.*/, "") if line.match?(/class="tag"/)
-    current.loc = line.sub(/.*class="ex-loc">/, "").sub(/<.*/, "") if line.match?(/class="ex-loc"/)
+    current.loc = line[EX_LOC, 1] if line.match?(EX_LOC)
     current.src = line.sub(/.*data-src="/, "").sub(/".*/, "") if line.match?(/data-src="/)
     next unless line.match?(%r{</details>})
 
@@ -243,13 +249,12 @@ theme_states(check, "--syn-key", "syntax tints", absent: "no syntax tokens on th
 # them. Near-duplicates (structurally identical code a few lines apart) are the more
 # common waste and need a reader; this catches only the literal case. Placeholders are
 # excluded: an unfilled template legitimately repeats {{PATH}}:{{LINES}}.
-locations = page.scan(/class="ex-loc">[^<]*/).reject { |loc| loc.include?("{{") }
+locations = page.scan(EX_LOC).map { |m| m[EX_LOC, 1] }.reject { |loc| loc.include?("{{") }
 duplicated = locations.tally.select { |_, n| n > 1 }.keys.sort.first(3)
 if duplicated.empty?
   check.ok("no excerpt quotes the same lines twice")
 else
-  ranges = duplicated.map { |loc| loc.sub('class="ex-loc">', "") }
-  check.bad("the same range is excerpted more than once: #{ranges.join(" ")} ")
+  check.bad("the same range is excerpted more than once: #{duplicated.join(" ")} ")
 end
 
 check.finish

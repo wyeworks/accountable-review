@@ -198,6 +198,11 @@ works that out from the diff instead of asserting it: the bytes of a quotation v
 and its label is the one part that cannot. The excerpts matter most on an unpushed branch, where
 nothing on the page is clickable at all.
 
+The location shown on a closed excerpt is also its link. In a checkpoint's *Look at* list that
+location is the entry's citation, so the address appears once. A short citation there, about a dozen
+lines or fewer, comes with its excerpt by default: closed, it takes no more room than the link
+would have, and opened, it saves you a trip into a file you have not seen.
+
 They also make the page shorter, which is the part that surprised us. A paragraph describing what a
 guard does is longer than the guard, less precise, and unverifiable — so where the page would have
 narrated the mechanism, it shows the lines and states the implication in one sentence instead.

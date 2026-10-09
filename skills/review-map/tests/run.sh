@@ -2,7 +2,7 @@
 # run.sh — the deterministic tests for review-map's scripts.
 #
 #   Usage: tests/run.sh
-#          REVIEW_MAP_SECTION=skeleton|diff-render|carry-plan tests/run.sh   one section only
+#          REVIEW_MAP_SECTION=skeleton|diff-render|carry-plan|excerpt tests/run.sh   one section only
 #
 # Whether a Review Map is any good is a model run and cannot be asserted on. The scripts underneath
 # it are ordinary software with right answers, and this is where that half is held to account.
@@ -42,6 +42,7 @@ TEMPLATE=${REVIEW_MAP_TEMPLATE:-$SKILL_DIR/references/page-template.html}
 THEMES=${REVIEW_MAP_THEMES:-$SKILL_DIR/references/themes}
 DIFF_RENDER=${REVIEW_MAP_DIFF_RENDER:-$SKILL_DIR/scripts/diff-render.sh}
 CARRY_PLAN=${REVIEW_MAP_CARRY_PLAN:-$SKILL_DIR/scripts/carry-plan.sh}
+EXCERPT=${REVIEW_MAP_EXCERPT:-$SKILL_DIR/scripts/excerpt.sh}
 
 # A theme set in the caller's environment would change every page this file emits.
 unset ACCOUNTABLE_REVIEW_THEME
@@ -59,8 +60,8 @@ count() { c=$(grep -c -F -e "$2" "$1" 2>/dev/null) || c=0; printf %s "$c"; }
 # what CI and a person get.
 SECTION=${REVIEW_MAP_SECTION:-all}
 case $SECTION in
-  all|skeleton|diff-render|carry-plan) ;;
-  *) echo "run.sh: unknown REVIEW_MAP_SECTION: $SECTION (skeleton | diff-render | carry-plan)" >&2; exit 2 ;;
+  all|skeleton|diff-render|carry-plan|excerpt) ;;
+  *) echo "run.sh: unknown REVIEW_MAP_SECTION: $SECTION (skeleton | diff-render | carry-plan | excerpt)" >&2; exit 2 ;;
 esac
 section() { [ "$SECTION" = all ] || [ "$SECTION" = "$1" ]; }
 
@@ -364,6 +365,25 @@ assert_eq "$(grep -c 'class="sr-r">[^<]*<code>' "$WORK/markup")" "1" \
 begin_ex=$(awk '/<ol class="begin">/ { f = 1 } f { print } /<\/ol>/ { f = 0 }' "$WORK/markup" \
   | grep -c 'details class="excerpt excerpt--source"' || true)
 assert_eq "$begin_ex" "1" "a reading-path stop is assembled carrying its excerpt"
+
+# A LOOK AT ENTRY WITH AN EXCERPT CITES ONCE AND SAYS ITS CLAUSE ONCE. The excerpt's summary is the
+# citation — its .ex-loc is the link — so an entry that also keeps its own a.path shows one path
+# twice before the reader opens anything, and a summary why under the entry's clause says one thing
+# twice. Both shipped on a real page. Per entry, by an awk walk over each ul.lookat li: the two
+# zeros are what the self-test breaks, and the first count is what proves the walk saw an excerpt.
+lookat_walk() {
+  awk '/<ul class="lookat">/ { f = 1 } f && /<li>/ { ex = 0; p = 0; w = 0 }
+       f && /details class="excerpt/ { ex = 1 } f && /^ *<a class="path"/ { p = 1 } f && /class="ex-why"/ { w = 1 }
+       f && /<\/li>/ { if (ex) { n++; if (p) np++; if (w) nw++ } }
+       /<\/ul>/ { f = 0 }
+       END { printf "%d %d %d\n", n, np, nw }' "$WORK/markup"
+}
+set -- $(lookat_walk)
+assert_eq "$1" "2" "two Look at entries are assembled carrying an excerpt"
+assert_eq "$2" "0" "and neither keeps an a.path beside the excerpt's linked summary"
+assert_eq "$3" "0" "and neither excerpt repeats the entry's clause as a summary why"
+assert_eq "$(count "$WORK/markup" 'class="ex-src"')" "0" \
+  "no excerpt carries a second, body-foot citation under its code"
 
 # ---------------------------------------------------------------- markers
 for m in SKELETON:HEAD:START SKELETON:HEAD:END SKELETON:TAIL:START SKELETON:TAIL:END SKELETON:THEME; do
@@ -938,6 +958,65 @@ assert_eq "$rc" "2" "an unreadable page is refused"
 rc=0; out=$( (cd "$CREPO" && "$CARRY_PLAN" "$WORK/cpage.html" --prev-head 0000000000000000000000000000000000000000 --base "$CBASE" --head "$CHEAD") 2>/dev/null ) || rc=$?
 assert_eq "$rc" "4" "an unresolvable ref exits 4 rather than reporting an empty delta"
 assert_eq "$(printf '%s' "$out" | grep -c . || true)" "0" "and prints nothing that could be read as a plan"
+fi
+
+# ================================================================ excerpt.sh
+if section excerpt; then
+# The quotation's bytes are git's, so what is tested here is the frame around them: where the
+# citation goes and what the summary says. A summary that carries no link at rungs 1 and 2 leaves a
+# closed excerpt with nothing to click, and one that carries the link AND a body-foot copy is the
+# duplicate this layout was changed to remove.
+echo ""
+echo "excerpt  $EXCERPT"
+echo ""
+
+EREPO=$WORK/exrepo
+mkdir -p "$EREPO/app"
+(
+  cd "$EREPO"
+  git init -q .
+  git config user.email test@example.com
+  git config user.name test
+  printf 'a\nb\nc\n' > app/changed.rb
+  printf 'keep\n'      > app/same.rb
+  git add . && git commit -qm base
+  printf 'a\nB\nc\n' > app/changed.rb
+  git commit -qam head
+)
+ex() { (cd "$EREPO" && sh "$EXCERPT" "$@") 2>/dev/null; }
+
+out=$(ex --at app/same.rb:1-1 --base HEAD~1 --blob 'https://h/blob/s/app/same.rb' --why 'w')
+assert_eq "$(printf '%s' "$out" | grep -c '<span class="ex-loc"><a class="cite" href="https://h/blob/s/app/same.rb#L1-L1">app/same.rb:1-1</a></span>')" "1" \
+  "--at with a link puts it on the summary's location, with the range it read"
+assert_eq "$(printf '%s' "$out" | grep -c 'ex-src')" "0" "and repeats it nowhere under the code"
+assert_eq "$(printf '%s' "$out" | grep -c '<span class="ex-why">w</span>')" "1" "and keeps the why outside an entry"
+assert_eq "$(printf '%s' "$out" | grep -c '<span class="tag">Unchanged</span>')" "1" "and tags a path outside the diff Unchanged"
+
+out=$(ex --at app/same.rb:1-1 --base HEAD~1)
+assert_eq "$(printf '%s' "$out" | grep -c '<span class="ex-loc">app/same.rb:1-1</span>')" "1" \
+  "with no link the location is plain text, the rung-3/4 citation"
+
+out=$(ex --at app/same.rb:1-1 --base HEAD~1 --in-entry --blob 'https://h/blob/s/app/same.rb')
+assert_eq "$(printf '%s' "$out" | grep -c 'ex-why')" "0" "--in-entry leaves the why to the entry's clause"
+assert_eq "$(printf '%s' "$out" | grep -c 'WHY_THIS_MATTERS')" "0" "and leaves no placeholder for it either"
+
+rc=0; ex --at app/same.rb:1-1 --base HEAD~1 --in-entry --why w >/dev/null || rc=$?
+assert_eq "$rc" "2" "--in-entry with --why is refused rather than choosing one"
+
+out=$(ex --diff app/changed.rb --base HEAD~1 --blob 'https://h/blob/s/app/changed.rb' --in-entry)
+assert_eq "$(printf '%s' "$out" | grep -c '<span class="ex-loc"><a class="cite" href="https://h/blob/s/app/changed.rb#L1-L3">app/changed.rb:1-3</a></span>')" "1" \
+  "--diff links the summary's location at the hunk's own range"
+assert_eq "$(printf '%s' "$out" | grep -c 'ex-src\|ex-why')" "0" "and, in an entry, carries no second citation and no why"
+
+D=0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+out=$(ex --diff app/changed.rb --base HEAD~1 --in-entry --link "https://h/pull/1/files#diff-${D}R9")
+assert_eq "$(printf '%s' "$out" | grep -c "href=\"https://h/pull/1/files#diff-${D}R1-R3\"")" "1" \
+  "--diff given a diff-page anchor links the hunk's own R-range, whatever range it carried"
+
+out=$(ex --diff app/changed.rb --base HEAD~1)
+assert_eq "$(printf '%s' "$out" | grep -c '<span class="ex-loc">app/changed.rb:1-3</span>')" "1" \
+  "--diff with no link leaves the location plain"
+assert_eq "$(printf '%s' "$out" | grep -c 'WHY_THIS_MATTERS')" "1" "and an unwritten why stays visibly unwritten"
 fi
 
 echo ""
