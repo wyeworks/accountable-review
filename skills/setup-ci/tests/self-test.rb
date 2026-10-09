@@ -272,6 +272,24 @@ CASES = [
            edit: sub(/^\[ -n "\$TRIVIAL_LINES" \] .*$/, "TRIVIAL_LINES=$TRIVIAL_LINES_DEFAULT"),
            sections: %i[gate], expect: "trivial_lines: 0 in the config file generates a map for any application change"),
 
+  # A repository's own path rules. Each break below is a plausible edit to the override, and each
+  # arrives looking like a simplification.
+  Case.new(desc: "the gate ignores paths.code in .accountable-review.yml", file: GATE,
+           edit: sub("    code) printf 'code\\tconfigured", "    nevercode) printf 'code\\tconfigured"),
+           sections: %i[gate], expect: "paths.code makes a Markdown prompt application code"),
+
+  # A conflict must resolve towards the map, for the reason the default is code.
+  Case.new(desc: "a path matching both lists is skipped", file: GATE,
+           edit: sub('END { if ("code" in hit) print "code"; else if ("skip" in hit) print "skip" }',
+                     'END { if ("skip" in hit) print "skip"; else if ("code" in hit) print "code" }'),
+           sections: %i[gate], expect: "a path matching both lists is code, never skipped"),
+
+  # `*` crossing a slash is what shell `case` does, and it would make `agents/*.md` reach every
+  # Markdown file below agents/ — a team writing the workflow-filter meaning gets a wider rule.
+  Case.new(desc: "a single * in a configured pattern crosses a slash", file: GATE,
+           edit: sub('re = re "[^/]*"', 're = re ".*"'),
+           sections: %i[gate], expect: "a single * stops at a slash, the way a workflow paths filter does"),
+
   Case.new(desc: "generation is no longer guarded by the gate", file: W,
            edit: drop(/if: steps\.scope\.outputs\.verdict == .generate./),
            sections: %i[workflow], expect: "generation is guarded by the scope check"),

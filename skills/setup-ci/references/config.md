@@ -10,6 +10,9 @@ review_map:
   update: true           # re-read only the new commits on a second run
   trivial_files: 2       # skip when application files <= this AND
   trivial_lines: 20      #   application lines <= this; either at 0 disables it
+  paths:
+    code: ["skills/**/*.md"]          # these paths count as application code
+    skip: ["skills/*/evals/**"]       # these do not
 
   delivery:
     provider: github-artifact
@@ -28,6 +31,8 @@ That is the whole schema. Every key is optional; a file may set one of them.
 | `review_map.theme` | `daylight` | How the page **looks**, and nothing about what is on it: typefaces, corner radii, hues and a few label treatments. `daylight` is a cool, quiet sans-serif page; `workshop` is square and bold, with hard frames and highlighter tints; `field-notes` is warm paper with a serif display and handwritten labels. Every theme keeps the four colour families meaning what they mean and has a dark half, so a page reads the same in all three. **It is the default, not the only look**: every page carries all three, and a reader can switch theme — and light, dark or system — from the *Aa* menu in the masthead, a choice their browser remembers. Read by the skill itself — `page-skeleton.sh` looks for this key in the repository it is reviewing — so it applies to a person's run as well as to CI, and a name with no theme behind it stops the run rather than falling back to the default |
 | `review_map.trivial_files` | `2` | With `trivial_lines`, the size below which a pull request gets no Review Map. Both are compared with **and**, so a change that is large by either measurement earns one: 900 lines in one file, or 9 lines across six. Counted over **application paths only** — a lockfile's five thousand lines are not in the total. `0` here or on `trivial_lines` switches the rule off, since nothing containing application code has zero of either |
 | `review_map.trivial_lines` | `20` | The line half of the same rule, added plus deleted. The numbers are a first calibration rather than a measurement, and the trade is stated in `workflow.md` § *The application-code gate*: what a change *reaches* predicts a map's value better than its size does, so a small edit with wide consequences is what this discards first. Lower it, or set it to 0, if a team finds it has lost one it wanted |
+| `review_map.paths.code` | — | Paths the application-code gate counts as code whatever its built-in list says — for a repository whose product is prose, or whose layout puts code under a directory the list names. A list of patterns, `*` and `?` within one path segment, `**` across any number; both `[a, b]` and one `- a` per line are read. Checked before everything else, and a path matching both lists is code. `workflow.md` § *A repository says what its own paths are* owns the rules |
+| `review_map.paths.skip` | — | Paths the gate does **not** count — an eval harness, a generated example. Same patterns. A match is reported as `configured` in the job summary, so it is never mistaken for a built-in skip. A path neither list matches still goes through the built-in rules and from there to code, so the gate keeps failing open |
 | `review_map.update` | `true` | Whether a second run over the same pull request re-reads only the commits since the previous map and edits it in place, instead of rebuilding it. It reaches nothing unless the workflow regenerates on push, since a pull request that gets one map has no second run — and nothing unless the previous page was restored, which is the workflow's cache step. What it buys is most of a run; what it costs is that a judgment the new commits did not reach was not verified again, which the page says in its masthead and in one sentence. Every way an update can refuse — a force-push, a moved base, a delta past half the diff — falls back to a full generation, so `false` is for a team that wants that unconditionally |
 | `review_map.delivery.provider` | `github-artifact` | Where the finished map goes. See `delivery.md` |
 | `review_map.delivery.retention_days` | `30` | How long the artifact is kept, 1–90. GitHub's own repository setting still caps it |
@@ -84,6 +89,10 @@ real diff — and once it is made there it is an ordinary run-time read like eve
 
 That is also why the earlier answer to "can we tune the thresholds without re-running setup" has
 changed to yes. `workflow.md` § *The application-code gate* owns the rule.
+
+`paths.code` and `paths.skip` sit on the same side of that line for the same reason: they decide
+which paths the gate counts, which only the checkout can answer. They are the only lists in the
+schema, and the parser reads them and nothing else as lists.
 
 ## An unknown key is an error
 

@@ -457,10 +457,42 @@ Note what is **not** excluded. `config/` is where a Rails app keeps its routes a
 a Dockerfile and a compose file describe how the thing runs. Those are application code here, and a
 directory-name exclusion that swept them up would take a routing change with them.
 
-Two known limits, both failing towards a missing map. A repository whose product *is* prose has
-application changes under `*.md` that this counts as documentation. And a team with an unusual layout
-can keep code under a directory named in the exclusion list. The job summary is what surfaces either:
-it lists every discounted path with its reason.
+### A repository says what its own paths are
+
+The built-in list is a guess about layouts in general, and two kinds of repository disagree with it.
+One whose product *is* prose — this plugin, whose skills are Markdown — has application changes under
+`*.md` that the list calls documentation, and loses the map it most wanted. One with an unusual
+layout keeps tooling or an eval harness under a directory nothing names, and gets a map for a change
+nobody needs one for. Editing the script per repository is the project-layout assumption this whole
+plugin refuses, and `linguist-generated` in `.gitattributes` would collapse those diffs for human
+reviewers too, so the repository says it in `.accountable-review.yml`:
+
+```yaml
+review_map:
+  paths:
+    code: ["skills/**/*.md", "agents/*.md"]
+    skip: ["skills/review-map/evals/**"]
+```
+
+Four rules, each chosen for the direction it fails in:
+
+- **Checked first, before the generated-file verdicts and the built-in list**, so a repository's
+  word about its own paths wins.
+- **It only ever overrides.** A path neither list names falls through to the built-in rules, and from
+  there to code — so configuring a repository cannot turn fail-open off.
+- **A path both lists match is code.** The expensive direction is the skip, so a conflict resolves
+  away from it, for the same reason an unrecognised path does.
+- **A configured verdict says so.** The reason column reads `configured`, for a skip and for code
+  alike, so the job summary tells the repository's rule from the script's.
+
+Patterns are matched against the whole path from the repository root, the way a workflow's own
+`paths:` filter matches: `*` and `?` stop at a slash, `**` crosses any number, and `**/` may match
+nothing, so `**/*.md` includes a Markdown file at the root. Nothing else is special — `app/[id]/` and
+`app/(group)/` are the literal Next.js directories they look like — and `read-config.sh` refuses
+`{a,b}`, a leading `!` and a leading `/` rather than taking them literally and matching nothing.
+
+The job summary is still what surfaces a wrong call either way: it lists every discounted path with
+its reason.
 
 ### Asked again, over the commits since the map we already have
 

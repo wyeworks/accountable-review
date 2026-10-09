@@ -41,6 +41,20 @@ counts as code — so an unusual layout costs you a map you did not need rather 
 did. The job summary lists every path it discounted and why, so a wrong call is something you can
 see.
 
+When the list is wrong about your repository, say so in the same file:
+
+```yaml
+review_map:
+  paths:
+    code: ["prompts/**/*.md"]     # Markdown that is the product, not documentation
+    skip: ["tools/benchmarks/**"] # code nobody needs a map for
+```
+
+`*` matches within one directory and `**` across any number, as in a workflow's `paths:` filter.
+These are checked first, a path in both lists counts as code, and a path in neither is judged as it
+always was — so you can only correct the gate, never switch off its habit of counting what it does
+not recognise. A configured skip shows up in the job summary as `configured`.
+
 ## A second run reuses the first
 
 By default a pull request gets one Review Map, at the moment it becomes reviewable. Set the workflow

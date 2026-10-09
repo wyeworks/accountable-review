@@ -1286,14 +1286,21 @@ Same rule as above: editing one of these means checking the others still agree.
   counts, never `trivial`**, and **it stands the job down rather than rewriting the page**: a script
   refreshing model-authored HTML risks a stale number on a page that looks current.
 
-  Eight files agree: `ci/application-code.sh` holds both rules; `ci/map-still-current.sh` the
-  composition **alone**; `read-config.sh` and `references/config.md` the two keys;
-  `templates/workflow.yml` the `scope` step and the guards; `references/workflow.md` § *The
-  application-code gate* owns the reasoning **alone** — polarity, payload, fail-open, the default's
-  trade, the second range; `SKILL.md`'s hard rules forbid counting anything but application code or
-  baking a number into the YAML; `tests/suite.rb` covers each threshold either side (`bulky`, `spread`,
-  `masked`) and both halves of the second question; `docs/ci.md` restates it.
-  either side of each threshold and both halves of the second question, and `docs/ci.md` restates it.
+  **What counts as application code is the repository's to correct, never to switch off.**
+  `review_map.paths.code` and `.skip` are checked before the built-in list, a path in both is code,
+  and a path in neither falls through to the built-in rules and from there to code — so the override
+  cannot turn fail-open off, and a configured verdict prints `configured` so the summary tells it
+  from a built-in one. This repository is the first user: its skills are Markdown.
+
+  Eight files agree: `ci/application-code.sh` holds both rules and the override; `ci/map-still-current.sh`
+  the composition **alone**; `read-config.sh` and `references/config.md` the four keys (the two
+  lists are the schema's only non-scalars); `templates/workflow.yml` the `scope` step and the guards;
+  `references/workflow.md` § *The application-code gate* owns the reasoning **alone** — polarity,
+  payload, fail-open, the default's trade, the override's precedence and glob meaning, the second
+  range; `SKILL.md`'s hard rules forbid counting anything but application code or baking a number
+  into the YAML; `tests/suite.rb` covers each threshold either side (`bulky`, `spread`, `masked`),
+  each override either side plus an unmatched path staying code, and both halves of the second
+  question; `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
   gate. `SKILL.md` step 1 owns the flag, step 9 says the stages become save points rather than

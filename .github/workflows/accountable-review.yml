@@ -2,33 +2,23 @@
 #
 # Re-run that command to regenerate this file; it will show you a diff before
 # touching a version you have edited.
-# SETUP:IF:comment
 #
 # What this job does to your repository is one comment. It reads the pull
 # request, writes a static HTML Review Map to the runner's temporary directory,
 # uploads it as a build artifact, and comments the link on the pull request. It
 # never pushes, never approves, never touches code, sets no check, and never runs
 # your application.
-# SETUP:END:comment
-# SETUP:IF:no-comment
 #
-# Everything this job does is read-only: it reads the pull request, writes a
-# static HTML Review Map to the runner's temporary directory, and uploads it as a
-# build artifact. It never pushes, never comments, never approves, and never runs
-# your application.
-# SETUP:END:no-comment
-#
-# Accountable Review: {{PLUGIN_REPO}} @ {{PLUGIN_REF}}
+# Accountable Review: wyeworks/accountable-review @ accountable-review--v1.4.0
 #
 # The line below records the decisions setup confirmed — when a Review Map is
 # generated, and whether the link is commented on the pull request — in the form
 # setup takes them as flags. Re-running setup reads it back, so upgrading the pin
 # above moves the version without reverting the choices someone made. Delete the
 # line and the next run offers you the defaults again, as a diff.
-# Decisions: {{DECISIONS}}
+# Decisions: --no-regenerate-on-push --skip-authors dependabot[bot] --pr-comment
 name: Accountable Review
 
-# SETUP:IF:no-push
 # A Review Map is generated when a pull request first becomes reviewable — and
 # then never again, because pushes do not trigger this workflow.
 #
@@ -43,22 +33,6 @@ name: Accountable Review
 # stale silently — nothing on the page says the code has changed under it. Check
 # the head SHA the map names against the pull request before trusting it, and
 # re-run setup with --regenerate-on-push if that stops being an acceptable cost.
-# SETUP:END:no-push
-# SETUP:IF:push
-# A Review Map is generated when a pull request becomes worth reviewing, and
-# regenerated whenever the thing under review changes after that.
-#
-#   draft opened / pushed to while draft  ->  nothing
-#   opened (already ready for review)     ->  Review Map
-#   ready_for_review (draft marked ready) ->  Review Map
-#   reopened                              ->  Review Map
-#   a push to a ready pull request        ->  Review Map, regenerated
-#
-# The map always describes the current head, which is what stops a reviewer
-# reading a page for a revision nobody is looking at any more. What it costs is a
-# model run per push to a ready pull request; the concurrency group below is what
-# keeps a burst of pushes costing one rather than one per commit.
-# SETUP:END:push
 #
 # `labeled`, `edited`, `assigned` and the rest are absent for a firmer reason
 # than any of the above: none of them changes the code under review, and a Review
@@ -69,9 +43,6 @@ on:
       - opened
       - ready_for_review
       - reopened
-# SETUP:IF:push
-      - synchronize
-# SETUP:END:push
 
 # One run per pull request, superseded runs cancelled. Pushing three commits in a
 # minute costs one Review Map rather than three, and the two obsolete ones would
@@ -83,12 +54,6 @@ concurrency:
   group: accountable-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
-# SETUP:IF:no-comment
-# The job reads a pull request and produces a document. It needs nothing else,
-# and asking for nothing else is what keeps a compromised dependency in a PR
-# branch from being able to do anything with this token.
-# SETUP:END:no-comment
-# SETUP:IF:comment
 # The job reads a pull request, produces a document, and links it in one comment.
 # `pull-requests: write` is the entire cost of that link, and it is the only write
 # this token can perform: it cannot push, cannot touch contents, cannot approve,
@@ -101,18 +66,15 @@ concurrency:
 # write-capable credential while the map is being generated.
 #
 # Re-run setup with --no-pr-comment to drop the comment, and this line with it.
-# SETUP:END:comment
 permissions:
   contents: read
-# SETUP:IF:comment
   pull-requests: write
-# SETUP:END:comment
 
 jobs:
   review-map:
     name: Review Map
     runs-on: ubuntu-latest
-    timeout-minutes: {{TIMEOUT_MINUTES}}
+    timeout-minutes: 30
 
     # Draft pull requests never get a Review Map. `opened` fires for a pull
     # request opened as a draft, so without this guard every draft would cost a
@@ -125,7 +87,6 @@ jobs:
     # confusingly on every external contribution. Skipping is the honest
     # outcome — the alternative, `pull_request_target`, would run with this
     # repository's secrets against a branch the contributor controls.
-    # SETUP:IF:authors
     #
     # The author clauses skip pull requests opened by a bot. A dependency bump is
     # not a change a Review Map helps with: there is no judgment to stage and no
@@ -134,7 +95,6 @@ jobs:
     # it opened. These test the pull request AUTHOR, not github.actor, because a
     # human who reopens or marks ready a bot's pull request becomes the actor
     # while the bot stays the author.
-    # SETUP:END:authors
     #
     # NOTHING HERE COUNTS FILES OR LINES, and that is deliberate rather than an
     # omission. How big a change is decides whether it earns a Review Map, but
@@ -156,7 +116,7 @@ jobs:
     if: >-
       github.event.pull_request.draft == false
       && github.event.pull_request.head.repo.full_name == github.repository
-{{AUTHOR_CLAUSES}}
+      && github.event.pull_request.user.login != 'dependabot[bot]'
 
     steps:
       - name: Check out the pull request
@@ -175,10 +135,10 @@ jobs:
       # it never appears in the diff under review. It comes before Node because
       # the scope check below runs from it, and a pull request that turns out to
       # need no Review Map should not have installed a toolchain first.
-      - name: Install Accountable Review {{PLUGIN_REF}}
+      - name: Install Accountable Review accountable-review--v1.4.0
         env:
-          PLUGIN_REPO: {{PLUGIN_REPO}}
-          PLUGIN_REF: {{PLUGIN_REF}}
+          PLUGIN_REPO: wyeworks/accountable-review
+          PLUGIN_REF: accountable-review--v1.4.0
         run: |
           git clone --quiet --depth 1 --branch "$PLUGIN_REF" \
             "https://github.com/$PLUGIN_REPO" "$RUNNER_TEMP/accountable-review"
@@ -196,62 +156,6 @@ jobs:
       # over application paths only — a three-line model change beside a
       # five-thousand-line lockfile is a three-line change. The payload cannot
       # express that, so the gate runs here, after the cheap half of the job.
-# SETUP:IF:push
-      # The previous Review Map for this pull request, so the run can update it
-      # over the new commits instead of rebuilding it — and, before that, so the
-      # scope step below can ask whether these commits reach anything the map
-      # says at all. Only reachable with `synchronize` on: a first run has
-      # nothing to restore, and a pull request that gets one map has no second
-      # run to restore it into.
-      #
-      # IT CARRIES NO VERDICT GUARD, and it sits above the step that decides the
-      # verdict for exactly that reason: the second half of that decision is
-      # about the restored map. Restoring ~80 KB unconditionally is cheaper than
-      # the model run it is deciding about, and on a miss it is a no-op.
-      #
-      # A MISS IS NOT A FAILURE. It means a full generation, which is the better
-      # page — the whole flag is a saving with a cost, so every way it can go
-      # wrong leads to the page that has no cost. Nothing here is load-bearing
-      # for correctness, and two existing rules are why: a half-written page
-      # restored here carries a pending marker and carry-plan.sh refuses it, and
-      # a run that dies after the restore leaves a page naming the OLD head,
-      # which the generate step below refuses to deliver.
-      #
-      # The key is built from run-time expressions, so two renders of this file
-      # with the same flags are the same bytes — the idempotency rule this whole
-      # template is compared by. No date, no run id.
-      - name: Restore the previous Review Map
-        id: previous
-        uses: actions/cache/restore@v4
-        with:
-          path: ${{ runner.temp }}/review-map
-          key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
-          restore-keys: accountable-review-map-${{ github.event.pull_request.number }}-
-
-      # ONLY WHEN THERE IS A PREVIOUS MAP TO REUSE, which is what the guard says:
-      # `cache-matched-key` is empty on a cold cache, and a run with nothing
-      # restored has nothing to carry and no searches to replay.
-      #
-      # Both halves of reusing a map replay the page's own recorded searches, and
-      # every search recipe in the lens files is written with rg — so on a runner
-      # without ripgrep every one of them refuses and the run rebuilds the page
-      # from scratch. Correct, and the whole saving gone.
-      #
-      # IT CANNOT FAIL THE JOB, and that is deliberate rather than defensive. The
-      # install is an optimisation; if it does not work the page is rebuilt, which
-      # is the answer that costs more and is never wrong. A step that could turn a
-      # Review Map into a red job to save a few minutes has the polarity backwards.
-      - name: Install ripgrep, so the previous map's searches can be replayed
-        if: steps.previous.outputs.cache-matched-key != ''
-        run: |
-          if command -v rg >/dev/null 2>&1; then
-            echo "ripgrep is already here"
-            exit 0
-          fi
-          sudo apt-get install -y ripgrep \
-            || { sudo apt-get update && sudo apt-get install -y ripgrep; } \
-            || echo "no ripgrep: this run rebuilds the page instead of updating it"
-# SETUP:END:push
 
       - name: Does this pull request change application code?
         id: scope
@@ -267,45 +171,15 @@ jobs:
           # 0 is generate and 3 is skip; anything else is a diff this job could
           # not read, and that is a failure rather than a quiet skip.
           [ "$rc" = 0 ] || [ "$rc" = 3 ] || exit "$rc"
-# SETUP:IF:push
-
-          # THE SAME QUESTION, ASKED AGAIN OVER THE COMMITS SINCE THE MAP WE
-          # ALREADY HAVE. The gate above measures BASE...HEAD, so a README-only
-          # push to a branch that changed application code earlier still answers
-          # `generate` — the pull request contains application code, and nothing
-          # up there can see that THIS push did not. The result is a model run
-          # whose page says what the last page said.
-          #
-          # It downgrades this step's own verdict rather than adding a second
-          # one, which is why no guard below moves: every later step already
-          # stands aside on `verdict != 'generate'`, and the step that explains
-          # a skip already fires on `verdict == 'skip'`.
-          if [ "$rc" = 0 ]; then
-            cur=0
-            "$RUNNER_TEMP/accountable-review/ci/map-still-current.sh" \
-              --dir "$RUNNER_TEMP/review-map" --head "$HEAD_SHA" \
-              --plugin-dir "$RUNNER_TEMP/accountable-review" \
-              > "$RUNNER_TEMP/still-current.txt" || cur=$?
-            cat "$RUNNER_TEMP/still-current.txt"
-            [ "$cur" = 0 ] || [ "$cur" = 3 ] || exit "$cur"
-            if [ "$cur" = 0 ]; then
-              {
-                echo "verdict=skip"
-                echo "reason=map-still-current"
-                sed -n 's/^reason: /detail=/p' "$RUNNER_TEMP/still-current.txt" | head -n 1
-              } >> "$GITHUB_OUTPUT"
-            fi
-          fi
-# SETUP:END:push
 
       - uses: actions/setup-node@v4
         if: steps.scope.outputs.verdict == 'generate'
         with:
-          node-version: '{{NODE_VERSION}}'
+          node-version: '22'
 
       - name: Install Claude Code
         if: steps.scope.outputs.verdict == 'generate'
-        run: npm install -g @anthropic-ai/claude-code@{{CLAUDE_CODE_VERSION}}
+        run: npm install -g @anthropic-ai/claude-code@2
 
       - name: Generate the Review Map
         if: steps.scope.outputs.verdict == 'generate'
@@ -365,19 +239,6 @@ jobs:
           retention-days: ${{ steps.delivery.outputs.retention_days }}
           if-no-files-found: error
 
-# SETUP:IF:push
-      # Kept for the next push, and only once this one has actually shipped.
-      # success() is what makes the cache hold delivered pages rather than
-      # whatever was in the directory when a step died — correctness does not
-      # depend on it, since a half-written page is refused on the way back in,
-      # but a cache entry nothing can use is still worth not writing.
-      - name: Keep this Review Map for the next push
-        if: success() && steps.scope.outputs.verdict == 'generate'
-        uses: actions/cache/save@v4
-        with:
-          path: ${{ runner.temp }}/review-map
-          key: accountable-review-map-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
-# SETUP:END:push
 
       - name: Say where it went
         if: steps.scope.outputs.verdict == 'generate'
@@ -445,7 +306,6 @@ jobs:
             echo "</details>"
           } >> "$GITHUB_STEP_SUMMARY"
 
-# SETUP:IF:comment
 
       # The link, where the reviewer already is. The summary above says the same
       # thing, but nobody opens a workflow run to find out whether there is
@@ -518,4 +378,3 @@ jobs:
             gh api -X POST "repos/$REPOSITORY/issues/$PR_NUMBER/comments" \
               -f body="$body" --silent
           fi
-# SETUP:END:comment

@@ -621,6 +621,33 @@ class SetupCiSuite
       assert_eq sh(@read_cfg, File.join(c, "theme-each.yml")).code, 0, "read-config.sh accepts the theme file #{t}"
     end
 
+    # The two lists are the only non-scalars in the schema, and both YAML spellings are read.
+    write(File.join(c, "paths.yml"), <<~Y)
+      review_map:
+        paths:
+          code: ["skills/**/*.md", 'agents/*.md', AGENTS.md]
+          skip:
+          - skills/review-map/evals/**   # the eval harness
+          - "bin/evals"
+        theme: workshop
+    Y
+    po = sh(@read_cfg, File.join(c, "paths.yml"))
+    assert_eq po.code, 0,                           "a paths block with both list forms is read"
+    assert_in po.out, "CFG_paths_code='skills/**/*.md\nagents/*.md\nAGENTS.md'", "a flow list is one pattern per line, quotes stripped"
+    assert_in po.out, "CFG_paths_skip='skills/review-map/evals/**\nbin/evals'", "a block list is too, comments stripped"
+    assert_in po.out, "CFG_theme='workshop'",       "a key after the paths block is still read at its own level"
+    {
+      "paths-unknown.yml" => "review_map:\n  paths:\n    docs: [a]\n",
+      "paths-scalar.yml"  => "review_map:\n  paths:\n    code: skills/**\n",
+      "paths-slash.yml"   => "review_map:\n  paths:\n    code: [\"/app/**\"]\n",
+      "paths-negate.yml"  => "review_map:\n  paths:\n    skip: [\"!app/**\"]\n",
+      "paths-brace.yml"   => "review_map:\n  paths:\n    skip: [\"*.{md,txt}\"]\n",
+      "paths-orphan.yml"  => "review_map:\n  effort: high\n  - stray\n",
+    }.each do |name, text|
+      write(File.join(c, name), text)
+      assert_eq sh(@read_cfg, File.join(c, name)).code, 1, "read-config.sh refuses #{name.delete_suffix(".yml")}"
+    end
+
     write(File.join(c, "bad.yml"), "review_map:\n  retention_day: 14\n")
     assert_eq sh(@read_cfg, File.join(c, "bad.yml")).code, 1, "a misspelled key is an error, not a shrug"
     # There is no page-shape key either. `mode` is not read, not validated and not tolerated — it
@@ -797,6 +824,67 @@ class SetupCiSuite
     gate.call("flagwins", "generate", "an explicit flag beats the config file", "--trivial-lines", "10") do
       write(f["app/models/order.rb"], lines_of(40))
       write(f[".accountable-review.yml"], "review_map:\n  trivial_files: 5\n  trivial_lines: 100\n")
+    end
+
+    # --- a repository's own path rules: paths.code and paths.skip
+    # The config sits OUTSIDE the repository and arrives by --config, because a committed
+    # .accountable-review.yml is itself a changed path and would be counted alongside the
+    # fixture it configures.
+    paths_cfg = path("gate-paths.yml")
+    write(paths_cfg, <<~Y)
+      review_map:
+        trivial_lines: 0
+        paths:
+          code: ["skills/**/*.md", "agents/*.md", "app/(group)/[id]/*.md", "**/PROMPT.md"]
+          skip:
+            - skills/*/evals/**
+            - bin/evals
+    Y
+    pc = ["--config", paths_cfg]
+    gate.call("md-default", "skip", "without the override, a prompt under skills/ is documentation") do
+      write(f["skills/review/SKILL.md"], lines_of(40))
+    end
+    gate.call("md-code", "generate", "paths.code makes a Markdown prompt application code", *pc) do
+      write(f["skills/review/SKILL.md"], lines_of(40))
+    end
+    assert_in logs["md-code"], "code\tconfigured\tskills/review/SKILL.md", "a configured code path says so in the log"
+    gate.call("evals-default", "generate", "without the override, an evals script is application code") do
+      write(f["skills/review/evals/check.rb"], lines_of(40))
+    end
+    gate.call("evals-skip", "skip", "paths.skip takes an evals directory out of the count", *pc) do
+      write(f["skills/review/evals/check.rb"], lines_of(40))
+      write(f["bin/evals"], lines_of(40))
+    end
+    assert_in logs["evals-skip"], "skip\tconfigured\tskills/review/evals/check.rb",
+              "a configured skip prints its own reason, distinguishable from a built-in one"
+    assert_in logs["evals-skip"], "skip\tconfigured\tbin/evals", "a block-list item is read as well as a flow one"
+    # A conflict resolves towards the map. The expensive direction is the skip, so a path both lists
+    # claim is code — the same reason the default is code.
+    gate.call("both", "generate", "a path matching both lists is code, never skipped", *pc) do
+      write(f["skills/review/evals/judge.md"], lines_of(40))
+    end
+    # The override only ever overrides. A path neither list names still goes through the built-in
+    # rules, which still end in code — so configuring a repository cannot switch fail-open off.
+    gate.call("neither", "generate", "with paths configured, an unmatched unknown path still counts as code", *pc) do
+      write(f["odd/thing.xyz"], lines_of(40))
+    end
+    gate.call("neither-docs", "skip", "and an unmatched README is still documentation", *pc) do
+      append(f["README.md"], lines_of(40))
+    end
+    gate.call("star-slash", "skip", "a single * stops at a slash, the way a workflow paths filter does", *pc) do
+      write(f["agents/nested/notes.md"], lines_of(40))
+    end
+    gate.call("star", "generate", "and matches within one segment", *pc) do
+      write(f["agents/falsifier.md"], lines_of(40))
+    end
+    gate.call("double-star-root", "generate", "**/ may match nothing, so **/PROMPT.md includes the root", *pc) do
+      write(f["PROMPT.md"], lines_of(40))
+    end
+    gate.call("literal", "generate", "brackets and parentheses in a pattern are the literal directory names", *pc) do
+      write(f["app/(group)/[id]/notes.md"], lines_of(40))
+    end
+    gate.call("literal-not-class", "skip", "and not a character class", *pc) do
+      write(f["app/(group)/i/notes.md"], lines_of(40))
     end
 
     bad_cfg = path("trivial-bad.yml")
