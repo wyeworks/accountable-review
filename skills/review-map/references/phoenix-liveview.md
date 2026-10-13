@@ -123,7 +123,9 @@ repository's own: a line in its convention doc first, a sibling module or popula
 - **A second way to do a job the app already does one way** — a hand-rolled `Plug` where an
   `on_mount` chain exists, a bespoke JSON shape beside a `@derive {Jason.Encoder}`, a `GenServer`
   holding state a table already holds, a list of roles or statuses ordered again beside the module
-  attribute that already ranks them.
+  attribute that already ranks them. Size and timing decide it as they do in Rails: a few copied
+  lines is a clause at most, and a function that cannot do this job as it stands — wrong moment,
+  wrong state — is not the answer the change went around.
 
 **Ask; never answer**, exactly as in Rails: *is it deliberate that X, given Y?* and never *X should be
 Y*. The probe that settles what a module actually is needs no rows — `MyApp.Thing.__schema__(:source)`

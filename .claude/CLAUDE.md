@@ -411,6 +411,15 @@ Editing one of these means checking the others still agree.
   Rails itself documents still hold. What keeps the second from becoming taste is that the run may not
   extend the list — adding a row means adding its catalogue row through `verify-catalogue.sh`.
 
+  **A citation admits a candidate; it does not make a departure (issue #97).** With no count, the
+  bar is the only filter, and a citation proves only that something similar exists. A run cited a
+  model helper beside a one-line copy in a service and asked — every fact true, the question wrong:
+  the copy took a snapshot before the service's own write cleared the fields, and the flow that
+  traced that was not the flow that raised the copy. So three tests sit behind the citation:
+  **same job as it stands** (no new parameter, call site or moment), **big enough** (a few copied
+  lines is a clause, as a name already was), and **no reason in any note**, checked across every
+  flow in step 7c. Free room under seven is never a reason to look for one.
+
   Seven files agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
   it; `report-format.md` § *Coding decisions* owns the bar and the caps **alone** and § *Where
   checkpoints come from* lists it last; both lens files carry the shapes and the searches that produce
