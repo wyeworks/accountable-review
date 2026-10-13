@@ -2175,7 +2175,7 @@ earns, and so do the excerpt, the probe and the primer; *Context* holds none of 
 
 ### How much Context
 
-`SKILL.md` step 1 reads `--context auto|never|always|collapsed`; the CI key is
+`SKILL.md` step 1 reads `--context auto|never|always|collapsed`, else the repository's
 `review_map.context`. **`auto` is the default and is everything above, unchanged.** The others are a
 team's standing answer to *how well do our reviewers know this repository* — not a reader choosing a
 document — and each is held to a rule that keeps the page this one.

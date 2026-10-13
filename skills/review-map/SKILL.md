@@ -33,7 +33,9 @@ Use `/accountable-review:review-map` in Claude Code or `$accountable-review:revi
 (`/review-map` and `$review-map` when installed as a standalone skill, as `npx skills add` does).
 Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
-`--mentor` with an optional stack; `--context auto|never|always|collapsed`; and `--output <dir>`. `--review` is not implemented.
+`--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`; and
+`--output <dir>`. The repository's `.accountable-review.yml` supplies the first three when no flag
+does (step 1). `--review` is not implemented.
 
 Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
 in Claude Code, and [the one for every other host](references/hosts/generic.md) anywhere else — Codex
@@ -91,6 +93,25 @@ point of putting them in a separate context. The host reference owns how the rea
   with `--` that is not one of `--effort`, `--mentor`, `--context`, `--output`, `--update`, `--repository`,
   `--base-sha` or `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
   wrong run, and the reader has no way to tell.
+- **Read the repository's settings before the flags that override them.** If the repository's top
+  level has an `.accountable-review.yml`, run, once:
+
+  ```sh
+  <skill base directory>/scripts/read-config.sh "<repo top level>/.accountable-review.yml"
+  ```
+
+  It prints one `CFG_<key>='<value>'` line per key the file sets and nothing for a key it does not.
+  `CFG_effort`, `CFG_mentor` and `CFG_context` are the team's standing answers, and the order is
+  **flag, then file, then default** — the same order CI applies, so a person's run and a CI run of
+  the same repository start from the same settings. `CFG_mentor` reads as the flag would: `true`
+  is a bare `--mentor`, `false` is off, a stack name is checked at step 2 like one on the command
+  line. `CFG_theme` is `page-skeleton.sh`'s, which reads it itself; `update`, `trivial_*` and
+  `delivery` are CI's and change nothing here — `--update` is only ever a flag on this skill.
+
+  **A non-zero exit stops the run**, with the parser's message: the file names a key or a value
+  that does not exist, and a setting read as nothing is a team's decision silently replaced by a
+  default — the unknown-flag rule, one file over. The file read is the working tree's, which is the
+  copy the person has checked out. Say in chat which settings came from it.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
   it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
   *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about 700
@@ -99,7 +120,8 @@ point of putting them in a separate context. The host reference owns how the rea
   and nothing else: no checkpoint, no citation, no evidence tier and no figure comes out for the
   budget's sake, and **the number it never touches is the checkpoint count.**
 - **Read the effort off the invocation too, and hold it the same way.** One of `--effort high`,
-  `--effort low`, in any position; **no flag means `high`**. It decides how hard the run works to
+  `--effort low`, in any position; **no flag means the file's `effort`, and no file setting means
+  `high`**. It decides how hard the run works to
   be right, and at `--effort high` that buys exactly one thing today: the falsification pass —
   spawned at the end of step 6 against the analysis notes, folded in at step 8. `--effort low` opts
   out of it, and is the flag to reach for when the diff is small enough that a second reader has
@@ -146,7 +168,8 @@ point of putting them in a separate context. The host reference owns how the rea
   the command line that disagrees with what is in front of you is **reported, not obeyed**. Taking
   it as an override would reintroduce the worst regression this skill has: a Rails lens over a
   service that is not Rails, inventing findings confidently. A bare `--mentor` is the ordinary form
-  and the one to prefer, and a value that is none of those six names is reported like any other
+  and the one to prefer. **`--mentor off` turns it off**, which matters only when the repository's
+  file turned it on, and a value that is none of those six names or `off` is reported like any other
   unknown flag. `react` agrees with either React stack, because a Next.js app is a React app;
   `nextjs` agrees only with a Next.js one.
 
@@ -160,7 +183,8 @@ point of putting them in a separate context. The host reference owns how the rea
   **There is no mentor marker, chip or banner.** The flag's effect is visible by being on the page,
   which is exactly why it needs nothing announcing it — and a count of primers would be the page
   grading its own thoroughness. Say which flags you took in chat, not in the artifact.
-- **`--context` says how much of section 02 the page carries, and `auto` is what no flag means.**
+- **`--context` says how much of section 02 the page carries, and `auto` is what no flag and no
+  file setting means.**
   One of `auto`, `never`, `always`, `collapsed`; any other value is **reported, not guessed at**.
   It is a team's standing answer to how well its reviewers know this repository, and it touches
   section 02 and nothing else. `references/report-format.md` § *How much Context* owns all four;
@@ -1255,8 +1279,8 @@ Everything else about writing holds at every stage:
   token block is the repository's **theme** — `review_map.theme` in its `.accountable-review.yml`,
   Daylight when there is none — which the script finds by itself. **Pass no `--theme`**: the look is
   the team's setting, not the run's, and a page that came out in another theme than the repository
-  asked for is a page somebody has to explain. If the script refuses a theme name (exit 2), stop and
-  report the name and the file it came from — never retry with a theme of your own choosing. Then
+  asked for is a page somebody has to explain. If the script refuses the theme or the file (exit 2),
+  stop and report its message — never retry with a theme of your own choosing. Then
   the first `Edit` replaces its one-line body placeholder with the rail, `<main>`, the build banner,
   the masthead and section 1. It refuses with exit 3 if the page already has content, which is the
   guard against re-running it over a page a reader is already looking at.
@@ -1621,9 +1645,10 @@ from becoming a level.
 Four checks are yours, because none of them can be recovered from a page. Do them before anything
 else, and on any disagreement run fully and say so in chat:
 
-- **The flags match the previous run.** `--effort`, `--mentor` and `--context` are invisible on
-  the page by design, so nothing can read them back off it. An update under different flags would produce a
-  page half of which was written to different rules.
+- **The settings match the previous run.** Effort, mentor and context — as step 1 resolved them,
+  from a flag or from the file — are invisible on the page by design, so nothing can read them back
+  off it. An update under different settings would produce a page half of which was written to
+  different rules, and an `.accountable-review.yml` changed in the delta is a reason to run fully.
 - **The stack is the one the page was written for**, per step 2.
 - **The rung is the one step 1 just resolved.** The rung decides whether anything on the page is
   clickable, so a change in it rewrites every citation and there is nothing to carry.
