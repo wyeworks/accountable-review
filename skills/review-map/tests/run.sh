@@ -494,15 +494,26 @@ assert_eq "$(count "$WORK/c.html" '<style data-style="field-notes" data-style-la
 rm -f "$WORK/c.html"
 ACCOUNTABLE_REVIEW_THEME=field-notes "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --theme daylight --out "$WORK/c.html" --title t >/dev/null
 assert_eq "$(count "$WORK/c.html" '<style data-style="daylight" data-style-label')" "1" "--theme beats both"
+# The file goes through read-config.sh whole, so what CI refuses is refused here, before a model
+# has drafted a word: a theme: nested under delivery: and a misspelled key are both errors.
 printf 'review_map:\n  delivery:\n    theme: workshop\n' > "$WORK/cfg/.accountable-review.yml"
 rm -f "$WORK/c.html"
-"$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null
-assert_eq "$(count "$WORK/c.html" '<style data-style="daylight" data-style-label')" "1" "a theme: nested under delivery: is not review_map.theme, so the default holds"
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2" "a theme: nested under delivery: is refused, as CI refuses it"
+printf 'review_map:\n  thme: workshop\n' > "$WORK/cfg/.accountable-review.yml"
+rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2" "an unknown key in the repository's config is refused, not ignored"
+assert_eq "$([ -e "$WORK/c.html" ] && echo written || echo absent)" "absent" "and nothing is written for it"
 printf 'review_map:\n  theme: workshp\n' > "$WORK/cfg/.accountable-review.yml"
 rm -f "$WORK/c.html"
 rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "2" "a theme name with no file behind it is refused, not defaulted"
 assert_eq "$([ -e "$WORK/c.html" ] && echo written || echo absent)" "absent" "and nothing is written"
+# read-config.sh refuses that one before the script's own check is reached; the environment (how CI
+# passes a --config file's theme) and --theme are not parsed by it, so the script's check is theirs.
+rm -f "$WORK/cfg/.accountable-review.yml"
+rc=0; ACCOUNTABLE_REVIEW_THEME=workshp "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK/cfg" --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?
+assert_eq "$rc" "2" "a theme name from the environment with no file behind it is refused, not defaulted"
 rc=0; "$SKELETON" --template "$TEMPLATE" --themes "$THEMES" --repo "$WORK" --theme ../themes/daylight --out "$WORK/c.html" --title t >/dev/null 2>&1 || rc=$?
 assert_eq "$rc" "2" "a theme name is a name, never a path"
 

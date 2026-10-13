@@ -73,7 +73,7 @@ done
 # Configuration, in the order the design fixes: explicit flags beat the
 # repository's config file, which beats the defaults. read-config.sh is the one
 # place that knows the file's shape.
-READ_CONFIG=$PLUGIN_ROOT/skills/setup-ci/scripts/read-config.sh
+READ_CONFIG=$PLUGIN_ROOT/skills/review-map/scripts/read-config.sh
 if [ -z "$CONFIG" ] && [ -f .accountable-review.yml ]; then CONFIG=.accountable-review.yml; fi
 if [ -n "$CONFIG" ] && [ -f "$CONFIG" ] && [ -x "$READ_CONFIG" ]; then
   eval "$("$READ_CONFIG" "$CONFIG" --prefix CFG_)"

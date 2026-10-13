@@ -54,7 +54,7 @@ worth one block, and none of it is worth a question of its own.
 | `scripts/inspect-repo.sh` | step 1 | Reports what the repository already has |
 | `scripts/render-workflow.sh` | step 3 | Renders the workflow. Deterministic — same flags, same bytes |
 | `scripts/install-workflow.sh` | step 3 | Writes it, idempotently, and refuses to clobber a hand-edited one |
-| `scripts/read-config.sh` | step 4 | Reads the config file. Also what the CI scripts use at run time |
+| `../review-map/scripts/read-config.sh` | step 4 | Reads the config file. Lives with `review-map`, whose runs read the same file; the CI scripts use it too |
 | `templates/workflow.yml` | — | The workflow itself. Edit this, not a copy in your head |
 
 Paths are relative to the base directory named at the top of this skill when it loads.

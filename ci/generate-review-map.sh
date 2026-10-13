@@ -5,7 +5,7 @@
 #   Usage: generate-review-map.sh --output DIR --repository owner/repo
 #                                 --pr N --base-sha SHA --head-sha SHA
 #                                 [--effort high|low]
-#                                 [--mentor [rails|elixir|phoenix|rust|react|nextjs]]
+#                                 [--mentor [off|rails|elixir|phoenix|rust|react|nextjs]]
 #                                 [--context auto|never|always|collapsed]
 #                                 [--update | --no-update]
 #                                 [--config FILE] [--repo-dir DIR]
@@ -55,9 +55,9 @@ while [ $# -gt 0 ]; do
     # --mentor takes an OPTIONAL stack name, which is how the skill spells it, and one
     # spelling in both places is worth the peek: a second flag name here would be a second
     # thing to keep in step with SKILL.md. The next argument is consumed only when it is one
-    # of the six names, so `--mentor --effort low` cannot swallow the flag after it.
+    # of the six names or `off`, so `--mentor --effort low` cannot swallow the flag after it.
     --mentor)      MENTOR=on
-                   case ${2:-} in rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac
+                   case ${2:-} in off|rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac
                    shift ;;
     --context)     CONTEXT=$2;    shift 2 ;;
     --update)      UPDATE=on;     shift ;;
@@ -85,7 +85,7 @@ if [ -z "$CONFIG" ] && [ -f "$REPO_DIR/.accountable-review.yml" ]; then
   CONFIG=$REPO_DIR/.accountable-review.yml
 fi
 if [ -n "$CONFIG" ] && [ -f "$CONFIG" ]; then
-  eval "$("$PLUGIN_ROOT/skills/setup-ci/scripts/read-config.sh" "$CONFIG" --prefix CFG_)"
+  eval "$("$PLUGIN_ROOT/skills/review-map/scripts/read-config.sh" "$CONFIG" --prefix CFG_)"
 fi
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 [ -n "$MENTOR" ] || MENTOR=${CFG_mentor:-off}
@@ -110,7 +110,7 @@ case $MENTOR in
   off|false|no) MENTOR=off ;;
   on|true|yes)  MENTOR=on ;;
   rails|elixir|phoenix|rust|react|nextjs) ;;
-  *) die "--mentor takes no value, or one of rails, elixir, phoenix, rust, react, nextjs; got '$MENTOR'" ;;
+  *) die "--mentor takes no value, off, or one of rails, elixir, phoenix, rust, react, nextjs; got '$MENTOR'" ;;
 esac
 
 # How much of section 02 Context the page carries. `auto` is the earning rule and the default;
@@ -154,15 +154,16 @@ PAGE=$OUTPUT_ABS/index.html
 # ---------------------------------------------------------------- invocation --
 
 PROMPT="/accountable-review:review-map${PR:+ $PR} --effort $EFFORT --output $OUTPUT_ABS"
-# Off is the absence of the flag rather than `--mentor off`: the skill parses no such value, and a
-# flag whose off state is spelled out is one more thing for it to get wrong.
+# Every page setting is passed EXPLICITLY, its default included. The skill reads the checkout's
+# .accountable-review.yml itself, under its flags, so a value left to the absence of a flag would be
+# decided twice — here, possibly from a --config kept elsewhere, and there from the checkout — and
+# the checkout would win. Passing all three makes this script's resolution the run's, which is also
+# what the manifest below records.
 case $MENTOR in
-  off) ;;
   on)  PROMPT="$PROMPT --mentor" ;;
   *)   PROMPT="$PROMPT --mentor $MENTOR" ;;
 esac
-# `auto` is the absence of the flag, for --mentor's reason: the default is what a bare run does.
-[ "$CONTEXT" = auto ] || PROMPT="$PROMPT --context $CONTEXT"
+PROMPT="$PROMPT --context $CONTEXT"
 # --update goes on only when something already put a page where this run writes. That check is
 # mechanical rather than editorial: the adapter reports that a previous map is present, and the
 # skill decides — via carry-plan.sh — whether any of it may be carried. Asking for an update

@@ -17,12 +17,18 @@
 #     mentor: rails          # true | false | rails | elixir | phoenix | rust | react | nextjs  (default false)
 #     theme: daylight        # daylight | workshop | field-notes  (default daylight)
 #     context: auto          # auto | never | always | collapsed  (default auto)
-#     trivial_files: 2       # skip when application files <= this AND
+#     update: true           # true | false  (default true; CI only)
+#     trivial_files: 2      # skip when application files <= this AND
 #     trivial_lines: 20      #   application lines <= this; either at 0 disables it
 #     delivery:
 #       provider: github-artifact
 #       retention_days: 30
 #       command: ./bin/publish-review-map   # provider: command only
+#
+# It lives in review-map rather than setup-ci because every reader needs it: the skill at step 1 and
+# page-skeleton.sh on a person's run, and the ci/ scripts in CI. The skill is installed alone by
+# `npx skills add` and by Codex, so the one parser has to ship with it — a second, narrower reader
+# would wave through a file CI then refuses.
 #
 # THIS IS NOT A YAML PARSER, and it should not grow into one. It reads exactly
 # the keys above at exactly that nesting, which is the entire configuration this
@@ -121,9 +127,8 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
         fail("context must be auto, never, always or collapsed, got `" val "`")
       emit("context", val)
     } else if (key == "theme") {
-      # How the page LOOKS, and nothing about what is on it: typefaces, radii, hues. Read here so
-      # CI fails on a typo before a model is spent, and passed on by generate-review-map.sh; the
-      # skill page-skeleton.sh reads the same key itself, because it ships without this script.
+      # How the page LOOKS, and nothing about what is on it: typefaces, radii, hues. Validated here
+      # for every reader; page-skeleton.sh is the one that uses it, through this script.
       # The names are the files under skills/review-map/references/themes/, and the setup-ci
       # tests/suite.rb fails when this list and that directory disagree.
       if (val != "daylight" && val != "workshop" && val != "field-notes") \

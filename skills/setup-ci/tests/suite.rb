@@ -70,7 +70,7 @@ class SetupCiSuite
     @results = []
     @render   = File.join(root, "skills/setup-ci/scripts/render-workflow.sh")
     @install  = File.join(root, "skills/setup-ci/scripts/install-workflow.sh")
-    @read_cfg = File.join(root, "skills/setup-ci/scripts/read-config.sh")
+    @read_cfg = File.join(root, "skills/review-map/scripts/read-config.sh")
     @inspect  = File.join(root, "skills/setup-ci/scripts/inspect-repo.sh")
     @generate = File.join(root, "ci/generate-review-map.sh")
     @deliver  = File.join(root, "ci/delivery/deliver.sh")
@@ -578,10 +578,18 @@ class SetupCiSuite
     default = inv.call("--repo-dir", @tmp).out
     assert_in default, "--effort high",             "the default effort is high, as the skill's is"
 
-    # --mentor is OFF unless asked for, and off is the ABSENCE of the flag rather than a value: the
-    # skill parses no `--mentor off`. It is also the one setting that changes what is on the page,
-    # which is why its default is the one that matters most here.
-    assert_not_in default, "--mentor",              "no mentor flag is passed by default"
+    # --mentor is OFF unless asked for, and the off is SPELLED OUT: the skill reads the checkout's
+    # config file under its flags, so an absent flag would let that file decide again — and a
+    # --config kept elsewhere would lose to it. It is also the one setting that changes what is on
+    # the page, which is why its default is the one that matters most here.
+    assert_in default, "--mentor off",              "mentor's default reaches the run as --mentor off"
+    assert_in inv.call("--repo-dir", @tmp, "--mentor", "off", "--effort", "low").out, "--effort low",
+              "an explicit --mentor off does not swallow the flag after it"
+    write(File.join(c, "mentor-off.yml"), "review_map:\n  mentor: false\n")
+    write(File.join(c, ".accountable-review.yml"), "review_map:\n  mentor: rails\n")
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "mentor-off.yml"), chdir: c).out, "--mentor off",
+              "a --config elsewhere saying off reaches the run as off, whatever the checkout's file says"
+    File.delete(File.join(c, ".accountable-review.yml"))
     assert_in inv.call("--repo-dir", @tmp, "--mentor").out, "--mentor", "a bare --mentor reaches the run"
     assert_in inv.call("--repo-dir", @tmp, "--mentor", "rails").out, "--mentor rails", "and a stack name travels with it"
     # The optional value must not swallow the flag after it. A peek that consumed any next argument
@@ -605,13 +613,11 @@ class SetupCiSuite
     assert_eq sh(@read_cfg, File.join(c, "mentor-bad.yml")).code, 1, "a mentor value that is not a stack is an error"
 
     # --context is how much of section 02 the page carries. `auto` is the default and, like mentor's
-    # off, is the ABSENCE of the flag: the default is what a bare run does, so naming it would be a
-    # second spelling of nothing. The other three travel by name, from the flag or the config file.
-    assert_not_in default, "--context",             "no context flag is passed by default"
+    # off, is spelled out, for the same reason: an absent flag is a second decision by the skill.
+    assert_in default, "--context auto",            "context's default reaches the run as --context auto"
     %w[never always collapsed].each do |v|
       assert_in inv.call("--repo-dir", @tmp, "--context", v).out, "--context #{v}", "--context #{v} reaches the run"
     end
-    assert_not_in inv.call("--repo-dir", @tmp, "--context", "auto").out, "--context", "an explicit auto passes nothing"
     assert_eq inv.call("--repo-dir", @tmp, "--context", "sometimes").code, 1, "a context value that is none of the four is refused"
     write(File.join(c, "context.yml"), "review_map:\n  context: never\n")
     assert_in inv.call("--repo-dir", c, "--config", File.join(c, "context.yml"), chdir: c).out, "--context never",
