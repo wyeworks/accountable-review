@@ -914,12 +914,20 @@ Same rule as above: editing one of these means checking the others still agree.
   downgrades the scope step's own verdict, so no guard moves. **Only `no-application-code` counts,
   never `trivial`**, and **it stands the job down rather than rewriting the page**.
 
-  These agree: `ci/application-code.sh` holds both rules; `ci/map-still-current.sh` the composition
-  **alone**; `read-config.sh` and `references/config.md` the two keys; `templates/workflow.yml` the
-  `scope` step and the guards; `references/workflow.md` § *The application-code gate* owns the
-  reasoning **alone**; `SKILL.md`'s hard rules forbid counting anything but application code or
-  baking a number into the YAML; `tests/suite.rb` covers each threshold either side (`bulky`,
-  `spread`, `masked`) and both halves of the second question; `docs/ci.md` restates it.
+  **What counts as application code is the repository's to correct, never to switch off.**
+  `review_map.paths.code` and `.skip` are checked before the built-in list, a path in both is code,
+  and a path in neither falls through to the built-in rules and from there to code — so the override
+  cannot turn fail-open off, and a configured verdict prints `configured`. This repository is the
+  first user: its skills are Markdown.
+
+  These agree: `ci/application-code.sh` holds both rules and the override; `ci/map-still-current.sh`
+  the composition **alone**; `read-config.sh` and `references/config.md` the four keys (the two lists
+  are the schema's only non-scalars); `templates/workflow.yml` the `scope` step and the guards;
+  `references/workflow.md` § *The application-code gate* owns the reasoning **alone**; `SKILL.md`'s
+  hard rules forbid counting anything but application code or baking a number into the YAML;
+  `tests/suite.rb` covers each threshold either side (`bulky`, `spread`, `masked`), each override
+  either side plus an unmatched path staying code, and both halves of the second question;
+  `docs/ci.md` restates it.
 - **The CI page and a person's page are the same page.** `--output <dir>` changes where the bytes
   land and nothing else: same sections, same depth rules, same excerpt budget, same completeness
   gate. `SKILL.md` step 1 owns the flag, step 9 makes the stages save points rather than publishes,
@@ -950,6 +958,10 @@ Same rule as above: editing one of these means checking the others still agree.
   holding the canonical, complete flag form of all of them; `install-workflow.sh` recovers it and
   passes it ahead of the current call's flags, so re-running setup to move the version pin does not
   revert a team's decisions. The line is a pure function of the flags.
+
+  **One ref is recorded there too**: `--plugin-branch`, because tracking a branch (this repository
+  dogfooding itself) is a choice a re-run must not swap for a tag; a release pin is recorded by its
+  absence, and `manifest.json`'s `plugin.commit` keeps a branch build attributable.
 
   These agree: `templates/workflow.yml` holds the `SETUP:IF:`/`SETUP:END:` blocks and the line,
   `render-workflow.sh` resolves them, `install-workflow.sh` recovers them, `SKILL.md` step 3 confirms

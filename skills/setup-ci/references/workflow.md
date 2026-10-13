@@ -320,6 +320,19 @@ review — `review-map` inspects the working tree and would report the clone as 
 `render-workflow.sh` defaults the ref to the version of the plugin that generated the file. Upgrading
 means re-running `/accountable-review:setup-ci`, which reports the change as a diff.
 
+**Or a branch, for a repository dogfooding the plugin.** `--plugin-branch main` clones the branch
+instead, so every map comes from whatever was last merged — no release needed for a prose change to
+reach CI. That gives up the pin on purpose, and two things keep what the pin was for. The install step
+prints the commit it resolved, and `manifest.json` records it as `plugin.commit`, so a map still names
+the build that wrote it even though the version no longer does. And the choice is recorded in
+`# Decisions:` as `--plugin-branch main`, so re-running setup to pick up a template change keeps the
+branch rather than re-deriving a tag; `--plugin-release` goes back. It is meant for this repository and
+for a team testing a fork, not as a default — anyone else wants the tag.
+
+The branch is the plugin's, never the pull request's: a pull request that edits the skill is mapped by
+the skill as merged, not by its own edit, which is both the safer and the more useful reading — the
+reviewer sees the change through the tool everyone else already uses.
+
 **The tag has to exist.** Setup cannot check — it has no network — so a workflow generated from an
 unreleased checkout pins a tag nothing resolves, and the failure arrives later, on someone's pull
 request, as a clone error. If you are running from a checkout rather than an installed release, say
@@ -457,10 +470,42 @@ Note what is **not** excluded. `config/` is where a Rails app keeps its routes a
 a Dockerfile and a compose file describe how the thing runs. Those are application code here, and a
 directory-name exclusion that swept them up would take a routing change with them.
 
-Two known limits, both failing towards a missing map. A repository whose product *is* prose has
-application changes under `*.md` that this counts as documentation. And a team with an unusual layout
-can keep code under a directory named in the exclusion list. The job summary is what surfaces either:
-it lists every discounted path with its reason.
+### A repository says what its own paths are
+
+The built-in list is a guess about layouts in general, and two kinds of repository disagree with it.
+One whose product *is* prose — this plugin, whose skills are Markdown — has application changes under
+`*.md` that the list calls documentation, and loses the map it most wanted. One with an unusual
+layout keeps tooling or an eval harness under a directory nothing names, and gets a map for a change
+nobody needs one for. Editing the script per repository is the project-layout assumption this whole
+plugin refuses, and `linguist-generated` in `.gitattributes` would collapse those diffs for human
+reviewers too, so the repository says it in `.accountable-review.yml`:
+
+```yaml
+review_map:
+  paths:
+    code: ["skills/**/*.md", "agents/*.md"]
+    skip: ["skills/review-map/evals/**"]
+```
+
+Four rules, each chosen for the direction it fails in:
+
+- **Checked first, before the generated-file verdicts and the built-in list**, so a repository's
+  word about its own paths wins.
+- **It only ever overrides.** A path neither list names falls through to the built-in rules, and from
+  there to code — so configuring a repository cannot turn fail-open off.
+- **A path both lists match is code.** The expensive direction is the skip, so a conflict resolves
+  away from it, for the same reason an unrecognised path does.
+- **A configured verdict says so.** The reason column reads `configured`, for a skip and for code
+  alike, so the job summary tells the repository's rule from the script's.
+
+Patterns are matched against the whole path from the repository root, the way a workflow's own
+`paths:` filter matches: `*` and `?` stop at a slash, `**` crosses any number, and `**/` may match
+nothing, so `**/*.md` includes a Markdown file at the root. Nothing else is special — `app/[id]/` and
+`app/(group)/` are the literal Next.js directories they look like — and `read-config.sh` refuses
+`{a,b}`, a leading `!` and a leading `/` rather than taking them literally and matching nothing.
+
+The job summary is still what surfaces a wrong call either way: it lists every discounted path with
+its reason.
 
 ### Asked again, over the commits since the map we already have
 

@@ -1,0 +1,18 @@
+# This repository's product is prose: the skills, the agent and the rules that govern them are
+# Markdown a model executes, so a change to them is application code. The README, CONTRIBUTING,
+# docs/ and the eval harness's notes stay documentation by the gate's built-in rules.
+review_map:
+  paths:
+    code:
+      - skills/*/SKILL.md
+      - skills/*/references/**
+      - agents/*.md
+      - AGENTS.md
+      - .claude/CLAUDE.md
+    # The eval harness and the published examples are not what a Review Map explains: the first
+    # judges the product rather than being it, and the second is regenerated, never edited.
+    skip:
+      - skills/review-map/evals/**
+      - bin/evals
+      - examples/**
+      - .accountable-review.yml

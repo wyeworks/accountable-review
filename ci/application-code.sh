@@ -47,20 +47,40 @@
 # when EVERY path is excluded, so one path misfiled as a test changes nothing
 # unless the whole diff is misfiled. The expensive direction is the other one.
 #
-# WHAT IT DOES NOT KNOW. Whether a file is application code is a question about a
-# repository, and this script reads only paths plus what diff-render.sh can tell
-# it. Two known limits, neither worth machinery today: a repository whose product
-# IS prose (this plugin, for one) has application changes under *.md that this
-# calls documentation, and a team with an unusual layout can have code under a
-# directory named here. Both fail towards skipping a map that was wanted, and
-# both are visible — the job summary prints every path it discounted and why, so
-# an unwanted skip is a thing someone can see and report rather than an absence
-# they have to notice.
+# WHAT IT DOES NOT KNOW, AND HOW A REPOSITORY TELLS IT. Whether a file is
+# application code is a question about a repository, and the built-in rules below
+# read only paths plus what diff-render.sh can tell them. A repository whose
+# product IS prose (this plugin, for one) has application changes under *.md that
+# they call documentation; a team with an unusual layout has code under a
+# directory they name, or tooling under one they do not. Editing this list per
+# repository is the project-layout assumption everything here refuses, so the
+# repository says it instead, in .accountable-review.yml:
+#
+#   review_map:
+#     paths:
+#       code: ["skills/**/*.md", "AGENTS.md"]
+#       skip: ["skills/review-map/evals/**"]
+#
+# Both lists are checked BEFORE everything else, generated files included, so a
+# repository's word about its own paths wins. They only ever override: a path
+# matching neither falls through to the built-in rules and from there to code,
+# so the gate still fails open. A path matching BOTH is code — the expensive
+# direction is the skip, so a conflict resolves away from it. A configured skip
+# prints `configured` as its reason and a configured code path prints it in the
+# same column, so the job summary tells a repository's rule from this file's.
+#
+# Patterns are matched against the whole path from the repository root, the way a
+# workflow's `paths:` filter matches: `*` and `?` stop at a slash, `**` crosses
+# any number of them, and `**/` may match nothing, so `**/*.md` includes a
+# Markdown file at the root. Nothing else is special — `[id]` and `(group)` are
+# the literal Next.js directories they look like.
 #
 # Output is one line per changed path, tab-separated, plus comment lines. The
 # fourth column is that path's changed lines, added plus deleted:
 #
 #   code<TAB>-<TAB>app/models/order.rb<TAB>12
+#   code<TAB>configured<TAB>skills/review-map/SKILL.md<TAB>30
+#   skip<TAB>configured<TAB>skills/review-map/evals/check.rb<TAB>8
 #   skip<TAB>test<TAB>spec/models/order_spec.rb<TAB>40
 #   skip<TAB>lockfile<TAB>yarn.lock<TAB>5183
 #
@@ -93,7 +113,7 @@ while [ $# -gt 0 ]; do
     --config)         CONFIG=$2;        shift 2 ;;
     --trivial-files)  TRIVIAL_FILES=$2; shift 2 ;;
     --trivial-lines)  TRIVIAL_LINES=$2; shift 2 ;;
-    -h|--help) sed -n '2,63p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,89p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "application-code.sh: unknown argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -115,6 +135,42 @@ if [ -n "$CONFIG" ] && [ -f "$CONFIG" ] && [ -x "$READ_CONFIG" ]; then
 fi
 [ -n "$TRIVIAL_FILES" ] || TRIVIAL_FILES=${CFG_trivial_files:-$TRIVIAL_FILES_DEFAULT}
 [ -n "$TRIVIAL_LINES" ] || TRIVIAL_LINES=${CFG_trivial_lines:-$TRIVIAL_LINES_DEFAULT}
+
+# The repository's own path rules, compiled once into one regex per line,
+# `code` or `skip` first. read-config.sh has already refused the syntax this does
+# not implement, so the translation only has to know three tokens.
+OVERRIDES=$(mktemp); trap 'rm -f "$OVERRIDES"' EXIT
+{
+  [ -z "${CFG_paths_code:-}" ] || printf '%s\n' "$CFG_paths_code" | sed 's/^/code	/'
+  [ -z "${CFG_paths_skip:-}" ] || printf '%s\n' "$CFG_paths_skip" | sed 's/^/skip	/'
+} | awk -F'\t' '
+  # Every character that is not a glob token goes through a bracket expression,
+  # which is literal in any awk, so a path holding . ( ) [ ] + $ means itself.
+  function glob2re(g,    re, i, c) {
+    re = "^"
+    for (i = 1; i <= length(g); i++) {
+      c = substr(g, i, 1)
+      if (substr(g, i, 3) == "**/") { re = re "(.*/)?"; i += 2 }
+      else if (substr(g, i, 2) == "**") { re = re ".*"; i += 1 }
+      else if (c == "*") re = re "[^/]*"
+      else if (c == "?") re = re "[^/]"
+      else if (c == "]") re = re "[]]"
+      else if (c ~ /[A-Za-z0-9_\/-]/) re = re c
+      else re = re "[" c "]"
+    }
+    return re "$"
+  }
+  NF == 2 && $2 != "" { print $1 "\t" glob2re($2) }
+' > "$OVERRIDES"
+
+configured_verdict() {
+  awk -F'\t' -v p="$1" '
+    p ~ $2 { hit[$1] = 1 }
+    # Code first, whatever order the lists came in: a conflict resolves towards
+    # the map, for the reason an unmatched path does.
+    END { if ("code" in hit) print "code"; else if ("skip" in hit) print "skip" }
+  ' "$OVERRIDES"
+}
 
 for n in "$TRIVIAL_FILES" "$TRIVIAL_LINES"; do
   case $n in
@@ -141,7 +197,7 @@ for ref in "$BASE" "$HEAD_REF"; do
   fi
 done
 
-TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
+TMP=$(mktemp -d); trap 'rm -rf "$TMP" "$OVERRIDES"' EXIT
 
 # --numstat rather than --name-only, because the line counts and the path list
 # have to come from ONE command: two reads of the same diff can disagree about a
@@ -187,6 +243,12 @@ generated_reason() {
 classify() {
   _path=$1
   _lines=$2
+
+  # The repository's own word first. See WHAT IT DOES NOT KNOW above.
+  case $(configured_verdict "$_path") in
+    code) printf 'code\tconfigured\t%s\t%s\n' "$_path" "$_lines"; return ;;
+    skip) printf 'skip\tconfigured\t%s\t%s\n' "$_path" "$_lines"; return ;;
+  esac
 
   _why=$(generated_reason "$_path")
   if [ -n "$_why" ]; then

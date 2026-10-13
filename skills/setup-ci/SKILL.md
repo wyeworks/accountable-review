@@ -159,6 +159,7 @@ Take their answer as flags rather than as an edit to the file:
 | map the bot's pull requests too | `--no-skip-authors` |
 | skip another bot as well | `--skip-authors 'dependabot[bot],renovate[bot]'` |
 | don't comment on the pull request | `--no-pr-comment` — drops the write scope with it |
+| run the plugin's `main`, not a release (dogfooding) | `--plugin-branch main` — kept on re-runs; `--plugin-release` undoes it |
 
 ```sh
 <skill base directory>/scripts/install-workflow.sh --repo-dir . --print-diff [-- <flags>]
@@ -216,6 +217,11 @@ defaults are in effect rather than leaving them wondering where the settings liv
 bother under about fifty lines* is asking for `trivial_lines: 0` or `trivial_lines: 50`, not a flag —
 how big a change has to be is run-time configuration, not one of step 3's when-decisions, and
 `references/config.md` says why. Write the key, and only the one they moved.
+
+**So does a layout answer.** A repository whose Markdown is the product (prompts, a skill) or whose
+tree holds code nobody needs a map for (an eval harness, generated examples) is asking for
+`review_map.paths.code` or `review_map.paths.skip`. Write only the patterns they named or that step
+1's inspection made obvious, and say that a path in neither list is judged by the built-in rules.
 
 **Offer the look, once.** The page comes in three themes — **Daylight** (the default: cool, quiet,
 sans-serif), **Workshop** (square and bold, hard frames, highlighter tints) and **Field Notes** (warm
