@@ -70,7 +70,7 @@ class SetupCiSuite
     @results = []
     @render   = File.join(root, "skills/setup-ci/scripts/render-workflow.sh")
     @install  = File.join(root, "skills/setup-ci/scripts/install-workflow.sh")
-    @read_cfg = File.join(root, "skills/setup-ci/scripts/read-config.sh")
+    @read_cfg = File.join(root, "skills/review-map/scripts/read-config.sh")
     @inspect  = File.join(root, "skills/setup-ci/scripts/inspect-repo.sh")
     @generate = File.join(root, "ci/generate-review-map.sh")
     @deliver  = File.join(root, "ci/delivery/deliver.sh")
@@ -578,10 +578,18 @@ class SetupCiSuite
     default = inv.call("--repo-dir", @tmp).out
     assert_in default, "--effort high",             "the default effort is high, as the skill's is"
 
-    # --mentor is OFF unless asked for, and off is the ABSENCE of the flag rather than a value: the
-    # skill parses no `--mentor off`. It is also the one setting that changes what is on the page,
-    # which is why its default is the one that matters most here.
-    assert_not_in default, "--mentor",              "no mentor flag is passed by default"
+    # --mentor is OFF unless asked for, and the off is SPELLED OUT: the skill reads the checkout's
+    # config file under its flags, so an absent flag would let that file decide again — and a
+    # --config kept elsewhere would lose to it. It is also the one setting that changes what is on
+    # the page, which is why its default is the one that matters most here.
+    assert_in default, "--mentor off",              "mentor's default reaches the run as --mentor off"
+    assert_in inv.call("--repo-dir", @tmp, "--mentor", "off", "--effort", "low").out, "--effort low",
+              "an explicit --mentor off does not swallow the flag after it"
+    write(File.join(c, "mentor-off.yml"), "review_map:\n  mentor: false\n")
+    write(File.join(c, ".accountable-review.yml"), "review_map:\n  mentor: rails\n")
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "mentor-off.yml"), chdir: c).out, "--mentor off",
+              "a --config elsewhere saying off reaches the run as off, whatever the checkout's file says"
+    File.delete(File.join(c, ".accountable-review.yml"))
     assert_in inv.call("--repo-dir", @tmp, "--mentor").out, "--mentor", "a bare --mentor reaches the run"
     assert_in inv.call("--repo-dir", @tmp, "--mentor", "rails").out, "--mentor rails", "and a stack name travels with it"
     # The optional value must not swallow the flag after it. A peek that consumed any next argument
@@ -603,6 +611,21 @@ class SetupCiSuite
               "react is a stack name the adapter takes as --mentor's value"
     write(File.join(c, "mentor-bad.yml"), "review_map:\n  mentor: nope\n")
     assert_eq sh(@read_cfg, File.join(c, "mentor-bad.yml")).code, 1, "a mentor value that is not a stack is an error"
+
+    # --context is how much of section 02 the page carries. `auto` is the default and, like mentor's
+    # off, is spelled out, for the same reason: an absent flag is a second decision by the skill.
+    assert_in default, "--context auto",            "context's default reaches the run as --context auto"
+    %w[never always collapsed].each do |v|
+      assert_in inv.call("--repo-dir", @tmp, "--context", v).out, "--context #{v}", "--context #{v} reaches the run"
+    end
+    assert_eq inv.call("--repo-dir", @tmp, "--context", "sometimes").code, 1, "a context value that is none of the four is refused"
+    write(File.join(c, "context.yml"), "review_map:\n  context: never\n")
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "context.yml"), chdir: c).out, "--context never",
+              "context is read from the config file"
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "context.yml"), "--context", "always", chdir: c).out,
+              "--context always", "and the flag beats the config file"
+    write(File.join(c, "context-bad.yml"), "review_map:\n  context: needed\n")
+    assert_eq sh(@read_cfg, File.join(c, "context-bad.yml")).code, 1, "a context value that is none of the four is an error"
 
     # The theme is how the page looks and nothing about what is on it, so it is never a flag on the
     # skill: page-skeleton.sh reads it from the checkout, and the adapter passes it through the
@@ -699,6 +722,7 @@ class SetupCiSuite
     assert_in m, '"pull_request": 412',             "the manifest records the pull request"
     assert_in m, '"coverage_gate": "pass"',         "the coverage gate runs and its result is recorded"
     assert_not_in m, "severity",                    "the manifest carries no verdict vocabulary"
+    assert_in m, '"context": "auto"',               "the manifest records how much Context was asked for"
 
     o2 = path("out-pending")
     page.call(o2, "<div class=\"buildstate\">Still being written</div>#{filler}")

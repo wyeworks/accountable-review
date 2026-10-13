@@ -5,12 +5,8 @@ full before editing anything here.** It is the canonical home for every rule tha
 what the two skills are, the invariants several files have to agree on, and the register to write
 in — and this file deliberately restates none of it.
 
-That is the point rather than an economy. `CLAUDE.md` § *One canonical home* is the page's rule and
-that file's own, and the thing it warns about has already happened here once: an `AGENTS.md`
-existed as a whole copy of `CLAUDE.md` with `Claude` replaced by `Codex` throughout. It fell two
-hundred lines behind, lost `carry-plan.sh` and `--update` entirely, and rendered
-`claude plugin validate --strict` as a command that does not exist. A pointer cannot go stale that
-way.
+That is the point rather than an economy: `CLAUDE.md` § *One canonical home* is the page's rule and
+that file's own, and a second copy of the rules goes stale where a pointer cannot.
 
 ## What is different when you work here from Codex
 

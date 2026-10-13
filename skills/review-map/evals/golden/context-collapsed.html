@@ -1,0 +1,82 @@
+<!-- CONTEXT, COLLAPSED. The context-clean page at --context collapsed: the same two entries,
+     wrapped in one shut details.ctx-fold whose summary names them. report-format.md § How much
+     Context. Every Context rule must read through the fold exactly as it reads the open dl, so
+     this fixture must pass with the same line context-clean does. -->
+    <section id="context">
+      <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
+      <h2 style="margin-bottom:18px">What the judgments below rely on</h2>
+      <details class="ctx-fold">
+        <summary><span class="ctx-fold-lbl">Repository context</span> Email-code signup, discourse-captcha</summary>
+      <dl class="ctx">
+        <dt>Email-code signup</dt>
+        <dd>Signing up without a password: the browser posts an email, then posts back the six-digit
+          code it was sent, and only a later request carrying a username creates the account.
+          <span class="path">app/services/email_login_code/redeem.rb:42-49</span>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
+        <dt>discourse-captcha</dt>
+        <dd>A plugin, not core code. It wraps the session controller method that handles a code
+          request and stops it when no CAPTCHA was solved.
+          <span class="path">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:5-15</span>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a></span></dd>
+      </dl>
+      </details>
+    </section>
+
+    <section id="attention" style="padding-top:48px">
+      <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
+      <h2 style="margin-bottom:18px">What needs your attention</h2>
+      <p>Two judgments, in the order you would most regret getting wrong.</p>
+
+      <section class="cp" id="cp-a">
+        <span class="lbl lbl-wide">Checkpoint A</span>
+        <h3>Does every request that creates an email-code account still pass CAPTCHA?</h3>
+        <p>The CAPTCHA gate now fires only on a code request that carries a username. That is safe
+        only because the redeem service refuses to create an account without one, and nothing links
+        the two files.</p>
+        <ul class="lookat">
+          <li>
+            <b>The gate</b>
+            <span>keys on the username param rather than on account creation</span>
+            <span class="path">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:38-44</span>
+          </li>
+        </ul>
+        <p class="open"><b>Open question</b> Should the gate key on account creation itself?</p>
+      </section>
+
+      <section class="cp" id="cp-b">
+        <span class="lbl lbl-wide">Checkpoint B</span>
+        <h3>Is an approval signup still checked before staff see it?</h3>
+        <p>Approval signups stopped being checked on the first code request. They are checked on
+        the completion endpoint instead, by code this change did not touch. <span class="tier tier-unc">from unchanged code</span></p>
+        <ul class="lookat">
+          <li>
+            <b>The completion check</b>
+            <span>unchanged, and now the only one on this path</span>
+            <span class="path">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</span>
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    <section id="start" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Where to begin</span><i></i></div>
+      <h2 style="margin-bottom:22px">Read the code in this order</h2>
+      <ol class="begin">
+        <li>
+          <span class="n">01</span>
+          <span class="t">
+            <span class="path">app/services/email_login_code/redeem.rb:42-49</span>
+            <span class="why">The policy list, whose last rule the CAPTCHA gate depends on.</span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <span class="t">
+            <span class="path">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:1-48</span>
+            <span class="why">The whole hook, short enough to read at once.</span>
+          </span>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
+        </li>
+      </ol>
+    </section>

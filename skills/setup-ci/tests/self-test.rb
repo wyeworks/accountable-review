@@ -71,7 +71,7 @@ end
 W = "skills/setup-ci/templates/workflow.yml"
 RENDER = "skills/setup-ci/scripts/render-workflow.sh"
 INSTALL = "skills/setup-ci/scripts/install-workflow.sh"
-READ_CONFIG = "skills/setup-ci/scripts/read-config.sh"
+READ_CONFIG = "skills/review-map/scripts/read-config.sh"
 GENERATE = "ci/generate-review-map.sh"
 GATE = "ci/application-code.sh"
 STILL = "ci/map-still-current.sh"
@@ -148,7 +148,7 @@ CASES = [
            edit: sub(' && val != "nextjs")', ")"),
            sections: %i[config], expect: "nextjs is a stack name the config file and the adapter both accept"),
   Case.new(desc: "the adapter's peek stops taking react as --mentor's value", file: GENERATE,
-           edit: sub("case ${2:-} in rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in rails|elixir|phoenix|rust|nextjs) MENTOR=$2; shift ;; esac"),
+           edit: sub("case ${2:-} in off|rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in rails|elixir|phoenix|rust|nextjs) MENTOR=$2; shift ;; esac"),
            sections: %i[config], expect: "react is a stack name the adapter takes as --mentor's value"),
 
   Case.new(desc: "the artifact is not named for the revision", file: "ci/delivery/github-artifact.sh",
@@ -237,12 +237,24 @@ CASES = [
   # matters most: on by default is the plausible edit — it looks generous.
   Case.new(desc: "mentor defaults to on, so every CI page teaches the framework", file: GENERATE,
            edit: sub("MENTOR=${CFG_mentor:-off}", "MENTOR=${CFG_mentor:-on}"),
-           sections: %i[config], expect: "no mentor flag is passed by default"),
+           sections: %i[config], expect: "mentor's default reaches the run as --mentor off"),
+
+  # --context's default is the earning rule, and `always` is the plausible edit — it looks generous,
+  # and it would put a lowered bar on every CI page while the docs say the default is `auto`.
+  Case.new(desc: "context defaults to always, so every CI page lowers the earning bar", file: GENERATE,
+           edit: sub("CONTEXT=${CFG_context:-auto}", "CONTEXT=${CFG_context:-always}"),
+           sections: %i[config], expect: "context's default reaches the run as --context auto"),
+
+  # The config parser is the second place the four names live; dropping one leaves a team's
+  # `context: never` an error in CI while the flag works by hand.
+  Case.new(desc: "the config parser stops reading context at all", file: READ_CONFIG,
+           edit: sub('emit("context", val)', ""),
+           sections: %i[config], expect: "context is read from the config file"),
 
   # And the peek that reads --mentor's optional value. Consuming ANY next argument turns
   # `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
   Case.new(desc: "the optional stack name swallows whatever flag follows --mentor", file: GENERATE,
-           edit: sub("case ${2:-} in rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
+           edit: sub("case ${2:-} in off|rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
            sections: %i[config], expect: "a bare --mentor does not swallow the flag after it"),
 
   # The application-code gate. Two rules, and the cases below break each of them in the way a

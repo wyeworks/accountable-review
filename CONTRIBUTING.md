@@ -72,6 +72,7 @@ skills/review-map/
 │   ├── excerpt.sh                 generates the collapsed source excerpts, so they are quotations
 │   ├── ledger-rows.sh             generates the evidence foot's inventory from the diff
 │   ├── coverage-gate.sh           asserts the inventory accounts for every changed path
+│   ├── read-config.sh             the one parser of .accountable-review.yml, for the skill and for CI
 │   └── carry-plan.sh              on --update, what the previous page may keep and what it may not
 ├── tests/                         the deterministic tests for those scripts, and the proof they fire
 └── evals/                         the mechanical checks, and the end-to-end harness over real PRs
@@ -82,7 +83,7 @@ skills/setup-ci/
 │   ├── config.md                  .accountable-review.yml — the whole schema and precedence
 │   └── delivery.md                the delivery contract, and how to add a provider
 ├── templates/workflow.yml         the workflow itself
-├── scripts/                       inspect, render, install, read-config
+├── scripts/                       inspect, render, install
 └── tests/                         the deterministic tests, and the proof they fire
 ```
 

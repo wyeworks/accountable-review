@@ -1,7 +1,7 @@
 ---
 name: review-map
 description: >-
-  Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails, Elixir/Phoenix, Rust and React — a Phoenix LiveView app, a Rails, Phoenix or Rust JSON or gRPC API, a Rust library, CLI or workspace that serves nothing, a Next.js app, or a React single-page app or component library, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $accountable-review:review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+  Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails, Elixir/Phoenix, Rust and React — a Phoenix LiveView app, a Rails, Phoenix or Rust JSON or gRPC API, a Rust library, CLI or workspace that serves nothing, a Next.js app, or a React single-page app or component library, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $accountable-review:review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. --context auto|never|always|collapsed says how much of the repository-orientation section the page carries; auto, the default, writes it only when a checkpoint needs it. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -33,7 +33,9 @@ Use `/accountable-review:review-map` in Claude Code or `$accountable-review:revi
 (`/review-map` and `$review-map` when installed as a standalone skill, as `npx skills add` does).
 Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
-`--mentor` with an optional stack; and `--output <dir>`. `--review` is not implemented.
+`--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`; and
+`--output <dir>`. The repository's `.accountable-review.yml` supplies the first three when no flag
+does (step 1). `--review` is not implemented.
 
 Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
 in Claude Code, and [the one for every other host](references/hosts/generic.md) anywhere else — Codex
@@ -88,9 +90,28 @@ point of putting them in a separate context. The host reference owns how the rea
   current branch against its base.
 - **There is one page shape, and no flag chooses it.** No argument selects a length, a depth or a
   second document, and there is nothing to map one onto if someone invents one. An argument starting
-  with `--` that is not one of `--effort`, `--mentor`, `--output`, `--update`, `--repository`,
+  with `--` that is not one of `--effort`, `--mentor`, `--context`, `--output`, `--update`, `--repository`,
   `--base-sha` or `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
   wrong run, and the reader has no way to tell.
+- **Read the repository's settings before the flags that override them.** If the repository's top
+  level has an `.accountable-review.yml`, run, once:
+
+  ```sh
+  <skill base directory>/scripts/read-config.sh "<repo top level>/.accountable-review.yml"
+  ```
+
+  It prints one `CFG_<key>='<value>'` line per key the file sets and nothing for a key it does not.
+  `CFG_effort`, `CFG_mentor` and `CFG_context` are the team's standing answers, and the order is
+  **flag, then file, then default** — the same order CI applies, so a person's run and a CI run of
+  the same repository start from the same settings. `CFG_mentor` reads as the flag would: `true`
+  is a bare `--mentor`, `false` is off, a stack name is checked at step 2 like one on the command
+  line. `CFG_theme` is `page-skeleton.sh`'s, which reads it itself; `update`, `trivial_*` and
+  `delivery` are CI's and change nothing here — `--update` is only ever a flag on this skill.
+
+  **A non-zero exit stops the run**, with the parser's message: the file names a key or a value
+  that does not exist, and a setting read as nothing is a team's decision silently replaced by a
+  default — the unknown-flag rule, one file over. The file read is the working tree's, which is the
+  copy the person has checked out. Say in chat which settings came from it.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
   it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
   *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about 700
@@ -99,7 +120,8 @@ point of putting them in a separate context. The host reference owns how the rea
   and nothing else: no checkpoint, no citation, no evidence tier and no figure comes out for the
   budget's sake, and **the number it never touches is the checkpoint count.**
 - **Read the effort off the invocation too, and hold it the same way.** One of `--effort high`,
-  `--effort low`, in any position; **no flag means `high`**. It decides how hard the run works to
+  `--effort low`, in any position; **no flag means the file's `effort`, and no file setting means
+  `high`**. It decides how hard the run works to
   be right, and at `--effort high` that buys exactly one thing today: the falsification pass —
   spawned at the end of step 6 against the analysis notes, folded in at step 8. `--effort low` opts
   out of it, and is the flag to reach for when the diff is small enough that a second reader has
@@ -133,7 +155,7 @@ point of putting them in a separate context. The host reference owns how the rea
     silently differs, with nothing in the output to tell the reader which they got.
 
   **Do not announce the effort** — nothing about the pass reaches the page, and step 8 says why.
-- **`--mentor` is the one flag that puts anything on the page, and it is off by default.** It says
+- **`--mentor` is the one flag that puts anything inside a checkpoint, and it is off by default.** It says
   the reviewer is new to the **stack** rather than to the change, so a judgment that turns on a
   framework rule they may not know gets that rule stated rather than linked. What it admits is one
   component and nothing else: the **primer callout**, `aside.primer`, inside the checkpoints that
@@ -146,7 +168,8 @@ point of putting them in a separate context. The host reference owns how the rea
   the command line that disagrees with what is in front of you is **reported, not obeyed**. Taking
   it as an override would reintroduce the worst regression this skill has: a Rails lens over a
   service that is not Rails, inventing findings confidently. A bare `--mentor` is the ordinary form
-  and the one to prefer, and a value that is none of those six names is reported like any other
+  and the one to prefer. **`--mentor off` turns it off**, which matters only when the repository's
+  file turned it on, and a value that is none of those six names or `off` is reported like any other
   unknown flag. `react` agrees with either React stack, because a Next.js app is a React app;
   `nextjs` agrees only with a Next.js one.
 
@@ -160,6 +183,21 @@ point of putting them in a separate context. The host reference owns how the rea
   **There is no mentor marker, chip or banner.** The flag's effect is visible by being on the page,
   which is exactly why it needs nothing announcing it — and a count of primers would be the page
   grading its own thoroughness. Say which flags you took in chat, not in the artifact.
+- **`--context` says how much of section 02 the page carries, and `auto` is what no flag and no
+  file setting means.**
+  One of `auto`, `never`, `always`, `collapsed`; any other value is **reported, not guessed at**.
+  It is a team's standing answer to how well its reviewers know this repository, and it touches
+  section 02 and nothing else. `references/report-format.md` § *How much Context* owns all four;
+  in one line each:
+  - `auto` — step 7k as written: four conditions, most pages earn nothing.
+  - `never` — skip step 7k; no section 02, no rail entry, no shift. **Nothing compensates**: no
+    checkpoint gains a clause it would not have had under `auto`.
+  - `always` — step 7k with the lowered bar: an impact path's use counts as a checkpoint's, and a
+    concept a checkpoint already explains in a clause qualifies. Same cap, and **still omitted when
+    nothing qualifies** — an entry written so the section has one is inventory.
+  - `collapsed` — step 7k as for `auto`, the result written inside one shut `details.ctx-fold`.
+
+  **No marker for any of them**, for `--mentor`'s reason. Say which you took in chat.
 - **`--output <dir>` makes the run non-interactive.** It is the only flag that changes where the page
   goes rather than what is on it: the page is written to `<dir>/index.html` and **nothing is
   published** — no `Artifact` call, at any stage. Everything else is identical, and has to be. Same
@@ -979,7 +1017,9 @@ Two rules keep this from becoming ceremony:
   factory in this repo — a command a reviewer can paste. Invented steps are worse than none, because
   they burn the reader's trust in the whole page on the first paste that fails.
 
-**7k. Name the context.** Last, because it is decided against the finished agenda: read each
+**7k. Name the context.** At `--context never`, skip this step and write *context: never* in
+`agenda.md`. At `always`, read the conditions below with § *How much Context*'s lowered bar; at
+`collapsed`, exactly as written. Last, because it is decided against the finished agenda: read each
 checkpoint as a reviewer who knows the stack and not this repository, and list what it assumes they
 can name — a sequence of requests, a plugin wrapping core code, a domain term a setting introduces.
 A concept gets an entry only when **all four** of `references/report-format.md` § *Section 2*'s
@@ -1114,9 +1154,9 @@ someone mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
-| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending |
+| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending — at `--context never`, section 02 and its rail entry are deleted here instead, since nothing will fill them |
 | 2 · Agenda | 7, then per checkpoint | Section 03's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
-| 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it |
+| 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it (inside its fold at `--context collapsed`) — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
 **Section 05 cannot publish before the checkpoints exist, which is why it is third and not second.**
@@ -1227,7 +1267,7 @@ Everything else about writing holds at every stage:
 
   **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
   only when step 7i found nothing crossing into unchanged code, and the 02 entry only when step 7k
-  earned no concept, and then remove the section with it. Numbers stay as given when one goes: a
+  earned no concept or `--context never` skipped it, and then remove the section with it. Numbers stay as given when one goes: a
   rail reading 01, 03, 04 says a section was omitted, which is true.
 - **Write the skeleton once, before anything else in stage 1:**
 
@@ -1239,8 +1279,8 @@ Everything else about writing holds at every stage:
   token block is the repository's **theme** — `review_map.theme` in its `.accountable-review.yml`,
   Daylight when there is none — which the script finds by itself. **Pass no `--theme`**: the look is
   the team's setting, not the run's, and a page that came out in another theme than the repository
-  asked for is a page somebody has to explain. If the script refuses a theme name (exit 2), stop and
-  report the name and the file it came from — never retry with a theme of your own choosing. Then
+  asked for is a page somebody has to explain. If the script refuses the theme or the file (exit 2),
+  stop and report its message — never retry with a theme of your own choosing. Then
   the first `Edit` replaces its one-line body placeholder with the rail, `<main>`, the build banner,
   the masthead and section 1. It refuses with exit 3 if the page already has content, which is the
   guard against re-running it over a page a reader is already looking at.
@@ -1605,9 +1645,10 @@ from becoming a level.
 Four checks are yours, because none of them can be recovered from a page. Do them before anything
 else, and on any disagreement run fully and say so in chat:
 
-- **The flags match the previous run.** `--effort` and `--mentor` are invisible on the page by
-  design, so nothing can read them back off it. An update under different flags would produce a
-  page half of which was written to different rules.
+- **The settings match the previous run.** Effort, mentor and context — as step 1 resolved them,
+  from a flag or from the file — are invisible on the page by design, so nothing can read them back
+  off it. An update under different settings would produce a page half of which was written to
+  different rules, and an `.accountable-review.yml` changed in the delta is a reason to run fully.
 - **The stack is the one the page was written for**, per step 2.
 - **The rung is the one step 1 just resolved.** The rung decides whether anything on the page is
   clickable, so a change in it rewrites every citation and there is nothing to carry.
