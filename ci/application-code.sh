@@ -128,7 +128,7 @@ cd "$REPO_DIR"
 # order as everything else here, and read at RUN time so changing a threshold
 # never means regenerating the workflow. read-config.sh is the one thing that
 # knows the file's shape.
-READ_CONFIG=$PLUGIN_DIR/skills/setup-ci/scripts/read-config.sh
+READ_CONFIG=$PLUGIN_DIR/skills/review-map/scripts/read-config.sh
 if [ -z "$CONFIG" ] && [ -f .accountable-review.yml ]; then CONFIG=.accountable-review.yml; fi
 if [ -n "$CONFIG" ] && [ -f "$CONFIG" ] && [ -x "$READ_CONFIG" ]; then
   eval "$("$READ_CONFIG" "$CONFIG" --prefix CFG_)"

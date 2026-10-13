@@ -45,6 +45,9 @@ EXCERPT=$SKILL_DIR/scripts/excerpt.sh
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
+# A mutated page-skeleton.sh in $WORK calls read-config.sh beside itself. Without this copy every
+# such row would go red on a missing parser rather than on its own mutation, and pass for nothing.
+cp "$SKILL_DIR/scripts/read-config.sh" "$WORK/read-config.sh"
 
 ok=0; bad=0
 
@@ -418,9 +421,15 @@ fi
 
 # 33. The script stops reading the repository's config. Every page is still a correct Daylight page,
 #     which is exactly why it needs a row: the team's choice is ignored and nothing looks wrong.
-sed 's|^    THEME=$(config_theme "$REPO/.accountable-review.yml")$|    THEME=|' "$SKELETON" > "$WORK/no-config.sh"
+sed 's|^    THEME=${CFG_theme:-}$|    THEME=|' "$SKELETON" > "$WORK/no-config.sh"
 chmod 755 "$WORK/no-config.sh"
 case_runs_red "the script ignores review_map.theme in the repository's config" "$TEMPLATE" "$WORK/no-config.sh"
+
+# 33b. A config file the parser refuses is shrugged off. The page comes out in Daylight, CI then
+#      fails on the same file, and the team learns about its typo from a red run.
+sed 's|(see above)" >\&2; exit 2; }$|(see above)" >\&2; cfg=; }|' "$SKELETON" > "$WORK/shrug.sh"
+chmod 755 "$WORK/shrug.sh"
+case_runs_red "a config file read-config.sh refuses is ignored rather than refused" "$TEMPLATE" "$WORK/shrug.sh"
 
 # 34. An unknown theme falls back to the default instead of refusing. A typo then reads as a team
 #     that never chose, and nobody is told.
