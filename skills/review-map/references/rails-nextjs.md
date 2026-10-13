@@ -103,6 +103,11 @@ it is the checkpoint's one doc link.
   a bespoke query object where a scope would compose, a second serializer shape for a resource that
   already has one, an ordering of roles or statuses declared again beside the module that already
   ranks them. The maintenance cost is the two diverging, and that is the consequence worth naming.
+  **Size decides it, the way it does for names below**: a few lines copied — a `filter_map` over
+  the same fields, one consumer on each side — is a clause at most, never a checkpoint. And check
+  that the existing one does this job *as it stands*: a helper that reads the live association at
+  render time is not the answer for a service that needs a snapshot before its own write clears the
+  fields.
 - **A name that departs from its siblings** — a `*Manager` in an app of `*Service`s, a `Fetcher` among
   `Repository`s. Thin on its own; worth a clause inside a question that has more behind it.
 

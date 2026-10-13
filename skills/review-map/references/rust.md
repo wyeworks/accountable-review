@@ -267,7 +267,9 @@ crate or populated directory.
 - **A `utils` or `helpers` module** in a crate whose code is otherwise organised by domain.
 - **A second way to do a job the codebase already does one way** — a hand-rolled retry loop beside a
   retry crate, a `lazy_static!` beside `std::sync::OnceLock`, a manual builder beside a derived one,
-  `log` macros in a crate that otherwise uses `tracing`.
+  `log` macros in a crate that otherwise uses `tracing`. A few copied lines with one caller on each
+  side is a clause at most, and an existing function that would need a new parameter or a different
+  moment to do this job is not the answer the change went around.
 - **`unwrap()` in a crate whose siblings propagate**, or the reverse: a crate that treats panics as
   bugs and one function that treats them as control flow.
 

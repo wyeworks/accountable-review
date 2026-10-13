@@ -313,11 +313,18 @@ Editing one of these means checking the others still agree.
   The run may not extend the closed list; adding a row means adding its catalogue row through
   `verify-catalogue.sh`. The list exists only where the catalogue is open, so Phoenix is repo-only.
 
-  **No fixed count; the citation is the cap.** One per departure, merged first when two share a
+  **No fixed count; the bar is the cap.** One per departure, merged first when two share a
   precedent; they **never displace a behavioural judgment** and never push the page past seven —
   ranked last. In a refactor they may be the only judgments and then they are the page. A departure
   with nothing to cite is written nowhere. The page must be able to ask a structural question, not
   only behavioural ones: step 7a does not restrict judgments to behavioural terms.
+
+  **A citation admits a candidate; it does not make a departure.** A citation proves only that
+  something similar exists, so three tests sit behind it: **same job as it stands** (no new
+  parameter, call site or moment), **big enough** (a few copied lines is a clause, as a name
+  already was), and **no reason in any note**, checked across every flow in step 7c. Free room
+  under seven is never a reason to look for one. Issue #97 is the run that asked about a one-line
+  copy whose reason — a snapshot before its own write — sat in another flow's note.
 
   These agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
   it; `report-format.md` § *Coding decisions* owns the bar and the caps **alone** and § *Where

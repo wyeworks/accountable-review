@@ -783,7 +783,8 @@ above names three: where a thing was put, what kind of object it is, and which e
 it went around. A run that confirms the new code sits where its siblings sit has answered the first
 and asked nothing about the third — and the third is the departure a reviewer who knows the codebase
 spots, because it is a second source of truth for a fact the app already defines. When a note
-already cites the module that owns that fact, the departure is in front of you.
+already cites the module that owns that fact, a **candidate** is in front of you — not yet a
+departure. Something similar existing is where the question starts, and most candidates end there.
 
 **The bar is a citation, from one of two sources.** The question exists only if you can point at
 the answer it departs from: **this repository's decision** — a line in its convention doc, else a
@@ -793,6 +794,15 @@ settled on the PR's choice there is no departure, whatever the stack convention 
 silent, the stack convention stands; where both agree, cite both. **No citation from either, no
 question** — a convention you know but the lens does not list is taste. The lens file's search
 recipes are how; `report-format.md` § *Coding decisions* owns the rest of the rule.
+
+**A citation admits a candidate; three tests decide it**, and `report-format.md` § *Coding
+decisions* owns them. **Same job, as it stands** — could `Y` do `X`'s job with no new parameter, no
+other call site and no other moment in the sequence? **Big enough** — would the two drifting apart
+cost anything, or is it a few copied lines with one consumer each, which is a clause at most?
+**No reason in any note** — ask why the author might have built it this way and read the answer
+against every note, not the one that raised it: the ordering that explains a copy is usually in
+another flow's trace. And a difference you would name as the reason to ask has to be one the notes
+show matters; a difference no note settled is a reason not to ask.
 
 **Ask it; never answer it.** No *should have been*, no *unidiomatic*, no *the Rails way*. The reviewer
 knows why the codebase is shaped as it is and you do not — step 6's neutrality rule is the register,
@@ -812,6 +822,11 @@ Merge until each candidate is a single question whose answer settles everything 
 
 This is where the agenda gets short honestly. Three observations that share a question are one
 checkpoint, and a run that lists them separately has written the same judgment three times.
+
+**Coding-decision candidates go through the same merge, and it can delete them.** Read each against
+every note: a fact another flow traced — a value captured before a write clears it, a subset taken
+for a reason — is often the reason the departure exists, and then there is no departure to ask
+about.
 
 **7d. Rank.** Order the candidates by four things, in this priority: the consequence if the reviewer
 misunderstands it; how uncertain the notes are about it, because the reviewer's attention is worth
@@ -871,8 +886,9 @@ which is why the agenda has room to grow rather than a ceiling that would push o
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
 checkpoint is written, never on how many there are.
 
-**Coding decisions take the last slots, as many as clear the bar and fit.** No fixed count, and three
-limits:
+**Coding decisions take the last slots, as many as clear the bar and fit.** Fitting is a limit, never
+a reason: room left under seven is not a prompt to find one, and none is the common right answer. No
+fixed count, and three limits:
 
 - **One per departure, each with its own citation.** If the diff departs from this codebase's
   settled answers in two unrelated places, ask both — a reviewer who knows the codebase would. The

@@ -405,21 +405,51 @@ backed by the manual — never the run's sense of what a good Rails app looks li
 has an answer to point at, the change has departed from nothing and there is no judgment to make — a
 preference stated in its absence is the page grading the author's taste, which it does not do.
 
+**A citation is necessary and not sufficient: three more tests, and a candidate that fails any one
+is not a question.** All three exist because a citation proves only that *something similar exists*,
+and "something similar exists" is not yet "the PR went around it". A run found a one-line helper
+duplicating a model's, cited the model, and asked — every fact true, the question wrong on all three
+counts below.
+
+- **Same job, as it stands.** `Y` must do `X`'s job with no change to `Y` and none to where or when it
+  is called: same inputs, same moment, same state. If using `Y` would take a new parameter, a
+  different call site or a different point in the sequence — a snapshot read before a write clears
+  the fields, where `Y` reads the live association at render time — the PR did not go around a
+  settled answer; it needed a different one. *For the same job* in the form above is this test, not a
+  figure of speech.
+- **Big enough to be a judgment.** A divergence that costs something when the two drift — a second
+  policy, a second serializer shape, a second ranking of the same statuses, a second fetching layer —
+  is a question. A few lines copied with one consumer on each side, or a name that departs from its
+  siblings, is at most a clause inside a question that has more behind it, and never a checkpoint of
+  its own. The lens files' bullets say which of their shapes are thin.
+- **No reason in the notes.** Before writing one, ask *why might the author have built it this way?*
+  and check the answer against **every** analysis note, not only the one that raised the candidate —
+  the ordering, the state or the scope that explains a copy is routinely recorded by a different
+  flow. A note that explains the departure means there is none. This is step 7c's cross-flow merge
+  applied to the second kind.
+
+And a difference the page names as the reason to ask has to **matter**: *it runs over the reconciled
+subset rather than every record* is not a difference if the records outside the subset never carry
+the fields. Trace it or drop it; step 7 traces nothing, so a difference no note settled is a reason
+not to ask.
+
 **Ask; never answer.** No *should have been*, no *unidiomatic*, no *the Rails way*, no *consider
 moving*. A stack convention is stated as what the manual documents, linked, never as a standard the
 PR failed. The reviewer knows why the codebase is shaped the way it is; the page knows only that the
 shapes differ. Where the run cannot resolve it — and it usually cannot — the *Open question* line is
 where that goes.
 
-**No fixed count — every one that clears the bar, within three limits:**
+**No fixed count — every one that clears the bar, within three limits.** Free room under the ceiling
+is not a reason to look harder for one: four behavioural checkpoints and no coding decision is the
+common right page, and the bar above is the only thing that admits one.
 
 - **One per departure, and the bar is per checkpoint.** Each coding-decision checkpoint names its own
   departure and cites its own answer. There is no quota in either direction: a PR that puts a class
   in the wrong directory *and* builds a second way to do something the app already does one way asks
   both, because a reviewer who knows the codebase would ask both. What keeps this from becoming a
-  style review is not a count but the citation — every question still has to point at a decision in
-  this repository or a convention on the stack's list, so a page can only ask as many as those two
-  sources have settled answers for. **Merge before counting**, as step 7c does for any judgment: three new files that all went around the same
+  style review is not a count but the bar — every question still has to point at a decision in
+  this repository or a convention on the stack's list that does the same job as it stands, so a page
+  can only ask as many as those two sources have settled answers for. **Merge before counting**, as step 7c does for any judgment: three new files that all went around the same
   `app/services/` convention are one question with three *Look at* entries, not three questions. A
   departure that did not clear the bar is not written anywhere else — an observation about shape with
   nothing to cite is noise, not a finding.
