@@ -220,6 +220,7 @@ classify() {
     .rubocop.yml|.rubocop_todo.yml|.credo.exs|.formatter.exs|\
     rustfmt.toml|.rustfmt.toml|clippy.toml|.clippy.toml|\
     .prettierrc*|.prettierignore|.eslintrc*|.eslintignore|\
+    eslint.config.*|prettier.config.*|*/eslint.config.*|*/prettier.config.*|\
     CODEOWNERS|.github/CODEOWNERS|renovate.json|.dependabot/*)
       printf 'skip\ttooling\t%s\t%s\n' "$_path" "$_lines" ;;
 

@@ -8,13 +8,16 @@ There is no application code here. The repository is the `accountable-review` Cl
 with Codex support for `review-map` as a plugin from this repository's own Codex marketplace. It
 ships two skills — `skills/review-map/` and `skills/setup-ci/` — plus the one subagent the first of
 them spawns (`agents/claim-falsifier.md`, and only at `--effort high`), plus `ci/`, which is neither
-a skill nor read by one. `review-map` turns a pull request into a published HTML **review agenda**:
+a skill nor read by one, plus `hooks/`, a Claude Code mod that sets a progress line while
+`review-map` runs and changes nothing about the page. `review-map` turns a pull request into a published HTML **review agenda**:
 what changed, the judgments the reviewer has to make with the lines that settle each
-one, the order to read the code in, and what the change reaches in code it did not touch. Three stacks
+one, the order to read the code in, and what the change reaches in code it did not touch. Four stacks
 are supported: a Rails API with a Next.js client, which came first; Elixir/Phoenix — a LiveView app
-or a JSON API; and Rust, in two lenses — **Rust in general** (a library, a CLI, a workspace that
+or a JSON API; Rust, in two lenses — **Rust in general** (a library, a CLI, a workspace that
 serves nothing) and **Rust backend** (an HTTP or gRPC server), which reads the general lens and a
-second one on top of it. Step 2 detects which, and the run reads that stack's lens and its doc
+second one on top of it; and React, built the same way — **React in general** (a single-page app, a
+component library) and **Next.js**, which reads the React lens and a second one on top of it. Step 2
+detects which, and the run reads that stack's lens and its doc
 catalogue, never another's. `setup-ci` writes the GitHub Actions workflow that produces one automatically
 on every review-ready pull request, and `ci/` is what that workflow runs.
 
@@ -180,12 +183,16 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Currently closed, so an Elixir run anchors with probes and prose |
 | `references/rust.md` | Domain knowledge, **Rust of any kind** — the same three parts, organised around what the compiler was told not to check or cannot see: the wildcard arm, the `pub` item, the unbuilt feature combination, the module whose safe code keeps an `unsafe` block sound. The whole lens for Rust in general, and the first layer for a Rust backend. Its probes read the build — `--locked` always — because Rust has no console |
 | `references/rust-backend.md` | Domain knowledge, **Rust backend** — read **after** `rust.md`, never instead of it, and restating none of it: routes and layers (an `axum` layer covers only the routes added before it), extractors, the wire contract, migrations against compile-time-checked queries, and the request whose future is dropped when the client leaves. Points at `rails-nextjs.md`'s client sections the way the Phoenix file does |
+| `references/react.md` | Domain knowledge, **React of any kind** — the same three parts, organised around what TypeScript is silent about: when code runs (an effect's dependencies, a missing cleanup), which instance state belongs to (a key, a wrapper that resets it), whose identity a memo or a context compares, and every consumer of a component, hook or query key outside the diff. The whole lens for React in general, and the first layer for Next.js. Its probes read the toolchain in the project's own package manager, `--no-install` on every `npx`, because React has no console. Points at `rails-nextjs.md`'s boundary and TypeScript sections for the client half of a wire contract rather than restating them |
+| `references/nextjs.md` | Domain knowledge, **Next.js** — read **after** `react.md`, never instead of it, and restating none of it: the server/client boundary, server actions as public endpoints, route handlers, rendering mode and the cache (per-user data cached for everyone is its sharpest finding), the file tree as router, middleware or proxy, and a Prisma or Drizzle schema. `rails-nextjs.md` § *Next.js* stays as the short form a Rails run reads; this file is the depth behind it and says so |
+| `references/react-docs.md` | The documentation catalogue, **React** — react.dev and nextjs.org paths stored **with their host**, a nextjs.org path also with its **router**, pinned per **major** because that is the only grain either site publishes. Written **closed** like `elixir-docs.md`; its sweep has one question to answer before any row — whether each host addresses its *current* major |
 | `references/rust-docs.md` | The documentation catalogue, **Rust** — docs.rs paths pinned per crate and doc.rust-lang.org paths pinned to the toolchain, each stored **with its host** because `cargo` is both a crate and a book. Written closed like `elixir-docs.md`, **opened** by the 2026-10-08 sweep |
 | `references/page-template.html` | Design system — the rules every theme's tokens keep (it declares none of its own), component classes, the assembled checkpoint, the chain, one of each topology figure and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads. A fifth, `SKELETON:THEME`, inside the head, is where the theme goes |
 | `references/themes/` | The three looks — `daylight` (the default), `workshop`, `field-notes` — each one file: a font link and one `<style>` holding its tokens in all three theme states and its overrides, every element carrying `data-style`. All three emitted at the `SKELETON:THEME` line, the unchosen ones `media="not all"`; never read by a run |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
+| `hooks/` | A Claude Code mod — the status line while `review-map` runs interactively. `progress.ts` reads, `board.ts` formats, `activity.json` is the tool-call-to-purpose table `evals/e2e/progress.rb` reads too, and `skills/review-map/tests/activity.rb` holds that one file to both readers. Inert until the skill expands; `.codex-plugin/plugin.json` names no hooks |
 | `scripts/page-skeleton.sh` | Emits the head, the theme the repository chose and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
@@ -288,8 +295,9 @@ Editing one of these means checking the others still agree.
 
   **A primer holds its checkpoint's one doc link rather than adding a second**, so the anchor budget
   is relocated and never raised: mentor buys explanation, never citations. It is also **gated** on
-  that link, which is what makes a closed catalogue mean no primers for that stack — Phoenix gets the
-  ordinary page today, and so does Rust, and one verification run per catalogue lifts it.
+  that link, which is what makes a closed catalogue mean no primers for that stack — Phoenix and
+  React get the ordinary page today, and one verification run per catalogue lifts it, as it did for
+  Rust.
 
   Three things about it look like generosity and are not. **A run that earns no primer writes none**,
   because manufacturing a lesson to honour a flag is how this becomes a framework manual with a diff
@@ -492,7 +500,8 @@ Editing one of these means checking the others still agree.
   template. `CAUSAL` moved to `checks/lib/review_map/vocabulary.rb` because two checks now read it, and
   `lib/test/test_page.rb` fails when it and § *Impact paths*'s list disagree.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
-  Rails (`Gemfile`, `config/application.rb`), Elixir (`mix.exs`) or Rust (`Cargo.toml`) and **names**
+  Rails (`Gemfile`, `config/application.rb`), Elixir (`mix.exs`), Rust (`Cargo.toml`) or React (a
+  `package.json` depending on `react`) and **names**
   one lens and one catalogue. Two stacks' roots, or none, are handled explicitly — ask in the first
   case, degrade to the stack-independent page and emit no anchor in the second. Defaulting to Rails is
   the regression: a Rails lens over a Go service invents findings, confidently.
@@ -503,6 +512,15 @@ Editing one of these means checking the others still agree.
   the repository has one — and a Cargo workspace is one root however many members it has. Layering
   rather than two self-contained files is § *One canonical home* again: a backend is a crate, and a
   second copy of the ownership, `unsafe`, feature and serde lenses would drift from the first.
+  **React is the same shape a second time**: Next.js reads `react.md` then `nextjs.md`, decided by
+  whether the package the diff touches depends on `next`, and a JavaScript workspace is one root.
+
+  **A client beside a backend is the backend's, until the diff is only the client.** A Rails,
+  Phoenix or Rust repository with a React app in it was one stack before React was one, and stays
+  so whenever the diff touches the backend — that lens already carries the client half. Only a diff
+  confined to the client is the React stack, which is the "answer it from the diff" rule rather than
+  a new one. Reading every `package.json` as a second root would turn the commonest Rails repository
+  this skill serves into a question on every run.
 
   **Naming them is not reading them, and the difference is worth about 43 KB of resident context.**
   The lens is read at step 5, where its search recipes are the work; the catalogue at step 7, when a
@@ -1052,6 +1070,16 @@ Editing one of these means checking the others still agree.
   Watch for pages whose excerpts are all `--source`. A per-flow `--diff` floor used to prevent that
   and went with the flows; seeing the hunk is very often what a judgment turns on, and nothing warns
   when it is missing any more.
+
+  **An excerpt's summary location is its one link, and in a *Look at* entry it is the entry's
+  citation.** An entry is title, clause, then *either* an `a.path` *or* an excerpt generated with
+  `--in-entry` (no summary why, because the clause is right above it). The pre-change version
+  showed one path three times. Because the excerpt now replaces the link instead of adding to it, a
+  short entry citation carries one by default, and the per-checkpoint ration covers only the
+  excerpts that do add to the prose. Five files agree: `excerpt.sh` links `.ex-loc`,
+  `page-template.html` assembles entries that way, `report-format.md` § *The review checkpoint* and
+  § *Source excerpts* own the rule, `excerpts.rb` reads a linked location, and `tests/run.sh`
+  asserts both the script and the template, with `self-test.sh` rows behind each zero.
 - **Impact paths are section 05's figure, and the edge is the point of them.** A path runs from changed
   code, through the affected-but-unchanged code that gives the change its consequence, to an
   observable behaviour, every hop past the first carrying its incoming relation as a causal verb.
@@ -1250,6 +1278,24 @@ Editing one of these means checking the others still agree.
   not do. Four files carry the version and have to agree: `examples/README.md` owns the provenance
   and the regeneration recipe **alone**, `examples/index.html`'s foot and `README.md`
   § *Example Review Map* restate it, and `CONTRIBUTING.md`'s layout lists the directory.
+
+- **The progress line is read, never guessed — the verification badge's terminal twin.** Two
+  surfaces show a run in progress: the e2e board (`evals/e2e/progress.rb`) and the status line
+  `hooks/progress.ts` sets in an interactive session. Each field comes from something the run
+  produced: an engine event or a transcript line, the staged page, the clock. **Activity is
+  shown by purpose, never as a step**, because steps interleave and cannot be read off a run.
+  **The one estimate is the bar, labelled `~`, and outside the harness it needs a recorded
+  history.** The mod writes its own generation times to `$.store`, per repository and per kind of
+  run (high, low, `--update`), and only for a run whose coverage gate passed before its turn
+  answered. Time spent waiting between turns is left out. With nothing recorded it shows elapsed
+  time and no bar. The harness's 25-minute fallback is a documented order of magnitude there; on a
+  person's screen it would be invented progress.
+
+  **One table, two languages.** `hooks/activity.json` is read by Ruby and by JavaScript. Two
+  copies would name the same tool call two ways. One copy can still mean two things, so
+  `tests/activity.rb` refuses a pattern the two engines read differently, and a label that reads
+  as a step counter. **It observes and does nothing else**: every hook passes its event on
+  unchanged behind a `.catch` that still does, so a bug in the line cannot stall a generation.
 
 ## Invariants the CI setup adds
 
@@ -1464,7 +1510,11 @@ script catches and no care while writing prevents.
 URL was, so the file withholds every link until a dated verification line replaces its § *Version*
 paragraph — the fail-closed rule at file scope. An Elixir run anchors with probes and prose, and
 `--mentor` on Phoenix produces no primer. `verify-catalogue.sh --catalogue references/elixir-docs.md`
-is that file's **release gate**, not optional maintenance. **`rust-docs.md` shipped closed the same
+is that file's **release gate**, not optional maintenance. **`react-docs.md` ships closed for the same
+reason**, written from the two sites' naming schemes, with one question its sweep answers first:
+both hosts publish their current major unversioned, and whether each also addresses it at the
+versioned form § *Pinning* writes decides whether the newest React or Next.js can carry a link at
+all. If not, that § and `rails-anchors.rb`'s React arm change in the same commit. **`rust-docs.md` shipped closed the same
 way and is now open, which is the gate working rather than the rule relaxing.** Its rows were
 rustdoc's naming scheme applied from memory, and the sweep that opened it found one defect of each
 kind that habit produces — a re-exported item linked at its import path, a fragment renamed under a
@@ -1486,7 +1536,10 @@ hexdocs path keeps its package (`ecto/Ecto.Changeset.html#cast/4`), because `Ect
 `ecto` is a 404 that reads as correct. **Rust pins per crate and the toolchain separately**, the same
 shape a third time (`golden/anchors-docsrs-clean.html`), and a docs.rs path keeps the crate's name
 *and* its identifier (`docs.rs/actix-web/actix_web/…`), because the hyphen where the underscore
-belongs is that stack's 404 that reads as correct.
+belongs is that stack's 404 that reads as correct. **React pins per major, `react` and `next`
+separately** — a fourth time (`golden/anchors-reactdocs-clean.html`) — and a nextjs.org path keeps
+its router, because the same function under `docs/pages/` is a page that **resolves** and documents
+code the app does not run, which is worse than a 404.
 
 Six files agree. Each catalogue's §§ *Version*, *Pinning* and *What the marks mean* own the forms and
 marks **alone**; `report-format.md` § *Framework anchors* says why the page cares; `SKILL.md` step 2
@@ -1658,10 +1711,12 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   directory next session, so "the same path again" needs a rule, not a memory. Profiling a run that
   had no rule found nine calls and seventy seconds spent re-establishing a path and moving excerpt
   files that had been written somewhere else first.
-- It assumes Claude Code or Codex plus a git repo containing a Rails or a Phoenix app or a Rust crate
-  or workspace. Everything else — which of them it is, the Rails root location or the `lib/<app>` and
-  `lib/<app>_web` split, a Cargo workspace's members and whether the changed ones serve requests, RSpec
-  vs Minitest vs ExUnit vs `cargo test` or nextest, API-only vs server-rendered vs LiveView, how
+- It assumes Claude Code or Codex plus a git repo containing a Rails or a Phoenix app, a Rust crate
+  or workspace, or a React or Next.js app. Everything else — which of them it is, the Rails root
+  location or the `lib/<app>` and `lib/<app>_web` split, a Cargo workspace's members and whether the
+  changed ones serve requests, a JavaScript workspace's packages, its package manager and which
+  Next.js router the changed files use, RSpec vs Minitest vs ExUnit vs `cargo test` or nextest vs
+  Vitest or Jest, API-only vs server-rendered vs LiveView, how
   authorization is attached, whether a separate frontend exists and where its client and types live —
   is discovered, never assumed. Adding an assumption about project layout is a regression, and
   **defaulting to a stack when none is detected is the same regression wearing a helpful face**: the
@@ -1670,6 +1725,11 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
   and error cases across the boundary; it does not critique component design. In a LiveView app the
   boundary is the `phx-*` attribute and the callback answering it rather than a JSON contract, and the
   same limit applies: the page follows the event and the assign, it does not review the markup.
+  **On a React stack the components are the application**, so the lens reads them — for behaviour:
+  when an effect runs, which instance holds state, who renders a component and with what. The limit
+  moves with it rather than disappearing: no critique of styling, naming or component taste, and a
+  departure from how the codebase builds components is a coding-decision question with a citation,
+  like any other.
 
 ## Editing style
 
@@ -1698,8 +1758,12 @@ the project.
 ## Publishing
 
 `.claude-plugin/plugin.json` is the plugin manifest. Its `version` is the update pin: users only
-receive a change once that field moves, so bump it in the same commit as the change and tag the
-release.
+receive a change once that field moves. **A release is the maintainer's decision, not a side effect
+of a change**: do not touch `version` in either manifest unless a bump is explicitly asked for. When
+a change would ship only with one, say so in a line and leave the field alone. Several changes
+routinely go out under one release. A bump made alongside a feature has to be reverted by hand,
+and a stray one tags a version nobody meant to cut. When a release is asked for, bump both
+manifests in one commit and tag it.
 
 ```bash
 claude plugin validate . --strict

@@ -14,3 +14,7 @@ that read the column through `steward?`.
 `src/archive.rs` is not for this check. It is the one Rust declaration in the stub, so that
 `rails-anchors.rb` can be shown a probe naming a struct and find it defined, which is what
 `anchors-probe-rust-forms.html` pins.
+
+`src/components/ProjectCard.tsx` is the same thing for React: an exported function component, so
+that `anchors-probe-js-forms.html` can name it as a test filter and a file path and find it defined
+— a component is a function or a const, which neither the Ruby nor the Rust keywords cover.

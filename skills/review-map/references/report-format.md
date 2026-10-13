@@ -47,11 +47,11 @@ reading path, same budget on every other part. Nothing moves to make room. That 
 difference from a second document reached by a flag, which would leave the reader nothing on the page
 to tell them which they had been handed.
 
-**The stack is not a level either, and it is invisible for the same reason.** Rails, Phoenix and
-the two Rust stacks change which lens and which catalogue the run reads (`SKILL.md` step 2), what a
+**The stack is not a level either, and it is invisible for the same reason.** Rails, Phoenix,
+the two Rust stacks and the two React stacks change which lens and which catalogue the run reads (`SKILL.md` step 2), what a
 chain's nodes are called, and what a probe's command looks like. They change **no section, no field,
-no tier, no component and no marker.** There is no stack chip and no "reviewed as a Phoenix app" or
-"reviewed as a Rust library" line: two pages of equivalent changes in two stacks differ in their
+no tier, no component and no marker.** There is no stack chip and no "reviewed as a Phoenix app",
+"reviewed as a Rust library" or "reviewed as a Next.js app" line: two pages of equivalent changes in two stacks differ in their
 content and not in their shape. What the stack is
 belongs in the sentences that cite this repository, which say it by naming real files.
 
@@ -133,7 +133,8 @@ never expected to open.
 mode*, the four-rung degradation ladder. Settle the rung once, in step 1 of the procedure; the form
 then follows the line, not the run's taste. A documentation link is not one of those forms and the
 ladder does not reach it: see *Framework anchors*, and take the URL from the catalogue the stack
-selected — `references/rails-docs.md`, `references/elixir-docs.md` or `references/rust-docs.md`.
+selected — `references/rails-docs.md`, `references/elixir-docs.md`, `references/rust-docs.md` or
+`references/react-docs.md`.
 
 ---
 
@@ -171,8 +172,10 @@ change the judgment, and the page carries the judgment.
   <ul class="lookat">
     <li><b>The scope guard</b>
         <span>the branch the filter now skips, and what reaches it instead</span>
-        <a class="path" href="…">app/models/project.rb:41-52</a>
-        <details class="excerpt excerpt--diff">…</details></li>
+        <details class="excerpt excerpt--diff">…</details></li>   <!-- its summary is the link -->
+    <li><b>The callers</b>
+        <span>both still pass a project, so neither reaches the new nil branch</span>
+        <a class="path" href="…">app/controllers/projects_controller.rb:18-60</a></li>
   </ul>
   <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
   <p class="open"><b>Open question</b> Whether archived projects should still appear in
@@ -205,9 +208,17 @@ change the judgment, and the page carries the judgment.
 - **Look at, `ul.lookat`, one to four entries.** Each has **three parts, in this order**: a title
   naming what is at that location, a clause saying what to see in it, and the citation last. An entry
   with no clause is a bare citation, and a bare citation is a location the reader has to open to learn
-  why it is on the list — the deleted-field defect wearing a link. A collapsed excerpt sits beside the
-  entry it confirms when the citation is load-bearing for the judgment; § *Source excerpts* owns the
-  budget. The entry has to read complete with the block shut.
+  why it is on the list — the deleted-field defect wearing a link. The entry has to read complete with
+  the block shut.
+
+  **The citation is one of two things, never both: an `a.path`, or an excerpt.** An excerpt's
+  summary carries its location as the link, and the summary stays visible when the block is closed,
+  so in an entry the excerpt *is* the citation. It is generated with `--in-entry`, which leaves the
+  summary's why out, because the clause directly above it already says what to see. An entry that
+  kept its own `a.path` above an excerpt showed the same path twice before the reader opened
+  anything, and a summary why under the clause said one thing twice in slightly different words. A
+  real page did both in one entry. § *Source excerpts* › *Budget* owns which entries carry one, and
+  for a short citation the answer is most of them.
 
   **The title is what makes a list of four scannable, which is the whole reason the citation moved
   last.** Every entry used to open with a sixty-character monospace address, so finding the one you
@@ -366,7 +377,7 @@ two sources:
   `file:line` it rests on. Only conventions on that list qualify: a practice the run knows but the
   lens does not name is general knowledge, and general knowledge is taste. **A list exists only
   where the catalogue is open**, so a Phoenix run has the first source alone until `elixir-docs.md`
-  is verified.
+  is verified, and a React or Next.js run until `react-docs.md` is.
 
 **The repository outranks the stack.** Where this codebase has settled on the PR's choice — a
 convention doc that says so, or a dozen siblings doing the same — there is no departure, whatever the
@@ -877,16 +888,17 @@ claim rests on the citation to the call site, at whatever tier it already carrie
   security consequence, state it, cite the line, and let the link explain the mechanism.
 
 **Cite only from the catalogue the stack selected** — `references/rails-docs.md` for Rails,
-`references/elixir-docs.md` for Elixir, `references/rust-docs.md` for either Rust stack, and never
-another one. That file is the allowlist, and the
+`references/elixir-docs.md` for Elixir, `references/rust-docs.md` for either Rust stack,
+`references/react-docs.md` for either React stack, and never another one. That file is the allowlist, and the
 reason is that the run cannot check a URL: there is no fetch step, and egress to those hosts is
 commonly blocked. A concept the catalogue does not carry gets explained in prose with a repo citation,
 which is the ordinary case and not a degraded one. Constructing a plausible URL is the failure this
 rule exists to prevent: it looks like diligence and it lands the reader on a 404.
 
-**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` currently
-withholds every link in its § *Version* until a verification run has opened its rows, so an Elixir
-run anchors with probes and prose and emits no doc link at all. `rust-docs.md` was closed the same
+**A catalogue can be closed as a whole, and then it yields nothing.** `elixir-docs.md` and
+`react-docs.md` currently withhold every link in their § *Version* until a verification run has
+opened their rows, so an Elixir, React or Next.js run anchors with probes and prose and emits no doc
+link at all. `rust-docs.md` was closed the same
 way and is open since its 2026-10-08 sweep. That is the same fail-closed rule applied
 at file scope rather than at row scope, and the page is shorter rather than wrong. Read the
 catalogue's § *Version* before reaching for a link from it.
@@ -906,8 +918,10 @@ than this repo's lock file — one app, one series. An Elixir app pins **each pa
 from `mix.lock`, and hexdocs serves exact versions rather than a series prefix, so **a correct Elixir
 page carries several different version segments** and that is not a defect. A Rust codebase is the
 same shape again — each crate pinned from `Cargo.lock`, the toolchain's own documentation pinned to
-the toolchain release — so a correct Rust page carries several too.
-`evals/checks/rails-anchors.rb` encodes all three: every doc link must carry a version segment in any
+the toolchain release — so a correct Rust page carries several too. React is the coarsest of the
+four: both of its sites publish one page per API per *major*, so a link pins the major of `react` or
+of `next`, and a Next.js page carrying one of each is correct.
+`evals/checks/rails-anchors.rb` encodes all four: every doc link must carry a version segment in any
 stack, and only the Rails links must agree on one series.
 
 **A row with no verified path for this app's version yields no link.** Not a nearest-neighbour link,
@@ -916,8 +930,8 @@ without it, exactly as it does with every excerpt closed. Failing closed is the 
 unlinked explanation is never misleading, and a link to the wrong version is.
 
 **Two marks in the catalogue constrain the sentence, not the link.** In `rails-docs.md` they are the
-outcome of an audit of the Rails CHANGELOGs across the supported series; in `elixir-docs.md` and
-`rust-docs.md` they are a first pass that no such audit has yet confirmed, which each file says of
+outcome of an audit of the Rails CHANGELOGs across the supported series; in `elixir-docs.md`,
+`rust-docs.md` and `react-docs.md` they are a first pass that no such audit has yet confirmed, which each file says of
 itself. Each catalogue's
 § *What the marks mean* owns their definitions:
 
@@ -939,7 +953,9 @@ step 2 selected has the probes and the rule for running them safely — in Rails
 `iex -S mix`, and that there is **no sandbox console at all**, so a write is wrapped in
 `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it is not proposed; in Rust, that there is
 no console of any kind, so a probe reads the build with `cargo` and `--locked`, says when it compiles,
-and a write is a test rather than a command. Every constant, scope,
+and a write is a test rather than a command; in React, that there is no console either, so a probe
+reads the toolchain in the project's own package manager, never installs, carries `--no-install` on
+every `npx`, and says when it runs the project's configuration. Every constant, scope,
 context and module a probe names must exist in this repository — the same rule as *validation steps
 must exist in this repo*, and it fails the same way when broken.
 
@@ -964,7 +980,8 @@ number — a primer *holds* the checkpoint's link rather than adding one, which 
 turning into a licence to cite. **At most one probe per
 checkpoint** as well, and probes are scarcer than links besides: a checkpoint earns one where its
 judgment is framework-shaped — ActiveRecord in Rails, a changeset, a query, an association or an
-`on_mount` chain in Elixir, a feature set, a derive's expansion or a migration's queries in Rust — and
+`on_mount` chain in Elixir, a feature set, a derive's expansion or a migration's queries in Rust,
+a duplicated dependency, a hooks-lint verdict or a route's rendering mode in React — and
 a second wants a reason. The one exemption is the `‡ probe` row
 above, which is not rationed at all.
 
@@ -1076,7 +1093,7 @@ Two things follow from that gate, and both are deliberate.
 
 - **A closed catalogue means no primers for that stack.** While `elixir-docs.md` § *Version*
   withholds every link, a Phoenix run at `--mentor` carries none of these and anchors with probes and
-  prose. Narrower, not wrong: the same trade the withhold already makes, arriving at the heaviest
+  prose — and so does a React or Next.js run while `react-docs.md` does. Narrower, not wrong: the same trade the withhold already makes, arriving at the heaviest
   component rather than the lightest, and lifted by the same one command. Say so in chat rather than
   on the page — a line explaining why the page has no primers is a mentor badge with an apology
   attached.
@@ -1137,9 +1154,9 @@ stack's, never a choice**: it goes on a primer whose doc link is a `docs.rs` or 
 row and on no other, and `rails-anchors.rb` § 8 fails the page in either direction, because a frame a
 run picks is how a colour starts to mean something. Graphite rather than Ferris orange because orange
 sits between the red frame and the ochre that says something is missing, and would be read as the
-second. Phoenix still earns no primer, because `elixir-docs.md` withholds every link; when it opens
-the answer is the same shape — a variant class, never a colour a run types, never a second
-component.
+second. Phoenix and React still earn no primer, because `elixir-docs.md` and `react-docs.md`
+withhold every link; when either opens the answer is the same shape — a variant class, never a colour
+a run types, never a second component.
 
 **No mark, and therefore no trademark line.** The version of this callout that the agenda put down
 carried an inlined logotype and a notice saying whose it was. This page has no `<svg>` anywhere, so
@@ -1214,7 +1231,9 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   and `Show code` are not summaries: a closed excerpt has to be informative, because most of them
   stay closed. The clause lives in the summary rather than at the top of the body **because of the
   closed-page rule above** — a why the reader has to open the block to see is exactly the hidden
-  content the rule forbids. `excerpt.sh` emits it there; do not move it.
+  content the rule forbids. `excerpt.sh` emits it there; do not move it. **Inside a *Look at* entry
+  the clause is the entry's own**, directly above the block and just as visible, so `--in-entry`
+  leaves the summary's why out rather than repeating it.
 - **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped inventory cell fails the
   coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
   catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
@@ -1250,13 +1269,22 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   fine — but a reader working through that field with the block shut had nothing to click. Judge the
   rule field by field, not page-wide. `check.rb` cannot catch this: it checks summaries and collapse
   state, never whether a citation survives the block closing.
-- **The excerpt does not replace the link.** It deliberately omits the surrounding context, so the
-  citation stays in the body for a reader who needs more than the quoted lines.
+- **The link is the summary's location, and it appears once.** The excerpt omits the surrounding
+  context on purpose, so a reader who needs more than the quoted lines still needs a link. That link
+  goes on the summary's `path:lines`, which `excerpt.sh` builds from the range it read whenever
+  `--blob` or `--link` is given. It is visible with the block shut, so a closed excerpt is a
+  followable citation, and a click on it follows the link without toggling the block. There is no
+  second copy under the code and no `a.path` beside it in a *Look at* entry. All three used to
+  exist together, so one location appeared twice on screen and a third time inside the block. At
+  rungs 3 and 4 the location is plain text, as every citation is.
 - **Next to a `--diff` excerpt, say which range you mean.** The script labels the block with the
   hunk's new-side span, which is rarely the range the prose wants to cite — the method, or the one
   changed line. All three are correct and on screen together they read as an inconsistency. Leave the
   script's label alone and make the prose citation explicit about what it points at (*"the guard at
   `:128`"*, *"the method at `:121-134`"*), so the reader knows the summary is describing the hunk.
+  In a *Look at* entry there is no second citation to reconcile, because the summary is the
+  citation: if the judgment turns on fewer lines than the hunk, quote those lines with `--at`
+  instead.
 - **`data-path` is reserved to inventory cells.** Excerpts carry `data-src`. `scripts/coverage-gate.sh`
   greps `data-path` across the whole page and compares it to the diff as a set, so an excerpt using it
   would register as a surplus path — and would do so most reliably when citing unchanged code, which
@@ -1311,6 +1339,23 @@ so under that reading every one of them earns an excerpt automatically, three ch
 without a decision being made, and a large PR produces dozens. A cap that is always
 reached is not a cap.
 
+**Inside a *Look at* entry the ration is different, because the cost is different.** The budget
+below was written for an excerpt that came *in addition to* its citation: a second block of chrome
+per quotation, and that is what a ration is for. In an entry, the excerpt's summary *replaces* the
+citation (§ *The review checkpoint*). Closed, it takes the room the link would have taken. Open, it
+saves a trip into a file the reader has never seen. So **a short entry citation carries its excerpt
+by default**: about twelve lines or fewer, `--source` or a `--diff` hunk of that size. The entry
+takes a bare `a.path` instead in four cases: the range is longer than that, the file is on the
+never-excerpt list below, the same lines are already quoted elsewhere on the page, or what the
+entry points at is a region rather than lines (a whole method to read, a file of callers). That
+default came from a real checkpoint whose three entries were one five-line hook and two single
+lines in unchanged code. The judgment turned on all three, and only the first was quoted.
+
+Entries count toward nothing below. The entry count, one to four, is what bounds them. The rest of
+this section rations the excerpts that do add to the prose: one confirming a claim in a
+checkpoint's explanation, one on a reading-path stop, and one beside an affected entry in *Impact
+outside the diff*.
+
 **The test that does work: is the citation load-bearing for a decision the reviewer has to make?**
 Not merely unchanged, not merely interesting — load-bearing. A finding they will act on, ask the
 author about, or have to weigh. Most *affected but unchanged* entries are context; a few are the
@@ -1344,8 +1389,10 @@ Then the mechanical limits:
   is the one nuanced case; see the note under the location table.
 - **A page-wide sense of scale**, since the per-field cap alone does not bound the total: the count
   grows with the number of checkpoints and the number of load-bearing findings, never with the file
-  count, which is a far slower curve. One or two per checkpoint is the ordinary shape — the hunk the
-  judgment turns on, plus the one unchanged citation it rests on — and a third wants a reason.
+  count, which is a far slower curve. Outside the *Look at* entries, one or two per checkpoint is the
+  ordinary shape — the hunk the judgment turns on, plus the one unchanged citation it rests on — and
+  a third wants a reason. Entry excerpts are bounded by the entry count instead, for the reason the
+  paragraph above the test gives.
   **Count per checkpoint, not per section, inside** *What needs your attention*: a section-wide
   limit of two there is a limit of two across the bulk of the page, which is how this format once
   ended up under-quoting the diff. Outside *What needs your attention*, more than two in a section

@@ -1,0 +1,14 @@
+<!-- One defect: the react.dev link carries no major, so it silently means whatever React ships
+     today — the form a person copies out of a browser's address bar. On a React 18 app that hands
+     the reader React 19's page for a hook whose behaviour around refs and errors moved. The path
+     itself is catalogued, so only the pinning rule may fire here. -->
+<section class="cp" id="cp-a">
+  <h3>Does the filter effect still refetch when the team changes?</h3>
+  <p>The effect reads <code>teamId</code> and its dependency array no longer names it.</p>
+
+  <ul class="lookat">
+    <li>The effect at <span class="path">src/features/projects/ProjectList.tsx:42</span> &mdash;
+      <a class="doc" href="https://react.dev/reference/react/useEffect">useEffect</a>
+      re-runs only when a listed dependency changes. <span class="tier">explicitly changed</span></li>
+  </ul>
+</section>

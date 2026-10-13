@@ -1,0 +1,29 @@
+<!-- NO DEFECT. Two probe forms that react.md tells a run to write and that this check would
+     otherwise report as invented, kept in ONE clean fixture for the reason
+     anchors-probe-legit-forms.html gives: a fixture that must PASS catches a regression in
+     either, where a fixture that must FAIL keeps failing while one of them breaks.
+
+     1. A component named as a test filter. A component is a function or a const, and the
+        definition search used to know only the Ruby and Rust keywords, so a component this
+        repository plainly declares read as invented. searches-repo carries
+        src/components/ProjectCard.tsx for exactly this.
+
+     2. A file path whose basename is a component. `ProjectCard.test.tsx` reads, to the scope rule,
+        as a call of `test` on `ProjectCard` — a method this repository does not define, and a
+        false accusation against the probe the lens spells out. A capitalised word inside a path
+        is a file name, not a receiver.
+
+     Run with --repo @GOLD@/searches-repo. Two checkpoints for two probes, because the ration is
+     one each. -->
+<section class="cp" id="cp-a">
+  <h3>Is there a test that renders the card with an archived project?</h3>
+  <p>The card gained an archived state and its test file did not change. <span class="path">src/components/ProjectCard.tsx:3</span></p>
+  <span class="lbl">vitest list &middot; loads the Vitest config, runs nothing &middot; which tests name the card</span>
+<pre class="probe">npx --no-install vitest list ProjectCard</pre>
+</section>
+<section class="cp" id="cp-b">
+  <h3>Does the card's test still pass against this branch?</h3>
+  <p>The test was edited alongside the component it covers. <span class="path">src/components/ProjectCard.tsx:3</span></p>
+  <span class="lbl">vitest run &middot; runs one file and loads the config &middot; whether the edited test passes</span>
+<pre class="probe">npx --no-install vitest run src/components/ProjectCard.test.tsx</pre>
+</section>

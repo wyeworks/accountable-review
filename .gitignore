@@ -1,3 +1,7 @@
 .DS_Store
 skills/review-map/evals/results/*.jsonl
 .claude/worktrees/
+# What Claude Code writes beside a mod it loads from this folder, for the editor: the API types
+# under .claude-plugin/ (where only the manifest belongs) and a root tsconfig.json extending them.
+/.claude-plugin/types/
+/tsconfig.json

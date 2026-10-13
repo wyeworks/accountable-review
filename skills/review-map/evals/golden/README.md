@@ -55,6 +55,13 @@ job for the same reason: two crates and the toolchain, three different version s
 page. `anchors-probe-rust-forms.html` is the probe half — `Cargo.toml` named as a file, and a struct
 named as a test filter — and it is the reason `searches-repo` carries a `src/archive.rs`.
 
+The three `anchors-reactdocs-*` and `anchors-nextjs-*` fragments are the React arms. The clean one
+carries a React major and a Next.js major that differ, for the same reason again; the wrong-router
+one is a `docs/pages/` link to an API catalogued under `docs/app/` only, which is the defect a
+pinned, resolving URL can still have in this stack. `anchors-probe-js-forms.html` is the probe half
+— a component named as a test filter, and its test file named by path — and it is the reason
+`searches-repo` carries a `src/components/ProjectCard.tsx`.
+
 `start-here-orphan-checkpoint.html` is the same argument for a rule that sits beside an older one
 measuring nearly the same thing. Section 03 has always been checked for linking *into* the
 checkpoints, and that rule counts links: the fixture keeps three stops, three why-clauses, three
