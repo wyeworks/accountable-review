@@ -71,7 +71,7 @@ end
 W = "skills/setup-ci/templates/workflow.yml"
 RENDER = "skills/setup-ci/scripts/render-workflow.sh"
 INSTALL = "skills/setup-ci/scripts/install-workflow.sh"
-READ_CONFIG = "skills/setup-ci/scripts/read-config.sh"
+READ_CONFIG = "skills/review-map/scripts/read-config.sh"
 GENERATE = "ci/generate-review-map.sh"
 GATE = "ci/application-code.sh"
 STILL = "ci/map-still-current.sh"
@@ -148,7 +148,7 @@ CASES = [
            edit: sub(' && val != "nextjs")', ")"),
            sections: %i[config], expect: "nextjs is a stack name the config file and the adapter both accept"),
   Case.new(desc: "the adapter's peek stops taking react as --mentor's value", file: GENERATE,
-           edit: sub("case ${2:-} in rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in rails|elixir|phoenix|rust|nextjs) MENTOR=$2; shift ;; esac"),
+           edit: sub("case ${2:-} in off|rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in rails|elixir|phoenix|rust|nextjs) MENTOR=$2; shift ;; esac"),
            sections: %i[config], expect: "react is a stack name the adapter takes as --mentor's value"),
 
   Case.new(desc: "the artifact is not named for the revision", file: "ci/delivery/github-artifact.sh",
@@ -237,12 +237,24 @@ CASES = [
   # matters most: on by default is the plausible edit — it looks generous.
   Case.new(desc: "mentor defaults to on, so every CI page teaches the framework", file: GENERATE,
            edit: sub("MENTOR=${CFG_mentor:-off}", "MENTOR=${CFG_mentor:-on}"),
-           sections: %i[config], expect: "no mentor flag is passed by default"),
+           sections: %i[config], expect: "mentor's default reaches the run as --mentor off"),
+
+  # --context's default is the earning rule, and `always` is the plausible edit — it looks generous,
+  # and it would put a lowered bar on every CI page while the docs say the default is `auto`.
+  Case.new(desc: "context defaults to always, so every CI page lowers the earning bar", file: GENERATE,
+           edit: sub("CONTEXT=${CFG_context:-auto}", "CONTEXT=${CFG_context:-always}"),
+           sections: %i[config], expect: "context's default reaches the run as --context auto"),
+
+  # The config parser is the second place the four names live; dropping one leaves a team's
+  # `context: never` an error in CI while the flag works by hand.
+  Case.new(desc: "the config parser stops reading context at all", file: READ_CONFIG,
+           edit: sub('emit("context", val)', ""),
+           sections: %i[config], expect: "context is read from the config file"),
 
   # And the peek that reads --mentor's optional value. Consuming ANY next argument turns
   # `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
   Case.new(desc: "the optional stack name swallows whatever flag follows --mentor", file: GENERATE,
-           edit: sub("case ${2:-} in rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
+           edit: sub("case ${2:-} in off|rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
            sections: %i[config], expect: "a bare --mentor does not swallow the flag after it"),
 
   # The application-code gate. Two rules, and the cases below break each of them in the way a
@@ -281,6 +293,30 @@ CASES = [
   Case.new(desc: "the gate ignores the thresholds in .accountable-review.yml", file: GATE,
            edit: sub(/^\[ -n "\$TRIVIAL_LINES" \] .*$/, "TRIVIAL_LINES=$TRIVIAL_LINES_DEFAULT"),
            sections: %i[gate], expect: "trivial_lines: 0 in the config file generates a map for any application change"),
+
+  # A repository's own path rules. Each break below is a plausible edit to the override, and each
+  # arrives looking like a simplification.
+  Case.new(desc: "the gate ignores paths.code in .accountable-review.yml", file: GATE,
+           edit: sub("    code) printf 'code\\tconfigured", "    nevercode) printf 'code\\tconfigured"),
+           sections: %i[gate], expect: "paths.code makes a Markdown prompt application code"),
+
+  # A conflict must resolve towards the map, for the reason the default is code.
+  Case.new(desc: "a path matching both lists is skipped", file: GATE,
+           edit: sub('END { if ("code" in hit) print "code"; else if ("skip" in hit) print "skip" }',
+                     'END { if ("skip" in hit) print "skip"; else if ("code" in hit) print "code" }'),
+           sections: %i[gate], expect: "a path matching both lists is code, never skipped"),
+
+  # `*` crossing a slash is what shell `case` does, and it would make `agents/*.md` reach every
+  # Markdown file below agents/ — a team writing the workflow-filter meaning gets a wider rule.
+  Case.new(desc: "a single * in a configured pattern crosses a slash", file: GATE,
+           edit: sub('re = re "[^/]*"', 're = re ".*"'),
+           sections: %i[gate], expect: "a single * stops at a slash, the way a workflow paths filter does"),
+
+  # A branch pin re-derived as a release tag on the next setup run is a dogfooding repository
+  # quietly moved off main by the command it ran to upgrade.
+  Case.new(desc: "a branch pin is not recorded with the decisions", file: RENDER,
+           edit: sub('[ -z "$PLUGIN_BRANCH" ] || DECISIONS="$DECISIONS --plugin-branch $PLUGIN_BRANCH"', ":"),
+           sections: %i[recovery], expect: "a re-run with no flags keeps the branch rather than re-deriving a release tag"),
 
   Case.new(desc: "generation is no longer guarded by the gate", file: W,
            edit: drop(/if: steps\.scope\.outputs\.verdict == .generate./),

@@ -403,7 +403,7 @@ is worth doing when the diff is small enough that a second reader has nothing to
 
 ### Onboarding a reviewer into the stack
 
-A third axis, and the only one that puts anything on the page:
+A third axis, and the only one that puts anything inside a checkpoint:
 
 ```text
 /accountable-review:review-map 412 --mentor          # add framework primers
@@ -715,33 +715,42 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 Nothing is required, and that is deliberate: every setting is a thing that can go stale against the
 repository it describes.
 
-What you choose per run:
+What you choose per run — effort, mentor and context can also be a team's standing answer in
+`.accountable-review.yml` (below), and a flag beats the file for one run:
 
 | | |
 | --- | --- |
 | **Target** | PR number, PR URL, branch, diff range, or nothing for the current branch against its base. |
 | **Effort** | `--effort high` (default) or `--effort low`. |
-| **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack. |
+| **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack, and `--mentor off` overrides a file that turned it on. |
+| **Context** | `--context auto` by default: the repository-orientation section appears only when a checkpoint needs it. `never` drops it, `always` lowers the bar for a team onboarding people into the codebase (it still never invents an entry), `collapsed` puts it behind a toggle. |
 | **Theme** | Daylight by default; `workshop` or `field-notes` via `review_map.theme` in `.accountable-review.yml`. A setting of the repository, not a flag — and only the default: readers switch from the page's *Aa* menu. |
-| **Update** | Off by default; `--update` re-reads only the commits since the existing page and edits it in place. |
+| **Update** | A flag only, off unless you pass it: `--update` re-reads only the commits since the existing page and edits it in place. CI turns it on for you (`review_map.update`). |
 | **Output** | A published artifact in Claude Code, a local HTML file in Codex; `--output <dir>` writes static HTML to a chosen directory instead. |
 
-In CI, the same choices live in an optional `.accountable-review.yml` — the whole schema, every key
-optional:
+A repository's standing answers live in an optional `.accountable-review.yml` — the whole schema,
+every key optional:
 
 ```yaml
 review_map:
   effort: high           # high | low
   mentor: false          # true | false | rails | elixir | phoenix | rust | react | nextjs
+  context: auto          # auto | never | always | collapsed
   theme: daylight        # daylight | workshop | field-notes
-  delivery:
+  update: true           # CI only: edit the previous map on a push rather than rebuild it
+  trivial_files: 2       # CI only: skip a change this small in application files
+  trivial_lines: 20      #   and in application lines
+  delivery:              # CI only
     provider: github-artifact
     retention_days: 14
 ```
 
-`theme` is the one key read outside CI too: the skill looks for it in the repository it is reviewing,
-so a team's choice of look applies to every Review Map of that repository, whoever generates it.
-Daylight is the default; Workshop and Field Notes are the alternatives. The key sets the look a page
+**The first four are read by the skill itself**, so they apply to every Review Map of the repository,
+whoever generates it — on your laptop (from the copy you have checked out) and in CI alike. The rest
+only mean something in CI. The whole file is checked on every run, so a misspelt key stops your
+local run rather than surfacing in a CI job later.
+
+Daylight is the default theme; Workshop and Field Notes are the alternatives. The key sets the look a page
 opens in, and every page carries all three: a reader can switch theme, and light, dark or the
 system's choice, from the *Aa* menu in the masthead, and their browser remembers it. A theme changes
 typefaces, radii and hues — never what is on the page.

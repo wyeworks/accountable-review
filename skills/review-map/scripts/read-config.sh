@@ -16,12 +16,22 @@
 #     effort: high           # high | low  (`normal` accepted, means `low`)
 #     mentor: rails          # true | false | rails | elixir | phoenix | rust | react | nextjs  (default false)
 #     theme: daylight        # daylight | workshop | field-notes  (default daylight)
-#     trivial_files: 2       # skip when application files <= this AND
+#     context: auto          # auto | never | always | collapsed  (default auto)
+#     update: true           # true | false  (default true; CI only)
+#     trivial_files: 2      # skip when application files <= this AND
 #     trivial_lines: 20      #   application lines <= this; either at 0 disables it
+#     paths:                 # override the gate's built-in path rules
+#       code: ["skills/**/*.md"]   # these count as application code
+#       skip: ["evals/**"]         # these do not (reported as `configured`)
 #     delivery:
 #       provider: github-artifact
 #       retention_days: 30
 #       command: ./bin/publish-review-map   # provider: command only
+#
+# It lives in review-map rather than setup-ci because every reader needs it: the skill at step 1 and
+# page-skeleton.sh on a person's run, and the ci/ scripts in CI. The skill is installed alone by
+# `npx skills add` and by Codex, so the one parser has to ship with it — a second, narrower reader
+# would wave through a file CI then refuses.
 #
 # THIS IS NOT A YAML PARSER, and it should not grow into one. It reads exactly
 # the keys above at exactly that nesting, which is the entire configuration this
@@ -31,6 +41,15 @@
 # this file exists to prevent. Adding an option means adding it here, in
 # references/config.md, and in whatever reads it — three places on purpose, so a
 # configuration surface cannot grow by accident.
+#
+# THE TWO LISTS ARE THE ONLY NON-SCALARS, and they are emitted as one variable
+# each, PREFIXpaths_code and PREFIXpaths_skip, one pattern per line — a path
+# cannot contain a newline, so the newline is a separator nothing has to escape.
+# Both YAML forms are read, the flow `[a, b]` and the block `- a` per line,
+# because a team copying either from anywhere else should not be told off for it.
+# What a pattern MEANS is application-code.sh's business; this only refuses the
+# glob syntax that script does not implement, because a `!negation` or a
+# `{a,b}` taken literally would match nothing and say nothing.
 
 set -eu
 
@@ -52,6 +71,17 @@ fi
 
 awk -v prefix="$PREFIX" -v file="$FILE" '
   function fail(msg) { printf "read-config.sh: %s:%d: %s\n", file, NR, msg > "/dev/stderr"; bad = 1; exit 1 }
+  function add_pattern(k, p) {
+    sub(/^[[:space:]]+/, "", p); sub(/[[:space:]]+$/, "", p)
+    if (p ~ /^".*"$/ || p ~ /^'"'"'.*'"'"'$/) p = substr(p, 2, length(p) - 2)
+    if (p == "") fail("an empty pattern under `paths." k "`")
+    if (p ~ /^\//) fail("pattern `" p "` is anchored with a leading /; paths are already relative to the repository root")
+    if (p ~ /^!/) fail("pattern `" p "` starts with !, and there is no negation; list it under the other key instead")
+    if (p ~ /["'"'"']/) fail("pattern `" p "` holds a quote; a pattern cannot contain a comma, a quote or a newline")
+    if (p ~ /[{}\\^\t]/) fail("pattern `" p "` uses glob syntax the gate does not implement (only *, ** and ? are special)")
+    lists[k] = (k in lists && lists[k] != "") ? lists[k] "\n" p : p
+    seen[k] = 1
+  }
   function emit(k, v) {
     gsub(/'"'"'/, "'"'"'\\'"'"''"'"'", v)
     printf "%s%s='"'"'%s'"'"'\n", prefix, k, v
@@ -65,6 +95,17 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
     # unquoted — a command containing a # is a legitimate value.
     match(line, /^[[:space:]]*/); indent = RLENGTH
     rest = substr(line, indent + 1)
+
+    # A block-list item belongs to the list key just above it, and to nothing else.
+    if (rest ~ /^-([[:space:]]|$)/) {
+      if (list_key == "" || indent < list_indent) fail("a list item `" rest "` with no list key above it")
+      item = rest; sub(/^-[[:space:]]*/, "", item)
+      if (item !~ /^["'"'"']/) sub(/[[:space:]]+#.*$/, "", item)
+      add_pattern(list_key, item)
+      next
+    }
+    list_key = ""
+
     if (rest !~ /^[A-Za-z_][A-Za-z0-9_]*:/) fail("expected `key:`, got: " rest)
     key = rest; sub(/:.*$/, "", key)
     val = rest; sub(/^[^:]*:[[:space:]]*/, "", val)
@@ -79,9 +120,26 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
     }
     if (section != "review_map") fail("`" key "` sits outside `review_map:`")
 
-    if (key == "delivery" && val == "") { sub_section = "delivery"; delivery_indent = indent; next }
+    if (sub_section != "" && indent <= sub_indent) sub_section = ""
+    if (sub_section == "" && (key == "delivery" || key == "paths") && val == "") {
+      sub_section = key; sub_indent = indent; next
+    }
+
+    if (sub_section == "paths") {
+      if (key != "code" && key != "skip") fail("unknown key `" key "` under `paths:` (only `code:` and `skip:` exist)")
+      seen[key] = 1
+      if (val == "") { list_key = key; list_indent = indent; next }
+      if (val !~ /^\[.*\]$/) fail("`paths." key "` must be a list, `[\"a/**\", \"b/*.md\"]` or one `- item` per line")
+      body = substr(val, 2, length(val) - 2)
+      n = split(body, items, ",")
+      for (i = 1; i <= n; i++) {
+        if (items[i] ~ /^[[:space:]]*$/ && n == 1) break   # `[]` is an empty list
+        add_pattern(key, items[i])
+      }
+      next
+    }
+
     if (val == "") fail("`" key "` has no value")
-    if (sub_section == "delivery" && indent <= delivery_indent) sub_section = ""
 
     if (sub_section == "delivery") {
       if (key == "provider") {
@@ -101,7 +159,7 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "high" && val != "low") fail("effort must be high or low, got `" val "`")
       emit("effort", val)
     } else if (key == "mentor") {
-      # The one key that changes what is ON the page: it admits a framework primer inside
+      # The one key that changes what is inside a CHECKPOINT: it admits a framework primer inside
       # the checkpoints that earn one, for a reviewer new to the stack. Off is the default,
       # and `false` stays legal so turning it back off does not mean deleting the key.
       # A stack name is a claim the run checks against the repository, never an override —
@@ -111,10 +169,17 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "true" && val != "false" && val != "rails" && val != "elixir" && val != "phoenix" && val != "rust" && val != "react" && val != "nextjs") \
         fail("mentor must be true, false, or one of rails, elixir, phoenix, rust, react, nextjs, got `" val "`")
       emit("mentor", val)
+    } else if (key == "context") {
+      # How much of section 02 Context the page carries. `auto` is the earning rule; `never`
+      # and `collapsed` subtract from it (the section, or its visibility), and `always` lowers
+      # the bar without ever manufacturing an entry. report-format.md § How much Context owns
+      # the four, and generate-review-map.sh passes nothing for `auto`.
+      if (val != "auto" && val != "never" && val != "always" && val != "collapsed") \
+        fail("context must be auto, never, always or collapsed, got `" val "`")
+      emit("context", val)
     } else if (key == "theme") {
-      # How the page LOOKS, and nothing about what is on it: typefaces, radii, hues. Read here so
-      # CI fails on a typo before a model is spent, and passed on by generate-review-map.sh; the
-      # skill page-skeleton.sh reads the same key itself, because it ships without this script.
+      # How the page LOOKS, and nothing about what is on it: typefaces, radii, hues. Validated here
+      # for every reader; page-skeleton.sh is the one that uses it, through this script.
       # The names are the files under skills/review-map/references/themes/, and the setup-ci
       # tests/suite.rb fails when this list and that directory disagree.
       if (val != "daylight" && val != "workshop" && val != "field-notes") \
@@ -143,5 +208,12 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val !~ /^[0-9]+$/) fail("`" key "` must be a whole number, got `" val "`")
       emit(key, val)
     } else fail("unknown key `" key "` under `review_map:`")
+  }
+  END {
+    if (bad) exit 1
+    # An empty list is legal and says so: a key written as `[]` is present, and a
+    # caller can tell it from one the file never set.
+    if ("code" in seen) emit("paths_code", lists["code"])
+    if ("skip" in seen) emit("paths_skip", lists["skip"])
   }
 ' "$FILE"

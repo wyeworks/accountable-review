@@ -37,11 +37,10 @@
 # repository beside the team's other settings, and a reviewer gets the same page from CI and from
 # their own terminal.
 #
-# This reads ONE key of that file and nothing else. setup-ci's read-config.sh owns the schema and
-# validates it in CI, but this skill is installed alone by `npx skills add` and by Codex, where that
-# script is not on disk — so the lookup is here, deliberately narrow, and a value with no theme file
-# behind it is refused rather than defaulted: a team that wrote `theme: workshp` should hear about
-# it, not get Daylight and wonder.
+# The file is read by read-config.sh beside this script, the one parser of that schema, so a key
+# CI would refuse is refused here too (exit 2). Only the theme is used; SKILL.md step 1 reads the
+# other page keys itself. A value with no theme file behind it is refused rather than defaulted: a
+# team that wrote `theme: workshp` should hear about it, not get Daylight and wonder.
 #
 # Reads only, except for --out. Needs awk. No network.
 set -eu
@@ -108,27 +107,6 @@ n=$(extract "$HEAD_S" "$HEAD_E" "$TEMPLATE" | grep -c "$THEME_M" || true)
 [ "${n:-0}" -eq 1 ] || {
   echo "page-skeleton.sh: $THEME_M must sit inside the HEAD range of $TEMPLATE" >&2; exit 1; }
 
-# review_map.theme, and only that: the first-level key under review_map:, so a `theme:` nested
-# deeper (under delivery:) is not mistaken for it. Quotes and a trailing comment are stripped the
-# way read-config.sh strips them.
-config_theme() {
-  awk '
-    { sub(/\r$/, "") }
-    /^[[:space:]]*(#|$)/ { next }
-    /^[^[:space:]]/ { inmap = ($0 ~ /^review_map:[[:space:]]*(#.*)?$/); depth = 0; next }
-    inmap {
-      match($0, /^[[:space:]]*/)
-      if (depth == 0) depth = RLENGTH
-      if (RLENGTH != depth || $0 !~ /^[[:space:]]*theme:/) next
-      v = $0; sub(/^[[:space:]]*theme:[[:space:]]*/, "", v)
-      if (v !~ /^["\047]/) sub(/[[:space:]]+#.*$/, "", v)
-      sub(/[[:space:]]+$/, "", v)
-      if (v ~ /^".*"$/ || v ~ /^\047.*\047$/) v = substr(v, 2, length(v) - 2)
-      print v; exit
-    }
-  ' "$1"
-}
-
 SOURCE=--theme
 if [ -z "$THEME" ] && [ -n "${ACCOUNTABLE_REVIEW_THEME:-}" ]; then
   THEME=$ACCOUNTABLE_REVIEW_THEME; SOURCE=ACCOUNTABLE_REVIEW_THEME
@@ -136,7 +114,12 @@ fi
 if [ -z "$THEME" ]; then
   [ -n "$REPO" ] || REPO=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
   if [ -f "$REPO/.accountable-review.yml" ]; then
-    THEME=$(config_theme "$REPO/.accountable-review.yml")
+    # The whole file goes through read-config.sh, not just the one key: a file this script waved
+    # through and CI then refused would be a typo a team learns about from a red run.
+    cfg=$("$HERE/read-config.sh" "$REPO/.accountable-review.yml" --prefix CFG_) || {
+      echo "page-skeleton.sh: $REPO/.accountable-review.yml does not parse (see above)" >&2; exit 2; }
+    eval "$cfg"
+    THEME=${CFG_theme:-}
     SOURCE="review_map.theme in $REPO/.accountable-review.yml"
   fi
 fi
