@@ -29,6 +29,9 @@ jobs:
       # Validates the manifest plus the skills, agents and commands in the tree.
       # Needs no API key — validation is local and offline.
       - run: claude plugin validate . --strict
+      # The status line hooks/progress.ts draws while review-map runs interactively, run against
+      # the engine's own test kit. Local and offline like the line above.
+      - run: claude plugin test .
 
   checks:
     runs-on: ubuntu-latest
@@ -62,6 +65,9 @@ jobs:
       # with nothing above noticing: a version left behind, setup-ci shipped into Codex, or a
       # marketplace entry naming something else. It mutates its own inputs to prove it fires.
       - run: ruby skills/review-map/tests/codex-plugin.rb
+      # hooks/activity.json is read by the e2e board in Ruby and by the status line in
+      # JavaScript; this holds the one table to both readers, and breaks it to prove it looks.
+      - run: ruby skills/review-map/tests/activity.rb
 
   ci-setup:
     runs-on: ubuntu-latest

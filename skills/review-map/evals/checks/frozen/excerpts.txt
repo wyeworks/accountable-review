@@ -172,6 +172,12 @@ SKIP  no excerpts in this input
 ## --page anchors-mixed-series.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-nextjs-wrong-router.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-nextjs-wrong-router.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-primer-clean.html
 exit=0
 SKIP  no excerpts in this input
@@ -238,6 +244,12 @@ SKIP  no excerpts in this input
 ## --page anchors-primer-ungated.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment anchors-probe-js-forms.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-probe-js-forms.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment anchors-probe-label-thin.html
 exit=0
 SKIP  no excerpts in this input
@@ -272,6 +284,18 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page anchors-probe-unlabelled.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-reactdocs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-reactdocs-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment anchors-reactdocs-unpinned.html
+exit=0
+SKIP  no excerpts in this input
+## --page anchors-reactdocs-unpinned.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment anchors-runner-mutates.html
@@ -425,6 +449,54 @@ PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
 ## --page excerpt-duplicate.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+## --fragment excerpt-linked-clean.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --page excerpt-linked-clean.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-linked-duplicate.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+## --page excerpt-linked-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
@@ -1054,7 +1126,7 @@ PASS  3 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
-FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}}; {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{START}}-{{END}}; {{PATH}}:{{START}}-{{END}} — quote it and let excerpt.sh --base tag the state
 SKIP  excerpt tints: a fragment carries no token block
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
@@ -1066,7 +1138,7 @@ PASS  3 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
-FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{LINES}}; {{PATH}}:{{LINES}} — quote it and let excerpt.sh --base tag the state
+FAIL  labelled Unchanged, but the change touches the file: {{PATH}}:{{START}}-{{END}}; {{PATH}}:{{START}}-{{END}} — quote it and let excerpt.sh --base tag the state
 PASS  excerpt tints defined in all three theme blocks
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
@@ -1097,6 +1169,30 @@ PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
 ## --fragment excerpt-duplicate.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+## --fragment excerpt-linked-clean.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+## --fragment excerpt-linked-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default

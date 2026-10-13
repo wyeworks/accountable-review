@@ -1,0 +1,27 @@
+<!-- Two Look at entries, each an excerpt whose summary location is the link — the shape
+     excerpt.sh --in-entry emits. The same range twice, linked: the duplicate check has to read
+     through the anchor to find it, or it never sees a range at all. -->
+<section id="cp-a">
+  <ul class="lookat">
+    <li><b>The archive guard</b>
+      <span>runs before the write</span>
+      <details class="excerpt excerpt--source">
+        <summary><span class="ex-loc"><a class="cite" href="#">app/models/project.rb:31-35</a></span>
+          <span class="tag">Unchanged</span></summary>
+        <div class="ex-body">
+<pre class="codeblock" data-src="app/models/project.rb"><span class="l">  def archive!</span>
+</pre>
+        </div>
+      </details></li>
+    <li><b>The callback</b>
+      <span>reprices on entry</span>
+      <details class="excerpt excerpt--source">
+        <summary><span class="ex-loc"><a class="cite" href="#">app/models/project.rb:31-35</a></span>
+          <span class="tag">Unchanged</span></summary>
+        <div class="ex-body">
+<pre class="codeblock" data-src="app/models/order.rb"><span class="l">  after_save :reprice</span>
+</pre>
+        </div>
+      </details></li>
+  </ul>
+</section>

@@ -138,8 +138,18 @@ CASES = [
   # in the adapter, and a stack dropped from the parser is a --mentor a team can pass by hand and
   # never set in CI.
   Case.new(desc: "the config parser stops accepting rust as a mentor stack", file: READ_CONFIG,
-           edit: sub(' && val != "rust")', ")"),
+           edit: sub(' && val != "rust"', ""),
            sections: %i[config], expect: "rust is a stack name the config file and the adapter both accept"),
+  # And React, the same two places: the parser, and the adapter's peek at --mentor's value. A name
+  # dropped from the peek leaves `--mentor react` reaching the run as a bare --mentor followed by an
+  # unknown argument, which the adapter refuses — so the CI page for a React repository would fail
+  # to generate rather than quietly lose its primers.
+  Case.new(desc: "the config parser stops accepting nextjs as a mentor stack", file: READ_CONFIG,
+           edit: sub(' && val != "nextjs")', ")"),
+           sections: %i[config], expect: "nextjs is a stack name the config file and the adapter both accept"),
+  Case.new(desc: "the adapter's peek stops taking react as --mentor's value", file: GENERATE,
+           edit: sub("case ${2:-} in rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in rails|elixir|phoenix|rust|nextjs) MENTOR=$2; shift ;; esac"),
+           sections: %i[config], expect: "react is a stack name the adapter takes as --mentor's value"),
 
   Case.new(desc: "the artifact is not named for the revision", file: "ci/delivery/github-artifact.sh",
            edit: sub('name="accountable-review-pr-$AR_PR-$short"', 'name="accountable-review-pr-$AR_PR"'),
@@ -232,7 +242,7 @@ CASES = [
   # And the peek that reads --mentor's optional value. Consuming ANY next argument turns
   # `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
   Case.new(desc: "the optional stack name swallows whatever flag follows --mentor", file: GENERATE,
-           edit: sub("case ${2:-} in rails|elixir|phoenix|rust) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
+           edit: sub("case ${2:-} in rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac", "case ${2:-} in ?*) MENTOR=$2; shift ;; esac"),
            sections: %i[config], expect: "a bare --mentor does not swallow the flag after it"),
 
   # The application-code gate. Two rules, and the cases below break each of them in the way a

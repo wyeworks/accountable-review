@@ -139,6 +139,9 @@ eight merged, public PRs of different shapes, none of them the calibration PR:
 - a Phoenix LiveView change (the `phx-*` to `handle_event` seam)
 - a Rust backend change (a migration with compile-time-checked queries, or a route added after an
   auth layer) and a Rust library change (a new variant on a public enum), one per lens
+- a Next.js change (a server action that writes data, or a shared component that started reading
+  `cookies()`) and a React library change (a component whose props or hook return shape moved), one
+  per lens
 - a docs-only or trivial PR, where the right output is a refusal
 - a multi-commit PR run at `update_from`, then `--update` at head
 

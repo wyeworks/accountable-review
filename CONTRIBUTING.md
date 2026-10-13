@@ -39,6 +39,11 @@ ci/                                what runs in CI, not what a skill reads
 docs/                              the public documentation the README links out to
 ├── review-map.md                  anatomy of the page
 └── ci.md                          the delivery seam, and how to add a provider
+hooks/                             a Claude Code mod: the progress line while review-map runs
+├── progress.ts                    reads the run's events and staged page, sets the status line
+├── board.ts                       turns those readings into the line, and nothing else
+├── activity.json                  tool call → purpose, the one table progress.rb reads too
+└── progress.test.ts               `claude plugin test .`
 examples/                          published example maps, served at wyeworks.github.io by pages.yml
 ├── index.html                     the front door — borrows the design language, not the page rules
 ├── README.md                      which PR, which revision and which version produced each page
@@ -53,9 +58,12 @@ skills/review-map/
 │   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the second stack
 │   ├── rust.md                    Rust, any kind of crate: the same, and the whole lens for Rust in general
 │   ├── rust-backend.md            Rust backend: read on top of rust.md — routes, layers, the wire, the schema
+│   ├── react.md                   React, any kind of app or library: the same, and the whole lens for React in general
+│   ├── nextjs.md                  Next.js: read on top of react.md — server/client boundary, actions, the cache
 │   ├── rails-docs.md              the Rails and gem doc paths the page may cite, pinned per version
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
 │   ├── rust-docs.md               the docs.rs and doc.rust-lang.org paths, pinned per crate and toolchain
+│   ├── react-docs.md              the react.dev and nextjs.org paths, pinned per major — closed pending verification
 │   ├── page-template.html         design system and components — no svg, by design
 │   └── themes/                    daylight (default), workshop, field-notes — fonts, tokens, overrides
 ├── scripts/
@@ -81,7 +89,8 @@ skills/setup-ci/
 Each reference owns one axis — procedure, page format, per-stack domain knowledge, documentation
 catalogue, design system — and several invariants span more than one file. A Rails run reads the Rails
 lens and the Rails catalogue; a Phoenix run reads the Phoenix pair; a Rust run reads `rust.md` and
-`rust-docs.md`, and a Rust backend run `rust-backend.md` on top — and none should learn about another
+`rust-docs.md`, and a Rust backend run `rust-backend.md` on top; a React run reads `react.md` and
+`react-docs.md`, and a Next.js run `nextjs.md` on top — and none should learn about another
 stack's contents. `.claude/CLAUDE.md` documents how the
 documents divide the work and which invariants have to stay in agreement; read it before changing
 anything that looks like it is stated in two places.
@@ -161,6 +170,8 @@ ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner,
 skills/review-map/evals/checks/frozen.rb                # ~1000 cases against their recorded output
 skills/review-map/tests/run.sh                          # page-skeleton.sh, diff-render.sh, carry-plan.sh
 skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
+ruby skills/review-map/tests/activity.rb                # hooks/activity.json, read the same by Ruby and JS
+claude plugin test .                                    # the progress line, against the engine's test kit
 ruby skills/setup-ci/tests/run.rb                       # what the generated workflow contains
 ruby skills/setup-ci/tests/self-test.rb                 # every break run.rb claims to catch
 ```
@@ -173,9 +184,10 @@ rule quietly changing what it says.
 One script needs the network and is maintenance rather than part of a run:
 `evals/verify-catalogue.sh` opens every URL in a catalogue — `references/rails-docs.md` across every
 Rails series the version floor admits, `references/elixir-docs.md` at each package's newest release,
-and `references/rust-docs.md` at each crate's newest release and the newest toolchain — and reports
-dead pages, dead anchors, and rows that differ by version. A catalogue is the one thing a run cannot
-verify for itself, and the Elixir one stays closed until this script opens it. The Rust one is open;
+`references/rust-docs.md` at each crate's newest release and the newest toolchain, and
+`references/react-docs.md` at the newest major of `react` and `next` — and reports dead pages, dead
+anchors, and rows that differ by version. A catalogue is the one thing a run cannot verify for
+itself, and the Elixir and React ones stay closed until this script opens them. The Rust one is open;
 the script checks it at newest releases only, so a change to it also wants the floor sweep its
 § *Version* describes.
 
