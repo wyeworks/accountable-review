@@ -114,10 +114,13 @@ LLM judge per aspect of the page, anchored in the checkout and blind to the mech
 **Calibration**: a judge counts only once it has matched a person's verdicts on a certified gold
 page and on copies of it that each plant one defect. Calibration PRs are held out of the eval set.
 
-**One judge exists, deliberately** — `judges/what-changed.md`, for § 01. The other aspects
-(checkpoints, reading path, impact, evidence, voice, recall) are notes in `judges/IDEAS.md`, not
-code: one calibrated judge proves the method before the method is copied. The calibration PR is
-`discourse/discourse#43002`; `calibration/status.json` records the judge's calibration state.
+**Six judges exist** — `what-changed` (§ 01 with its masthead), `checkpoint-judgments` and
+`checkpoint-claims` (§ 03's shape and its truth), `reading-path`, `impact` and `evidence`. The
+aspects with no judge yet (Context, figures, coding decisions, probes, voice, recall) are notes in
+`judges/IDEAS.md`, most waiting on a gold page that carries their subject. The calibration PR is
+`discourse/discourse#43002`; a judge is measured against it only once `gold.yml` lists it as
+certified, and `calibration/status.json` records each judge's calibration state against the
+**instrument's** sha — the judge's file, `judge.rb` and `verdicts.rb` hashed together.
 Whole-run cases with no harness yet (the trivial refusal, `--update`'s P6 refusal, the 7.1 override
 path, a planted recall floor) are listed in `IDEAS.md`; each keeps its mechanical half in
 `tests/run.sh`.
@@ -177,7 +180,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
 | `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
-| `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one working judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release |
+| `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one file per judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release |
 | `evals/checks/` | One Ruby script per rule family, ten of them, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. A check that could only SKIP does not exist, because a SKIP reads as verified. `impact-paths.rb` grades `figure.impact` and nothing else; `figures.rb` grades a checkpoint's figures, `figure.chain` among them. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — which is a relation between the page and a repository, hence `golden/links-repo.sh` and `lib/review_map/fixture.rb`. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output, and `frozen.rb` verifies against it |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
@@ -297,8 +300,9 @@ Editing one of these means checking the others still agree.
 
   Nothing mechanical grades a checkpoint's quality. `start-here.rb` requires the reading path to
   point at one, `rails-anchors.rb` counts them for its doc-link budget, and `tests/run.sh` asserts the
-  template assembles three. Whether a question is a judgment is the first candidate judge in
-  `evals/e2e/judges/IDEAS.md`.
+  template assembles three. Whether a question is a judgment, asked once and ordered without a grade
+  is `evals/e2e/judges/checkpoint-judgments.md`'s question; whether its claims are true,
+  `checkpoint-claims.md`'s.
 - **Two kinds of checkpoint, and the second is ranked behind the first.** A **behavioural**
   checkpoint judges what the system now does. A **coding-decision** checkpoint judges how the change
   was built — where a class was put, what kind of object it is, which existing abstraction it went
@@ -758,8 +762,8 @@ Editing one of these means checking the others still agree.
   **The cap stays at 3** — a consequence that does not fit keeps its entry in the affected list and
   its explanation in the checkpoint. **A `p.ip-why` orients and points; it never walks the hops.**
   Shape is a FAIL and vocabulary a WARN, because a hard failure on a verb teaches a run to mislabel a
-  true edge. Whether these are the right paths and whether each edge is **true** is judged; the § 05
-  judge in `evals/e2e/judges/IDEAS.md` is where it would be asked.
+  true edge. Whether each edge is **true** is `evals/e2e/judges/impact.md`'s question; whether these
+  are the right paths has no judge yet (`evals/e2e/judges/IDEAS.md`).
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four `SKELETON:`
   markers. Everything in the head and tail ranges — the `<head>`, the themes' token blocks, the
   highlight.js tags and the tint script — is written straight into the page by

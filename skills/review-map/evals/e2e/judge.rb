@@ -5,8 +5,8 @@
 #
 #   e2e/judge.rb <judge> --page P --repo R --base SHA --head SHA [--out DIR] [--model M]
 #
-# <judge> names judges/<judge>.md: YAML front matter carrying the pinned model, the section it
-# grades and its criteria, then the prompt. Prints the tally and exits 0 when the verdict file is
+# <judge> names judges/<judge>.md: YAML front matter carrying the pinned model, the parts of the
+# page it grades and its criteria, then the prompt. Prints the tally and exits 0 when the verdict file is
 # usable, 1 when it is not — a failed criterion is a finding, not an error.
 #
 # Three properties carried over from the judge this replaced, because they are what made its
@@ -33,6 +33,18 @@ module Judge
   Result = Struct.new(:judge, :judge_sha, :model, :counts, :criteria, :verdicts_path, :usable,
                       :session, :cost_usd, :seconds, keyword_init: true)
 
+  # The calibrated identity is the whole instrument, not the rubric alone: the judge's file, this
+  # file (prompt assembly, the tool allowlist, the extraction below) and verdicts.rb (how a reply
+  # becomes verdicts). A change to any of them can change a verdict, so a change to any of them
+  # uncalibrates every judge. lib.rb stays outside it because it holds report plumbing, and an
+  # edit there would uncalibrate everything for nothing — which is why nothing a judge sees is
+  # computed there.
+  INSTRUMENT = [__FILE__, File.join(__dir__, "verdicts.rb")].freeze
+
+  def self.instrument_sha(path)
+    Digest::SHA256.hexdigest([path, *INSTRUMENT].map { |f| File.binread(f) }.join("\0"))[0, 12]
+  end
+
   def self.load(name)
     path = File.join(E2E::JUDGES, "#{name}.md")
     abort "judge: no judge at #{path}" unless File.exist?(path)
@@ -42,7 +54,39 @@ module Judge
     abort "judge: #{path} has no front matter" unless front
 
     meta = YAML.safe_load(front)
-    { path: path, sha: E2E.file_sha(path), meta: meta, body: body }
+    abort "judge: #{path} names no parts of the page to grade" if Array(meta["parts"]).empty?
+    { path: path, sha: instrument_sha(path), meta: meta, body: body }
+  end
+
+  # ---------------------------------------------------------------- what the judge is handed
+
+  # A part is a section id, or one of the two landmarks that are not sections: the masthead (the
+  # <header> holding § 01's headline, lede and Shape cell) and the evidence foot. Each is cut out
+  # whole, balanced on its own tag, because a <section> holds nested checkpoint sections and the
+  # foot holds a nested <details>.
+  LANDMARKS = {
+    "masthead" => ["header", /<header\b/],
+    "evidence" => ["details", /<details\b[^>]*\bclass="evidence"/]
+  }.freeze
+
+  def self.part(html, name)
+    tag, opener = LANDMARKS.fetch(name) { ["section", /<section\b[^>]*\bid="#{Regexp.escape(name)}"/] }
+    start = html.index(opener) or return nil
+    depth = 0
+    html.to_enum(:scan, %r{<#{tag}\b|</#{tag}>}).each do
+      m = Regexp.last_match
+      next if m.begin(0) < start
+
+      depth += m[0] == "</#{tag}>" ? -1 : 1
+      return html[start...m.end(0)] if depth.zero?
+    end
+    nil
+  end
+
+  # The parts in the order the judge's file names them. A part the page does not carry is said in
+  # place rather than dropped, so an omitted section reads as omitted to the judge too.
+  def self.extract(html, parts)
+    Array(parts).map { |p| part(html, p) || "<!-- this page has no #{p} -->" }.join("\n\n")
   end
 
   def self.run(name, page:, repo:, base:, head:, out:, model: nil, claude: ENV.fetch("CLAUDE_BIN", "claude"))
@@ -53,7 +97,7 @@ module Judge
 
     html = File.read(page)
     section_path = File.join(out, "#{name}.section.html")
-    File.write(section_path, E2E.section(html, j[:meta]["section"]) || "<!-- no section id=#{j[:meta]['section']} on the page -->")
+    File.write(section_path, extract(html, j[:meta]["parts"]))
 
     list = criteria.each_with_index.map { |c, i| "#{i + 1}. #{c.strip}" }.join("\n\n")
     prompt = j[:body].gsub("{{CRITERIA}}", list)
