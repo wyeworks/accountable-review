@@ -166,7 +166,7 @@ def repetition(pr, opts, stamp, batch, rep)
       end
 
       html = File.read(page)
-      if (sec = E2E.section(html, "changed"))
+      if (sec = Judge.part(html, "changed"))
         words = E2E.prose_words(sec)
         row["changed_words"] = words
         row["changed_words_in_budget"] = words.between?(80, 160)

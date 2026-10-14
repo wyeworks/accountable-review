@@ -18,7 +18,7 @@ evals/
 │   ├── prs.yml              the pull requests: pinned base and head, role calibration | eval
 │   ├── run.rb               generate → check → judge → profile → one jsonl line
 │   ├── judge.rb             one judge, one page
-│   ├── judges/              what-changed.md is the one working judge; IDEAS.md is the rest
+│   ├── judges/              one file per judge; IDEAS.md is the aspects with no judge yet
 │   ├── calibrate.rb         each judge against gold and its planted defects
 │   ├── calibration/         <id>/gold.html, defects/*.patch, labels.yml; status.json
 │   ├── verdicts.rb          reads one verdicts.json; shared by judge.rb and self-test.rb
@@ -112,18 +112,21 @@ nobody is logged into. `run.rb` checks first and says so.
 
 Every line carries `plugin_version`, `skill_sha` (with `+dirty` when the skill has uncommitted
 edits), the skill's `effort`, the producing `model` (`ambient` when none was named — which is not a
-fact about anything, so name it when you intend to compare), and per judge its file's sha, its
+fact about anything, so name it when you intend to compare), and per judge its instrument sha, its
 model and whether it is calibrated. `report.rb` groups by the first four, so a row measured on one
 version of the prose is never averaged into another; a judge column is only coloured when that
 judge is calibrated at the sha and model it ran at.
 
 ### The judge
 
-One judge per aspect of the page, each a file in `e2e/judges/` with its pinned model, the section it
-grades and at most five criteria in front matter, and the prompt below. **`what-changed.md` is the
-only working one**, deliberately: one judge calibrated against a gold page tells us whether the
-method works before it is copied six times. `IDEAS.md` records the other five and what a planted
-defect for each would look like.
+One judge per aspect of the page, each a file in `e2e/judges/` with its pinned model, the `parts` of
+the page it is handed (section ids, plus `masthead` and `evidence` for the two landmarks that are
+not sections) and at most five criteria in front matter, and the prompt below. Six exist:
+`what-changed` (§ 01 with its masthead), `checkpoint-judgments` and `checkpoint-claims` (§ 03, its
+shape and its truth, split because one judge asked to check both checks each less carefully),
+`reading-path` (§ 04), `impact` (§ 05) and `evidence` (tiers, excerpts and the closed-page rule,
+page-wide). `IDEAS.md` records the aspects with no judge yet, and what a planted defect for each
+would look like.
 
 What makes the verdicts worth anything is not the rubric, it is the anchoring. The judge runs
 **inside the checkout at head**, with Read, Grep, Glob and read-only `git`, so "is this claim right"
@@ -159,14 +162,14 @@ never in the eval set — has a gold page a person certified criterion by criter
 planted defect against it. `calibrate.rb` runs each judge three times on gold and on every variant.
 **Specificity**: gold passes every criterion at least twice. **Sensitivity**: each variant's targeted
 criterion fails at least twice. Both hold, or the judge is uncalibrated, and `status.json` records
-the judge file's sha and model — so editing a judge uncalibrates it, which is the point. Editing the
-rest of the instrument does not yet, and `e2e/calibration/README.md` § *Known gaps* says what that
-and the masthead leave unmeasured.
+the instrument's sha — the judge's file, `judge.rb` and `verdicts.rb` hashed together — and the
+model, so editing any of them uncalibrates, which is the point.
 
 **There is one calibration PR, `discourse/discourse#43002`**, chosen because its claims are easy to
-check by hand. Its gold page is the unedited output of one run, certified by a person on 2026-09-30
-(`calibration/discourse-43002/gold.yml`), and `what-changed` passed calibration against it and its six
-planted defects on 2026-10-02. Making another is a real run and a person's reading, and
+check by hand. Its gold page is the unedited output of one run, and `gold.yml`'s `judges` names the
+judges a person has certified it for; `calibrate.rb` measures no other judge against it. The
+planted defects, one or more per criterion of every judge, are cut by its `make-defects.rb`. Making
+another is a real run and a person's reading, and
 `calibration/README.md` has the steps. Gold is not `examples/` — those are regenerated when the format
 moves, and gold has to stay put as long as its patches apply.
 

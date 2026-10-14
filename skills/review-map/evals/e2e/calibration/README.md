@@ -50,6 +50,10 @@ $EDITOR /tmp/v.html                     # plant exactly one defect
 diff -u <id>/gold.html /tmp/v.html > <id>/defects/what-changed-wrong-delta.patch
 ```
 
+Where a gold directory has a `make-defects.rb`, add the defect there instead — an anchor that must
+match gold exactly once, and its replacement — and rerun it, so a regenerated gold fails loudly
+rather than quietly yielding a patch that plants nothing.
+
 Name each patch `<judge>-<defect>`. Then give it labels. A variant lists only the criteria its
 defect changes; every other criterion inherits gold's label.
 
@@ -61,42 +65,62 @@ variants:
     what-changed: {1: fail}
 ```
 
+**When gold itself fails a criterion**, label it `fail` on the gold row — gold is a run's output,
+not an ideal page, and its own defects test the judge as well as a planted one does. Two things
+then need a variant of their own. Gold can no longer show the judge *passing* a page that meets
+that criterion, so add `<judge>-corrected`: gold with exactly those failures fixed, labelled
+`pass` on them. And a defect planted on gold for that criterion changes nothing, so plant it on the
+corrected copy and name it as the base; it is gated where it differs from the base, not from gold:
+
+```yaml
+  impact-corrected:
+    impact: {2: pass, 3: pass}
+  impact-false-edge:
+    base: impact-corrected
+    impact: {2: fail}
+```
+
+**When a person cannot settle a criterion on gold** — a sentence true on one reasonable reading and
+false on another — label it `~`. Gold is not gated on it, because either label would grade the
+judge on which reading it picked; the corrected copy removes the doubt and is gated instead.
+
+The patch is still a diff against `gold.html`, carrying the corrections and the defect together;
+`make-defects.rb`'s `FIX` and `REBASED` build both.
+
 Watch the words a patch uses. Two of the first golden fragments passed for the wrong reason,
 because their own `aria-label` contained the word the check was looking for.
 
 ## What calibrated means
 
-`bin/evals calibrate` runs each judge K=3 times on gold and on every variant:
+`bin/evals calibrate` runs each judge up to K=3 times on gold and on every variant labelled for it,
+stopping on a page once the remaining runs could not change a gated verdict — so a page whose
+first two runs agree costs two:
 
 - **Specificity.** Gold passes each criterion in at least 2 of 3 runs.
 - **Sensitivity.** Each variant's targeted criterion fails in at least 2 of 3 runs.
 
-Both have to hold. Criteria a variant doesn't target are recorded but not gated. The result goes
-to `status.json` under the judge file's sha and the model, so **editing a judge's file
-uncalibrates it**, and report.rb then shows that judge's column as *uncalibrated* instead of as a
-score. Editing the rest of the instrument does not, yet; see *Known gaps*.
+Both have to hold. Criteria a variant doesn't target are recorded but not gated, and a judge runs
+only on the variants labelled for it. The result goes to `status.json` under the **instrument's**
+sha and the model: one hash over the judge's file, `../judge.rb` (the prompt assembly, the tool
+allowlist and the extraction of the parts a judge is handed) and `../verdicts.rb` (how a reply
+becomes verdicts). **Editing any of the three uncalibrates** — the judge's file uncalibrates that
+judge, the other two every judge — and report.rb then shows the column as *uncalibrated* instead of
+as a score. `../lib.rb` is outside the hash because it holds report plumbing; nothing a judge sees
+is computed there.
+
+A judge whose name is missing from every `gold.yml`'s `judges` list is reported as not calibrated
+and gets no `status.json` entry: its gold labels are a guess until a person has read that gold
+against its criteria. A smoke pass (`--variant`, `--model`, or `-k` under 3) runs it anyway,
+because it writes nothing, and its notes on gold are a useful first read for the person
+certifying.
 `--variant NAME` runs one variant while you iterate on a patch, and never writes `status.json`.
 
 ## Known gaps
 
 - **One calibration PR, and it's Rails** (`discourse-43002`, with the Ember client in the same
-  repository). No judge is calibrated against a Phoenix page.
-- **The masthead is outside what calibration measured.** The judge's prompt calls § 01 "the masthead
-  plus `<section id="changed">`", but `E2E.section` (`../lib.rb`) hands it the section alone; the
-  masthead's `<h1>`, lede and Shape cell sit in the `<header>` before it (`gold.html:1372-1393`), and
-  the judge reaches them only by reading the whole page. All six defects in
-  `discourse-43002/defects/` sit inside the section, so calibration has not measured whether the
-  judge catches a false claim where § 01's headline claim lives. Closing it is two changes and one
-  recalibration: extract the header with the section for the judge — keeping the § 01 word count on
-  the section alone, since the agenda budget excludes the masthead — and add a seventh patch planting
-  a false `<h1>` or lede, labelled `{1: fail}`.
-- **The calibrated identity is the judge's file and nothing else.** `Judge.calibration` compares the
-  sha of `judges/<name>.md` and the model. The rest of the instrument — the prompt assembly and tool
-  allowlist in `judge.rb`, the section extraction, and `Verdicts.parse`'s recovery of a fenced or
-  prose-wrapped reply — can change while `status.json` still says calibrated. Hashing `lib.rb` whole
-  is the wrong fix, because it holds report plumbing too and an unrelated edit there would uncalibrate
-  every judge; move the extraction into `judge.rb` and hash the judge file, `judge.rb` and
-  `verdicts.rb` together, in the same change as the masthead fix, so one recalibration covers both.
+  repository). No judge is calibrated against a Phoenix page, and the judges whose subject this
+  page does not carry — Context, a checkpoint's figure, a coding-decision checkpoint, a probe — wait
+  for a second gold (`../judges/IDEAS.md`).
 - **Blindness is assumed, not tested.** "Blind to the mechanical results" and "a sibling variant must
   not be readable" both rest on `claude -p` confining `Read` to the working directory and the
   `--add-dir` directories. `check.txt` sits one level above the judge's working directory

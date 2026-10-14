@@ -1,0 +1,46 @@
+--- gold.html
++++ gold.html
+@@ -1475,8 +1475,8 @@
+           </li>
+         </ul>
+ 
+-        <div class="gap"><b>GAP</b><span>No test resizes a card and then applies the modal. No frontend test
+-          covers the modal's Apply at all.</span></div>
++        <div class="gap"><b>GAP</b><span>No test resizes a card and then applies the modal. No test covers a
++          layout save that omits a size.</span></div>
+       </section>
+ 
+       <section class="cp" id="cp-b">
+@@ -1548,10 +1548,10 @@
+           </li>
+         </ul>
+ 
+-        <p class="open"><b>Open question</b> Does hiding and re-showing the Reports section rebuild the
+-          component from cached, pre-resize data? If it does, the next resize or remove would send the old size
+-          back to the server <span class="tier tier-inf">inferred</span>. Impact path B shows where that would
+-          happen. Trying it in the browser would settle it.</p>
++        <p class="open"><b>Open question</b> Is it intended that showing the Reports section again rebuilds
++          the component from the cached, pre-resize data, so that the next resize or remove sends the old size
++          back to the server <span class="tier tier-inf">inferred</span>? Impact path B shows where that
++          happens.</p>
+       </section>
+ 
+       <section class="cp" id="cp-c">
+@@ -1562,7 +1562,7 @@
+           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R244-R246">app/controllers/admin/dashboard_controller.rb:244-246</a>,
+           in model validations at
+           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R40-R43">app/models/admin_dashboard_report.rb:40-43</a>,
+-          and in the client's clamps. The only production write goes through <code>insert_all</code>, which
++          and in the client's clamps. The only production write of <code>rows</code> and <code>cols</code> goes through <code>insert_all</code>, which
+           <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-insert_all">never instantiates a model</a> and so runs no validations,
+           and the table has no <code>CHECK</code>. So the model validations run only in seeds and specs, and
+           the controller's parser is the real guard. That parser is also shared with the bulk-fetch endpoint.
+@@ -1621,7 +1621,7 @@
+         </ul>
+ 
+         <p class="open"><b>Open question</b> Should the rule also be enforced by a database constraint, or by a
+-          validation run before the insert, given that the model validations never see a production write?</p>
++          validation run before the insert, given that the model validations never see a production write of a size?</p>
+       </section>
+ 
+       <section class="cp" id="cp-d">

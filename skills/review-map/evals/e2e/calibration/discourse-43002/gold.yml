@@ -6,6 +6,6 @@ effort: high
 generated: 2026-09-30
 run_batch: 20260930T022646Z
 certified_by: Jorge Bejar
-certified: 2026-09-30
-judges: [what-changed]   # § 01 only: the claims were checked against the diff at head
+certified: 2026-10-13
+judges: [what-changed, checkpoint-judgments, checkpoint-claims, reading-path, impact, evidence]   # every claim in each judge's parts checked against the code at head
 # Rung 1: every citation links to the pull request on GitHub.

@@ -112,8 +112,6 @@ module E2E
     dirty ? "#{sha}+dirty" : sha
   end
 
-  def self.file_sha(path) = Digest::SHA256.file(path).hexdigest[0, 12]
-
   def self.append(name, row)
     FileUtils.mkdir_p(RESULTS)
     File.open(File.join(RESULTS, "#{name}.jsonl"), "a") { |f| f.puts(JSON.generate(row)) }
@@ -140,21 +138,9 @@ module E2E
   # ------------------------------------------------------------------ the page
 
   # § 01's prose, as the agenda budget counts it: the paragraphs, bullets and before/after rows
-  # of <section id="changed">, never code, never a collapsed block, never the heading. Mechanical,
-  # so it is measured here rather than asked of the judge — counting is what a grader is worst at.
-  def self.section(html, id)
-    start = html.index(/<section\b[^>]*\bid="#{Regexp.escape(id)}"/) or return nil
-    depth = 0
-    html.to_enum(:scan, %r{<section\b|</section>}).each do
-      m = Regexp.last_match
-      next if m.begin(0) < start
-
-      depth += m[0] == "</section>" ? -1 : 1
-      return html[start...m.end(0)] if depth.zero?
-    end
-    nil
-  end
-
+  # of <section id="changed"> (Judge.part cuts it out), never the masthead, never code, never a
+  # collapsed block, never the heading. Mechanical, so it is measured here rather than asked of
+  # the judge — counting is what a grader is worst at.
   def self.prose_words(fragment)
     text = fragment.gsub(/<!--.*?-->/m, " ")
                    .gsub(%r{<(details|code|pre|h2|h3|figure)\b.*?</\1>}m, " ")

@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -1632,7 +1632,7 @@
+           width. Every other size, including a four-row card, goes straight to 1&times;1 and is saved. The
+           handle's own contract says to commit only when <code>moved</code> is set
+           <span class="tier tier-unc">from unchanged code</span>. This component commits on a click on purpose.
+-          Decide whether collapsing a tall card on an accidental click is the intended behaviour. On narrow
++          This is a bug: the click branch should widen a 1&times;1 card and leave every other size alone. On narrow
+           viewports the handles are hidden but <code>--rows-N</code> still spans rows, so a phone shows a tall card
+           that cannot be shrunk there.</p>
+ 

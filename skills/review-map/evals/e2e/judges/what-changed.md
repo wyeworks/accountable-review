@@ -1,10 +1,11 @@
 ---
-# The one working judge. Its model is pinned here rather than inherited, because the judge IS the
+# § 01: is what the masthead and What changed say true, at the level of deltas, attributed, limited
+# honestly and ungraded? Its model is pinned here rather than inherited, because the judge IS the
 # measurement: a cheaper or different grader does not make a number cheaper, it makes it softer.
 # Changing this line, or any byte of this file, invalidates calibration — judge.rb stamps the
-# file's sha on every verdict and calibrate.rb records which sha and model were calibrated.
+# instrument's sha on every verdict and calibrate.rb records which sha and model were calibrated.
 model: claude-opus-5-5
-section: changed
+parts: [masthead, changed]
 criteria:
   - >-
     ACCURATE. Every factual claim § 01 makes about what the change does — the problem it solves,
@@ -45,7 +46,7 @@ judgment to the sections after it.
 
 - The whole page: `{{PAGE}}`. Read it so you can tell whether § 01 repeats what a later section
   owns, but grade only § 01.
-- § 01 on its own: `{{SECTION}}`.
+- § 01 on its own, the masthead first and then the section: `{{SECTION}}`.
 - The repository is your working directory, checked out at the pull request's head `{{HEAD}}`.
   The base is `{{BASE}}`. `git diff {{BASE}}...{{HEAD}}`, `git log {{BASE}}..{{HEAD}}` and
   `git show` are available, as are Read, Grep and Glob.
