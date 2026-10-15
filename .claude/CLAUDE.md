@@ -175,7 +175,8 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
-| `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
+| `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/`, `setup-ci/tests/` and `bin/examples check` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
+| `bin/examples` | The published examples — `regen` regenerates each at the revision its committed `manifest.json` pins, `render` writes the provenance regions in `examples/README.md` and `examples/index.html`, `check` fails a version or a region gone stale. Outside `examples/` because Pages uploads that directory |
 | `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
 | `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one working judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release |
 | `evals/checks/` | One Ruby script per rule family, ten of them, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. A check that could only SKIP does not exist, because a SKIP reads as verified. `impact-paths.rb` grades `figure.impact` and nothing else; `figures.rb` grades a checkpoint's figures, `figure.chain` among them. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — which is a relation between the page and a repository, hence `golden/links-repo.sh` and `lib/review_map/fixture.rb`. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output, and `frozen.rb` verifies against it |
@@ -844,14 +845,22 @@ Editing one of these means checking the others still agree.
   rule. `page-invariants.rb` § 3 matches `class="tier` with any family modifier, behind
   `golden/invariants-tier-modifier-only.html`, which does not quote the attribute in its own header
   comment because § 3 reads raw bytes.
-- **A published example is regenerated, never edited, and it names the version that produced it.**
-  `examples/` holds real runs against public pull requests, served at
+- **A published example is regenerated every release, never edited, and nothing said about it is
+  typed.** `examples/` holds real runs against public pull requests, served at
   `wyeworks.github.io/accountable-review` by `.github/workflows/pages.yml`, which uploads that
-  directory and nothing else. Public repositories are required: a map whose every citation 404s is
-  not an example. A format change means running the skill again, not patching the HTML. These agree:
-  `examples/README.md` owns the provenance and the regeneration recipe **alone**,
-  `examples/index.html`'s foot and `README.md` § *Example Review Map* restate the version, and
-  `CONTRIBUTING.md`'s layout lists the directory.
+  directory and nothing else — so the tooling lives in `bin/`. Public repositories are required: a
+  map whose every citation 404s is not an example. Each example is the run's `index.html` and the
+  `manifest.json` written beside it, and **the manifest is both the pin and the provenance**.
+  `bin/examples regen` generates through `ci/generate-review-map.sh --output` at the pinned head with
+  the manifest's settings, refuses a page `check.rb --final` fails, and reuses the e2e harness's
+  checkout, force-push guard included. `render` writes every count, date and version into the named
+  `examples:begin` regions; `check`, in `bin/evals offline`, fails while a manifest names another
+  version than `plugin.json`, so a version bump is red until the examples are regenerated. **A
+  regenerated page is read before it is committed**, and a worse one is re-run, never edited. Prose
+  outside the regions says why a pull request was chosen and nothing a regeneration could falsify.
+  These agree: `bin/examples`; `examples/README.md`, which owns the provenance rule and the recipe
+  **alone**; `examples/index.html`; `README.md` § *Example Review Map*; `CONTRIBUTING.md`
+  § *Releasing*; `bin/evals` and `validate.yml`, which run `check`.
 - **The progress line is read, never guessed.** Two surfaces show a run in progress: the e2e board
   (`evals/e2e/progress.rb`) and the status line `hooks/progress.ts` sets in an interactive session.
   Each field comes from something the run produced: an engine event or a transcript line, the staged
@@ -1208,7 +1217,8 @@ project.
 receive a change once that field moves. **A release is the maintainer's decision, not a side effect
 of a change**: do not touch `version` in either manifest unless a bump is explicitly asked for. When
 a change would ship only with one, say so in a line and leave the field alone. When a release is
-asked for, bump both manifests in one commit and tag it.
+asked for, bump both manifests, run `bin/examples regen` and read the pages, commit the bump and
+the examples together, and tag it.
 
 ```bash
 claude plugin validate . --strict
