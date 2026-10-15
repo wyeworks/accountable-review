@@ -199,6 +199,18 @@ field moves, so bump it in the same commit as the change and tag the release. Bu
 `.codex-plugin/plugin.json` to the same value in the same commit — Codex users update on it the same
 way, and `tests/codex-plugin.rb` fails while the two differ.
 
+Then regenerate the published examples, after the bump and in the same pull request.
+`bin/examples check` (part of `bin/evals offline`) fails while an example names an older version.
+
+```bash
+export CLAUDE_CODE_OAUTH_TOKEN=$(claude setup-token)   # or ANTHROPIC_API_KEY
+bin/examples regen
+```
+
+Read each regenerated page before committing it, against the four questions in
+`.claude/CLAUDE.md` § *What to check on every run*. A page that came out worse is re-run, never
+edited. `examples/README.md` has the rest.
+
 Before a **major** release, run the end-to-end evals and keep what they said: calibrate, run every
 `eval` PR three times, and commit the summary beside the release.
 

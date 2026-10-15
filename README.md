@@ -575,12 +575,13 @@ Two, against real pull requests in public Rails codebases:
 
 | | |
 | --- | --- |
-| [**RubyGems.org #6699**](https://wyeworks.github.io/accountable-review/rubygems-6699/) — *Record every stint a user spends owning or maintaining a gem* | 11 files, 4 checkpoints, no *Context*. An additive diff that all looks safe — a new table, its callbacks, a backfill — where the judgments are about unchanged callers. Its figure draws every path that ends an ownership converging on the one history row each must close, and its impact section shows a bulk demotion, in code the PR never touched, leaving `owner` in the history it writes. |
-| [**Discourse #43845**](https://wyeworks.github.io/accountable-review/discourse-43845/) — *Email-code signup collects its details before it creates the account* | 36 files, 6 checkpoints. The case the format exists for: most of what a reviewer has to decide is not in the diff — whether every request that creates an account still passes the CAPTCHA, and what the new signup step does for a visitor who is not logged in yet. Its *Context* section draws the signup requests before and after, so the account-creating request is seen moving before any checkpoint relies on it. |
+| [**RubyGems.org #6699**](https://wyeworks.github.io/accountable-review/rubygems-6699/) — *Record every stint a user spends owning or maintaining a gem* | An additive diff that all looks safe — a new table, its callbacks, a backfill — where the judgments are about unchanged callers: every path that starts or ends an ownership has to keep the new history in step with it, including the ones that never run the callbacks. |
+| [**Discourse #43845**](https://wyeworks.github.io/accountable-review/discourse-43845/) — *Email-code signup collects its details before it creates the account* | The case the format exists for: most of what a reviewer has to decide is not in the diff — whether every request that creates an account still passes the CAPTCHA, and what the new signup step does for a visitor who is not logged in yet. The change moves which request creates the account, and the page shows that move before any checkpoint relies on it. |
 
 They are public repositories on purpose: every `file:line` citation on those pages resolves, so you
 can follow any claim into the code it is about. Both are ordinary output at the default settings,
-unedited after the run produced them.
+unedited after the run produced them, and regenerated with every release; [`examples/README.md`](examples/README.md)
+says which version and revision each one is.
 
 Worth opening them for:
 

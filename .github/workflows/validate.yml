@@ -68,6 +68,10 @@ jobs:
       # hooks/activity.json is read by the e2e board in Ruby and by the status line in
       # JavaScript; this holds the one table to both readers, and breaks it to prove it looks.
       - run: ruby skills/review-map/tests/activity.rb
+      # The published examples under examples/: every manifest names this plugin version, so a
+      # release cannot ship with maps a release older, and the provenance bin/examples renders
+      # from the manifests and pages is current. No model; regenerating is bin/examples regen.
+      - run: ruby bin/examples check
 
   ci-setup:
     runs-on: ubuntu-latest
