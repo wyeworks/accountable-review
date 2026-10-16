@@ -751,12 +751,12 @@
     ]
   },
   "evidence": {
-    "judge_sha": "0ef891249500",
+    "judge_sha": "896d85a4f146",
     "model": "claude-opus-5-5",
     "k": 3,
     "need": 2,
     "calibrated": true,
-    "date": "2026-10-15T21:24:01Z",
+    "date": "2026-10-16T12:32:01Z",
     "prs": [
       "discourse-43002"
     ],
@@ -803,7 +803,6 @@
         "criterion": 1,
         "expected": "pass",
         "got": [
-          "fail",
           "pass",
           "pass"
         ],
@@ -817,7 +816,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -829,7 +827,6 @@
         "criterion": 3,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -1140,12 +1137,12 @@
     ]
   },
   "impact": {
-    "judge_sha": "459120372c2f",
+    "judge_sha": "d5f21403003a",
     "model": "claude-opus-5-5",
     "k": 3,
     "need": 2,
     "calibrated": true,
-    "date": "2026-10-15T17:46:41Z",
+    "date": "2026-10-16T12:23:43Z",
     "prs": [
       "discourse-43002"
     ],
@@ -1156,9 +1153,8 @@
         "criterion": 1,
         "expected": null,
         "got": [
-          "fail",
           "pass",
-          "fail"
+          "pass"
         ],
         "gated": false,
         "held": true
@@ -1169,7 +1165,6 @@
         "criterion": 2,
         "expected": "pass",
         "got": [
-          "fail",
           "pass",
           "pass"
         ],
@@ -1183,7 +1178,6 @@
         "expected": "fail",
         "got": [
           "fail",
-          "fail",
           "fail"
         ],
         "gated": true,
@@ -1195,7 +1189,6 @@
         "criterion": 4,
         "expected": "fail",
         "got": [
-          "fail",
           "fail",
           "fail"
         ],
@@ -1269,7 +1262,7 @@
         "expected": "pass",
         "got": [
           "pass",
-          "fail"
+          "pass"
         ],
         "gated": false,
         "held": true
@@ -1425,7 +1418,7 @@
         "expected": "pass",
         "got": [
           "pass",
-          "fail"
+          "pass"
         ],
         "gated": false,
         "held": true
