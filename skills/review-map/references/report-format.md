@@ -1597,7 +1597,8 @@ that judges it.
 
 ```html
 <p class="ip-why">Events created before this migration can carry a null location, and the
-registration mailer interpolates it without a guard. <a href="#cp-b">Checkpoint B</a></p>
+registration mailer interpolates it without a guard <span class="tier tier-unc">from unchanged code</span>.
+<a href="#cp-b">Checkpoint B</a></p>
 ```
 
 It exists because a card otherwise opens on geometry. The header names a behaviour and the next thing
@@ -1607,6 +1608,13 @@ and the one figure on the page that is *about* consequences made its consequence
 **It must not walk the hops.** A paragraph naming the chain in sequence makes one of the two
 redundant, and that is precisely the failure the box grid had: a figure with a footnote supplying the
 edges it could not draw. Say the consequence; let the figure say the mechanism.
+
+**It carries the tier the checkpoint gave the claim.** The why restates a consequence the
+checkpoint already labelled — `from unchanged code` because the mailer above is in a file the diff
+does not touch, `inferred` because an interleaving is reasoning about an order no line shows — and
+the label travels with the sentence. A reader who meets the claim here first has no other way to
+know what it rests on, and a why with no label says the diff shows it. § *Evidence tiers* owns the
+rule for every field that restates a claim; this is the field that most often drops it.
 
 **It orients, it does not explain.** The checkpoint owns the explanation, and § *One canonical home*
 applies here exactly as it does to the affected entries below — this is why the paragraph ends in a
@@ -2180,7 +2188,11 @@ miscounted first screen, and the reader who adds it up stops trusting the number
 **Then one paragraph, 80 to 160 words, and at most a handful of bullets.** What problem this solves,
 what is now true that was not, who is affected. Derived from the code, the tests and the commits —
 the PR description is a claim and is attributed when it is used, per `SKILL.md` step 4. Carry an
-evidence tier on the intent itself if it is inferred rather than stated.
+evidence tier on the intent itself if it is inferred rather than stated, and on a consequence this
+paragraph states ahead of the checkpoint that explains it — what used to happen, what a reader sees
+now — the tier that checkpoint gives it: `from unchanged code` where the behaviour sits in a file
+the diff does not touch. The label travels with the restatement (§ *Evidence tiers*); the first
+screen is where a reader meets the claim first.
 
 **It may say a test was added; it never says the tests cover the change.** *Pin each of them*,
 *covered by specs*, *both behaviours are tested* — each is a sentence about how well the change is

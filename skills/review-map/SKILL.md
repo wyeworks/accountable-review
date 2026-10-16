@@ -1388,7 +1388,9 @@ Everything else about writing holds at every stage:
   panel this replaced was a grid of boxes, and every real page filled the boxes with prose to supply
   the relation the layout could not express — which is the failure to watch for coming back.
 - **Every card opens with its `p.ip-why`, and every code node carries its locator.** The paragraph
-  says what goes wrong and to whom and points at a checkpoint; it never walks the chain, because a
+  says what goes wrong and to whom and points at a checkpoint, **carrying the tier the checkpoint
+  gave the claim** — a why restates a `from unchanged code` or `inferred` consequence a section
+  later, and unlabelled it says the diff shows it; it never walks the chain, because a
   paragraph that names the hops in sequence makes one of the two redundant. The locator is
   `a.path.ip-loc`, last inside the box — `{{DIFF}}` on a changed node, `{{BLOB}}` on an unchanged
   one, and never on the outcome, which is a behaviour rather than a file. Both apply to a
