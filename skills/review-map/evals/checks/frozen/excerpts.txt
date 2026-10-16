@@ -10,6 +10,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page agenda-clean.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -22,6 +23,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment agenda-probe-unlabelled.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -34,6 +36,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page agenda-probe-unlabelled.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -46,6 +49,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment agenda-probes-over-budget.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -58,6 +62,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page agenda-probes-over-budget.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -70,6 +75,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment anchors-clean.html
 exit=0
 SKIP  no excerpts in this input
@@ -154,6 +160,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page anchors-link-in-excerpt.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -166,6 +173,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment anchors-mixed-series.html
 exit=0
 SKIP  no excerpts in this input
@@ -382,6 +390,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-at-head.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -394,6 +403,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-clean.html
 exit=0
 PASS  1 source excerpt(s), each with a summary
@@ -406,6 +416,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-clean.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -418,6 +429,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-diff-lang.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -430,6 +442,7 @@ PASS  no hand-written syntax colouring inside a quotation
 FAIL  a --diff excerpt carries data-lang — only unchanged code is tinted, a hunk is two realities interleaved
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-diff-lang.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -442,6 +455,7 @@ PASS  no hand-written syntax colouring inside a quotation
 FAIL  a --diff excerpt carries data-lang — only unchanged code is tinted, a hunk is two realities interleaved
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -454,6 +468,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -466,6 +481,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-linked-clean.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -478,6 +494,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-linked-clean.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -490,6 +507,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-linked-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -502,6 +520,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-linked-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -514,6 +533,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-open.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -526,6 +546,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-open.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -538,6 +559,59 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
+## --fragment excerpt-overlap-clean.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
+## --page excerpt-overlap-clean.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
+## --fragment excerpt-overlap.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+WARN  excerpts quote overlapping lines: lib/oauth.rb:54-66 and lib/oauth.rb:54-56 — the same lines twice, or one of the two entries cites the wrong block
+## --page excerpt-overlap.html
+exit=1
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+WARN  excerpts quote overlapping lines: lib/oauth.rb:54-66 and lib/oauth.rb:54-56 — the same lines twice, or one of the two entries cites the wrong block
 ## --fragment excerpt-typed-highlight.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -550,6 +624,7 @@ FAIL  hljs- classes are written into the markup — the tint is the page script'
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-typed-highlight.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -562,6 +637,7 @@ FAIL  hljs- classes are written into the markup — the tint is the page script'
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-typed-tag.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -574,6 +650,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-typed-tag.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -586,6 +663,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-unchanged-changed-file.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -598,6 +676,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page excerpt-unchanged-changed-file.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -610,6 +689,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment figures-chain-aff.html
 exit=0
 SKIP  no excerpts in this input
@@ -874,6 +954,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page invariants-loose-data-path.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -886,6 +967,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment invariants-no-tier.html
 exit=0
 SKIP  no excerpts in this input
@@ -922,6 +1004,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page invariants-section-sign-quoted.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -934,6 +1017,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment invariants-section-sign.html
 exit=0
 SKIP  no excerpts in this input
@@ -1006,6 +1090,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page links-clean.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1018,6 +1103,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment links-collapsed-anchor.html
 exit=0
 SKIP  no excerpts in this input
@@ -1096,6 +1182,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page start-here-orphan-checkpoint.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -1108,6 +1195,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment start-here-style-comment.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -1120,6 +1208,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page start-here-style-comment.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -1132,6 +1221,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment start-here-two-lists.html
 exit=0
 SKIP  no excerpts in this input
@@ -1150,6 +1240,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --page page-template.html
 exit=1
 PASS  3 source excerpt(s), each with a summary
@@ -1162,6 +1253,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 PASS  syntax tints defined in all three theme blocks
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-clean.html
 exit=0
 PASS  1 source excerpt(s), each with a summary
@@ -1174,6 +1266,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-open.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1186,6 +1279,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -1198,6 +1292,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-linked-clean.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -1210,6 +1305,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-linked-duplicate.html
 exit=1
 PASS  2 source excerpt(s), each with a summary
@@ -1222,6 +1318,33 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
+PASS  no two excerpts quote overlapping lines
+## --fragment excerpt-overlap.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+WARN  excerpts quote overlapping lines: lib/oauth.rb:54-66 and lib/oauth.rb:54-56 — the same lines twice, or one of the two entries cites the wrong block
+## --fragment excerpt-overlap-clean.html
+exit=0
+PASS  2 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+SKIP  state tags against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-typed-highlight.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1234,6 +1357,7 @@ FAIL  hljs- classes are written into the markup — the tint is the page script'
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-diff-lang.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1246,6 +1370,7 @@ PASS  no hand-written syntax colouring inside a quotation
 FAIL  a --diff excerpt carries data-lang — only unchanged code is tinted, a hunk is two realities interleaved
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-unchanged-changed-file.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1258,6 +1383,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -1270,6 +1396,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-typed-tag.html
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1282,6 +1409,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-unchanged-changed-file.html --repo searches-repo --base 0000000000000000000000000000000000000000
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1295,6 +1423,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-at-head.html --repo searches-repo --base 0000000000000000000000000000000000000000
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -1308,6 +1437,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-typed-tag.html --repo searches-repo --base 0000000000000000000000000000000000000000
 exit=1
 PASS  1 source excerpt(s), each with a summary
@@ -1321,6 +1451,7 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment agenda-clean.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -1333,3 +1464,4 @@ PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only
 SKIP  syntax tints: a fragment carries no token block
 PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines

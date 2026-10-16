@@ -340,6 +340,18 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page excerpt-open.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-overlap-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-overlap-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-overlap.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-overlap.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment excerpt-typed-highlight.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

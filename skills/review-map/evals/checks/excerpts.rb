@@ -218,4 +218,23 @@ else
   check.bad("the same range is excerpted more than once: #{duplicated.join(" ")} ")
 end
 
+# Overlapping ranges in one file: the same lines quoted twice under two different locations,
+# which the literal test above cannot see. It is also the one mechanical trace of an entry
+# quoting the wrong block — a run that cited a revocation loop for a claim about an assignment
+# collided with the entry that cited the loop correctly, 54-66 around 54-56. A WARN, because a
+# FAIL here teaches a run to shift a range by a line until the two stop touching; which of the
+# two is the wrong citation is a reader's question.
+ranges = locations.uniq.filter_map do |loc|
+  m = loc.strip.match(/\A(.+):(\d+)(?:-(\d+))?\z/)
+  m && [loc.strip, m[1], m[2].to_i, (m[3] || m[2]).to_i]
+end
+overlapping = ranges.combination(2).filter_map do |(a, path_a, from_a, to_a), (b, path_b, from_b, to_b)|
+  "#{a} and #{b}" if path_a == path_b && from_a <= to_b && from_b <= to_a
+end
+if overlapping.empty?
+  check.ok("no two excerpts quote overlapping lines")
+else
+  check.maybe("excerpts quote overlapping lines: #{overlapping.first(3).join("; ")} — the same lines twice, or one of the two entries cites the wrong block")
+end
+
 check.finish

@@ -346,6 +346,18 @@ SKIP  no checkpoint figure in this input
 ## --page excerpt-open.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-overlap-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-overlap-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-overlap.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-overlap.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment excerpt-typed-highlight.html
 exit=0
 SKIP  no checkpoint figure in this input

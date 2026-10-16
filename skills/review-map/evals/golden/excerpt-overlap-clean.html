@@ -1,0 +1,27 @@
+<!-- The clean twin of excerpt-overlap.html: two excerpts of one file whose ranges touch and do
+     not overlap, 54-56 and 57-66. It pins the boundary, so a comparison that went off by one, or
+     stopped comparing at all, turns the row red. -->
+<section id="cp-b">
+  <ul class="lookat">
+    <li><b>The skipped assignment</b>
+      <span>name and redirect URIs come from metadata only while the flag is false</span>
+      <details class="excerpt excerpt--source">
+        <summary><span class="ex-loc"><a class="cite" href="#">lib/oauth.rb:57-66</a></span>
+          <span class="tag">At head</span></summary>
+        <div class="ex-body">
+<pre class="codeblock" data-src="lib/oauth.rb"><span class="l">  if previous_hash != metadata_hash</span>
+</pre>
+        </div>
+      </details></li>
+    <li><b>Re-consent on any metadata change</b>
+      <span>still keyed to the whole document</span>
+      <details class="excerpt excerpt--source">
+        <summary><span class="ex-loc"><a class="cite" href="#">lib/oauth.rb:54-56</a></span>
+          <span class="tag">At head</span></summary>
+        <div class="ex-body">
+<pre class="codeblock" data-src="lib/oauth.rb"><span class="l">  if previous_hash != metadata_hash</span>
+</pre>
+        </div>
+      </details></li>
+  </ul>
+</section>

@@ -724,6 +724,30 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment excerpt-overlap-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page excerpt-overlap-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment excerpt-overlap.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page excerpt-overlap.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+PASS  section 04 is a single list
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 ## --fragment excerpt-typed-highlight.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none

@@ -478,6 +478,18 @@ SKIP  no .impact panel in this input
 ## --page excerpt-open.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment excerpt-overlap-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page excerpt-overlap-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment excerpt-overlap.html
+exit=0
+SKIP  no .impact panel in this input
+## --page excerpt-overlap.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment excerpt-typed-highlight.html
 exit=0
 SKIP  no .impact panel in this input
