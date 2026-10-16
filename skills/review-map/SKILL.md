@@ -1080,10 +1080,14 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
 - **Label the tier of anything the diff does not show directly.** Five tiers, rendered per
   `references/report-format.md`: explicitly changed · evidenced by unchanged code · inferred from
   tests · inferred from naming or architecture · uncertain. Silence means the first one. Never let an
-  inference sit in the page wearing the clothes of a fact. Two wear them most often, because the
-  diff shows the lines they are built from: what happens when two requests interleave, and that
-  nothing else reads, writes or calls something. The reference's § *Evidence tiers* says what each
-  needs before it is stated plainly.
+  inference sit in the page wearing the clothes of a fact. Three wear them most often, because the
+  page shows the lines they are built from: what happens when two requests interleave, that nothing
+  else reads, writes or calls something, and what the language or a library does with a value. The
+  reference's § *Evidence tiers* says what each needs before it is stated plainly.
+- **No label is not no citation.** A claim about an untouched line of a changed file carries no
+  tier, and so it carries that line's citation at the claim, in the open page — the diff view does
+  not show it, and without the line the reader has no way to check the sentence. A tier or a
+  citation in another field, or in the shut search record, does not cover it.
 - **Tests are evidence of intent, not proof of correctness.** Say which behaviour they pin, which
   branch they leave open, and what still needs a human to exercise it.
 - Where you could not confirm something, put it in the page as an open question. Do not round

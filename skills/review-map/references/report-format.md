@@ -888,12 +888,27 @@ unchanged by file in every place the word appears — this tier, an excerpt's `U
 — and one page meaning two things by it leaves the reader unable to tell which. Where the line-level
 fact is the point, the prose says it: *"`valid_redirect_uri?`, which this change does not touch"*.
 
+**No label is not no citation.** Silence means *the diff shows this*, and for an untouched line of a
+changed file the diff view does not: the reader can only check the claim if the page hands them the
+line. So the citation is the label's replacement and is just as required — an `a.path` or an
+excerpt's summary location **at the claim**, in the open page. A line in the search record does not
+count, because the record is shut; neither does a citation elsewhere on the page to a different
+range of the same file. Before writing a sentence about what an untouched method of a changed file
+does — what `valid_redirect_uri?` accepts, which clients `resolve!` returns early for, what the
+presets already contain — name its lines, and if they are not cited in that field, cite them.
+
 The other direction is the commoner miss. A claim resting **only** on a file outside the diff — what
 the consent screen shows, which controller reads the list — is not something the diff shows, so it
 carries `from unchanged code` even when it reads as plain description. Unlabelled, it claims the
 first tier.
 
-**Two kinds of claim pass as fact most often, because each is built from lines the diff does show.**
+**A tier labels the claim it sits against, and no other.** A paragraph that says *the authorize
+endpoint checks the stored list* and a *Look at* entry beneath it that cites the controller with
+`from unchanged code` are two fields making the same claim, and the label on the entry does not
+reach the paragraph: a reader of the paragraph meets an unlabelled claim. Each field carries its own
+tier where it states the claim — or the paragraph points at the entry instead of restating it.
+
+**Three kinds of claim pass as fact most often, because each is built from lines the page does show.**
 
 - **What happens when two things interleave.** The lock, the reload and the re-check are in the
   diff; what they guarantee when an edit lands during a refresh's fetch is reasoning about an order
@@ -905,6 +920,10 @@ first tier.
   it carries `inferred` or does not go on the page. These are the sentences most often false at
   head: a create action, a backfill, or a view that displays the value is the reader nobody looked
   for.
+- **What the language or a library does with a value.** The line calls `URI.parse`; what
+  `URI.parse` makes of `https://a.example/cb,https://b.example/cb` is not on that line, or on any
+  line in the repository. Unless a test feeds it that value, it carries `inferred` — and a page that
+  proposes a probe to confirm it has said as much, so the label has to agree with the probe.
 
 **Label only the tiers that are not "explicitly changed."** Labelling everything is noise, and noise
 gets skipped, which defeats the purpose. Labelling nothing lets inference pass as fact, which is
