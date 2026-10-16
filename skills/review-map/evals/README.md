@@ -204,8 +204,9 @@ is a read or a call the code performs, a reading-path stop's *why* is true, § 0
 and an inference is not stated as fact. A **form** criterion asks whether a true page is built
 right: the tier is on the claim it qualifies, the excerpt is earned, the page reads complete when
 shut, the heading is a judgment and not a category, the stop points at the checkpoint whose
-judgment turns on its code, the order has a reason. Each judge's frontmatter names its class per
-criterion, and a criterion that mixes the two is split — the evidence judge's first criterion is
+judgment turns on its code, the order has a reason. `e2e/criteria.yml` names each criterion's class — beside the thresholds and never in the
+judge's file, whose bytes are the instrument sha; a key added there would uncalibrate every
+judge — and a criterion that mixes the two is split — the evidence judge's first criterion is
 the one that does today, and § *Making the number trustworthy* phase 2 is the split.
 
 1. **Mechanical checks stay at zero.** `check.rb` is deterministic, so a FAIL is a bug and never
@@ -263,7 +264,8 @@ before any rule is written for the prose: if the challenge was raised and not fo
 in step 8; if it was never raised, in the mandate. The prose is the third suspect, not the first.
 
 The thresholds live in `e2e/summary.rb` (the badge per criterion and per repetition) and
-`e2e/report.rb` (the release table), the class in each judge's frontmatter; this section owns the
+`e2e/report.rb` (the release table), the class in `e2e/criteria.yml`, and `e2e/test_grade.rb` holds
+the arithmetic and the drift check between that file and the judges; this section owns the
 reasoning. Nothing about them reaches the skill's prose.
 
 ## Making the number trustworthy
@@ -273,7 +275,10 @@ loop can see, and only then is a prose change measurable. Each phase has an exit
 
 1. **Freeze and baseline.** No new rule in the skill's prose until phase 4 is done. `lib.rb` stamps
    a result `+dirty` when `skills/review-map` or `agents` has uncommitted changes; `run.rb` refuses
-   that unless `--allow-dirty` is passed, so every row is attributable to a sha. `summary.rb` and
+   that unless `--allow-dirty` is passed, so every row is attributable to a sha. The paths are the
+   bytes a run reads — `SKILL.md`, `references/`, `scripts/`, `agents/` — never `evals/` or
+   `tests/`, because a harness edit changes nothing about the page and a sha that moved on one would
+   separate rows that measure the same prose. `summary.rb` and
    `report.rb` report the per-criterion pooled rate as the headline number and the all-criteria
    repetition count second. *Exit*: `bin/evals report` shows a rate per criterion per sha.
 

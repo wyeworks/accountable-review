@@ -3,7 +3,7 @@
 
 # run.rb — generate a Review Map of a real pull request, check it, judge it, record it.
 #
-#   e2e/run.rb <id> [-n N] [-j N] [--effort high|low] [--model M] [--no-judge] [--keep]
+#   e2e/run.rb <id> [-n N] [-j N] [--effort high|low] [--model M] [--no-judge] [--keep] [--allow-dirty]
 #   e2e/run.rb <id> --rejudge RUNDIR   # check and judge a run that already exists; no generation
 #   e2e/run.rb --list
 #
@@ -42,6 +42,7 @@ OptionParser.new do |o|
   o.on("--model M", "the PRODUCING model; the judge's is pinned in its file") { |v| opts[:model] = v }
   o.on("--no-judge", "generate and check only") { opts[:judge] = false }
   o.on("--keep", "keep the worktree") { opts[:keep] = true }
+  o.on("--allow-dirty", "generate from uncommitted skill prose; the row is stamped +dirty") { opts[:allow_dirty] = true }
   o.on("--rejudge DIR", "re-check and re-judge an existing run directory instead of generating") { |v| opts[:rejudge] = File.expand_path(v) }
   o.on("--list", "list the PRs in prs.yml") do
     E2E.prs.each { |p| puts format("%-20s %-11s %-6s %s#%d", p.id, p.role, p.stack, p.repo, p.pr) }
@@ -51,6 +52,19 @@ end.parse!
 
 id = ARGV.shift or abort("usage: run.rb <id> [-n N] … (run.rb --list for the ids)")
 pr = E2E.pr(id)
+
+# A row is attributable to a sha or it is not a measurement: evals/README.md § Making the number
+# trustworthy. Uncommitted prose is refused up front rather than stamped +dirty and compared with
+# rows that were. A re-judge carries the original row's stamp, so it is exempt.
+if !opts[:rejudge] && !opts[:allow_dirty] && E2E.skill_sha.end_with?("+dirty")
+  abort <<~MSG
+    e2e: the skill has uncommitted changes (#{E2E::SKILL_PATHS.join(', ')}), so this batch would be
+    stamped #{E2E.skill_sha} and attributable to no sha. Commit them first, or pass --allow-dirty
+    for a smoke run whose row will never count toward a release.
+
+    Nothing was generated.
+  MSG
+end
 
 creds = %w[ANTHROPIC_API_KEY CLAUDE_CODE_OAUTH_TOKEN CLAUDE_CODE_USE_BEDROCK CLAUDE_CODE_USE_VERTEX]
 if !opts[:rejudge] && creds.none? { |k| ENV[k].to_s != "" }
@@ -219,7 +233,7 @@ at_exit { $board.stop }
 if opts[:rejudge]
   repetition(pr, opts, stamp, batch, 1)
   $board.stop
-  exit(Summary.print(pr, $rows) == :fail ? 1 : 0)
+  exit(Summary.print(pr, $rows) == :block ? 1 : 0)
 end
 
 queue = Queue.new
@@ -235,4 +249,4 @@ workers.each(&:join)
 $board.stop
 # Exit 1 only on a FAIL. A LOOK — a calibrated judge that could not tell — exits 0, because a
 # person has to read it and a red exit would say the page was wrong when nobody knows yet.
-exit(Summary.print(pr, $rows) == :fail ? 1 : 0)
+exit(Summary.print(pr, $rows) == :block ? 1 : 0)
