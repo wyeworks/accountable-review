@@ -33,9 +33,11 @@ good is not your question and nothing you write may answer it.
 
 The section is **§ 05, Impact outside the diff**: `<section id="impact">`. It holds one to three
 impact paths in `figure.impact`, one per `.ip-card`. A path is an `ol.ip-path` of nodes: it starts
-in code the PR changed (`.ip-chg`), passes through at least one unchanged consumer whose meaning
-the change altered (`.ip-aff`, *affected, not changed*), and ends at an observable behaviour
-(`.ip-out`). Every hop after the first carries its incoming relation as a causal verb in
+in a file the PR changes (`.ip-chg`, the *In this PR's files* lane), passes through at least one
+consumer in a file the PR does not touch whose meaning the change altered (`.ip-aff`, *affected,
+not changed*), and ends at an observable behaviour (`.ip-out`). **The lanes split by file, not by
+line**: an `.ip-chg` node may cite a line of a changed file that the PR did not edit, and that is
+correct, never a mislabel. Every hop after the first carries its incoming relation as a causal verb in
 `.ip-rel`, and each code node carries its citation as an `a.path.ip-loc`.
 
 **A verb reads from the node above to the node below**: *`A` — read by — `B`* means B reads A,

@@ -442,13 +442,14 @@ Editing one of these means checking the others still agree.
   Labelling everything is noise, and noise gets skipped.
 
   **Changed and unchanged split by file, everywhere the page says either.** An untouched line of a
-  changed file is changed code for the tier, the excerpt's `Unchanged` tag, the `.ip-aff` node and
-  the *Affected, not changed* lists alike, because one word meaning two things on one page leaves
-  the reader unable to tell which. `report-format.md` § *Evidence tiers* states it for the tier; §
-  *Source excerpts* and § *Impact paths* state it for their components; `SKILL.md` step 6 files such
-  a hop under *Trace*; and `excerpts.rb`, `impact-paths.rb` and `searches.rb` hold the tag, the node
-  and the list against one changed set, `checks/lib/review_map/changed.rb`. The tier has no check;
-  the `evidence` judge reads it.
+  changed file is changed code for the tier, the excerpt's `Unchanged` tag, the `.ip-aff` node, the
+  impact lanes (*In this PR's files*, *Outside the diff*) and the *Affected, not changed* lists
+  alike, because one word meaning two things on one page leaves the reader unable to tell which.
+  `report-format.md` § *Evidence tiers* states it for the tier; § *Source excerpts* and § *Impact
+  paths* state it for their components; `SKILL.md` step 6 files such a hop under *Trace*; and
+  `excerpts.rb`, `impact-paths.rb` and `searches.rb` hold the tag, the node and the list against one
+  changed set, `checks/lib/review_map/changed.rb`. The tier has no check; the `evidence` judge reads
+  it.
 - **Framework anchors are provenance, not evidence, and there is no sixth tier.** A doc link explains
   why a framework consequence follows; a console probe asks the reviewer's own application; a primer
   states the rule outright, at `--mentor` only. The claim keeps resting on a repo `file:line` at the

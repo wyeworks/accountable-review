@@ -501,7 +501,7 @@ from these same boxes, and § *Topology figures* owns them.
 
 | Kind | Class | Means | Legal in |
 |---|---|---|---|
-| Changed by this PR | `.ip-n.ip-chg` | code the diff touches | both figures |
+| In this PR's files | `.ip-n.ip-chg` | code in a file the diff touches, edited or not | both figures |
 | Affected, not changed | `.ip-n.ip-aff` | unchanged code whose meaning the change altered — a finding | `figure.impact`, and the two fan-in figures in § *Topology figures*; **never `figure.chain`** |
 | Step | `.ip-n.ip-step` | a hop the value passes through that claims nothing about the diff — a framework layer, an unchanged pass-through, the browser | `figure.chain` only |
 | Outcome | `.ip-n.ip-out` | what a user or an operator sees; last, exactly once | both figures |
@@ -1523,18 +1523,23 @@ first-class part, and adjacency is not asked to imply anything.
 
 | Kind | Class | Reads as |
 |---|---|---|
-| Changed by this PR | `.ip-chg` | solid border, page ground |
+| In this PR's files | `.ip-chg` | solid border, page ground |
 | Affected, not changed | `.ip-aff` | dashed border, teal ground and teal clause |
 | Behaviour / outcome | `.ip-out` | filled, ink ground |
 
-`.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
-left, *the existing system* on the right, with a **dotted** rule between them — is **derived from
-the kind and never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an
+`.legend` is required and names all three. The lane a node sits in — *in this PR's files* on the
+left, *outside the diff* on the right, with a **dotted** rule between them — is **derived from the
+kind and never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an
 observable behaviour belongs to neither half. So the boundary the reader sees is structurally true,
 and there is no lane class for a run to put on the wrong node.
 
+**The lanes name files, not edits**, because the left lane is where the reader opens the code: the
+file they are already scrolling in *Files changed*. A node there may be a line this PR did not edit
+— the method beside the one it added — and the label stays true of it. When the line being
+untouched is the point, the node's `.ip-d` says so, as § *Evidence tiers* has the prose say it.
+
 **The dash is no longer carrying the distinction alone.** `.ip-aff` is teal — ground, border and
-its `.ip-d` clause — because *changed by this PR* against *the existing system* is the most
+its `.ip-d` clause — because *in this PR's files* against *outside the diff* is the most
 load-bearing thing this figure draws and it was being encoded by border style over two near-identical
 greys. Teal is the page's word for **not in the diff** everywhere else too (the `tier-unc` label, the
 *Affected, not changed* lists), so a node and the entry beneath the panel that names it are visibly
@@ -1547,7 +1552,7 @@ and the panel has to survive being printed.
 and that split is load-bearing rather than decorative: the divider began as a 1px solid hairline in
 the connectors' own ink, so the one line on the figure carrying no direction looked exactly like
 the lines that do, and a path crossing it read as joining it. Dashes are already how `.ip-aff` says
-*the existing system*, so anything drawn solid is now part of a chain and nothing else is.
+*outside the diff*, so anything drawn solid is now part of a chain and nothing else is.
 
 **One path per `.ip-card`, and the card is the frame.** `.impact` is a group, not a box: it carries
 the label, the one `.legend` for every card, and the note. Each card holds its own `.ip-hd` naming

@@ -13,6 +13,8 @@ criteria:
     `uncertain` and says what would settle it. An inference stated as plain fact fails, and so does a label on a claim
     the diff shows. A claim resting on untouched lines of a file the diff changes needs a citation,
     not a tier, and an entry under an *Affected, not changed* heading is labelled by that heading.
+    The same by-file split holds for an impact path's `.ip-chg` node: on an untouched line of a
+    changed file it is in its right lane, and it claims nothing about that line being edited.
     Check the claims against the code.
   - >-
     EVERY EXCERPT IS EARNED. Each `details.excerpt` sits beside the claim or *Look at* entry it
