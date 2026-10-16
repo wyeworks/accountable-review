@@ -907,6 +907,10 @@ endpoint checks the stored list* and a *Look at* entry beneath it that cites the
 `from unchanged code` are two fields making the same claim, and the label on the entry does not
 reach the paragraph: a reader of the paragraph meets an unlabelled claim. Each field carries its own
 tier where it states the claim — or the paragraph points at the entry instead of restating it.
+**Every field that restates a claim is one of these**: a checkpoint's paragraph, a *Look at* clause,
+an impact card's `p.ip-why`, a reading-path stop's why. A consequence Checkpoint D labels `inferred`
+is still inferred when Impact path B's `p.ip-why` says it a section later, and a reader who meets it
+there first has no way to know.
 
 **Three kinds of claim pass as fact most often, because each is built from lines the page does show.**
 
@@ -915,15 +919,22 @@ tier where it states the claim — or the paragraph points at the entry instead 
   no line shows. It carries `inferred`, or `inferred from tests` where a spec runs that interleaving,
   and it names the ordering it reasoned about. Stated plainly, it claims the code was seen doing it.
 - **That nothing else does something.** *Read only by the refresh*, *nothing else writes the flag*,
-  *no other caller* — an absence rests on a search, not on a line. It is stated only where a search
-  recorded in § *What was searched* returned nothing, and then in that search's scope; without one
-  it carries `inferred` or does not go on the page. These are the sentences most often false at
-  head: a create action, a backfill, or a view that displays the value is the reader nobody looked
-  for.
+  *no other caller* — an absence rests on a search, not on a line, and the search reaches files the
+  diff does not touch. So it carries `from unchanged code`, and it is stated only where a search
+  recorded in § *What was searched* backs it, in that search's scope; without one it carries
+  `inferred` or does not go on the page. **It names every hit it sets aside.** A search for the flag
+  returns the create action, the backfill and the serializer as well as the resolver, and *the
+  resolver is its only reader* is true only once each of the others is named and excluded — *the
+  only reader that decides anything; the serializer passes it to the UI for display*. A run that
+  searched and then wrote *only* without listing the hits is the run that misread its own results:
+  these are the sentences most often false at head, and the reader nobody accounted for was in the
+  search output every time.
 - **What the language or a library does with a value.** The line calls `URI.parse`; what
   `URI.parse` makes of `https://a.example/cb,https://b.example/cb` is not on that line, or on any
-  line in the repository. Unless a test feeds it that value, it carries `inferred` — and a page that
-  proposes a probe to confirm it has said as much, so the label has to agree with the probe.
+  line in the repository. Unless a test feeds it that value, it is not shown. When the page proposes
+  a probe to settle it, it carries `uncertain`: the probe *is* what would settle it, which is what
+  that tier asks the page to say, and a claim the page itself offers to test has not been
+  established. `inferred` is for reasoning the page stands behind without a probe.
 
 **Label only the tiers that are not "explicitly changed."** Labelling everything is noise, and noise
 gets skipped, which defeats the purpose. Labelling nothing lets inference pass as fact, which is
