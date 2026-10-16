@@ -946,6 +946,30 @@ PASS  every linked citation addresses the lines its text names (2)
 SKIP  diff anchors: this input has none
 SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
 SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment impact-aff-changed-file.html
+exit=0
+PASS  every linked citation addresses the lines its text names (6)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page impact-aff-changed-file.html
+exit=0
+PASS  every linked citation addresses the lines its text names (6)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --fragment impact-aff-ledger-clean.html
+exit=0
+PASS  every linked citation addresses the lines its text names (6)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
+## --page impact-aff-ledger-clean.html
+exit=0
+PASS  every linked citation addresses the lines its text names (6)
+SKIP  diff anchors: this input has none
+SKIP  collapsed-diff routing: needs --repo and --base to ask which files GitHub renders
+SKIP  withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for
 ## --fragment impact-card-no-lanes.html
 exit=0
 PASS  every linked citation addresses the lines its text names (6)

@@ -526,6 +526,18 @@ FAIL  cp-a's flowchart: figure.flowchart is not a checkpoint figure — the four
 exit=1
 PASS  at most one figure per checkpoint
 FAIL  cp-a's flowchart: figure.flowchart is not a checkpoint figure — the four are chain, converge, lifecycle, structure, and figure.impact lives in section 05
+## --fragment impact-aff-changed-file.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-aff-changed-file.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-aff-ledger-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-aff-ledger-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment impact-card-no-lanes.html
 exit=0
 SKIP  no checkpoint figure in this input

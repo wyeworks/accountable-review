@@ -255,6 +255,11 @@ FIX = {
      "So the model validations run only in seeds, at\n          <a class=\"path\" href=\"#{BLOB}/lib/seed_data/admin_dashboard_reports.rb#L11-L14\">lib/seed_data/admin_dashboard_reports.rb:11-14</a>,\n          and in specs <span class=\"tier tier-unc\">from unchanged code</span>, and"],
     ["That parser is also shared with the bulk-fetch endpoint.",
      "That parser is also shared with the bulk-fetch endpoint, at\n          <a class=\"path\" href=\"#{BLOB}/app/controllers/admin/dashboard_controller.rb#L155\">app/controllers/admin/dashboard_controller.rb:155</a>."],
+    # § 01's "only admins" rests on canEdit, untouched lines of the changed reports.gjs that the diff
+    # adds a caller of and the page cited nowhere; a judge that can run `git diff` sees they sit
+    # outside every hunk
+    ["admins see the handle, and only after the card's data has loaded.",
+     "admins see the handle, at\n        <a class=\"path\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L171-L173\">frontend/discourse/admin/components/dashboard/reports.gjs:171-173</a>,\n        and only after the card's data has loaded."],
   ],
 }.freeze
 

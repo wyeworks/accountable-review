@@ -878,6 +878,21 @@ reads as a footnote marker and the reader has to work out what it refers to. Put
 clause it qualifies — *"…on the /my-day and /my-week screens `inferred`. The diff adds…"*, not
 *"…screens. `inferred` — the diff adds…"*.
 
+**Unchanged means a file the diff does not touch, never an untouched line.** A claim resting on
+lines of a changed file that this PR did not edit — the method beside the one it rewrote, the guard
+a hunk's context shows — carries **no label**: it is cited, in whatever form § *Deep links* gives
+that line, since the file is one the reader is about to open anyway. `from unchanged code` is for
+code in a file `git diff --name-only` does not list, and nowhere else. The page splits changed from
+unchanged by file in every place the word appears — this tier, an excerpt's `Unchanged` tag
+(§ *Source excerpts*), the `.ip-aff` node and the *Affected, not changed* lists (§ *Impact paths*)
+— and one page meaning two things by it leaves the reader unable to tell which. Where the line-level
+fact is the point, the prose says it: *"`valid_redirect_uri?`, which this change does not touch"*.
+
+The other direction is the commoner miss. A claim resting **only** on a file outside the diff — what
+the consent screen shows, which controller reads the list — is not something the diff shows, so it
+carries `from unchanged code` even when it reads as plain description. Unlabelled, it claims the
+first tier.
+
 **Label only the tiers that are not "explicitly changed."** Labelling everything is noise, and noise
 gets skipped, which defeats the purpose. Labelling nothing lets inference pass as fact, which is
 worse than being wrong loudly.
@@ -1622,6 +1637,16 @@ like one.**
 - **Every path holds at least one `.ip-aff`.** A path with no unchanged node is a call stack inside
   the diff — true, and visible in the diff already. Unchanged-but-affected code is what this page is
   for, so a path that does not pass through any is not earning its place.
+- **`.ip-aff` is a file the diff does not touch, never an untouched line of one it does.** The
+  method beside the one this PR rewrote is inside a changed file: the reader opens that file in the
+  diff, the evidence foot lists it as changed, and drawing it dashed and teal tells them the
+  opposite. A hop through it is `.ip-chg`, its locator in the form § *Deep links* gives that line.
+  When that leaves a path with no node outside the diff, the chain is mechanism inside the change —
+  a checkpoint's `figure.chain` (§ *Chains*) — and not an impact path. The same rule holds for every
+  entry under *Affected, not changed*, beside the panel and in the evidence foot: an untouched line
+  of a changed file is cited from the checkpoint that turns on it. This is the by-file split §
+  *Evidence tiers* and § *Source excerpts* already make; `impact-paths.rb` holds the nodes and
+  `searches.rb` the lists against the changed set.
 - **At most two lane crossings.** The point is the one or two interactions that carry the
   consequence, not every hop between them.
 - **Labels, never sentences.** `<b>` is an identifier; `.ip-d` is a few words at most. A panel of
@@ -2280,6 +2305,16 @@ Each entry carries three things, and one of them is a pointer rather than an exp
   show.
 - **Which checkpoint it belongs to** — `href="#cp-x"`, which never re-explains the judgment and never
   repeats the checkpoint's own citation or tier.
+
+**A why claims no more than the checkpoint it points at.** One sentence compresses, and compression
+reaches for exclusivity: *the one place the flag is raised*, *the only check that sends a grant back
+to consent*, *everything after reads this flag*. Each sounds like orientation and each is a
+universal claim about the whole repository, made in the one sentence on the page with no room for
+the citation that would back it — and in real runs each was false at head, contradicted by a create
+action, a backfill, or a checkpoint on the same page. So *only*, *the one*, *every*, *never*,
+*nothing else* and their kin go in a why only where the checkpoint it points at makes the same claim
+on a recorded search. Otherwise say what the file does — *where an admin edit raises the flag* —
+which is true whether or not it is the only such place, and is all a route needs.
 
 **Order by conceptual dependency, not by the diff.** Schema before the code that trusts it; the
 smallest complete example before the bulk; irreversible code last, so it is read twice. Alphabetical,

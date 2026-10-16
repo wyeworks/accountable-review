@@ -25,7 +25,9 @@ gold:
   what-changed: [pass, pass, pass, pass, pass]
   checkpoint-judgments: [pass, pass, pass, pass]
   checkpoint-claims: [pass, pass, ~]        # 3: unsettled — cp-a's GAP says no frontend test applies the modal; a system spec does, no QUnit test does
-  reading-path: [pass, pass, fail, ~]       # 3: stops 03 and 04 restate checkpoint A; 4: unsettled — stop 06's "largest part of the diff" is true of reports.gjs's share, not of the PR
+  reading-path: [pass, pass, ~, ~]          # 3: unsettled — stops 03 and 04 echo checkpoint A in a clause ("which is why a missing size becomes a reset"),
+                                            # a restatement or a set-up for the next stop by reading; reading-path-restates carries the clear case. 4: unsettled — stop 06's
+                                            # "largest part of the diff" is true of reports.gjs's share, not of the PR
   impact: [~, pass, fail, fail]             # 1: unsettled — BulkFetch is the code whose request now 400s, but the 400 is the controller's; 3: delete_all's file is in
                                             # the diff; 4: card B's why walks two hops (path A's "called by" holds through the request)
   evidence: [fail, pass, pass]              # 1: cp-b states the cached-copy claim, which rests on unchanged dashboard.js, untiered and uncited
@@ -92,7 +94,7 @@ variants:
     base: impact-corrected
     impact: {4: fail}
 
-  evidence-corrected:                # gold with the date-change, cached-copy, seeds and bulk-caller claims cited and tiered, cp-b's open question
+  evidence-corrected:                # gold with the date-change, cached-copy, seeds, bulk-caller and § 01 admins-only claims cited and tiered, cp-b's open question
                                      # and card B's title agreeing with them, and the changed scss line out of the foot's affected list
     evidence: {1: pass}
   evidence-unlabelled-inference:     # the overlapping-resize claim loses its `inferred`

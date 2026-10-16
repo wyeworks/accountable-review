@@ -112,7 +112,13 @@ module Judge
            "--disallowedTools", "Edit,Write,NotebookEdit,WebFetch,WebSearch,Agent,Task",
            "--disable-slash-commands", "--strict-mcp-config"]
     started = Time.now
-    stdout, stderr, status = Open3.capture3(*cmd, chdir: repo)
+    # The shell goes back to the checkout after every command. A judge that ran `cd <out>; cat
+    # section.html` stayed outside the repository, every `git diff` after it failed with "Not a
+    # git repository", and a `cd` back before a git command is refused — so it settled which files
+    # the diff touches from the page's own account, which is the thing under test. Not `git -C`
+    # in the allowlist instead: that prefix admits every subcommand, and the judge is read-only.
+    env = { "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR" => "1" }
+    stdout, stderr, status = Open3.capture3(env, *cmd, chdir: repo)
     seconds = (Time.now - started).round(1)
     File.write(File.join(out, "#{name}.stderr.txt"), stderr) unless stderr.empty?
 

@@ -685,7 +685,10 @@ Each note carries, under these headings:
   reaches it, and its evidence tier written out (`diff`, `from unchanged code`, `inferred from
   tests`, `inferred`, `uncertain`). Write the tier on **every** entry here, the `diff` ones included.
   On the page silence means the first tier; in a note silence is a claim nobody labelled, and the
-  falsifier is told to treat it as one.
+  falsifier is told to treat it as one. **Affected means a file `git diff --name-only` does not
+  list**: an untouched method inside a changed file goes in *Trace*, because the page splits changed
+  from unchanged by file and a run that files it here draws it teal and labels it
+  `from unchanged code` on a page whose inventory lists the file as changed.
 - **Searched** — one line per search, the command then the result clause, in the form
   `details.searched` will take.
 - **Tests** — which behaviour each pins, which branch it leaves open.
@@ -1002,7 +1005,9 @@ goes on the checkpoint's `p.open` line.
 before the code that trusts it, the smallest complete example before the bulk, irreversible code last.
 Each stop is a path, one sentence on why here, and a link to the checkpoint it belongs to. It is built
 after the agenda because it is a route through the agenda. Ask, per stop: *what does the reviewer have
-to understand first for the next file to make sense?*
+to understand first for the next file to make sense?* A why says what the file does, and claims it is
+the only place something happens only where its checkpoint does — `report-format.md` § *Section 4*
+says why that is the sentence most often false at head.
 
 **7i. Identify the external impact.** One to three paths from the notes' *affected, not changed*
 entries: each starts in changed code, passes through at least one unchanged consumer, and ends at

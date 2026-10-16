@@ -47,6 +47,15 @@
 # failure to report, not this check's. A PASS here would read as a verified figure that was
 # never looked at.
  impact-paths       | searches-clean.html           | 0 | no .impact panel in this input
+# Affected means a file the diff does not touch, held against the changed set — here the page's
+# own ledger, so no repository is needed. The clean twin is pinned on its PASS line rather than on
+# exit 0, because reach-clean.html carries no ledger and only SKIPs the rule: a clean row that
+# never read a changed set would vouch for nothing. One defect, two checks: the node is
+# impact-paths.rb's, the list entry searches.rb's.
+ impact-paths       | impact-aff-ledger-clean.html  | 0 | every .ip-aff node sits in a file the diff does not touch
+ impact-paths       | impact-aff-changed-file.html  | 1 | an .ip-aff node in a file the change touches
+ searches           | impact-aff-ledger-clean.html  | 0 | sits in a file the diff does not touch
+ searches           | impact-aff-changed-file.html  | 1 | affected entr(ies) in a file the change touches
  searches           | searches-clean.html           | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
  searches           | searches-unreachable.html     | 1 | reachable from no recorded search | --repo @GOLD@/searches-repo
  searches           | searches-bre-dialect.html     | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo

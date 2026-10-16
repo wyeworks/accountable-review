@@ -1000,6 +1000,30 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment impact-aff-changed-file.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page impact-aff-changed-file.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --fragment impact-aff-ledger-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page impact-aff-ledger-clean.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-card-no-lanes.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none

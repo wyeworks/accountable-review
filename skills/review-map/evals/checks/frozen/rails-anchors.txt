@@ -1690,6 +1690,26 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment impact-aff-changed-file.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page impact-aff-changed-file.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment impact-aff-ledger-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page impact-aff-ledger-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment impact-card-no-lanes.html
 exit=0
 SKIP  doc links: none on this input

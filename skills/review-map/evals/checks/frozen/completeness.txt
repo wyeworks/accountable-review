@@ -472,6 +472,18 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page figures-unknown-kind.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-aff-changed-file.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-aff-changed-file.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-aff-ledger-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-aff-ledger-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment impact-card-no-lanes.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
