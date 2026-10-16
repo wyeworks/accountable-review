@@ -294,12 +294,16 @@ loop can see, and only then is a prose change measurable. Each phase has an exit
    the failures. *Exit*: `status.json` lists the judge's current sha as calibrated, and the
    release table shows evidence as five lines.
 
-3. **Generalise the prose written from one PR.** Rules in `report-format.md` § *Evidence tiers*
-   and `SKILL.md` step 8 that name the eval PR's own identifiers are memorisation: keep the rule
-   shapes (an interleaving, an absence, what a library does with a value), drop the per-sentence
-   instructions and the identifiers. The mechanical checks added beside them (`changed.rb`, the
-   excerpt-overlap warning, the masthead sums) are tested and stay. *Exit*: no eval PR identifier
-   in either file; word counts near where they were before the rules were added.
+3. **No eval PR in the prose.** A rule in `report-format.md` or `SKILL.md` is written in general
+   terms, and its example is a shape — a validator beside the hunk, a flag's serializer, a parser
+   handed a value no test feeds it — never an identifier from a PR in `prs.yml`. A rule written
+   from one repetition's verdict text, naming that PR's methods, is memorisation of that page and
+   nothing a second PR can confirm. The rule shapes the loop found are kept — the by-file split,
+   the citation that replaces a tier, the tier kept where a claim is restated, the absence that
+   names its hits, insulation out of the affected list, § 01 never vouching for the tests —
+   because each is a rule about every page. The mechanical checks added beside them
+   (`changed.rb`, the excerpt-overlap warning, the masthead sums) are tested and stay. *Exit*:
+   `grep` for the eval PR's identifiers across the skill's bytes finds nothing.
 
 4. **A second eval PR of a different shape.** Every number so far is one 14-file feature with a
    migration. Add a merged Rails bugfix of four to eight files and no migration, `role: eval`, then

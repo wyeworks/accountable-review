@@ -886,7 +886,7 @@ code in a file `git diff --name-only` does not list, and nowhere else. The page 
 unchanged by file in every place the word appears — this tier, an excerpt's `Unchanged` tag
 (§ *Source excerpts*), the `.ip-aff` node and the *Affected, not changed* lists (§ *Impact paths*)
 — and one page meaning two things by it leaves the reader unable to tell which. Where the line-level
-fact is the point, the prose says it: *"`valid_redirect_uri?`, which this change does not touch"*.
+fact is the point, the prose says it: *"the validator beside it, which this change does not touch"*.
 
 **No label is not no citation.** Silence means *the diff shows this*, and for an untouched line of a
 changed file the diff view does not: the reader can only check the claim if the page hands them the
@@ -894,16 +894,16 @@ line. So the citation is the label's replacement and is just as required — an 
 excerpt's summary location **at the claim**, in the open page. A line in the search record does not
 count, because the record is shut; neither does a citation elsewhere on the page to a different
 range of the same file. Before writing a sentence about what an untouched method of a changed file
-does — what `valid_redirect_uri?` accepts, which clients `resolve!` returns early for, what the
-presets already contain — name its lines, and if they are not cited in that field, cite them.
+does — what a validator accepts, which inputs a resolver returns early for, what a preset list
+already holds — name its lines, and if they are not cited in that field, cite them.
 
-The other direction is the commoner miss. A claim resting **only** on a file outside the diff — what
-the consent screen shows, which controller reads the list — is not something the diff shows, so it
-carries `from unchanged code` even when it reads as plain description. Unlabelled, it claims the
-first tier.
+The other direction is the commoner miss. A claim resting **only** on a file outside the diff —
+what a screen outside the diff shows, which controller reads the value — is not something the diff
+shows, so it carries `from unchanged code` even when it reads as plain description. Unlabelled, it
+claims the first tier.
 
-**A tier labels the claim it sits against, and no other.** A paragraph that says *the authorize
-endpoint checks the stored list* and a *Look at* entry beneath it that cites the controller with
+**A tier labels the claim it sits against, and no other.** A paragraph that says *the endpoint
+checks the stored list* and a *Look at* entry beneath it that cites the controller with
 `from unchanged code` are two fields making the same claim, and the label on the entry does not
 reach the paragraph: a reader of the paragraph meets an unlabelled claim. Each field carries its own
 tier where it states the claim — or the paragraph points at the entry instead of restating it.
@@ -915,23 +915,24 @@ there first has no way to know.
 **Three kinds of claim pass as fact most often, because each is built from lines the page does show.**
 
 - **What happens when two things interleave.** The lock, the reload and the re-check are in the
-  diff; what they guarantee when an edit lands during a refresh's fetch is reasoning about an order
+  diff; what they guarantee when a write lands during another request's fetch is reasoning about an order
   no line shows. It carries `inferred`, or `inferred from tests` where a spec runs that interleaving,
   and it names the ordering it reasoned about. Stated plainly, it claims the code was seen doing it.
-- **That nothing else does something.** *Read only by the refresh*, *nothing else writes the flag*,
+- **That nothing else does something.** *Read only by one job*, *nothing else writes the flag*,
   *no other caller* — an absence rests on a search, not on a line, and the search reaches files the
   diff does not touch. So it carries `from unchanged code`, and it is stated only where a search
   recorded in § *What was searched* backs it, in that search's scope; without one it carries
-  `inferred` or does not go on the page. **It names every hit it sets aside.** A search for the flag
-  returns the create action, the backfill and the serializer as well as the resolver, and *the
-  resolver is its only reader* is true only once each of the others is named and excluded — *the
-  only reader that decides anything; the serializer passes it to the UI for display*. A run that
-  searched and then wrote *only* without listing the hits is the run that misread its own results:
+  `inferred` or does not go on the page. **It names every hit it sets aside.** A search for a flag
+  returns the action that sets it, the migration that backfills it and the serializer that displays
+  it, as well as the one reader that branches on it — and *X is its only reader* is true only once
+  each of the others is named and excluded: *the only reader that decides anything; the serializer
+  passes it through for display*. A run that searched and then wrote *only* without listing the
+  hits is the run that misread its own results:
   these are the sentences most often false at head, and the reader nobody accounted for was in the
   search output every time.
-- **What the language or a library does with a value.** The line calls `URI.parse`; what
-  `URI.parse` makes of `https://a.example/cb,https://b.example/cb` is not on that line, or on any
-  line in the repository. Unless a test feeds it that value, it is not shown. When the page proposes
+- **What the language or a library does with a value.** The line calls a parser; what the parser
+  makes of a value with a stray separator in it is not on that line, or on any line in the
+  repository. Unless a test feeds it that value, it is not shown. When the page proposes
   a probe to settle it, it carries `uncertain`: the probe *is* what would settle it, which is what
   that tier asks the page to say, and a claim the page itself offers to test has not been
   established. `inferred` is for reasoning the page stands behind without a probe.
@@ -2423,10 +2424,9 @@ why the entry is affected — and it reaches the entries no path had room for:
 Not a summary of Checkpoint B. Not its citation again, not its tier again.
 
 **An entry is code whose meaning the change altered, never code the change leaves alone.** The
-search for consumers also turns up insulation — the token exchange that checks a code's own
-redirect rather than the client's list, the status check whose inputs an edit does not move — and
-it is a real finding: it is why existing grants keep working. But its clause says *the change does
-not reach this*, and a list under *Affected, not changed* read with that clause tells the reader the
+search for consumers also turns up insulation — the check that reads a value the change stores
+nowhere, the status computation whose inputs an edit does not move — and it is a real finding: it
+is why what already exists keeps working. But its clause says *the change does not reach this*, and a list under *Affected, not changed* read with that clause tells the reader the
 opposite of what its heading does. Insulation is evidence for the checkpoint that asks whether
 something is reached, cited there as a *Look at* entry; it is never an entry here or in the foot's
 list. The test is the clause: if it says what this code now does differently or now receives, it is
