@@ -2147,9 +2147,9 @@ ambiguous.
 **Change shape** — a chip naming what kind of change this is: feature · refactor · bugfix ·
 migration · dependency bump · mixed. One word, and it is a category, never a grade.
 
-**A metric strip** of commits, files and a line split. Bucket the files rather than reporting one
-total, because a 40-file PR that is 8 production files and 32 fixtures is a different review from one
-that is 40 production files:
+**A metric strip** of commits, files and the files split by kind. Bucket the files rather than
+reporting one total, because a 40-file PR that is 8 production files and 32 fixtures is a different
+review from one that is 40 production files:
 
 | Bucket | Holds |
 |---|---|
@@ -2157,6 +2157,13 @@ that is 40 production files:
 | Test | Specs, factories, fixtures, test helpers |
 | Generated | Lockfiles, schema dumps, compiled assets, generated types |
 | Docs | Markdown, comments-only changes |
+
+The *By kind* cell writes them in that order as `11 prod · 3 test · 1 generated`, leaving out an empty
+bucket. **The buckets add up to *Files*, and *Files* is the inventory's count**: every file sits in
+exactly one bucket, so a schema dump or a locale file the run was unsure of still goes somewhere —
+the nearest bucket — rather than nowhere. A strip whose parts do not sum to its total is a
+miscounted first screen, and the reader who adds it up stops trusting the numbers beneath it.
+`page-invariants.rb` § 9 checks both sums.
 
 **Then one paragraph, 80 to 160 words, and at most a handful of bullets.** What problem this solves,
 what is now true that was not, who is affected. Derived from the code, the tests and the commits —

@@ -361,4 +361,46 @@ else
   check.ok("no section-sign pointers — every reference names something the reader can follow")
 end
 
+# 9 · The metric strip adds up. report-format.md § Section 1 owns the rule: *Files* is the
+#     inventory's count, and the *By kind* buckets add up to *Files*. A cell with two slots for
+#     four buckets let a run with a generated schema dump in its diff drop that file from the split
+#     rather than find it a slot, so the first screen did not add up and only a judge doing
+#     arithmetic noticed. Two sums, two severities: *Files* against the gated inventory has one
+#     right answer, so FAIL; the buckets sum through a classification the run made, and a hard
+#     failure there would teach it to file a schema dump under prod to make the arithmetic work, so
+#     WARN. Read on the comment-stripped copy, because the template's comment beside the cell
+#     carries a worked example.
+FILES_CELL = %r{>Files</div><div[^>]*>\s*\d+\s*<}
+KIND_CELL  = %r{>By kind</div><div[^>]*>[^<]*<}
+BUCKET     = /(\d+)\s+(prod|test|generated|docs)\b/
+files_hit = prose.scan(FILES_CELL).first
+if files_hit.nil?
+  check.skip("metric strip: the page carries no masthead Files count")
+else
+  files = files_hit[/(\d+)\s*<\z/, 1].to_i
+  inventory = page.scan(/<(?:td|div class="c")[[:space:]]+data-path="/).size
+  if inventory.zero?
+    check.skip("metric strip: no inventory yet to count Files against")
+  elsif files == inventory
+    check.ok("masthead Files (#{files}) is the inventory's count")
+  else
+    check.bad("masthead says #{files} files but the inventory lists #{inventory} — Files is the inventory's count")
+  end
+
+  kind_hit = prose.scan(KIND_CELL).first
+  value = kind_hit.to_s.sub(%r{\A>By kind</div><div[^>]*>}, "").chomp("<").gsub("&middot;", "·").strip
+  buckets = value.to_enum(:scan, BUCKET).map { [Regexp.last_match(1).to_i, Regexp.last_match(2)] }
+  leftover = value.gsub(BUCKET, "").delete("·").strip
+  sum = buckets.sum(&:first)
+  if kind_hit.nil?
+    check.maybe("metric strip: no By kind cell — the masthead splits Files into prod, test, generated and docs")
+  elsif buckets.empty? || !leftover.empty?
+    check.maybe("metric strip: By kind reads '#{value}' — write each bucket as 'N prod', 'N test', 'N generated' or 'N docs'")
+  elsif sum == files
+    check.ok("By kind adds up to Files (#{buckets.map { |n, k| "#{n} #{k}" }.join(" · ")})")
+  else
+    check.maybe("By kind adds up to #{sum} but Files is #{files} — every file goes in exactly one bucket, the nearest one when unsure")
+  end
+end
+
 check.finish

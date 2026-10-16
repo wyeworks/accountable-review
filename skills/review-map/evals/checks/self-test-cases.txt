@@ -122,6 +122,13 @@
  page-invariants    | invariants-no-tier.html       | 1 | no evidence tier labels
  page-invariants    | invariants-tier-modifier-only.html | 0 | evidence tiers used (2 label(s))
  page-invariants    | invariants-loose-data-path.html | 1 | outside a ledger cell
+# The metric strip, § 9. Two sums at two severities: Files against the inventory is a FAIL, the
+# By kind buckets against Files a WARN pinned at exit 0. The clean rows are agenda-clean, the one
+# fixture with a masthead whose sums agree, so a rule that fires on a correct strip goes red there.
+ page-invariants    | invariants-strip-files.html   | 1 | but the inventory lists
+ page-invariants    | invariants-strip-kind.html    | 0 | By kind adds up to 4 but Files is 5
+ page-invariants    | agenda-clean.html             | 0 | masthead Files (5) is the inventory's count
+ page-invariants    | agenda-clean.html             | 0 | By kind adds up to Files
 # The flow designator, § 7 — the rule that guards a deleted vocabulary, the way § 1's severity
 # chips do. Two rows, because the corpus itself carried the old vocabulary until this rule
 # landed: the FAIL row proves it fires, and the PASS row on a clean fixture proves the pattern

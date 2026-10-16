@@ -676,6 +676,18 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-standing-disclaimer.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-strip-files.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-strip-files.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-strip-kind.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-strip-kind.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-tier-modifier-only.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

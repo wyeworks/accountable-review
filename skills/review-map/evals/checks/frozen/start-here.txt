@@ -1408,6 +1408,38 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment invariants-strip-files.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page invariants-strip-files.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --fragment invariants-strip-kind.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page invariants-strip-kind.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
 ## --fragment invariants-tier-modifier-only.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none

@@ -1649,7 +1649,13 @@ figcaption strong { color: var(--ink-3); }
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{FEATURE_REFACTOR_FIX}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">{{N}} / {{N}}</div></div>
+        <!-- BY KIND: the Files count split into report-format.md § Section 1's four buckets,
+             in that order, each as "N kind" and joined by &middot;. A bucket with no files is
+             left out, so a plain feature reads "11 prod &middot; 3 test" and a change with a
+             schema dump reads "10 prod &middot; 3 test &middot; 1 generated". The buckets
+             add up to Files: a file the strip has no bucket for goes in the nearest one,
+             never nowhere. -->
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">By kind</div><div class="path" style="font-size:12px">{{N}} prod &middot; {{N}} test &middot; {{N}} generated &middot; {{N}} docs</div></div>
       </div>
     </header>
 
