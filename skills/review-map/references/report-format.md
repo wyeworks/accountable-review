@@ -2404,6 +2404,16 @@ why the entry is affected — and it reaches the entries no path had room for:
 
 Not a summary of Checkpoint B. Not its citation again, not its tier again.
 
+**An entry is code whose meaning the change altered, never code the change leaves alone.** The
+search for consumers also turns up insulation — the token exchange that checks a code's own
+redirect rather than the client's list, the status check whose inputs an edit does not move — and
+it is a real finding: it is why existing grants keep working. But its clause says *the change does
+not reach this*, and a list under *Affected, not changed* read with that clause tells the reader the
+opposite of what its heading does. Insulation is evidence for the checkpoint that asks whether
+something is reached, cited there as a *Look at* entry; it is never an entry here or in the foot's
+list. The test is the clause: if it says what this code now does differently or now receives, it is
+affected; if it says why this code is untouched, it is not.
+
 **What stays here and what goes to the foot.** The entries a path runs through and the entries a
 checkpoint turns on stay. Everything else the pass found — real, cited, and not something the reviewer
 has to decide about — goes in the evidence foot. That split is what keeps this section a set of

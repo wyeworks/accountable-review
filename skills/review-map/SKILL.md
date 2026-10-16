@@ -688,7 +688,11 @@ Each note carries, under these headings:
   falsifier is told to treat it as one. **Affected means a file `git diff --name-only` does not
   list**: an untouched method inside a changed file goes in *Trace*, because the page splits changed
   from unchanged by file and a run that files it here draws it teal and labels it
-  `from unchanged code` on a page whose inventory lists the file as changed.
+  `from unchanged code` on a page whose inventory lists the file as changed. **And it means the
+  change reaches it.** Code the search found that the change does *not* reach — the exchange that
+  checks a code's own redirect, the status check whose inputs an edit leaves alone — is insulation:
+  file it under *Trace* or *Open* as evidence for whichever judgment asks whether it is reached,
+  never here, because whatever is filed here becomes an *Affected, not changed* entry.
 - **Searched** — one line per search, the command then the result clause, in the form
   `details.searched` will take.
 - **Tests** — which behaviour each pins, which branch it leaves open.
