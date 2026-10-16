@@ -893,6 +893,19 @@ the consent screen shows, which controller reads the list — is not something t
 carries `from unchanged code` even when it reads as plain description. Unlabelled, it claims the
 first tier.
 
+**Two kinds of claim pass as fact most often, because each is built from lines the diff does show.**
+
+- **What happens when two things interleave.** The lock, the reload and the re-check are in the
+  diff; what they guarantee when an edit lands during a refresh's fetch is reasoning about an order
+  no line shows. It carries `inferred`, or `inferred from tests` where a spec runs that interleaving,
+  and it names the ordering it reasoned about. Stated plainly, it claims the code was seen doing it.
+- **That nothing else does something.** *Read only by the refresh*, *nothing else writes the flag*,
+  *no other caller* — an absence rests on a search, not on a line. It is stated only where a search
+  recorded in § *What was searched* returned nothing, and then in that search's scope; without one
+  it carries `inferred` or does not go on the page. These are the sentences most often false at
+  head: a create action, a backfill, or a view that displays the value is the reader nobody looked
+  for.
+
 **Label only the tiers that are not "explicitly changed."** Labelling everything is noise, and noise
 gets skipped, which defeats the purpose. Labelling nothing lets inference pass as fact, which is
 worse than being wrong loudly.
@@ -2125,6 +2138,12 @@ that is 40 production files:
 what is now true that was not, who is affected. Derived from the code, the tests and the commits —
 the PR description is a claim and is attributed when it is used, per `SKILL.md` step 4. Carry an
 evidence tier on the intent itself if it is inferred rather than stated.
+
+**It may say a test was added; it never says the tests cover the change.** *Pin each of them*,
+*covered by specs*, *both behaviours are tested* — each is a sentence about how well the change is
+verified, which is the assurance § *One page shape* refuses, placed on the page's first screen.
+Whether a test pins a behaviour, and which branch it leaves open, is a checkpoint's question. Here,
+name the behaviour a new spec exercises, or leave the tests to the metric strip's bucket.
 
 Bullets only when the PR contains genuinely independent changes, and then one line each as an actor
 plus a behaviour. **Not an execution path**: a path is a chain's job, and a list of them here is the

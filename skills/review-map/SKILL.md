@@ -1080,7 +1080,10 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
 - **Label the tier of anything the diff does not show directly.** Five tiers, rendered per
   `references/report-format.md`: explicitly changed · evidenced by unchanged code · inferred from
   tests · inferred from naming or architecture · uncertain. Silence means the first one. Never let an
-  inference sit in the page wearing the clothes of a fact.
+  inference sit in the page wearing the clothes of a fact. Two wear them most often, because the
+  diff shows the lines they are built from: what happens when two requests interleave, and that
+  nothing else reads, writes or calls something. The reference's § *Evidence tiers* says what each
+  needs before it is stated plainly.
 - **Tests are evidence of intent, not proof of correctness.** Say which behaviour they pin, which
   branch they leave open, and what still needs a human to exercise it.
 - Where you could not confirm something, put it in the page as an open question. Do not round
