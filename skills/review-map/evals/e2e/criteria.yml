@@ -44,8 +44,8 @@ impact:
   4: form    # a card's why orients and points
 
 evidence:
-  1: truth   # the tiers are honest — mixes a truth rule (an inference stated as fact) with form
-             # rules (a label on a diff-shown claim, an uncited untouched line); classed truth until
-             # README § Making the number trustworthy phase 2 splits it
-  2: form    # every excerpt is earned
-  3: form    # the page reads complete with every block shut
+  1: truth   # no claim is stated as more than it is
+  2: form    # no label on what the diff shows
+  3: form    # an untouched line of a changed file is cited
+  4: form    # every excerpt is earned
+  5: form    # the page reads complete with every block shut

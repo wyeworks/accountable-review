@@ -1,21 +1,37 @@
 ---
-# Evidence across the page: are the tiers honest, is every excerpt earned, and does the page read
-# complete with every collapsed block shut? The model is pinned for the reason what-changed.md
+# Evidence across the page: is no claim stated as more than it is, is nothing the diff shows
+# labelled, is every untouched line of a changed file cited, is every excerpt earned, and does the
+# page read complete with every collapsed block shut? The first is the truth criterion, and the
+# three tier rules are three criteria so that one mis-tier among forty claims fails the one rule it
+# breaks and not all of them. The model is pinned for the reason what-changed.md
 # gives: changing it, or any byte of the instrument, invalidates calibration.
 model: claude-opus-5-5
 parts: [changed, attention, start, impact, evidence]
 criteria:
   - >-
-    THE TIERS ARE HONEST. A claim the diff shows directly carries no tier label. A claim resting on
-    code in a file the diff does not touch carries `from unchanged code`; one resting on what a test
-    expects carries `inferred from tests`; an inference from naming, architecture or reasoning about
-    behaviour the code does not show carries `inferred`; something not established carries
-    `uncertain` and says what would settle it. An inference stated as plain fact fails, and so does a label on a claim
-    the diff shows. A claim resting on untouched lines of a file the diff changes needs a citation,
-    not a tier, and an entry under an *Affected, not changed* heading is labelled by that heading.
-    The same by-file split holds for an impact path's `.ip-chg` node: on an untouched line of a
-    changed file it is in its right lane, and it claims nothing about that line being edited.
+    NO CLAIM IS STATED AS MORE THAN IT IS. A claim with no tier label says the diff shows it. A
+    claim resting on code in a file the diff does not touch carries `from unchanged code` and
+    cites that file; one resting on what a test expects carries `inferred from tests`; an
+    inference from naming, architecture, library behaviour or reasoning about an order the code
+    does not show carries `inferred`; something not established carries `uncertain` and says what
+    would settle it. Any of those stated plainly fails, and so does one carrying a tier stronger
+    than it earns — `inferred from tests` on reasoning no test runs. An entry under an *Affected,
+    not changed* heading is labelled by that heading. The same claim restated in another field —
+    a *Look at* clause, an impact card's `p.ip-why`, a stop's why — carries its tier there too.
     Check the claims against the code.
+  - >-
+    NO LABEL ON WHAT THE DIFF SHOWS. A claim the diff shows directly carries no tier; a label on
+    it fails. Changed and unchanged split by file: an untouched line of a file the diff changes is
+    changed code, so `from unchanged code` on a claim resting on it fails, a line the diff adds
+    listed under *Affected, not changed* fails, and an impact path's `.ip-chg` node on an
+    untouched line of a changed file is in its right lane and claims nothing about that line
+    being edited. Run `git diff` to settle which files the diff touches.
+  - >-
+    AN UNTOUCHED LINE OF A CHANGED FILE IS CITED. A claim resting on untouched lines of a file
+    the diff changes needs a citation, not a tier: an `a.path` or an excerpt's summary location
+    at the claim, in the open page. The diff view does not show that line, so without the
+    citation the reader has no way to check the sentence. A citation elsewhere on the page to a
+    different range of the same file, or a line in the shut search record, does not count.
   - >-
     EVERY EXCERPT IS EARNED. Each `details.excerpt` sits beside the claim or *Look at* entry it
     confirms, and its quoted lines bear on that claim: they are what the reviewer's judgment turns

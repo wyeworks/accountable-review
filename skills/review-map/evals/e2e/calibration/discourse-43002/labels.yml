@@ -20,7 +20,9 @@
 #                         does not re-explain · 4 what a stop says is true
 #   impact                1 affected nodes are real consumers · 2 edges true · 3 affected means
 #                         unchanged · 4 a card's why orients and points
-#   evidence              1 tiers honest · 2 excerpts earned · 3 reads complete with blocks shut
+#   evidence              1 no claim stated as more than it is · 2 no label on what the diff shows ·
+#                         3 untouched line of a changed file cited · 4 excerpts earned · 5 reads complete
+#                         with blocks shut
 gold:
   what-changed: [pass, pass, pass, pass, pass]
   checkpoint-judgments: [pass, pass, pass, pass]
@@ -30,7 +32,10 @@ gold:
                                             # "largest part of the diff" is true of reports.gjs's share, not of the PR
   impact: [~, pass, fail, fail]             # 1: unsettled — BulkFetch is the code whose request now 400s, but the 400 is the controller's; 3: delete_all's file is in
                                             # the diff; 4: card B's why walks two hops (path A's "called by" holds through the request)
-  evidence: [fail, pass, pass]              # 1: cp-b states the cached-copy claim, which rests on unchanged dashboard.js, untiered and uncited
+  evidence: [fail, fail, fail, pass, pass]  # 1: cp-b states the cached-copy claim, which rests on unchanged dashboard.js, untiered and uncited;
+                                            # 2: admin_dashboard.scss:489, a line the diff adds, sits under the foot's Affected, not changed;
+                                            # 3: the bulk-caller and § 01 admins-only claims rest on untouched lines of the changed
+                                            # dashboard_controller.rb and reports.gjs, cited nowhere
 variants:
   what-changed-headline:             # the <h1> says each admin's sizes are saved for them; the table has no user column
     what-changed: {1: fail}
@@ -95,12 +100,21 @@ variants:
     impact: {4: fail}
 
   evidence-corrected:                # gold with the date-change, cached-copy, seeds, bulk-caller and § 01 admins-only claims cited and tiered, cp-b's open question
-                                     # and card B's title agreeing with them, and the changed scss line out of the foot's affected list
-    evidence: {1: pass}
+                                     # and card B's title agreeing with them, the changed scss line out of the foot's affected list, the insert_all
+                                     # and click-threshold claims tiered, three restatements keeping their tier, § 01's whole-list claim citing
+                                     # layout_updater.rb:19, stop 02 citing both call sites, cp-b's entry citing the items getter, cp-a's
+                                     # modal premise tiered, and the delete_all node in the changed lane
+    evidence: {1: pass, 2: pass, 3: pass}
   evidence-unlabelled-inference:     # the overlapping-resize claim loses its `inferred`
     base: evidence-corrected
     evidence: {1: fail}
-  evidence-unearned-excerpt:         # a stylesheet excerpt beside the claim that the columns have no CHECK
+  evidence-labelled-diff-claim:      # cp-a's default-to-1, which the hunk at :235-240 adds, gains `from unchanged code`
+    base: evidence-corrected
     evidence: {2: fail}
-  evidence-hidden-claim:             # checkpoint D's click entry: no clause, and an excerpt summary that says nothing
+  evidence-uncited-untouched-line:   # the bulk-caller claim loses the dashboard_controller.rb:155 citation the corrected copy gave it
+    base: evidence-corrected
     evidence: {3: fail}
+  evidence-unearned-excerpt:         # a stylesheet excerpt beside the claim that the columns have no CHECK
+    evidence: {4: fail}
+  evidence-hidden-claim:             # checkpoint D's click entry: no clause, and an excerpt summary that says nothing
+    evidence: {5: fail}

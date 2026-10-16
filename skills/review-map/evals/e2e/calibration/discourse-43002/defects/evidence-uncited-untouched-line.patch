@@ -1,0 +1,152 @@
+--- gold.html
++++ gold.html
+@@ -1399,8 +1399,11 @@
+       <p>Before this change, the reports layout was an ordered list of reports. Every card was the same size.
+         Now each entry also has <code>rows</code> (1&ndash;4) and <code>cols</code> (1&ndash;2), and a card
+         taller than one row must span both columns. The layout endpoint still replaces the whole list on every
+-        save. As a result, any request that leaves out a card's size now resets that card to one cell. Only
+-        admins see the handle, and only after the card's data has loaded. The handle is hidden on narrow
++        save, at
++        <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/layout_updater.rb#L19">lib/admin_dashboard/reports/layout_updater.rb:19</a>. As a result, any request that leaves out a card's size now resets that card to one cell. Only
++        admins see the handle, at
++        <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L171-L173">frontend/discourse/admin/components/dashboard/reports.gjs:171-173</a>,
++        and only after the card's data has loaded. The handle is hidden on narrow
+         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
+         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
+         one writer the diff did not touch.</p>
+@@ -1419,7 +1422,7 @@
+         <p>The controller now treats a missing <code>rows</code> or <code>cols</code> as 1, at
+           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>.
+           <code>LayoutUpdater</code> deletes every row before it re-inserts the list. The modal's Apply button
+-          still sends only <code>source</code> and <code>identifier</code>. So reordering or adding a report
++          still sends only <code>source</code> and <code>identifier</code> <span class="tier tier-unc">from unchanged code</span>. So reordering or adding a report
+           there resets every card to 1&times;1, including cards the admin never touched
+           <span class="tier tier-unc">from unchanged code</span>. The drawing is Impact path A. Decide whether
+           this reset is intended, or whether the modal should carry the sizes through.</p>
+@@ -1427,7 +1430,7 @@
+         <ul class="lookat">
+           <li>
+             <b>Modal Apply request body</b>
+-            <span>maps each row to <code>{source, identifier}</code> and drops any size</span>
++            <span>maps each row to <code>{source, identifier}</code> and drops any size <span class="tier tier-unc">from unchanged code</span></span>
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L194-L213">frontend/discourse/admin/components/modal/manage-reports.gjs:194-213</a>
+ <details class="excerpt excerpt--source">
+   <summary>
+@@ -1490,8 +1493,11 @@
+           <code>@data</code>. Two consequences follow. If a second resize starts before the first PUT returns, it
+           sends the first card's old size <span class="tier tier-inf">inferred</span>. And
+           <code>loadPayloads</code> rebuilds the cards from <code>@data.items</code>. After a date change that data
+-          is refetched and correct, but when the dashboard re-serves its cached copy it still holds the sizes from
+-          before the resize. Decide whether local state can safely stand in for the server's copy on both
++          is refetched, at
++          <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/controllers/admin/dashboard.js#L74-L88">frontend/discourse/admin/controllers/admin/dashboard.js:74-88</a>,
++          and correct <span class="tier tier-unc">from unchanged code</span>, but when the dashboard re-serves its cached copy, at
++          <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/controllers/admin/dashboard.js#L96-L127">frontend/discourse/admin/controllers/admin/dashboard.js:96-127</a>,
++          it still holds the sizes from before the resize <span class="tier tier-unc">from unchanged code</span>. Decide whether local state can safely stand in for the server's copy on both
+           paths.</p>
+ 
+         <ul class="lookat">
+@@ -1536,7 +1542,8 @@
+           </li>
+           <li>
+             <b>Where cards are rebuilt</b>
+-            <span>every run copies <code>this.items</code>, which is <code>@data.items</code>, back over any local
++            <span>every run copies <code>this.items</code>, which is <code>@data.items</code> at
++              <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L158-L160">frontend/discourse/admin/components/dashboard/reports.gjs:158-160</a>, back over any local
+               resize</span>
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L213-L251">frontend/discourse/admin/components/dashboard/reports.gjs:213-251</a>
+           </li>
+@@ -1548,10 +1555,10 @@
+           </li>
+         </ul>
+ 
+-        <p class="open"><b>Open question</b> Does hiding and re-showing the Reports section rebuild the
+-          component from cached, pre-resize data? If it does, the next resize or remove would send the old size
+-          back to the server <span class="tier tier-inf">inferred</span>. Impact path B shows where that would
+-          happen. Trying it in the browser would settle it.</p>
++        <p class="open"><b>Open question</b> Is it intended that showing the Reports section again rebuilds
++          the component from the cached, pre-resize data, so that the next resize or remove sends the old size
++          back to the server <span class="tier tier-inf">inferred</span>? Impact path B shows where that
++          happens.</p>
+       </section>
+ 
+       <section class="cp" id="cp-c">
+@@ -1563,8 +1570,10 @@
+           in model validations at
+           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R40-R43">app/models/admin_dashboard_report.rb:40-43</a>,
+           and in the client's clamps. The only production write goes through <code>insert_all</code>, which
+-          <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-insert_all">never instantiates a model</a> and so runs no validations,
+-          and the table has no <code>CHECK</code>. So the model validations run only in seeds and specs, and
++          <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-insert_all">never instantiates a model</a> and so runs no validations <span class="tier tier-inf">inferred</span>,
++          and the table has no <code>CHECK</code>. So the model validations run only in seeds, at
++          <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">lib/seed_data/admin_dashboard_reports.rb:11-14</a>,
++          and in specs <span class="tier tier-unc">from unchanged code</span>, and
+           the controller's parser is the real guard. That parser is also shared with the bulk-fetch endpoint.
+           Decide whether that is enough, given that <code>computeColumns</code> ignores <code>rows</code> and relies
+           on the rule <span class="tier tier-inf">inferred</span>.</p>
+@@ -1628,7 +1637,9 @@
+         <span class="lbl lbl-wide">Checkpoint D</span>
+         <h3>Should a plain click on a tall card's handle collapse it to one cell?</h3>
+ 
+-        <p>A press that never passes the 8&nbsp;px threshold counts as a click. A 1&times;1 card goes to full
++        <p>A press that never passes the 8&nbsp;px threshold counts as a click, at
++          <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">frontend/discourse/app/ui-kit/d-resize-handles.gts:101-106</a>
++          <span class="tier tier-unc">from unchanged code</span>. A 1&times;1 card goes to full
+           width. Every other size, including a four-row card, goes straight to 1&times;1 and is saved. The
+           handle's own contract says to commit only when <code>moved</code> is set
+           <span class="tier tier-unc">from unchanged code</span>. This component commits on a click on purpose.
+@@ -1670,7 +1681,7 @@
+           </li>
+           <li>
+             <b>Handle contract for <code>moved</code></b>
+-            <span>says a bare click should not be committed as a change</span>
++            <span>says a bare click should not be committed as a change <span class="tier tier-unc">from unchanged code</span></span>
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">frontend/discourse/app/ui-kit/d-resize-handles.gts:101-106</a>
+           </li>
+           <li>
+@@ -1701,7 +1712,9 @@
+           <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R228-R249">app/controllers/admin/dashboard_controller.rb:228-249</a>
+             <span class="why">The parser holds both the default-to-1 and the only enforced size rule. Both the
+-              layout and bulk endpoints call it.</span>
++              layout and bulk endpoints call it, at
++              <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L127">app/controllers/admin/dashboard_controller.rb:127</a> and
++              <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L155">app/controllers/admin/dashboard_controller.rb:155</a>.</span>
+           </span>
+           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+         </li>
+@@ -1754,22 +1767,22 @@
+         <div class="ip-card">
+           <span class="ip-hd">A &middot; Applying Manage reports resets every card size</span>
+           <p class="ip-why">An admin who resized cards and then reorders or adds a report in the modal finds
+-            every card back at one cell. <a href="#cp-a">Checkpoint A</a></p>
++            every card back at one cell <span class="tier tier-unc">from unchanged code</span>. <a href="#cp-a">Checkpoint A</a></p>
+           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+           <div class="ip-body">
+             <ol class="ip-path">
+               <li class="ip-n ip-chg"><span class="ip-box"><b>parse_reports_items_payload</b><span class="ip-d">missing size &rarr; 1&times;1</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a></span></li>
+               <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>ManageReports#apply</b><span class="ip-d">sends source + identifier only</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L201-L204">frontend/discourse/admin/components/modal/manage-reports.gjs:201-204</a></span></li>
+-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>AdminDashboardReport.delete_all</b><span class="ip-d">no old size survives</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/layout_updater.rb#L19">lib/admin_dashboard/reports/layout_updater.rb:19</a></span></li>
++              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>LayoutUpdater.call</b><span class="ip-d">deletes every row, re-inserts at 1&times;1</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35">lib/admin_dashboard/reports/layout_updater.rb:18-35</a></span></li>
+               <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Every card back to 1&times;1</b><span class="ip-d">observable behaviour</span></span></li>
+             </ol>
+           </div>
+         </div>
+ 
+         <div class="ip-card">
+-          <span class="ip-hd">B &middot; A resized card may revert when the Reports section is shown again</span>
++          <span class="ip-hd">B &middot; A resized card reverts when the Reports section is shown again</span>
+           <p class="ip-why">A resize updates only local state. Section data that the dashboard serves from its
+-            cache still has the old size <span class="tier tier-inf">inferred</span>.
++            cache still has the old size <span class="tier tier-unc">from unchanged code</span>.
+             <a href="#cp-b">Checkpoint B</a></p>
+           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+           <div class="ip-body">
+@@ -1858,7 +1871,6 @@
+       <ul class="ev-list">
+         <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">lib/seed_data/admin_dashboard_reports.rb:11-14</a> &mdash; seeded cards rely on the column defaults of 1&times;1.</li>
+         <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L445-L478">frontend/discourse/app/ui-kit/d-resize-handles.gts:445-478</a> &mdash; if a handle is removed mid-drag (the card starts loading), this calls <code>onResizeCancel</code>, which clears the live preview.</li>
+-        <li><a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-35807e3f075a8c1fbb902e87020dbf0982d206585c14170247fb6844277dbda5R489">app/assets/stylesheets/admin/admin_dashboard.scss:489</a> &mdash; <code>grid-auto-rows: 320px</code> applies to every <code>.--grid</code> section, and in core only Reports uses one.</li>
+       </ul>
+     </details>
+ 

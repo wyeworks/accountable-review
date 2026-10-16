@@ -206,8 +206,8 @@ right: the tier is on the claim it qualifies, the excerpt is earned, the page re
 shut, the heading is a judgment and not a category, the stop points at the checkpoint whose
 judgment turns on its code, the order has a reason. `e2e/criteria.yml` names each criterion's class — beside the thresholds and never in the
 judge's file, whose bytes are the instrument sha; a key added there would uncalibrate every
-judge — and a criterion that mixes the two is split — the evidence judge's first criterion is
-the one that does today, and § *Making the number trustworthy* phase 2 is the split.
+judge — and no criterion mixes the two: the evidence judge's tier rules are three criteria,
+one of each kind a mis-tier can be, so one wrong label fails the rule it breaks and not all of them.
 
 1. **Mechanical checks stay at zero.** `check.rb` is deterministic, so a FAIL is a bug and never
    noise. Any FAIL blocks. WARNs are reported and not counted.
@@ -282,17 +282,17 @@ loop can see, and only then is a prose change measurable. Each phase has an exit
    `report.rb` report the per-criterion pooled rate as the headline number and the all-criteria
    repetition count second. *Exit*: `bin/evals report` shows a rate per criterion per sha.
 
-2. **Split the criterion that bundles six rules.** `judges/evidence.md`'s first criterion fails on
-   any one of: an inference stated as fact, a label on a claim the diff shows, an untouched line of
-   a changed file with no citation in its field, a mislabelled *Affected* entry, a mislabelled
-   `.ip-chg` node. One mis-tier among forty claims zeroes the judge, and the sentence that fails
-   is a different one every repetition. Split it into three criteria — plain-fact inference (truth), label
-   on a diff-shown claim (form), uncited untouched line (form) — each with its own planted defect in
-   `calibration/discourse-43002/make-defects.rb` and row in `labels.yml`, then
-   `bin/evals calibrate evidence`. Re-judge the existing run directories with the split judge
-   before regenerating anything, so the first thing learned is which sub-rule carries the
-   failures. *Exit*: `status.json` lists the new judge sha as calibrated, no criterion gated by
-   gold alone.
+2. **One criterion per tier rule, and a planted defect for each.** `judges/evidence.md` holds five
+   criteria: no claim stated as more than it is (truth), no label on what the diff shows (form),
+   an untouched line of a changed file is cited (form), every excerpt earned, the page reads
+   complete shut. Each tier rule has its own defect in `calibration/discourse-43002/make-defects.rb`
+   and its row in `labels.yml`, planted on the corrected copy because gold fails all three on its
+   own. The split moves the judge's instrument sha, so it is uncalibrated until
+   `bin/evals calibrate evidence` passes. Then re-judge the existing run directories
+   (`bin/evals e2e discourse-44196 --rejudge <rundir>`, which keeps the original row's stamp)
+   before regenerating anything, so the first thing learned is which of the three rules carries
+   the failures. *Exit*: `status.json` lists the judge's current sha as calibrated, and the
+   release table shows evidence as five lines.
 
 3. **Generalise the prose written from one PR.** Rules in `report-format.md` § *Evidence tiers*
    and `SKILL.md` step 8 that name the eval PR's own identifiers are memorisation: keep the rule

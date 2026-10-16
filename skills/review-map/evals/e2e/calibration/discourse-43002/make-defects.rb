@@ -167,15 +167,27 @@ D = [
    "<p class=\"ip-why\"><code>parse_reports_items_payload</code> turns a missing size into 1&times;1.\n            <code>ManageReports#apply</code> sends it only <code>source</code> and <code>identifier</code>, then\n            <code>AdminDashboardReport.delete_all</code> removes every old row so no earlier size survives, and\n            every card comes back at one cell. <a href=\"#cp-a\">Checkpoint A</a></p>"],
 
   # ---- evidence ------------------------------------------------------------------------------
-  # 1 tiers are honest: the overlapping-resize claim is an inference and loses its label
+  # 1 no claim is stated as more than it is: the overlapping-resize claim is an inference and
+  #   loses its label
   ["evidence-unlabelled-inference",
    "sends the first card's old size <span class=\"tier tier-inf\">inferred</span>.",
    "sends the first card's old size."],
-  # 2 every excerpt is earned: real stylesheet bytes beside a claim about database constraints
+  # 2 no label on what the diff shows: the default-to-1 is the hunk at dashboard_controller.rb:235-240
+  #   and gains `from unchanged code`
+  ["evidence-labelled-diff-claim",
+   "treats a missing <code>rows</code> or <code>cols</code> as 1, at\n",
+   "treats a missing <code>rows</code> or <code>cols</code> as 1 <span class=\"tier tier-unc\">from unchanged code</span>, at\n"],
+  # 3 an untouched line of a changed file is cited: the bulk-caller claim rests on
+  #   dashboard_controller.rb:155, outside every hunk of a changed file, and the citation the
+  #   corrected copy gave it is taken back (the edit runs after the FIX, so old is corrected text)
+  ["evidence-uncited-untouched-line",
+   "That parser is also shared with the bulk-fetch endpoint, at\n          <a class=\"path\" href=\"https://github.com/discourse/discourse/blob/#{HEAD}/app/controllers/admin/dashboard_controller.rb#L155\">app/controllers/admin/dashboard_controller.rb:155</a>.",
+   "That parser is also shared with the bulk-fetch endpoint."],
+  # 4 every excerpt is earned: real stylesheet bytes beside a claim about database constraints
   ["evidence-unearned-excerpt",
    "db/structure.sql:311-312</a>\n",
    "db/structure.sql:311-312</a>\n" + SCSS_EXCERPT],
-  # 3 reads complete with every block shut: checkpoint D's click-branch entry loses its clause and
+  # 5 reads complete with every block shut: checkpoint D's click-branch entry loses its clause and
   #   its excerpt's summary goes vague, so the claim is left only inside the collapsed quotation
   ["evidence-hidden-claim", CLICK_ENTRY,
    CLICK_ENTRY.sub(/^ *<span><code>isNormal<\/code>.*\n/, "")
@@ -195,6 +207,11 @@ BLOB = "https://github.com/discourse/discourse/blob/#{HEAD}"
 OPEN_QUESTION_B =
   ["<p class=\"open\"><b>Open question</b> Does hiding and re-showing the Reports section rebuild the\n          component from cached, pre-resize data? If it does, the next resize or remove would send the old size\n          back to the server <span class=\"tier tier-inf\">inferred</span>. Impact path B shows where that would\n          happen. Trying it in the browser would settle it.</p>",
    "<p class=\"open\"><b>Open question</b> Is it intended that showing the Reports section again rebuilds\n          the component from the cached, pre-resize data, so that the next resize or remove sends the old size\n          back to the server <span class=\"tier tier-inf\">inferred</span>? Impact path B shows where that\n          happens.</p>"].freeze
+# delete_all's file is in the diff, so the node is changed code — LayoutUpdater as a whole, cited at
+# its hunk. impact's c3 and evidence's c2 both read the lane, so both corrected copies carry it.
+LANE =
+  ["<li class=\"ip-n ip-aff\"><span class=\"ip-rel\"><i></i>causes</span><span class=\"ip-box\"><b>AdminDashboardReport.delete_all</b><span class=\"ip-d\">no old size survives</span><a class=\"path ip-loc\" href=\"#{BLOB}/lib/admin_dashboard/reports/layout_updater.rb#L19\">lib/admin_dashboard/reports/layout_updater.rb:19</a></span></li>",
+   "<li class=\"ip-n ip-chg\"><span class=\"ip-rel\"><i></i>causes</span><span class=\"ip-box\"><b>LayoutUpdater.call</b><span class=\"ip-d\">deletes every row, re-inserts at 1&times;1</span><a class=\"path ip-loc\" href=\"https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35\">lib/admin_dashboard/reports/layout_updater.rb:18-35</a></span></li>"].freeze
 FIX = {
   # c3: a browser spec does apply the modal; cp-b's open question is one the code answers; and
   # cp-c's premise and its c2 twin need "of rows and cols", because seeds write rows in production
@@ -222,21 +239,19 @@ FIX = {
     ["<span class=\"why\">This unchanged file is the third writer of the layout, and the only one that leaves\n              sizes out <span class=\"tier tier-unc\">from unchanged code</span></span>",
      "<span class=\"why\">This unchanged file is the third writer of the layout; read its request body\n              against the parser in stop 02 <span class=\"tier tier-unc\">from unchanged code</span></span>"],
   ],
-  # c3: delete_all's file is in the diff, so the node is changed code — LayoutUpdater as a whole,
-  # cited at its hunk. c1: BulkFetch never sees the parser; the 400 is the changed controller's.
+  # c3: the lane (LANE above). c1: BulkFetch never sees the parser; the 400 is the changed controller's.
   # c4: card B's why walked the first two hops and never said what the admin sees.
   "impact" => [
     ["        <li><a class=\"path\" href=\"https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/bulk_fetch.rb#L10-L28\">lib/admin_dashboard/reports/bulk_fetch.rb:10-28</a> &mdash; ignores rows and cols, but the shared parser now returns 400 for the whole bulk request if any size is out of range. <a href=\"#cp-c\">Checkpoint C</a></li>\n",
      ""],
     ["<p class=\"ip-why\">A resize updates only local state. Section data that the dashboard serves from its\n            cache still has the old size <span class=\"tier tier-inf\">inferred</span>.\n            <a href=\"#cp-b\">Checkpoint B</a></p>",
      "<p class=\"ip-why\">An admin who resizes a card, then hides the Reports section and shows it again,\n            sees the card back at its old size <span class=\"tier tier-inf\">inferred</span>.\n            <a href=\"#cp-b\">Checkpoint B</a></p>"],
-    ["<li class=\"ip-n ip-aff\"><span class=\"ip-rel\"><i></i>causes</span><span class=\"ip-box\"><b>AdminDashboardReport.delete_all</b><span class=\"ip-d\">no old size survives</span><a class=\"path ip-loc\" href=\"#{BLOB}/lib/admin_dashboard/reports/layout_updater.rb#L19\">lib/admin_dashboard/reports/layout_updater.rb:19</a></span></li>",
-     "<li class=\"ip-n ip-chg\"><span class=\"ip-rel\"><i></i>causes</span><span class=\"ip-box\"><b>LayoutUpdater.call</b><span class=\"ip-d\">deletes every row, re-inserts at 1&times;1</span><a class=\"path ip-loc\" href=\"https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35\">lib/admin_dashboard/reports/layout_updater.rb:18-35</a></span></li>"],
+    LANE,
   ],
-  # c1: the date-change and cached-copy claims rest on unchanged dashboard.js, cited nowhere in cp-b
-  # and the second tiered
-  # `inferred` on the card; the seeds claim rests on unchanged seed data; the bulk caller is
-  # outside every hunk
+  # c1: the date-change and cached-copy claims rest on unchanged dashboard.js, cited nowhere in cp-b,
+  # and the card tiered the second `inferred`; the seeds claim rests on unchanged seed data.
+  # c2: admin_dashboard.scss:489 is a line the diff adds, listed as affected-not-changed in the foot.
+  # c3: the bulk caller and the admins-only claim rest on untouched lines of changed files.
   "evidence" => [
     OPEN_QUESTION_B,
     # the impact card hedged what the body and its tier now state
@@ -260,6 +275,36 @@ FIX = {
     # outside every hunk
     ["admins see the handle, and only after the card's data has loaded.",
      "admins see the handle, at\n        <a class=\"path\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L171-L173\">frontend/discourse/admin/components/dashboard/reports.gjs:171-173</a>,\n        and only after the card's data has loaded."],
+    # c1: what insert_all does is library behaviour; a doc link is provenance, not a tier
+    ["never instantiates a model</a> and so runs no validations,\n",
+     "never instantiates a model</a> and so runs no validations <span class=\"tier tier-inf\">inferred</span>,\n"],
+    # c1: the click threshold is d-resize-handles.gts, a file the diff does not touch
+    ["<p>A press that never passes the 8&nbsp;px threshold counts as a click. A 1&times;1 card goes to full\n",
+     "<p>A press that never passes the 8&nbsp;px threshold counts as a click, at\n          <a class=\"path\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106\">frontend/discourse/app/ui-kit/d-resize-handles.gts:101-106</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>. A 1&times;1 card goes to full\n"],
+    # c1: three restatements of unchanged-code claims — card A's why, and two Look at clauses whose
+    # entries cite unchanged files — keep the tier where they are restated
+    ["every card back at one cell. <a href=\"#cp-a\">Checkpoint A</a></p>",
+     "every card back at one cell <span class=\"tier tier-unc\">from unchanged code</span>. <a href=\"#cp-a\">Checkpoint A</a></p>"],
+    ["<span>maps each row to <code>{source, identifier}</code> and drops any size</span>",
+     "<span>maps each row to <code>{source, identifier}</code> and drops any size <span class=\"tier tier-unc\">from unchanged code</span></span>"],
+    ["<span>says a bare click should not be committed as a change</span>",
+     "<span>says a bare click should not be committed as a change <span class=\"tier tier-unc\">from unchanged code</span></span>"],
+    # c3: § 01's whole-list replacement is delete_all at layout_updater.rb:19, an untouched line of a
+    # changed file, cited only in later sections
+    ["The layout endpoint still replaces the whole list on every\n        save.",
+     "The layout endpoint still replaces the whole list on every\n        save, at\n        <a class=\"path\" href=\"#{BLOB}/lib/admin_dashboard/reports/layout_updater.rb#L19\">lib/admin_dashboard/reports/layout_updater.rb:19</a>."],
+    # c3: stop 02's "both endpoints call it" rests on the call sites at :127 and :155, untouched lines
+    # of the changed controller, and the stop cited only the parser's hunk
+    ["              layout and bulk endpoints call it.</span>",
+     "              layout and bulk endpoints call it, at\n              <a class=\"path\" href=\"#{BLOB}/app/controllers/admin/dashboard_controller.rb#L127\">app/controllers/admin/dashboard_controller.rb:127</a> and\n              <a class=\"path\" href=\"#{BLOB}/app/controllers/admin/dashboard_controller.rb#L155\">app/controllers/admin/dashboard_controller.rb:155</a>.</span>"],
+    # c3: "this.items, which is @data.items" is the getter at reports.gjs:158-160, between hunks
+    ["which is <code>@data.items</code>, back over any local\n              resize</span>",
+     "which is <code>@data.items</code> at\n              <a class=\"path\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L158-L160\">frontend/discourse/admin/components/dashboard/reports.gjs:158-160</a>, back over any local\n              resize</span>"],
+    # c1: the modal's request body is manage-reports.gjs, unchanged; the tier sat on the conclusion
+    ["still sends only <code>source</code> and <code>identifier</code>. So reordering",
+     "still sends only <code>source</code> and <code>identifier</code> <span class=\"tier tier-unc\">from unchanged code</span>. So reordering"],
+    # c2: the lane
+    LANE,
   ],
 }.freeze
 
@@ -273,6 +318,8 @@ REBASED = {
   "impact-why-walks-hops" => "impact",
   "impact-changed-as-affected" => "impact",
   "evidence-unlabelled-inference" => "evidence",
+  "evidence-labelled-diff-claim" => "evidence",
+  "evidence-uncited-untouched-line" => "evidence",
 }.freeze
 
 VARIANTS = D.map { |name, old, new| [name, FIX.fetch(REBASED[name], []) + [[old, new]]] } +
