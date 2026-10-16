@@ -305,10 +305,15 @@ loop can see, and only then is a prose change measurable. Each phase has an exit
    (`changed.rb`, the excerpt-overlap warning, the masthead sums) are tested and stay. *Exit*:
    `grep` for the eval PR's identifiers across the skill's bytes finds nothing.
 
-4. **A second eval PR of a different shape.** Every number so far is one 14-file feature with a
-   migration. Add a merged Rails bugfix of four to eight files and no migration, `role: eval`, then
-   `bin/evals e2e <both> -n 3 -j 3` at the clean sha. *Exit*: a per-criterion table for two PRs at
-   one sha, which is the baseline every later change is measured against.
+4. **A second eval PR of a different shape.** `prs.yml` carries two `eval` cases: discourse-44196,
+   a 14-file feature with a migration and an Ember client, and discourse-44560, an 8-file backend
+   bugfix inside a plugin with no migration and no client. Small and large PRs fail oppositely — a
+   small one by inflation, a large one by skimming — and a rule that moves only one of them has
+   found something about that PR, not about the skill. A candidate the CI scope gate would skip as
+   trivial is not an eval PR, because CI would never map it: `ci/application-code.sh` over its range
+   is the first check on any addition. Run `bin/evals e2e <id> -n 3 -j 3` for both at the clean
+   sha. *Exit*: a per-criterion table pooled over both PRs at one sha, which is the baseline every
+   later change is measured against.
 
 5. **Prose work, one rule per cycle**, under rule 7 above, and for a truth criterion only after
    the falsifier transcripts of the failing repetitions have been read (§ *What counts as good*,

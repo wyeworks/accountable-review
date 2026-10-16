@@ -38,3 +38,18 @@
     migration and structure.sql, a controller, model and lib change, a new Ember route and template,
     and tests on both sides — so a judge calibrated on discourse-43002 is measured on a page of the
     kind it was calibrated for, and never on that page.
+
+- id: discourse-44560
+  repo: discourse/discourse
+  pr: 44560
+  base_sha: cb0fbef39d7b233a161e99a8885211ac195ae9e3
+  head_sha: ade0a07ff4d81bc275aca6ac713e0283b418de83
+  stack: rails
+  role: eval
+  notes: >-
+    FIX: Mask webhook header auth credentials in trigger data. 8 files, +104/-17, one commit, all
+    inside a Rails plugin: four production files (a service, a request wrapper, a parser) and four
+    specs, no migration, no client. The opposite shape from discourse-44196 — a small backend
+    bugfix where the whole change is which layer masks a value and when — so a rule that moves
+    only the feature PR's numbers is memorisation, and a page that inflates a small change shows
+    here and nowhere else. CI's scope gate generates for it (4 application files, 32 lines).
