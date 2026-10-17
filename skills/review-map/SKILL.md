@@ -74,6 +74,7 @@ rule one level up — yours, not the other host's.
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
+| `evals/check.rb` | step 10 | Runs the ten mechanical checks over the finished page: a FAIL is fixed before the final publish, a WARN is read |
 
 Paths are relative to this skill's base directory; do not rely on a plugin-root environment
 variable such as `$CLAUDE_PLUGIN_ROOT`, which is not set in the shell.
@@ -1627,6 +1628,29 @@ URL: say where the file is, once, and nothing more.
   unchanged excerpts: presentation only, and the page reads correctly with the whole block deleted, in
   one ink. Do not give the checkpoints checkboxes, tick state or an "n of m" counter — a count of cleared items
   reads as progress toward approval, which is the verdict this page does not carry.
+- **Run the mechanical checks over the finished page, and act on what they print.** After the banner
+  and every marker are gone and the gate has passed, from a directory **outside** the repository under
+  review, which is passed by path — a version manager resolves `ruby` by the directory it runs in, and
+  the repository's pinned Ruby is often one this machine does not have:
+
+  ```sh
+  ruby <skill base directory>/evals/check.rb --page <page.html> --repo <repo top level> --base BASE --head HEAD --final
+  ```
+
+  Ten checks print `PASS`, `FAIL`, `WARN` and `SKIP` lines; the exit code follows the FAILs. **A FAIL
+  is fixed before the final publish** — a placeholder left in the panel, a build marker, an impact
+  path with no unchanged node, a link whose form does not match its citation — because each is a
+  shape the page must not ship in. **A WARN is read, one by one**: each names a sentence or a
+  component and says what rule it bent. Where the check is right, fix the sentence — cite the line,
+  add the tier, drop the label — as a correction that replaces (step 8), never as a note about the
+  page's own drafting; where it is wrong about this page, leave the sentence and say so in chat. The
+  tier WARNs are the ones most often right: a sentence citing a file outside the diff with no tier,
+  a `from unchanged code` with nothing cited beside it, a `from unchanged code` on a sentence whose
+  only citations are files in the diff. Re-run after the fixes; the checks are cheap and the page is
+  not re-read whole to apply them — `Edit` the sentence the WARN quotes.
+
+  Needs `ruby` on `PATH`. If there is none, say so in chat as a limit of this run and go on: nothing
+  about it goes on the page, which carries no account of how it was checked.
 - Publish the final state to the same path — or, with `--output`, simply leave the finished file at
   `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
   what the change does in two or three lines, and anything you could not verify. Mention the project's

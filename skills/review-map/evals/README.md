@@ -521,6 +521,11 @@ harness cannot see" is an argument, not a measurement.
 
 ## checks/
 
+**A run executes these too.** `SKILL.md` step 10 runs `check.rb --final` over the finished page
+before the final publish, fixes every FAIL and reads every WARN, so a rule here is a correction the
+run makes on every page and not only a measurement the eval takes afterwards. Nothing about it
+reaches the page.
+
 One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines and nothing else;
 `check.rb` decides which apply and adds them up.
 

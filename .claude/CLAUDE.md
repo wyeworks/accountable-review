@@ -107,7 +107,7 @@ long drifts silently. **The checkpoint count is never graded**: a page that came
 by losing a judgment has done the one thing the budget forbids.
 
 `skills/review-map/evals/` is where judging happens, in three layers. **Mechanical**: `check.rb`
-and the ten checks, run on every push. **End to end** (`evals/e2e/`): a whole run of the skill
+and the ten checks, run on every push and, by `SKILL.md` step 10, over every finished page before its final publish. **End to end** (`evals/e2e/`): a whole run of the skill
 against a **real merged OSS pull request** pinned in `prs.yml`, generated through
 `ci/generate-review-map.sh --output` exactly as CI does, checked mechanically, then graded by one
 LLM judge per aspect of the page, anchored in the checkout and blind to the mechanical results.
@@ -173,13 +173,13 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the evidence foot's inventory cells and their deep links, so the gate checks the page rather than someone's typing. `--paths-only` is the only mode the page uses |
-| `scripts/coverage-gate.sh` | The one mechanical check — set equality between the inventory and the diff |
+| `scripts/coverage-gate.sh` | The one mechanical gate — set equality between the inventory and the diff |
 | `scripts/read-config.sh` | The only thing that knows `.accountable-review.yml`'s shape, and the one parser every reader uses — the skill at step 1, `page-skeleton.sh`, and the `ci/` scripts. In `review-map` because the skill ships alone |
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/` and `setup-ci/tests/` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
-| `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
+| `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime, except `check.rb`, which step 10 runs over the finished page; see `evals/README.md` |
 | `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one file per judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release; `grade.rb` holds the thresholds `evals/README.md` § *What counts as good* owns, reading each criterion's truth-or-form class from `criteria.yml` — **never from a judge's file**, whose bytes are its instrument sha, so `test_grade.rb` pins the two to the same length |
 | `evals/checks/` | One Ruby script per rule family, ten of them, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. A check that could only SKIP does not exist, because a SKIP reads as verified. `impact-paths.rb` grades `figure.impact` and nothing else; `figures.rb` grades a checkpoint's figures, `figure.chain` among them. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — which is a relation between the page and a repository, hence `golden/links-repo.sh` and `lib/review_map/fixture.rb`. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output, and `frozen.rb` verifies against it |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
@@ -502,7 +502,15 @@ Editing one of these means checking the others still agree.
   check scopes its affected-entry region on the verbatim `Affected, not changed` eyebrow, which appears
   twice — beside the impact panel and in the foot — so `</ul>` and `</section>` must stay among its
   region resets.
-- **Completeness, and the one mechanical check.** Every path in the diff appears in the page, and the
+- **Step 10 runs `evals/check.rb --final` over the finished page, and the page carries no trace of
+  it.** A FAIL is fixed before the final publish, because each is a shape the page must not ship
+  in; a WARN is read and the sentence it quotes is corrected or left, in chat. The run needs `ruby`
+  and says so in chat when there is none; nothing about the checks reaches the page, which is the
+  verification-badge rule applied to the run's own tooling. These agree: `SKILL.md` step 10 and its
+  scripts table, `hooks/activity.json` (the call's purpose on the progress line), `evals/README.md`
+  § *checks/*, and `ci/generate-review-map.sh`, which runs nothing of it because the skill already
+  has.
+- **Completeness, and the one mechanical gate.** Every path in the diff appears in the page, and the
   gate runs on the finished page. The carrier is `div.gt.gt-paths` inside `details.evidence` at the
   foot, generated by `ledger-rows.sh --paths-only` as cells carrying `data-path`. It is a grid cell
   (`<div class="c" data-path="…">`) because `coverage-gate.sh` greps `data-path` page-wide and
