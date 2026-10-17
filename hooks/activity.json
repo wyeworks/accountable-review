@@ -1,7 +1,7 @@
 [
   ["claim-falsifier", "🥊 falsifiers reading"],
   ["coverage-gate\\.sh", "🚪 coverage gate"],
-  ["evals/check\\.rb", "🔬 checking the page"],
+  ["page-lint\\.sh", "🔬 linting the page"],
   ["ledger-rows\\.sh", "🧾 listing every file"],
   ["excerpt\\.sh", "✂️  cutting excerpts"],
   ["page-skeleton\\.sh", "🏗️  laying out the page"],

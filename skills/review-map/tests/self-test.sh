@@ -42,6 +42,7 @@ SKELETON=$SKILL_DIR/scripts/page-skeleton.sh
 DIFF_RENDER=$SKILL_DIR/scripts/diff-render.sh
 CARRY_PLAN=$SKILL_DIR/scripts/carry-plan.sh
 EXCERPT=$SKILL_DIR/scripts/excerpt.sh
+PAGE_LINT=$SKILL_DIR/scripts/page-lint.sh
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
@@ -485,6 +486,37 @@ case_excerpt_red "excerpt.sh writes a second citation under the code" "$WORK/ex-
 # 42. The link falls off the summary — the closed excerpt is then a citation nobody can click.
 sed 's|^  if \[ -n "\$LINK" \]; then$|  if false; then|' "$EXCERPT" > "$WORK/no-loc-link.sh"
 case_excerpt_red "excerpt.sh --at leaves the summary's location unlinked" "$WORK/no-loc-link.sh"
+
+# The same, for page-lint.sh. Script mutations, each one rule switched off: a lint whose rule
+# never fires passes every page, which is the check that always passes in a new costume.
+case_lint_red() {
+  what=$1; scr=$2
+  chmod 755 "$scr"
+  if REVIEW_MAP_SECTION=page-lint REVIEW_MAP_PAGE_LINT="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
+    bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
+  else
+    ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
+  fi
+}
+
+# 43. The tier is never seen, so every cited unchanged file reads as unlabelled — the clean page
+#     goes red, which is the only way to prove the clean assertion looked for a label.
+sed 's|  tier = index(s, "class=\\"tier") > 0|  tier = 0|' "$PAGE_LINT" > "$WORK/lint-blind.sh"
+case_lint_red "page-lint.sh stops seeing tier labels" "$WORK/lint-blind.sh"
+
+# 44. The href is ignored, so a short citation under a blob permalink is matched on its text —
+#     `project.rb:41` is nowhere in the ledger as such, and the suffix match is what saves it; cut
+#     that too and the clean page warns.
+sed 's|  if (path in changed) return 1|  return 0|' "$PAGE_LINT" > "$WORK/lint-nohref.sh"
+case_lint_red "page-lint.sh stops resolving a citation to the changed set" "$WORK/lint-nohref.sh"
+
+# 45. The on-changed shape is dropped, so a label on changed code passes.
+sed 's|  if (unc \&\& inside \&\& !outside) {|  if (0) {|' "$PAGE_LINT" > "$WORK/lint-nochg.sh"
+case_lint_red "page-lint.sh stops warning on from-unchanged-code over changed files" "$WORK/lint-nochg.sh"
+
+# 46. Placeholders are not a FAIL any more.
+sed 's|  status=1|  status=0|' "$PAGE_LINT" > "$WORK/lint-ph.sh"
+case_lint_red "page-lint.sh lets a placeholder ship" "$WORK/lint-ph.sh"
 
 echo ""
 echo "self-test: $ok ok, $bad bad"

@@ -521,10 +521,11 @@ harness cannot see" is an argument, not a measurement.
 
 ## checks/
 
-**A run executes these too.** `SKILL.md` step 10 runs `check.rb --final` over the finished page
-before the final publish, fixes every FAIL and reads every WARN, so a rule here is a correction the
-run makes on every page and not only a measurement the eval takes afterwards. Nothing about it
-reaches the page.
+**None of this runs inside a user's run, and two of its rules are relayed from scripts that do.**
+Ruby is the evals'; a run may depend on shell and awk only. So `completeness.rb` relays
+`scripts/coverage-gate.sh` and `page-invariants.rb` § 10 relays `scripts/page-lint.sh`, the lint
+`SKILL.md` step 10 runs over the finished page, and each of those rules has one implementation —
+the one the run acts on, measured here afterwards.
 
 One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines and nothing else;
 `check.rb` decides which apply and adds them up.

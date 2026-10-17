@@ -2,7 +2,7 @@
 # run.sh — the deterministic tests for review-map's scripts.
 #
 #   Usage: tests/run.sh
-#          REVIEW_MAP_SECTION=skeleton|diff-render|carry-plan|excerpt tests/run.sh   one section only
+#          REVIEW_MAP_SECTION=skeleton|diff-render|carry-plan|excerpt|page-lint tests/run.sh   one section only
 #
 # Whether a Review Map is any good is a model run and cannot be asserted on. The scripts underneath
 # it are ordinary software with right answers, and this is where that half is held to account.
@@ -43,6 +43,8 @@ THEMES=${REVIEW_MAP_THEMES:-$SKILL_DIR/references/themes}
 DIFF_RENDER=${REVIEW_MAP_DIFF_RENDER:-$SKILL_DIR/scripts/diff-render.sh}
 CARRY_PLAN=${REVIEW_MAP_CARRY_PLAN:-$SKILL_DIR/scripts/carry-plan.sh}
 EXCERPT=${REVIEW_MAP_EXCERPT:-$SKILL_DIR/scripts/excerpt.sh}
+PAGE_LINT=${REVIEW_MAP_PAGE_LINT:-$SKILL_DIR/scripts/page-lint.sh}
+GOLDEN=$SKILL_DIR/evals/golden
 
 # A theme set in the caller's environment would change every page this file emits.
 unset ACCOUNTABLE_REVIEW_THEME
@@ -60,8 +62,8 @@ count() { c=$(grep -c -F -e "$2" "$1" 2>/dev/null) || c=0; printf %s "$c"; }
 # what CI and a person get.
 SECTION=${REVIEW_MAP_SECTION:-all}
 case $SECTION in
-  all|skeleton|diff-render|carry-plan|excerpt) ;;
-  *) echo "run.sh: unknown REVIEW_MAP_SECTION: $SECTION (skeleton | diff-render | carry-plan | excerpt)" >&2; exit 2 ;;
+  all|skeleton|diff-render|carry-plan|excerpt|page-lint) ;;
+  *) echo "run.sh: unknown REVIEW_MAP_SECTION: $SECTION (skeleton | diff-render | carry-plan | excerpt | page-lint)" >&2; exit 2 ;;
 esac
 section() { [ "$SECTION" = all ] || [ "$SECTION" = "$1" ]; }
 
@@ -1034,8 +1036,76 @@ assert_eq "$(printf '%s' "$out" | grep -c 'WHY_THIS_MATTERS')" "1" "and an unwri
 fi
 
 echo ""
+if section page-lint; then
+# ---------------------------------------------------------------- page-lint.sh
+# The runtime reading a run acts on at step 10 (SKILL.md), in shell because it runs on the user's
+# machine. The tier fixtures are the eval's golden pages — one defect each, their ledger the
+# changed set — because evals/checks/page-invariants.rb § 10 relays this script, so one set of
+# pages holds both readers to the same answer.
+echo ""
+echo "page-lint  $PAGE_LINT"
+lint_out() { rc=0; "$PAGE_LINT" "$@" > "$WORK/lint.out" 2>/dev/null || rc=$?; echo "$rc" > "$WORK/lint.exit"; }
+
+lint_out "$GOLDEN/invariants-tier-clean.html"
+assert_eq "$(count "$WORK/lint.out" 'WARN')" "0" "a page whose labels agree with its ledger draws no WARN"
+assert_eq "$(count "$WORK/lint.out" 'PASS  tiers agree with the changed set')" "1" "and says the tiers agree, naming the ledger"
+assert_eq "$(cat "$WORK/lint.exit")" "0" "a WARN-free page exits 0"
+
+for shape in unlabelled uncited on-changed; do
+  lint_out "$GOLDEN/invariants-tier-$shape.html"
+  assert_eq "$(count "$WORK/lint.out" 'WARN')" "1" "invariants-tier-$shape.html draws exactly one WARN"
+  assert_eq "$(count "$WORK/lint.out" "WARN  $shape —")" "1" "and it is the $shape shape"
+  assert_eq "$(cat "$WORK/lint.exit")" "0" "a WARN never moves the exit code"
+done
+
+# The href is where a citation's path lives when its text is short: app/models/project.rb is in the
+# ledger, so `project.rb:41` under a blob permalink is changed code (no WARN), and a diff-form href
+# is changed by definition. lib/other.rb is in neither, so its short citation with no tier is the
+# unlabelled shape — and a plain-text citation matches on its suffix.
+cat > "$WORK/href.html" <<'HTML'
+<section class="cp" id="cp-a">
+  <p>The column is set at <a class="path" href="https://github.com/o/r/blob/0123abcd/app/models/project.rb#L41">project.rb:41</a>. The hunk at <a class="path" href="https://github.com/o/r/pull/1/files#diff-abc">project.rb:41</a> shows it. The helper at <a class="path" href="https://github.com/o/r/blob/0123abcd/lib/other.rb#L3">other.rb:3</a> reads it. The spec at <a class="path">spec/models/project_spec.rb:9</a> pins it.</p>
+</section>
+<details class="evidence"><summary>Evidence</summary><div class="gt gt-paths">
+<div class="c" data-path="app/models/project.rb">app/models/project.rb</div>
+<div class="c" data-path="spec/models/project_spec.rb">spec/models/project_spec.rb</div>
+</div></details>
+HTML
+lint_out "$WORK/href.html"
+assert_eq "$(count "$WORK/lint.out" 'WARN')" "1" "a citation's path is read from its href, a diff href is changed, plain text matches on its suffix"
+assert_eq "$(count "$WORK/lint.out" 'other.rb:3')" "1" "and the one WARN names the file outside the ledger"
+
+# A card's why may not carry a citation — impact-paths.rb holds that line — so its unchanged-code
+# label is never the uncited shape. The same label in a paragraph is.
+cat > "$WORK/why.html" <<'HTML'
+<p class="ip-why">An archived project stays selectable <span class="tier tier-unc">from unchanged code</span>. <a href="#cp-a">Checkpoint A</a></p>
+<details class="evidence"><div class="gt gt-paths"><div class="c" data-path="app/models/project.rb">x</div></div></details>
+HTML
+lint_out "$WORK/why.html"
+assert_eq "$(count "$WORK/lint.out" 'WARN')" "0" "a card's why with an unchanged-code label and no citation is not the uncited shape"
+
+# Placeholders are the one FAIL: the template copied and not filled in.
+printf '<p>{{WHAT_GOES_WRONG}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>\n' > "$WORK/ph.html"
+lint_out "$WORK/ph.html"
+assert_eq "$(count "$WORK/lint.out" 'FAIL  placeholders')" "1" "a placeholder left on the page is a FAIL"
+assert_eq "$(count "$WORK/lint.out" '{{LETTER}} {{WHAT_GOES_WRONG}}')" "1" "naming each placeholder once"
+assert_eq "$(cat "$WORK/lint.exit")" "1" "and the exit code says so"
+
+# No ledger and no repository: nothing to hold a label against, said out loud rather than passed.
+printf '<p>A claim <span class="tier tier-unc">from unchanged code</span>.</p>\n' > "$WORK/bare.html"
+lint_out "$WORK/bare.html"
+assert_eq "$(count "$WORK/lint.out" 'SKIP  tiers')" "1" "with no changed set the tier rule says SKIP"
+assert_eq "$(count "$WORK/lint.out" 'WARN')" "0" "and warns on nothing"
+
+# A comment carries every placeholder and rule name in the template; none of it is read.
+printf '<!-- {{IN_A_COMMENT}} from unchanged code --><p>Plain.</p>\n<div class="c" data-path="a.rb">a</div>\n' > "$WORK/comment.html"
+lint_out "$WORK/comment.html"
+assert_eq "$(count "$WORK/lint.out" 'FAIL')" "0" "a placeholder inside a comment is not on the page"
+fi
+
 echo "run.sh: $pass passed, $fail failed"
 # A narrowed run that asserted nothing has not passed. It is the shape a mistyped section name in
 # the gate above would take if the case statement ever lost a branch.
 [ "$pass" -gt 0 ] || { echo "run.sh: no assertion ran in section $SECTION" >&2; exit 1; }
 [ "$fail" -eq 0 ]
+
