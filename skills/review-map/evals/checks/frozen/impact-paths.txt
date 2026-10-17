@@ -1700,10 +1700,34 @@ PASS  every changed and affected node carries exactly one locator, last in its b
 PASS  every .ip-aff node sits in a file the diff does not touch, against the page's own ledger
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
+## --fragment invariants-tier-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-tier-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-tier-modifier-only.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-tier-on-changed.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-tier-on-changed.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-tier-uncited.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-tier-uncited.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment invariants-tier-unlabelled.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-tier-unlabelled.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment invariants-update-assurance.html

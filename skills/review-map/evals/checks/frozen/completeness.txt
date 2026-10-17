@@ -688,10 +688,34 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-strip-kind.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-tier-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-tier-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-tier-modifier-only.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-tier-modifier-only.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-tier-on-changed.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-tier-on-changed.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-tier-uncited.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-tier-uncited.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-tier-unlabelled.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-tier-unlabelled.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-update-assurance.html

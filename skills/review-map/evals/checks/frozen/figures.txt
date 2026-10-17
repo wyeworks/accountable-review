@@ -746,10 +746,34 @@ PASS  cp-a's chain holds its shape and carries its locators
 exit=0
 PASS  at most one figure per checkpoint
 PASS  cp-a's chain holds its shape and carries its locators
+## --fragment invariants-tier-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-tier-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page invariants-tier-modifier-only.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-tier-on-changed.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-tier-on-changed.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-tier-uncited.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-tier-uncited.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-tier-unlabelled.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-tier-unlabelled.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment invariants-update-assurance.html

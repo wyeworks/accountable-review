@@ -688,10 +688,34 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-strip-kind.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-tier-modifier-only.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-tier-modifier-only.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-on-changed.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-on-changed.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-uncited.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-uncited.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-unlabelled.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-unlabelled.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-update-assurance.html

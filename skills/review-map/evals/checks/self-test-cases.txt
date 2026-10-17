@@ -110,6 +110,12 @@
 # caveat until the format dropped it, so a pattern reaching too far would fire everywhere at
 # once. That half is pinned by frozen.rb, which holds every case's whole output.
  page-invariants    | invariants-standing-disclaimer.html | 0 | a standing disclaimer may have come back
+# § 10, tiers against the changed set: three WARN shapes and the page that carries none. Each
+# fixture's ledger is its changed set, so the rows run with no repository.
+ page-invariants    | invariants-tier-clean.html       | 0 | tiers agree with the changed set
+ page-invariants    | invariants-tier-unlabelled.html  | 0 | cites a file outside the diff with no tier
+ page-invariants    | invariants-tier-uncited.html     | 0 | from unchanged code with nothing cited
+ page-invariants    | invariants-tier-on-changed.html  | 0 | from unchanged code on a sentence that cites only files in the diff
  page-invariants    | invariants-bill-in-comment.html | 0 | no 'clean bill of health' in the prose
  page-invariants    | invariants-bill-in-prose.html   | 0 | 'clean bill of health' appears
 # Recency, § 2e. Two shapes because they are two different mistakes: a class on the checkpoint,

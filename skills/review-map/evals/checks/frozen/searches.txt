@@ -918,6 +918,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 PASS  every one of 2 affected entr(ies) sits in a file the diff does not touch, against the page's own ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-tier-clean.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-tier-clean.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
@@ -925,6 +933,30 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page invariants-tier-modifier-only.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-tier-on-changed.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-tier-on-changed.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-tier-uncited.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-tier-uncited.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-tier-unlabelled.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-tier-unlabelled.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-update-assurance.html
 exit=0

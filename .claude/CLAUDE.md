@@ -448,8 +448,11 @@ Editing one of these means checking the others still agree.
   `report-format.md` § *Evidence tiers* states it for the tier; § *Source excerpts* and § *Impact
   paths* state it for their components; `SKILL.md` step 6 files such a hop under *Trace*; and
   `excerpts.rb`, `impact-paths.rb` and `searches.rb` hold the tag, the node and the list against one
-  changed set, `checks/lib/review_map/changed.rb`. The tier has no check; the `evidence` judge reads
-  it.
+  changed set, `checks/lib/review_map/changed.rb`. `page-invariants.rb` § 10 warns on the three ways a
+  label can disagree with that set — a sentence citing a file outside the diff with no tier, `from
+  unchanged code` with nothing cited, `from unchanged code` on a sentence citing only changed files —
+  never failing, because a hard failure on a label teaches a run to label everything; whether a tier
+  is *earned* is the `evidence` judge's question.
 - **Framework anchors are provenance, not evidence, and there is no sixth tier.** A doc link explains
   why a framework consequence follows; a console probe asks the reviewer's own application; a primer
   states the rule outright, at `--mentor` only. The claim keeps resting on a repo `file:line` at the

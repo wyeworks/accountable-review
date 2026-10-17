@@ -2188,11 +2188,7 @@ miscounted first screen, and the reader who adds it up stops trusting the number
 **Then one paragraph, 80 to 160 words, and at most a handful of bullets.** What problem this solves,
 what is now true that was not, who is affected. Derived from the code, the tests and the commits —
 the PR description is a claim and is attributed when it is used, per `SKILL.md` step 4. Carry an
-evidence tier on the intent itself if it is inferred rather than stated, and on a consequence this
-paragraph states ahead of the checkpoint that explains it — what used to happen, what a reader sees
-now — the tier that checkpoint gives it: `from unchanged code` where the behaviour sits in a file
-the diff does not touch. The label travels with the restatement (§ *Evidence tiers*); the first
-screen is where a reader meets the claim first.
+evidence tier on the intent itself if it is inferred rather than stated.
 
 **It may say a test was added; it never says the tests cover the change.** *Pin each of them*,
 *covered by specs*, *both behaviours are tested* — each is a sentence about how well the change is

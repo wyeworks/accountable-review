@@ -11,6 +11,7 @@
 # passing on evidence they do not have.
 
 require_relative "lib/review_map/check"
+require_relative "lib/review_map/changed"
 
 # Verdict language, in two families, because one of them is legitimate as a DENIAL.
 #
@@ -400,6 +401,77 @@ else
     check.ok("By kind adds up to Files (#{buckets.map { |n, k| "#{n} #{k}" }.join(" · ")})")
   else
     check.maybe("By kind adds up to #{sum} but Files is #{files} — every file goes in exactly one bucket, the nearest one when unsure")
+  end
+end
+
+# 10 · Tiers against the changed set. report-format.md § Evidence tiers owns the rule: a claim
+#      resting on a file the diff does not touch carries `from unchanged code` and cites that file,
+#      and a file the diff touches is changed code, untouched lines included, so it never carries
+#      that label. Three shapes, each a WARN because a hard failure on a label teaches a run to
+#      label everything: a sentence that cites a file outside the diff and carries no tier; a
+#      `from unchanged code` with nothing cited in its sentence; a `from unchanged code` whose only
+#      citations are files in the diff. Whether a tier is EARNED stays the evidence judge's
+#      question — this reads only what the sentence cites.
+#
+#      Read per sentence inside the prose fields — a paragraph, a *Look at* entry, a reading-path
+#      stop, a card's why — on the comment-stripped copy with the regions that carry no claim or
+#      are labelled by their heading removed: node locators, the *Affected, not changed* lists, the
+#      search record, Context, the evidence foot. A list entry is one unit, because its clause and
+#      its citation are separate elements. The changed set is the diff when --repo and --base are
+#      given, else the page's own ledger; with neither there is nothing to hold the labels against.
+changed, set_from, = ReviewMap.changed_set(check, page)
+tier_text = visible
+  .without(open: /<ol class="ip-path"/, close: %r{</ol>})
+  .without(open: /<ul class="ev-list"/, close: %r{</ul>})
+  .without(open: /<details class="searched"/, close: %r{</details>})
+  .without(open: /<dl class="ctx"/, close: %r{</dl>})
+  .without(open: /<details class="evidence"/, close: %r{</details>})
+  .lines.join
+CITATION_IN_PROSE = %r{<(?:a|span) class="(?:path|ex-loc)(?: [^"]*)?"([^>]*)>([^<]*)</(?:a|span)>}
+# Each field is [sentence, cites?]: a card's why may not carry a citation (impact-paths.rb holds
+# that line — the locators on its nodes are its citations), so an unchanged-code label there is
+# held to the first and third shapes and never to the second.
+fields = tier_text.scan(%r{<p\b([^>]*)>(.*?)</p>}m).flat_map do |attrs, inner|
+  next [] if attrs.match?(/class="(?:note|buildstate)/)
+
+  why = attrs.include?('class="ip-why')
+  inner.split(/(?<=[.!?])\s+/).map { |sentence| [sentence, !why] }
+end
+fields += tier_text.scan(%r{<li\b(?![^>]*class="ip-n)[^>]*>(.*?)</li>}m).flatten.map { |li| [li, true] }
+if changed.nil?
+  check.skip("tiers against the changed set: no --repo/--base and no ledger on the page")
+elsif !tier_text.match?(CITATION_IN_PROSE) && !tier_text.include?("from unchanged code")
+  check.skip("tiers against the changed set: the fragment cites nothing and carries no unchanged-code label")
+else
+  quote = ->(s) { ReviewMap.unescape(s.gsub(/<[^>]*>/, "")).gsub(/\s+/, " ").strip[0, 70] }
+  # A citation's path is in its href when the link text is short (`oauth.rb:35` for a blob
+  # permalink), and a diff-form href names no path at all but is by definition a changed file;
+  # plain-text citations on an unpushed branch carry only the text, matched on its suffix.
+  in_diff = lambda do |attrs, text|
+    next true if attrs.include?("/files#diff-")
+
+    path = attrs[%r{/blob/[0-9a-f]{7,40}/([^#"]+)}, 1] || text.split(":").first.to_s.strip
+    changed.include?(path) || changed.any? { |c| c.end_with?("/#{path}") }
+  end
+  unlabelled = []
+  uncited = []
+  on_changed = []
+  fields.each do |s, cites|
+    verdicts = s.scan(CITATION_IN_PROSE).reject { |_, text| text.strip.empty? }.map { |attrs, text| in_diff.(attrs, text) }
+    tier = s.include?('class="tier')
+    unc = s.include?("from unchanged code")
+    outside = verdicts.any? { |v| !v }
+    inside = verdicts.any?
+    unlabelled << quote.(s) if outside && !tier
+    uncited << quote.(s) if unc && verdicts.empty? && cites
+    on_changed << quote.(s) if unc && inside && !outside
+  end
+  if unlabelled.empty? && uncited.empty? && on_changed.empty?
+    check.ok("tiers agree with the changed set (#{set_from})")
+  else
+    check.maybe("a sentence cites a file outside the diff with no tier — a claim resting on unchanged code says so, or it claims the diff shows it: #{unlabelled.map { |q| "\"#{q}\"" }.join(" · ")} ") unless unlabelled.empty?
+    check.maybe("from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: #{uncited.map { |q| "\"#{q}\"" }.join(" · ")} ") unless uncited.empty?
+    check.maybe("from unchanged code on a sentence that cites only files in the diff — an untouched line of a changed file is changed code, cited and unlabelled: #{on_changed.map { |q| "\"#{q}\"" }.join(" · ")} ") unless on_changed.empty?
   end
 end
 

@@ -1088,10 +1088,34 @@ PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 PASS  no excerpt quotes the same lines twice
 PASS  no two excerpts quote overlapping lines
+## --fragment invariants-tier-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-tier-clean.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 SKIP  no excerpts in this input
 ## --page invariants-tier-modifier-only.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-tier-on-changed.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-tier-on-changed.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-tier-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-tier-uncited.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment invariants-tier-unlabelled.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-tier-unlabelled.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment invariants-update-assurance.html

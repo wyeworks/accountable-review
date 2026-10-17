@@ -246,10 +246,17 @@ one of each kind a mis-tier can be, so one wrong label fails the rule it breaks 
    against the previous release's row in `history/`. On 6 samples a drop that size is beyond judge
    noise.
 
-7. **A wording change is kept only if it shows a general effect.** Measured on every eval PR at a
-   clean sha, the criterion it targets gains at least 2 verdicts of 6 and no other criterion loses
-   more than 1. A gain on one PR only is reverted as memorisation, whatever the judge wrote about
-   it. The failure this rule exists to stop is the per-round patch: a rule written from one
+7. **A wording change is kept only if it shows a general effect, measured on the shape it
+   targets.** Measured on every eval PR at a clean sha. For a form criterion the measure is the
+   pooled rate: the target gains at least 2 verdicts of 6. A truth criterion cannot move in one
+   cycle — it fails on any one of forty claims and a page carries several shapes under it — so
+   its measure is the shape: no judge's evidence names it on any page afterwards, and where the
+   page carries a count of it (a card's why with its tier, a label beside a citation) that count,
+   which is read off the pages and not off a verdict. In either class no other criterion may lose
+   more than 1 of 6 *for a reason the rule explains*: at six verdicts ±2 is the judges' own noise —
+   criteria no rule touched move that far — so a larger drop is read before it is counted, and
+   counted only where its evidence names the rule's wording. A gain on one PR only is reverted as
+   memorisation, whatever the judge wrote about it. The failure this rule exists to stop is the per-round patch: a rule written from one
    repetition's verdict text, naming that PR's identifiers, that moves the next repetition's
    failure to a different sentence under the same criterion.
 
@@ -318,8 +325,10 @@ loop can see, and only then is a prose change measurable. Each phase has an exit
 5. **Prose work, one rule per cycle**, under rule 7 above, and for a truth criterion only after
    the falsifier transcripts of the failing repetitions have been read (§ *What counts as good*,
    last paragraph): pick the lowest-rated sub-criterion
-   across both PRs, write one rule in general terms, run both PRs three times, keep or revert on
-   the rule-acceptance test. A cycle that improves one PR and not the other has found something
+   across both PRs, and prefer a check to a rule wherever the shape is mechanical — a label beside
+   a citation can be held against the changed set, and a check corrects the run at step 10 on every
+   page where a rule only instructs it. Otherwise write one rule in general terms. Run both PRs
+   three times, keep or revert on the rule-acceptance test. A cycle that improves one PR and not the other has found something
    about that PR, not about the skill.
 
 ## Profiling one run
@@ -517,7 +526,7 @@ One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines 
 
 | | Owns | Scope |
 |---|---|---|
-| `page-invariants.rb` | severity chips, verdict language, assurance language, evidence tiers, `data-path`, dead links, themes | page and fragment |
+| `page-invariants.rb` | severity chips, verdict language, assurance language, evidence tiers and their agreement with the changed set, `data-path`, dead links, themes, the metric strip | page and fragment |
 | `build-state.rb` | draft / final / stopped | page |
 | `completeness.rb` | the gate, delegated to `scripts/coverage-gate.sh` | page |
 | `excerpts.rb` | collapsed, summarised, tinted in all three themes, no range quoted twice, no syntax colouring written into the quotation, `data-lang` on unchanged blocks only, and a state tag that agrees with the diff — `Unchanged` never on a path the change touched, and no tag outside the generator's vocabulary | page and fragment |

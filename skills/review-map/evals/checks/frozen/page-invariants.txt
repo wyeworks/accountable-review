@@ -15,6 +15,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --page agenda-clean.html
 exit=1
 PASS  no severity chips
@@ -32,6 +33,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment agenda-probe-unlabelled.html
 exit=0
 PASS  no severity chips
@@ -49,6 +51,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --page agenda-probe-unlabelled.html
 exit=1
 PASS  no severity chips
@@ -66,6 +69,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment agenda-probes-over-budget.html
 exit=0
 PASS  no severity chips
@@ -83,6 +87,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --page agenda-probes-over-budget.html
 exit=1
 PASS  no severity chips
@@ -100,6 +105,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment anchors-clean.html
 exit=0
 PASS  no severity chips
@@ -116,6 +122,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-clean.html
 exit=1
 PASS  no severity chips
@@ -132,6 +139,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-demo-loose.html
 exit=0
 PASS  no severity chips
@@ -148,6 +156,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-demo-loose.html
 exit=1
 PASS  no severity chips
@@ -164,6 +173,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-docsrs-clean.html
 exit=0
 PASS  no severity chips
@@ -180,6 +190,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-docsrs-clean.html
 exit=1
 PASS  no severity chips
@@ -196,6 +207,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-docsrs-unpinned.html
 exit=0
 PASS  no severity chips
@@ -212,6 +224,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-docsrs-unpinned.html
 exit=1
 PASS  no severity chips
@@ -228,6 +241,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-docsrs-wrong-crate.html
 exit=0
 PASS  no severity chips
@@ -244,6 +258,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-docsrs-wrong-crate.html
 exit=1
 PASS  no severity chips
@@ -260,6 +275,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-fabricated-output.html
 exit=0
 PASS  no severity chips
@@ -276,6 +292,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-fabricated-output.html
 exit=1
 PASS  no severity chips
@@ -292,6 +309,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-hexdocs-clean.html
 exit=0
 PASS  no severity chips
@@ -308,6 +326,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-hexdocs-clean.html
 exit=1
 PASS  no severity chips
@@ -324,6 +343,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-hexdocs-unpinned.html
 exit=0
 PASS  no severity chips
@@ -340,6 +360,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-hexdocs-unpinned.html
 exit=1
 PASS  no severity chips
@@ -356,6 +377,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-hexdocs-wrong-package.html
 exit=0
 PASS  no severity chips
@@ -372,6 +394,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-hexdocs-wrong-package.html
 exit=1
 PASS  no severity chips
@@ -388,6 +411,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-invented-attribute.html
 exit=0
 PASS  no severity chips
@@ -404,6 +428,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-invented-attribute.html
 exit=1
 PASS  no severity chips
@@ -420,6 +445,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-invented-scope.html
 exit=0
 PASS  no severity chips
@@ -436,6 +462,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-invented-scope.html
 exit=1
 PASS  no severity chips
@@ -452,6 +479,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-link-alone.html
 exit=0
 PASS  no severity chips
@@ -468,6 +496,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-link-alone.html
 exit=1
 PASS  no severity chips
@@ -484,6 +513,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-link-in-excerpt.html
 exit=0
 PASS  no severity chips
@@ -500,6 +530,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-link-in-excerpt.html
 exit=1
 PASS  no severity chips
@@ -516,6 +547,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-mixed-series.html
 exit=0
 PASS  no severity chips
@@ -532,6 +564,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-mixed-series.html
 exit=1
 PASS  no severity chips
@@ -548,6 +581,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-nextjs-wrong-router.html
 exit=0
 PASS  no severity chips
@@ -564,6 +598,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-nextjs-wrong-router.html
 exit=1
 PASS  no severity chips
@@ -580,6 +615,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-clean.html
 exit=0
 PASS  no severity chips
@@ -596,6 +632,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-clean.html
 exit=1
 PASS  no severity chips
@@ -612,6 +649,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-doubled.html
 exit=0
 PASS  no severity chips
@@ -628,6 +666,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-doubled.html
 exit=1
 PASS  no severity chips
@@ -644,6 +683,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-marked.html
 exit=0
 PASS  no severity chips
@@ -660,6 +700,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-marked.html
 exit=1
 PASS  no severity chips
@@ -676,6 +717,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-orphan.html
 exit=1
 PASS  no severity chips
@@ -692,6 +734,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-orphan.html
 exit=1
 PASS  no severity chips
@@ -708,6 +751,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-over-budget.html
 exit=0
 PASS  no severity chips
@@ -724,6 +768,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-over-budget.html
 exit=1
 PASS  no severity chips
@@ -740,6 +785,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-probe-nested.html
 exit=0
 PASS  no severity chips
@@ -756,6 +802,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-probe-nested.html
 exit=1
 PASS  no severity chips
@@ -772,6 +819,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-rails-framed.html
 exit=0
 PASS  no severity chips
@@ -788,6 +836,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-rails-framed.html
 exit=1
 PASS  no severity chips
@@ -804,6 +853,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-rust-clean.html
 exit=0
 PASS  no severity chips
@@ -820,6 +870,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-rust-clean.html
 exit=1
 PASS  no severity chips
@@ -836,6 +887,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-rust-unframed.html
 exit=0
 PASS  no severity chips
@@ -852,6 +904,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-rust-unframed.html
 exit=1
 PASS  no severity chips
@@ -868,6 +921,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-uncited.html
 exit=0
 PASS  no severity chips
@@ -884,6 +938,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-uncited.html
 exit=1
 PASS  no severity chips
@@ -900,6 +955,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-primer-ungated.html
 exit=0
 PASS  no severity chips
@@ -916,6 +972,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-primer-ungated.html
 exit=1
 PASS  no severity chips
@@ -932,6 +989,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-probe-js-forms.html
 exit=1
 PASS  no severity chips
@@ -948,6 +1006,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-probe-js-forms.html
 exit=1
 PASS  no severity chips
@@ -964,6 +1023,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-probe-label-thin.html
 exit=0
 PASS  no severity chips
@@ -980,6 +1040,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-probe-label-thin.html
 exit=1
 PASS  no severity chips
@@ -996,6 +1057,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-probe-legit-forms.html
 exit=1
 PASS  no severity chips
@@ -1012,6 +1074,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-probe-legit-forms.html
 exit=1
 PASS  no severity chips
@@ -1028,6 +1091,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-probe-lens-forms.html
 exit=1
 PASS  no severity chips
@@ -1044,6 +1108,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-probe-lens-forms.html
 exit=1
 PASS  no severity chips
@@ -1060,6 +1125,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-probe-rust-forms.html
 exit=1
 PASS  no severity chips
@@ -1076,6 +1142,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-probe-rust-forms.html
 exit=1
 PASS  no severity chips
@@ -1092,6 +1159,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-probe-sandbox-lie.html
 exit=0
 PASS  no severity chips
@@ -1108,6 +1176,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-probe-sandbox-lie.html
 exit=1
 PASS  no severity chips
@@ -1124,6 +1193,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-probe-unlabelled.html
 exit=0
 PASS  no severity chips
@@ -1140,6 +1210,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-probe-unlabelled.html
 exit=1
 PASS  no severity chips
@@ -1156,6 +1227,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-reactdocs-clean.html
 exit=0
 PASS  no severity chips
@@ -1172,6 +1244,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-reactdocs-clean.html
 exit=1
 PASS  no severity chips
@@ -1188,6 +1261,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-reactdocs-unpinned.html
 exit=0
 PASS  no severity chips
@@ -1204,6 +1278,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-reactdocs-unpinned.html
 exit=1
 PASS  no severity chips
@@ -1220,6 +1295,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-runner-mutates.html
 exit=0
 PASS  no severity chips
@@ -1236,6 +1312,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-runner-mutates.html
 exit=1
 PASS  no severity chips
@@ -1252,6 +1329,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-uncatalogued-url.html
 exit=0
 PASS  no severity chips
@@ -1268,6 +1346,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-uncatalogued-url.html
 exit=1
 PASS  no severity chips
@@ -1284,6 +1363,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment anchors-unpinned-link.html
 exit=0
 PASS  no severity chips
@@ -1300,6 +1380,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page anchors-unpinned-link.html
 exit=1
 PASS  no severity chips
@@ -1316,6 +1397,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment build-state-updated-clean.html
 exit=0
 PASS  no severity chips
@@ -1332,6 +1414,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page build-state-updated-clean.html
 exit=1
 PASS  no severity chips
@@ -1348,6 +1431,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment build-state-updated-missing.html
 exit=0
 PASS  no severity chips
@@ -1364,6 +1448,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page build-state-updated-missing.html
 exit=1
 PASS  no severity chips
@@ -1380,6 +1465,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment build-state-updated-nosha.html
 exit=0
 PASS  no severity chips
@@ -1396,6 +1482,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page build-state-updated-nosha.html
 exit=1
 PASS  no severity chips
@@ -1412,6 +1499,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment build-state-updated-twice.html
 exit=0
 PASS  no severity chips
@@ -1428,6 +1516,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page build-state-updated-twice.html
 exit=1
 PASS  no severity chips
@@ -1444,6 +1533,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment context-clean.html
 exit=0
 PASS  no severity chips
@@ -1460,6 +1550,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page context-clean.html
 exit=1
 PASS  no severity chips
@@ -1476,6 +1567,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment context-collapsed.html
 exit=0
 PASS  no severity chips
@@ -1492,6 +1584,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page context-collapsed.html
 exit=1
 PASS  no severity chips
@@ -1508,6 +1601,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment context-dead-pointer.html
 exit=0
 PASS  no severity chips
@@ -1524,6 +1618,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page context-dead-pointer.html
 exit=1
 PASS  no severity chips
@@ -1540,6 +1635,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment context-no-pointer.html
 exit=0
 PASS  no severity chips
@@ -1556,6 +1652,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page context-no-pointer.html
 exit=1
 PASS  no severity chips
@@ -1572,6 +1669,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment context-shift-only.html
 exit=1
 PASS  no severity chips
@@ -1588,6 +1686,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page context-shift-only.html
 exit=1
 PASS  no severity chips
@@ -1604,6 +1703,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  no severity chips
@@ -1620,6 +1720,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "The renderer divides by the row count and this change never touched it" 
 ## --page excerpt-at-head.html
 exit=1
 PASS  no severity chips
@@ -1636,6 +1737,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "The renderer divides by the row count and this change never touched it" 
 ## --fragment excerpt-clean.html
 exit=0
 PASS  no severity chips
@@ -1652,6 +1754,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-clean.html
 exit=1
 PASS  no severity chips
@@ -1668,6 +1771,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-diff-lang.html
 exit=0
 PASS  no severity chips
@@ -1684,6 +1788,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-diff-lang.html
 exit=1
 PASS  no severity chips
@@ -1700,6 +1805,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-duplicate.html
 exit=0
 PASS  no severity chips
@@ -1716,6 +1822,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-duplicate.html
 exit=1
 PASS  no severity chips
@@ -1732,6 +1839,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-linked-clean.html
 exit=1
 PASS  no severity chips
@@ -1748,6 +1856,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-linked-clean.html
 exit=1
 PASS  no severity chips
@@ -1764,6 +1873,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-linked-duplicate.html
 exit=1
 PASS  no severity chips
@@ -1780,6 +1890,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-linked-duplicate.html
 exit=1
 PASS  no severity chips
@@ -1796,6 +1907,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-open.html
 exit=0
 PASS  no severity chips
@@ -1812,6 +1924,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-open.html
 exit=1
 PASS  no severity chips
@@ -1828,6 +1941,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-overlap-clean.html
 exit=1
 PASS  no severity chips
@@ -1844,6 +1958,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-overlap-clean.html
 exit=1
 PASS  no severity chips
@@ -1860,6 +1975,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-overlap.html
 exit=1
 PASS  no severity chips
@@ -1876,6 +1992,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-overlap.html
 exit=1
 PASS  no severity chips
@@ -1892,6 +2009,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-typed-highlight.html
 exit=0
 PASS  no severity chips
@@ -1908,6 +2026,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-typed-highlight.html
 exit=1
 PASS  no severity chips
@@ -1924,6 +2043,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-typed-tag.html
 exit=0
 PASS  no severity chips
@@ -1940,6 +2060,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page excerpt-typed-tag.html
 exit=1
 PASS  no severity chips
@@ -1956,6 +2077,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment excerpt-unchanged-changed-file.html
 exit=0
 PASS  no severity chips
@@ -1972,6 +2094,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --page excerpt-unchanged-changed-file.html
 exit=1
 PASS  no severity chips
@@ -1988,6 +2111,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --fragment figures-chain-aff.html
 exit=1
 PASS  no severity chips
@@ -2004,6 +2128,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-chain-aff.html
 exit=1
 PASS  no severity chips
@@ -2020,6 +2145,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-clean.html
 exit=1
 PASS  no severity chips
@@ -2036,6 +2162,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-clean.html
 exit=1
 PASS  no severity chips
@@ -2052,6 +2179,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-context-chain.html
 exit=1
 PASS  no severity chips
@@ -2068,6 +2196,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-context-chain.html
 exit=1
 PASS  no severity chips
@@ -2084,6 +2213,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-converge-grading-note.html
 exit=1
 PASS  no severity chips
@@ -2100,6 +2230,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-converge-grading-note.html
 exit=1
 PASS  no severity chips
@@ -2116,6 +2247,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-converge-one-path.html
 exit=1
 PASS  no severity chips
@@ -2132,6 +2264,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-converge-one-path.html
 exit=1
 PASS  no severity chips
@@ -2148,6 +2281,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-converge-rel.html
 exit=1
 PASS  no severity chips
@@ -2164,6 +2298,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-converge-rel.html
 exit=1
 PASS  no severity chips
@@ -2180,6 +2315,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-converge-target-loc.html
 exit=1
 PASS  no severity chips
@@ -2196,6 +2332,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-converge-target-loc.html
 exit=1
 PASS  no severity chips
@@ -2212,6 +2349,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-lifecycle-aff.html
 exit=1
 PASS  no severity chips
@@ -2228,6 +2366,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-lifecycle-aff.html
 exit=1
 PASS  no severity chips
@@ -2244,6 +2383,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-lifecycle-method-label.html
 exit=1
 PASS  no severity chips
@@ -2260,6 +2400,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-lifecycle-method-label.html
 exit=1
 PASS  no severity chips
@@ -2276,6 +2417,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-lifecycle-no-loc.html
 exit=1
 PASS  no severity chips
@@ -2292,6 +2434,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-lifecycle-no-loc.html
 exit=1
 PASS  no severity chips
@@ -2308,6 +2451,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-shift-clean.html
 exit=1
 PASS  no severity chips
@@ -2324,6 +2468,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-shift-clean.html
 exit=1
 PASS  no severity chips
@@ -2340,6 +2485,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-shift-in-checkpoint.html
 exit=1
 PASS  no severity chips
@@ -2356,6 +2502,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-shift-in-checkpoint.html
 exit=1
 PASS  no severity chips
@@ -2372,6 +2519,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-shift-no-cases.html
 exit=1
 PASS  no severity chips
@@ -2388,6 +2536,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-shift-no-cases.html
 exit=1
 PASS  no severity chips
@@ -2404,6 +2553,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-shift-not-moved.html
 exit=1
 PASS  no severity chips
@@ -2420,6 +2570,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-shift-not-moved.html
 exit=1
 PASS  no severity chips
@@ -2436,6 +2587,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-shift-one-moved.html
 exit=1
 PASS  no severity chips
@@ -2452,6 +2604,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-shift-one-moved.html
 exit=1
 PASS  no severity chips
@@ -2468,6 +2621,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-shift-one-pointer.html
 exit=1
 PASS  no severity chips
@@ -2484,6 +2638,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-shift-one-pointer.html
 exit=1
 PASS  no severity chips
@@ -2500,6 +2655,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-structure-erd.html
 exit=1
 PASS  no severity chips
@@ -2516,6 +2672,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-structure-erd.html
 exit=1
 PASS  no severity chips
@@ -2532,6 +2689,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-two-figures.html
 exit=1
 PASS  no severity chips
@@ -2548,6 +2706,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-two-figures.html
 exit=1
 PASS  no severity chips
@@ -2564,6 +2723,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment figures-unknown-kind.html
 exit=1
 PASS  no severity chips
@@ -2580,6 +2740,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page figures-unknown-kind.html
 exit=1
 PASS  no severity chips
@@ -2596,6 +2757,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-aff-changed-file.html
 exit=0
 PASS  no severity chips
@@ -2612,6 +2774,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --page impact-aff-changed-file.html
 exit=1
 PASS  no severity chips
@@ -2628,6 +2791,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --fragment impact-aff-ledger-clean.html
 exit=0
 PASS  no severity chips
@@ -2644,6 +2808,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --page impact-aff-ledger-clean.html
 exit=1
 PASS  no severity chips
@@ -2660,6 +2825,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --fragment impact-card-no-lanes.html
 exit=0
 PASS  no severity chips
@@ -2676,6 +2842,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-card-no-lanes.html
 exit=1
 PASS  no severity chips
@@ -2692,6 +2859,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-entities-vocab-clean.html
 exit=1
 PASS  no severity chips
@@ -2708,6 +2876,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-entities-vocab-clean.html
 exit=1
 PASS  no severity chips
@@ -2724,6 +2893,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-four-paths.html
 exit=1
 PASS  no severity chips
@@ -2740,6 +2910,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-four-paths.html
 exit=1
 PASS  no severity chips
@@ -2756,6 +2927,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-loc-not-last.html
 exit=0
 PASS  no severity chips
@@ -2772,6 +2944,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-loc-not-last.html
 exit=1
 PASS  no severity chips
@@ -2788,6 +2961,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-loc-on-outcome.html
 exit=0
 PASS  no severity chips
@@ -2804,6 +2978,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-loc-on-outcome.html
 exit=1
 PASS  no severity chips
@@ -2820,6 +2995,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-missing-loc.html
 exit=0
 PASS  no severity chips
@@ -2836,6 +3012,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-missing-loc.html
 exit=1
 PASS  no severity chips
@@ -2852,6 +3029,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-no-affected.html
 exit=1
 PASS  no severity chips
@@ -2868,6 +3046,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-no-affected.html
 exit=1
 PASS  no severity chips
@@ -2884,6 +3063,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-no-outcome.html
 exit=1
 PASS  no severity chips
@@ -2900,6 +3080,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-no-outcome.html
 exit=1
 PASS  no severity chips
@@ -2916,6 +3097,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-no-why.html
 exit=0
 PASS  no severity chips
@@ -2932,6 +3114,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-no-why.html
 exit=1
 PASS  no severity chips
@@ -2948,6 +3131,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-prose-nodes.html
 exit=1
 PASS  no severity chips
@@ -2964,6 +3148,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-prose-nodes.html
 exit=1
 PASS  no severity chips
@@ -2980,6 +3165,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-shared-card.html
 exit=1
 PASS  no severity chips
@@ -2996,6 +3182,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-shared-card.html
 exit=1
 PASS  no severity chips
@@ -3012,6 +3199,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-two-locators.html
 exit=0
 PASS  no severity chips
@@ -3028,6 +3216,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-two-locators.html
 exit=1
 PASS  no severity chips
@@ -3044,6 +3233,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-unlabelled-edge.html
 exit=1
 PASS  no severity chips
@@ -3060,6 +3250,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-unlabelled-edge.html
 exit=1
 PASS  no severity chips
@@ -3076,6 +3267,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-why-citation.html
 exit=0
 PASS  no severity chips
@@ -3092,6 +3284,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-why-citation.html
 exit=1
 PASS  no severity chips
@@ -3108,6 +3301,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment impact-why-variant-class.html
 exit=0
 PASS  no severity chips
@@ -3124,6 +3318,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page impact-why-variant-class.html
 exit=1
 PASS  no severity chips
@@ -3140,6 +3335,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-assurance.html
 exit=1
 PASS  no severity chips
@@ -3156,6 +3352,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-assurance.html
 exit=1
 PASS  no severity chips
@@ -3172,6 +3369,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-bill-in-comment.html
 exit=0
 PASS  no severity chips
@@ -3188,6 +3386,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-bill-in-comment.html
 exit=1
 PASS  no severity chips
@@ -3204,6 +3403,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-bill-in-prose.html
 exit=0
 PASS  no severity chips
@@ -3220,6 +3420,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-bill-in-prose.html
 exit=1
 PASS  no severity chips
@@ -3236,6 +3437,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-clean.html
 exit=0
 PASS  no severity chips
@@ -3252,6 +3454,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-clean.html
 exit=1
 PASS  no severity chips
@@ -3268,6 +3471,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-draft-narration.html
 exit=1
 PASS  no severity chips
@@ -3284,6 +3488,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-draft-narration.html
 exit=1
 PASS  no severity chips
@@ -3300,6 +3505,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-flow-designator.html
 exit=1
 PASS  no severity chips
@@ -3316,6 +3522,7 @@ SKIP  theme states: a fragment carries no token block
 FAIL  the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: Flow A 
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-flow-designator.html
 exit=1
 PASS  no severity chips
@@ -3332,6 +3539,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 FAIL  the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: Flow A 
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-loose-data-path.html
 exit=1
 PASS  no severity chips
@@ -3348,6 +3556,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --page invariants-loose-data-path.html
 exit=1
 PASS  no severity chips
@@ -3364,6 +3573,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --fragment invariants-no-tier.html
 exit=1
 PASS  no severity chips
@@ -3380,6 +3590,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-no-tier.html
 exit=1
 PASS  no severity chips
@@ -3396,6 +3607,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-risk-score-leading.html
 exit=1
 PASS  no severity chips
@@ -3412,6 +3624,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-risk-score-leading.html
 exit=1
 PASS  no severity chips
@@ -3428,6 +3641,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-risk-score-trailing.html
 exit=1
 PASS  no severity chips
@@ -3444,6 +3658,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-risk-score-trailing.html
 exit=1
 PASS  no severity chips
@@ -3460,6 +3675,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-risk-score.html
 exit=1
 PASS  no severity chips
@@ -3476,6 +3692,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-risk-score.html
 exit=1
 PASS  no severity chips
@@ -3492,6 +3709,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-section-sign-quoted.html
 exit=0
 PASS  no severity chips
@@ -3508,6 +3726,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-section-sign-quoted.html
 exit=1
 PASS  no severity chips
@@ -3524,6 +3743,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-section-sign.html
 exit=1
 PASS  no severity chips
@@ -3540,6 +3760,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 FAIL  the page points with a section sign, which names nothing on the page and links nowhere — name the section by its linked title, or the repository heading in words with its file cited: § 01 
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-section-sign.html
 exit=1
 PASS  no severity chips
@@ -3556,6 +3777,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 FAIL  the page points with a section sign, which names nothing on the page and links nowhere — name the section by its linked title, or the repository heading in words with its file cited: § 01 
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-severity-chip.html
 exit=1
 FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
@@ -3573,6 +3795,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-severity-chip.html
 exit=1
 FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
@@ -3590,6 +3813,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-standing-disclaimer.html
 exit=0
 PASS  no severity chips
@@ -3607,6 +3831,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-standing-disclaimer.html
 exit=1
 PASS  no severity chips
@@ -3624,6 +3849,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-strip-files.html
 exit=1
 PASS  no severity chips
@@ -3641,6 +3867,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 FAIL  masthead says 6 files but the inventory lists 5 — Files is the inventory's count
 PASS  By kind adds up to Files (5 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --page invariants-strip-files.html
 exit=1
 PASS  no severity chips
@@ -3658,6 +3885,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 FAIL  masthead says 6 files but the inventory lists 5 — Files is the inventory's count
 PASS  By kind adds up to Files (5 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment invariants-strip-kind.html
 exit=0
 PASS  no severity chips
@@ -3675,6 +3903,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 WARN  By kind adds up to 4 but Files is 5 — every file goes in exactly one bucket, the nearest one when unsure
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --page invariants-strip-kind.html
 exit=1
 PASS  no severity chips
@@ -3692,6 +3921,41 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 WARN  By kind adds up to 4 but Files is 5 — every file goes in exactly one bucket, the nearest one when unsure
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
+## --fragment invariants-tier-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
+## --page invariants-tier-clean.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 PASS  no severity chips
@@ -3708,6 +3972,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-tier-modifier-only.html
 exit=1
 PASS  no severity chips
@@ -3724,6 +3989,109 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
+## --fragment invariants-tier-on-changed.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code on a sentence that cites only files in the diff — an untouched line of a changed file is changed code, cited and unlabelled: "The model sets the column at app/models/project.rb:41 and nothing else" 
+## --page invariants-tier-on-changed.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code on a sentence that cites only files in the diff — an untouched line of a changed file is changed code, cited and unlabelled: "The model sets the column at app/models/project.rb:41 and nothing else" 
+## --fragment invariants-tier-uncited.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "The selectable-projects query has never read archived_at, so an archiv" 
+## --page invariants-tier-uncited.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "The selectable-projects query has never read archived_at, so an archiv" 
+## --fragment invariants-tier-unlabelled.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  a sentence cites a file outside the diff with no tier — a claim resting on unchanged code says so, or it claims the diff shows it: "The query at app/queries/active_projects.rb:12 has never read archived" 
+## --page invariants-tier-unlabelled.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  a sentence cites a file outside the diff with no tier — a claim resting on unchanged code says so, or it claims the diff shows it: "The query at app/queries/active_projects.rb:12 has never read archived" 
 ## --fragment invariants-update-assurance.html
 exit=1
 PASS  no severity chips
@@ -3740,6 +4108,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-update-assurance.html
 exit=1
 PASS  no severity chips
@@ -3756,6 +4125,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-clean.html
 exit=0
 PASS  no severity chips
@@ -3772,6 +4142,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-update-clean.html
 exit=1
 PASS  no severity chips
@@ -3788,6 +4159,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-narration.html
 exit=1
 PASS  no severity chips
@@ -3804,6 +4176,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-update-narration.html
 exit=1
 PASS  no severity chips
@@ -3820,6 +4193,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-recency.html
 exit=1
 PASS  no severity chips
@@ -3836,6 +4210,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-update-recency.html
 exit=1
 PASS  no severity chips
@@ -3852,6 +4227,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-resolved.html
 exit=1
 PASS  no severity chips
@@ -3868,6 +4244,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-update-resolved.html
 exit=1
 PASS  no severity chips
@@ -3884,6 +4261,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-verdict.html
 exit=1
 PASS  no severity chips
@@ -3900,6 +4278,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page invariants-verdict.html
 exit=1
 PASS  no severity chips
@@ -3916,6 +4295,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment links-clean.html
 exit=1
 PASS  no severity chips
@@ -3932,6 +4312,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page links-clean.html
 exit=1
 PASS  no severity chips
@@ -3948,6 +4329,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment links-collapsed-anchor.html
 exit=1
 PASS  no severity chips
@@ -3964,6 +4346,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page links-collapsed-anchor.html
 exit=1
 PASS  no severity chips
@@ -3980,6 +4363,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment links-collapsed-no-excerpt.html
 exit=1
 PASS  no severity chips
@@ -3996,6 +4380,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page links-collapsed-no-excerpt.html
 exit=1
 PASS  no severity chips
@@ -4012,6 +4397,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment links-range-truncated.html
 exit=1
 PASS  no severity chips
@@ -4028,6 +4414,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page links-range-truncated.html
 exit=1
 PASS  no severity chips
@@ -4044,6 +4431,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment links-unknown-anchor.html
 exit=1
 PASS  no severity chips
@@ -4060,6 +4448,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page links-unknown-anchor.html
 exit=1
 PASS  no severity chips
@@ -4076,6 +4465,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment reach-clean.html
 exit=0
 PASS  no severity chips
@@ -4092,6 +4482,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page reach-clean.html
 exit=1
 PASS  no severity chips
@@ -4108,6 +4499,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment searches-bre-dialect.html
 exit=0
 PASS  no severity chips
@@ -4124,6 +4516,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page searches-bre-dialect.html
 exit=1
 PASS  no severity chips
@@ -4140,6 +4533,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment searches-clean.html
 exit=0
 PASS  no severity chips
@@ -4156,6 +4550,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page searches-clean.html
 exit=1
 PASS  no severity chips
@@ -4172,6 +4567,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment searches-git-grep.html
 exit=0
 PASS  no severity chips
@@ -4188,6 +4584,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page searches-git-grep.html
 exit=1
 PASS  no severity chips
@@ -4204,6 +4601,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment searches-unreachable.html
 exit=0
 PASS  no severity chips
@@ -4220,6 +4618,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page searches-unreachable.html
 exit=1
 PASS  no severity chips
@@ -4236,6 +4635,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment start-here-clean.html
 exit=0
 PASS  no severity chips
@@ -4252,6 +4652,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page start-here-clean.html
 exit=1
 PASS  no severity chips
@@ -4268,6 +4669,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment start-here-no-why.html
 exit=1
 PASS  no severity chips
@@ -4284,6 +4686,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page start-here-no-why.html
 exit=1
 PASS  no severity chips
@@ -4300,6 +4703,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment start-here-orphan-checkpoint.html
 exit=0
 PASS  no severity chips
@@ -4317,6 +4721,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --page start-here-orphan-checkpoint.html
 exit=1
 PASS  no severity chips
@@ -4334,6 +4739,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment start-here-style-comment.html
 exit=0
 PASS  no severity chips
@@ -4351,6 +4757,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --page start-here-style-comment.html
 exit=1
 PASS  no severity chips
@@ -4368,6 +4775,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment start-here-two-lists.html
 exit=0
 PASS  no severity chips
@@ -4384,6 +4792,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --page start-here-two-lists.html
 exit=1
 PASS  no severity chips
@@ -4400,6 +4809,7 @@ FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment page-template.html
 exit=0
 PASS  no severity chips
@@ -4416,6 +4826,9 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+WARN  a sentence cites a file outside the diff with no tier — a claim resting on unchanged code says so, or it claims the diff shows it: "{{WHAT_THE_TEST_IS_ABOUT}} {{WHICH_BRANCH_IT_PINS_AND_WHICH_IT_LEAVES_" 
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "{{WHAT_THAT_MEANS_FOR_THE_ROWS_THIS_PR_TOUCHES}} from unchanged code" 
+WARN  from unchanged code on a sentence that cites only files in the diff — an untouched line of a changed file is changed code, cited and unlabelled: "{{THE_UNCHANGED_THING_THIS_ENTRY_IS_ABOUT}} {{WHAT_THIS_UNCHANGED_CODE" · "{{THE_UNCHANGED_WRITER}} {{WHAT_IT_BYPASSES_AND_WHAT_THAT_LEAVES}} fro" · "{{THE_EXISTING_ENTITY}} {{WHAT_IT_NOW_HAS_TO_ACCOUNT_FOR}} from unchan" · "02 {{PATH}}:{{START}}-{{END}} {{WHY_THIS_UNCHANGED_FILE_IS_ON_THE_ROUT" 
 ## --page page-template.html
 exit=0
 PASS  no severity chips
@@ -4432,6 +4845,9 @@ PASS  all three theme states present
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+WARN  a sentence cites a file outside the diff with no tier — a claim resting on unchanged code says so, or it claims the diff shows it: "{{WHAT_THE_TEST_IS_ABOUT}} {{WHICH_BRANCH_IT_PINS_AND_WHICH_IT_LEAVES_" 
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "{{WHAT_THAT_MEANS_FOR_THE_ROWS_THIS_PR_TOUCHES}} from unchanged code" 
+WARN  from unchanged code on a sentence that cites only files in the diff — an untouched line of a changed file is changed code, cited and unlabelled: "{{THE_UNCHANGED_THING_THIS_ENTRY_IS_ABOUT}} {{WHAT_THIS_UNCHANGED_CODE" · "{{THE_UNCHANGED_WRITER}} {{WHAT_IT_BYPASSES_AND_WHAT_THAT_LEAVES}} fro" · "{{THE_EXISTING_ENTITY}} {{WHAT_IT_NOW_HAS_TO_ACCOUNT_FOR}} from unchan" · "02 {{PATH}}:{{START}}-{{END}} {{WHY_THIS_UNCHANGED_FILE_IS_ON_THE_ROUT" 
 ## --fragment excerpt-at-head.html
 exit=0
 PASS  no severity chips
@@ -4448,6 +4864,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "The renderer divides by the row count and this change never touched it" 
 ## --fragment invariants-clean.html
 exit=0
 PASS  no severity chips
@@ -4464,6 +4881,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-severity-chip.html
 exit=1
 FAIL  severity chips reintroduced (chip-block/chip-watch/chip-good)
@@ -4481,6 +4899,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-verdict.html
 exit=1
 PASS  no severity chips
@@ -4497,6 +4916,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-risk-score.html
 exit=1
 PASS  no severity chips
@@ -4513,6 +4933,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-risk-score-leading.html
 exit=1
 PASS  no severity chips
@@ -4529,6 +4950,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-risk-score-trailing.html
 exit=1
 PASS  no severity chips
@@ -4545,6 +4967,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-clean.html
 exit=0
 PASS  no severity chips
@@ -4561,6 +4984,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-assurance.html
 exit=1
 PASS  no severity chips
@@ -4577,6 +5001,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-draft-narration.html
 exit=1
 PASS  no severity chips
@@ -4593,6 +5018,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-narration.html
 exit=1
 PASS  no severity chips
@@ -4609,6 +5035,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-assurance.html
 exit=1
 PASS  no severity chips
@@ -4625,6 +5052,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-clean.html
 exit=0
 PASS  no severity chips
@@ -4641,6 +5069,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-clean.html
 exit=0
 PASS  no severity chips
@@ -4657,6 +5086,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-standing-disclaimer.html
 exit=0
 PASS  no severity chips
@@ -4674,6 +5104,75 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
+## --fragment invariants-tier-clean.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
+## --fragment invariants-tier-unlabelled.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  a sentence cites a file outside the diff with no tier — a claim resting on unchanged code says so, or it claims the diff shows it: "The query at app/queries/active_projects.rb:12 has never read archived" 
+## --fragment invariants-tier-uncited.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "The selectable-projects query has never read archived_at, so an archiv" 
+## --fragment invariants-tier-on-changed.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (2 label(s))
+PASS  data-path is only on ledger rows (2)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+WARN  from unchanged code on a sentence that cites only files in the diff — an untouched line of a changed file is changed code, cited and unlabelled: "The model sets the column at app/models/project.rb:41 and nothing else" 
 ## --fragment invariants-bill-in-comment.html
 exit=0
 PASS  no severity chips
@@ -4690,6 +5189,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-bill-in-prose.html
 exit=0
 PASS  no severity chips
@@ -4706,6 +5206,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-recency.html
 exit=1
 PASS  no severity chips
@@ -4722,6 +5223,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-resolved.html
 exit=1
 PASS  no severity chips
@@ -4738,6 +5240,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-update-clean.html
 exit=0
 PASS  no severity chips
@@ -4754,6 +5257,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-no-tier.html
 exit=1
 PASS  no severity chips
@@ -4770,6 +5274,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 PASS  no severity chips
@@ -4786,6 +5291,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-loose-data-path.html
 exit=1
 PASS  no severity chips
@@ -4802,6 +5308,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+PASS  tiers agree with the changed set (the page's own ledger)
 ## --fragment invariants-strip-files.html
 exit=1
 PASS  no severity chips
@@ -4819,6 +5326,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 FAIL  masthead says 6 files but the inventory lists 5 — Files is the inventory's count
 PASS  By kind adds up to Files (5 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment invariants-strip-kind.html
 exit=0
 PASS  no severity chips
@@ -4836,6 +5344,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 WARN  By kind adds up to 4 but Files is 5 — every file goes in exactly one bucket, the nearest one when unsure
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -4853,6 +5362,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -4870,6 +5380,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment invariants-flow-designator.html
 exit=1
 PASS  no severity chips
@@ -4886,6 +5397,7 @@ SKIP  theme states: a fragment carries no token block
 FAIL  the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: Flow A 
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-clean.html
 exit=0
 PASS  no severity chips
@@ -4902,6 +5414,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-section-sign.html
 exit=1
 PASS  no severity chips
@@ -4918,6 +5431,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 FAIL  the page points with a section sign, which names nothing on the page and links nowhere — name the section by its linked title, or the repository heading in words with its file cited: § 01 
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-section-sign-quoted.html
 exit=0
 PASS  no severity chips
@@ -4934,6 +5448,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment invariants-clean.html --repo searches-repo --head 0000000000000000000000000000000000000000
 exit=0
 PASS  no severity chips
@@ -4950,6 +5465,7 @@ SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers against the changed set: no --repo/--base and no ledger on the page
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -4967,6 +5483,7 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -4984,3 +5501,4 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
+WARN  from unchanged code with nothing cited in its sentence — the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis" · "from unchanged code Two concurrent requests can both pass the validati" 
