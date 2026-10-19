@@ -1084,6 +1084,31 @@ HTML
 lint_out "$WORK/why.html"
 assert_eq "$(count "$WORK/lint.out" 'WARN')" "0" "a card's why with an unchanged-code label and no citation is not the uncited shape"
 
+# A Look at entry whose citation is an in-entry excerpt carries it as excerpt.sh writes it — a
+# span.ex-loc holding the link, or the plain location on an unlinked rung — and that span is the
+# entry's citation. app/queries/active_projects.rb is outside the ledger, so its labelled entries
+# are clean; the same span over app/models/project.rb, which the ledger lists, is the on-changed
+# shape — which proves the span's href is resolved and not merely counted as a citation.
+excerpt_entry() {
+  printf '<li><b>%s</b> <span>%s <span class="tier tier-unc">from unchanged code</span></span>\n<details class="excerpt excerpt--source"><summary><span class="chev">&#9656;</span>\n<span class="ex-loc">%s</span>\n<span class="tag">Unchanged</span></summary><div class="ex-body"><pre data-src="x">code</pre></div></details></li>\n' "$1" "$2" "$3"
+}
+{
+  printf '<section class="cp" id="cp-a"><ul class="lookat">\n'
+  excerpt_entry "Linked summary" "filters on status only" '<a class="cite" href="https://github.com/o/r/blob/0123abcd/app/queries/active_projects.rb#L12-L14">active_projects.rb:12-14</a>'
+  excerpt_entry "Plain summary" "reads no archived flag" 'app/queries/active_projects.rb:12-14'
+  printf '</ul></section>\n<details class="evidence"><div class="gt gt-paths"><div class="c" data-path="app/models/project.rb">x</div></div></details>\n'
+} > "$WORK/excerpt-clean.html"
+lint_out "$WORK/excerpt-clean.html"
+assert_eq "$(count "$WORK/lint.out" 'WARN')" "0" "an excerpt summary is the entry's citation, linked or plain"
+{
+  printf '<section class="cp" id="cp-a"><ul class="lookat">\n'
+  excerpt_entry "Linked summary over changed code" "sets the column" '<a class="cite" href="https://github.com/o/r/blob/0123abcd/app/models/project.rb#L41">project.rb:41</a>'
+  printf '</ul></section>\n<details class="evidence"><div class="gt gt-paths"><div class="c" data-path="app/models/project.rb">x</div></div></details>\n'
+} > "$WORK/excerpt-changed.html"
+lint_out "$WORK/excerpt-changed.html"
+assert_eq "$(count "$WORK/lint.out" 'WARN  on-changed')" "1" "and the summary's href is resolved: a label over a changed file's excerpt is on-changed"
+assert_eq "$(count "$WORK/lint.out" 'WARN')" "1" "with no other WARN"
+
 # Placeholders are the one FAIL: the template copied and not filled in.
 printf '<p>{{WHAT_GOES_WRONG}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>\n' > "$WORK/ph.html"
 lint_out "$WORK/ph.html"

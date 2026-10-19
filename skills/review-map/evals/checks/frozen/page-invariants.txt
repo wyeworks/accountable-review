@@ -16,7 +16,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --page agenda-clean.html
 exit=1
 PASS  no severity chips
@@ -35,7 +37,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment agenda-probe-unlabelled.html
 exit=0
 PASS  no severity chips
@@ -54,7 +58,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --page agenda-probe-unlabelled.html
 exit=1
 PASS  no severity chips
@@ -73,7 +79,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment agenda-probes-over-budget.html
 exit=0
 PASS  no severity chips
@@ -92,7 +100,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --page agenda-probes-over-budget.html
 exit=1
 PASS  no severity chips
@@ -111,7 +121,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment anchors-clean.html
 exit=0
 PASS  no severity chips
@@ -3874,7 +3886,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 FAIL  masthead says 6 files but the inventory lists 5 — Files is the inventory's count
 PASS  By kind adds up to Files (5 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --page invariants-strip-files.html
 exit=1
 PASS  no severity chips
@@ -3893,7 +3907,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 FAIL  masthead says 6 files but the inventory lists 5 — Files is the inventory's count
 PASS  By kind adds up to Files (5 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment invariants-strip-kind.html
 exit=0
 PASS  no severity chips
@@ -3912,7 +3928,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 WARN  By kind adds up to 4 but Files is 5 — every file goes in exactly one bucket, the nearest one when unsure
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --page invariants-strip-kind.html
 exit=1
 PASS  no severity chips
@@ -3931,7 +3949,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 WARN  By kind adds up to 4 but Files is 5 — every file goes in exactly one bucket, the nearest one when unsure
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment invariants-tier-clean.html
 exit=0
 PASS  no severity chips
@@ -3941,14 +3961,14 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
-PASS  tiers agree with the changed set (4 sentences read against the page's own ledger)
+PASS  tiers agree with the changed set (5 sentences read against the page's own ledger)
 ## --page invariants-tier-clean.html
 exit=1
 PASS  no severity chips
@@ -3958,14 +3978,14 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
-PASS  tiers agree with the changed set (4 sentences read against the page's own ledger)
+PASS  tiers agree with the changed set (5 sentences read against the page's own ledger)
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 PASS  no severity chips
@@ -4009,7 +4029,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
@@ -4026,7 +4046,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
@@ -4043,7 +4063,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
@@ -4060,7 +4080,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
@@ -4077,7 +4097,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (1 label(s))
+PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
@@ -4094,7 +4114,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (1 label(s))
+PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
@@ -4732,7 +4752,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --page start-here-orphan-checkpoint.html
 exit=1
 PASS  no severity chips
@@ -4751,7 +4773,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment start-here-style-comment.html
 exit=0
 PASS  no severity chips
@@ -4770,7 +4794,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --page start-here-style-comment.html
 exit=1
 PASS  no severity chips
@@ -4789,7 +4815,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment start-here-two-lists.html
 exit=0
 PASS  no severity chips
@@ -5134,14 +5162,14 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
 PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
-PASS  tiers agree with the changed set (4 sentences read against the page's own ledger)
+PASS  tiers agree with the changed set (5 sentences read against the page's own ledger)
 ## --fragment invariants-tier-unlabelled.html
 exit=0
 PASS  no severity chips
@@ -5151,7 +5179,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (1 label(s))
+PASS  evidence tiers used (2 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
@@ -5168,7 +5196,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
@@ -5185,7 +5213,7 @@ PASS  no assurance language — the effort level is invisible on the page
 PASS  no 'clean bill of health' in the prose
 PASS  no draft narration — corrections are written as claims, not as revisions
 PASS  no recency markers — an answered checkpoint is deleted rather than ticked
-PASS  evidence tiers used (2 label(s))
+PASS  evidence tiers used (3 label(s))
 PASS  data-path is only on ledger rows (2)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
@@ -5347,7 +5375,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 FAIL  masthead says 6 files but the inventory lists 5 — Files is the inventory's count
 PASS  By kind adds up to Files (5 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment invariants-strip-kind.html
 exit=0
 PASS  no severity chips
@@ -5366,7 +5396,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 WARN  By kind adds up to 4 but Files is 5 — every file goes in exactly one bucket, the nearest one when unsure
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -5385,7 +5417,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -5404,7 +5438,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment invariants-flow-designator.html
 exit=1
 PASS  no severity chips
@@ -5508,7 +5544,9 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"
 ## --fragment agenda-clean.html
 exit=0
 PASS  no severity chips
@@ -5527,4 +5565,6 @@ PASS  no section-sign pointers — every reference names something the reader ca
 PASS  masthead Files (5) is the inventory's count
 PASS  By kind adds up to Files (4 prod · 1 test)
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Whether that is the intended first step or an omis"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "The query every list goes through not in the diff, and the reason arch"
 WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "from unchanged code Two concurrent requests can both pass the validati"
+WARN  uncited — from unchanged code with nothing cited in its sentence; the label names a kind of evidence, the citation is the evidence: "03 app/queries/active_projects.rb:1-6 Not in the diff, and the file th"

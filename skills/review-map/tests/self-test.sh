@@ -514,6 +514,11 @@ case_lint_red "page-lint.sh stops resolving a citation to the changed set" "$WOR
 sed 's|  if (unc \&\& inside \&\& !outside) {|  if (0) {|' "$PAGE_LINT" > "$WORK/lint-nochg.sh"
 case_lint_red "page-lint.sh stops warning on from-unchanged-code over changed files" "$WORK/lint-nochg.sh"
 
+# 47. The excerpt summary is no longer a citation, so every entry cited through an excerpt reads
+#     as uncited — the shape that sent runs editing against a warning nothing earned.
+sed 's|    pe = index(rest, "<span class=\\"ex-loc\\">")|    pe = 0|' "$PAGE_LINT" > "$WORK/lint-noexloc.sh"
+case_lint_red "page-lint.sh stops reading an excerpt summary as the entry's citation" "$WORK/lint-noexloc.sh"
+
 # 46. Placeholders are not a FAIL any more.
 sed 's|  status=1|  status=0|' "$PAGE_LINT" > "$WORK/lint-ph.sh"
 case_lint_red "page-lint.sh lets a placeholder ship" "$WORK/lint-ph.sh"

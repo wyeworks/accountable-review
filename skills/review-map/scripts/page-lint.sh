@@ -127,9 +127,25 @@ BEGIN {
   o[++n] = "<details class=\"evidence\""; c[n] = "</details>"
 }
 {
-  if (inside) { if ($0 ~ c[inside]) inside = 0; next }
-  for (i = 1; i <= n; i++) if ($0 ~ o[i]) { if ($0 !~ c[i]) inside = i; next }
-  printf "%s ", $0
+  line = $0
+  if (inside) {
+    k = index(line, c[inside])
+    if (k == 0) next
+    line = substr(line, k + length(c[inside])); inside = 0
+  }
+  # A region that opens and closes on one line is cut out of the line, not the line out of the
+  # page: an excerpt body on the same line as the </li> that closes its entry would otherwise
+  # take the entry with it, and the entry would be read as nothing rather than as cited.
+  while (1) {
+    best = 0
+    for (i = 1; i <= n; i++) if (match(line, o[i]) && (!best || RSTART < bs)) { best = i; bs = RSTART }
+    if (!best) break
+    rest = substr(line, bs)
+    k = index(rest, c[best])
+    if (k == 0) { line = substr(line, 1, bs - 1); inside = best; break }
+    line = substr(line, 1, bs - 1) substr(rest, k + length(c[best]))
+  }
+  printf "%s ", line
 }' "$TMP/prose" > "$TMP/stream"
 
 awk '
@@ -174,13 +190,31 @@ function in_diff(attrs, text,   path, k, p) {
   for (p in changed) { k = length(p) - length(path); if (k > 0 && substr(p, k) == "/" path) return 1 }
   return 0
 }
-function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, unc, m, tag_end) {
+function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, unc, m, tag_end, pa, la, pe, inner, e) {
   outside = 0; inside = 0; any = 0
   rest = s
-  while (match(rest, /<(a|span) class="(path|ex-loc)[^"]*"[^>]*>[^<]*</)) {
-    m = substr(rest, RSTART, RLENGTH); rest = substr(rest, RSTART + RLENGTH)
-    tag_end = index(m, ">")
-    attrs = substr(m, 1, tag_end); text = substr(m, tag_end + 1); sub(/<$/, "", text)
+  # Two citation forms. An a.path carries its text directly. An excerpt summary location is a
+  # span.ex-loc whose first child is the link (excerpt.sh: <span class="ex-loc"><a class="cite"
+  # href="…">path:line</a></span>), or the plain text on an unlinked rung — so the span is taken
+  # whole, its href from the inner <a> and its text with the tags stripped. Reading it as an
+  # element with empty text made every entry whose citation is an excerpt read as uncited.
+  while (1) {
+    pa = match(rest, /<a class="path[^"]*"[^>]*>[^<]*</) ? RSTART : 0; la = RLENGTH
+    pe = index(rest, "<span class=\"ex-loc\">")
+    if (!pa && !pe) break
+    if (pa && (!pe || pa < pe)) {
+      m = substr(rest, pa, la); rest = substr(rest, pa + la)
+      tag_end = index(m, ">")
+      attrs = substr(m, 1, tag_end); text = substr(m, tag_end + 1); sub(/<$/, "", text)
+    } else {
+      inner = substr(rest, pe + 21)
+      e = index(inner, "</span>")
+      if (e == 0) break
+      inner = substr(inner, 1, e - 1); rest = substr(rest, pe + 21 + e + 6)
+      attrs = ""
+      if (match(inner, /<a [^>]*>/)) attrs = substr(inner, RSTART, RLENGTH)
+      text = inner; gsub(/<[^>]*>/, "", text)
+    }
     if (text ~ /^ *$/) continue
     v = in_diff(attrs, text)
     if (v < 0) continue
