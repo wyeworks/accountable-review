@@ -1,0 +1,24 @@
+{
+  "schema": "accountable-review/review-map-manifest@3",
+  "generated_at": "2026-10-19T16:47:31Z",
+  "plugin": {
+    "name": "accountable-review",
+    "version": "1.3.0",
+    "commit": "92e31bd6e802ce52fef8bb6b5dc524e8f064815f"
+  },
+  "review_map": {
+    "entry": "index.html",
+    "effort": "high",
+    "mentor": "off",
+    "context": "auto",
+    "theme": "daylight"
+  },
+  "revision": {
+    "repository": "rubygems/rubygems.org",
+    "pull_request": 6699,
+    "base_sha": "e9b5a3e5da3339c1eaa1e79c6b54fb0557b01781",
+    "head_sha": "4199bcb5c646121879386a2897aff5c76ea9ee31",
+    "updated_from": null
+  },
+  "coverage_gate": "pass"
+}

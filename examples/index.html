@@ -195,14 +195,16 @@ code {
       <p>
         Eleven files that all look safe: a new table, the callbacks that keep it in step with the
         live one, and a backfill task. What a reviewer has to judge is in code the diff never
-        opened — every path that ends an ownership, drawn converging on the one history row each
-        must close, and a bulk demotion that leaves <code>owner</code> in the history it writes.
+        opened: every path that starts or ends an ownership has to keep the one history row in step
+        with it, including paths that never run the callbacks.
       </p>
       <div class="meta">
+        <!-- examples:begin card:rubygems-6699 — written by bin/examples render; do not edit by hand -->
         <span><b>11</b> files</span>
         <span><b>4</b> checkpoints</span>
-        <span>no impact path</span>
+        <span><b>2</b> impact paths</span>
         <span>PR <a href="https://github.com/rubygems/rubygems.org/pull/6699">rubygems.org#6699</a></span>
+        <!-- examples:end -->
       </div>
       <a class="go" href="rubygems-6699/">Open the map</a>
     </article>
@@ -212,15 +214,17 @@ code {
       <h2><a href="discourse-43845/">Email-code signup collects its details before it creates the account</a></h2>
       <p>
         A medium change across the signup path, and the one that shows what the format is for:
-        most of what a reviewer has to decide lives in code the diff never opened. Its Context draws
-        the signup requests before and after, so a reader new to Discourse sees which one now
-        creates the account before being asked whether every such request still passes the CAPTCHA.
+        most of what a reviewer has to decide lives in code the diff never opened. The change moves
+        which request creates the account, and a reader new to Discourse has to see that move before
+        being asked whether every such request still passes the CAPTCHA.
       </p>
       <div class="meta">
+        <!-- examples:begin card:discourse-43845 — written by bin/examples render; do not edit by hand -->
         <span><b>36</b> files</span>
-        <span><b>7</b> checkpoints</span>
+        <span><b>6</b> checkpoints</span>
         <span><b>2</b> impact paths</span>
         <span>PR <a href="https://github.com/discourse/discourse/pull/43845">discourse#43845</a></span>
+        <!-- examples:end -->
       </div>
       <a class="go" href="discourse-43845/">Open the map</a>
     </article>
@@ -230,10 +234,11 @@ code {
   <div class="foot">
     <span class="lbl">How these were made</span>
     <p class="note">
-      Both generated on 2026-10-08 with <code>accountable-review</code> 1.2.0, at the default
-      <code>--effort high</code> and without <code>--mentor</code>. The page format moves between
-      releases, so the version is recorded rather than implied: a map produced by a later release
-      may not look like these. <a href="https://github.com/wyeworks/accountable-review/blob/main/examples/README.md">Provenance for each page</a>.
+      <!-- examples:begin foot — written by bin/examples render; do not edit by hand -->
+      Generated on 2026-10-19 with <code>accountable-review</code> 1.3.0, at <code>--effort high</code> and <code>--mentor off</code>.
+      <!-- examples:end -->
+      The page format moves between releases, and every release regenerates these, so the version is
+      recorded rather than implied. <a href="https://github.com/wyeworks/accountable-review/blob/main/examples/README.md">Provenance for each page</a>.
     </p>
     <p class="note">
       A Review Map is a pass over a change, not an audit of it, and it carries no verdict on

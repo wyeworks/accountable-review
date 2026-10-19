@@ -1,0 +1,255 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# examples — regenerate the published Review Maps under examples/, and keep what is said about
+# them true.
+#
+#   bin/examples regen [id...]   generate each example again at its pinned revision. Needs a model.
+#   bin/examples render          rewrite the provenance regions from the manifests and the pages
+#   bin/examples check           what CI runs: every example names this plugin version, passed its
+#                                coverage gate, carries its head, and render would change nothing
+#
+# An example is examples/<id>/index.html plus the manifest.json the run wrote beside it. The
+# manifest is the pin — repository, pull request, base and head — and the provenance: version,
+# plugin commit, date, settings, gate. Nothing about a page is typed by hand. render writes the
+# named regions that describe the pages — `<!-- examples:begin NAME … -->` to `<!-- examples:end -->`
+# in examples/README.md and examples/index.html — and check fails while any is stale.
+#
+# check fails on a version bump until the examples are regenerated, and that is its job: a
+# release is the one moment the published examples are guaranteed to be read again.
+#
+# regen is the skill run exactly as CI runs it — ci/generate-review-map.sh --output, from a
+# detached worktree of the pinned head — through the e2e harness's checkout code, so it inherits
+# the force-push guard: a head that is no longer on the pull ref stops the run rather than
+# publishing a page whose every citation 404s. The page settings come from the manifest, passed
+# explicitly, so an example keeps the settings it was made with. It never edits a page.
+#
+# This script lives outside examples/ on purpose: .github/workflows/pages.yml uploads that whole
+# directory to the public site.
+#
+# Exit codes follow the rest of the repository: 0 clean, 1 something failed, 2 called wrongly.
+
+require "json"
+require "open3"
+require "tmpdir"
+require "fileutils"
+require_relative "../skills/review-map/evals/e2e/lib"
+
+ROOT = E2E::ROOT
+DIR = File.join(ROOT, "examples")
+README = File.join(DIR, "README.md")
+INDEX = File.join(DIR, "index.html")
+
+def die(msg, code = 2)
+  warn "examples: #{msg}"
+  exit code
+end
+
+Example = Struct.new(:id, :manifest, :page) do
+  def rev = manifest.fetch("revision")
+  def plugin = manifest.fetch("plugin")
+  def settings = manifest.fetch("review_map")
+  def date = manifest.fetch("generated_at")[0, 10]
+  def short(sha) = sha.to_s[0, 7]
+  def pr_url = "https://github.com/#{rev['repository']}/pull/#{rev['pull_request']}"
+
+  # Counted on the page with its HTML and CSS comments stripped, because real pages carry the
+  # template's comments verbatim — one of them names `<section class="cp" id="cp-x">`.
+  def bare = @bare ||= page.gsub(/<!--.*?-->/m, "").gsub(%r{/\*.*?\*/}m, "")
+  def count(re) = bare.scan(re).size
+
+def counts
+  figs = bare.scan(/<figure class="(converge|lifecycle|structure|chain)\b/).flatten.tally
+  { files: count(/data-path="/), context: bare[%r{<dl class="ctx">.*?</dl>}m].to_s.scan(/<dt\b/).size,
+    checkpoints: count(/<section class="cp" id="cp-/), figures: figs.sort,
+    impact: count(/class="ip-card\b/) }
+end
+
+def self.n(k, word, plural = "#{word}s") = "#{k} #{k == 1 ? word : plural}"
+
+def shape
+  c = counts
+  parts = ["#{c[:files]} files"]
+  parts << Example.n(c[:context], "context entry", "context entries") if c[:context].positive?
+  parts << Example.n(c[:checkpoints], "checkpoint")
+  c[:figures].each { |k, n| parts << Example.n(n, "#{k} figure") }
+  parts << (c[:impact].zero? ? "no impact path" : Example.n(c[:impact], "impact path"))
+  parts.join(" · ")
+end
+end
+
+def examples
+  Dir[File.join(DIR, "*", "manifest.json")].sort.map do |m|
+    id = File.basename(File.dirname(m))
+    page = File.join(File.dirname(m), "index.html")
+    die("#{id} has a manifest and no index.html", 1) unless File.file?(page)
+    Example.new(id, JSON.parse(File.read(m)), File.read(page))
+  end.tap { |all| die("no examples/<id>/manifest.json found", 1) if all.empty? }
+end
+
+def plugin_version
+  JSON.parse(File.read(File.join(ROOT, ".claude-plugin", "plugin.json"))).fetch("version")
+end
+
+# ---------------------------------------------------------------- render
+
+def one_or_list(values) = values.uniq.size == 1 ? values.first : values.uniq.join(", ")
+
+def readme_region(all)
+  rows = all.map do |e|
+    "| `#{e.id}/` | [#{e.rev['repository']}##{e.rev['pull_request']}](#{e.pr_url}) | " \
+      "`#{e.short(e.rev['head_sha'])}` → `#{e.short(e.rev['base_sha'])}` | #{e.shape} |"
+  end
+  made = all.map do |e|
+    s = e.settings
+    "- `#{e.id}/`: generated on **#{e.date}** by **`accountable-review` #{e.plugin['version']}** " \
+      "from plugin commit `#{e.short(e.plugin['commit'])}`, at `--effort #{s['effort']}`, " \
+      "`--mentor #{s['mentor']}`, `--context #{s['context']}`; coverage gate: #{e.manifest['coverage_gate']}."
+  end
+  <<~MD.chomp
+    | Path | Pull request | Revision (head → base) | Shape |
+    |---|---|---|---|
+    #{rows.join("\n")}
+
+    #{made.join("\n")}
+  MD
+end
+
+def index_region(all)
+  settings = all.map(&:settings)
+  "Generated on #{one_or_list(all.map(&:date))} with <code>accountable-review</code> " \
+    "#{one_or_list(all.map { |e| e.plugin['version'] })}, at <code>--effort " \
+    "#{one_or_list(settings.map { |s| s['effort'] })}</code> and <code>--mentor " \
+    "#{one_or_list(settings.map { |s| s['mentor'] })}</code>."
+end
+
+# The meta line under each card on the front door. Same counts as the README's Shape column.
+def card_region(e)
+  c = e.counts
+  spans = ["<b>#{c[:files]}</b> files", "<b>#{c[:checkpoints]}</b> checkpoints"]
+  spans << (c[:impact].zero? ? "no impact path" : "<b>#{c[:impact]}</b> impact #{c[:impact] == 1 ? 'path' : 'paths'}")
+  spans << "PR <a href=\"#{e.pr_url}\">#{e.rev['repository'].split('/').last}##{e.rev['pull_request']}</a>"
+  spans.map { |sp| "        <span>#{sp}</span>" }.join("\n")
+end
+
+# Replaces the body of every named region the regions hash names, and refuses a file missing
+# one or carrying a region nobody renders — a stale card left behind for a removed example.
+def splice(path, regions)
+  text = File.read(path)
+  rel = path.delete_prefix("#{ROOT}/")
+  found = text.scan(/<!-- examples:begin (\S+)/).flatten
+  (regions.keys - found).each { |k| die("#{rel} has no examples:begin #{k} region", 1) }
+  (found - regions.keys).each { |k| die("#{rel} has an examples:begin #{k} region nothing renders", 1) }
+  text.gsub(/(<!-- examples:begin (\S+)[^\n]*-->\n).*?(^[ \t]*<!-- examples:end -->)/m) do
+    "#{$1}#{regions.fetch($2)}\n#{$3}"
+  end
+end
+
+def rendered(all)
+  index = { "foot" => "      #{index_region(all)}" }
+  all.each { |e| index["card:#{e.id}"] = card_region(e) }
+  { README => splice(README, { "table" => readme_region(all) }), INDEX => splice(INDEX, index) }
+end
+
+def cmd_render
+  rendered(examples).each do |path, text|
+    next if File.read(path) == text
+    File.write(path, text)
+    puts "rewrote #{path.delete_prefix("#{ROOT}/")}"
+  end
+end
+
+# ---------------------------------------------------------------- check
+
+def cmd_check
+  all = examples
+  want = plugin_version
+  failures = []
+  all.each do |e|
+    v = e.plugin["version"]
+    failures << "#{e.id}: generated by #{v}, plugin.json is #{want} — run bin/examples regen" unless v == want
+    failures << "#{e.id}: coverage gate #{e.manifest['coverage_gate'].inspect}" unless e.manifest["coverage_gate"] == "pass"
+    failures << "#{e.id}: the page does not carry its head #{e.short(e.rev['head_sha'])}" unless e.page.include?(e.short(e.rev["head_sha"]))
+  end
+  rendered(all).each do |path, text|
+    failures << "#{path.delete_prefix("#{ROOT}/")}: stale — run bin/examples render" unless File.read(path) == text
+  end
+  if failures.empty?
+    puts "examples: #{all.size} pages, all from #{want}, provenance current"
+  else
+    failures.each { |f| puts "FAIL  #{f}" }
+    exit 1
+  end
+end
+
+# ---------------------------------------------------------------- regen
+
+def credential!
+  creds = %w[ANTHROPIC_API_KEY CLAUDE_CODE_OAUTH_TOKEN CLAUDE_CODE_USE_BEDROCK CLAUDE_CODE_USE_VERTEX]
+  return if creds.any? { |k| ENV[k].to_s != "" }
+  die(<<~MSG.chomp, 1)
+    no model credential in the environment. ci/generate-review-map.sh is written for a
+    runner nobody is logged into, so it reads one from the environment rather than your login:
+
+      export CLAUDE_CODE_OAUTH_TOKEN=$(claude setup-token)   # bills your subscription
+      # or ANTHROPIC_API_KEY=…                               # bills the API
+
+    Nothing was generated.
+  MSG
+end
+
+def regen(e)
+  pr = E2E::Pr.new(id: e.id, repo: e.rev["repository"], pr: e.rev["pull_request"],
+                   base_sha: e.rev["base_sha"], head_sha: e.rev["head_sha"])
+  Dir.mktmpdir("example-#{e.id}-") do |tmp|
+    repo = File.join(tmp, "repo")
+    out = File.join(tmp, "page")
+    puts "== #{e.id}: #{pr.repo}##{pr.pr} at #{e.short(pr.head_sha)}"
+    E2E.worktree(pr, repo, pr.head_sha)
+    begin
+      s = e.settings
+      cmd = [File.join(ROOT, "ci", "generate-review-map.sh"),
+             "--output", out, "--repository", pr.repo, "--pr", pr.pr.to_s,
+             "--base-sha", pr.base_sha, "--head-sha", pr.head_sha,
+             "--repo-dir", repo, "--plugin-dir", ROOT,
+             "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"]]
+      cmd += ["--claude-bin", ENV["CLAUDE_BIN"]] if ENV["CLAUDE_BIN"]
+      env = s["theme"] ? { "ACCOUNTABLE_REVIEW_THEME" => s["theme"] } : {}
+      system(env, *cmd) or die("#{e.id}: generation failed; examples/#{e.id}/ is unchanged", 1)
+
+      page = File.join(out, "index.html")
+      check, st = Open3.capture2e(File.join(E2E::EVALS, "check.rb"), "--final", "--page", page,
+                                  "--repo", repo, "--base", pr.base_sha)
+      puts check.lines.last(3).join
+      unless st.success?
+        puts check
+        die("#{e.id}: check.rb --final failed; examples/#{e.id}/ is unchanged. Re-run, never edit.", 1)
+      end
+
+      FileUtils.cp(page, File.join(DIR, e.id, "index.html"))
+      FileUtils.cp(File.join(out, "manifest.json"), File.join(DIR, e.id, "manifest.json"))
+    ensure
+      E2E.drop_worktree(pr, repo)
+    end
+  end
+end
+
+def cmd_regen(ids)
+  credential!
+  all = examples
+  chosen = ids.empty? ? all : ids.map { |id| all.find { |e| e.id == id } || die("no example #{id} (have: #{all.map(&:id).join(', ')})") }
+  chosen.each { |e| regen(e) }
+  cmd_render
+  puts "\nNow read each page before committing it. A worse page is re-run, never edited."
+end
+
+# ---------------------------------------------------------------- main
+
+case ARGV.shift
+when "regen" then cmd_regen(ARGV)
+when "render" then cmd_render
+when "check" then cmd_check
+when "help", "-h", "--help", nil
+  puts File.read(__FILE__).lines.drop(3).take_while { |l| l.start_with?("#") }.map { |l| l.sub(/^# ?/, "") }.join
+else die("unknown command (regen | render | check)")
+end

@@ -11,81 +11,76 @@ which is most of what makes an example worth reading.
 
 ## What is here
 
+<!-- examples:begin table — written by bin/examples render; do not edit by hand -->
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
-| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) — *Add HistoricalOwnership foundation for tracking gem ownership history* | `4199bcb` → `e9b5a3e` | 11 files · 3 context entries · 4 checkpoints · 1 converge figure · no impact path |
-| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) — *FIX: Separate email-code signup details from completion* | `320f173` → `64358ac` | 36 files · 3 context entries and the before-and-after figure · 7 checkpoints · 1 converge figure · 2 impact paths |
+| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) | `320f173` → `64358ac` | 36 files · 3 context entries · 6 checkpoints · 1 lifecycle figure · 2 impact paths |
+| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) | `4199bcb` → `e9b5a3e` | 11 files · 3 context entries · 4 checkpoints · 1 converge figure · 2 impact paths |
 
-`index.html` is the front door to the two. It is not a Review Map and follows none of the page
+- `discourse-43845/`: generated on **2026-10-19** by **`accountable-review` 1.3.0** from plugin commit `92e31bd`, at `--effort high`, `--mentor off`, `--context auto`; coverage gate: pass.
+- `rubygems-6699/`: generated on **2026-10-19** by **`accountable-review` 1.3.0** from plugin commit `92e31bd`, at `--effort high`, `--mentor off`, `--context auto`; coverage gate: pass.
+<!-- examples:end -->
+
+Each directory is one run's whole output: the page and the `manifest.json` written beside it. The
+manifest is the pin — repository, pull request, base and head — and the provenance: plugin version
+and commit, date, settings, coverage gate. The table and the list above are rendered from the
+manifests and the pages by `bin/examples render`, and so is the foot of `index.html`, so nothing
+said here about a page is typed.
+
+`index.html` is the front door to the pages. It is not a Review Map and follows none of the page
 rules — it borrows the design language and the theme rule, and nothing else.
 
-## Provenance
+Each pull request is mapped at the revision its manifest pins, so two versions of a page differ
+only by what the skill does. A pull request that is still open may move on past its pin. The pin
+holds until the head it names is gone from the pull ref, and then a person re-pins or replaces the
+example — never the script.
 
-Both pages were generated on **2026-10-08** by **`accountable-review` 1.2.0**, at the default
-`--effort high` and without `--mentor`: Discourse from plugin checkout `a9f1673`, which keeps a tier
-chip inline in a *Look at* entry, and RubyGems from `5f8b758`, which adds the third kind of
-coding decision — an abstraction the change went around — to step 7b. Without that example two
-RubyGems runs asked no coding decision; with it, three of three asked whether
-re-ranking roles beside `lib/access.rb` is deliberate. The Discourse page already asks its coding
-decision, which is about placement.
-
-The RubyGems page draws no impact path: nothing reads the new table yet, so the unchanged code it
-reaches is writers flowing into it, drawn in its first checkpoint's converge figure instead.
-
-Both pull requests are mapped at the revisions in the table, the same ones the previous versions of
-these pages described, so the two versions differ only by what the skill does. Discourse's is
-merged, so its revision is final; RubyGems' is still open, and may have moved on since.
-
-Neither page was edited after the run produced it. That is the point of keeping them: a hand-tuned
+No page is edited after the run produced it. That is the point of keeping them: a hand-tuned
 example demonstrates what someone could write, not what the skill does.
 
-## Why the version is recorded
+## Regenerated every release
 
 The page format moves between releases — a component is added, a section is merged away, a rule
 about what may appear changes. A linked example rendering a format two releases old is exactly the
 kind of drift this project is careful about everywhere else, and it is quiet: nothing about a stale
-page announces that it is stale.
-
-So the version is written down rather than implied, here and in the foot of `index.html`. It is the
-same reason an eval result line carries the skill's git sha — a page is attributable to a version of
-the prose, or it is evidence of nothing in particular.
-
-**When the format changes in a way these pages no longer show, regenerate them rather than editing
-them.** From a checkout of the target repository:
+page announces that it is stale. So every release regenerates them, and `bin/examples check`, part
+of `bin/evals offline`, fails while any manifest names a version other than `plugin.json`'s.
 
 ```bash
-cd /path/to/discourse
-claude --plugin-dir /path/to/accountable-review
-/accountable-review:review-map 43845 --output /tmp/example
+export CLAUDE_CODE_OAUTH_TOKEN=$(claude setup-token)   # or ANTHROPIC_API_KEY
+bin/examples regen                 # every example, or name one: bin/examples regen discourse-43845
 ```
 
-Then copy `/tmp/example/index.html` over the page here and update this file's table, the date and
-the version above, and the foot of `index.html`. `--output` is what makes the run non-interactive
-and writes portable static HTML; it changes where the bytes land and nothing else about the page.
+It runs the skill exactly as CI does: `ci/generate-review-map.sh --output` from a detached
+worktree of the pinned head, with the settings the manifest records. It then runs `check.rb --final`
+on the page, and only if that passes does it copy the page and its manifest here and re-render the
+provenance.
+
+Then **read each page** before committing it, against the four questions `.claude/CLAUDE.md` asks
+of every run: is every checkpoint a judgment, did the merge happen, does the impact panel cite code
+that really consumes the change, and does any sentence grade the pull request. Finding defects is
+sampling, so a regenerated page can come out worse than the one it replaces. A worse page is
+re-run, never edited.
+
+To add an example, write its `manifest.json` by hand — `regen` reads the revision block and the
+settings — and run `bin/examples regen <id>`. The repository must be public.
 
 ## Why these two
 
 They fail in opposite directions, which is what a pair is for.
 
 **RubyGems** is eleven files that all look safe. It is the first slice of a larger change: a new
-table, the callbacks that keep it in step with the live one, and a backfill task — nothing reads
-the new table yet, and every line of it is an addition. What a reviewer has to decide is therefore
-almost entirely about code the diff never opened, and the page's converge figure is that question
-drawn: every path that starts or ends an ownership — the callbacks, a re-push that disowns a gem
-without running them, an organization onboarding that moves ownerships under them, an account
-deletion — converging on the one rule they must all keep, an open history row exactly while a
-confirmed ownership exists. It earns **no** *Context*: every checkpoint is followable by someone who
-knows Rails and has never opened this repository, which is the section being earned rather than
-always on. Its two impact paths are the crossings the diff cannot show: owner removal now writes a
-second table inside its own transaction, and contributors demoted in bulk keep `owner` in their
-history row, because nothing on that path lowers the role it recorded.
+table, the callbacks that keep it in step with the live one, and a backfill task. Nothing reads the
+new table yet, and every line of it is an addition. So what a reviewer has to decide is almost
+entirely about code the diff never opened: every path that starts or ends an ownership — the
+callbacks, a re-push that disowns a gem without running them, an organization onboarding that moves
+ownerships under it, an account deletion — has to keep one rule, an open history row exactly while
+a confirmed ownership exists.
 
 **Discourse** is the case for a large diff. Thirty-six files, and most of what a reviewer has to
 decide is not in any of them: whether every request that creates an account still passes the
-CAPTCHA — drawn as the verify requests converging on that rule — and what the new signup step does
-for a visitor who is not logged in yet. Its *Context* section is the one this format added for
-pages like it: the request sequence drawn before and after, with the account-creating request
-moving one step later and the cases that run differently listed beneath it, then the CAPTCHA plugin
-and *approval signup* introduced before any checkpoint relies on them.
+CAPTCHA, and what the new signup step does for a visitor who is not logged in yet. It is also the
+case for *Context*: the change moves which request creates the account, and a reader has to see
+that move, and meet the CAPTCHA plugin and *approval signup*, before a checkpoint can rely on them.
 
 Neither page grades its pull request, and this directory does not rank the two.
