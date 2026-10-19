@@ -19,7 +19,11 @@
 # `used_percent`, `window_minutes` and `resets_at`. `mark` writes the running totals and windows to
 # $W/usage.start; `report` subtracts them from the latest, so tokens spent before the run are not
 # its own. A falsifier is a subagent thread with a rollout of its own whose session meta names this
-# thread as its parent: every such rollout written since the mark is the run's, whole.
+# thread as its parent: every such rollout begun after the mark is the run's, whole. One that already
+# existed at the mark is an earlier task's, even while it keeps writing, so `mark` lists them and
+# `report` leaves them out. A thread reverted since the mark has a new rollout whose totals start
+# over, so the mark names its rollout and `report` refuses a different one rather than subtract
+# across the two.
 #
 # WHAT IT DOES NOT CLAIM. The window percentages are the account's, so anything else the account
 # runs meanwhile moves them too, and the line says account-wide. A window that reset between the
@@ -74,8 +78,17 @@ snapshot() { # prints key=value lines for one rollout's latest reading
   done
 }
 
+# Every rollout whose session meta names this thread as its parent.
+children_of() {
+  find "$sessions" -type f -name 'rollout-*.jsonl' 2>/dev/null | while read -r f; do
+    [ "$f" = "$rollout" ] && continue
+    if head -n 1 "$f" | grep -q "\"parent_thread_id\":\"$tid\""; then printf '%s\n' "$f"; fi
+  done
+}
+
 if [ "$mode" = mark ]; then
-  { echo "tid=$tid"; snapshot "$rollout"; } >"$W/usage.start"
+  { echo "tid=$tid"; echo "rollout=$rollout"; snapshot "$rollout"; } >"$W/usage.start"
+  children_of >"$W/usage.before"
   say "USAGE marked: thread $tid"
 fi
 
@@ -83,15 +96,17 @@ fi
 start=$W/usage.start
 start_tid=$(sed -n 's/^tid=//p' "$start")
 [ "$start_tid" = "$tid" ] || say "SKIP usage: the mark is thread $start_tid's, this is $tid"
+[ "$(sed -n 's/^rollout=//p' "$start")" = "$rollout" ] ||
+  say "SKIP usage: the thread was reverted since the mark, and its new log counts from zero"
 now=$W/usage.now
 snapshot "$rollout" >"$now"
 
-# Falsifiers: subagent threads begun since the mark whose session meta names this thread.
+# Falsifiers: this thread's subagents, less the ones that already existed at the mark.
 children=$W/usage.children
 : >"$children"
-find "$sessions" -type f -name 'rollout-*.jsonl' -newer "$start" 2>/dev/null | while read -r f; do
-  [ "$f" = "$rollout" ] && continue
-  head -n 1 "$f" | grep -q "\"parent_thread_id\":\"$tid\"" || continue
+touch "$W/usage.before"
+children_of | while read -r f; do
+  grep -qxF "$f" "$W/usage.before" && continue
   t=$(totals_of "$f")
   echo "$(field "$t" input_tokens) $(field "$t" cached_input_tokens) $(field "$t" output_tokens)" >>"$children"
 done
@@ -102,9 +117,9 @@ awk -v startf="$start" -v nowf="$now" -v kidsf="$children" '
     close(file)
   }
   function tok(n) {
-    if (n >= 1e7) return sprintf("%.1fM", n / 1e6)
-    if (n >= 1e6) return sprintf("%.2fM", n / 1e6)
-    if (n >= 1e3) return sprintf("%dk", int(n / 1e3 + 0.5))
+    if (n >= 9995000) return sprintf("%.1fM", n / 1e6)
+    if (n >= 999500) return sprintf("%.2fM", n / 1e6)
+    if (n >= 999.5) return sprintf("%dk", int(n / 1e3 + 0.5))
     return sprintf("%d", n)
   }
   function pct(p) { p = sprintf("%.1f", p); sub(/\.0$/, "", p); return p "%" }

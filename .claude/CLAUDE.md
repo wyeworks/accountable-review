@@ -889,9 +889,9 @@ Editing one of these means checking the others still agree.
   low, `--update`), only for a run whose coverage gate passed before its turn answered, excluding
   time waiting between turns. With nothing recorded it shows elapsed time and no bar.
 
-  **What the run spends is read too, and never reaches the page.** Tokens are every `turn.step`
-  response's usage while the run is live, main loop and subagents alike; the 5-hour figure is how
-  far the engine's `five_hour` reading moved since the run's first one, and a window that reset in
+  **What the run spends is read too, and never reaches the page.** Tokens are the usage of every
+  `turn.step` the run makes, the main loop's and its falsifiers'; the 5-hour figure is how far the
+  engine's `five_hour` reading moved since the run's first one, and a window that reset in
   between shows no share. The end of a run logs one line to the transcript. Codex has no surface a
   plugin draws on, so `scripts/usage.sh` reads its rollout log and the run says the same line in
   chat at step 10 (`references/hosts/generic.md`). A cost figure on the page would grade how hard

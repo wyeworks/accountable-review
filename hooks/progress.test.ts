@@ -124,6 +124,9 @@ describe('board', () => {
     expect(tokens(1_262_020)).toBe('1.26M')
     expect(tokens(48_400)).toBe('48k')
     expect(tokens(12_400_000)).toBe('12.4M')
+    expect(tokens(999_700)).toBe('1.00M')
+    expect(tokens(9_996_000)).toBe('10.0M')
+    expect(tokens(999.7)).toBe('1k')
     expect(moved(FIVE(30), FIVE(38.5))).toBe(8.5)
     expect(moved(FIVE(30), { ...FIVE(4), resetsAt: '2026-10-19T23:00:00Z' })).toBeUndefined()
     expect(moved(undefined, FIVE(4))).toBeUndefined()
@@ -255,8 +258,8 @@ describe('progress line', () => {
     await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(30)] } as never)
     const spawned = await $.agent.spawn({ subagentType: 'accountable-review:claim-falsifier' } as never)
     await step($ as never, (spawned as { agentId: string }).agentId)
-    await step($ as never, 'some-other-agent')
-    expect(statuses.at(-1)).toContain('🪙 1.89M')
+    await step($ as never, 'some-other-agent') // a subagent the run did not spawn: not its tokens
+    expect(statuses.at(-1)).toContain('🪙 1.26M')
 
     await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(34.5)] } as never)
     expect(statuses.at(-1)).toContain('⏳ 5h +4.5%')
@@ -267,12 +270,23 @@ describe('progress line', () => {
     await $.turn.complete(finish('answer'))
     expect(statuses.at(-1)).toContain('⏳ 5h +6%')
     expect(statuses.logs).toEqual([
-      'review map used 1.89M tokens (30 input · 90k cache write · 1.80M cache read · 3k output; ' +
+      'review map used 1.26M tokens (20 input · 60k cache write · 1.20M cache read · 2k output; ' +
         'falsifiers 631k of it) — 5-hour window 30% → 36% (+6%), account-wide',
     ])
 
     await step($ as never) // after the run: not its tokens
-    expect(statuses.at(-1)).toContain('🪙 1.89M')
+    expect(statuses.at(-1)).toContain('🪙 1.26M')
+  })
+
+  test('a reading from a window that already reset is no baseline', async ($, on) => {
+    mock.clock(on, { now: Date.parse('2026-10-19T18:00:00Z') })
+    mock.store(on)
+    // the session sat idle past the old window's reset: the reading it kept is that window's
+    const statuses = world(on, {}, { now: [{ ...FIVE(80), resetsAt: '2026-10-19T12:00:00Z' }] })
+    await $.prompt.submit({ text: '/review-map 7' } as never)
+    await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(2)] } as never)
+    await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(5)] } as never)
+    expect(statuses.at(-1)).toContain('⏳ 5h +3%')
   })
 
   test('an --output run reads its page where the command put it', async ($, on) => {

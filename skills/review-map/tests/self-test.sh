@@ -540,8 +540,16 @@ sed 's|    inp = b\["in"\] - a\["in"\]; cached = b\["cached"\] - a\["cached"\]; 
 case_usage_red "usage.sh stops subtracting the mark" "$WORK/usage-nomark.sh"
 
 # 49. Any thread begun since the mark counts as a falsifier, another session's included.
-sed 's|  head -n 1 "\$f" \| grep -q "\\"parent_thread_id\\":\\"\$tid\\"" \|\| continue|  :|' "$USAGE" > "$WORK/usage-anychild.sh"
+sed 's|    if head -n 1 "\$f" \| grep -q "\\"parent_thread_id\\":\\"\$tid\\""; then|    if :; then|' "$USAGE" > "$WORK/usage-anychild.sh"
 case_usage_red "usage.sh counts threads that are not this run's" "$WORK/usage-anychild.sh"
+
+# 49b. A subagent that existed at the mark counts too: an earlier task's, still writing.
+sed 's|  grep -qxF "\$f" "\$W/usage.before" \&\& continue|  :|' "$USAGE" > "$WORK/usage-early.sh"
+case_usage_red "usage.sh counts a subagent begun before the mark" "$WORK/usage-early.sh"
+
+# 49c. A reverted thread is subtracted across two logs instead of refused.
+sed 's|^\[ "\$(sed -n .s/^rollout=//p. "\$start")" = "\$rollout" \] \|\||: \|\||' "$USAGE" > "$WORK/usage-revert.sh"
+case_usage_red "usage.sh subtracts a mark from a reverted thread's new log" "$WORK/usage-revert.sh"
 
 # 50. A window that reset is reported as a share — a delta across two different windows.
 sed 's|a\[w "_reset"\] == b\[w "_reset"\] \&\& ||' "$USAGE" > "$WORK/usage-reset.sh"

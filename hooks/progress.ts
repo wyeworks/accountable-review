@@ -13,8 +13,8 @@
 //   * the page the run is staging — checkpoints written against pending ones;
 //   * the clock, against the median of this repository's earlier generations of the same kind,
 //     which this file records itself. With none recorded there is no bar, only elapsed time;
-//   * what the run spent: every model request's usage as the API reported it, the falsifiers'
-//     requests included, and the account's 5-hour window as the engine measures it, from the
+//   * what the run spent: the usage the API reported for every request the run made, the main
+//     loop's and its falsifiers' (another agent working beside the run is not the run's), and the account's 5-hour window as the engine measures it, from the
 //     run's first reading. When the run ends the transcript gets one line with the breakdown.
 //
 // The activity is the latest tool call by purpose, never a step number: steps interleave and
@@ -174,7 +174,9 @@ async function start($: EngineInterface, command: string) {
     firstLimits: [],
     lastLimits: [],
   }
-  measured(mine, await readLimits($))
+  // A reading from before an idle stretch can belong to a window that has since reset: as a
+  // baseline it would match no later reading, and the run would show no share at all.
+  measured(mine, (await readLimits($)).filter(l => !(Date.parse(l.resetsAt ?? '') <= mine.started)))
   run = mine
   tick($, mine)
   await draw($)
@@ -240,18 +242,18 @@ export const register: Register = on => {
     return result
   }).catch(($, e, next) => next(e))
 
-  // Every model request while the run is live, main loop and subagents alike, counted once the
-  // response is whole. A falsifier still reading after the main turn ended is the run's too, so a
+  // Every request the run makes, counted once the response is whole: the main loop's and its
+  // falsifiers'. The skill spawns no other agent, so any other subagent is someone else's work
+  // running beside it. A falsifier still reading after the main turn ended is the run's too, so a
   // waiting run keeps counting. The stream passes through untouched.
   on('turn.step', async function* ($, e, next) {
     const mine = run && !run.ended ? run : undefined
     const result = yield* next(e)
-    if (mine && !mine.ended && result.usage) {
+    const falsifier = e.agentId !== undefined && mine?.falsifierIds.has(e.agentId) === true
+    if (mine && !mine.ended && result.usage && (e.agentId === undefined || falsifier)) {
       try {
         mine.usage = addUsage(mine.usage, result.usage)
-        if (e.agentId !== undefined && mine.falsifierIds.has(e.agentId)) {
-          mine.falsifierUsage = addUsage(mine.falsifierUsage, result.usage)
-        }
+        if (falsifier) mine.falsifierUsage = addUsage(mine.falsifierUsage, result.usage)
         await draw($)
       } catch {
         // the count is the line's, never the request's

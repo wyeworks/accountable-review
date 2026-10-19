@@ -1151,16 +1151,19 @@ uout "" mark
 assert_eq "$(count "$WORK/u.out" 'SKIP usage: not a Codex session')" "1" "outside Codex it says SKIP, since Claude Code counts its own"
 assert_eq "$(cat "$WORK/u.exit")" "0" "and a count it cannot read never stops a run"
 
+# A subagent of this thread from an earlier task, begun before the mark and still writing after it.
+EARLY=$CX/sessions/2026/10/19/rollout-2026-10-19T09-00-00-0199ffff-early.jsonl
+{ meta 0199ffff-early "\"$TID\""; tc 50000 0 500 29.0; } > "$EARLY"
 uout "$TID" mark
 assert_eq "$(count "$WORK/u.out" 'USAGE marked')" "1" "mark records where the thread stands"
-sleep 1 # -newer has one-second granularity on some file systems: the falsifier's log is after the mark
+tc 70000 0 700 36.5 >> "$EARLY"
 tc 900000 800000 12000 36.5 >> "$ROLL"
 { meta 0199bbbb-child "\"$TID\""; tc 300000 250000 6000 36.5; } > "$CX/sessions/2026/10/19/rollout-2026-10-19T10-05-00-0199bbbb-child.jsonl"
 { meta 0199cccc-other "\"0199dddd-unrelated\""; tc 999999 0 999 36.5; } > "$CX/sessions/2026/10/19/rollout-2026-10-19T10-06-00-0199cccc-other.jsonl"
 
 uout "$TID" report
 assert_eq "$(count "$WORK/u.out" 'USAGE review map used 1.12M tokens (1.10M input, 970k of it cached · 16k output; falsifiers 306k of it)')" "1" \
-  "report subtracts the mark, adds the falsifier, and leaves another thread's log out"
+  "report subtracts the mark, adds the falsifier, and leaves another thread's and an earlier subagent's logs out"
 assert_eq "$(count "$WORK/u.out" '5-hour window 30% → 36.5% (+6.5%), 7-day window 12% → 12% (+0%), account-wide')" "1" \
   "and says how far each window moved, named from its length, account-wide"
 
@@ -1168,6 +1171,24 @@ tc 950000 850000 13000 4.0 1760918000 >> "$ROLL" # the 5-hour window reset since
 uout "$TID" report
 assert_eq "$(count "$WORK/u.out" '5-hour window at 4%')" "1" "a window that reset is reported where it stands, never as a share"
 assert_eq "$(count "$WORK/u.out" '→ 4%')" "0" "with no delta across the reset"
+
+# A revert writes a newer rollout for the same thread, its totals starting over.
+sleep 1 # -nt has one-second granularity on some file systems
+{ meta "$TID" null; tc 1000 0 10 4.0 1760918000; } > "${ROLL%.jsonl}_0199abcd.jsonl"
+uout "$TID" report
+assert_eq "$(count "$WORK/u.out" 'SKIP usage: the thread was reverted since the mark')" "1" \
+  "a thread reverted since the mark is refused rather than subtracted across two logs"
+rm "${ROLL%.jsonl}_0199abcd.jsonl"
+
+# Just under a million rounds into millions, never to 1000k.
+TID2=0199aaaa-0000-7000-8000-00000000beef
+ROLL2=$CX/sessions/2026/10/19/rollout-2026-10-19T11-00-00-$TID2.jsonl
+mkdir -p "$WORK/uw2"
+{ meta "$TID2" null; tc 0 0 0 30.0; } > "$ROLL2"
+CODEX_THREAD_ID=$TID2 CODEX_HOME=$CX "$USAGE" mark "$WORK/uw2" >/dev/null
+tc 999000 0 700 30.0 >> "$ROLL2"
+CODEX_THREAD_ID=$TID2 CODEX_HOME=$CX "$USAGE" report "$WORK/uw2" > "$WORK/u.out"
+assert_eq "$(count "$WORK/u.out" 'used 1.00M tokens (999k input')" "1" "999,700 tokens read as 1.00M"
 
 uout 0199eeee-not-marked report
 assert_eq "$(count "$WORK/u.out" 'SKIP usage: no Codex session log')" "1" "a thread with no log says SKIP"

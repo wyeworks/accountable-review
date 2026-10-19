@@ -152,9 +152,10 @@ export function totalTokens(t: Usage): number {
   return t.input + t.output + t.cacheRead + t.cacheWrite
 }
 
+// Each unit starts where the smaller one would round up into it: 999,700 is 1.00M, never 1000k.
 export function tokens(n: number): string {
-  if (n >= 1e6) return `${(n / 1e6).toFixed(n >= 1e7 ? 1 : 2)}M`
-  if (n >= 1e3) return `${Math.round(n / 1e3)}k`
+  if (n >= 999_500) return `${(n / 1e6).toFixed(n >= 9_995_000 ? 1 : 2)}M`
+  if (n >= 999.5) return `${Math.round(n / 1e3)}k`
   return String(Math.round(n))
 }
 
