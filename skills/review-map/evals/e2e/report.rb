@@ -5,11 +5,17 @@
 #
 #   e2e/report.rb [--id ID] [--out FILE] [--history VERSION]
 #
-# Grouped by PR, then by (plugin version, skill sha, effort, producing model): a row measured on
-# one version of the prose is never averaged into a row measured on another. Inside a group, each
-# judge gets one column per criterion, the pass rate across repetitions — and a judge that
-# calibrate.rb has not passed at its current sha and model is labelled UNCALIBRATED instead of
-# being given a colour, because an uncalibrated judge's number is not a measurement yet.
+# The release table comes first: one block per (plugin version, skill sha, effort, producing
+# model) with every eval PR's repetitions POOLED, one line per criterion carrying its class, its
+# count and its status under evals/README.md § What counts as good — grade.rb's arithmetic, the
+# sample the thresholds there are written for. A sha stamped +dirty is shown and marked: it is
+# attributable to no prose.
+#
+# Beneath it, the detail: grouped by PR, then by the same key — a row measured on one version of
+# the prose is never averaged into a row measured on another. Inside a group, each judge gets one
+# column per criterion, the pass rate across repetitions — and a judge that calibrate.rb has not
+# passed at its current sha and model is labelled UNCALIBRATED instead of being given a colour,
+# because an uncalibrated judge's number is not a measurement yet.
 #
 # One row per page: a --rejudge supersedes the line it re-judges (E2E.runs), so re-judging a page
 # never turns it into a second repetition.
@@ -24,6 +30,7 @@ require "optparse"
 require_relative "lib"
 require_relative "judge"
 require_relative "verdicts"
+require_relative "grade"
 
 opts = { out: File.join(E2E.out, "report.html") }
 OptionParser.new do |o|
@@ -49,6 +56,32 @@ end
 summary = []
 body = +""
 
+STATUS = { good: "good", watch: "watch", read: "read by a person", block: "BLOCKS — two failures",
+           failing: "BLOCKS — below 4/6", deferred: "deferred — reported, not graded", none: "—" }.freeze
+CLS = { good: "good", watch: "mixed", read: "mixed", block: "bad", failing: "bad", deferred: "plain", none: "plain" }.freeze
+
+body << %(<h2>Release table — every eval PR pooled, per skill sha</h2>)
+body << %(<p class="meta">truth: no failure is good, one is read by a person, two block · form: pass ≥ 5/6 good, ≥ 4/6 watch, below blocks · deferred: judged and shown, graded by nothing · a page is acceptable with ≤ 2 form failures and no check FAIL, and the median repetition per PR must be.</p>)
+rows.select { |r| E2E.pr(r["id"]).role == "eval" rescue false }.group_by(&key).sort_by { |(_v, _s, _e, _m), g| g.map { |r| r["batch"].to_s }.max.to_s }.reverse.each do |(version, sha, effort, model), group|
+  lines = Grade.table(group)
+  blocking = Grade.blocking?(group, lines)
+  overall = blocking ? :block : Grade.overall(lines)
+  prs = group.group_by { |r| r["id"] }
+  dirty = sha.to_s.end_with?("+dirty")
+  body << %(<h3>#{h.(version)} · skill #{h.(sha)} · effort #{h.(effort)} · model #{h.(model)} · #{group.length} rep(s) over #{prs.size} PR(s) — <span class="#{CLS[overall]}">#{h.(STATUS.fetch(overall, overall))}</span>#{dirty ? ' · <span class="uncal">uncommitted prose — attributable to no sha</span>' : ''}</h3>)
+  body << %(<p class="meta">median repetition per PR: #{prs.map { |id, g| "#{h.(id)} #{Grade.median_acceptable?(g) ? 'acceptable' : 'NOT acceptable'}" }.join(' · ')}.</p>)
+  body << %(<table><tr><th>judge</th><th>criterion</th><th>class</th><th>pass</th><th>status</th></tr>)
+  lines.each do |l|
+    n = l.counts.values.sum
+    extra = []
+    extra << "#{l.counts[:unclear]} unclear" if l.counts[:unclear].positive?
+    extra << "judge split on gold" if l.split
+    body << %(<tr><td>#{h.(l.judge)}</td><td class="crit">#{l.n}. #{h.(l.label)}</td><td>#{l.klass}</td><td>#{l.counts[:pass]}/#{n}</td><td class="#{CLS[l.status]}">#{h.(STATUS[l.status])}#{extra.empty? ? '' : " (#{h.(extra.join(', '))})"}</td></tr>)
+  end
+  body << "</table>"
+end
+body << %(<h2>Detail, per PR</h2>)
+
 rows.group_by { |r| r["id"] }.each do |id, by_pr|
   body << %(<h2>#{h.(id)}</h2>)
   by_pr.group_by(&key).each do |(version, sha, effort, model), group|
@@ -73,19 +106,20 @@ rows.group_by { |r| r["id"] }.each do |id, by_pr|
       calibrated = cal == ["calibrated"]
       docs = entries.map { |e| verdict_doc(e["verdicts"]) }
       ncrit = entries.map { |e| e["criteria"].to_i }.max
-      criteria = (Judge.load(jn)[:meta]["criteria"] rescue [])
 
       body << %(<h4>#{h.(jn)} #{calibrated ? '<span class="cal">calibrated</span>' : '<span class="uncal">UNCALIBRATED — not a measurement</span>'}</h4>)
       body << %(<table><tr><th>criterion</th><th>pass rate</th>#{docs.each_index.map { |i| "<th>r#{i + 1}</th>" }.join}</tr>)
       rates = {}
+      classes = {}
       (1..ncrit).each do |n|
+        classes[n] = (Grade.klass(jn, n) rescue nil)
         vs = docs.map { |d| d && d["verdicts"].find { |v| v["n"].to_i == n } }
         passes = vs.count { |v| v && v["verdict"] == "pass" }
         usable = vs.count { |v| v }
         rates[n] = usable.zero? ? nil : (passes.to_f / usable).round(2)
         rate = rates[n] ? "#{passes}/#{usable}" : "—"
         cls = calibrated && rates[n] ? (rates[n] == 1 ? "good" : rates[n].zero? ? "bad" : "mixed") : "plain"
-        label = criteria[n - 1].to_s[/\A[A-Z][A-Z ,]+[A-Z]/] || "criterion #{n}"
+        label = Grade.label(jn, n)
         cells = vs.map do |v|
           next "<td>unusable</td>" unless v
 
@@ -98,7 +132,7 @@ rows.group_by { |r| r["id"] }.each do |id, by_pr|
       notes = docs.each_with_index.filter_map { |d, i| d && !d["notes"].to_s.empty? ? "r#{i + 1}: #{d['notes']}" : nil }
       body << %(<div class="notes"><b>notes — read before the verdicts</b><ul>#{notes.map { |n| "<li>#{h.(n)}</li>" }.join}</ul></div>) unless notes.empty?
       group_summary["judges"][jn] = { "judge_sha" => entries.first["judge_sha"], "model" => entries.first["model"],
-                                      "calibrated" => calibrated, "pass_rate" => rates }
+                                      "calibrated" => calibrated, "pass_rate" => rates, "class" => classes }
     end
 
     body << "<ul class=\"runs\">"

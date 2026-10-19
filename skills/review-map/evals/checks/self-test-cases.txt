@@ -47,6 +47,15 @@
 # failure to report, not this check's. A PASS here would read as a verified figure that was
 # never looked at.
  impact-paths       | searches-clean.html           | 0 | no .impact panel in this input
+# Affected means a file the diff does not touch, held against the changed set — here the page's
+# own ledger, so no repository is needed. The clean twin is pinned on its PASS line rather than on
+# exit 0, because reach-clean.html carries no ledger and only SKIPs the rule: a clean row that
+# never read a changed set would vouch for nothing. One defect, two checks: the node is
+# impact-paths.rb's, the list entry searches.rb's.
+ impact-paths       | impact-aff-ledger-clean.html  | 0 | every .ip-aff node sits in a file the diff does not touch
+ impact-paths       | impact-aff-changed-file.html  | 1 | an .ip-aff node in a file the change touches
+ searches           | impact-aff-ledger-clean.html  | 0 | sits in a file the diff does not touch
+ searches           | impact-aff-changed-file.html  | 1 | affected entr(ies) in a file the change touches
  searches           | searches-clean.html           | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
  searches           | searches-unreachable.html     | 1 | reachable from no recorded search | --repo @GOLD@/searches-repo
  searches           | searches-bre-dialect.html     | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
@@ -101,6 +110,12 @@
 # caveat until the format dropped it, so a pattern reaching too far would fire everywhere at
 # once. That half is pinned by frozen.rb, which holds every case's whole output.
  page-invariants    | invariants-standing-disclaimer.html | 0 | a standing disclaimer may have come back
+# § 10, tiers against the changed set: three WARN shapes and the page that carries none. Each
+# fixture's ledger is its changed set, so the rows run with no repository.
+ page-invariants    | invariants-tier-clean.html       | 0 | tiers agree with the changed set
+ page-invariants    | invariants-tier-unlabelled.html  | 0 | cites a file outside the diff with no tier
+ page-invariants    | invariants-tier-uncited.html     | 0 | from unchanged code with nothing cited
+ page-invariants    | invariants-tier-on-changed.html  | 0 | from unchanged code on a sentence that cites only files in the diff
  page-invariants    | invariants-bill-in-comment.html | 0 | no 'clean bill of health' in the prose
  page-invariants    | invariants-bill-in-prose.html   | 0 | 'clean bill of health' appears
 # Recency, § 2e. Two shapes because they are two different mistakes: a class on the checkpoint,
@@ -113,6 +128,13 @@
  page-invariants    | invariants-no-tier.html       | 1 | no evidence tier labels
  page-invariants    | invariants-tier-modifier-only.html | 0 | evidence tiers used (2 label(s))
  page-invariants    | invariants-loose-data-path.html | 1 | outside a ledger cell
+# The metric strip, § 9. Two sums at two severities: Files against the inventory is a FAIL, the
+# By kind buckets against Files a WARN pinned at exit 0. The clean rows are agenda-clean, the one
+# fixture with a masthead whose sums agree, so a rule that fires on a correct strip goes red there.
+ page-invariants    | invariants-strip-files.html   | 1 | but the inventory lists
+ page-invariants    | invariants-strip-kind.html    | 0 | By kind adds up to 4 but Files is 5
+ page-invariants    | agenda-clean.html             | 0 | masthead Files (5) is the inventory's count
+ page-invariants    | agenda-clean.html             | 0 | By kind adds up to Files
 # The flow designator, § 7 — the rule that guards a deleted vocabulary, the way § 1's severity
 # chips do. Two rows, because the corpus itself carried the old vocabulary until this rule
 # landed: the FAIL row proves it fires, and the PASS row on a clean fixture proves the pattern
@@ -130,6 +152,11 @@
  excerpts           | excerpt-duplicate.html        | 1 | same range is excerpted more than once
  excerpts           | excerpt-linked-clean.html     | 0 | no excerpt quotes the same lines twice
  excerpts           | excerpt-linked-duplicate.html | 1 | same range is excerpted more than once
+# Overlap is the duplicate rule for two different locations, and the one mechanical trace of an
+# entry quoting the wrong block. A WARN, so both rows sit at exit 0 and the text is the assertion;
+# the clean twin's ranges touch without overlapping, so an off-by-one turns it red.
+ excerpts           | excerpt-overlap.html          | 0 | excerpts quote overlapping lines
+ excerpts           | excerpt-overlap-clean.html    | 0 | no two excerpts quote overlapping lines
  rails-anchors      | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-uncatalogued-url.html | 1 | in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md, react-docs.md) | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-unpinned-link.html    | 1 | unpinned Rails doc link           | --repo @GOLD@/searches-repo

@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -1418,7 +1418,7 @@
+ 
+         <p>The controller now treats a missing <code>rows</code> or <code>cols</code> as 1, at
+           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>.
+-          <code>LayoutUpdater</code> deletes every row before it re-inserts the list. The modal's Apply button
++          <code>LayoutUpdater</code> updates each row in place and leaves the others alone. The modal's Apply button
+           still sends only <code>source</code> and <code>identifier</code>. So reordering or adding a report
+           there resets every card to 1&times;1, including cards the admin never touched
+           <span class="tier tier-unc">from unchanged code</span>. The drawing is Impact path A. Decide whether

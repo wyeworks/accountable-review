@@ -74,6 +74,7 @@ rule one level up — yours, not the other host's.
 | `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
+| `scripts/page-lint.sh` | step 10 | Reads the finished page: placeholders are a FAIL to fix, a tier that disagrees with the diff is a WARN to read |
 
 Paths are relative to this skill's base directory; do not rely on a plugin-root environment
 variable such as `$CLAUDE_PLUGIN_ROOT`, which is not set in the shell.
@@ -685,7 +686,14 @@ Each note carries, under these headings:
   reaches it, and its evidence tier written out (`diff`, `from unchanged code`, `inferred from
   tests`, `inferred`, `uncertain`). Write the tier on **every** entry here, the `diff` ones included.
   On the page silence means the first tier; in a note silence is a claim nobody labelled, and the
-  falsifier is told to treat it as one.
+  falsifier is told to treat it as one. **Affected means a file `git diff --name-only` does not
+  list**: an untouched method inside a changed file goes in *Trace*, because the page splits changed
+  from unchanged by file and a run that files it here draws it teal and labels it
+  `from unchanged code` on a page whose inventory lists the file as changed. **And it means the
+  change reaches it.** Code the search found that the change does *not* reach — the check that
+  reads a value the change stores nowhere, the status computation whose inputs an edit leaves alone
+  — is insulation: file it under *Trace* or *Open* as evidence for whichever judgment asks whether
+  it is reached, never here, because whatever is filed here becomes an *Affected, not changed* entry.
 - **Searched** — one line per search, the command then the result clause, in the form
   `details.searched` will take.
 - **Tests** — which behaviour each pins, which branch it leaves open.
@@ -1002,7 +1010,9 @@ goes on the checkpoint's `p.open` line.
 before the code that trusts it, the smallest complete example before the bulk, irreversible code last.
 Each stop is a path, one sentence on why here, and a link to the checkpoint it belongs to. It is built
 after the agenda because it is a route through the agenda. Ask, per stop: *what does the reviewer have
-to understand first for the next file to make sense?*
+to understand first for the next file to make sense?* A why says what the file does, and claims it is
+the only place something happens only where its checkpoint does — `report-format.md` § *Section 4*
+says why that is the sentence most often false at head.
 
 **7i. Identify the external impact.** One to three paths from the notes' *affected, not changed*
 entries: each starts in changed code, passes through at least one unchanged consumer, and ends at
@@ -1075,7 +1085,17 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
 - **Label the tier of anything the diff does not show directly.** Five tiers, rendered per
   `references/report-format.md`: explicitly changed · evidenced by unchanged code · inferred from
   tests · inferred from naming or architecture · uncertain. Silence means the first one. Never let an
-  inference sit in the page wearing the clothes of a fact.
+  inference sit in the page wearing the clothes of a fact. Three wear them most often, because the
+  page shows the lines they are built from: what happens when two requests interleave, that nothing
+  else reads, writes or calls something, and what the language or a library does with a value. The
+  reference's § *Evidence tiers* says what each needs before it is stated plainly; the one most
+  often false is the absence, and it is written only after naming every hit its search returned.
+  A claim keeps its tier wherever it is restated — a *Look at* clause, an impact card's
+  `p.ip-why`, a stop's why — because a reader may meet it there first.
+- **No label is not no citation.** A claim about an untouched line of a changed file carries no
+  tier, and so it carries that line's citation at the claim, in the open page — the diff view does
+  not show it, and without the line the reader has no way to check the sentence. A tier or a
+  citation in another field, or in the shut search record, does not cover it.
 - **Tests are evidence of intent, not proof of correctness.** Say which behaviour they pin, which
   branch they leave open, and what still needs a human to exercise it.
 - Where you could not confirm something, put it in the page as an open question. Do not round
@@ -1369,7 +1389,9 @@ Everything else about writing holds at every stage:
   panel this replaced was a grid of boxes, and every real page filled the boxes with prose to supply
   the relation the layout could not express — which is the failure to watch for coming back.
 - **Every card opens with its `p.ip-why`, and every code node carries its locator.** The paragraph
-  says what goes wrong and to whom and points at a checkpoint; it never walks the chain, because a
+  says what goes wrong and to whom and points at a checkpoint, **carrying the tier the checkpoint
+  gave the claim** — a why restates a `from unchanged code` or `inferred` consequence a section
+  later, and unlabelled it says the diff shows it; it never walks the chain, because a
   paragraph that names the hops in sequence makes one of the two redundant. The locator is
   `a.path.ip-loc`, last inside the box — `{{DIFF}}` on a changed node, `{{BLOB}}` on an unchanged
   one, and never on the outcome, which is a behaviour rather than a file. Both apply to a
@@ -1606,6 +1628,25 @@ URL: say where the file is, once, and nothing more.
   unchanged excerpts: presentation only, and the page reads correctly with the whole block deleted, in
   one ink. Do not give the checkpoints checkboxes, tick state or an "n of m" counter — a count of cleared items
   reads as progress toward approval, which is the verdict this page does not carry.
+- **Lint the finished page, and act on what it prints.** After the banner and every marker are gone
+  and the gate has passed, from inside the repository under review like the gate:
+
+  ```sh
+  <skill base directory>/scripts/page-lint.sh <page.html> --repo . --base BASE --head HEAD
+  ```
+
+  Shell and awk, nothing else, so it runs wherever the skill does. It prints `PASS`, `WARN`, `FAIL`
+  and `SKIP` lines and exits 1 only on a FAIL. **The one FAIL is a placeholder** — `{{…}}` left on
+  the page is the template copied and not filled in — and it is fixed before the final publish.
+  **The WARNs are read one by one**: each names a sentence whose evidence tier disagrees with the
+  diff — a sentence citing a file outside the diff with no tier, a `from unchanged code` with nothing
+  cited beside it, a `from unchanged code` on a sentence whose only citations are files in the diff
+  (`references/report-format.md` § *Evidence tiers*). Where the script is right, fix the sentence —
+  cite the line, add the tier, drop the label — as a correction that replaces (step 8), never as a
+  note about the page's own drafting; where it is wrong about this page, leave the sentence and say
+  so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
+  page whole. Nothing about the lint reaches the page, which carries no account of how it was
+  checked.
 - Publish the final state to the same path — or, with `--output`, simply leave the finished file at
   `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
   what the change does in two or three lines, and anything you could not verify. Mention the project's

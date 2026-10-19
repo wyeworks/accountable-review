@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -1730,7 +1730,7 @@
+             <span class="why">Read <code>layoutItems</code> and <code>loadPayloads</code> together to see which copy
+               of a size each one trusts. Then read <code>setSize</code> at <code>:389</code>.</span>
+           </span>
+-          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
++          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+         </li>
+         <li>
+           <span class="n">06</span>

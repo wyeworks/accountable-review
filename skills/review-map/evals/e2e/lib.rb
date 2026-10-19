@@ -104,15 +104,20 @@ module E2E
     JSON.parse(File.read(File.join(ROOT, ".claude-plugin", "plugin.json")))["version"]
   end
 
-  # The sha of the last commit to touch the skill, plus a dirty flag, because a result from an
-  # uncommitted wording is still a result — it just cannot be attributed to a sha alone.
+  # The bytes a run reads: the procedure, the references it loads on demand, the scripts it
+  # calls and the falsifier. evals/ and tests/ are not among them, because a harness edit changes
+  # nothing about the page a run writes, and a sha that moved on one would separate rows that
+  # measure the same prose.
+  SKILL_PATHS = %w[skills/review-map/SKILL.md skills/review-map/references skills/review-map/scripts agents].freeze
+
+  # The sha of the last commit to touch those bytes, plus a dirty flag, because a result from an
+  # uncommitted wording is still a result — it just cannot be attributed to a sha alone. run.rb
+  # refuses to generate under the flag unless told to.
   def self.skill_sha
-    sha = sh!("git", "log", "-1", "--format=%h", "--", "skills/review-map", "agents").strip
-    dirty = !sh!("git", "status", "--porcelain", "--", "skills/review-map", "agents").strip.empty?
+    sha = sh!("git", "log", "-1", "--format=%h", "--", *SKILL_PATHS).strip
+    dirty = !sh!("git", "status", "--porcelain", "--", *SKILL_PATHS).strip.empty?
     dirty ? "#{sha}+dirty" : sha
   end
-
-  def self.file_sha(path) = Digest::SHA256.file(path).hexdigest[0, 12]
 
   def self.append(name, row)
     FileUtils.mkdir_p(RESULTS)
@@ -140,21 +145,9 @@ module E2E
   # ------------------------------------------------------------------ the page
 
   # § 01's prose, as the agenda budget counts it: the paragraphs, bullets and before/after rows
-  # of <section id="changed">, never code, never a collapsed block, never the heading. Mechanical,
-  # so it is measured here rather than asked of the judge — counting is what a grader is worst at.
-  def self.section(html, id)
-    start = html.index(/<section\b[^>]*\bid="#{Regexp.escape(id)}"/) or return nil
-    depth = 0
-    html.to_enum(:scan, %r{<section\b|</section>}).each do
-      m = Regexp.last_match
-      next if m.begin(0) < start
-
-      depth += m[0] == "</section>" ? -1 : 1
-      return html[start...m.end(0)] if depth.zero?
-    end
-    nil
-  end
-
+  # of <section id="changed"> (Judge.part cuts it out), never the masthead, never code, never a
+  # collapsed block, never the heading. Mechanical, so it is measured here rather than asked of
+  # the judge — counting is what a grader is worst at.
   def self.prose_words(fragment)
     text = fragment.gsub(/<!--.*?-->/m, " ")
                    .gsub(%r{<(details|code|pre|h2|h3|figure)\b.*?</\1>}m, " ")

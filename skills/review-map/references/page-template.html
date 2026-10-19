@@ -914,9 +914,11 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
    THE LANE IS DERIVED FROM THE NODE KIND, NEVER AUTHORED:
    .ip-chg sits left, .ip-aff right, .ip-out spans both. So the
-   boundary between "changed by this PR" and "the existing
-   system" is structurally true, and there is no lane class for
-   a run to get backwards.
+   boundary between "in this PR's files" and "outside the diff"
+   is structurally true, and there is no lane class for a run to
+   get backwards. The split is by file: an untouched line of a
+   changed file sits left, because that is where the reader
+   opens it.
 
    ONE PATH PER .ip-card, AND THE FIGURE IS A GROUP RATHER THAN
    A BOX. It began as five paths stacked inside one bordered
@@ -964,8 +966,8 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    IT IS DASHED, AND IT IS NOT --rule-strong. It began as a 1px solid --rule-strong hairline,
    which is byte-for-byte what a connector and an elbow are drawn in — so the one line on the
    figure that carries no direction looked exactly like the lines that do, and a path crossing
-   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "the
-   existing system", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
+   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "outside
+   the diff", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
    FLOW, DASHES BOUND. Anything drawn in --rule-strong is part of a chain.
 
    DOTTED RATHER THAN DASHED, and that is the second half of it. At 3-on-5-off in the same ink
@@ -1537,7 +1539,7 @@ figcaption strong { color: var(--ink-3); }
 
        The lane is derived from the kind — .ip-chg left, .ip-aff right, .ip-out
        spans both — so there is no lane class to get backwards, and the boundary
-       between the change and the existing system is structurally true.
+       between this PR's files and the rest is structurally true.
 
        The component, its causal vocabulary, its shape rules and its caps live in
        report-format.md § Impact paths, and ONLY there. § Chains owns what this
@@ -1647,7 +1649,13 @@ figcaption strong { color: var(--ink-3); }
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{FEATURE_REFACTOR_FIX}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">{{N}} / {{N}}</div></div>
+        <!-- BY KIND: the Files count split into report-format.md § Section 1's four buckets,
+             in that order, each as "N kind" and joined by &middot;. A bucket with no files is
+             left out, so a plain feature reads "11 prod &middot; 3 test" and a change with a
+             schema dump reads "10 prod &middot; 3 test &middot; 1 generated". The buckets
+             add up to Files: a file the strip has no bucket for goes in the nearest one,
+             never nowhere. -->
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">By kind</div><div class="path" style="font-size:12px">{{N}} prod &middot; {{N}} test &middot; {{N}} generated &middot; {{N}} docs</div></div>
       </div>
     </header>
 
@@ -2307,8 +2315,8 @@ post.saved_change_to_title?  # =&gt; true</pre>
                wrong and to whom, then a pointer at the checkpoint that judges it. It must NOT
                walk the hops: a paragraph naming three nodes in sequence makes one of the two
                redundant, which is the footnote-under-a-figure the panel this replaced needed. -->
-          <p class="ip-why">{{WHAT_GOES_WRONG_AND_TO_WHOM}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <p class="ip-why">{{WHAT_GOES_WRONG_AND_TO_WHOM}} <span class="tier">{{TIER_THE_CHECKPOINT_GAVE_THIS_CLAIM}}</span> <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>
+          <div class="ip-lanes"><span>In this PR's files</span><span>Outside the diff</span></div>
           <div class="ip-body">
             <ol class="ip-path">
               <li class="ip-n ip-chg"><span class="ip-box"><b>{{CHANGED_ENTRY_POINT}}</b><span class="ip-d">{{WHAT_IT_NOW_DOES}}</span><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
@@ -2324,8 +2332,8 @@ post.saved_change_to_title?  # =&gt; true</pre>
 
         <div class="ip-card">
           <span class="ip-hd">B &middot; {{A_DIFFERENT_BEHAVIOUR}}</span>
-          <p class="ip-why">{{WHAT_GOES_WRONG_ON_THIS_ONE}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <p class="ip-why">{{WHAT_GOES_WRONG_ON_THIS_ONE}} <span class="tier">{{TIER_THE_CHECKPOINT_GAVE_THIS_CLAIM}}</span> <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></p>
+          <div class="ip-lanes"><span>In this PR's files</span><span>Outside the diff</span></div>
           <div class="ip-body">
             <ol class="ip-path">
               <li class="ip-n ip-chg"><span class="ip-box"><b>{{A_DIFFERENT_CHANGED_THING}}</b><span class="ip-d">{{WHAT_THAT_ONE_DOES}}</span><a class="path ip-loc" href="{{DIFF}}R{{START}}">{{PATH}}:{{START}}</a></span></li>
@@ -2337,7 +2345,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
 
         <!-- One legend for the whole group: the three kinds mean the same thing in every card. -->
         <div class="legend">
-          <span><i class="key-chg"></i>Changed by this PR</span>
+          <span><i class="key-chg"></i>In this PR's files</span>
           <span><i class="key-aff"></i>Affected, not changed</span>
           <span><i class="key-out"></i>Behaviour</span>
         </div>

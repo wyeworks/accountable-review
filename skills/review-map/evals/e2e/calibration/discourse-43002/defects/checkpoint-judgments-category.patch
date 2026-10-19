@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -1556,7 +1556,7 @@
+ 
+       <section class="cp" id="cp-c">
+         <span class="lbl lbl-wide">Checkpoint C</span>
+-        <h3>Which layer actually enforces &ldquo;a multi-row card is full width&rdquo;?</h3>
++        <h3>Controller and model validations</h3>
+ 
+         <p>The rule is written three times: in the controller at
+           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R244-R246">app/controllers/admin/dashboard_controller.rb:244-246</a>,

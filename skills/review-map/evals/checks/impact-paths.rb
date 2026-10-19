@@ -40,6 +40,7 @@
 # consequence that does not happen.
 
 require_relative "lib/review_map/check"
+require_relative "lib/review_map/changed"
 require_relative "lib/review_map/vocabulary"
 
 ANCHOR = /id="impact"/
@@ -420,6 +421,40 @@ if loc_faults.empty?
   check.ok("every changed and affected node carries exactly one locator, last in its box")
 else
   check.bad("#{loc_faults.join('; ')} — a node naming a symbol and nothing else leaves the reader to guess which file it is in")
+end
+
+# --- Affected means a file the diff does not touch.
+#
+# The page splits changed from affected-not-changed BY FILE, everywhere — the excerpt's
+# `Unchanged` tag, the `from unchanged code` tier, the dashed node. An unchanged function inside
+# a changed file is drawn as part of the change, and its locator is a {{DIFF}} link. Read off the
+# node's own locator, because that is the address the reader follows; a node with none is already
+# a FAIL above and is not counted twice here.
+changed, set_from, git_unreadable = ReviewMap.changed_set(check, source)
+if git_unreadable
+  check.maybe("the changed set could not be read from #{check.repo}: #{git_unreadable} — a page carrying a ledger is still checked against that, and one without is not checked at all")
+end
+if set_from.nil?
+  check.skip("affected nodes against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger")
+else
+  in_diff = []
+  all.each_with_index do |ns, pi|
+    ns.each_with_index do |n, ni|
+      next unless n.kind == :affected
+
+      loc = n.body.to_s[%r{<(?:a|span) class="(?:path|cite)[^"]*"[^>]*>([^<]*)</}, 1]
+      next if loc.nil?
+
+      path = ReviewMap.unescape(loc).strip.split(":").first.to_s
+      # Whole strings, never substrings: api/Gemfile sits inside api/Gemfile.lock.
+      in_diff << "path #{pi + 1} node #{ni + 1} (#{path})" if changed.include?(path)
+    end
+  end
+  if in_diff.empty?
+    check.ok("every .ip-aff node sits in a file the diff does not touch, against #{set_from}")
+  else
+    check.bad("an .ip-aff node in a file the change touches: #{in_diff.join(', ')} — affected means a file outside the diff; a hop through an untouched line of a changed file is .ip-chg, and a path left with no node outside the diff is a checkpoint chain (report-format.md § Impact paths)")
+  end
 end
 
 placeholders = panel.scan(/\{\{[A-Z_|]+\}\}/).uniq

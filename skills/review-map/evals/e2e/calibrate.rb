@@ -18,8 +18,9 @@
 #   defects/*.patch      one unified diff each against gold.html, each planting EXACTLY ONE defect
 #   labels.yml           the verdict a correct judge gives, per criterion, on gold and on each variant
 #
-# The judge runs K times (default 3) on gold and on every variant, inside a checkout of the PR at
-# head — anchored exactly as it is in a real run. Two numbers come out, and both have to hold:
+# The judge runs up to K times (default 3) on gold and on every variant labelled for it, inside a
+# checkout of the PR at head — anchored exactly as it is in a real run. A page stops early once its
+# remaining runs could not change a gated verdict. Two numbers come out, and both have to hold:
 #
 #   specificity  gold passes each criterion in at least ceil(2K/3) of K runs. A judge that fails
 #                a page a person certified has invented a defect, and it will invent one on
@@ -75,6 +76,14 @@ all_held = true
 status_path = File.join(E2E::CALIBRATION, "status.json")
 status = File.exist?(status_path) ? JSON.parse(File.read(status_path)) : {}
 
+# A gold page is certified per judge: gold.yml's `judges` lists the judges whose criteria a person
+# checked against the code. Labels alone are not a certification — a `pass` nobody verified
+# calibrates the judge against a guess — so a judge with no certified gold is not calibrated, and
+# says so, rather than being measured against a page nobody read for it.
+def certified?(pr, name)
+  Array(YAML.safe_load_file(File.join(E2E::CALIBRATION, pr.id, "gold.yml"), permitted_classes: [Date])["judges"]).include?(name)
+end
+
 judges.each do |name|
   jmeta = Judge.load(name)
   model = opts[:model] || jmeta[:meta]["model"]
@@ -82,7 +91,19 @@ judges.each do |name|
   findings = []
   ok = true
 
-  with_gold.each do |pr|
+  # A smoke pass writes nothing, so it may run an uncertified judge: that is how a patch that
+  # plants nothing is found before anyone pays for a certification, and the judge's notes on gold
+  # point the person certifying at the places worth reading twice.
+  certified = with_gold.select { |pr| smoke || certified?(pr, name) }
+  if certified.empty?
+    puts "\n#{name} @ #{jmeta[:sha]}: NOT calibrated — no gold page is certified for it " \
+         "(add it to a gold.yml's `judges` once a person has checked that gold against its criteria)"
+    all_held = false
+    status.delete(name)
+    next
+  end
+
+  certified.each do |pr|
     dir = File.join(E2E::CALIBRATION, pr.id)
     labels = YAML.safe_load_file(File.join(dir, "labels.yml"))
     gold_labels = Array(labels.dig("gold", name))
@@ -91,9 +112,17 @@ judges.each do |name|
     work = Dir.mktmpdir("calibrate-#{pr.id}-")
     repo = E2E.worktree(pr, File.join(work, "repo"), pr.head_sha)
     begin
+      # A judge runs on the variants labelled for it, and no others: on another judge's variant
+      # every criterion would be ungated, so the runs would cost and measure nothing. A patch
+      # labelled for no judge, or named for a judge that has no labels on it, plants a defect
+      # nothing measures, which is a mistake rather than a skip.
       pages = { "gold" => File.join(dir, "gold.html") }
       Dir[File.join(dir, "defects", "*.patch")].sort.each do |patch|
         v = File.basename(patch, ".patch")
+        vl = labels.dig("variants", v)
+        abort "calibrate: #{patch} has no labels in labels.yml" unless vl.is_a?(Hash) && !vl.empty?
+        abort "calibrate: #{patch} is named for #{name} but labels.yml has no #{name} labels for it" if v.start_with?("#{name}-") && !vl.key?(name)
+        next unless vl.key?(name)
         next if opts[:variant] && v != opts[:variant]
 
         out = File.join(work, "#{v}.html")
@@ -102,6 +131,20 @@ judges.each do |name|
         pages[v] = out
       end
 
+      # What a variant is expected to say, and what it is compared against to find the criteria it
+      # targets. A variant normally differs from gold; one with a `base` differs from that other
+      # variant instead. That is how a defect is planted on a corrected copy of gold: where gold
+      # itself fails a criterion, a defect planted on gold for the same criterion changes nothing,
+      # so it is planted on the copy that fixes gold's failure, and gated against that copy.
+      expected_of = lambda do |variant|
+        next gold_labels.dup if variant == "gold"
+
+        v = labels.dig("variants", variant) or abort "calibrate: labels.yml has no variant #{variant}"
+        own = v[name] or abort "calibrate: #{variant} is a base for #{name} but has no #{name} labels"
+        expected_of.call(v["base"] || "gold").tap { |e| own.each { |n, l| e[Integer(n) - 1] = l } }
+      end
+      reference_of = ->(variant) { expected_of.call(labels.dig("variants", variant, "base") || "gold") }
+
       expected_for = {}
       pages.each do |variant, page|
         # A page lives in its own directory, as it does after a real run: the judge is handed
@@ -109,49 +152,68 @@ judges.each do |name|
         pdir = File.join(work, "page-#{variant}")
         FileUtils.mkdir_p(pdir)
         FileUtils.cp(page, File.join(pdir, "index.html"))
-      
-        expected = gold_labels.dup
-        unless variant == "gold"
-          override = labels.dig("variants", variant, name) or abort "calibrate: labels.yml has no #{name} labels for variant #{variant}"
-          override.each { |n, v| expected[Integer(n) - 1] = v }
-        end
-        expected_for[variant] = expected
+        expected_for[variant] = expected_of.call(variant)
       end
       
+      # The criteria each page is gated on. `~` is a gold label a person could not settle: nothing is
+      # gated on it, and a variant that settles it — a corrected copy — is gated where it does.
+      gated_on = pages.keys.to_h do |variant|
+        expected = expected_for[variant]
+        reference = variant == "gold" ? nil : reference_of.call(variant)
+        targeted = variant == "gold" ? (0...ncrit).to_a : (0...ncrit).select { |i| expected[i] != reference[i] }
+        [variant, targeted.reject { |i| expected[i].nil? }]
+      end
+
+      # Runs stop on a page as soon as the rest of its K could not change any gated verdict: a
+      # criterion holds once `need` runs agree with its label, and is lost once too few runs remain
+      # to reach `need`. So a page gets `need` runs first and more only while a gated criterion is
+      # still open — the verdicts are the ones K runs would give, at the cost of the runs that
+      # could have changed one. An unusable run counts as a run that agreed with nothing.
       got = Hash.new { |h, k| h[k] = Array.new(ncrit) { [] } }
+      runs = Hash.new(0)
+      open = lambda do |variant|
+        left = opts[:k] - runs[variant]
+        gated_on[variant].any? do |i|
+          hits = got[variant][i].count(expected_for[variant][i])
+          hits < need && hits + left >= need
+        end
+      end
       lock = Mutex.new
-      jobs = Queue.new
-      pages.each_key { |variant| opts[:k].times { |run| jobs << [variant, run] } }
-      Array.new([opts[:j], jobs.size].min) do
-        Thread.new do
-          while (job = begin jobs.pop(true) rescue nil end)
-            variant, run = job
-            r = Judge.run(name, page: File.join(work, "page-#{variant}", "index.html"), repo: repo, base: pr.base_sha,
-                                head: pr.head_sha, out: File.join(work, "out", variant, run.to_s), model: model)
-            doc = r.usable ? Verdicts.read(r.verdicts_path) : nil
-            lock.synchronize do
-              doc&.fetch("verdicts")&.each { |v| got[variant][Integer(v["n"]) - 1] << v["verdict"] if v["n"].to_i.between?(1, ncrit) }
-              E2E.append("calibration", "judge" => name, "judge_sha" => jmeta[:sha], "model" => model,
-                                        "id" => pr.id, "variant" => variant, "run" => run, "usable" => r.usable,
-                                        "verdicts" => doc && doc["verdicts"], "notes" => doc && doc["notes"])
-              puts "  … #{variant} r#{run} #{r.usable ? 'done' : 'UNUSABLE'} (#{r.seconds}s)"
+      round = pages.keys.flat_map { |variant| Array.new([need, opts[:k]].min) { variant } }
+      until round.empty?
+        jobs = Queue.new
+        round.each { |variant| jobs << [variant, runs[variant]].tap { runs[variant] += 1 } }
+        Array.new([opts[:j], jobs.size].min) do
+          Thread.new do
+            while (job = begin jobs.pop(true) rescue nil end)
+              variant, run = job
+              r = Judge.run(name, page: File.join(work, "page-#{variant}", "index.html"), repo: repo, base: pr.base_sha,
+                                  head: pr.head_sha, out: File.join(work, "out", variant, run.to_s), model: model)
+              doc = r.usable ? Verdicts.read(r.verdicts_path) : nil
+              lock.synchronize do
+                doc&.fetch("verdicts")&.each { |v| got[variant][Integer(v["n"]) - 1] << v["verdict"] if v["n"].to_i.between?(1, ncrit) }
+                E2E.append("calibration", "judge" => name, "judge_sha" => jmeta[:sha], "model" => model,
+                                          "id" => pr.id, "variant" => variant, "run" => run, "usable" => r.usable,
+                                          "verdicts" => doc && doc["verdicts"], "notes" => doc && doc["notes"])
+                puts "  … #{variant} r#{run} #{r.usable ? 'done' : 'UNUSABLE'} (#{r.seconds}s)"
+              end
             end
           end
-        end
-      end.each(&:join)
-      
+        end.each(&:join)
+        round = pages.keys.select { |variant| open.call(variant) }
+      end
+
       pages.each_key do |variant|
         expected = expected_for[variant]
-        targeted = variant == "gold" ? (0...ncrit).to_a : (0...ncrit).select { |i| expected[i] != gold_labels[i] }
         (0...ncrit).each do |i|
           hits = got[variant][i].count(expected[i])
-          gated = targeted.include?(i)
+          gated = gated_on[variant].include?(i)
           pass = !gated || hits >= need
           ok &&= pass
           findings << { "id" => pr.id, "variant" => variant, "criterion" => i + 1, "expected" => expected[i],
                         "got" => got[variant][i], "gated" => gated, "held" => pass }
           mark = gated ? (pass ? "ok  " : "MISS") : "  · "
-          puts format("%s %-8s %-34s c%d  want %-7s got %s", mark, name, variant, i + 1, expected[i], got[variant][i].join(","))
+          puts format("%s %-8s %-34s c%d  want %-7s got %s", mark, name, variant, i + 1, expected[i] || "~", got[variant][i].join(","))
         end
       end
     ensure
@@ -163,7 +225,7 @@ judges.each do |name|
   all_held &&= ok
   status[name] = { "judge_sha" => jmeta[:sha], "model" => model, "k" => opts[:k], "need" => need,
                    "calibrated" => ok && !smoke, "date" => Time.now.utc.iso8601,
-                   "prs" => with_gold.map(&:id), "findings" => findings }
+                   "prs" => certified.map(&:id), "findings" => findings }
   verdict = ok ? (smoke ? "all held (smoke pass — not a calibration)" : "CALIBRATED") : "NOT calibrated"
   puts "\n#{name} @ #{jmeta[:sha]} · #{model}: #{verdict}"
 end
@@ -176,4 +238,4 @@ else
   File.write(status_path, JSON.pretty_generate(status) + "\n")
   puts "written: #{status_path}"
 end
-exit(smoke ? (all_held ? 0 : 1) : (status.values_at(*judges).all? { |s| s["calibrated"] } ? 0 : 1))
+exit(smoke ? (all_held ? 0 : 1) : (status.values_at(*judges).all? { |s| s && s["calibrated"] } ? 0 : 1))
