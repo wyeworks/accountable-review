@@ -7,7 +7,7 @@
 <meta name="description" content="Two Review Maps produced by accountable-review against real pull requests in public Rails codebases.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..600,0,0;1,9..144,400,0,0&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 
 <!--
   The index for examples/. NOT a Review Map: it is the front door to two of them,
@@ -25,78 +25,78 @@
 
 <style>
 :root {
-  --ground:      #f6f5f1;
-  --surface:     #faf9f6;
-  --ink:         #1b1a17;
-  --ink-2:       #26251f;
-  --ink-3:       #3d3b36;
-  --muted:       #6f6c65;
-  --faint:       #8d8a82;
-  --rule:        #e5e1d8;
-  --rule-strong: #cec9be;
-  --chip:        #eceae3;
+  --ground:      #f7f8fa;
+  --surface:     #fbfbfc;
+  --ink:         #161a22;
+  --ink-2:       #232833;
+  --ink-3:       #3a404c;
+  --muted:       #6a7180;
+  --faint:       #858b97;
+  --rule:        #e3e6ec;
+  --rule-strong: #c9ced8;
+  --chip:        #eceff3;
 
-  --nav-bg:     oklch(0.975 0.014 252);
-  --nav-rule:   oklch(0.885 0.045 252);
-  --nav-rule-2: oklch(0.79  0.065 252);
-  --nav-ink:    oklch(0.45  0.105 252);
-  --nav-ink-hi: oklch(0.36  0.12  252);
+  --nav-bg:     oklch(0.975 0.018 262);
+  --nav-rule:   oklch(0.885 0.055 262);
+  --nav-rule-2: oklch(0.78 0.08 262);
+  --nav-ink:    oklch(0.47 0.13 262);
+  --nav-ink-hi: oklch(0.38 0.14 262);
 
-  --prov-bg:    oklch(0.975 0.014 318);
-  --prov-rule:  oklch(0.885 0.045 318);
-  --prov-ink:   oklch(0.45  0.105 318);
+  --prov-bg:    oklch(0.975 0.018 330);
+  --prov-rule:  oklch(0.885 0.055 330);
+  --prov-ink:   oklch(0.47 0.13 330);
 
-  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
-  --mono:    'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --display: 'Instrument Sans', system-ui, sans-serif;
+  --body:    'Instrument Sans', system-ui, sans-serif;
+  --mono:    'JetBrains Mono', ui-monospace, Menlo, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --ground:      #14130f;
-    --surface:     #1b1a16;
-    --ink:         #ece9e1;
-    --ink-2:       #ddd9cf;
-    --ink-3:       #c2bdb1;
-    --muted:       #9c968a;
-    --faint:       #837d72;
-    --rule:        #302e27;
-    --rule-strong: #423f36;
-    --chip:        #2b2924;
+    --ground:      #0f1217;
+    --surface:     #13171d;
+    --ink:         #e8ebf0;
+    --ink-2:       #d2d7df;
+    --ink-3:       #b9c0cc;
+    --muted:       #8f98a7;
+    --faint:       #79828f;
+    --rule:        #262c36;
+    --rule-strong: #363d49;
+    --chip:        #222833;
 
-    --nav-bg:     oklch(0.235 0.028 252);
-    --nav-rule:   oklch(0.42  0.055 252);
-    --nav-rule-2: oklch(0.52  0.075 252);
-    --nav-ink:    oklch(0.80  0.09  252);
-    --nav-ink-hi: oklch(0.88  0.075 252);
+    --nav-bg:     oklch(0.23 0.035 262);
+    --nav-rule:   oklch(0.4 0.07 262);
+    --nav-rule-2: oklch(0.52 0.09 262);
+    --nav-ink:    oklch(0.82 0.1 262);
+    --nav-ink-hi: oklch(0.88 0.08 262);
 
-    --prov-bg:    oklch(0.235 0.028 318);
-    --prov-rule:  oklch(0.42  0.055 318);
-    --prov-ink:   oklch(0.80  0.09  318);
+    --prov-bg:    oklch(0.23 0.035 330);
+    --prov-rule:  oklch(0.4 0.07 330);
+    --prov-ink:   oklch(0.82 0.1 330);
   }
 }
 
 :root[data-theme="dark"] {
-  --ground:      #14130f;
-  --surface:     #1b1a16;
-  --ink:         #ece9e1;
-  --ink-2:       #ddd9cf;
-  --ink-3:       #c2bdb1;
-  --muted:       #9c968a;
-  --faint:       #837d72;
-  --rule:        #302e27;
-  --rule-strong: #423f36;
-  --chip:        #2b2924;
+  --ground:      #0f1217;
+  --surface:     #13171d;
+  --ink:         #e8ebf0;
+  --ink-2:       #d2d7df;
+  --ink-3:       #b9c0cc;
+  --muted:       #8f98a7;
+  --faint:       #79828f;
+  --rule:        #262c36;
+  --rule-strong: #363d49;
+  --chip:        #222833;
 
-  --nav-bg:     oklch(0.235 0.028 252);
-  --nav-rule:   oklch(0.42  0.055 252);
-  --nav-rule-2: oklch(0.52  0.075 252);
-  --nav-ink:    oklch(0.80  0.09  252);
-  --nav-ink-hi: oklch(0.88  0.075 252);
+  --nav-bg:     oklch(0.23 0.035 262);
+  --nav-rule:   oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink:    oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
 
-  --prov-bg:    oklch(0.235 0.028 318);
-  --prov-rule:  oklch(0.42  0.055 318);
-  --prov-ink:   oklch(0.80  0.09  318);
+  --prov-bg:    oklch(0.23 0.035 330);
+  --prov-rule:  oklch(0.4 0.07 330);
+  --prov-ink:   oklch(0.82 0.1 330);
 }
 
 * { box-sizing: border-box; }
@@ -114,11 +114,10 @@ a:hover { color: var(--nav-ink-hi); text-decoration-color: currentColor; }
 a:focus-visible { outline: 2px solid var(--nav-ink); outline-offset: 3px; }
 
 h1, h2 {
-  font-family: var(--display); font-weight: 400; margin: 0; text-wrap: pretty;
-  font-optical-sizing: auto; font-variation-settings: 'SOFT' 0, 'WONK' 0;
+  font-family: var(--display); font-weight: 600; margin: 0; text-wrap: pretty;
 }
-h1 { font-size: clamp(34px, 5vw, 50px); line-height: 1.06; letter-spacing: -.016em; max-width: 18ch; }
-h2 { font-size: 23px; line-height: 1.22; letter-spacing: -.01em; }
+h1 { font-size: clamp(34px, 5vw, 50px); line-height: 1.06; letter-spacing: -.032em; max-width: 18ch; }
+h2 { font-size: 23px; line-height: 1.22; letter-spacing: -.022em; }
 h2 a { text-decoration: none; color: var(--ink); }
 h2 a:hover { color: var(--nav-ink); }
 p { margin: 0; }
