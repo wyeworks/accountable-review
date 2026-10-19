@@ -8,15 +8,17 @@
   horizontal overflow, wide blocks scroll in their own container, and all three
   theme states resolve.
 
-  Design language: "PR review interface redesign". Warm paper ground, Fraunces
-  at weight 400 for display, and FOUR semantic colour families over one shared
-  five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
+  Design language: "PR review interface redesign", in one of three themes —
+  Daylight (the default), Workshop or Field Notes — chosen by review_map.theme
+  in the repository's .accountable-review.yml. A theme decides typefaces, radii,
+  hues and a few label treatments; every theme keeps FOUR semantic colour
+  families over one shared five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
   the diff does not touch, plum for provenance. Each one means one thing and the
   token block says which; a family used outside its rule stops carrying meaning
   everywhere else. A fifth ramp, --primer-*, is the exception that proves that
   rule: it means nothing at all. It frames aside.primer and nothing else, in
-  Rails red, and the token block says why a page with no severity vocabulary can
-  afford one. The structural idea is that a checkpoint is NOT a card — it
+  Rails red (graphite on a Rust primer, through aside.primer.pr-rust), and the
+  token block says why a page with no severity vocabulary can afford one. The structural idea is that a checkpoint is NOT a card — it
   is a question, the two or three sentences that make it one, and where to look;
   a hairline separates one from the next. Cards are reserved for the few things
   that genuinely are objects: a chain figure, the impact panel.
@@ -29,7 +31,7 @@
   classic unreadable-artifact bug. The three
   states are: explicit dark, explicit light, and the unstamped default that most
   viewers actually get, where only prefers-color-scheme applies.
-  The source design is light-only; the dark half below is ours, and the pair
+  The source designs are light-only; each theme's dark half is ours, and the pair
   that inverts (.ip-out, the filled node that ends a chain) is written against
   tokens precisely so it keeps inverting relative to the page.
 
@@ -49,7 +51,7 @@
   never read as.
 
   AND NO STACK BADGE, in the same place for the same reason. This template serves
-  both Rails and Phoenix pages. What differs between them is the content of the
+  Rails, Phoenix, Rust and React pages alike. What differs between them is the content of the
   sentences, the nodes in a figure.chain and the command inside a pre.probe —
   never a chip, a marker or a section. A reader should not be able to tell which
   lens file produced the page except by reading what it says about their
@@ -105,7 +107,8 @@
                             on it. No tier, no grade, and one figure at most:
                             figure.lifecycle.lc-shift, the request sequence
                             before and after, when the change moved which
-                            request does what
+                            request does what; at --context collapsed,
+                            all of it inside one shut details.ctx-fold
     evidence tier ......... .tier — neutral by default, .tier-unc teal for
                             `from unchanged code`, .tier-inf ochre for an
                             inference. .tag is an excerpt's state, in plum,
@@ -129,7 +132,8 @@
                             block on this page that may show a result line, because
                             its receiver is a class this repository does not have.
                             Its header names the stack in words — "Understanding
-                            Ruby on Rails" — and its frame is --primer-*
+                            Ruby on Rails" — and its frame is --primer-*;
+                            a Rust primer adds .pr-rust, nothing else
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
                             sentences, at most one figure, ul.lookat (1-4
                             places to look, each a title, a clause and its
@@ -173,26 +177,26 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..600,0,0;1,9..144,400,0,0&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap">
 
 <style>
 /* ============================================================
-   Tokens. Warm paper neutrals, and FOUR SEMANTIC FAMILIES that
-   share one ramp shape: every family is a single hue at fixed
-   lightness and chroma per slot, so no two can drift apart in
-   weight, and the dark half is one arithmetic reflection of the
-   light rather than a second hand-picked set.
-
-     light   bg .975/.014   bg-2 .955/.028   rule .885/.045
-             rule-2 .79/.065   ink .45/.105
-     dark    bg .235/.028   bg-2 .275/.045   rule .42/.055
-             rule-2 .52/.075   ink .80/.09
+   Tokens. NONE ARE DECLARED IN THIS BLOCK: every token — the
+   neutrals, the type stacks, the radii and the colour families —
+   comes from the theme page-skeleton.sh writes in at the theme
+   marker below this style block. What a theme may not
+   change is the rule that follows. Every theme carries FOUR
+   SEMANTIC FAMILIES that share one ramp shape: each family is a
+   single hue at fixed lightness and chroma per slot, so no two can
+   drift apart in weight, and the dark half is a reflection of the
+   light rather than a second hand-picked set. The hue numbers below
+   are approximate and move a few degrees between themes; what each
+   family means does not move at all.
 
    WHAT EACH FAMILY IS ALLOWED TO MEAN. The rule is the system —
    a family used outside it stops carrying meaning everywhere
    else on the page, which is the only thing colour is doing here.
 
-     --nav-*        slate 252   You can click it. Rail links,
+     --nav-*        slate        You can click it. Rail links,
                                 citations, paths, the progress bar,
                                 in-page anchors. Nothing that is not
                                 a link may be slate, which is why
@@ -200,11 +204,11 @@
                                 selection colour any more: they were
                                 two off-system hex values doing what
                                 two slots of this ramp already do.
-     --gap-*        ochre  72   Something is missing and the page is
+     --gap-*        ochre        Something is missing and the page is
                                 saying so: p.open, the inferred tier,
                                 the build-state banner. NEVER a
                                 severity and never a grade.
-     --unchanged-*  teal  200   This code is not in the diff. The
+     --unchanged-*  teal         This code is not in the diff. The
                                 `from unchanged code` tier, the
                                 dashed .ip-aff node and its legend
                                 key, the "Affected, not changed"
@@ -214,7 +218,7 @@
                                 to add to a page with no severity
                                 vocabulary. Never on a link, so it
                                 never competes with slate.
-     --prov-*       plum  318   How a thing is known, never what it
+     --prov-*       plum         How a thing is known, never what it
                                 means: the excerpt .tag, the searches
                                 block, the evidence foot, the probe
                                 label. The quietest family on purpose
@@ -224,7 +228,7 @@
    AND ONE RAMP THAT IS NOT A FAMILY, because it has no meaning to
    spend:
 
-     --primer-*     red    28   The frame of aside.primer, and of
+     --primer-*     red          The frame of aside.primer, and of
                                 nothing else on this page. Not a
                                 fifth meaning — a reminder of which
                                 framework is speaking, in the red
@@ -248,225 +252,27 @@
    a panel border around a lesson, the other a row stripe inside
    quoted code, and the two never abut.
 
-   ONE OPEN QUESTION, WRITTEN DOWN RATHER THAN GUESSED AT. Rails is
-   the only stack that earns a primer today, because elixir-docs.md
-   withholds every link and a primer is gated on one. If that
-   catalogue opens, a Phoenix primer in Rails red is wrong, and the
-   answer is a variant class on the aside — never a colour a run
-   types, and never a second component.
+     --primer-rust-*  graphite   The same frame for a Rust primer,
+                                reached by one class on the aside,
+                                aside.primer.pr-rust, which re-points
+                                --primer-* at this ramp and changes
+                                nothing else. Rust's own mark is
+                                black, so its frame is iron: the red
+                                ramp's lightness per slot at almost
+                                no chroma, and a near-black top rule
+                                where Rails draws a red one.
+
+   A RUST PRIMER IN RAILS RED WOULD BE WRONG, and that was the open
+   question this block used to record. The answer is the one it
+   predicted: a variant class, never a colour a run types and never
+   a second component. Graphite rather than Ferris orange because
+   orange sits between the red frame and the ochre that means
+   something is missing, and would read as the second. Phoenix still
+   has no frame of its own because elixir-docs.md withholds every
+   link and a primer is gated on one; when it opens, the same shape
+   applies. rails-anchors.rb § 8 checks that the class and the doc
+   link's host agree.
    ============================================================ */
-:root {
-  --ground:      #f6f5f1;
-  --surface:     #faf9f6;
-  --surface-hi:  #ffffff;
-  --surface-2:   #f1efe9;
-  --surface-3:   #fbfaf7;
-  --chip:        #eceae3;
-
-  --ink:         #1b1a17;
-  --ink-2:       #26251f;
-  --ink-3:       #3d3b36;
-  --muted:       #6f6c65;
-  --faint:       #8d8a82;
-  --fainter:     #a5a29a;
-  --on-ink:      #f2f0ea;
-  --on-ink-code: #dcd8cd;
-
-  --rule:        #e5e1d8;
-  --rule-soft:   #ece8e0;
-  --rule-strong: #cec9be;
-  --rule-dash:   #b9b4a8;
-  --rule-card:   #d8d3c8;
-
-  --nav-bg:            oklch(0.975 0.014 252);
-  --nav-bg-2:          oklch(0.955 0.028 252);
-  --nav-rule:          oklch(0.885 0.045 252);
-  --nav-rule-2:        oklch(0.79  0.065 252);
-  --nav-ink:           oklch(0.45  0.105 252);
-  --nav-ink-hi:        oklch(0.36  0.12  252);
-
-  --gap-bg:            oklch(0.975 0.014 72);
-  --gap-bg-2:          oklch(0.955 0.028 72);
-  --gap-rule:          oklch(0.885 0.045 72);
-  --gap-rule-2:        oklch(0.79  0.065 72);
-  --gap-ink:           oklch(0.45  0.105 72);
-
-  --unchanged-bg:      oklch(0.975 0.014 200);
-  --unchanged-bg-2:    oklch(0.955 0.028 200);
-  --unchanged-rule:    oklch(0.885 0.045 200);
-  --unchanged-rule-2:  oklch(0.79  0.065 200);
-  --unchanged-ink:     oklch(0.45  0.105 200);
-
-  --prov-bg:           oklch(0.975 0.014 318);
-  --prov-bg-2:         oklch(0.955 0.028 318);
-  --prov-rule:         oklch(0.885 0.045 318);
-  --prov-rule-2:       oklch(0.79  0.065 318);
-  --prov-ink:          oklch(0.45  0.105 318);
-
-  --primer-bg:         oklch(0.975 0.014 28);
-  --primer-bg-2:       oklch(0.955 0.028 28);
-  --primer-rule:       oklch(0.885 0.045 28);
-  --primer-rule-2:     oklch(0.79  0.065 28);
-  --primer-ink:        oklch(0.45  0.105 28);
-
-  --ex-add:      #e6efe6;
-  --add-sig:     #3f6b45;
-  --ex-del:      #f6e7e3;
-  --del-sig:     #a4453a;
-
-  /* Syntax tint for an unchanged excerpt. Applied at runtime by the page's
-     script — see the excerpt block below. Low chroma on purpose: this page
-     already spends colour on meaning (accent = navigation, ochre = a stated
-     gap, green/red = added and removed), and code that glows competes with
-     all three. Comments stay the quietest thing in the block. */
-  --syn-key:     oklch(0.44 0.12 318);
-  --syn-str:     oklch(0.46 0.09 150);
-  --syn-com:     oklch(0.60 0.02 80);
-  --syn-name:    oklch(0.45 0.09 235);
-  --syn-num:     oklch(0.50 0.10 50);
-
-  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
-  --mono:    'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-/* The unstamped default most viewers get: only prefers-color-scheme applies,
-   and an explicit light choice must still beat a dark OS. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground:      #14130f;
-    --surface:     #1b1a16;
-    --surface-hi:  #201f1a;
-    --surface-2:   #26241f;
-    --surface-3:   #191814;
-    --chip:        #2b2924;
-
-    --ink:         #ece9e1;
-    --ink-2:       #ddd9cf;
-    --ink-3:       #c2bdb1;
-    --muted:       #9c968a;
-    --faint:       #837d72;
-    --fainter:     #6b665c;
-    --on-ink:      #14130f;
-    --on-ink-code: #3d3b36;
-
-    --rule:        #302e27;
-    --rule-soft:   #292720;
-    --rule-strong: #423f36;
-    --rule-dash:   #4d4940;
-    --rule-card:   #383529;
-
-    --nav-bg:            oklch(0.235 0.028 252);
-    --nav-bg-2:          oklch(0.275 0.045 252);
-    --nav-rule:          oklch(0.42  0.055 252);
-    --nav-rule-2:        oklch(0.52  0.075 252);
-    --nav-ink:           oklch(0.80  0.09  252);
-    --nav-ink-hi:        oklch(0.88  0.075 252);
-
-    --gap-bg:            oklch(0.235 0.028 72);
-    --gap-bg-2:          oklch(0.275 0.045 72);
-    --gap-rule:          oklch(0.42  0.055 72);
-    --gap-rule-2:        oklch(0.52  0.075 72);
-    --gap-ink:           oklch(0.80  0.09  72);
-
-    --unchanged-bg:      oklch(0.235 0.028 200);
-    --unchanged-bg-2:    oklch(0.275 0.045 200);
-    --unchanged-rule:    oklch(0.42  0.055 200);
-    --unchanged-rule-2:  oklch(0.52  0.075 200);
-    --unchanged-ink:     oklch(0.80  0.09  200);
-
-    --prov-bg:           oklch(0.235 0.028 318);
-    --prov-bg-2:         oklch(0.275 0.045 318);
-    --prov-rule:         oklch(0.42  0.055 318);
-    --prov-rule-2:       oklch(0.52  0.075 318);
-    --prov-ink:          oklch(0.80  0.09  318);
-
-    --primer-bg:         oklch(0.235 0.028 28);
-    --primer-bg-2:       oklch(0.275 0.045 28);
-    --primer-rule:       oklch(0.42  0.055 28);
-    --primer-rule-2:     oklch(0.52  0.075 28);
-    --primer-ink:        oklch(0.80  0.09  28);
-
-    --ex-add:      #1b2a1d;
-    --add-sig:     #7fbf8c;
-    --ex-del:      #33201d;
-    --del-sig:     #e0918a;
-
-    --syn-key:     oklch(0.79 0.10 318);
-    --syn-str:     oklch(0.79 0.09 150);
-    --syn-com:     oklch(0.63 0.02 80);
-    --syn-name:    oklch(0.80 0.08 235);
-    --syn-num:     oklch(0.79 0.09 50);
-  }
-}
-
-/* The explicit toggle, so it wins in the other direction too. */
-:root[data-theme="dark"] {
-  --ground:      #14130f;
-  --surface:     #1b1a16;
-  --surface-hi:  #201f1a;
-  --surface-2:   #26241f;
-  --surface-3:   #191814;
-  --chip:        #2b2924;
-
-  --ink:         #ece9e1;
-  --ink-2:       #ddd9cf;
-  --ink-3:       #c2bdb1;
-  --muted:       #9c968a;
-  --faint:       #837d72;
-  --fainter:     #6b665c;
-  --on-ink:      #14130f;
-  --on-ink-code: #3d3b36;
-
-  --rule:        #302e27;
-  --rule-soft:   #292720;
-  --rule-strong: #423f36;
-  --rule-dash:   #4d4940;
-  --rule-card:   #383529;
-
-  --nav-bg:            oklch(0.235 0.028 252);
-  --nav-bg-2:          oklch(0.275 0.045 252);
-  --nav-rule:          oklch(0.42  0.055 252);
-  --nav-rule-2:        oklch(0.52  0.075 252);
-  --nav-ink:           oklch(0.80  0.09  252);
-  --nav-ink-hi:        oklch(0.88  0.075 252);
-
-  --gap-bg:            oklch(0.235 0.028 72);
-  --gap-bg-2:          oklch(0.275 0.045 72);
-  --gap-rule:          oklch(0.42  0.055 72);
-  --gap-rule-2:        oklch(0.52  0.075 72);
-  --gap-ink:           oklch(0.80  0.09  72);
-
-  --unchanged-bg:      oklch(0.235 0.028 200);
-  --unchanged-bg-2:    oklch(0.275 0.045 200);
-  --unchanged-rule:    oklch(0.42  0.055 200);
-  --unchanged-rule-2:  oklch(0.52  0.075 200);
-  --unchanged-ink:     oklch(0.80  0.09  200);
-
-  --prov-bg:           oklch(0.235 0.028 318);
-  --prov-bg-2:         oklch(0.275 0.045 318);
-  --prov-rule:         oklch(0.42  0.055 318);
-  --prov-rule-2:       oklch(0.52  0.075 318);
-  --prov-ink:          oklch(0.80  0.09  318);
-
-  --primer-bg:         oklch(0.235 0.028 28);
-  --primer-bg-2:       oklch(0.275 0.045 28);
-  --primer-rule:       oklch(0.42  0.055 28);
-  --primer-rule-2:     oklch(0.52  0.075 28);
-  --primer-ink:        oklch(0.80  0.09  28);
-
-  --ex-add:      #1b2a1d;
-  --add-sig:     #7fbf8c;
-  --ex-del:      #33201d;
-  --del-sig:     #e0918a;
-
-  --syn-key:     oklch(0.79 0.10 318);
-  --syn-str:     oklch(0.79 0.09 150);
-  --syn-com:     oklch(0.63 0.02 80);
-  --syn-name:    oklch(0.80 0.08 235);
-  --syn-num:     oklch(0.79 0.09 50);
-}
-
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -483,12 +289,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 }
 
 /* ============================================================
-   Type. Fraunces is variable: SOFT and WONK are pinned off —
-   WONK gives it a swashy single-storey g, which is the wrong
-   register for a review document and is on by default at some
-   weights. opsz follows the size, which is the whole point of
-   the face. Display weight is 400 everywhere; the design rests
-   on that not reading as decorative, so do not reach for 700.
+   Type. The faces are the theme's — --display, --body, --mono —
+   and so is the display weight: each theme sets its own on the
+   headings in its overrides. The variation settings below are
+   for a variable display face with SOFT and WONK axes (WONK gives
+   a swashy single-storey g, the wrong register for a review
+   document); a theme whose face has neither resets them to
+   normal. opsz follows the size wherever the face has it.
    ============================================================ */
 h1, h2, h3, h4 {
   font-family: var(--display); font-weight: 400; margin: 0; text-wrap: pretty;
@@ -655,6 +462,17 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 .ctx > dt:not(:first-of-type), .ctx > dd:not(:first-of-type) { border-top: 1px solid var(--rule); }
 .ctx .ctx-used, .lc-shift .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .ctx .ctx-used a, .lc-shift .ctx-used a { color: inherit; }
+/* --context collapsed: the same section, its entries (and shift) behind one shut
+   details.ctx-fold whose summary is the fixed label and the entry names. Neutral
+   rules, no family colour: plum would say "how a thing is known", and Context is
+   what a thing is. The one fold allowed to hold content rather than provenance —
+   report-format.md § How much Context says why that is safe. */
+details.ctx-fold { margin-top: 8px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+details.ctx-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
+details.ctx-fold > summary::-webkit-details-marker { display: none; }
+details.ctx-fold > summary::marker { content: ""; }
+.ctx-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+details.ctx-fold > .ctx { margin-top: 0; }
 @media (max-width: 700px) {
   .ctx { grid-template-columns: minmax(0, 1fr); }
   .ctx > dd { padding-top: 4px; }
@@ -782,10 +600,11 @@ pre.probe {
    the budget and what earns one.
 
    IT IS FRAMED IN RAILS RED, on --primer-*, and that ramp exists
-   for this component alone. The reason is the reader it is for:
-   someone new to the stack, who needs to recognise the block that
+   for this component alone. A Rust primer carries .pr-rust, which
+   re-points the same tokens at the graphite --primer-rust-* ramp.
+   The reason is the reader it is for: someone new to the stack, who needs to recognise the block that
    was written for them before reading a word of it. A hue does
-   that and a heading does not. The token block owns why a page
+   that and a heading does not. The Tokens comment owns why a page
    with no severity vocabulary can afford a red — it is attached to
    no claim, so it cannot be read as a verdict — and the rule that
    keeps it honest is that the frame may never spread. Red on
@@ -835,6 +654,14 @@ pre.probe {
 .primer {
   margin: 16px 0 6px; background: var(--primer-bg);
   border: 1px solid var(--primer-rule); border-top: 2px solid var(--primer-rule-2);
+}
+/* A Rust primer: same component, the frame re-pointed at the graphite ramp. The
+   class is the stack's, chosen by which catalogue the doc link came from, and
+   rails-anchors.rb fails a primer whose class and link disagree. */
+.primer.pr-rust {
+  --primer-bg: var(--primer-rust-bg); --primer-bg-2: var(--primer-rust-bg-2);
+  --primer-rule: var(--primer-rust-rule); --primer-rule-2: var(--primer-rust-rule-2);
+  --primer-ink: var(--primer-rust-ink); --primer-ink-hi: var(--primer-rust-ink-hi);
 }
 .pr-head {
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
@@ -888,7 +715,10 @@ pre.demo {
 /* ============================================================
    Source excerpts — generated by scripts/excerpt.sh, never typed.
    The page must read complete with EVERY excerpt closed, which is
-   why the why-line lives in the summary and not in the body.
+   why the why-line lives in the summary and not in the body — and
+   why the link does too: .ex-loc is the excerpt's one citation, linked
+   when the rung allows, so the closed block is still a followable
+   citation and nothing below the code repeats it.
    The pre grows to max-content and .ex-body scrolls, so the add/del
    stripes span the whole scroll width instead of stopping at the fold.
    data-src, never data-path: coverage-gate.sh greps data-path page-wide.
@@ -900,6 +730,7 @@ details.excerpt > summary::marker { content: ""; }
 .excerpt .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
 details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt .ex-loc { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.excerpt .ex-loc > a.cite { font-size: inherit; color: inherit; }
 .excerpt .ex-why { grid-column: 2 / -1; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 66ch; }
 .excerpt .ex-body { padding: 0 14px 14px; border-top: 1px solid var(--rule); overflow-x: auto; }
 .excerpt .ex-body > pre {
@@ -922,7 +753,6 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt .ex-body .sig { color: var(--fainter); user-select: text; }
 .excerpt .ex-body .l.add .sig { color: var(--add-sig); }
 .excerpt .ex-body .l.del .sig { color: var(--del-sig); }
-.excerpt .ex-src { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
 
 /* Syntax tint, --source only. The script at the bottom of this file rewrites the
    text nodes inside each .l into these classes; with the script gone, or the CDN
@@ -1062,9 +892,11 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
    THE LANE IS DERIVED FROM THE NODE KIND, NEVER AUTHORED:
    .ip-chg sits left, .ip-aff right, .ip-out spans both. So the
-   boundary between "changed by this PR" and "the existing
-   system" is structurally true, and there is no lane class for
-   a run to get backwards.
+   boundary between "in this PR's files" and "outside the diff"
+   is structurally true, and there is no lane class for a run to
+   get backwards. The split is by file: an untouched line of a
+   changed file sits left, because that is where the reader
+   opens it.
 
    ONE PATH PER .ip-card, AND THE FIGURE IS A GROUP RATHER THAN
    A BOX. It began as five paths stacked inside one bordered
@@ -1112,8 +944,8 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    IT IS DASHED, AND IT IS NOT --rule-strong. It began as a 1px solid --rule-strong hairline,
    which is byte-for-byte what a connector and an elbow are drawn in — so the one line on the
    figure that carries no direction looked exactly like the lines that do, and a path crossing
-   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "the
-   existing system", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
+   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "outside
+   the diff", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
    FLOW, DASHES BOUND. Anything drawn in --rule-strong is part of a chain.
 
    DOTTED RATHER THAN DASHED, and that is the second half of it. At 3-on-5-off in the same ink
@@ -1504,8 +1336,887 @@ figure { margin: 0; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
 figcaption strong { color: var(--ink-3); }
 
+/* ============================================================
+   The appearance menu. Built by the tail script into the masthead's
+   first line, never typed by a run: a reader's control over how
+   the page looks — which theme, and light, dark or the system's
+   choice. It changes no content, and it is not a badge: it names
+   the three looks because it offers them, the way a font menu names
+   fonts. Hidden in print, absent without JavaScript.
+
+   The swatches are the one place colour literals sit outside a
+   theme file, and deliberately: each previews ONE theme and must
+   look the same whichever theme is active and in either mode, so a
+   token — which changes with both — is exactly the wrong tool.
+   ============================================================ */
+.rc { margin-left: auto; position: relative; text-transform: none; letter-spacing: 0; }
+.rc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; font-family: var(--body); font-size: 13px; line-height: 1; color: var(--ink); background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); cursor: pointer; }
+.rc-btn b { font-weight: 700; }
+.rc-btn .rc-i { color: var(--ink-3); font-size: 12px; }
+.rc-btn:hover { background: var(--surface-2); }
+.rc-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 90; width: 260px; max-width: calc(100vw - 32px); padding: 12px; display: none; flex-direction: column; gap: 10px; background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); box-shadow: 0 12px 32px rgba(0,0,0,.16); }
+.rc.rc-on .rc-pop { display: flex; }
+.rc-h { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.rc-styles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rc-styles button { display: flex; flex-direction: column; gap: 6px; padding: 6px; font-family: var(--body); font-size: 12px; line-height: 1.2; text-align: left; color: var(--ink-3); background: none; border: 1px solid var(--rule); border-radius: var(--r); cursor: pointer; }
+.rc-styles button:hover { border-color: var(--ink-3); color: var(--ink); }
+.rc-styles button.on { border: 2px solid var(--ink); padding: 5px; color: var(--ink); font-weight: 600; }
+.rc-sw { display: block; height: 30px; }
+.rc-sw[data-sw="daylight"] { background: linear-gradient(135deg, #f7f8fa 50%, #3b6ef5 50%); border-radius: 5px; box-shadow: inset 0 0 0 1px #d3d9e2; }
+.rc-sw[data-sw="workshop"] { background: linear-gradient(135deg, #fdfdfb 50%, oklch(0.91 0.15 95) 50%); box-shadow: inset 0 0 0 1.5px #0a0a0a; }
+.rc-sw[data-sw="field-notes"] { background: linear-gradient(135deg, #f5efe0 50%, oklch(0.84 0.09 340) 50%); border-radius: 3px; box-shadow: inset 0 0 0 1px #cfc3a6; }
+.rc-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--rule-strong); border-radius: var(--r); overflow: hidden; }
+.rc-seg button { padding: 8px 0; font-family: var(--body); font-size: 12px; line-height: 1; color: var(--ink-3); background: none; border: 0; cursor: pointer; }
+.rc-seg button + button { border-left: 1px solid var(--rule); }
+.rc-seg button:hover { color: var(--ink); background: var(--surface-2); }
+.rc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+@media print { .rc { display: none; } }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
+
+<!--
+  THE THEMES. The next line is replaced by every file in references/themes/:
+  each a font link and one style block holding its tokens and its overrides.
+  They sit AFTER the base styles because an override has to win the cascade,
+  and tokens resolve wherever they are declared. ONE is active — the
+  repository's choice: --theme, else ACCOUNTABLE_REVIEW_THEME, else
+  review_map.theme in its .accountable-review.yml, else daylight — and the
+  others arrive with media="not all", which keeps their bytes on the page and
+  their rules off it. The appearance menu switches the attribute, so a reader
+  can change the look without a second file. A theme file must keep every rule
+  above: each colour on bare :root and in both dark blocks, the five families
+  meaning what this file says they mean, and no hue, glyph or label treatment
+  that reads as a grade. A theme changes how the page looks, never what is on it.
+-->
+<!-- Theme · Daylight. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="daylight" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style data-style="daylight" data-style-label="Daylight">
+/* Tokens · Daylight direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Instrument Sans', system-ui, sans-serif;
+  --body: 'Instrument Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --r: 12px;
+  --r-sm: 5px;
+  --r-tag: 999px;
+  --r-box: 10px;
+  --ground: #f7f8fa;
+  --surface: #fbfbfc;
+  --surface-hi: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #fafbfc;
+  --chip: #eceff3;
+  --ink: #161a22;
+  --ink-2: #232833;
+  --ink-3: #3a404c;
+  --muted: #6a7180;
+  --faint: #858b97;
+  --fainter: #a6abb5;
+  --on-ink: #f7f8fa;
+  --on-ink-code: #d5d9e0;
+  --rule: #e3e6ec;
+  --rule-soft: #eceef2;
+  --rule-strong: #c9ced8;
+  --rule-dash: #b3b9c4;
+  --rule-card: #d6dae2;
+  --ex-add: oklch(0.96 0.04 150);
+  --add-sig: oklch(0.45 0.12 150);
+  --ex-del: oklch(0.96 0.03 25);
+  --del-sig: oklch(0.50 0.15 25);
+  --syn-key: oklch(0.45 0.13 330);
+  --syn-str: oklch(0.46 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.47 0.12 262);
+  --syn-num: oklch(0.52 0.11 55);
+  --nav-bg: oklch(0.975 0.018 262);
+  --nav-bg-2: oklch(0.955 0.035 262);
+  --nav-rule: oklch(0.885 0.055 262);
+  --nav-rule-2: oklch(0.78 0.08 262);
+  --nav-ink: oklch(0.47 0.13 262);
+  --nav-ink-hi: oklch(0.38 0.14 262);
+  --gap-bg: oklch(0.975 0.018 70);
+  --gap-bg-2: oklch(0.955 0.035 70);
+  --gap-rule: oklch(0.885 0.055 70);
+  --gap-rule-2: oklch(0.78 0.08 70);
+  --gap-ink: oklch(0.47 0.13 70);
+  --gap-ink-hi: oklch(0.38 0.14 70);
+  --unchanged-bg: oklch(0.975 0.018 195);
+  --unchanged-bg-2: oklch(0.955 0.035 195);
+  --unchanged-rule: oklch(0.885 0.055 195);
+  --unchanged-rule-2: oklch(0.78 0.08 195);
+  --unchanged-ink: oklch(0.47 0.13 195);
+  --unchanged-ink-hi: oklch(0.38 0.14 195);
+  --prov-bg: oklch(0.975 0.018 330);
+  --prov-bg-2: oklch(0.955 0.035 330);
+  --prov-rule: oklch(0.885 0.055 330);
+  --prov-rule-2: oklch(0.78 0.08 330);
+  --prov-ink: oklch(0.47 0.13 330);
+  --prov-ink-hi: oklch(0.38 0.14 330);
+  --primer-bg: oklch(0.975 0.018 25);
+  --primer-bg-2: oklch(0.955 0.035 25);
+  --primer-rule: oklch(0.885 0.055 25);
+  --primer-rule-2: oklch(0.78 0.08 25);
+  --primer-ink: oklch(0.47 0.13 25);
+  --primer-ink-hi: oklch(0.38 0.14 25);
+  --primer-rust-bg: oklch(0.975 0.004 60);
+  --primer-rust-bg-2: oklch(0.955 0.007 60);
+  --primer-rust-rule: oklch(0.885 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.47 0.022 60);
+  --primer-rust-ink-hi: oklch(0.38 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+  --primer-rust-bg: oklch(0.23 0.006 60);
+  --primer-rust-bg-2: oklch(0.27 0.008 60);
+  --primer-rust-rule: oklch(0.4 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+  --primer-rust-bg: oklch(0.23 0.006 60);
+  --primer-rust-bg-2: oklch(0.27 0.008 60);
+  --primer-rust-rule: oklch(0.4 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+}
+
+/* ---- Daylight overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:600;letter-spacing:-0.022em;font-variation-settings:normal}
+h1{letter-spacing:-0.032em;max-width:20ch}
+.rail-id .tick{font-weight:600;letter-spacing:-0.01em}
+.tier,.tag{font-family:var(--body);font-size:11.5px;font-weight:500;letter-spacing:0;text-transform:none;padding:2px 10px;border-color:transparent;vertical-align:1px}
+.open{border:1px solid var(--gap-rule)}
+.open>b,.gap>b{font-family:var(--body);font-weight:600;font-size:12.5px;letter-spacing:0}
+details.searched>summary,details.evidence>summary{font-weight:500}
+</style>
+<!-- Theme · Workshop. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="workshop" media="not all" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" data-style="workshop" media="not all" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style data-style="workshop" media="not all" data-style-label="Workshop">
+/* Tokens · Workshop direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Geist', system-ui, sans-serif;
+  --body: 'Geist', system-ui, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+  --r: 12px;
+  --r-sm: 4px;
+  --r-tag: 6px;
+  --r-box: 8px;
+  --ground: #fafafa;
+  --surface: #fcfcfc;
+  --surface-hi: #ffffff;
+  --surface-2: #f4f4f4;
+  --surface-3: #fbfbfb;
+  --chip: #f0f0f0;
+  --ink: #0a0a0a;
+  --ink-2: #1f1f1f;
+  --ink-3: #404040;
+  --muted: #666666;
+  --faint: #808080;
+  --fainter: #a3a3a3;
+  --on-ink: #fafafa;
+  --on-ink-code: #d4d4d4;
+  --rule: #e6e6e6;
+  --rule-soft: #efefef;
+  --rule-strong: #cfcfcf;
+  --rule-dash: #b5b5b5;
+  --rule-card: #dcdcdc;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.97 0.035 150);
+  --add-sig: oklch(0.46 0.13 150);
+  --ex-del: oklch(0.97 0.025 25);
+  --del-sig: oklch(0.50 0.16 25);
+  --syn-key: oklch(0.47 0.15 300);
+  --syn-str: oklch(0.47 0.11 150);
+  --syn-com: oklch(0.62 0 0);
+  --syn-name: oklch(0.50 0.15 255);
+  --syn-num: oklch(0.53 0.13 55);
+  --nav-bg: oklch(0.98 0.015 255);
+  --nav-bg-2: oklch(0.97 0.03 255);
+  --nav-rule: oklch(0.89 0.06 255);
+  --nav-rule-2: oklch(0.78 0.1 255);
+  --nav-ink: oklch(0.48 0.15 255);
+  --nav-ink-hi: oklch(0.4 0.17 255);
+  --gap-bg: oklch(0.98 0.015 75);
+  --gap-bg-2: oklch(0.97 0.03 75);
+  --gap-rule: oklch(0.89 0.06 75);
+  --gap-rule-2: oklch(0.78 0.1 75);
+  --gap-ink: oklch(0.48 0.15 75);
+  --gap-ink-hi: oklch(0.4 0.17 75);
+  --unchanged-bg: oklch(0.98 0.015 190);
+  --unchanged-bg-2: oklch(0.97 0.03 190);
+  --unchanged-rule: oklch(0.89 0.06 190);
+  --unchanged-rule-2: oklch(0.78 0.1 190);
+  --unchanged-ink: oklch(0.48 0.15 190);
+  --unchanged-ink-hi: oklch(0.4 0.17 190);
+  --prov-bg: oklch(0.98 0.015 300);
+  --prov-bg-2: oklch(0.97 0.03 300);
+  --prov-rule: oklch(0.89 0.06 300);
+  --prov-rule-2: oklch(0.78 0.1 300);
+  --prov-ink: oklch(0.48 0.15 300);
+  --prov-ink-hi: oklch(0.4 0.17 300);
+  --primer-bg: oklch(0.98 0.015 25);
+  --primer-bg-2: oklch(0.97 0.03 25);
+  --primer-rule: oklch(0.89 0.06 25);
+  --primer-rule-2: oklch(0.78 0.1 25);
+  --primer-ink: oklch(0.48 0.15 25);
+  --primer-ink-hi: oklch(0.4 0.17 25);
+  --primer-rust-bg: oklch(0.98 0.004 60);
+  --primer-rust-bg-2: oklch(0.97 0.007 60);
+  --primer-rust-rule: oklch(0.89 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.48 0.022 60);
+  --primer-rust-ink-hi: oklch(0.4 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0a0a0a;
+  --surface: #0e0e0e;
+  --surface-hi: #111111;
+  --surface-2: #171717;
+  --surface-3: #0d0d0d;
+  --chip: #1c1c1c;
+  --ink: #ededed;
+  --ink-2: #d4d4d4;
+  --ink-3: #a8a8a8;
+  --muted: #8f8f8f;
+  --faint: #777777;
+  --fainter: #5a5a5a;
+  --on-ink: #0a0a0a;
+  --on-ink-code: #404040;
+  --rule: #262626;
+  --rule-soft: #1c1c1c;
+  --rule-strong: #3a3a3a;
+  --rule-dash: #4a4a4a;
+  --rule-card: #2e2e2e;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.25 0.06 150);
+  --add-sig: oklch(0.84 0.12 150);
+  --ex-del: oklch(0.25 0.06 25);
+  --del-sig: oklch(0.82 0.11 25);
+  --syn-key: oklch(0.80 0.12 300);
+  --syn-str: oklch(0.82 0.11 150);
+  --syn-com: oklch(0.60 0 0);
+  --syn-name: oklch(0.80 0.10 255);
+  --syn-num: oklch(0.82 0.11 60);
+  --nav-bg: oklch(0.22 0.03 255);
+  --nav-bg-2: oklch(0.24 0.045 255);
+  --nav-rule: oklch(0.38 0.07 255);
+  --nav-rule-2: oklch(0.52 0.1 255);
+  --nav-ink: oklch(0.83 0.11 255);
+  --nav-ink-hi: oklch(0.9 0.08 255);
+  --gap-bg: oklch(0.22 0.03 75);
+  --gap-bg-2: oklch(0.24 0.045 75);
+  --gap-rule: oklch(0.38 0.07 75);
+  --gap-rule-2: oklch(0.52 0.1 75);
+  --gap-ink: oklch(0.83 0.11 75);
+  --gap-ink-hi: oklch(0.9 0.08 75);
+  --unchanged-bg: oklch(0.22 0.03 190);
+  --unchanged-bg-2: oklch(0.24 0.045 190);
+  --unchanged-rule: oklch(0.38 0.07 190);
+  --unchanged-rule-2: oklch(0.52 0.1 190);
+  --unchanged-ink: oklch(0.83 0.11 190);
+  --unchanged-ink-hi: oklch(0.9 0.08 190);
+  --prov-bg: oklch(0.22 0.03 300);
+  --prov-bg-2: oklch(0.24 0.045 300);
+  --prov-rule: oklch(0.38 0.07 300);
+  --prov-rule-2: oklch(0.52 0.1 300);
+  --prov-ink: oklch(0.83 0.11 300);
+  --prov-ink-hi: oklch(0.9 0.08 300);
+  --primer-bg: oklch(0.22 0.03 25);
+  --primer-bg-2: oklch(0.24 0.045 25);
+  --primer-rule: oklch(0.38 0.07 25);
+  --primer-rule-2: oklch(0.52 0.1 25);
+  --primer-ink: oklch(0.83 0.11 25);
+  --primer-ink-hi: oklch(0.9 0.08 25);
+  --primer-rust-bg: oklch(0.22 0.006 60);
+  --primer-rust-bg-2: oklch(0.24 0.008 60);
+  --primer-rust-rule: oklch(0.38 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.83 0.014 60);
+  --primer-rust-ink-hi: oklch(0.9 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0a0a0a;
+  --surface: #0e0e0e;
+  --surface-hi: #111111;
+  --surface-2: #171717;
+  --surface-3: #0d0d0d;
+  --chip: #1c1c1c;
+  --ink: #ededed;
+  --ink-2: #d4d4d4;
+  --ink-3: #a8a8a8;
+  --muted: #8f8f8f;
+  --faint: #777777;
+  --fainter: #5a5a5a;
+  --on-ink: #0a0a0a;
+  --on-ink-code: #404040;
+  --rule: #262626;
+  --rule-soft: #1c1c1c;
+  --rule-strong: #3a3a3a;
+  --rule-dash: #4a4a4a;
+  --rule-card: #2e2e2e;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.25 0.06 150);
+  --add-sig: oklch(0.84 0.12 150);
+  --ex-del: oklch(0.25 0.06 25);
+  --del-sig: oklch(0.82 0.11 25);
+  --syn-key: oklch(0.80 0.12 300);
+  --syn-str: oklch(0.82 0.11 150);
+  --syn-com: oklch(0.60 0 0);
+  --syn-name: oklch(0.80 0.10 255);
+  --syn-num: oklch(0.82 0.11 60);
+  --nav-bg: oklch(0.22 0.03 255);
+  --nav-bg-2: oklch(0.24 0.045 255);
+  --nav-rule: oklch(0.38 0.07 255);
+  --nav-rule-2: oklch(0.52 0.1 255);
+  --nav-ink: oklch(0.83 0.11 255);
+  --nav-ink-hi: oklch(0.9 0.08 255);
+  --gap-bg: oklch(0.22 0.03 75);
+  --gap-bg-2: oklch(0.24 0.045 75);
+  --gap-rule: oklch(0.38 0.07 75);
+  --gap-rule-2: oklch(0.52 0.1 75);
+  --gap-ink: oklch(0.83 0.11 75);
+  --gap-ink-hi: oklch(0.9 0.08 75);
+  --unchanged-bg: oklch(0.22 0.03 190);
+  --unchanged-bg-2: oklch(0.24 0.045 190);
+  --unchanged-rule: oklch(0.38 0.07 190);
+  --unchanged-rule-2: oklch(0.52 0.1 190);
+  --unchanged-ink: oklch(0.83 0.11 190);
+  --unchanged-ink-hi: oklch(0.9 0.08 190);
+  --prov-bg: oklch(0.22 0.03 300);
+  --prov-bg-2: oklch(0.24 0.045 300);
+  --prov-rule: oklch(0.38 0.07 300);
+  --prov-rule-2: oklch(0.52 0.1 300);
+  --prov-ink: oklch(0.83 0.11 300);
+  --prov-ink-hi: oklch(0.9 0.08 300);
+  --primer-bg: oklch(0.22 0.03 25);
+  --primer-bg-2: oklch(0.24 0.045 25);
+  --primer-rule: oklch(0.38 0.07 25);
+  --primer-rule-2: oklch(0.52 0.1 25);
+  --primer-ink: oklch(0.83 0.11 25);
+  --primer-ink-hi: oklch(0.9 0.08 25);
+  --primer-rust-bg: oklch(0.22 0.006 60);
+  --primer-rust-bg-2: oklch(0.24 0.008 60);
+  --primer-rust-rule: oklch(0.38 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.83 0.014 60);
+  --primer-rust-ink-hi: oklch(0.9 0.012 60);
+}
+
+/* ---- Workshop overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:600;letter-spacing:-0.03em;font-variation-settings:normal}
+h1{letter-spacing:-0.045em;line-height:1.02}
+.rail-id .tick{font-weight:600;letter-spacing:-0.02em}
+.tier,.tag{font-size:10.5px;letter-spacing:0;text-transform:none;border-color:transparent;padding:2px 8px}
+.open,.gap{position:relative;margin-left:16px;border:1px solid var(--gap-rule);padding:16px 18px 16px 28px}
+.gap{margin-top:16px}
+.open::before,.gap::before{content:"?";position:absolute;left:-16px;top:-14px;width:32px;height:32px;box-sizing:border-box;border-radius:50%;background:var(--badge);border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--body);color:#0a0a0a}
+.gap::before{content:"!"}
+.open>b,.gap>b{font-family:var(--body);font-weight:600;font-size:13.5px;letter-spacing:0}
+details.searched>summary,details.evidence>summary{font-weight:500}
+
+/* ---- Highlighter accents. Tints for the two labelled tiers and the excerpt tag, never a grade ---- */
+:root{--hl-yellow:oklch(0.91 0.15 95);--hl-sky:oklch(0.91 0.08 205);--hl-pink:oklch(0.91 0.07 340);--hl-lime:oklch(0.92 0.13 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.95 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.50 0.20 265);--nav-ink-hi:oklch(0.42 0.21 265);--nav-rule-2:oklch(0.80 0.10 265);--unchanged-bg:oklch(0.96 0.035 205);--unchanged-rule-2:oklch(0.62 0.09 205);--gap-bg-2:oklch(0.97 0.05 95);--gap-rule:oklch(0.86 0.12 95);--prov-ink:oklch(0.48 0.15 340);--prov-bg:oklch(0.975 0.02 340);--prov-rule:oklch(0.88 0.06 340);--prov-rule-2:oklch(0.75 0.10 340);--primer-ink:oklch(0.50 0.17 25);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl-yellow:oklch(0.88 0.16 95);--hl-sky:oklch(0.84 0.09 205);--hl-pink:oklch(0.84 0.09 340);--hl-lime:oklch(0.88 0.15 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.40 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.80 0.13 265);--nav-ink-hi:oklch(0.88 0.09 265);--nav-rule-2:oklch(0.45 0.10 265);--unchanged-bg:oklch(0.22 0.04 205);--unchanged-rule-2:oklch(0.60 0.09 205);--gap-bg-2:oklch(0.24 0.05 95);--gap-rule:oklch(0.55 0.12 95);--prov-ink:oklch(0.84 0.09 340);--prov-bg:oklch(0.21 0.03 340);--prov-rule:oklch(0.38 0.06 340);--prov-rule-2:oklch(0.55 0.09 340);}}
+:root[data-theme="dark"]{--hl-yellow:oklch(0.88 0.16 95);--hl-sky:oklch(0.84 0.09 205);--hl-pink:oklch(0.84 0.09 340);--hl-lime:oklch(0.88 0.15 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.40 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.80 0.13 265);--nav-ink-hi:oklch(0.88 0.09 265);--nav-rule-2:oklch(0.45 0.10 265);--unchanged-bg:oklch(0.22 0.04 205);--unchanged-rule-2:oklch(0.60 0.09 205);--gap-bg-2:oklch(0.24 0.05 95);--gap-rule:oklch(0.55 0.12 95);--prov-ink:oklch(0.84 0.09 340);--prov-bg:oklch(0.21 0.03 340);--prov-rule:oklch(0.38 0.06 340);--prov-rule-2:oklch(0.55 0.09 340);}
+
+.tier{background:var(--chip);color:var(--ink-2)}
+.tier-unc{background:var(--hl-sky);color:var(--hl-ink)}
+.tier-inf{background:var(--hl-yellow);color:var(--hl-ink)}
+.tag{background:var(--hl-pink);color:var(--hl-ink);border-color:transparent}
+.ip-aff>.ip-box{border-color:var(--unchanged-rule-2)}
+main section > p strong{background:linear-gradient(transparent 58%,var(--hl-soft) 58%)}
+::selection{background:var(--hl-yellow);color:var(--hl-ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tier-unc,:root:not([data-theme="light"]) .tier-inf,:root:not([data-theme="light"]) .tag{background:transparent;border:1px solid currentColor}
+:root:not([data-theme="light"]) .tier-unc{color:var(--hl-sky)}:root:not([data-theme="light"]) .tier-inf{color:var(--hl-yellow)}:root:not([data-theme="light"]) .tag{color:var(--hl-pink)}}
+:root[data-theme="dark"] .tier-unc,:root[data-theme="dark"] .tier-inf,:root[data-theme="dark"] .tag{background:transparent;border:1px solid currentColor}
+:root[data-theme="dark"] .tier-unc{color:var(--hl-sky)}:root[data-theme="dark"] .tier-inf{color:var(--hl-yellow)}:root[data-theme="dark"] .tag{color:var(--hl-pink)}
+
+/* ---- Square frames and hard shadows: what reads Workshop apart from Daylight ---- */
+:root{--display:'Bricolage Grotesque', 'Geist', sans-serif;--r:0px;--r-box:0px;--r-tag:0px;--r-sm:2px;--frame:#0a0a0a;--shadow:#0a0a0a;--ground:#fdfdfb;--surface:#fdfdfb;--surface-3:#fbfbf8;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--frame:#3d3d3d;--shadow:#3d3d3d;}}
+:root[data-theme="dark"]{--frame:#3d3d3d;--shadow:#3d3d3d;}
+
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;letter-spacing:-0.03em;font-variation-settings:normal}
+h1{letter-spacing:-0.04em;line-height:1}
+.rail-id .tick{font-family:var(--display);font-weight:800}
+.rail{border-right:2px solid var(--frame)}
+.eyebrow > i{height:2px;background:var(--frame)}
+.lbl-a{background:var(--hl-yellow);color:var(--hl-ink);padding:3px 7px}
+.cp + .cp{border-top:2px dashed var(--rule-strong)}
+.ip-card,figure.chain{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
+details.excerpt,details.searched,.gt,.primer{border:2px solid var(--frame)}
+.gt{background:var(--frame)}
+.open,.gap{border:2px solid var(--frame);box-shadow:4px 4px 0 var(--shadow)}
+.open::before,.gap::before{border-radius:0;border:2px solid var(--frame);width:30px;height:30px}
+.tier,.tag{border:1.5px solid var(--frame)}
+.ip-box{border-width:2px !important}
+
+/* ---- The appearance menu, framed like everything else here ---- */
+.rc-btn{border:2px solid var(--frame);box-shadow:3px 3px 0 var(--shadow);font-weight:600}
+.rc-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.rc-pop{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
+.rc-h{display:inline-block;align-self:flex-start;background:var(--hl-yellow);color:var(--hl-ink);padding:3px 6px;font-weight:600}
+.rc-styles button.on{border-color:var(--frame)}
+.rc-seg{border:2px solid var(--frame)}
+.rc-seg button[aria-pressed="true"]{background:var(--hl-yellow);color:var(--hl-ink);font-weight:600}
+</style>
+<!-- Theme · Field Notes. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="field-notes" media="not all" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=Fira+Code:wght@400;500;600&family=Kalam:wght@400;700&display=swap">
+<style data-style="field-notes" media="not all" data-style-label="Field Notes">
+/* Tokens · Field Notes direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Young Serif', Georgia, serif;
+  --body: 'Nunito Sans', system-ui, sans-serif;
+  --mono: 'Fira Code', ui-monospace, Menlo, monospace;
+  --hand: 'Kalam', cursive;
+  --r: 6px;
+  --r-sm: 4px;
+  --r-tag: 0;
+  --r-box: 16px;
+  --ground: #fbf8f1;
+  --surface: #fcfaf4;
+  --surface-hi: #fffdf8;
+  --surface-2: #f4eee2;
+  --surface-3: #fdfbf6;
+  --chip: #f1eadb;
+  --ink: #2a2420;
+  --ink-2: #352e29;
+  --ink-3: #4a423a;
+  --muted: #73695f;
+  --faint: #8a7f72;
+  --fainter: #aaa092;
+  --on-ink: #fbf8f1;
+  --on-ink-code: #ddd3c3;
+  --rule: #e8e0cf;
+  --rule-soft: #efe9dc;
+  --rule-strong: #d3c8b2;
+  --rule-dash: #bfb39c;
+  --rule-card: #ddd3bf;
+  --note-bg: #fff6d9;
+  --note-border: #2a2420;
+  --note-shadow: #2a2420;
+  --hand-ink: oklch(0.53 0.14 40);
+  --highlight: oklch(0.91 0.10 90);
+  --ex-add: oklch(0.95 0.04 150);
+  --add-sig: oklch(0.46 0.11 150);
+  --ex-del: oklch(0.95 0.03 30);
+  --del-sig: oklch(0.50 0.14 30);
+  --syn-key: oklch(0.48 0.11 295);
+  --syn-str: oklch(0.47 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.48 0.10 245);
+  --syn-num: oklch(0.53 0.12 45);
+  --nav-bg: oklch(0.965 0.025 245);
+  --nav-bg-2: oklch(0.95 0.04 245);
+  --nav-rule: oklch(0.87 0.06 245);
+  --nav-rule-2: oklch(0.62 0.08 245);
+  --nav-ink: oklch(0.45 0.1 245);
+  --nav-ink-hi: oklch(0.37 0.11 245);
+  --gap-bg: oklch(0.965 0.025 85);
+  --gap-bg-2: oklch(0.95 0.04 85);
+  --gap-rule: oklch(0.87 0.06 85);
+  --gap-rule-2: oklch(0.62 0.08 85);
+  --gap-ink: oklch(0.45 0.1 85);
+  --gap-ink-hi: oklch(0.37 0.11 85);
+  --unchanged-bg: oklch(0.965 0.025 160);
+  --unchanged-bg-2: oklch(0.95 0.04 160);
+  --unchanged-rule: oklch(0.87 0.06 160);
+  --unchanged-rule-2: oklch(0.62 0.08 160);
+  --unchanged-ink: oklch(0.45 0.1 160);
+  --unchanged-ink-hi: oklch(0.37 0.11 160);
+  --prov-bg: oklch(0.965 0.025 295);
+  --prov-bg-2: oklch(0.95 0.04 295);
+  --prov-rule: oklch(0.87 0.06 295);
+  --prov-rule-2: oklch(0.62 0.08 295);
+  --prov-ink: oklch(0.45 0.1 295);
+  --prov-ink-hi: oklch(0.37 0.11 295);
+  --primer-bg: oklch(0.965 0.025 30);
+  --primer-bg-2: oklch(0.95 0.04 30);
+  --primer-rule: oklch(0.87 0.06 30);
+  --primer-rule-2: oklch(0.62 0.08 30);
+  --primer-ink: oklch(0.45 0.1 30);
+  --primer-ink-hi: oklch(0.37 0.11 30);
+  --primer-rust-bg: oklch(0.965 0.004 60);
+  --primer-rust-bg-2: oklch(0.95 0.007 60);
+  --primer-rust-rule: oklch(0.87 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.45 0.022 60);
+  --primer-rust-ink-hi: oklch(0.37 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #1d1a17;
+  --surface: #201d19;
+  --surface-hi: #24201c;
+  --surface-2: #2a2621;
+  --surface-3: #211e1a;
+  --chip: #2e2924;
+  --ink: #f1ebe1;
+  --ink-2: #e2dbcf;
+  --ink-3: #d0c7b9;
+  --muted: #a89d8b;
+  --faint: #8f8474;
+  --fainter: #6f665a;
+  --on-ink: #1d1a17;
+  --on-ink-code: #4a423a;
+  --rule: #3a342d;
+  --rule-soft: #2f2a24;
+  --rule-strong: #4a433a;
+  --rule-dash: #5a5247;
+  --rule-card: #403a32;
+  --note-bg: #3a3220;
+  --note-border: #e9d9a8;
+  --note-shadow: #0f0d0b;
+  --hand-ink: oklch(0.78 0.11 45);
+  --highlight: oklch(0.42 0.08 90);
+  --ex-add: oklch(0.27 0.05 150);
+  --add-sig: oklch(0.82 0.11 150);
+  --ex-del: oklch(0.27 0.05 30);
+  --del-sig: oklch(0.82 0.11 30);
+  --syn-key: oklch(0.80 0.09 295);
+  --syn-str: oklch(0.80 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.80 0.08 245);
+  --syn-num: oklch(0.80 0.10 50);
+  --nav-bg: oklch(0.26 0.03 245);
+  --nav-bg-2: oklch(0.29 0.045 245);
+  --nav-rule: oklch(0.42 0.06 245);
+  --nav-rule-2: oklch(0.65 0.08 245);
+  --nav-ink: oklch(0.82 0.09 245);
+  --nav-ink-hi: oklch(0.88 0.07 245);
+  --gap-bg: oklch(0.26 0.03 85);
+  --gap-bg-2: oklch(0.29 0.045 85);
+  --gap-rule: oklch(0.42 0.06 85);
+  --gap-rule-2: oklch(0.65 0.08 85);
+  --gap-ink: oklch(0.82 0.09 85);
+  --gap-ink-hi: oklch(0.88 0.07 85);
+  --unchanged-bg: oklch(0.26 0.03 160);
+  --unchanged-bg-2: oklch(0.29 0.045 160);
+  --unchanged-rule: oklch(0.42 0.06 160);
+  --unchanged-rule-2: oklch(0.65 0.08 160);
+  --unchanged-ink: oklch(0.82 0.09 160);
+  --unchanged-ink-hi: oklch(0.88 0.07 160);
+  --prov-bg: oklch(0.26 0.03 295);
+  --prov-bg-2: oklch(0.29 0.045 295);
+  --prov-rule: oklch(0.42 0.06 295);
+  --prov-rule-2: oklch(0.65 0.08 295);
+  --prov-ink: oklch(0.82 0.09 295);
+  --prov-ink-hi: oklch(0.88 0.07 295);
+  --primer-bg: oklch(0.26 0.03 30);
+  --primer-bg-2: oklch(0.29 0.045 30);
+  --primer-rule: oklch(0.42 0.06 30);
+  --primer-rule-2: oklch(0.65 0.08 30);
+  --primer-ink: oklch(0.82 0.09 30);
+  --primer-ink-hi: oklch(0.88 0.07 30);
+  --primer-rust-bg: oklch(0.26 0.006 60);
+  --primer-rust-bg-2: oklch(0.29 0.008 60);
+  --primer-rust-rule: oklch(0.42 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #1d1a17;
+  --surface: #201d19;
+  --surface-hi: #24201c;
+  --surface-2: #2a2621;
+  --surface-3: #211e1a;
+  --chip: #2e2924;
+  --ink: #f1ebe1;
+  --ink-2: #e2dbcf;
+  --ink-3: #d0c7b9;
+  --muted: #a89d8b;
+  --faint: #8f8474;
+  --fainter: #6f665a;
+  --on-ink: #1d1a17;
+  --on-ink-code: #4a423a;
+  --rule: #3a342d;
+  --rule-soft: #2f2a24;
+  --rule-strong: #4a433a;
+  --rule-dash: #5a5247;
+  --rule-card: #403a32;
+  --note-bg: #3a3220;
+  --note-border: #e9d9a8;
+  --note-shadow: #0f0d0b;
+  --hand-ink: oklch(0.78 0.11 45);
+  --highlight: oklch(0.42 0.08 90);
+  --ex-add: oklch(0.27 0.05 150);
+  --add-sig: oklch(0.82 0.11 150);
+  --ex-del: oklch(0.27 0.05 30);
+  --del-sig: oklch(0.82 0.11 30);
+  --syn-key: oklch(0.80 0.09 295);
+  --syn-str: oklch(0.80 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.80 0.08 245);
+  --syn-num: oklch(0.80 0.10 50);
+  --nav-bg: oklch(0.26 0.03 245);
+  --nav-bg-2: oklch(0.29 0.045 245);
+  --nav-rule: oklch(0.42 0.06 245);
+  --nav-rule-2: oklch(0.65 0.08 245);
+  --nav-ink: oklch(0.82 0.09 245);
+  --nav-ink-hi: oklch(0.88 0.07 245);
+  --gap-bg: oklch(0.26 0.03 85);
+  --gap-bg-2: oklch(0.29 0.045 85);
+  --gap-rule: oklch(0.42 0.06 85);
+  --gap-rule-2: oklch(0.65 0.08 85);
+  --gap-ink: oklch(0.82 0.09 85);
+  --gap-ink-hi: oklch(0.88 0.07 85);
+  --unchanged-bg: oklch(0.26 0.03 160);
+  --unchanged-bg-2: oklch(0.29 0.045 160);
+  --unchanged-rule: oklch(0.42 0.06 160);
+  --unchanged-rule-2: oklch(0.65 0.08 160);
+  --unchanged-ink: oklch(0.82 0.09 160);
+  --unchanged-ink-hi: oklch(0.88 0.07 160);
+  --prov-bg: oklch(0.26 0.03 295);
+  --prov-bg-2: oklch(0.29 0.045 295);
+  --prov-rule: oklch(0.42 0.06 295);
+  --prov-rule-2: oklch(0.65 0.08 295);
+  --prov-ink: oklch(0.82 0.09 295);
+  --prov-ink-hi: oklch(0.88 0.07 295);
+  --primer-bg: oklch(0.26 0.03 30);
+  --primer-bg-2: oklch(0.29 0.045 30);
+  --primer-rule: oklch(0.42 0.06 30);
+  --primer-rule-2: oklch(0.65 0.08 30);
+  --primer-ink: oklch(0.82 0.09 30);
+  --primer-ink-hi: oklch(0.88 0.07 30);
+  --primer-rust-bg: oklch(0.26 0.006 60);
+  --primer-rust-bg-2: oklch(0.29 0.008 60);
+  --primer-rust-rule: oklch(0.42 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+}
+
+/* ---- Field Notes overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:400;letter-spacing:-0.005em;font-variation-settings:normal}
+h1{line-height:1.1}
+.tier{font-family:var(--body);font-size:12.5px;font-weight:700;letter-spacing:0;text-transform:none;border:0;background:none;padding:0 2px;gap:6px;color:var(--muted);vertical-align:0}
+.tier::before{content:"";flex:0 0 auto;width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid currentColor}
+.tier-unc{background:none;color:var(--unchanged-ink)}
+.tier-unc::before{border-style:dashed}
+.tier-inf{background:none;color:var(--gap-ink)}
+.tier-inf::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.tag{font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:999px;padding:1px 9px}
+.open{background:var(--note-bg);border:1.5px solid var(--note-border);border-radius:4px;box-shadow:3px 3px 0 var(--note-shadow);transform:rotate(-0.3deg);color:var(--ink)}
+.open>b{font-family:var(--hand);font-weight:700;font-size:18px;letter-spacing:0;color:var(--gap-ink);margin-bottom:2px}
+.gap>b{font-family:var(--hand);font-size:16px;letter-spacing:0;font-weight:700}
+.lbl-a{font-family:var(--hand);font-size:19px;letter-spacing:0;text-transform:none;color:var(--hand-ink);font-weight:700}
+.cp > .lbl{font-family:var(--hand);font-size:17px;letter-spacing:0;text-transform:none;color:var(--hand-ink)}
+.ip-rel{font-family:var(--hand);font-size:15px;letter-spacing:0;text-transform:none;color:var(--hand-ink)}
+.ip-chg>.ip-box,.ip-out>.ip-box,.ip-aff>.ip-box{border-width:1.5px}
+main p a:not(.doc){text-decoration-style:wavy;text-underline-offset:4px}
+main section > p strong{background:linear-gradient(transparent 58%,var(--highlight) 58%)}
+details.searched>summary,details.evidence>summary{font-weight:700}
+
+/* ---- Highlighter accents. Tints for the two labelled tiers and the excerpt tag, never a grade ---- */
+:root{--hl-yellow:oklch(0.91 0.15 95);--hl-sky:oklch(0.90 0.08 205);--hl-pink:oklch(0.90 0.08 345);--highlight:oklch(0.91 0.15 95);--note-bg:oklch(0.96 0.09 95);--hand-ink:oklch(0.55 0.17 350);--nav-ink:oklch(0.48 0.16 260);--nav-ink-hi:oklch(0.40 0.17 260);--nav-rule-2:oklch(0.78 0.08 260);--unchanged-ink:oklch(0.42 0.09 205);--unchanged-rule-2:oklch(0.58 0.09 205);--unchanged-bg:oklch(0.95 0.035 205);--prov-ink:oklch(0.48 0.13 345);--prov-bg:oklch(0.97 0.02 345);--prov-rule:oklch(0.88 0.05 345);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl-yellow:oklch(0.50 0.10 95);--hl-sky:oklch(0.45 0.07 205);--hl-pink:oklch(0.45 0.08 345);--highlight:oklch(0.50 0.10 95);--note-bg:#3d3418;--hand-ink:oklch(0.80 0.12 350);--nav-ink:oklch(0.80 0.11 260);--nav-ink-hi:oklch(0.88 0.08 260);--nav-rule-2:oklch(0.50 0.08 260);--unchanged-ink:oklch(0.84 0.08 205);--unchanged-rule-2:oklch(0.65 0.08 205);--unchanged-bg:oklch(0.27 0.035 205);--prov-ink:oklch(0.84 0.08 345);--prov-bg:oklch(0.26 0.03 345);--prov-rule:oklch(0.42 0.06 345);}}
+:root[data-theme="dark"]{--hl-yellow:oklch(0.50 0.10 95);--hl-sky:oklch(0.45 0.07 205);--hl-pink:oklch(0.45 0.08 345);--highlight:oklch(0.50 0.10 95);--note-bg:#3d3418;--hand-ink:oklch(0.80 0.12 350);--nav-ink:oklch(0.80 0.11 260);--nav-ink-hi:oklch(0.88 0.08 260);--nav-rule-2:oklch(0.50 0.08 260);--unchanged-ink:oklch(0.84 0.08 205);--unchanged-rule-2:oklch(0.65 0.08 205);--unchanged-bg:oklch(0.27 0.035 205);--prov-ink:oklch(0.84 0.08 345);--prov-bg:oklch(0.26 0.03 345);--prov-rule:oklch(0.42 0.06 345);}
+
+.tier-unc{background:linear-gradient(transparent 45%,var(--hl-sky) 45%);color:var(--ink)}
+.tier-inf{background:linear-gradient(transparent 45%,var(--hl-yellow) 45%);color:var(--ink)}
+.tier-unc::before{border-color:var(--unchanged-rule-2)}
+.tier-inf::before{color:var(--gap-ink)}
+.tag{background:linear-gradient(transparent 40%,var(--hl-pink) 40%);color:var(--ink);border-color:transparent;border-radius:0}
+.cp > h3{text-decoration:underline;text-decoration-color:var(--hl-yellow);text-decoration-thickness:.32em;text-underline-offset:-.12em;text-decoration-skip-ink:none}
+::selection{background:var(--hl-yellow);color:var(--ink)}
+
+/* ---- The appearance menu, in this theme's hand ---- */
+.rc-h{font-family:var(--hand);font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+.rc-btn b{font-family:var(--hand);font-size:15px}
+.rc-pop{transform:rotate(-.4deg)}
+.rc-seg button[aria-pressed="true"]{background:var(--hl-yellow);color:#2a2620;font-weight:600}
+</style>
+<!--
+  The reader's saved appearance, applied here rather than in the tail script
+  so the page never paints in one look and then jumps to another. Two keys,
+  both a viewer's own convenience: which theme (only if this page carries a
+  file of that name) and light or dark (absent means follow the system).
+  Every storage call is guarded — a private window or blocked site data
+  throws, and then the page is simply the repository's choice.
+-->
+<script>
+(function () {
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var s = get('review-style'), els = document.querySelectorAll('[data-style]'), i, known = false;
+  for (i = 0; i < els.length; i++) { if (els[i].getAttribute('data-style') === s) { known = true; } }
+  if (known) {
+    for (i = 0; i < els.length; i++) {
+      if (els[i].getAttribute('data-style') === s) { els[i].removeAttribute('media'); }
+      else { els[i].setAttribute('media', 'not all'); }
+    }
+  }
+  var t = get('review-theme');
+  if (t === 'light' || t === 'dark') { document.documentElement.setAttribute('data-theme', t); }
+})();
+</script>
 
 <!-- Scroll progress. The only decoration on the page that moves. -->
 <div class="progress"><i id="bar"></i></div>
@@ -1522,13 +2233,12 @@ figcaption strong { color: var(--ink-3); }
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
       <a data-rail="context" href="#context"><span class="n">02</span>Context</a>
       <a data-rail="attention" href="#attention"><span class="n">03</span>Needs your attention</a>
-      <a class="sub" data-rail="cp-a" href="#cp-a">CAPTCHA on every creating request</a>
-      <a class="sub" data-rail="cp-b" href="#cp-b">What the generated flag does</a>
-      <a class="sub" data-rail="cp-c" href="#cp-c">The code&rsquo;s ten minutes</a>
-      <a class="sub" data-rail="cp-d" href="#cp-d">Invite usernames, now kept</a>
-      <a class="sub" data-rail="cp-e" href="#cp-e">Random usernames off by default</a>
-      <a class="sub" data-rail="cp-f" href="#cp-f">A chosen avatar that never lands</a>
-      <a class="sub" data-rail="cp-g" href="#cp-g">Signup logic in the controller</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">CAPTCHA on account creation</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">Rejected username keeps the code</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">The generated-username flag</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">Avatar lost after creation</a>
+      <a class="sub" data-rail="cp-e" href="#cp-e">Random names off by default</a>
+      <a class="sub" data-rail="cp-f" href="#cp-f">The for_user_id guard</a>
       <a data-rail="start" href="#start"><span class="n">04</span>Read in this order</a>
       <a data-rail="impact" href="#impact"><span class="n">05</span>Impact outside the diff</a>
     </div>
@@ -1536,51 +2246,49 @@ figcaption strong { color: var(--ink-3); }
 
   <main>
 
-
     <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
       <div class="lbl lbl-wide" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px">
         <span>discourse</span><span style="color:var(--rule-strong)">/</span><span>discourse</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/discourse/discourse/pull/43845">PR #43845</a><span style="color:var(--rule-strong)">&middot;</span><span>keegangeorge</span>
       </div>
 
-      <h1>Email-code signup picks a username before the account exists</h1>
+      <h1>Email-code signup asks for a username before the account exists</h1>
 
-      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">The first correct code no longer
-        creates an account. It is verified and left unconsumed, and the account is created by the next
-        request, which carries the code and the username the person chose.</p>
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">A correct code no longer creates a new
+        member's account by itself. The server answers with a details step, and the account is created by the
+        request that brings the chosen username back.</p>
 
       <div class="gt gt-meta" style="margin-top:44px">
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">fix/email-code-signup-completion <span style="color:var(--fainter)">&rarr;</span> main</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">320f173 <span>&rarr;</span> 64358ac</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">bugfix</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">mixed</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">6</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">36</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test</div><div class="path" style="font-size:12px">20 / 16</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">By kind</div><div class="path" style="font-size:12px">20 prod &middot; 16 test</div></div>
       </div>
     </header>
 
     <section id="changed">
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
-      <h2 style="max-width:30ch;margin-bottom:18px">The account is created by the request that carries the chosen username</h2>
+      <h2 style="max-width:30ch;margin-bottom:18px">The account is created by the request that carries the username</h2>
 
-      <p>Before this change, the first correct email code created the account under a suggested or
-        random name, and a follow-up step let the new person rename it. Now that request verifies the
-        code without consuming it and answers <code>username_required</code>. The account is created on
-        the next request, which carries the code and the chosen name, and the CAPTCHA check moves with
-        it. The avatar is picked on the same step and uploaded once the account exists. Email-code
-        invitations follow the same rule. A plugin can also ask the server to generate the username
-        itself, through a new modifier that no code in this repository registers. The description calls
-        this a server-controlled flow that uses &ldquo;the normal validation and CAPTCHA checks&rdquo;.
-        Separately, <code>check_username</code> now refuses <code>for_user_id</code> to anyone who cannot
-        edit that user&rsquo;s username.</p>
+      <p>For a new address on an open site, a correct code now returns <code>username_required</code> with a
+        suggested name. The form shows a details step for username and avatar, and a second verify request
+        carrying the chosen name creates the account. CAPTCHA, username validation and consuming the code all
+        move to that second request. An avatar picked on the step is saved by the browser once the account
+        exists. A plugin can also switch the step to a server-generated name that the form submits by itself.
+        The description says this restores a reverted change with a distinct details state.</p>
+      <p>Two smaller changes ride along:</p>
       <ul>
-        <li>A new person signing up by email code chooses a username before the account is created.</li>
-        <li>Every site still on the default loses random adjective-noun usernames, because
-          <code>enable_random_usernames</code> now defaults to false.</li>
+        <li>A caller checking a username for another user (<code>for_user_id</code>) must now be signed in
+          and allowed to edit that user's username.</li>
+        <li><code>enable_random_usernames</code> now defaults to off.</li>
       </ul>
 
       <dl class="ba">
-        <dt>Before</dt><dd>A correct code created the account straight away; the username and avatar were edited afterwards, on an already-created account.</dd>
+        <dt>Before</dt><dd>Entering the code created the account with a generated name, which the new member
+          could then rename.</dd>
         <dt class="now">After</dt>
-        <dd class="now">A correct code opens a details step; the account exists only once a username is submitted with the code, and a chosen avatar is uploaded after that.</dd>
+        <dd class="now">The new member chooses the name, and optionally an avatar, before the account is
+          created.</dd>
       </dl>
     </section>
 
@@ -1594,8 +2302,8 @@ figcaption strong { color: var(--ink-3); }
             <ol class="lc-states">
               <li class="lc-s"><span class="ip-box"><b>email entered</b></span></li>
               <li class="lc-s"><span class="ip-rel"><i></i>request code<a class="path ip-loc" href="https://github.com/discourse/discourse/blob/64358ac0d0c189aee4214d66fb0b9b7dc34fb4ed/app/controllers/session_controller.rb#L516">app/controllers/session_controller.rb:516</a></span><span class="ip-box"><b>code sent</b></span></li>
-              <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64L975-L976">app/controllers/session_controller.rb:975-976</a></span><span class="ip-box"><b>account created</b></span></li>
-              <li class="lc-s"><span class="ip-rel"><i></i>rename<a class="path ip-loc" href="https://github.com/discourse/discourse/blob/64358ac0d0c189aee4214d66fb0b9b7dc34fb4ed/frontend/discourse/app/components/code-login-form.gjs#L751">frontend/discourse/app/components/code-login-form.gjs:751</a></span><span class="ip-box"><b>username chosen</b></span></li>
+              <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64L975">app/controllers/session_controller.rb:975</a></span><span class="ip-box"><b>account created</b></span></li>
+              <li class="lc-s"><span class="ip-rel"><i></i>rename<a class="path ip-loc" href="https://github.com/discourse/discourse/blob/64358ac0d0c189aee4214d66fb0b9b7dc34fb4ed/frontend/discourse/app/components/code-login-form.gjs#L751">frontend/discourse/app/components/code-login-form.gjs:751</a></span><span class="ip-box"><b>username changed</b></span></li>
             </ol>
           </div>
           <div class="lc-row">
@@ -1603,81 +2311,65 @@ figcaption strong { color: var(--ink-3); }
             <ol class="lc-states">
               <li class="lc-s"><span class="ip-box"><b>email entered</b></span></li>
               <li class="lc-s"><span class="ip-rel"><i></i>request code<a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L519">app/controllers/session_controller.rb:519</a></span><span class="ip-box"><b>code sent</b></span></li>
-              <li class="lc-s lc-new"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1021-R1027">app/controllers/session_controller.rb:1021-1027</a></span><span class="ip-box"><b>username required</b></span></li>
-              <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code and username<a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R146-R158">app/services/email_login_code/redeem.rb:146-158</a></span><span class="ip-box"><b>account created</b></span></li>
+              <li class="lc-s lc-new"><span class="ip-rel"><i></i>submit code<a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1021-R1027">app/controllers/session_controller.rb:1021-1027</a></span><span class="ip-box"><b>username asked</b></span></li>
+              <li class="lc-s lc-moved"><span class="ip-rel"><i></i>submit code and username<a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R978-R996">app/controllers/session_controller.rb:978-996</a></span><span class="ip-box"><b>account created</b></span></li>
             </ol>
           </div>
         </div>
         <ul class="lc-cases">
-          <li>Existing accounts: one request, since every new-account policy passes for them<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R136-R138">app/services/email_login_code/redeem.rb:136-138</a></li>
-          <li>Required user fields or full name: one more request first, answered before Redeem runs<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R972-R976">app/controllers/session_controller.rb:972-976</a></li>
-          <li>Approval sites: details and creation go through the signup-token completion request<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1077-L1087">app/controllers/session_controller.rb:1077-1087</a></li>
-          <li>Invitations: the same two steps, through Invite::RedeemWithEmailCode<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1267-R1273">app/controllers/session_controller.rb:1267-1273</a></li>
+          <li>Existing users: one request, which logs them in<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R136-R138">app/services/email_login_code/redeem.rb:136-138</a></li>
+          <li>Sites requiring user fields or a full name: one more request before the username step<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L970-L976">app/controllers/session_controller.rb:970-976</a></li>
+          <li>Approval sites: details first, then a separate completion request creates the account<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1077-L1101">app/controllers/session_controller.rb:1077-1101</a></li>
+          <li>Email-code invites: the same username step, answered by the invite service<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1267-R1273">app/controllers/session_controller.rb:1267-1273</a></li>
         </ul>
-        <figcaption>Which request creates the account, for a new person on an open site with no required fields. <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-c">Checkpoint C</a>, <a href="#cp-f">Checkpoint F</a></span></figcaption>
+        <figcaption>Which request creates the account, for a new member on an open site. <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a>, <a href="#cp-d">Checkpoint D</a></span></figcaption>
       </figure>
       <dl class="ctx">
-        <dt>discourse-captcha</dt>
-        <dd>A plugin bundled in this repository that prepends a module to SessionController, so its
-          CAPTCHA checks run before core&rsquo;s code-verification handler and can refuse the request.
+        <dt>The CAPTCHA plugin's controller patch</dt>
+        <dd>The bundled <code>discourse-captcha</code> plugin prepends a module onto
+          <code>SessionController</code> that wraps <code>process_verified_login_code</code> and decides, per
+          request, whether a CAPTCHA token is required.
           <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/plugin.rb#L28">plugins/discourse-captcha/plugin.rb:28</a>
           <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
         <dt>Approval signup</dt>
-        <dd>With <code>must_approve_users</code> on and the email domain not auto-approved, a verified
-          code returns a signup token; a second request carrying it creates the account, which then
-          waits for staff approval.
-          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1049-L1052">app/controllers/session_controller.rb:1049-1052</a>
-          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-e">Checkpoint E</a></span></dd>
+        <dd>With <code>must_approve_users</code> on and an address that is not auto-approved, a verified code
+          returns a signup token held in the server session rather than an account.
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1049-L1075">app/controllers/session_controller.rb:1049-1075</a>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
         <dt>Plugin modifiers</dt>
-        <dd><code>DiscoursePluginRegistry.apply_modifier</code> passes a default through every block
-          plugins registered under a name and returns the result; with none registered, the default
-          comes back unchanged.
-          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/discourse_plugin_registry.rb#L306-L320">lib/discourse_plugin_registry.rb:306-320</a>
-          <span class="ctx-used">Used by <a href="#cp-b">Checkpoint B</a></span></dd>
+        <dd><code>DiscoursePluginRegistry.apply_modifier</code> returns the default value it is handed unless
+          some plugin has registered a modifier under that name.
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/discourse_plugin_registry.rb#L306-L310">lib/discourse_plugin_registry.rb:306-310</a>
+          <span class="ctx-used">Used by <a href="#cp-c">Checkpoint C</a></span></dd>
       </dl>
     </section>
 
     <section id="attention" style="padding-top:48px">
       <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
       <h2 style="margin-bottom:18px">What needs your attention</h2>
-      <p>Each question below turns on which request now creates the account and what that request
-        trusts. They are ordered by what would cost most to misread. The last one is about where the
-        new code was put.</p>
+      <p>The first four turn on the new request sequence, the last two on the bundled changes. The order is
+        the order to think about them.</p>
 
       <section class="cp" id="cp-a">
         <span class="lbl lbl-wide">Checkpoint A</span>
-        <h3>Does every request that can now create an email-code account still pass CAPTCHA?</h3>
+        <h3>Does every request that creates an email-code account still pass CAPTCHA?</h3>
 
-        <p>The CAPTCHA plugin now asks for a CAPTCHA only when the request carries a username and is not
-          an approval signup. That is meant to track account creation: EmailLoginCode::Redeem will not
-          create an account without a username, and a request missing required fields or a full name is
-          answered before Redeem runs (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R972-R976">app/controllers/session_controller.rb:972-976</a>).
-          On approval sites the first step no longer checks CAPTCHA, so the completion gate is the only
-          check. Decide whether <em>a username is present</em> is an exact stand-in for <em>this
-          request can create an account</em>: a creating request the gate skips is the gap to look for.</p>
-
-        <figure class="converge">
-          <div class="cv-grid">
-            <ol class="cv-paths">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>code and username submitted</b><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R42-R43">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:42-43</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-box"><b>approval details submitted</b><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L25">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</a></span></li>
-            </ol>
-            <div class="cv-target"><span class="ip-box"><b>no new account without CAPTCHA, invitations aside</b><span class="ip-d">must hold on every path</span></span></div>
-          </div>
-          <figcaption>Which requests create an email-code account, and must each check CAPTCHA.</figcaption>
-        </figure>
+        <p>The patch used to demand a token on the request that submitted the code. It now demands one only
+          when the request carries a username, is not an approval signup, and has no user fields or full name
+          missing. Those negations mirror the controller's early returns, so the requests it lets through
+          stop at <code>required_username_provided</code> before the code is consumed. Approval signups are
+          checked on the completion request instead. Decide whether that mirroring holds for every way a
+          request reaches <code>EmailLoginCode::Redeem</code>.</p>
 
         <ul class="lookat">
           <li>
-            <b>The new gate condition</b>
-            <span>requires <code>params[:username]</code> and excludes approval signups; the rest of the condition is unchanged</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R38-R44">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:38-44</a>
+            <b>The new predicate</b>
+            <span>the username condition, and the existing-user and invite exits above it</span>
 <details class="excerpt excerpt--diff">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:39-46</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R39-R46">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:39-46</a></span>
     <span class="tag">Changed</span>
-    <span class="ex-why">The gate now requires a username on the request</span>
   </summary>
   <div class="ex-body">
 <pre data-src="plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb" style="counter-reset: exl 38"><span class="l"><span class="sig"> </span>      return false if matched_user.present? || params[:invite_key].present?</span>
@@ -1691,185 +2383,115 @@ figcaption strong { color: var(--ink-3); }
 <span class="l"><span class="sig"> </span></span>
 <span class="l"><span class="sig"> </span>    include CaptchaVerification</span>
 </pre>
-    <p class="ex-src">Changed at <a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R39-R46">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:39-46</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>What creation refuses without</b>
-            <span>the policy that sends a username-less request back to the details step, now the last one Redeem runs</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R136-R138">app/services/email_login_code/redeem.rb:136-138</a>
+            <b>The exits it mirrors</b>
+            <span>approval signups, then missing fields or name, both returning before Redeem</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L966-L976">app/controllers/session_controller.rb:966-976</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/session_controller.rb" data-lang="ruby" style="counter-reset: exl 965"><span class="l">    return process_verified_invite_login_code(matched_user) if params[:invite_key].present?</span>
+<span class="l"></span>
+<span class="l">    return begin_verified_login_code_signup if pending_approval_signup?(matched_user)</span>
+<span class="l"></span>
+<span class="l">    if matched_user.nil? &amp;&amp; registration_via_login_code_open?</span>
+<span class="l">      user_fields_required = signup_user_fields_missing?</span>
+<span class="l">      name_required = signup_full_name_missing?</span>
+<span class="l">      if user_fields_required || name_required</span>
+<span class="l">        return render json: { user_fields_required:, name_required: }</span>
+<span class="l">      end</span>
+<span class="l">    end</span>
+</pre>
+  </div>
+</details>
           </li>
           <li>
-            <b>The approval completion gate</b>
-            <span>checks CAPTCHA unless the stored proof says it was checked, which the first step no longer records <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L25">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</a>
+            <b>Approval completion check</b>
+            <span>runs CAPTCHA when the stored proof was not verified, which is now every approval signup</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb#L17-L25">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:17-25</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb" data-lang="ruby" style="counter-reset: exl 16"><span class="l">    def complete_verified_login_code_signup</span>
+<span class="l">      proof = verified_login_code_signup_proof_for(params[:signup_token].to_s)</span>
+<span class="l">      if proof.is_a?(Hash) &amp;&amp; !proof[:captcha_verified] &amp;&amp; (error = captcha_verification_error)</span>
+<span class="l">        render json: { error: I18n.t(error) }</span>
+<span class="l">        return</span>
+<span class="l">      end</span>
+<span class="l"></span>
+<span class="l">      super</span>
+<span class="l">    end</span>
+</pre>
+  </div>
+</details>
           </li>
           <li>
-            <b>Auto-submit switched off</b>
-            <span>with CAPTCHA on, a generated-username signup stops on the details step so the widget can be solved</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-a224a02b8e833db9828d79d0c7c0afc620c5f8e6a8488bee988980c08d0cca78R23">plugins/discourse-captcha/assets/javascripts/pre-initializers/h-captcha.js:23</a>
+            <b>What the request specs pin</b>
+            <span>no CAPTCHA on the code-only request, no account without one, and the generated-name case</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-fef7ca716d6cf5fc8229851c3c50e6ede1d2bfdcc2af47148016e0cdb27f9f68R16-R75">plugins/discourse-captcha/spec/requests/discourse_captcha/session_controller_spec.rb:16-75</a>
           </li>
         </ul>
       </section>
 
       <section class="cp" id="cp-b">
         <span class="lbl lbl-wide">Checkpoint B</span>
-        <h3>Is the <code>generated_username</code> flag meant to change anything once it reaches account creation?</h3>
+        <h3>When a chosen username is rejected, is the code still good for another try?</h3>
 
-        <p>When a plugin&rsquo;s <code>email_login_code_username_mode</code> modifier answers
-          <code>:generated</code>, the server picks the name, stores a proof keyed by the login code, and
-          passes <code>generated_username</code> through EmailLoginCode::Redeem into
-          CreateFromVerifiedEmail. That action declares the option and never reads it, and switches
-          username restrictions on from <code>username.present?</code> alone. The flag&rsquo;s only effect
-          is in the controller: a generated name that fails is answered with a fresh candidate instead of an
-          error (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1004-R1013">app/controllers/session_controller.rb:1004-1013</a>).
-          No code in this repository registers the modifier, so here the path runs only in specs. Decide
-          whether the option is leftover plumbing from the commit titled &ldquo;Support trusted generated
-          usernames&rdquo; or a missing behaviour.</p>
+        <p>Every new account now arrives with a member-chosen name, so rejection is the ordinary path. On the
+          login-code path the reserved-name policy runs before the transaction, and a format or uniqueness
+          failure fails the model step inside it, which leaves the code unconsumed
+          <span class="tier tier-inf">inferred from tests</span>. On the invite path
+          <code>InviteRedeemer</code> now takes a verified-email username as given instead of falling back to
+          a suggestion, so the <code>User</code> validator at
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L2156-L2181">app/models/user.rb:2156-2181</a> is its only
+          format and uniqueness check, and the
+          resulting <code>RecordInvalid</code> comes back as <code>username_errors</code>
+          <span class="tier tier-unc">from unchanged code</span>. Judge whether both paths leave the code and
+          any staged account reusable.</p>
 
         <ul class="lookat">
           <li>
-            <b>The option nothing reads</b>
-            <span>declared at <code>:6</code>; <code>call</code> assigns the username and sets restrictions without it</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-3ff254581cf16467216569a8fdd771593581377b379569e63a1618be57c92fd3R6">app/services/user/action/create_from_verified_email.rb:6</a>
+            <b>Policies, then the transaction</b>
+            <span><code>username_allowed</code> runs before <code>consume_code</code> and account creation</span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/services/user/action/create_from_verified_email.rb:12-32</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R46-R56">app/services/email_login_code/redeem.rb:46-56</a></span>
     <span class="tag">At head</span>
-    <span class="ex-why">The flag is declared but call never reads it</span>
   </summary>
   <div class="ex-body">
-<pre data-src="app/services/user/action/create_from_verified_email.rb" data-lang="ruby" style="counter-reset: exl 11"><span class="l">  def call</span>
-<span class="l">    raise Discourse::SiteArchived if SiteSetting.site_archived</span>
+<pre data-src="app/services/email_login_code/redeem.rb" data-lang="ruby" style="counter-reset: exl 45"><span class="l">  policy :username_allowed</span>
+<span class="l">  policy :required_fields_provided</span>
+<span class="l">  policy :required_full_name_provided</span>
+<span class="l">  policy :required_username_provided</span>
 <span class="l"></span>
-<span class="l">    user = User.where(staged: true).with_email(email).first</span>
-<span class="l">    user&amp;.unstage!</span>
-<span class="l">    user ||= User.new</span>
-<span class="l"></span>
-<span class="l">    user.attributes = {</span>
-<span class="l">      email: email,</span>
-<span class="l">      username: username,</span>
-<span class="l">      name: name.presence || user.name,</span>
-<span class="l">      active: false,</span>
-<span class="l">      locale: I18n.locale,</span>
-<span class="l">      ip_address: ip_address,</span>
-<span class="l">      registration_ip_address: ip_address,</span>
-<span class="l">    }</span>
-<span class="l"></span>
-<span class="l">    assign_user_fields(user)</span>
-<span class="l">    user.password = password if password.present?</span>
-<span class="l"></span>
-<span class="l">    user.enforce_username_restrictions = username.present?</span>
+<span class="l">  lock(:email) do</span>
+<span class="l">    transaction do</span>
+<span class="l">      step :consume_code</span>
+<span class="l">      model :user, :ensure_user</span>
+<span class="l">    end</span>
+<span class="l">  end</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/user/action/create_from_verified_email.rb#L12-L32">app/services/user/action/create_from_verified_email.rb:12-32</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>Where the flag is decided</b>
-            <span>the proof must match the code, email, username and <code>signup_context</code>, and the modifier is asked again</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1336-R1345">app/controllers/session_controller.rb:1336-1345</a>
-          </li>
-          <li>
-            <b>The modifier&rsquo;s inputs</b>
-            <span><code>signup_context</code> and the <code>destination_url</code> cookie both come from the browser</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1347-R1356">app/controllers/session_controller.rb:1347-1356</a>
-          </li>
-          <li>
-            <b>Specs for the retry mapping</b>
-            <span>pin that the client cannot switch generated mode on and that failures return fresh candidates; none covers the option itself</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/spec/requests/session_controller_spec.rb#L1420-L1435">spec/requests/session_controller_spec.rb:1420-1435</a>
-          </li>
-        </ul>
-
-        <p class="open"><b>Open question</b> What should a plugin that registers this modifier expect
-          beyond the fresh-candidate retry, and is the five-argument modifier call the contract to
-          keep?</p>
-      </section>
-
-      <section class="cp" id="cp-c">
-        <span class="lbl lbl-wide">Checkpoint C</span>
-        <h3>Is the login code&rsquo;s ten-minute life enough for the new details step?</h3>
-
-        <p>The code now has to last through the whole details step &mdash; username, avatar, CAPTCHA
-          &mdash; because it is consumed only when the account is created. It still expires ten minutes
-          after it was sent, and the generated-name proof expires with it
-          (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1379-R1380">app/controllers/session_controller.rb:1379-1380</a>).
-          A lapsed code returns the generic invalid-code error on a step with no way to request a new one:
-          the change-email button exists only on the code step
-          (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1246-L1252">frontend/discourse/app/components/code-login-form.gjs:1246-1252</a>)
-          <span class="tier tier-unc">from unchanged code</span>. Each retry also counts against the
-          verify rate limit (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L15-L16">app/controllers/session_controller.rb:15-16</a>).
-          Decide whether ten minutes and that dead end are the intended bounds. Impact path B draws the
-          consequence.</p>
-
-        <ul class="lookat">
-          <li>
-            <b>Where an expired code stops</b>
-            <span>verification fails once <code>expires_at</code> passes, before attempts or the username are looked at <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/email_login_code.rb#L57-L61">app/models/email_login_code.rb:57-61</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/models/email_login_code.rb:57-61</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">An expired code fails verification before anything else is checked</span>
-  </summary>
-  <div class="ex-body">
-<pre data-src="app/models/email_login_code.rb" data-lang="ruby" style="counter-reset: exl 56"><span class="l">  # Verifies a submitted code against this record. Burns one attempt up front</span>
-<span class="l">  # (atomically, so parallel guesses cannot exceed MAX_ATTEMPTS) and refunds it</span>
-<span class="l">  # on success so a pending second factor round-trip can verify again.</span>
-<span class="l">  def verify(submitted)</span>
-<span class="l">    return false if consumed_at.present? || expires_at &lt;= Time.zone.now</span>
-</pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/email_login_code.rb#L57-L61">app/models/email_login_code.rb:57-61</a></p>
-  </div>
-</details>
-          </li>
-          <li>
-            <b>Policies before consumption</b>
-            <span>every policy, the username one now last, runs before the locked transaction that consumes the code</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R39-R56">app/services/email_login_code/redeem.rb:39-56</a>
-          </li>
-          <li>
-            <b>The details step&rsquo;s controls</b>
-            <span>a Continue button and the error line, and nothing that returns to the email or code step</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1423-L1518">frontend/discourse/app/components/code-login-form.gjs:1423-1518</a>
-          </li>
-        </ul>
-
-        <div class="gap"><b>GAP</b><span>No spec lets the code lapse between the request that returns
-          <code>username_required</code> and the one that submits the username.</span></div>
-      </section>
-
-      <section class="cp" id="cp-d">
-        <span class="lbl lbl-wide">Checkpoint D</span>
-        <h3>Does validation on save catch every username the invite pre-check used to replace?</h3>
-
-        <p>For an email-code invitation, InviteRedeemer now keeps any submitted username when the email is
-          verified. Before, a name that failed the format or availability check was quietly swapped for a
-          suggestion. Two things stand in for that check now: the new invite policy rejecting reserved and
-          route-clashing names, and User&rsquo;s own validation on <code>save!</code>, whose
-          RecordInvalid the controller now maps to <code>username_errors</code>
-          (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1277-R1279">app/controllers/session_controller.rb:1277-1279</a>).
-          InviteRedeemer never sets <code>enforce_username_restrictions</code>, so the model skips its
-          reserved-name check <span class="tier tier-unc">from unchanged code</span>, and the policy is the
-          only one. Decide whether the two together cover what the pre-check did, including a staged
-          account keeping its own name <span class="tier tier-inf">inferred</span>.</p>
-
-        <ul class="lookat">
-          <li>
-            <b>The trusted branch</b>
-            <span>reachable only from Invite::RedeemWithEmailCode, the one caller passing <code>email_verified: true</code></span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R102-R103">app/models/invite_redeemer.rb:102-103</a>
+            <b>Invite username taken as given</b>
+            <span>the format and availability branch is skipped once the email is verified</span>
 <details class="excerpt excerpt--diff">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/models/invite_redeemer.rb:99-108</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R99-R108">app/models/invite_redeemer.rb:99-108</a></span>
     <span class="tag">Changed</span>
-    <span class="ex-why">A verified invite now keeps any submitted username</span>
   </summary>
   <div class="ex-body">
 <pre data-src="app/models/invite_redeemer.rb" style="counter-reset: exl 98"><span class="l"><span class="sig"> </span>  )</span>
@@ -1885,108 +2507,172 @@ figcaption strong { color: var(--ink-3); }
 <span class="l"><span class="sig"> </span>    elsif email_verified</span>
 <span class="l"><span class="sig"> </span>      available_username =</span>
 </pre>
-    <p class="ex-src">Changed at <a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R99-R108">app/models/invite_redeemer.rb:99-108</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>The invite username policy</b>
-            <span>reserved names and route clashes only; format and uniqueness are left to the model</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-19921a0232ee24a63fc2516cfcd13ccdbc2953477c14190016a663f1ec9ffb6bR121-R126">app/services/invite/redeem_with_email_code.rb:121-126</a>
-          </li>
-          <li>
-            <b>What save checks</b>
-            <span>format and uniqueness always; reserved and route names only behind the flag <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L2155-L2175">app/models/user.rb:2155-2175</a>
-          </li>
-        </ul>
-
-        <div class="gap"><b>GAP</b><span>No spec drives a taken or malformed username through the invite
-          path; the taken-username request spec posts without an <code>invite_key</code>
-          (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/spec/requests/session_controller_spec.rb#L1634-L1645">spec/requests/session_controller_spec.rb:1634-1645</a>).</span></div>
-      </section>
-
-      <section class="cp" id="cp-e">
-        <span class="lbl lbl-wide">Checkpoint E</span>
-        <h3>Is turning random usernames off for every site on the default intended?</h3>
-
-        <p><code>enable_random_usernames</code> now defaults to false, and a changed default reaches every
-          site that never set the value. There the generator returns nil, the regenerate button on both
-          code-signup steps disappears
-          (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1282">frontend/discourse/app/components/code-login-form.gjs:1282</a>,
-          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1472">:1472</a>),
-          and <code>/u/random-username</code> returns 404
-          (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2194-L2195">app/controllers/users_controller.rb:2194-2195</a>),
-          all from unchanged code. Suggestions that fell back to a random name now fall back to nothing,
-          so the approval form can open with an empty username. Generated mode is exempt
-          (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1364">app/controllers/session_controller.rb:1364</a>).
-          The first commit&rsquo;s message says the default is deliberate; decide whether existing sites
-          should get it without an admin choosing it. Impact path A draws the approval form.</p>
-
-        <ul class="lookat">
-          <li>
-            <b>The new default</b>
-            <span>flipped to false; the two word-list settings depend on it</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R697-R700">config/site_settings.yml:697-700</a>
-          </li>
-          <li>
-            <b>The approval form&rsquo;s suggestion</b>
-            <span>falls back to the generator when the email gives no usable name <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1065-L1067">app/controllers/session_controller.rb:1065-1067</a>
+            <b>The validator that now decides</b>
+            <span>format and uniqueness always; reserved names only with
+              <code>enforce_username_restrictions</code>, which the invite path never sets, so the invite
+              service's own policy covers them <span class="tier tier-unc">from unchanged code</span></span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/controllers/session_controller.rb:1065-1067</span>
-    <span class="tag">At head</span>
-    <span class="ex-why">The approval form's suggestion falls back to the random generator</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L2156-L2174">app/models/user.rb:2156-2174</a></span>
+    <span class="tag">Unchanged</span>
   </summary>
   <div class="ex-body">
-<pre data-src="app/controllers/session_controller.rb" data-lang="ruby" style="counter-reset: exl 1064"><span class="l">    username =</span>
-<span class="l">      UserNameSuggester.suggest(login_code.email, allow_generic_fallback: false) ||</span>
-<span class="l">        RandomUsernameGenerator.generate</span>
+<pre data-src="app/models/user.rb" data-lang="ruby" style="counter-reset: exl 2155"><span class="l">  def username_validator</span>
+<span class="l">    username_format_validator ||</span>
+<span class="l">      begin</span>
+<span class="l">        if will_save_change_to_username?</span>
+<span class="l">          if enforce_username_restrictions &amp;&amp;</span>
+<span class="l">               (</span>
+<span class="l">                 User.reserved_username?(username) ||</span>
+<span class="l">                   UsernameValidator.clashing_with_existing_route?(username)</span>
+<span class="l">               )</span>
+<span class="l">            errors.add(:username, I18n.t("login.reserved_username"))</span>
+<span class="l">          end</span>
+<span class="l"></span>
+<span class="l">          existing =</span>
+<span class="l">            DB.query(USERNAME_EXISTS_SQL, username: self.class.normalize_username(username))</span>
+<span class="l"></span>
+<span class="l">          user_id = existing.select { |u| u.is_user }.first&amp;.id</span>
+<span class="l">          same_user = user_id &amp;&amp; user_id == id</span>
+<span class="l"></span>
+<span class="l">          errors.add(:username, I18n.t(:"user.username.unique")) if existing.present? &amp;&amp; !same_user</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1065-L1067">app/controllers/session_controller.rb:1065-1067</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>The generator&rsquo;s new escape hatch</b>
-            <span><code>allow_when_disabled</code> is used only by the generated-name path</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-e2b1a0a649599ae548d1d65afd05dcd62b20280b82693ef2f8c0644d834c3e3cR10-R11">lib/random_username_generator.rb:10-11</a>
+            <b>Rejection specs on the invite service</b>
+            <span>missing, reserved, route-clashing, invalid and taken names each assert the code unconsumed;
+              the login-code service carries the same contexts at
+              <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-071066618551b8a890c5e089631f5357d1379f05c5ee1e7be6c8d36fe3bf2511R220-R290">spec/services/email_login_code/redeem_spec.rb:220-290</a></span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-04917fe3dd168f1726cd66d6e8e93263d84e8b439ed4eab1aaf2872cfd1aee3aR171-R250">spec/services/invite/redeem_with_email_code_spec.rb:171-250</a>
           </li>
         </ul>
       </section>
 
-      <section class="cp" id="cp-f">
-        <span class="lbl lbl-wide">Checkpoint F</span>
-        <h3>Is it acceptable that a chosen avatar can silently fail to save?</h3>
+      <section class="cp" id="cp-c">
+        <span class="lbl lbl-wide">Checkpoint C</span>
+        <h3>What should the server-side generated-username flag change?</h3>
 
-        <p>The avatar is now chosen before the account exists and uploaded by the browser afterwards, and
-          any failure there is swallowed so the redirect goes ahead. Two cases lose a chosen file with no
-          message. The upload option is offered from a prediction &mdash; default trust-level groups plus
-          any invite groups
-          (<a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1317-R1332">app/controllers/session_controller.rb:1317-1332</a>)
-          &mdash; while the upload is gated on the created account&rsquo;s actual groups. And
-          UploadsController refuses avatar uploads when an auth provider owns avatars, a setting neither
-          check reads <span class="tier tier-unc">from unchanged code</span>. The first commit says upload
-          failures should not interrupt signup; decide whether failing silently is the intended form of
-          that.</p>
+        <p>The controller sets <code>generated_username</code> only when a proof in the server session matches
+          the code, the email, the name and the signup context, and Redeem forwards it to
+          <code>CreateFromVerifiedEmail</code>, whose <code>call</code> never reads it. Its whole server-side
+          effect is in the controller: a rejected generated name is replaced with a fresh one instead of
+          returning an error. The mode is only on when a plugin registers
+          <code>email_login_code_username_mode</code>; otherwise
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/discourse_plugin_registry.rb#L306-L310">lib/discourse_plugin_registry.rb:306-310</a>
+          returns the default, and no plugin in this repository registers it
+          <span class="tier tier-unc">from unchanged code</span>. The same is true one layer up: the contract still declares
+          <code>username_required</code> at
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/email_login_code/redeem.rb#L11">app/services/email_login_code/redeem.rb:11</a>
+          and the approval completion still sends it at
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1095">app/controllers/session_controller.rb:1095</a>,
+          but no policy reads it any more. Decide whether each unused input is leftover plumbing or a missing
+          behaviour.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>The option nothing reads</b>
+            <span>declared beside <code>username</code>; restrictions are still decided by
+              <code>username.present?</code></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/user/action/create_from_verified_email.rb#L3-L39">app/services/user/action/create_from_verified_email.rb:3-39</a>
+          </li>
+          <li>
+            <b>Where Redeem forwards it</b>
+            <span>true only when the proof's code id matches the code being redeemed</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/email_login_code/redeem.rb#L146-L158">app/services/email_login_code/redeem.rb:146-158</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/services/email_login_code/redeem.rb" data-lang="ruby" style="counter-reset: exl 145"><span class="l">  def ensure_user(existing_user:, login_code:, params:, ip_address:, options:)</span>
+<span class="l">    generated_username =</span>
+<span class="l">      options.generated_username &amp;&amp; options.generated_username_login_code_id == login_code.id</span>
+<span class="l">    existing_user ||</span>
+<span class="l">      User::Action::CreateFromVerifiedEmail.call(</span>
+<span class="l">        email: params.email,</span>
+<span class="l">        ip_address: ip_address,</span>
+<span class="l">        user_fields: params.user_fields,</span>
+<span class="l">        name: params.name,</span>
+<span class="l">        password: params.password,</span>
+<span class="l">        username: params.username,</span>
+<span class="l">        generated_username: generated_username,</span>
+<span class="l">      )</span>
+</pre>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The mode switch</b>
+            <span>defaults to <code>:required</code> unless a plugin modifier answers otherwise</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1347-R1356">app/controllers/session_controller.rb:1347-1356</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/session_controller.rb" data-lang="ruby" style="counter-reset: exl 1346"><span class="l">  def email_login_code_username_mode(email, signup_context)</span>
+<span class="l">    DiscoursePluginRegistry.apply_modifier(</span>
+<span class="l">      :email_login_code_username_mode,</span>
+<span class="l">      :required,</span>
+<span class="l">      email,</span>
+<span class="l">      server_session,</span>
+<span class="l">      signup_context,</span>
+<span class="l">      cookies[:destination_url],</span>
+<span class="l">    )</span>
+<span class="l">  end</span>
+</pre>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>A retry instead of an error</b>
+            <span>a rejected generated name re-renders the details step with a new one</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1004-R1014">app/controllers/session_controller.rb:1004-1014</a>
+          </li>
+        </ul>
+
+        <p class="open"><b>Open question</b> Is <code>generated_username</code> on
+          <code>CreateFromVerifiedEmail</code> meant to relax a check, and should the unread
+          <code>username_required</code> go?</p>
+      </section>
+
+      <section class="cp" id="cp-d">
+        <span class="lbl lbl-wide">Checkpoint D</span>
+        <h3>Is it acceptable that a chosen avatar can be lost without a word?</h3>
+
+        <p>The avatar is picked before the account exists and saved by the browser after
+          <code>account_created</code>: an upload then <code>pickAvatar</code>, or <code>selectAvatar</code>
+          for a preset, with every failure swallowed before the redirect. The picker offers upload when
+          <code>can_upload_avatar</code> is true, which only checks groups, but the upload endpoint also
+          refuses avatars when <code>auth_overrides_avatar</code> or
+          <code>discourse_connect_overrides_avatar</code> is set
+          (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/uploads_controller.rb#L51-L56">app/controllers/uploads_controller.rb:51-56</a>)
+          <span class="tier tier-unc">from unchanged code</span>. On such a site a member can choose a file,
+          see it previewed, and arrive with the default avatar. Approval signups never reach this save, because
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1180-L1181">app/controllers/session_controller.rb:1180-1181</a>
+          answers <code>pending_approval</code> first.</p>
 
         <ul class="lookat">
           <li>
             <b>The deferred save</b>
-            <span>uploads only if the created account may, then picks it; the empty <code>catch</code> covers both calls</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1017-L1040">frontend/discourse/app/components/code-login-form.gjs:1017-1040</a>
+            <span>upload or select as the new user, then an empty <code>catch</code></span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">frontend/discourse/app/components/code-login-form.gjs:1017-1040</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1018-L1040">frontend/discourse/app/components/code-login-form.gjs:1018-1040</a></span>
     <span class="tag">At head</span>
-    <span class="ex-why">Upload runs after creation and every failure is swallowed</span>
   </summary>
   <div class="ex-body">
-<pre data-src="frontend/discourse/app/components/code-login-form.gjs" style="counter-reset: exl 1016"><span class="l">    try {</span>
-<span class="l">      await updateCsrfToken();</span>
+<pre data-src="frontend/discourse/app/components/code-login-form.gjs" style="counter-reset: exl 1017"><span class="l">      await updateCsrfToken();</span>
 <span class="l">      if (selection.file &amp;&amp; result.can_upload_avatar) {</span>
 <span class="l">        const data = new FormData();</span>
 <span class="l">        data.append("type", "avatar");</span>
@@ -2010,20 +2696,18 @@ figcaption strong { color: var(--ink-3); }
 <span class="l">      // Avatar customization must not block an account that was successfully created.</span>
 <span class="l">    }</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1017-L1040">frontend/discourse/app/components/code-login-form.gjs:1017-1040</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>The avatar upload guard</b>
-            <span>returns 422 when <code>discourse_connect_overrides_avatar</code> or <code>auth_overrides_avatar</code> is set <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/uploads_controller.rb#L51-L57">app/controllers/uploads_controller.rb:51-57</a>
+            <b>The upload endpoint's refusal</b>
+            <span>the two override settings and the group check, returning 422 for an avatar upload
+              <span class="tier tier-unc">from unchanged code</span></span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/controllers/uploads_controller.rb:51-57</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/uploads_controller.rb#L51-L56">app/controllers/uploads_controller.rb:51-56</a></span>
     <span class="tag">Unchanged</span>
-    <span class="ex-why">Avatar uploads refused when an auth provider owns avatars</span>
   </summary>
   <div class="ex-body">
 <pre data-src="app/controllers/uploads_controller.rb" data-lang="ruby" style="counter-reset: exl 50"><span class="l">    if type == "avatar" &amp;&amp;</span>
@@ -2032,51 +2716,162 @@ figcaption strong { color: var(--ink-3); }
 <span class="l">             !me.in_any_groups?(SiteSetting.uploaded_avatars_allowed_groups_map)</span>
 <span class="l">         )</span>
 <span class="l">      return render json: failed_json, status: :unprocessable_entity</span>
-<span class="l">    end</span>
 </pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/uploads_controller.rb#L51-L57">app/controllers/uploads_controller.rb:51-57</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>Picking without saving</b>
-            <span>the selector&rsquo;s deferred mode returns the choice to the caller instead of saving it</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-51a1a531f223b2a8519a7aa1a0d45b4f5bc934c4aeeb301f013ea64a8368459b">frontend/discourse/app/components/modal/avatar-selector.gjs</a>
+            <b>What the picker is told</b>
+            <span><code>can_upload_avatar</code> from the default trust-level groups and any invite groups</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1318-R1333">app/controllers/session_controller.rb:1318-1333</a>
           </li>
         </ul>
+
+        <p class="open"><b>Open question</b> Should the override settings hide the upload option, or should a
+          failed save tell the member?</p>
       </section>
 
-      <section class="cp" id="cp-g">
-        <span class="lbl lbl-wide">Checkpoint G</span>
-        <h3>Is it deliberate that the new signup logic lives in SessionController rather than a service?</h3>
+      <section class="cp" id="cp-e">
+        <span class="lbl lbl-wide">Checkpoint E</span>
+        <h3>Should sites that never set <code>enable_random_usernames</code> lose random names?</h3>
 
-        <p>The PR adds about a hundred lines of signup policy to SessionController: choosing and validating
-          generated names, storing and matching the proof, and predicting avatar permission. The
-          project&rsquo;s guide says business logic &mdash; validation, models, permissions &mdash; is
-          extracted from controllers into services, and the signup policies themselves already live in
-          EmailLoginCode::Redeem. The approval continuation, which came first, also keeps its proof in this
-          controller (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1054-L1075">app/controllers/session_controller.rb:1054-1075</a>).
-          Is putting the new helpers here deliberate?</p>
+        <p>The setting arrived on 2026-08-27 defaulting to on, and this flips the default. Every site still on
+          the default stops getting adjective-and-noun suggestions on the username and approval details steps,
+          loses the regenerate button
+          (<a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1282">frontend/discourse/app/components/code-login-form.gjs:1282</a>),
+          and gets a 404 from the random-username endpoint. The plugin-driven
+          generated mode ignores the setting through <code>allow_when_disabled: true</code>. Whether a release
+          shipped with the old default is <span class="tier">uncertain</span>; the release tags would settle
+          it.</p>
 
         <ul class="lookat">
           <li>
-            <b>The written convention</b>
-            <span>extract validation, models and permissions from controllers</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/CLAUDE.md#L63-L64">CLAUDE.md:63-64</a>
+            <b>The default</b>
+            <span>true to false, still dependent on code logins</span>
+<details class="excerpt excerpt--diff">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R696-R702">config/site_settings.yml:696-702</a></span>
+    <span class="tag">Changed</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="config/site_settings.yml" style="counter-reset: exl 695"><span class="l"><span class="sig"> </span>        - everyone</span>
+<span class="l"><span class="sig"> </span>  enable_random_usernames:</span>
+<span class="l"><span class="sig"> </span>    client: true</span>
+<span class="l del"><span class="sig">-</span>    default: true</span>
+<span class="l add"><span class="sig">+</span>    default: false</span>
+<span class="l"><span class="sig"> </span>    area: "login"</span>
+<span class="l"><span class="sig"> </span>    depends_on:</span>
+<span class="l"><span class="sig"> </span>      - enable_local_logins_via_code</span>
+</pre>
+  </div>
+</details>
           </li>
           <li>
-            <b>The service that holds the policies</b>
-            <span>every signup policy, including the new username one</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R39-R49">app/services/email_login_code/redeem.rb:39-49</a>
+            <b>The endpoint guard</b>
+            <span><code>ensure_random_username_access</code> raises NotFound when the setting is off</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2193-L2197">app/controllers/users_controller.rb:2193-2197</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/users_controller.rb" data-lang="ruby" style="counter-reset: exl 2192"><span class="l"></span>
+<span class="l">  def ensure_random_username_access</span>
+<span class="l">    raise Discourse::NotFound if !SiteSetting.enable_random_usernames</span>
+<span class="l">    return redirect_to_login_if_required if current_user</span>
+<span class="l">    return if !SiteSetting.login_required?</span>
+</pre>
+  </div>
+</details>
           </li>
           <li>
-            <b>The new controller helpers</b>
-            <span>from <code>render_signup_username_required</code> to <code>complete_login_code_authentication</code></span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1299-R1406">app/controllers/session_controller.rb:1299-1406</a>
+            <b>The bypass</b>
+            <span>generated names call the generator whatever the setting says</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1358-R1370">app/controllers/session_controller.rb:1358-1370</a>
           </li>
         </ul>
       </section>
 
+      <section class="cp" id="cp-f">
+        <span class="lbl lbl-wide">Checkpoint F</span>
+        <h3>Does the new <code>for_user_id</code> guard turn away a caller that still needs it?</h3>
+
+        <p><code>check_username</code> used to load any <code>for_user_id</code> for any caller, anonymous
+          included, and check availability against that user's email. It now raises for an anonymous caller
+          and requires <code>ensure_can_edit_username!</code>; the signup form stopped sending the id. The
+          username preference, which does send it, only shows its edit control when the serialized
+          <code>can_edit_username</code> is true, computed by the same guardian method at
+          <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/serializers/user_serializer.rb#L216-L218">app/serializers/user_serializer.rb:216-218</a>
+          <span class="tier tier-unc">from unchanged code</span>. Decide whether any caller outside this
+          repository relied on the old behaviour.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>The guard</b>
+            <span>anonymous callers refused, then the edit permission enforced</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43845/files#diff-cfdccd0a9d5df5a43aaad2a35d36ebbe187c52ad5fdc9846fa189d04537adb6e">app/controllers/users_controller.rb:714-721</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/users_controller.rb" data-lang="ruby" style="counter-reset: exl 713"><span class="l">  def user_from_params_or_current_user</span>
+<span class="l">    return current_user if !params[:for_user_id]</span>
+<span class="l">    raise Discourse::InvalidAccess if !current_user</span>
+<span class="l"></span>
+<span class="l">    user = User.find(params[:for_user_id])</span>
+<span class="l">    guardian.ensure_can_edit_username!(user)</span>
+<span class="l">    user</span>
+<span class="l">  end</span>
+</pre>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The guardian rule</b>
+            <span>overrides, staff, the change period, then self within it
+              <span class="tier tier-unc">from unchanged code</span></span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/lib/guardian/user_guardian.rb#L24-L30">lib/guardian/user_guardian.rb:24-30</a></span>
+    <span class="tag">Unchanged</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="lib/guardian/user_guardian.rb" data-lang="ruby" style="counter-reset: exl 23"><span class="l">  def can_edit_username?(user)</span>
+<span class="l">    return false if SiteSetting.auth_overrides_username?</span>
+<span class="l">    return true if is_staff?</span>
+<span class="l">    return false if SiteSetting.username_change_period &lt;= 0</span>
+<span class="l">    return false if is_anonymous?</span>
+<span class="l">    is_me?(user) &amp;&amp; user.created_at &gt; SiteSetting.username_change_period.days.ago</span>
+<span class="l">  end</span>
+</pre>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>Where the preference gets its flag</b>
+            <span>the same guardian call, so its edit control and the guard agree
+              <span class="tier tier-unc">from unchanged code</span></span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/serializers/user_serializer.rb#L216-L218">app/serializers/user_serializer.rb:216-218</a></span>
+    <span class="tag">Unchanged</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/serializers/user_serializer.rb" data-lang="ruby" style="counter-reset: exl 215"><span class="l">  def can_edit_username</span>
+<span class="l">    scope.can_edit_username?(object)</span>
+<span class="l">  end</span>
+</pre>
+  </div>
+</details>
+          </li>
+        </ul>
+      </section>
     </section>
 
     <section id="start" style="padding-top:62px">
@@ -2086,24 +2881,26 @@ figcaption strong { color: var(--ink-3); }
         <li>
           <span class="n">01</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R39-R56">app/services/email_login_code/redeem.rb:39-56</a>
-            <span class="why">The policy list and the transaction: where creation now waits for a username, and why the code survives the wait.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R46-R56">app/services/email_login_code/redeem.rb:46-56</a>
+            <span class="why">The policy order that stops a request without a username before the code is
+              consumed; everything else reacts to it.</span>
           </span>
-          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
         <li>
           <span class="n">02</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R978-R1046">app/controllers/session_controller.rb:978-1046</a>
-            <span class="why">How each refusal is answered, and the one place the generated flag changes an answer.</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L966-L1044">app/controllers/session_controller.rb:966-1044</a>
+            <span class="why">The verify action: early exits, then Redeem and the handlers that turn a missing
+              or rejected name into the details step.</span>
           </span>
-          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">03</span>
           <span class="t">
             <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-917007c55d261af4d807489c94b8b57aba7667e7d634367f3240d94454af2817R38-R44">plugins/discourse-captcha/lib/discourse_captcha/session_controller_patch.rb:38-44</a>
-            <span class="why">With the creating request known, check that the CAPTCHA gate follows it.</span>
+            <span class="why">The CAPTCHA predicate, read against the exits in the previous stop.</span>
           </span>
           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
@@ -2111,33 +2908,34 @@ figcaption strong { color: var(--ink-3); }
           <span class="n">04</span>
           <span class="t">
             <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-b955d5e07bb336431ce5d25acd60fe8f87e3a31c4b33a167a069f3b76bf3ef64R1299-R1406">app/controllers/session_controller.rb:1299-1406</a>
-            <span class="why">The new helpers: the details response, the generated-name proof, and the avatar prediction Checkpoint F turns on.</span>
+            <span class="why">The username-required response, the generated-name proof, and the clean-up
+              after login; also where the avatar permission is computed for Checkpoint D.</span>
           </span>
-          <a class="ptr" href="#cp-g">Checkpoint G &rarr;</a>
+          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
         </li>
         <li>
           <span class="n">05</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R102-R112">app/models/invite_redeemer.rb:102-112</a>
-            <span class="why">The invite path&rsquo;s version of the same rule, read after the core path it mirrors.</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L387-L547">frontend/discourse/app/components/code-login-form.gjs:387-547</a>
+            <span class="why">The client side of the sequence, ending in the deferred avatar save.</span>
           </span>
           <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
         </li>
         <li>
           <span class="n">06</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L588-L601">frontend/discourse/app/components/code-login-form.gjs:588-601</a>
-            <span class="why">The client side of the details step, from the response that opens it to the deferred avatar save at <code>:1010</code>.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R697-R702">config/site_settings.yml:697-702</a>
+            <span class="why">The default flip, separate from the sequence.</span>
           </span>
-          <a class="ptr" href="#cp-f">Checkpoint F &rarr;</a>
+          <a class="ptr" href="#cp-e">Checkpoint E &rarr;</a>
         </li>
         <li>
           <span class="n">07</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R697-R700">config/site_settings.yml:697-700</a>
-            <span class="why">Last, because it is independent of the rest: one default that reaches every site using it.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43845/files#diff-cfdccd0a9d5df5a43aaad2a35d36ebbe187c52ad5fdc9846fa189d04537adb6eR714-R721">app/controllers/users_controller.rb:714-721</a>
+            <span class="why">The availability check's new permission guard.</span>
           </span>
-          <a class="ptr" href="#cp-e">Checkpoint E &rarr;</a>
+          <a class="ptr" href="#cp-f">Checkpoint F &rarr;</a>
         </li>
       </ol>
     </section>
@@ -2150,54 +2948,51 @@ figcaption strong { color: var(--ink-3); }
         <span class="lbl">Impact paths</span>
 
         <div class="ip-card">
-          <span class="ip-hd">A &middot; The approval form opens with no suggested username</span>
-          <p class="ip-why">On approval sites still on the default, an email that yields no usable name now
-            reaches the account-details form with the username blank instead of a random suggestion.
-            <a href="#cp-e">Checkpoint E</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <span class="ip-hd">A &middot; The CAPTCHA widget moves to the details step</span>
+          <p class="ip-why">On sites running the CAPTCHA plugin the challenge now appears beside the username
+            field rather than under the code entry <span class="tier tier-unc">from unchanged code</span>.
+            <a href="#cp-a">Checkpoint A</a></p>
+          <div class="ip-lanes"><span>In this PR's files</span><span>Outside the diff</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>enable_random_usernames</b><span class="ip-d">defaults to false</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-bff2842c9891df212adcbe8eb22a4a17c9644c676260a0cfa6e7a3953852c5e8R699">config/site_settings.yml:699</a></span></li>
-              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>RandomUsernameGenerator.generate</b><span class="ip-d">returns nil</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-e2b1a0a649599ae548d1d65afd05dcd62b20280b82693ef2f8c0644d834c3e3cR10-R11">lib/random_username_generator.rb:10-11</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>begin_verified_login_code_signup</b><span class="ip-d">suggestion falls through</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1065-L1067">app/controllers/session_controller.rb:1065-1067</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>blank username on the approval form</b><span class="ip-d">observable behaviour</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>code-login-after-code</b><span class="ip-d">outlet moved to details steps</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/code-login-form.gjs#L1498-L1501">frontend/discourse/app/components/code-login-form.gjs:1498-1501</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>rendered by</span><span class="ip-box"><b>CaptchaFieldsConnector</b><span class="ip-d">hCaptcha or reCAPTCHA</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs#L11">plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs:11</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>challenge beside the username field</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
         </div>
 
         <div class="ip-card">
-          <span class="ip-hd">B &middot; A lapsed code strands the details step</span>
-          <p class="ip-why">Someone who is still on the details step ten minutes after the code was sent
-            gets the invalid-code error, with no control on that step to recover from it.
-            <a href="#cp-c">Checkpoint C</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <span class="ip-hd">B &middot; An invitee's name is checked only by the User model</span>
+          <p class="ip-why">A malformed or taken name chosen by an email-code invitee is no longer swapped for a
+            suggestion; it is rejected and shown as a username error
+            <span class="tier tier-unc">from unchanged code</span>. <a href="#cp-b">Checkpoint B</a></p>
+          <div class="ip-lanes"><span>In this PR's files</span><span>Outside the diff</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>required_username_provided</b><span class="ip-d">code left unconsumed</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-332689167ad3f5b70936b639fce992d3d74bcec36acd78eb15926f599ab60fd3R49">app/services/email_login_code/redeem.rb:49</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>EmailLoginCode#verify</b><span class="ip-d">ten-minute expiry</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/email_login_code.rb#L57-L61">app/models/email_login_code.rb:57-61</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>falls through to</span><span class="ip-box"><b>invalid_login_code</b><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1421-L1423">app/controllers/session_controller.rb:1421-1423</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>renders</span><span class="ip-box"><b>invalid-code error, no way back</b><span class="ip-d">observable behaviour</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>InviteRedeemer.create_user_from_invite</b><span class="ip-d">keeps the given name</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43845/files#diff-576330bb5d796fe0e877fb7db891ab4dbb01d12843f2c9c5a5e66b291cd616f2R102-R106">app/models/invite_redeemer.rb:102-106</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>passes</span><span class="ip-box"><b>User#username_validator</b><span class="ip-d">format, uniqueness</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L2156-L2181">app/models/user.rb:2156-2181</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>username error on the details step</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
         </div>
 
         <div class="legend">
-          <span><i class="key-chg"></i>Changed by this PR</span>
+          <span><i class="key-chg"></i>In this PR's files</span>
           <span><i class="key-aff"></i>Affected, not changed</span>
           <span><i class="key-out"></i>Behaviour</span>
         </div>
 
-        <p class="note" style="margin-top:16px">Plugins and themes outside this repository that register
-          <code>email_login_code_username_mode</code>, listen for <code>:email_login_code_authenticated</code>
-          or link to <code>/signup?signup_context=</code> are beyond a search of this checkout.</p>
+        <p class="note" style="margin-top:16px">A name-based pass cannot see plugins outside this repository that
+          register <code>email_login_code_username_mode</code>, listen for
+          <code>email_login_code_authenticated</code>, or render into <code>code-login-after-code</code>.</p>
       </figure>
 
       <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/email_login_code.rb#L9">app/models/email_login_code.rb:9</a> &mdash; <code>VALID_FOR</code> now bounds the details step as well as the code step. <a href="#cp-c">Checkpoint C</a></li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/users_controller.rb#L2194-L2195">app/controllers/users_controller.rb:2194-2195</a> &mdash; the random-username endpoint 404s on every site left on the default. <a href="#cp-e">Checkpoint E</a></li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/uploads_controller.rb#L51-L57">app/controllers/uploads_controller.rb:51-57</a> &mdash; refuses the deferred avatar upload when an auth provider owns avatars. <a href="#cp-f">Checkpoint F</a></li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L2155-L2175">app/models/user.rb:2155-2175</a> &mdash; the only format and uniqueness check left on the invite path. <a href="#cp-d">Checkpoint D</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs#L11">plugins/discourse-captcha/assets/javascripts/discourse/connectors/code-login-after-code/captcha-fields-connector.gjs:11</a> &mdash; renders wherever the moved outlet now sits. <a href="#cp-a">Checkpoint A</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/user.rb#L2156-L2181">app/models/user.rb:2156-2181</a> &mdash; now the only format and uniqueness check on an email-code invitee's name. <a href="#cp-b">Checkpoint B</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/uploads_controller.rb#L51-L56">app/controllers/uploads_controller.rb:51-56</a> &mdash; now receives avatar uploads the signup picker offered, and may refuse them. <a href="#cp-d">Checkpoint D</a></li>
       </ul>
     </section>
 
@@ -2284,51 +3079,41 @@ figcaption strong { color: var(--ink-3); }
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>rg -n 'CreateFromVerifiedEmail' app lib plugins</code> <span class="sr-r">one caller, <code>EmailLoginCode::Redeem#ensure_user</code></span></li>
-            <li><code>rg -n 'EmailLoginCode::Redeem.call' app lib plugins</code> <span class="sr-r">two callers: code verify (<code>:986</code>) and approval completion (<code>:1087</code>)</span></li>
-            <li><code>rg -n '\.redeem\(|email_verified:' app lib plugins --glob '!**/spec/**'</code> <span class="sr-r">only <code>Invite::RedeemWithEmailCode</code> passes <code>email_verified: true</code></span></li>
-            <li><code>rg -n 'email_login_code_username_mode|email_login_code_authenticated' --glob '!spec/**' .</code> <span class="sr-r">definitions in SessionController only; registrations appear in specs</span></li>
-            <li><code>rg -n 'generated_username' app/services</code> <span class="sr-r">declared in CreateFromVerifiedEmail, passed by Redeem, read by neither action body</span></li>
-            <li><code>rg -n 'code-login-auto-create-account|code-login-after-code' frontend plugins</code> <span class="sr-r">registry entry, two outlets in CodeLoginForm, the CAPTCHA plugin&rsquo;s transformer and connector</span></li>
-            <li><code>rg -n 'enforce_username_restrictions' app lib</code> <span class="sr-r">set only in CreateFromVerifiedEmail, read in <code>User#username_validator</code></span></li>
-            <li><code>rg -n 'RandomUsernameGenerator|enable_random_usernames' app lib frontend/discourse/app config</code> <span class="sr-r">users_controller, session_controller (three), invite_redeemer, three template guards, the setting</span></li>
-            <li><code>rg -n 'checkUsername\(' frontend/discourse/app</code> <span class="sr-r">only username-preference passes <code>for_user_id</code></span></li>
-            <li><code>rg -n 'deferSave' frontend</code> <span class="sr-r">avatar selector and CodeLoginForm only</span></li>
-            <li><code>rg -n 'complete_login_code_authentication\(user\)|if login_not_approved_for\?\(user\)' app/controllers/session_controller.rb</code> <span class="sr-r">two calls in <code>login_with_login_code</code> (<code>:1188</code>, <code>:1203</code>), both after the pending-approval return at <code>:1180-1181</code></span></li>
-            <li><code>rg -n 'redirectTo\(' frontend/discourse/app/lib/url.js</code> <span class="sr-r">defined at <code>:379</code>, wrapping <code>getURL</code></span></li>
-            <li><code>rg -n 'login_code.verify\(|EmailLoginCode::Verify' app</code> <span class="sr-r">the controller runs <code>EmailLoginCode::Verify</code> first (<code>verify.rb:30</code>), then Redeem verifies again (<code>redeem.rb:70</code>)</span></li>
+            <li><code>git grep -n "code-login-after-code\|registerBehaviorTransformer\|registerValueTransformer" plugins/discourse-captcha</code> <span class="sr-r">one outlet connector, one behaviour and one value transformer</span></li>
+            <li><code>git grep -n "email_login_code_username_mode\|email_login_code_authenticated" -- ':!spec'</code> <span class="sr-r">only <code>session_controller.rb</code>; the CAPTCHA request spec registers the modifier</span></li>
+            <li><code>git grep -n "generated_username" app/services/user</code> <span class="sr-r">declared at <code>create_from_verified_email.rb:6</code>, never read</span></li>
+            <li><code>git grep -n "email_verified" -- app lib plugins</code> <span class="sr-r">only <code>Invite::RedeemWithEmailCode</code> passes true</span></li>
+            <li><code>grep -rn "enforce_username_restrictions" app lib plugins</code> <span class="sr-r">set only in <code>create_from_verified_email.rb:32</code></span></li>
+            <li><code>git grep -n "checkUsername(\|for_user_id" -- frontend plugins app</code> <span class="sr-r"><code>username-preference.gjs</code> is the only other caller sending an id</span></li>
+            <li><code>git grep -n "RandomUsernameGenerator\|enable_random_usernames"</code> <span class="sr-r">the generator, the endpoint guard, three client reads, three controller calls, the invite fallback</span></li>
+            <li><code>grep -n "changeAvatar\|pendingAvatar" frontend/discourse/app/components/code-login-form.gjs</code> <span class="sr-r">avatar only on the signup-details step</span></li>
           </ul>
-          <p class="sr-limit"><strong>Out of reach.</strong> Plugins and themes outside this checkout that
-            register the new modifier, listen for the new event or pass <code>signup_context</code>; and
-            anything that builds these names dynamically.</p>
+          <p class="sr-limit"><strong>Out of reach.</strong> Plugins and themes outside this repository that
+            register the new modifier, listen for the new event, render into the moved outlet, or call
+            <code>check_username</code> with <code>for_user_id</code>.</p>
         </div>
       </details>
-
-      <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
-      <ul class="ev-list">
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/components/username-preference.gjs#L117-L121">frontend/discourse/app/components/username-preference.gjs:117-121</a> &mdash; passes <code>for_user_id</code>, and renders only when <code>can_edit_username</code> is true (<code>:175</code>), matching the new guard on <code>check_username</code>.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/frontend/discourse/app/lib/url.js#L379-L381">frontend/discourse/app/lib/url.js:379-381</a> &mdash; <code>redirectTo</code>, now used for the post-signup redirect, adds the subfolder prefix to root-relative URLs that lack it.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/controllers/session_controller.rb#L1180-L1181">app/controllers/session_controller.rb:1180-1181</a> &mdash; a login held for approval returns before <code>complete_login_code_authentication</code>, so its generated-name proofs stay until they expire.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/services/email_login_code/verify.rb#L19-L30">app/services/email_login_code/verify.rb:19-30</a> &mdash; verifies the code before Redeem verifies it again, so each username retry checks the code twice.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/320f1738fa65d1ed8d5728d274ed8965b5152846/app/models/invite_redeemer.rb#L107-L110">app/models/invite_redeemer.rb:107-110</a> &mdash; the verified-email suggestion fallback, now reached only when no username is submitted.</li>
-      </ul>
     </details>
 
   </main>
+  </main>
 </div>
 
-<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, and
-     the syntax tint on unchanged excerpts.
-     This is the ONLY script the page carries: no state, no localStorage, no
-     counters. All four are presentation, and the page reads correctly with the
-     whole block removed — the excerpts simply render in one ink, as they did
+<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, the
+     appearance menu, and the syntax tint on unchanged excerpts.
+     Apart from the few lines in the head that apply a saved appearance before
+     first paint, this is the ONLY script the page carries, and its one piece of
+     state is that appearance: two localStorage keys, a viewer's own convenience,
+     never anything about the change. No counters. All five jobs are presentation,
+     and the page reads correctly with the whole block removed — the excerpts simply render in one ink, as they did
      before the tint existed, and a citation lands in the tab it was clicked from.
 
      highlight.js comes from cdnjs because that is the one script host a published
      artifact may load; its stylesheets are NOT loadable, which is why the theme
-     for it lives in our token block above. Two grammars are loaded beside the
+     for it lives in the theme's token block above. Two grammars are loaded beside the
      core bundle because neither is in it and both are code this page quotes:
      erb for Rails views, elixir for Elixir modules. Carry all three lines.
+     Rust needs no fourth: rust is in the core bundle, and TOML tints as ini.
      There is deliberately no heex grammar — highlight.js ships none, and
      excerpt.sh emits no data-lang for .heex for that reason. Loaded plainly, before the inline
      script, so it is defined by the time that runs. If it 404s or is blocked,
@@ -2406,6 +3191,112 @@ figcaption strong { color: var(--ink-3); }
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
   });
+
+  /* ---- The appearance menu ------------------------------------------------
+     Built here, into the right end of the masthead's first line, so the markup
+     half carries no control for a run to copy. Its styles are the style
+     elements page-skeleton.sh emitted, read off the page rather than listed
+     here, so a theme added under references/themes/ appears without touching
+     this block. Choosing one switches media between "all" and "not all"; the
+     light/dark/auto segment sets or clears data-theme, which every theme's
+     tokens already answer. Both choices are saved for the next visit by the
+     head script's two keys. With one theme or no masthead there is nothing to
+     offer, and nothing is drawn. */
+  (function () {
+    var line = document.querySelector('main > header > .lbl-wide');
+    var sheets = document.querySelectorAll('style[data-style]');
+    if (!line || sheets.length < 2) { return; }
+    var root = document.documentElement;
+    function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) { e.className = cls; }
+      if (text) { e.textContent = text; }
+      return e;
+    }
+
+    var rc = el('div', 'rc'), btn = el('button', 'rc-btn'), icon = el('span', 'rc-i');
+    btn.type = 'button';
+    btn.title = 'Appearance';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'rc-pop');
+    btn.appendChild(el('b', '', 'Aa'));
+    icon.setAttribute('aria-hidden', 'true');
+    btn.appendChild(icon);
+    var pop = el('div', 'rc-pop');
+    pop.id = 'rc-pop';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Appearance');
+
+    pop.appendChild(el('div', 'rc-h', 'Style'));
+    var list = el('div', 'rc-styles'), choices = [];
+    function active() {
+      for (var i = 0; i < sheets.length; i++) {
+        if (sheets[i].getAttribute('media') !== 'not all') { return sheets[i].getAttribute('data-style'); }
+      }
+      return '';
+    }
+    function useStyle(name) {
+      var all = document.querySelectorAll('[data-style]');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].getAttribute('data-style') === name) { all[i].removeAttribute('media'); }
+        else { all[i].setAttribute('media', 'not all'); }
+      }
+      choices.forEach(function (c) {
+        var on = c.getAttribute('data-s') === name;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+    }
+    Array.prototype.forEach.call(sheets, function (sh) {
+      var name = sh.getAttribute('data-style');
+      var b = el('button'), sw = el('span', 'rc-sw');
+      b.type = 'button';
+      b.setAttribute('data-s', name);
+      sw.setAttribute('data-sw', name);
+      b.appendChild(sw);
+      b.appendChild(document.createTextNode(sh.getAttribute('data-style-label') || name));
+      b.onclick = function () { useStyle(name); save('review-style', name); };
+      list.appendChild(b);
+      choices.push(b);
+    });
+    pop.appendChild(list);
+
+    pop.appendChild(el('div', 'rc-h', 'Theme'));
+    var seg = el('div', 'rc-seg'), modes = [];
+    seg.setAttribute('role', 'group');
+    seg.setAttribute('aria-label', 'Theme');
+    var glyph = { light: '\u2600', auto: '\u25D0', dark: '\u263E' };
+    function useMode(m) {
+      if (m === 'auto') { root.removeAttribute('data-theme'); } else { root.setAttribute('data-theme', m); }
+      icon.textContent = glyph[m];
+      modes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-t') === m)); });
+    }
+    [['light', 'Light'], ['auto', 'Auto'], ['dark', 'Dark']].forEach(function (m) {
+      var b = el('button', '', glyph[m[0]] + ' ' + m[1]);
+      b.type = 'button';
+      b.setAttribute('data-t', m[0]);
+      b.onclick = function () { useMode(m[0]); save('review-theme', m[0]); };
+      seg.appendChild(b);
+      modes.push(b);
+    });
+    pop.appendChild(seg);
+
+    rc.appendChild(btn);
+    rc.appendChild(pop);
+    line.appendChild(rc);
+    useStyle(active());
+    var t = root.getAttribute('data-theme');
+    useMode(t === 'light' || t === 'dark' ? t : 'auto');
+
+    function close() { rc.classList.remove('rc-on'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.onclick = function () { btn.setAttribute('aria-expanded', String(rc.classList.toggle('rc-on'))); };
+    document.addEventListener('click', function (e) { if (!rc.contains(e.target)) { close(); } });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && rc.classList.contains('rc-on')) { close(); btn.focus(); }
+    });
+  })();
 
   /* ---- Syntax tint, .excerpt--source only -------------------------------
      The rule this obeys: an excerpt is a quotation, so the script may change

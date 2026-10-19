@@ -1,10 +1,10 @@
 {
   "schema": "accountable-review/review-map-manifest@3",
-  "generated_at": "2026-10-08T00:00:00Z",
+  "generated_at": "2026-10-19T16:47:31Z",
   "plugin": {
     "name": "accountable-review",
-    "version": "1.2.0",
-    "commit": "5f8b758e7cfbc406004c528929942525b00041b0"
+    "version": "1.3.0",
+    "commit": "92e31bd6e802ce52fef8bb6b5dc524e8f064815f"
   },
   "review_map": {
     "entry": "index.html",

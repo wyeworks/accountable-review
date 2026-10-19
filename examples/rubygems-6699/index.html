@@ -1,4 +1,4 @@
-<title>Historical ownership foundation (#6699) Review</title>
+<title>Add HistoricalOwnership foundation for tracking gem ownership history Review</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--
   accountable-review · review-map page template
@@ -8,15 +8,17 @@
   horizontal overflow, wide blocks scroll in their own container, and all three
   theme states resolve.
 
-  Design language: "PR review interface redesign". Warm paper ground, Fraunces
-  at weight 400 for display, and FOUR semantic colour families over one shared
-  five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
+  Design language: "PR review interface redesign", in one of three themes —
+  Daylight (the default), Workshop or Field Notes — chosen by review_map.theme
+  in the repository's .accountable-review.yml. A theme decides typefaces, radii,
+  hues and a few label treatments; every theme keeps FOUR semantic colour
+  families over one shared five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
   the diff does not touch, plum for provenance. Each one means one thing and the
   token block says which; a family used outside its rule stops carrying meaning
   everywhere else. A fifth ramp, --primer-*, is the exception that proves that
   rule: it means nothing at all. It frames aside.primer and nothing else, in
-  Rails red, and the token block says why a page with no severity vocabulary can
-  afford one. The structural idea is that a checkpoint is NOT a card — it
+  Rails red (graphite on a Rust primer, through aside.primer.pr-rust), and the
+  token block says why a page with no severity vocabulary can afford one. The structural idea is that a checkpoint is NOT a card — it
   is a question, the two or three sentences that make it one, and where to look;
   a hairline separates one from the next. Cards are reserved for the few things
   that genuinely are objects: a chain figure, the impact panel.
@@ -29,7 +31,7 @@
   classic unreadable-artifact bug. The three
   states are: explicit dark, explicit light, and the unstamped default that most
   viewers actually get, where only prefers-color-scheme applies.
-  The source design is light-only; the dark half below is ours, and the pair
+  The source designs are light-only; each theme's dark half is ours, and the pair
   that inverts (.ip-out, the filled node that ends a chain) is written against
   tokens precisely so it keeps inverting relative to the page.
 
@@ -49,7 +51,7 @@
   never read as.
 
   AND NO STACK BADGE, in the same place for the same reason. This template serves
-  both Rails and Phoenix pages. What differs between them is the content of the
+  Rails, Phoenix, Rust and React pages alike. What differs between them is the content of the
   sentences, the nodes in a figure.chain and the command inside a pre.probe —
   never a chip, a marker or a section. A reader should not be able to tell which
   lens file produced the page except by reading what it says about their
@@ -105,7 +107,8 @@
                             on it. No tier, no grade, and one figure at most:
                             figure.lifecycle.lc-shift, the request sequence
                             before and after, when the change moved which
-                            request does what
+                            request does what; at --context collapsed,
+                            all of it inside one shut details.ctx-fold
     evidence tier ......... .tier — neutral by default, .tier-unc teal for
                             `from unchanged code`, .tier-inf ochre for an
                             inference. .tag is an excerpt's state, in plum,
@@ -129,7 +132,8 @@
                             block on this page that may show a result line, because
                             its receiver is a class this repository does not have.
                             Its header names the stack in words — "Understanding
-                            Ruby on Rails" — and its frame is --primer-*
+                            Ruby on Rails" — and its frame is --primer-*;
+                            a Rust primer adds .pr-rust, nothing else
     review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
                             sentences, at most one figure, ul.lookat (1-4
                             places to look, each a title, a clause and its
@@ -173,26 +177,26 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..600,0,0;1,9..144,400,0,0&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap">
 
 <style>
 /* ============================================================
-   Tokens. Warm paper neutrals, and FOUR SEMANTIC FAMILIES that
-   share one ramp shape: every family is a single hue at fixed
-   lightness and chroma per slot, so no two can drift apart in
-   weight, and the dark half is one arithmetic reflection of the
-   light rather than a second hand-picked set.
-
-     light   bg .975/.014   bg-2 .955/.028   rule .885/.045
-             rule-2 .79/.065   ink .45/.105
-     dark    bg .235/.028   bg-2 .275/.045   rule .42/.055
-             rule-2 .52/.075   ink .80/.09
+   Tokens. NONE ARE DECLARED IN THIS BLOCK: every token — the
+   neutrals, the type stacks, the radii and the colour families —
+   comes from the theme page-skeleton.sh writes in at the theme
+   marker below this style block. What a theme may not
+   change is the rule that follows. Every theme carries FOUR
+   SEMANTIC FAMILIES that share one ramp shape: each family is a
+   single hue at fixed lightness and chroma per slot, so no two can
+   drift apart in weight, and the dark half is a reflection of the
+   light rather than a second hand-picked set. The hue numbers below
+   are approximate and move a few degrees between themes; what each
+   family means does not move at all.
 
    WHAT EACH FAMILY IS ALLOWED TO MEAN. The rule is the system —
    a family used outside it stops carrying meaning everywhere
    else on the page, which is the only thing colour is doing here.
 
-     --nav-*        slate 252   You can click it. Rail links,
+     --nav-*        slate        You can click it. Rail links,
                                 citations, paths, the progress bar,
                                 in-page anchors. Nothing that is not
                                 a link may be slate, which is why
@@ -200,11 +204,11 @@
                                 selection colour any more: they were
                                 two off-system hex values doing what
                                 two slots of this ramp already do.
-     --gap-*        ochre  72   Something is missing and the page is
+     --gap-*        ochre        Something is missing and the page is
                                 saying so: p.open, the inferred tier,
                                 the build-state banner. NEVER a
                                 severity and never a grade.
-     --unchanged-*  teal  200   This code is not in the diff. The
+     --unchanged-*  teal         This code is not in the diff. The
                                 `from unchanged code` tier, the
                                 dashed .ip-aff node and its legend
                                 key, the "Affected, not changed"
@@ -214,7 +218,7 @@
                                 to add to a page with no severity
                                 vocabulary. Never on a link, so it
                                 never competes with slate.
-     --prov-*       plum  318   How a thing is known, never what it
+     --prov-*       plum         How a thing is known, never what it
                                 means: the excerpt .tag, the searches
                                 block, the evidence foot, the probe
                                 label. The quietest family on purpose
@@ -224,7 +228,7 @@
    AND ONE RAMP THAT IS NOT A FAMILY, because it has no meaning to
    spend:
 
-     --primer-*     red    28   The frame of aside.primer, and of
+     --primer-*     red          The frame of aside.primer, and of
                                 nothing else on this page. Not a
                                 fifth meaning — a reminder of which
                                 framework is speaking, in the red
@@ -248,225 +252,27 @@
    a panel border around a lesson, the other a row stripe inside
    quoted code, and the two never abut.
 
-   ONE OPEN QUESTION, WRITTEN DOWN RATHER THAN GUESSED AT. Rails is
-   the only stack that earns a primer today, because elixir-docs.md
-   withholds every link and a primer is gated on one. If that
-   catalogue opens, a Phoenix primer in Rails red is wrong, and the
-   answer is a variant class on the aside — never a colour a run
-   types, and never a second component.
+     --primer-rust-*  graphite   The same frame for a Rust primer,
+                                reached by one class on the aside,
+                                aside.primer.pr-rust, which re-points
+                                --primer-* at this ramp and changes
+                                nothing else. Rust's own mark is
+                                black, so its frame is iron: the red
+                                ramp's lightness per slot at almost
+                                no chroma, and a near-black top rule
+                                where Rails draws a red one.
+
+   A RUST PRIMER IN RAILS RED WOULD BE WRONG, and that was the open
+   question this block used to record. The answer is the one it
+   predicted: a variant class, never a colour a run types and never
+   a second component. Graphite rather than Ferris orange because
+   orange sits between the red frame and the ochre that means
+   something is missing, and would read as the second. Phoenix still
+   has no frame of its own because elixir-docs.md withholds every
+   link and a primer is gated on one; when it opens, the same shape
+   applies. rails-anchors.rb § 8 checks that the class and the doc
+   link's host agree.
    ============================================================ */
-:root {
-  --ground:      #f6f5f1;
-  --surface:     #faf9f6;
-  --surface-hi:  #ffffff;
-  --surface-2:   #f1efe9;
-  --surface-3:   #fbfaf7;
-  --chip:        #eceae3;
-
-  --ink:         #1b1a17;
-  --ink-2:       #26251f;
-  --ink-3:       #3d3b36;
-  --muted:       #6f6c65;
-  --faint:       #8d8a82;
-  --fainter:     #a5a29a;
-  --on-ink:      #f2f0ea;
-  --on-ink-code: #dcd8cd;
-
-  --rule:        #e5e1d8;
-  --rule-soft:   #ece8e0;
-  --rule-strong: #cec9be;
-  --rule-dash:   #b9b4a8;
-  --rule-card:   #d8d3c8;
-
-  --nav-bg:            oklch(0.975 0.014 252);
-  --nav-bg-2:          oklch(0.955 0.028 252);
-  --nav-rule:          oklch(0.885 0.045 252);
-  --nav-rule-2:        oklch(0.79  0.065 252);
-  --nav-ink:           oklch(0.45  0.105 252);
-  --nav-ink-hi:        oklch(0.36  0.12  252);
-
-  --gap-bg:            oklch(0.975 0.014 72);
-  --gap-bg-2:          oklch(0.955 0.028 72);
-  --gap-rule:          oklch(0.885 0.045 72);
-  --gap-rule-2:        oklch(0.79  0.065 72);
-  --gap-ink:           oklch(0.45  0.105 72);
-
-  --unchanged-bg:      oklch(0.975 0.014 200);
-  --unchanged-bg-2:    oklch(0.955 0.028 200);
-  --unchanged-rule:    oklch(0.885 0.045 200);
-  --unchanged-rule-2:  oklch(0.79  0.065 200);
-  --unchanged-ink:     oklch(0.45  0.105 200);
-
-  --prov-bg:           oklch(0.975 0.014 318);
-  --prov-bg-2:         oklch(0.955 0.028 318);
-  --prov-rule:         oklch(0.885 0.045 318);
-  --prov-rule-2:       oklch(0.79  0.065 318);
-  --prov-ink:          oklch(0.45  0.105 318);
-
-  --primer-bg:         oklch(0.975 0.014 28);
-  --primer-bg-2:       oklch(0.955 0.028 28);
-  --primer-rule:       oklch(0.885 0.045 28);
-  --primer-rule-2:     oklch(0.79  0.065 28);
-  --primer-ink:        oklch(0.45  0.105 28);
-
-  --ex-add:      #e6efe6;
-  --add-sig:     #3f6b45;
-  --ex-del:      #f6e7e3;
-  --del-sig:     #a4453a;
-
-  /* Syntax tint for an unchanged excerpt. Applied at runtime by the page's
-     script — see the excerpt block below. Low chroma on purpose: this page
-     already spends colour on meaning (accent = navigation, ochre = a stated
-     gap, green/red = added and removed), and code that glows competes with
-     all three. Comments stay the quietest thing in the block. */
-  --syn-key:     oklch(0.44 0.12 318);
-  --syn-str:     oklch(0.46 0.09 150);
-  --syn-com:     oklch(0.60 0.02 80);
-  --syn-name:    oklch(0.45 0.09 235);
-  --syn-num:     oklch(0.50 0.10 50);
-
-  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
-  --mono:    'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-/* The unstamped default most viewers get: only prefers-color-scheme applies,
-   and an explicit light choice must still beat a dark OS. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground:      #14130f;
-    --surface:     #1b1a16;
-    --surface-hi:  #201f1a;
-    --surface-2:   #26241f;
-    --surface-3:   #191814;
-    --chip:        #2b2924;
-
-    --ink:         #ece9e1;
-    --ink-2:       #ddd9cf;
-    --ink-3:       #c2bdb1;
-    --muted:       #9c968a;
-    --faint:       #837d72;
-    --fainter:     #6b665c;
-    --on-ink:      #14130f;
-    --on-ink-code: #3d3b36;
-
-    --rule:        #302e27;
-    --rule-soft:   #292720;
-    --rule-strong: #423f36;
-    --rule-dash:   #4d4940;
-    --rule-card:   #383529;
-
-    --nav-bg:            oklch(0.235 0.028 252);
-    --nav-bg-2:          oklch(0.275 0.045 252);
-    --nav-rule:          oklch(0.42  0.055 252);
-    --nav-rule-2:        oklch(0.52  0.075 252);
-    --nav-ink:           oklch(0.80  0.09  252);
-    --nav-ink-hi:        oklch(0.88  0.075 252);
-
-    --gap-bg:            oklch(0.235 0.028 72);
-    --gap-bg-2:          oklch(0.275 0.045 72);
-    --gap-rule:          oklch(0.42  0.055 72);
-    --gap-rule-2:        oklch(0.52  0.075 72);
-    --gap-ink:           oklch(0.80  0.09  72);
-
-    --unchanged-bg:      oklch(0.235 0.028 200);
-    --unchanged-bg-2:    oklch(0.275 0.045 200);
-    --unchanged-rule:    oklch(0.42  0.055 200);
-    --unchanged-rule-2:  oklch(0.52  0.075 200);
-    --unchanged-ink:     oklch(0.80  0.09  200);
-
-    --prov-bg:           oklch(0.235 0.028 318);
-    --prov-bg-2:         oklch(0.275 0.045 318);
-    --prov-rule:         oklch(0.42  0.055 318);
-    --prov-rule-2:       oklch(0.52  0.075 318);
-    --prov-ink:          oklch(0.80  0.09  318);
-
-    --primer-bg:         oklch(0.235 0.028 28);
-    --primer-bg-2:       oklch(0.275 0.045 28);
-    --primer-rule:       oklch(0.42  0.055 28);
-    --primer-rule-2:     oklch(0.52  0.075 28);
-    --primer-ink:        oklch(0.80  0.09  28);
-
-    --ex-add:      #1b2a1d;
-    --add-sig:     #7fbf8c;
-    --ex-del:      #33201d;
-    --del-sig:     #e0918a;
-
-    --syn-key:     oklch(0.79 0.10 318);
-    --syn-str:     oklch(0.79 0.09 150);
-    --syn-com:     oklch(0.63 0.02 80);
-    --syn-name:    oklch(0.80 0.08 235);
-    --syn-num:     oklch(0.79 0.09 50);
-  }
-}
-
-/* The explicit toggle, so it wins in the other direction too. */
-:root[data-theme="dark"] {
-  --ground:      #14130f;
-  --surface:     #1b1a16;
-  --surface-hi:  #201f1a;
-  --surface-2:   #26241f;
-  --surface-3:   #191814;
-  --chip:        #2b2924;
-
-  --ink:         #ece9e1;
-  --ink-2:       #ddd9cf;
-  --ink-3:       #c2bdb1;
-  --muted:       #9c968a;
-  --faint:       #837d72;
-  --fainter:     #6b665c;
-  --on-ink:      #14130f;
-  --on-ink-code: #3d3b36;
-
-  --rule:        #302e27;
-  --rule-soft:   #292720;
-  --rule-strong: #423f36;
-  --rule-dash:   #4d4940;
-  --rule-card:   #383529;
-
-  --nav-bg:            oklch(0.235 0.028 252);
-  --nav-bg-2:          oklch(0.275 0.045 252);
-  --nav-rule:          oklch(0.42  0.055 252);
-  --nav-rule-2:        oklch(0.52  0.075 252);
-  --nav-ink:           oklch(0.80  0.09  252);
-  --nav-ink-hi:        oklch(0.88  0.075 252);
-
-  --gap-bg:            oklch(0.235 0.028 72);
-  --gap-bg-2:          oklch(0.275 0.045 72);
-  --gap-rule:          oklch(0.42  0.055 72);
-  --gap-rule-2:        oklch(0.52  0.075 72);
-  --gap-ink:           oklch(0.80  0.09  72);
-
-  --unchanged-bg:      oklch(0.235 0.028 200);
-  --unchanged-bg-2:    oklch(0.275 0.045 200);
-  --unchanged-rule:    oklch(0.42  0.055 200);
-  --unchanged-rule-2:  oklch(0.52  0.075 200);
-  --unchanged-ink:     oklch(0.80  0.09  200);
-
-  --prov-bg:           oklch(0.235 0.028 318);
-  --prov-bg-2:         oklch(0.275 0.045 318);
-  --prov-rule:         oklch(0.42  0.055 318);
-  --prov-rule-2:       oklch(0.52  0.075 318);
-  --prov-ink:          oklch(0.80  0.09  318);
-
-  --primer-bg:         oklch(0.235 0.028 28);
-  --primer-bg-2:       oklch(0.275 0.045 28);
-  --primer-rule:       oklch(0.42  0.055 28);
-  --primer-rule-2:     oklch(0.52  0.075 28);
-  --primer-ink:        oklch(0.80  0.09  28);
-
-  --ex-add:      #1b2a1d;
-  --add-sig:     #7fbf8c;
-  --ex-del:      #33201d;
-  --del-sig:     #e0918a;
-
-  --syn-key:     oklch(0.79 0.10 318);
-  --syn-str:     oklch(0.79 0.09 150);
-  --syn-com:     oklch(0.63 0.02 80);
-  --syn-name:    oklch(0.80 0.08 235);
-  --syn-num:     oklch(0.79 0.09 50);
-}
-
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -483,12 +289,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 }
 
 /* ============================================================
-   Type. Fraunces is variable: SOFT and WONK are pinned off —
-   WONK gives it a swashy single-storey g, which is the wrong
-   register for a review document and is on by default at some
-   weights. opsz follows the size, which is the whole point of
-   the face. Display weight is 400 everywhere; the design rests
-   on that not reading as decorative, so do not reach for 700.
+   Type. The faces are the theme's — --display, --body, --mono —
+   and so is the display weight: each theme sets its own on the
+   headings in its overrides. The variation settings below are
+   for a variable display face with SOFT and WONK axes (WONK gives
+   a swashy single-storey g, the wrong register for a review
+   document); a theme whose face has neither resets them to
+   normal. opsz follows the size wherever the face has it.
    ============================================================ */
 h1, h2, h3, h4 {
   font-family: var(--display); font-weight: 400; margin: 0; text-wrap: pretty;
@@ -655,6 +462,17 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 .ctx > dt:not(:first-of-type), .ctx > dd:not(:first-of-type) { border-top: 1px solid var(--rule); }
 .ctx .ctx-used, .lc-shift .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .ctx .ctx-used a, .lc-shift .ctx-used a { color: inherit; }
+/* --context collapsed: the same section, its entries (and shift) behind one shut
+   details.ctx-fold whose summary is the fixed label and the entry names. Neutral
+   rules, no family colour: plum would say "how a thing is known", and Context is
+   what a thing is. The one fold allowed to hold content rather than provenance —
+   report-format.md § How much Context says why that is safe. */
+details.ctx-fold { margin-top: 8px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+details.ctx-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
+details.ctx-fold > summary::-webkit-details-marker { display: none; }
+details.ctx-fold > summary::marker { content: ""; }
+.ctx-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+details.ctx-fold > .ctx { margin-top: 0; }
 @media (max-width: 700px) {
   .ctx { grid-template-columns: minmax(0, 1fr); }
   .ctx > dd { padding-top: 4px; }
@@ -782,10 +600,11 @@ pre.probe {
    the budget and what earns one.
 
    IT IS FRAMED IN RAILS RED, on --primer-*, and that ramp exists
-   for this component alone. The reason is the reader it is for:
-   someone new to the stack, who needs to recognise the block that
+   for this component alone. A Rust primer carries .pr-rust, which
+   re-points the same tokens at the graphite --primer-rust-* ramp.
+   The reason is the reader it is for: someone new to the stack, who needs to recognise the block that
    was written for them before reading a word of it. A hue does
-   that and a heading does not. The token block owns why a page
+   that and a heading does not. The Tokens comment owns why a page
    with no severity vocabulary can afford a red — it is attached to
    no claim, so it cannot be read as a verdict — and the rule that
    keeps it honest is that the frame may never spread. Red on
@@ -835,6 +654,14 @@ pre.probe {
 .primer {
   margin: 16px 0 6px; background: var(--primer-bg);
   border: 1px solid var(--primer-rule); border-top: 2px solid var(--primer-rule-2);
+}
+/* A Rust primer: same component, the frame re-pointed at the graphite ramp. The
+   class is the stack's, chosen by which catalogue the doc link came from, and
+   rails-anchors.rb fails a primer whose class and link disagree. */
+.primer.pr-rust {
+  --primer-bg: var(--primer-rust-bg); --primer-bg-2: var(--primer-rust-bg-2);
+  --primer-rule: var(--primer-rust-rule); --primer-rule-2: var(--primer-rust-rule-2);
+  --primer-ink: var(--primer-rust-ink); --primer-ink-hi: var(--primer-rust-ink-hi);
 }
 .pr-head {
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
@@ -888,7 +715,10 @@ pre.demo {
 /* ============================================================
    Source excerpts — generated by scripts/excerpt.sh, never typed.
    The page must read complete with EVERY excerpt closed, which is
-   why the why-line lives in the summary and not in the body.
+   why the why-line lives in the summary and not in the body — and
+   why the link does too: .ex-loc is the excerpt's one citation, linked
+   when the rung allows, so the closed block is still a followable
+   citation and nothing below the code repeats it.
    The pre grows to max-content and .ex-body scrolls, so the add/del
    stripes span the whole scroll width instead of stopping at the fold.
    data-src, never data-path: coverage-gate.sh greps data-path page-wide.
@@ -900,6 +730,7 @@ details.excerpt > summary::marker { content: ""; }
 .excerpt .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
 details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt .ex-loc { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.excerpt .ex-loc > a.cite { font-size: inherit; color: inherit; }
 .excerpt .ex-why { grid-column: 2 / -1; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 66ch; }
 .excerpt .ex-body { padding: 0 14px 14px; border-top: 1px solid var(--rule); overflow-x: auto; }
 .excerpt .ex-body > pre {
@@ -922,7 +753,6 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt .ex-body .sig { color: var(--fainter); user-select: text; }
 .excerpt .ex-body .l.add .sig { color: var(--add-sig); }
 .excerpt .ex-body .l.del .sig { color: var(--del-sig); }
-.excerpt .ex-src { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
 
 /* Syntax tint, --source only. The script at the bottom of this file rewrites the
    text nodes inside each .l into these classes; with the script gone, or the CDN
@@ -1062,9 +892,11 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
    THE LANE IS DERIVED FROM THE NODE KIND, NEVER AUTHORED:
    .ip-chg sits left, .ip-aff right, .ip-out spans both. So the
-   boundary between "changed by this PR" and "the existing
-   system" is structurally true, and there is no lane class for
-   a run to get backwards.
+   boundary between "in this PR's files" and "outside the diff"
+   is structurally true, and there is no lane class for a run to
+   get backwards. The split is by file: an untouched line of a
+   changed file sits left, because that is where the reader
+   opens it.
 
    ONE PATH PER .ip-card, AND THE FIGURE IS A GROUP RATHER THAN
    A BOX. It began as five paths stacked inside one bordered
@@ -1112,8 +944,8 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    IT IS DASHED, AND IT IS NOT --rule-strong. It began as a 1px solid --rule-strong hairline,
    which is byte-for-byte what a connector and an elbow are drawn in — so the one line on the
    figure that carries no direction looked exactly like the lines that do, and a path crossing
-   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "the
-   existing system", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
+   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "outside
+   the diff", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
    FLOW, DASHES BOUND. Anything drawn in --rule-strong is part of a chain.
 
    DOTTED RATHER THAN DASHED, and that is the second half of it. At 3-on-5-off in the same ink
@@ -1504,8 +1336,887 @@ figure { margin: 0; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
 figcaption strong { color: var(--ink-3); }
 
+/* ============================================================
+   The appearance menu. Built by the tail script into the masthead's
+   first line, never typed by a run: a reader's control over how
+   the page looks — which theme, and light, dark or the system's
+   choice. It changes no content, and it is not a badge: it names
+   the three looks because it offers them, the way a font menu names
+   fonts. Hidden in print, absent without JavaScript.
+
+   The swatches are the one place colour literals sit outside a
+   theme file, and deliberately: each previews ONE theme and must
+   look the same whichever theme is active and in either mode, so a
+   token — which changes with both — is exactly the wrong tool.
+   ============================================================ */
+.rc { margin-left: auto; position: relative; text-transform: none; letter-spacing: 0; }
+.rc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; font-family: var(--body); font-size: 13px; line-height: 1; color: var(--ink); background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); cursor: pointer; }
+.rc-btn b { font-weight: 700; }
+.rc-btn .rc-i { color: var(--ink-3); font-size: 12px; }
+.rc-btn:hover { background: var(--surface-2); }
+.rc-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 90; width: 260px; max-width: calc(100vw - 32px); padding: 12px; display: none; flex-direction: column; gap: 10px; background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); box-shadow: 0 12px 32px rgba(0,0,0,.16); }
+.rc.rc-on .rc-pop { display: flex; }
+.rc-h { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.rc-styles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rc-styles button { display: flex; flex-direction: column; gap: 6px; padding: 6px; font-family: var(--body); font-size: 12px; line-height: 1.2; text-align: left; color: var(--ink-3); background: none; border: 1px solid var(--rule); border-radius: var(--r); cursor: pointer; }
+.rc-styles button:hover { border-color: var(--ink-3); color: var(--ink); }
+.rc-styles button.on { border: 2px solid var(--ink); padding: 5px; color: var(--ink); font-weight: 600; }
+.rc-sw { display: block; height: 30px; }
+.rc-sw[data-sw="daylight"] { background: linear-gradient(135deg, #f7f8fa 50%, #3b6ef5 50%); border-radius: 5px; box-shadow: inset 0 0 0 1px #d3d9e2; }
+.rc-sw[data-sw="workshop"] { background: linear-gradient(135deg, #fdfdfb 50%, oklch(0.91 0.15 95) 50%); box-shadow: inset 0 0 0 1.5px #0a0a0a; }
+.rc-sw[data-sw="field-notes"] { background: linear-gradient(135deg, #f5efe0 50%, oklch(0.84 0.09 340) 50%); border-radius: 3px; box-shadow: inset 0 0 0 1px #cfc3a6; }
+.rc-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--rule-strong); border-radius: var(--r); overflow: hidden; }
+.rc-seg button { padding: 8px 0; font-family: var(--body); font-size: 12px; line-height: 1; color: var(--ink-3); background: none; border: 0; cursor: pointer; }
+.rc-seg button + button { border-left: 1px solid var(--rule); }
+.rc-seg button:hover { color: var(--ink); background: var(--surface-2); }
+.rc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+@media print { .rc { display: none; } }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
+
+<!--
+  THE THEMES. The next line is replaced by every file in references/themes/:
+  each a font link and one style block holding its tokens and its overrides.
+  They sit AFTER the base styles because an override has to win the cascade,
+  and tokens resolve wherever they are declared. ONE is active — the
+  repository's choice: --theme, else ACCOUNTABLE_REVIEW_THEME, else
+  review_map.theme in its .accountable-review.yml, else daylight — and the
+  others arrive with media="not all", which keeps their bytes on the page and
+  their rules off it. The appearance menu switches the attribute, so a reader
+  can change the look without a second file. A theme file must keep every rule
+  above: each colour on bare :root and in both dark blocks, the five families
+  meaning what this file says they mean, and no hue, glyph or label treatment
+  that reads as a grade. A theme changes how the page looks, never what is on it.
+-->
+<!-- Theme · Daylight. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="daylight" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style data-style="daylight" data-style-label="Daylight">
+/* Tokens · Daylight direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Instrument Sans', system-ui, sans-serif;
+  --body: 'Instrument Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --r: 12px;
+  --r-sm: 5px;
+  --r-tag: 999px;
+  --r-box: 10px;
+  --ground: #f7f8fa;
+  --surface: #fbfbfc;
+  --surface-hi: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #fafbfc;
+  --chip: #eceff3;
+  --ink: #161a22;
+  --ink-2: #232833;
+  --ink-3: #3a404c;
+  --muted: #6a7180;
+  --faint: #858b97;
+  --fainter: #a6abb5;
+  --on-ink: #f7f8fa;
+  --on-ink-code: #d5d9e0;
+  --rule: #e3e6ec;
+  --rule-soft: #eceef2;
+  --rule-strong: #c9ced8;
+  --rule-dash: #b3b9c4;
+  --rule-card: #d6dae2;
+  --ex-add: oklch(0.96 0.04 150);
+  --add-sig: oklch(0.45 0.12 150);
+  --ex-del: oklch(0.96 0.03 25);
+  --del-sig: oklch(0.50 0.15 25);
+  --syn-key: oklch(0.45 0.13 330);
+  --syn-str: oklch(0.46 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.47 0.12 262);
+  --syn-num: oklch(0.52 0.11 55);
+  --nav-bg: oklch(0.975 0.018 262);
+  --nav-bg-2: oklch(0.955 0.035 262);
+  --nav-rule: oklch(0.885 0.055 262);
+  --nav-rule-2: oklch(0.78 0.08 262);
+  --nav-ink: oklch(0.47 0.13 262);
+  --nav-ink-hi: oklch(0.38 0.14 262);
+  --gap-bg: oklch(0.975 0.018 70);
+  --gap-bg-2: oklch(0.955 0.035 70);
+  --gap-rule: oklch(0.885 0.055 70);
+  --gap-rule-2: oklch(0.78 0.08 70);
+  --gap-ink: oklch(0.47 0.13 70);
+  --gap-ink-hi: oklch(0.38 0.14 70);
+  --unchanged-bg: oklch(0.975 0.018 195);
+  --unchanged-bg-2: oklch(0.955 0.035 195);
+  --unchanged-rule: oklch(0.885 0.055 195);
+  --unchanged-rule-2: oklch(0.78 0.08 195);
+  --unchanged-ink: oklch(0.47 0.13 195);
+  --unchanged-ink-hi: oklch(0.38 0.14 195);
+  --prov-bg: oklch(0.975 0.018 330);
+  --prov-bg-2: oklch(0.955 0.035 330);
+  --prov-rule: oklch(0.885 0.055 330);
+  --prov-rule-2: oklch(0.78 0.08 330);
+  --prov-ink: oklch(0.47 0.13 330);
+  --prov-ink-hi: oklch(0.38 0.14 330);
+  --primer-bg: oklch(0.975 0.018 25);
+  --primer-bg-2: oklch(0.955 0.035 25);
+  --primer-rule: oklch(0.885 0.055 25);
+  --primer-rule-2: oklch(0.78 0.08 25);
+  --primer-ink: oklch(0.47 0.13 25);
+  --primer-ink-hi: oklch(0.38 0.14 25);
+  --primer-rust-bg: oklch(0.975 0.004 60);
+  --primer-rust-bg-2: oklch(0.955 0.007 60);
+  --primer-rust-rule: oklch(0.885 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.47 0.022 60);
+  --primer-rust-ink-hi: oklch(0.38 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+  --primer-rust-bg: oklch(0.23 0.006 60);
+  --primer-rust-bg-2: oklch(0.27 0.008 60);
+  --primer-rust-rule: oklch(0.4 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+  --primer-rust-bg: oklch(0.23 0.006 60);
+  --primer-rust-bg-2: oklch(0.27 0.008 60);
+  --primer-rust-rule: oklch(0.4 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+}
+
+/* ---- Daylight overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:600;letter-spacing:-0.022em;font-variation-settings:normal}
+h1{letter-spacing:-0.032em;max-width:20ch}
+.rail-id .tick{font-weight:600;letter-spacing:-0.01em}
+.tier,.tag{font-family:var(--body);font-size:11.5px;font-weight:500;letter-spacing:0;text-transform:none;padding:2px 10px;border-color:transparent;vertical-align:1px}
+.open{border:1px solid var(--gap-rule)}
+.open>b,.gap>b{font-family:var(--body);font-weight:600;font-size:12.5px;letter-spacing:0}
+details.searched>summary,details.evidence>summary{font-weight:500}
+</style>
+<!-- Theme · Workshop. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="workshop" media="not all" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" data-style="workshop" media="not all" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style data-style="workshop" media="not all" data-style-label="Workshop">
+/* Tokens · Workshop direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Geist', system-ui, sans-serif;
+  --body: 'Geist', system-ui, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+  --r: 12px;
+  --r-sm: 4px;
+  --r-tag: 6px;
+  --r-box: 8px;
+  --ground: #fafafa;
+  --surface: #fcfcfc;
+  --surface-hi: #ffffff;
+  --surface-2: #f4f4f4;
+  --surface-3: #fbfbfb;
+  --chip: #f0f0f0;
+  --ink: #0a0a0a;
+  --ink-2: #1f1f1f;
+  --ink-3: #404040;
+  --muted: #666666;
+  --faint: #808080;
+  --fainter: #a3a3a3;
+  --on-ink: #fafafa;
+  --on-ink-code: #d4d4d4;
+  --rule: #e6e6e6;
+  --rule-soft: #efefef;
+  --rule-strong: #cfcfcf;
+  --rule-dash: #b5b5b5;
+  --rule-card: #dcdcdc;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.97 0.035 150);
+  --add-sig: oklch(0.46 0.13 150);
+  --ex-del: oklch(0.97 0.025 25);
+  --del-sig: oklch(0.50 0.16 25);
+  --syn-key: oklch(0.47 0.15 300);
+  --syn-str: oklch(0.47 0.11 150);
+  --syn-com: oklch(0.62 0 0);
+  --syn-name: oklch(0.50 0.15 255);
+  --syn-num: oklch(0.53 0.13 55);
+  --nav-bg: oklch(0.98 0.015 255);
+  --nav-bg-2: oklch(0.97 0.03 255);
+  --nav-rule: oklch(0.89 0.06 255);
+  --nav-rule-2: oklch(0.78 0.1 255);
+  --nav-ink: oklch(0.48 0.15 255);
+  --nav-ink-hi: oklch(0.4 0.17 255);
+  --gap-bg: oklch(0.98 0.015 75);
+  --gap-bg-2: oklch(0.97 0.03 75);
+  --gap-rule: oklch(0.89 0.06 75);
+  --gap-rule-2: oklch(0.78 0.1 75);
+  --gap-ink: oklch(0.48 0.15 75);
+  --gap-ink-hi: oklch(0.4 0.17 75);
+  --unchanged-bg: oklch(0.98 0.015 190);
+  --unchanged-bg-2: oklch(0.97 0.03 190);
+  --unchanged-rule: oklch(0.89 0.06 190);
+  --unchanged-rule-2: oklch(0.78 0.1 190);
+  --unchanged-ink: oklch(0.48 0.15 190);
+  --unchanged-ink-hi: oklch(0.4 0.17 190);
+  --prov-bg: oklch(0.98 0.015 300);
+  --prov-bg-2: oklch(0.97 0.03 300);
+  --prov-rule: oklch(0.89 0.06 300);
+  --prov-rule-2: oklch(0.78 0.1 300);
+  --prov-ink: oklch(0.48 0.15 300);
+  --prov-ink-hi: oklch(0.4 0.17 300);
+  --primer-bg: oklch(0.98 0.015 25);
+  --primer-bg-2: oklch(0.97 0.03 25);
+  --primer-rule: oklch(0.89 0.06 25);
+  --primer-rule-2: oklch(0.78 0.1 25);
+  --primer-ink: oklch(0.48 0.15 25);
+  --primer-ink-hi: oklch(0.4 0.17 25);
+  --primer-rust-bg: oklch(0.98 0.004 60);
+  --primer-rust-bg-2: oklch(0.97 0.007 60);
+  --primer-rust-rule: oklch(0.89 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.48 0.022 60);
+  --primer-rust-ink-hi: oklch(0.4 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0a0a0a;
+  --surface: #0e0e0e;
+  --surface-hi: #111111;
+  --surface-2: #171717;
+  --surface-3: #0d0d0d;
+  --chip: #1c1c1c;
+  --ink: #ededed;
+  --ink-2: #d4d4d4;
+  --ink-3: #a8a8a8;
+  --muted: #8f8f8f;
+  --faint: #777777;
+  --fainter: #5a5a5a;
+  --on-ink: #0a0a0a;
+  --on-ink-code: #404040;
+  --rule: #262626;
+  --rule-soft: #1c1c1c;
+  --rule-strong: #3a3a3a;
+  --rule-dash: #4a4a4a;
+  --rule-card: #2e2e2e;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.25 0.06 150);
+  --add-sig: oklch(0.84 0.12 150);
+  --ex-del: oklch(0.25 0.06 25);
+  --del-sig: oklch(0.82 0.11 25);
+  --syn-key: oklch(0.80 0.12 300);
+  --syn-str: oklch(0.82 0.11 150);
+  --syn-com: oklch(0.60 0 0);
+  --syn-name: oklch(0.80 0.10 255);
+  --syn-num: oklch(0.82 0.11 60);
+  --nav-bg: oklch(0.22 0.03 255);
+  --nav-bg-2: oklch(0.24 0.045 255);
+  --nav-rule: oklch(0.38 0.07 255);
+  --nav-rule-2: oklch(0.52 0.1 255);
+  --nav-ink: oklch(0.83 0.11 255);
+  --nav-ink-hi: oklch(0.9 0.08 255);
+  --gap-bg: oklch(0.22 0.03 75);
+  --gap-bg-2: oklch(0.24 0.045 75);
+  --gap-rule: oklch(0.38 0.07 75);
+  --gap-rule-2: oklch(0.52 0.1 75);
+  --gap-ink: oklch(0.83 0.11 75);
+  --gap-ink-hi: oklch(0.9 0.08 75);
+  --unchanged-bg: oklch(0.22 0.03 190);
+  --unchanged-bg-2: oklch(0.24 0.045 190);
+  --unchanged-rule: oklch(0.38 0.07 190);
+  --unchanged-rule-2: oklch(0.52 0.1 190);
+  --unchanged-ink: oklch(0.83 0.11 190);
+  --unchanged-ink-hi: oklch(0.9 0.08 190);
+  --prov-bg: oklch(0.22 0.03 300);
+  --prov-bg-2: oklch(0.24 0.045 300);
+  --prov-rule: oklch(0.38 0.07 300);
+  --prov-rule-2: oklch(0.52 0.1 300);
+  --prov-ink: oklch(0.83 0.11 300);
+  --prov-ink-hi: oklch(0.9 0.08 300);
+  --primer-bg: oklch(0.22 0.03 25);
+  --primer-bg-2: oklch(0.24 0.045 25);
+  --primer-rule: oklch(0.38 0.07 25);
+  --primer-rule-2: oklch(0.52 0.1 25);
+  --primer-ink: oklch(0.83 0.11 25);
+  --primer-ink-hi: oklch(0.9 0.08 25);
+  --primer-rust-bg: oklch(0.22 0.006 60);
+  --primer-rust-bg-2: oklch(0.24 0.008 60);
+  --primer-rust-rule: oklch(0.38 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.83 0.014 60);
+  --primer-rust-ink-hi: oklch(0.9 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0a0a0a;
+  --surface: #0e0e0e;
+  --surface-hi: #111111;
+  --surface-2: #171717;
+  --surface-3: #0d0d0d;
+  --chip: #1c1c1c;
+  --ink: #ededed;
+  --ink-2: #d4d4d4;
+  --ink-3: #a8a8a8;
+  --muted: #8f8f8f;
+  --faint: #777777;
+  --fainter: #5a5a5a;
+  --on-ink: #0a0a0a;
+  --on-ink-code: #404040;
+  --rule: #262626;
+  --rule-soft: #1c1c1c;
+  --rule-strong: #3a3a3a;
+  --rule-dash: #4a4a4a;
+  --rule-card: #2e2e2e;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.25 0.06 150);
+  --add-sig: oklch(0.84 0.12 150);
+  --ex-del: oklch(0.25 0.06 25);
+  --del-sig: oklch(0.82 0.11 25);
+  --syn-key: oklch(0.80 0.12 300);
+  --syn-str: oklch(0.82 0.11 150);
+  --syn-com: oklch(0.60 0 0);
+  --syn-name: oklch(0.80 0.10 255);
+  --syn-num: oklch(0.82 0.11 60);
+  --nav-bg: oklch(0.22 0.03 255);
+  --nav-bg-2: oklch(0.24 0.045 255);
+  --nav-rule: oklch(0.38 0.07 255);
+  --nav-rule-2: oklch(0.52 0.1 255);
+  --nav-ink: oklch(0.83 0.11 255);
+  --nav-ink-hi: oklch(0.9 0.08 255);
+  --gap-bg: oklch(0.22 0.03 75);
+  --gap-bg-2: oklch(0.24 0.045 75);
+  --gap-rule: oklch(0.38 0.07 75);
+  --gap-rule-2: oklch(0.52 0.1 75);
+  --gap-ink: oklch(0.83 0.11 75);
+  --gap-ink-hi: oklch(0.9 0.08 75);
+  --unchanged-bg: oklch(0.22 0.03 190);
+  --unchanged-bg-2: oklch(0.24 0.045 190);
+  --unchanged-rule: oklch(0.38 0.07 190);
+  --unchanged-rule-2: oklch(0.52 0.1 190);
+  --unchanged-ink: oklch(0.83 0.11 190);
+  --unchanged-ink-hi: oklch(0.9 0.08 190);
+  --prov-bg: oklch(0.22 0.03 300);
+  --prov-bg-2: oklch(0.24 0.045 300);
+  --prov-rule: oklch(0.38 0.07 300);
+  --prov-rule-2: oklch(0.52 0.1 300);
+  --prov-ink: oklch(0.83 0.11 300);
+  --prov-ink-hi: oklch(0.9 0.08 300);
+  --primer-bg: oklch(0.22 0.03 25);
+  --primer-bg-2: oklch(0.24 0.045 25);
+  --primer-rule: oklch(0.38 0.07 25);
+  --primer-rule-2: oklch(0.52 0.1 25);
+  --primer-ink: oklch(0.83 0.11 25);
+  --primer-ink-hi: oklch(0.9 0.08 25);
+  --primer-rust-bg: oklch(0.22 0.006 60);
+  --primer-rust-bg-2: oklch(0.24 0.008 60);
+  --primer-rust-rule: oklch(0.38 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.83 0.014 60);
+  --primer-rust-ink-hi: oklch(0.9 0.012 60);
+}
+
+/* ---- Workshop overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:600;letter-spacing:-0.03em;font-variation-settings:normal}
+h1{letter-spacing:-0.045em;line-height:1.02}
+.rail-id .tick{font-weight:600;letter-spacing:-0.02em}
+.tier,.tag{font-size:10.5px;letter-spacing:0;text-transform:none;border-color:transparent;padding:2px 8px}
+.open,.gap{position:relative;margin-left:16px;border:1px solid var(--gap-rule);padding:16px 18px 16px 28px}
+.gap{margin-top:16px}
+.open::before,.gap::before{content:"?";position:absolute;left:-16px;top:-14px;width:32px;height:32px;box-sizing:border-box;border-radius:50%;background:var(--badge);border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--body);color:#0a0a0a}
+.gap::before{content:"!"}
+.open>b,.gap>b{font-family:var(--body);font-weight:600;font-size:13.5px;letter-spacing:0}
+details.searched>summary,details.evidence>summary{font-weight:500}
+
+/* ---- Highlighter accents. Tints for the two labelled tiers and the excerpt tag, never a grade ---- */
+:root{--hl-yellow:oklch(0.91 0.15 95);--hl-sky:oklch(0.91 0.08 205);--hl-pink:oklch(0.91 0.07 340);--hl-lime:oklch(0.92 0.13 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.95 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.50 0.20 265);--nav-ink-hi:oklch(0.42 0.21 265);--nav-rule-2:oklch(0.80 0.10 265);--unchanged-bg:oklch(0.96 0.035 205);--unchanged-rule-2:oklch(0.62 0.09 205);--gap-bg-2:oklch(0.97 0.05 95);--gap-rule:oklch(0.86 0.12 95);--prov-ink:oklch(0.48 0.15 340);--prov-bg:oklch(0.975 0.02 340);--prov-rule:oklch(0.88 0.06 340);--prov-rule-2:oklch(0.75 0.10 340);--primer-ink:oklch(0.50 0.17 25);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl-yellow:oklch(0.88 0.16 95);--hl-sky:oklch(0.84 0.09 205);--hl-pink:oklch(0.84 0.09 340);--hl-lime:oklch(0.88 0.15 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.40 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.80 0.13 265);--nav-ink-hi:oklch(0.88 0.09 265);--nav-rule-2:oklch(0.45 0.10 265);--unchanged-bg:oklch(0.22 0.04 205);--unchanged-rule-2:oklch(0.60 0.09 205);--gap-bg-2:oklch(0.24 0.05 95);--gap-rule:oklch(0.55 0.12 95);--prov-ink:oklch(0.84 0.09 340);--prov-bg:oklch(0.21 0.03 340);--prov-rule:oklch(0.38 0.06 340);--prov-rule-2:oklch(0.55 0.09 340);}}
+:root[data-theme="dark"]{--hl-yellow:oklch(0.88 0.16 95);--hl-sky:oklch(0.84 0.09 205);--hl-pink:oklch(0.84 0.09 340);--hl-lime:oklch(0.88 0.15 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.40 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.80 0.13 265);--nav-ink-hi:oklch(0.88 0.09 265);--nav-rule-2:oklch(0.45 0.10 265);--unchanged-bg:oklch(0.22 0.04 205);--unchanged-rule-2:oklch(0.60 0.09 205);--gap-bg-2:oklch(0.24 0.05 95);--gap-rule:oklch(0.55 0.12 95);--prov-ink:oklch(0.84 0.09 340);--prov-bg:oklch(0.21 0.03 340);--prov-rule:oklch(0.38 0.06 340);--prov-rule-2:oklch(0.55 0.09 340);}
+
+.tier{background:var(--chip);color:var(--ink-2)}
+.tier-unc{background:var(--hl-sky);color:var(--hl-ink)}
+.tier-inf{background:var(--hl-yellow);color:var(--hl-ink)}
+.tag{background:var(--hl-pink);color:var(--hl-ink);border-color:transparent}
+.ip-aff>.ip-box{border-color:var(--unchanged-rule-2)}
+main section > p strong{background:linear-gradient(transparent 58%,var(--hl-soft) 58%)}
+::selection{background:var(--hl-yellow);color:var(--hl-ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tier-unc,:root:not([data-theme="light"]) .tier-inf,:root:not([data-theme="light"]) .tag{background:transparent;border:1px solid currentColor}
+:root:not([data-theme="light"]) .tier-unc{color:var(--hl-sky)}:root:not([data-theme="light"]) .tier-inf{color:var(--hl-yellow)}:root:not([data-theme="light"]) .tag{color:var(--hl-pink)}}
+:root[data-theme="dark"] .tier-unc,:root[data-theme="dark"] .tier-inf,:root[data-theme="dark"] .tag{background:transparent;border:1px solid currentColor}
+:root[data-theme="dark"] .tier-unc{color:var(--hl-sky)}:root[data-theme="dark"] .tier-inf{color:var(--hl-yellow)}:root[data-theme="dark"] .tag{color:var(--hl-pink)}
+
+/* ---- Square frames and hard shadows: what reads Workshop apart from Daylight ---- */
+:root{--display:'Bricolage Grotesque', 'Geist', sans-serif;--r:0px;--r-box:0px;--r-tag:0px;--r-sm:2px;--frame:#0a0a0a;--shadow:#0a0a0a;--ground:#fdfdfb;--surface:#fdfdfb;--surface-3:#fbfbf8;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--frame:#3d3d3d;--shadow:#3d3d3d;}}
+:root[data-theme="dark"]{--frame:#3d3d3d;--shadow:#3d3d3d;}
+
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;letter-spacing:-0.03em;font-variation-settings:normal}
+h1{letter-spacing:-0.04em;line-height:1}
+.rail-id .tick{font-family:var(--display);font-weight:800}
+.rail{border-right:2px solid var(--frame)}
+.eyebrow > i{height:2px;background:var(--frame)}
+.lbl-a{background:var(--hl-yellow);color:var(--hl-ink);padding:3px 7px}
+.cp + .cp{border-top:2px dashed var(--rule-strong)}
+.ip-card,figure.chain{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
+details.excerpt,details.searched,.gt,.primer{border:2px solid var(--frame)}
+.gt{background:var(--frame)}
+.open,.gap{border:2px solid var(--frame);box-shadow:4px 4px 0 var(--shadow)}
+.open::before,.gap::before{border-radius:0;border:2px solid var(--frame);width:30px;height:30px}
+.tier,.tag{border:1.5px solid var(--frame)}
+.ip-box{border-width:2px !important}
+
+/* ---- The appearance menu, framed like everything else here ---- */
+.rc-btn{border:2px solid var(--frame);box-shadow:3px 3px 0 var(--shadow);font-weight:600}
+.rc-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.rc-pop{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
+.rc-h{display:inline-block;align-self:flex-start;background:var(--hl-yellow);color:var(--hl-ink);padding:3px 6px;font-weight:600}
+.rc-styles button.on{border-color:var(--frame)}
+.rc-seg{border:2px solid var(--frame)}
+.rc-seg button[aria-pressed="true"]{background:var(--hl-yellow);color:var(--hl-ink);font-weight:600}
+</style>
+<!-- Theme · Field Notes. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="field-notes" media="not all" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=Fira+Code:wght@400;500;600&family=Kalam:wght@400;700&display=swap">
+<style data-style="field-notes" media="not all" data-style-label="Field Notes">
+/* Tokens · Field Notes direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Young Serif', Georgia, serif;
+  --body: 'Nunito Sans', system-ui, sans-serif;
+  --mono: 'Fira Code', ui-monospace, Menlo, monospace;
+  --hand: 'Kalam', cursive;
+  --r: 6px;
+  --r-sm: 4px;
+  --r-tag: 0;
+  --r-box: 16px;
+  --ground: #fbf8f1;
+  --surface: #fcfaf4;
+  --surface-hi: #fffdf8;
+  --surface-2: #f4eee2;
+  --surface-3: #fdfbf6;
+  --chip: #f1eadb;
+  --ink: #2a2420;
+  --ink-2: #352e29;
+  --ink-3: #4a423a;
+  --muted: #73695f;
+  --faint: #8a7f72;
+  --fainter: #aaa092;
+  --on-ink: #fbf8f1;
+  --on-ink-code: #ddd3c3;
+  --rule: #e8e0cf;
+  --rule-soft: #efe9dc;
+  --rule-strong: #d3c8b2;
+  --rule-dash: #bfb39c;
+  --rule-card: #ddd3bf;
+  --note-bg: #fff6d9;
+  --note-border: #2a2420;
+  --note-shadow: #2a2420;
+  --hand-ink: oklch(0.53 0.14 40);
+  --highlight: oklch(0.91 0.10 90);
+  --ex-add: oklch(0.95 0.04 150);
+  --add-sig: oklch(0.46 0.11 150);
+  --ex-del: oklch(0.95 0.03 30);
+  --del-sig: oklch(0.50 0.14 30);
+  --syn-key: oklch(0.48 0.11 295);
+  --syn-str: oklch(0.47 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.48 0.10 245);
+  --syn-num: oklch(0.53 0.12 45);
+  --nav-bg: oklch(0.965 0.025 245);
+  --nav-bg-2: oklch(0.95 0.04 245);
+  --nav-rule: oklch(0.87 0.06 245);
+  --nav-rule-2: oklch(0.62 0.08 245);
+  --nav-ink: oklch(0.45 0.1 245);
+  --nav-ink-hi: oklch(0.37 0.11 245);
+  --gap-bg: oklch(0.965 0.025 85);
+  --gap-bg-2: oklch(0.95 0.04 85);
+  --gap-rule: oklch(0.87 0.06 85);
+  --gap-rule-2: oklch(0.62 0.08 85);
+  --gap-ink: oklch(0.45 0.1 85);
+  --gap-ink-hi: oklch(0.37 0.11 85);
+  --unchanged-bg: oklch(0.965 0.025 160);
+  --unchanged-bg-2: oklch(0.95 0.04 160);
+  --unchanged-rule: oklch(0.87 0.06 160);
+  --unchanged-rule-2: oklch(0.62 0.08 160);
+  --unchanged-ink: oklch(0.45 0.1 160);
+  --unchanged-ink-hi: oklch(0.37 0.11 160);
+  --prov-bg: oklch(0.965 0.025 295);
+  --prov-bg-2: oklch(0.95 0.04 295);
+  --prov-rule: oklch(0.87 0.06 295);
+  --prov-rule-2: oklch(0.62 0.08 295);
+  --prov-ink: oklch(0.45 0.1 295);
+  --prov-ink-hi: oklch(0.37 0.11 295);
+  --primer-bg: oklch(0.965 0.025 30);
+  --primer-bg-2: oklch(0.95 0.04 30);
+  --primer-rule: oklch(0.87 0.06 30);
+  --primer-rule-2: oklch(0.62 0.08 30);
+  --primer-ink: oklch(0.45 0.1 30);
+  --primer-ink-hi: oklch(0.37 0.11 30);
+  --primer-rust-bg: oklch(0.965 0.004 60);
+  --primer-rust-bg-2: oklch(0.95 0.007 60);
+  --primer-rust-rule: oklch(0.87 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.45 0.022 60);
+  --primer-rust-ink-hi: oklch(0.37 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #1d1a17;
+  --surface: #201d19;
+  --surface-hi: #24201c;
+  --surface-2: #2a2621;
+  --surface-3: #211e1a;
+  --chip: #2e2924;
+  --ink: #f1ebe1;
+  --ink-2: #e2dbcf;
+  --ink-3: #d0c7b9;
+  --muted: #a89d8b;
+  --faint: #8f8474;
+  --fainter: #6f665a;
+  --on-ink: #1d1a17;
+  --on-ink-code: #4a423a;
+  --rule: #3a342d;
+  --rule-soft: #2f2a24;
+  --rule-strong: #4a433a;
+  --rule-dash: #5a5247;
+  --rule-card: #403a32;
+  --note-bg: #3a3220;
+  --note-border: #e9d9a8;
+  --note-shadow: #0f0d0b;
+  --hand-ink: oklch(0.78 0.11 45);
+  --highlight: oklch(0.42 0.08 90);
+  --ex-add: oklch(0.27 0.05 150);
+  --add-sig: oklch(0.82 0.11 150);
+  --ex-del: oklch(0.27 0.05 30);
+  --del-sig: oklch(0.82 0.11 30);
+  --syn-key: oklch(0.80 0.09 295);
+  --syn-str: oklch(0.80 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.80 0.08 245);
+  --syn-num: oklch(0.80 0.10 50);
+  --nav-bg: oklch(0.26 0.03 245);
+  --nav-bg-2: oklch(0.29 0.045 245);
+  --nav-rule: oklch(0.42 0.06 245);
+  --nav-rule-2: oklch(0.65 0.08 245);
+  --nav-ink: oklch(0.82 0.09 245);
+  --nav-ink-hi: oklch(0.88 0.07 245);
+  --gap-bg: oklch(0.26 0.03 85);
+  --gap-bg-2: oklch(0.29 0.045 85);
+  --gap-rule: oklch(0.42 0.06 85);
+  --gap-rule-2: oklch(0.65 0.08 85);
+  --gap-ink: oklch(0.82 0.09 85);
+  --gap-ink-hi: oklch(0.88 0.07 85);
+  --unchanged-bg: oklch(0.26 0.03 160);
+  --unchanged-bg-2: oklch(0.29 0.045 160);
+  --unchanged-rule: oklch(0.42 0.06 160);
+  --unchanged-rule-2: oklch(0.65 0.08 160);
+  --unchanged-ink: oklch(0.82 0.09 160);
+  --unchanged-ink-hi: oklch(0.88 0.07 160);
+  --prov-bg: oklch(0.26 0.03 295);
+  --prov-bg-2: oklch(0.29 0.045 295);
+  --prov-rule: oklch(0.42 0.06 295);
+  --prov-rule-2: oklch(0.65 0.08 295);
+  --prov-ink: oklch(0.82 0.09 295);
+  --prov-ink-hi: oklch(0.88 0.07 295);
+  --primer-bg: oklch(0.26 0.03 30);
+  --primer-bg-2: oklch(0.29 0.045 30);
+  --primer-rule: oklch(0.42 0.06 30);
+  --primer-rule-2: oklch(0.65 0.08 30);
+  --primer-ink: oklch(0.82 0.09 30);
+  --primer-ink-hi: oklch(0.88 0.07 30);
+  --primer-rust-bg: oklch(0.26 0.006 60);
+  --primer-rust-bg-2: oklch(0.29 0.008 60);
+  --primer-rust-rule: oklch(0.42 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #1d1a17;
+  --surface: #201d19;
+  --surface-hi: #24201c;
+  --surface-2: #2a2621;
+  --surface-3: #211e1a;
+  --chip: #2e2924;
+  --ink: #f1ebe1;
+  --ink-2: #e2dbcf;
+  --ink-3: #d0c7b9;
+  --muted: #a89d8b;
+  --faint: #8f8474;
+  --fainter: #6f665a;
+  --on-ink: #1d1a17;
+  --on-ink-code: #4a423a;
+  --rule: #3a342d;
+  --rule-soft: #2f2a24;
+  --rule-strong: #4a433a;
+  --rule-dash: #5a5247;
+  --rule-card: #403a32;
+  --note-bg: #3a3220;
+  --note-border: #e9d9a8;
+  --note-shadow: #0f0d0b;
+  --hand-ink: oklch(0.78 0.11 45);
+  --highlight: oklch(0.42 0.08 90);
+  --ex-add: oklch(0.27 0.05 150);
+  --add-sig: oklch(0.82 0.11 150);
+  --ex-del: oklch(0.27 0.05 30);
+  --del-sig: oklch(0.82 0.11 30);
+  --syn-key: oklch(0.80 0.09 295);
+  --syn-str: oklch(0.80 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.80 0.08 245);
+  --syn-num: oklch(0.80 0.10 50);
+  --nav-bg: oklch(0.26 0.03 245);
+  --nav-bg-2: oklch(0.29 0.045 245);
+  --nav-rule: oklch(0.42 0.06 245);
+  --nav-rule-2: oklch(0.65 0.08 245);
+  --nav-ink: oklch(0.82 0.09 245);
+  --nav-ink-hi: oklch(0.88 0.07 245);
+  --gap-bg: oklch(0.26 0.03 85);
+  --gap-bg-2: oklch(0.29 0.045 85);
+  --gap-rule: oklch(0.42 0.06 85);
+  --gap-rule-2: oklch(0.65 0.08 85);
+  --gap-ink: oklch(0.82 0.09 85);
+  --gap-ink-hi: oklch(0.88 0.07 85);
+  --unchanged-bg: oklch(0.26 0.03 160);
+  --unchanged-bg-2: oklch(0.29 0.045 160);
+  --unchanged-rule: oklch(0.42 0.06 160);
+  --unchanged-rule-2: oklch(0.65 0.08 160);
+  --unchanged-ink: oklch(0.82 0.09 160);
+  --unchanged-ink-hi: oklch(0.88 0.07 160);
+  --prov-bg: oklch(0.26 0.03 295);
+  --prov-bg-2: oklch(0.29 0.045 295);
+  --prov-rule: oklch(0.42 0.06 295);
+  --prov-rule-2: oklch(0.65 0.08 295);
+  --prov-ink: oklch(0.82 0.09 295);
+  --prov-ink-hi: oklch(0.88 0.07 295);
+  --primer-bg: oklch(0.26 0.03 30);
+  --primer-bg-2: oklch(0.29 0.045 30);
+  --primer-rule: oklch(0.42 0.06 30);
+  --primer-rule-2: oklch(0.65 0.08 30);
+  --primer-ink: oklch(0.82 0.09 30);
+  --primer-ink-hi: oklch(0.88 0.07 30);
+  --primer-rust-bg: oklch(0.26 0.006 60);
+  --primer-rust-bg-2: oklch(0.29 0.008 60);
+  --primer-rust-rule: oklch(0.42 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+}
+
+/* ---- Field Notes overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:400;letter-spacing:-0.005em;font-variation-settings:normal}
+h1{line-height:1.1}
+.tier{font-family:var(--body);font-size:12.5px;font-weight:700;letter-spacing:0;text-transform:none;border:0;background:none;padding:0 2px;gap:6px;color:var(--muted);vertical-align:0}
+.tier::before{content:"";flex:0 0 auto;width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid currentColor}
+.tier-unc{background:none;color:var(--unchanged-ink)}
+.tier-unc::before{border-style:dashed}
+.tier-inf{background:none;color:var(--gap-ink)}
+.tier-inf::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.tag{font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:999px;padding:1px 9px}
+.open{background:var(--note-bg);border:1.5px solid var(--note-border);border-radius:4px;box-shadow:3px 3px 0 var(--note-shadow);transform:rotate(-0.3deg);color:var(--ink)}
+.open>b{font-family:var(--hand);font-weight:700;font-size:18px;letter-spacing:0;color:var(--gap-ink);margin-bottom:2px}
+.gap>b{font-family:var(--hand);font-size:16px;letter-spacing:0;font-weight:700}
+.lbl-a{font-family:var(--hand);font-size:19px;letter-spacing:0;text-transform:none;color:var(--hand-ink);font-weight:700}
+.cp > .lbl{font-family:var(--hand);font-size:17px;letter-spacing:0;text-transform:none;color:var(--hand-ink)}
+.ip-rel{font-family:var(--hand);font-size:15px;letter-spacing:0;text-transform:none;color:var(--hand-ink)}
+.ip-chg>.ip-box,.ip-out>.ip-box,.ip-aff>.ip-box{border-width:1.5px}
+main p a:not(.doc){text-decoration-style:wavy;text-underline-offset:4px}
+main section > p strong{background:linear-gradient(transparent 58%,var(--highlight) 58%)}
+details.searched>summary,details.evidence>summary{font-weight:700}
+
+/* ---- Highlighter accents. Tints for the two labelled tiers and the excerpt tag, never a grade ---- */
+:root{--hl-yellow:oklch(0.91 0.15 95);--hl-sky:oklch(0.90 0.08 205);--hl-pink:oklch(0.90 0.08 345);--highlight:oklch(0.91 0.15 95);--note-bg:oklch(0.96 0.09 95);--hand-ink:oklch(0.55 0.17 350);--nav-ink:oklch(0.48 0.16 260);--nav-ink-hi:oklch(0.40 0.17 260);--nav-rule-2:oklch(0.78 0.08 260);--unchanged-ink:oklch(0.42 0.09 205);--unchanged-rule-2:oklch(0.58 0.09 205);--unchanged-bg:oklch(0.95 0.035 205);--prov-ink:oklch(0.48 0.13 345);--prov-bg:oklch(0.97 0.02 345);--prov-rule:oklch(0.88 0.05 345);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl-yellow:oklch(0.50 0.10 95);--hl-sky:oklch(0.45 0.07 205);--hl-pink:oklch(0.45 0.08 345);--highlight:oklch(0.50 0.10 95);--note-bg:#3d3418;--hand-ink:oklch(0.80 0.12 350);--nav-ink:oklch(0.80 0.11 260);--nav-ink-hi:oklch(0.88 0.08 260);--nav-rule-2:oklch(0.50 0.08 260);--unchanged-ink:oklch(0.84 0.08 205);--unchanged-rule-2:oklch(0.65 0.08 205);--unchanged-bg:oklch(0.27 0.035 205);--prov-ink:oklch(0.84 0.08 345);--prov-bg:oklch(0.26 0.03 345);--prov-rule:oklch(0.42 0.06 345);}}
+:root[data-theme="dark"]{--hl-yellow:oklch(0.50 0.10 95);--hl-sky:oklch(0.45 0.07 205);--hl-pink:oklch(0.45 0.08 345);--highlight:oklch(0.50 0.10 95);--note-bg:#3d3418;--hand-ink:oklch(0.80 0.12 350);--nav-ink:oklch(0.80 0.11 260);--nav-ink-hi:oklch(0.88 0.08 260);--nav-rule-2:oklch(0.50 0.08 260);--unchanged-ink:oklch(0.84 0.08 205);--unchanged-rule-2:oklch(0.65 0.08 205);--unchanged-bg:oklch(0.27 0.035 205);--prov-ink:oklch(0.84 0.08 345);--prov-bg:oklch(0.26 0.03 345);--prov-rule:oklch(0.42 0.06 345);}
+
+.tier-unc{background:linear-gradient(transparent 45%,var(--hl-sky) 45%);color:var(--ink)}
+.tier-inf{background:linear-gradient(transparent 45%,var(--hl-yellow) 45%);color:var(--ink)}
+.tier-unc::before{border-color:var(--unchanged-rule-2)}
+.tier-inf::before{color:var(--gap-ink)}
+.tag{background:linear-gradient(transparent 40%,var(--hl-pink) 40%);color:var(--ink);border-color:transparent;border-radius:0}
+.cp > h3{text-decoration:underline;text-decoration-color:var(--hl-yellow);text-decoration-thickness:.32em;text-underline-offset:-.12em;text-decoration-skip-ink:none}
+::selection{background:var(--hl-yellow);color:var(--ink)}
+
+/* ---- The appearance menu, in this theme's hand ---- */
+.rc-h{font-family:var(--hand);font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+.rc-btn b{font-family:var(--hand);font-size:15px}
+.rc-pop{transform:rotate(-.4deg)}
+.rc-seg button[aria-pressed="true"]{background:var(--hl-yellow);color:#2a2620;font-weight:600}
+</style>
+<!--
+  The reader's saved appearance, applied here rather than in the tail script
+  so the page never paints in one look and then jumps to another. Two keys,
+  both a viewer's own convenience: which theme (only if this page carries a
+  file of that name) and light or dark (absent means follow the system).
+  Every storage call is guarded — a private window or blocked site data
+  throws, and then the page is simply the repository's choice.
+-->
+<script>
+(function () {
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var s = get('review-style'), els = document.querySelectorAll('[data-style]'), i, known = false;
+  for (i = 0; i < els.length; i++) { if (els[i].getAttribute('data-style') === s) { known = true; } }
+  if (known) {
+    for (i = 0; i < els.length; i++) {
+      if (els[i].getAttribute('data-style') === s) { els[i].removeAttribute('media'); }
+      else { els[i].setAttribute('media', 'not all'); }
+    }
+  }
+  var t = get('review-theme');
+  if (t === 'light' || t === 'dark') { document.documentElement.setAttribute('data-theme', t); }
+})();
+</script>
 
 <!-- Scroll progress. The only decoration on the page that moves. -->
 <div class="progress"><i id="bar"></i></div>
@@ -1522,11 +2233,12 @@ figcaption strong { color: var(--ink-3); }
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
       <a data-rail="context" href="#context"><span class="n">02</span>Context</a>
       <a data-rail="attention" href="#attention"><span class="n">03</span>Needs your attention</a>
-      <a class="sub" data-rail="cp-a" href="#cp-a">Every path keeps history in step?</a>
-      <a class="sub" data-rail="cp-b" href="#cp-b">Backfill vs. changes after load?</a>
-      <a class="sub" data-rail="cp-c" href="#cp-c">Highest role, or current role?</a>
-      <a class="sub" data-rail="cp-d" href="#cp-d">A second role ordering beside Access?</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">One open row on every path?</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">Close history on joining an organization?</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">Backfill rows for ownerships already gone?</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">History destroyed with its user?</a>
       <a data-rail="start" href="#start"><span class="n">04</span>Read in this order</a>
+      <a data-rail="impact" href="#impact"><span class="n">05</span>Impact outside the diff</a>
     </div>
   </nav>
 
@@ -1534,134 +2246,155 @@ figcaption strong { color: var(--ink-3); }
 
     <header style="padding:64px 0 44px;border-bottom:1px solid var(--rule)">
       <div class="lbl lbl-wide" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:34px">
-        <span>rubygems</span><span style="color:var(--rule-strong)">/</span><span>rubygems.org</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/rubygems/rubygems.org/pull/6699">PR #6699</a><span style="color:var(--rule-strong)">&middot;</span><span>Eric Mueller</span>
+        <span>rubygems</span><span style="color:var(--rule-strong)">/</span><span>rubygems.org</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/rubygems/rubygems.org/pull/6699">PR #6699</a><span style="color:var(--rule-strong)">&middot;</span><span>nevinera</span>
       </div>
 
-      <h1>Record a history row for every stint a user holds on a gem</h1>
+      <h1>Add HistoricalOwnership foundation for tracking gem ownership history</h1>
 
-      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">A new table, kept in step by
-        <code>Ownership</code> callbacks and seeded by a maintenance task, that remembers who owned a gem,
-        from when, at what role, and when they stopped.</p>
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">A new table remembers every
+        stint a user spent owning or maintaining a gem, kept in step by Ownership callbacks and
+        seeded by a maintenance task.</p>
 
       <div class="gt gt-meta" style="margin-top:44px">
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">nev/6534/historical-ownership-foundation <span style="color:var(--fainter)">&rarr;</span> master</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">4199bcb <span>&rarr;</span> e9b5a3e</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">feature</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">7</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">11</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test / generated</div><div class="path" style="font-size:12px">6 / 4 / 1</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">By kind</div><div class="path" style="font-size:12px">6 prod &middot; 4 test &middot; 1 generated</div></div>
       </div>
     </header>
 
     <section id="changed">
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
-      <h2 style="max-width:30ch;margin-bottom:18px">A confirmed ownership now leaves a history row that outlives it</h2>
+      <h2 style="max-width:30ch;margin-bottom:18px">Ending an ownership now leaves a history row behind</h2>
 
-      <p>Before this change, removing an owner deleted the <code>ownerships</code> row and the only trace
-        left was an audit event. Now a <code>historical_ownerships</code> row opens when an ownership is
-        confirmed, with <code>first_owned_at</code> set to the confirmation time. Its role is raised on
-        promotion and never lowered, and <code>removed_at</code> is stamped when the ownership is destroyed or
-        the gem is disowned. Callbacks on <code>Ownership</code> do the writing, and
-        <code>Maintenance::BackfillHistoricalOwnershipsTask</code> opens rows for ownerships confirmed before
-        deploy.</p>
-      <p>Nothing reads the table yet: no view, API, policy or Avo resource refers to it, and the branch name
-        calls it a foundation. The <code>private_at</code> column is created with no code that writes or
-        reads it.</p>
+      <p>rubygems.org starts recording who has ever owned or maintained a gem. The new
+        <code>historical_ownerships</code> table holds one row per stint: Ownership callbacks open a
+        row when an ownership is confirmed (an invitation counts only once accepted), raise its role on
+        promotion but never lower it, and stamp <code>removed_at</code> when the ownership is
+        destroyed. <code>Rubygem#disown</code>, which deletes ownerships without callbacks, closes the
+        rows itself. A maintenance task opens rows for every ownership confirmed today; the description
+        says stints that ended before deploy are deliberately not reconstructed, and that this backfill
+        must finish before the two follow-up PRs are safe to merge. No code in this PR reads the table;
+        the description says the follow-ups will.</p>
     </section>
 
     <section id="context">
       <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
       <h2 style="margin-bottom:18px">What the judgments below rely on</h2>
       <dl class="ctx">
-        <dt>Ownership invitation</dt>
-        <dd>An <code>ownerships</code> row exists from the moment a user is invited; it counts as ownership
-          only once <code>confirm!</code> stamps <code>confirmed_at</code>, and the <code>confirmed</code>
-          scope is what every owner check reads.
-          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/ownership.rb#L74-L76">app/models/ownership.rb:74-76</a>
-          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a></span></dd>
-        <dt>Disown</dt>
-        <dd>When a push arrives for a gem with no indexed versions, such as one whose versions are all
-          yanked, the pusher calls <code>Rubygem#disown</code>, which removes every ownership; if the gem is
-          then unowned, the pusher becomes its owner.
-          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/pusher.rb#L236-L241">app/models/pusher.rb:236-241</a>
-          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a></span></dd>
-        <dt>Gem transfer to an organisation</dt>
-        <dd>Moving gems into an organisation turns their owners into organisation members: their
-          <code>Ownership</code> rows are destroyed, and outside contributors who stay are demoted to
-          maintainer. Organisation onboarding does the same.
-          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem_transfer.rb#L76-L91">app/models/rubygem_transfer.rb:76-91</a>
-          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-c">Checkpoint C</a></span></dd>
+        <dt>Disowning a gem</dt>
+        <dd>When someone pushes to a gem name with no indexed versions, <code>Pusher#update</code>
+          calls <code>Rubygem#disown</code>, which deletes the existing ownership rows without running
+          Ownership callbacks; the pusher then becomes the owner.
+          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/pusher.rb#L236">app/models/pusher.rb:236</a>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a></span></dd>
+        <dt>Organization onboarding and gem transfer</dt>
+        <dd>The two flows that move gems into an organization. Members who join have their direct
+          Ownership rows destroyed, because organization membership already grants access to the
+          organization's gems.
+          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L130">app/models/organization_onboarding.rb:126-130</a>
+          <span class="ctx-used">Used by <a href="#cp-b">Checkpoint B</a></span></dd>
+        <dt><code>script/merge_users</code></dt>
+        <dd>An operator script that merges two accounts: it re-points the discarded account's ownerships
+          to the kept one with <code>ownership.user = chosen_user; ownership.save!</code>, then
+          hard-destroys the discarded user.
+          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L44-L51">script/merge_users:44-51</a>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-d">Checkpoint D</a></span></dd>
       </dl>
     </section>
 
     <section id="attention" style="padding-top:48px">
       <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
       <h2 style="margin-bottom:18px">What needs your attention</h2>
-      <p>Three judgments about whether the history stays true, then one about how it was built. The order is
-        the order to think about them.</p>
+      <p>Four judgments, all about whether the history table stays true to the ownerships it mirrors.
+        The order is the order to think about them.</p>
 
       <section class="cp" id="cp-a">
         <span class="lbl lbl-wide">Checkpoint A</span>
-        <h3>Does every path that ends or moves an ownership keep its history row in step?</h3>
-        <p>Rows open and close through <code>Ownership</code> callbacks, and an open row left behind is not
-          inert: the next confirmation for the same user and gem reuses it, because the lookup at
-          <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R140">app/models/ownership.rb:140</a> matches any row with a null
-          <code>removed_at</code>, so two stints merge under the old start date. The paths that destroy
-          ownerships fire the closing callback; <code>disown</code> deletes without callbacks and closes by hand,
-          and the account-merge script moves an ownership to another user, a save no history callback watches
-          <span class="tier tier-unc">from unchanged code</span>. Decide whether each path leaves the history you
-          want.</p>
+        <h3>Does every path that starts or ends an ownership keep exactly one open history row?</h3>
+
+        <p>The history follows ownerships only through writes that run Ownership's callbacks. Every
+          <code>destroy</code> caller runs them, including account deletion at
+          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L376">app/models/user.rb:376</a> and the
+          organization flows
+          (<a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L130">app/models/organization_onboarding.rb:130</a>)
+          <span class="tier tier-unc">from unchanged code</span>, and <code>disown</code> skips them but closes the rows itself.
+          <code>script/merge_users</code>
+          (<a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L44-L51">script/merge_users:44-51</a>) does neither: changing <code>ownership.user</code> touches no
+          column a history callback watches, so the open row stays on the discarded account and is
+          deleted with it, leaving the kept account with a confirmed ownership and no open row
+          <span class="tier tier-unc">from unchanged code</span>. Decide whether that path, and any
+          future write that re-points an ownership, needs its own handling.</p>
+
         <figure class="converge">
           <div class="cv-grid">
             <ol class="cv-paths">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>added already confirmed</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R19">app/models/ownership.rb:19</a></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>invitation accepted</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R21">app/models/ownership.rb:21</a></span></li>
               <li class="ip-n ip-chg"><span class="ip-box"><b>ownership removed</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R26">app/models/ownership.rb:26</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-box"><b>account deleted</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L375-L376">app/models/user.rb:375-376</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-box"><b>gem joins an organisation</b><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem_transfer.rb#L81-L83">app/models/rubygem_transfer.rb:81-83</a></span></li>
               <li class="ip-n ip-chg"><span class="ip-box"><b>gem disowned</b><span class="cv-note">ownerships deleted without callbacks</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R345-R347">app/models/rubygem.rb:345-347</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-box"><b>accounts merged</b><span class="cv-note">ownership moved to another user</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L46-L51">script/merge_users:46-51</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-box"><b>accounts merged</b><span class="cv-note">ownership re-pointed; no history callback fires</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L44-L51">script/merge_users:44-51</a></span></li>
             </ol>
-            <div class="cv-target"><span class="ip-box"><b>an open history row exactly while the ownership is confirmed</b><span class="ip-d">must hold on every path</span></span></div>
+            <div class="cv-target"><span class="ip-box"><b>one open history row per confirmed owner and gem</b><span class="ip-d">must hold on every path</span></span></div>
           </div>
-          <figcaption>Which paths that end or move an ownership must keep its history row truthful.</figcaption>
+          <figcaption>Which paths must keep the open history row in step with the ownership.</figcaption>
         </figure>
+
         <ul class="lookat">
           <li>
-            <b>Disown's hand-written close</b>
-            <span>closes every open row for the gem, which matches the deleted ownerships only if no row is
-              already open without one</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R345-R347">app/models/rubygem.rb:345-347</a>
+            <b>The lifecycle callbacks</b>
+            <span>the conditions that decide which writes open, raise or close a row; none watches
+              <code>user_id</code></span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/models/rubygem.rb:344-351</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R18-R26">app/models/ownership.rb:18-26</a></span>
     <span class="tag">At head</span>
-    <span class="ex-why">ownerships deleted without callbacks, then their history closed by hand</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/ownership.rb" data-lang="ruby" style="counter-reset: exl 17"><span class="l">  after_create :record_create_event</span>
+<span class="l">  after_create :create_historical_ownership, if: :confirmed?</span>
+<span class="l">  after_update :record_confirmation_event, if: :saved_change_to_confirmed_at?</span>
+<span class="l">  after_update :create_historical_ownership, if: :saved_change_to_confirmed_at?</span>
+<span class="l">  after_update :record_role_updated_event, if: :saved_change_to_role?</span>
+<span class="l">  after_update :notify_user_role_of_role_change, if: :saved_change_to_role?</span>
+<span class="l">  after_update :upgrade_historical_ownership_role, if: :saved_change_to_role?</span>
+<span class="l">  after_destroy :record_destroy_event</span>
+<span class="l">  after_destroy :close_historical_ownership</span>
+</pre>
+  </div>
+</details>
+
+          </li>
+          <li>
+            <b>Disown's own close</b>
+            <span>the one bulk delete of ownerships, compensated two lines later</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R344-R348">app/models/rubygem.rb:344-348</a></span>
+    <span class="tag">At head</span>
   </summary>
   <div class="ex-body">
 <pre data-src="app/models/rubygem.rb" data-lang="ruby" style="counter-reset: exl 343"><span class="l">  def disown</span>
 <span class="l">    ownerships_including_unconfirmed.find_each(&amp;:delete)</span>
 <span class="l">    ownerships_including_unconfirmed.clear</span>
 <span class="l">    historical_ownerships.current.update_all(removed_at: Time.current)</span>
-<span class="l"></span>
-<span class="l">    oidc_rubygem_trusted_publishers.find_each(&amp;:delete)</span>
-<span class="l">    oidc_rubygem_trusted_publishers.clear</span>
-<span class="l">  end</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem.rb#L344-L351">app/models/rubygem.rb:344-351</a></p>
   </div>
 </details>
+
           </li>
           <li>
-            <b>Account merge</b>
-            <span>the kept user ends with a confirmed ownership and no open row, and destroying the other user
-              deletes its rows through <code>dependent: :destroy</code>
-              <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L44-L51">script/merge_users:44-51</a>
+            <b>The account-merge re-point</b>
+            <span>a <code>save!</code> that changes only <code>user_id</code>, then
+              <code>other_user.destroy</code> <span class="tier tier-unc">from unchanged code</span></span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">script/merge_users:44-51</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L44-L51">script/merge_users:44-51</a></span>
     <span class="tag">Unchanged</span>
-    <span class="ex-why">the ownership changes holder by a save no history callback watches</span>
   </summary>
   <div class="ex-body">
 <pre data-src="script/merge_users" data-lang="ruby" style="counter-reset: exl 43"><span class="l">(other_user.rubygems - chosen_user.rubygems).each do |rubygem|</span>
@@ -1673,53 +2406,114 @@ figcaption strong { color: var(--ink-3); }
 <span class="l"></span>
 <span class="l">other_user.destroy</span>
 </pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L44-L51">script/merge_users:44-51</a></p>
   </div>
 </details>
+
           </li>
           <li>
-            <b>Organisation transfer and onboarding</b>
-            <span>both use <code>destroy_all</code>, so the callback closes the row; onboarding does it at
-              <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L130">app/models/organization_onboarding.rb:130</a>
-              <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem_transfer.rb#L81-L83">app/models/rubygem_transfer.rb:81-83</a>
-          </li>
-          <li>
-            <b>Account deletion</b>
-            <span>discarding a user destroys its ownerships with callbacks; the user row survives, so its
-              history does too <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L375-L376">app/models/user.rb:375-376</a>
+            <b>Lifecycle specs</b>
+            <span>pin create, confirm, promote, demote and destroy; none runs <code>disown</code> or
+              re-points an ownership</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R163-R263">test/models/ownership_test.rb:163-263</a>
           </li>
         </ul>
-        <div class="gap"><b>GAP</b><span>The destroy tests at
-          <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R221-R262">test/models/ownership_test.rb:221-262</a> drive
-          <code>safe_destroy</code> only; no test runs <code>disown</code> or the merge script against
-          history.</span></div>
-        <p class="open"><b>Open question</b> Should a gem transfer record owners as removed when they keep
-          access as organisation members?</p>
+
+        <p class="open"><b>Open question</b> Whether <code>script/merge_users</code> is still run, and if
+          so whether it should carry the open history row across to the kept account.</p>
       </section>
 
       <section class="cp" id="cp-b">
         <span class="lbl lbl-wide">Checkpoint B</span>
-        <h3>Does the backfill stay right when an ownership is removed or promoted after the task loads it?</h3>
-        <p><code>process</code> writes an open row from the ownership as loaded and never re-reads it. An
-          ownership destroyed or disowned between load and process gets a fresh open row with nothing behind
-          it, which the next confirmation for that user and gem then reuses (Checkpoint A); a promotion in that
-          window is written as the old role <span class="tier tier-inf">inferred</span>. This repository's
-          maintenance-task rules ask for exactly this case to be handled: preserve newer application writes,
-          and skip records deleted after loading.</p>
+        <h3>When members' gems move into an organization, should their history rows close?</h3>
+
+        <p>Onboarding and gem transfer destroy the direct ownerships of members who join
+          (<a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L130">app/models/organization_onboarding.rb:126-130</a>), so each
+          destroy now stamps <code>removed_at</code> on that member's row
+          <span class="tier tier-unc">from unchanged code</span>. Those members keep access through the
+          organization, so the table will record them as former owners of gems they still publish. The
+          description says later slices will show prior owners on gem pages; decide whether
+          <code>removed_at</code> means the Ownership row went or the access did, because the follow-ups
+          will read it as one of the two. The path is drawn as
+          <a href="#impact">Impact path B</a>.</p>
+
         <ul class="lookat">
           <li>
-            <b>The per-record write</b>
-            <span>role and start date come from the loaded object; nothing checks the ownership still
-              exists</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R14-R19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a>
+            <b>Joining members' ownerships</b>
+            <span>the <code>destroy_all</code> that now runs <code>close_historical_ownership</code> for
+              each member <span class="tier tier-unc">from unchanged code</span></span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L131">app/models/organization_onboarding.rb:126-131</a></span>
+    <span class="tag">Unchanged</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/organization_onboarding.rb" data-lang="ruby" style="counter-reset: exl 125"><span class="l">  def remove_ownerships_for_joining_members</span>
+<span class="l">    onboarded_users = invites.reject { it.role.nil? || it.outside_contributor? }.map(&amp;:user)</span>
+<span class="l">    onboarded_users &lt;&lt; created_by</span>
+<span class="l"></span>
+<span class="l">    Ownership.includes(:rubygem, :user, api_key_rubygem_scopes: :api_key).where(user: onboarded_users, rubygem: selected_rubygems).destroy_all</span>
+<span class="l">  end</span>
+</pre>
+  </div>
+</details>
+
+          </li>
+          <li>
+            <b>The transfer twin</b>
+            <span>the same destroy when gems are transferred to an existing organization
+              <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem_transfer.rb#L76-L84">app/models/rubygem_transfer.rb:76-84</a>
+          </li>
+          <li>
+            <b>Access through membership</b>
+            <span><code>owned_by?</code> stays true for an organization member whose Ownership row is
+              gone</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem.rb#L226-L229">app/models/rubygem.rb:226-229</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/rubygem.rb" data-lang="ruby" style="counter-reset: exl 225"><span class="l">  def owned_by?(user)</span>
+<span class="l">    return false unless user</span>
+<span class="l">    ownerships.exists?(user_id: user.id) || (owned_by_organization? &amp;&amp; user_authorized_for_organization?(user))</span>
+<span class="l">  end</span>
+</pre>
+  </div>
+</details>
+
+          </li>
+        </ul>
+
+        <div class="gap"><b>GAP</b><span>No test runs onboarding or transfer against a gem with
+          history rows.</span></div>
+      </section>
+
+      <section class="cp" id="cp-c">
+        <span class="lbl lbl-wide">Checkpoint C</span>
+        <h3>Can the backfill open a history row for an ownership that is already gone?</h3>
+
+        <p><code>process</code> creates from the ownership the task loaded, without reloading it. If that
+          ownership is destroyed after its batch loads, the destroy callback finds no row to close and the
+          task then opens one for a user who no longer owns the gem, which the partial unique index
+          cannot refuse because no other open row exists <span class="tier tier-inf">inferred</span>.
+          This repository's maintenance-task guide asks tasks to handle that case
+          (<a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/doc/maintenance-tasks.md#L9-L11">doc/maintenance-tasks.md:9-11</a>)
+          <span class="tier tier-unc">from unchanged code</span>. Removals that land before the task
+          reaches an ownership leave no trace at all, and backfilled rows carry today's role rather than
+          the highest held. Decide whether that window matters before the follow-up PRs rely on the data.</p>
+
+        <ul class="lookat">
+          <li>
+            <b>The backfill's write</b>
+            <span>no reload and no existence check before the create</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R14-R19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a></span>
     <span class="tag">Added</span>
-    <span class="ex-why">writes from the record as loaded, with no re-read</span>
   </summary>
   <div class="ex-body">
 <pre data-src="app/tasks/maintenance/backfill_historical_ownerships_task.rb" data-lang="ruby" style="counter-reset: exl 13"><span class="l">  def process(ownership)</span>
@@ -1729,156 +2523,119 @@ figcaption strong { color: var(--ink-3); }
 <span class="l">    end</span>
 <span class="l">  end</span>
 </pre>
-    <p class="ex-src">Added at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/tasks/maintenance/backfill_historical_ownerships_task.rb#L14-L19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:14-19</a></p>
   </div>
 </details>
+
           </li>
           <li>
-            <b>The repository's rule</b>
-            <span>conditional writes or lock-and-reload, and skipping records deleted after load
+            <b>The repository's rule for tasks</b>
+            <span>records may change or be deleted after loading; reload them or skip the deleted ones
               <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/doc/maintenance-tasks.md#L7-L11">doc/maintenance-tasks.md:7-11</a>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">doc/maintenance-tasks.md:7-11</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/doc/maintenance-tasks.md#L9-L11">doc/maintenance-tasks.md:9-11</a></span>
     <span class="tag">Unchanged</span>
-    <span class="ex-why">the repository's rule for records that change after load</span>
   </summary>
   <div class="ex-body">
-<pre data-src="doc/maintenance-tasks.md" data-lang="markdown" style="counter-reset: exl 6"><span class="l">## Safety</span>
-<span class="l"></span>
-<span class="l">The application may change a record after the task loads it. When that matters, make the database update conditional on the task's change still being needed, or lock and reload the record in a transaction and check before updating. Preserve newer application writes and make reruns safe.</span>
+<pre data-src="doc/maintenance-tasks.md" style="counter-reset: exl 8"><span class="l">The application may change a record after the task loads it. When that matters, make the database update conditional on the task's change still being needed, or lock and reload the record in a transaction and check before updating. Preserve newer application writes and make reruns safe.</span>
 <span class="l"></span>
 <span class="l">Decide whether to include deleted and soft-deleted records. Use the same rule in `collection` and `process`. If excluding them, also skip records deleted after loading.</span>
 </pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/doc/maintenance-tasks.md#L7-L11">doc/maintenance-tasks.md:7-11</a></p>
   </div>
 </details>
-          </li>
-          <li>
-            <b>What the task tests pin</b>
-            <span>creation and the rerun no-op; nothing changes a record between load and process</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70R28-R49">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb:28-49</a>
-          </li>
-        </ul>
-        <div class="gap"><b>GAP</b><span>No test passes a stale record to <code>process</code>, the case
-          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/doc/maintenance-tasks.md#L21-L23">doc/maintenance-tasks.md:21-23</a>
-          describes.</span></div>
-        <p class="open"><b>Open question</b> History starts at the backfill: stints that ended before deploy,
-          and removals before the task reaches an ownership, leave no row. Intended, or is a reconstruction
-          from ownership events planned?</p>
-      </section>
 
-      <section class="cp" id="cp-c">
-        <span class="lbl lbl-wide">Checkpoint C</span>
-        <h3>Should a history row record the highest role held, when the backfill records the current one?</h3>
-        <p>A promotion raises the open row's role and a demotion leaves it alone, so an owner demoted to
-          maintainer stays <code>owner</code> in history; the bulk demotions in gem transfer and onboarding
-          skip the callback, which that rule makes harmless. The backfill copies the ownership's current role,
-          so for anyone who held a gem before deploy the same column means "role today"
-          <span class="tier tier-inf">inferred</span>. Decide which meaning the table's eventual reader
-          needs.</p>
-        <ul class="lookat">
+          </li>
           <li>
-            <b>The upgrade callback</b>
-            <span>updates only rows whose role ranks below the new one</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R146-R153">app/models/ownership.rb:146-153</a>
+            <b>The tolerant close</b>
+            <span>closes nothing when no open row exists yet</span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">app/models/ownership.rb:146-153</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R155-R159">app/models/ownership.rb:155-159</a></span>
     <span class="tag">At head</span>
-    <span class="ex-why">raises the open row's role, never lowers it</span>
   </summary>
   <div class="ex-body">
-<pre data-src="app/models/ownership.rb" data-lang="ruby" style="counter-reset: exl 145"><span class="l">  # Tracks the highest role ever held during the open stint, never downgrades.</span>
-<span class="l">  def upgrade_historical_ownership_role</span>
-<span class="l">    lower_roles = HistoricalOwnership.roles_below(role)</span>
-<span class="l">    return if lower_roles.empty?</span>
-<span class="l"></span>
-<span class="l">    HistoricalOwnership.where(rubygem_id:, user_id:, removed_at: nil, role: lower_roles)</span>
-<span class="l">      .update_all(role: HistoricalOwnership.roles[role])</span>
+<pre data-src="app/models/ownership.rb" data-lang="ruby" style="counter-reset: exl 154"><span class="l">  # Intentionally tolerant of not finding a record to update</span>
+<span class="l">  def close_historical_ownership</span>
+<span class="l">    HistoricalOwnership.where(rubygem_id:, user_id:, removed_at: nil)</span>
+<span class="l">      .update_all(removed_at: Time.current)</span>
 <span class="l">  end</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/ownership.rb#L146-L153">app/models/ownership.rb:146-153</a></p>
   </div>
 </details>
+
           </li>
           <li>
-            <b>Promote and demote tests</b>
-            <span>pin the raise and the demote-after-promote no-op; neither starts from a backfilled row</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-799f355263b9fa5910f19d9d85e6554ff81718ce8e7c2e789e8b88a3332d83f4R198-R218">test/models/ownership_test.rb:198-218</a>
-          </li>
-          <li>
-            <b>The backfill's role</b>
-            <span>copied from the ownership as it stands at backfill time</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R16">app/tasks/maintenance/backfill_historical_ownerships_task.rb:16</a>
+            <b>Backfill specs</b>
+            <span>pin the id range, the unconfirmed exclusion and a rerun; none deletes an ownership
+              between load and process</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70R6-R50">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb:6-50</a>
           </li>
         </ul>
+
+        <p class="open"><b>Open question</b> Whether the follow-up PRs need any stint that ended before
+          the backfill finished, which neither this task nor the callbacks can supply.</p>
       </section>
 
       <section class="cp" id="cp-d">
         <span class="lbl lbl-wide">Checkpoint D</span>
-        <h3>Is it deliberate that <code>roles_below</code> ranks roles itself, beside <code>Access</code>?</h3>
-        <p><code>lib/access.rb</code> already defines role order as integer flags, and the existing scopes
-          compare against it as ranges. <code>HistoricalOwnership</code> instead sorts its own enum into
-          <code>ROLE_HIERARCHY</code> and slices it by index, and a test keeps its enum equal to
-          <code>Ownership</code>'s. Is a second ordering, held in step by a test, intended over a flag
-          comparison through <code>Access</code>?</p>
+        <h3>Should history rows be destroyed with their user?</h3>
+
+        <p><code>User</code> and <code>Rubygem</code> now declare
+          <code>has_many :historical_ownerships</code> with
+          <a class="doc" href="https://api.rubyonrails.org/v8.1/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many">dependent: :destroy</a>.
+          Account deletion is a soft discard that destroys ownerships but leaves the user row, so the
+          ordinary path keeps the history. A hard destroy deletes it; the one found is
+          <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L51">script/merge_users:51</a>, which erases the
+          merged account's rows <span class="tier tier-unc">from unchanged code</span>. Destroying a
+          <code>Rubygem</code> would delete its rows the same way
+          (<a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R15">app/models/rubygem.rb:15</a>). Decide whether rows in a
+          history table are meant to disappear with the account or gem they describe.</p>
+
         <ul class="lookat">
           <li>
-            <b>Where role order lives</b>
-            <span>flags plus <code>with_minimum_role</code>, the range the ownership scope uses
-              <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/lib/access.rb#L4-L22">lib/access.rb:4-22</a>
+            <b>Account deletion is a discard</b>
+            <span><code>before_discard</code> destroys ownerships; the user row and its history stay</span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">lib/access.rb:4-22</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">where role order is already defined and compared</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/user.rb#L25-L28">app/models/user.rb:25-28</a></span>
+    <span class="tag">At head</span>
   </summary>
   <div class="ex-body">
-<pre data-src="lib/access.rb" data-lang="ruby" style="counter-reset: exl 3"><span class="l">  MAINTAINER = 50</span>
-<span class="l">  ADMIN = 60</span>
-<span class="l">  OWNER = 70</span>
-<span class="l"></span>
-<span class="l">  DEFAULT_ROLE = "owner"</span>
-<span class="l"></span>
-<span class="l">  ROLES = {</span>
-<span class="l">    "maintainer" =&gt; MAINTAINER,</span>
-<span class="l">    "owner" =&gt; OWNER,</span>
-<span class="l">    "admin" =&gt; ADMIN</span>
-<span class="l">  }.with_indifferent_access.freeze</span>
-<span class="l"></span>
-<span class="l">  def self.flag_for_role(role)</span>
-<span class="l">    ROLES.fetch(role)</span>
-<span class="l">  end</span>
-<span class="l"></span>
-<span class="l">  def self.with_minimum_role(role)</span>
-<span class="l">    Range.new(flag_for_role(role), nil)</span>
-<span class="l">  end</span>
+<pre data-src="app/models/user.rb" data-lang="ruby" style="counter-reset: exl 24"><span class="l">  before_discard :yank_gems, unless: :keep_gems_published?</span>
+<span class="l">  before_discard :expire_all_api_keys</span>
+<span class="l">  before_discard :destroy_associations_for_discard</span>
+<span class="l">  before_discard :clear_personal_attributes</span>
 </pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/lib/access.rb#L4-L22">lib/access.rb:4-22</a></p>
   </div>
 </details>
+
           </li>
           <li>
-            <b>A sibling comparing by flag</b>
-            <span>membership roles ranked through <code>Access.flag_for_role</code>
-              <span class="tier tier-unc">from unchanged code</span></span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/membership.rb#L14">app/models/membership.rb:14</a>
+            <b>The user association</b>
+            <span>the <code>dependent: :destroy</code> that a hard destroy of a user now fires</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9802ca3c9c4cf89904fd44bc114e35ebdf2c5dd3d5b645491e2b253e1afef29bR37">app/models/user.rb:37</a>
           </li>
           <li>
-            <b>The new ordering</b>
-            <span><code>ROLE_HIERARCHY</code> and <code>roles_below</code>, and the enum they sort</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R8-R16">app/models/historical_ownership.rb:8-16</a>
-          </li>
-          <li>
-            <b>The sync test</b>
-            <span>what holds the two enum declarations together</span>
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-0cea0e2d1f599cce1bf25ae15a606425821e18e0ab785ad66a912580d154750dR15-R17">test/models/historical_ownership_test.rb:15-17</a>
+            <b>The foreign keys</b>
+            <span>both references are <code>null: false</code> with a foreign key, so a row cannot outlive
+              its user or gem as the schema stands</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198cR5-R7">db/migrate/20260716041502_create_historical_ownerships.rb:5-7</a></span>
+    <span class="tag">Added</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="db/migrate/20260716041502_create_historical_ownerships.rb" data-lang="ruby" style="counter-reset: exl 4"><span class="l">    create_table :historical_ownerships do |t|</span>
+<span class="l">      t.references :rubygem, null: false, foreign_key: true</span>
+<span class="l">      t.references :user, null: false, foreign_key: true</span>
+</pre>
+  </div>
+</details>
+
           </li>
         </ul>
       </section>
@@ -1892,51 +2649,117 @@ figcaption strong { color: var(--ink-3); }
           <span class="n">01</span>
           <span class="t">
             <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-aed21bc6ebe200a4a9efc98c093672b24a0220ca277848829593ff3886f3198cR5-R16">db/migrate/20260716041502_create_historical_ownerships.rb:5-16</a>
-            <span class="why">The table and its partial unique index: one open row per gem and user is what every
-              callback relies on.</span>
+            <span class="why">The table and its partial unique index on open rows, which every later write
+              assumes.</span>
           </span>
           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">02</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R8-R16">app/models/historical_ownership.rb:8-16</a>
-            <span class="why">The role enum and <code>roles_below</code>, before the callback that calls
-              them; also where the ordering question sits.</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3R3-R17">app/models/historical_ownership.rb:3-17</a>
+            <span class="why">Role ordering and the <code>current</code> scope the writers below lean on.</span>
           </span>
-          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">03</span>
           <span class="t">
             <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R139-R159">app/models/ownership.rb:139-159</a>
-            <span class="why">The open, upgrade and close callbacks, registered at lines 19-26; the role rule
-              <a href="#cp-c">Checkpoint C</a> asks about is here too.</span>
+            <span class="why">The three writers; read them beside the callback conditions at
+              <code>:18-26</code>.</span>
           </span>
           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
           <span class="n">04</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R344-R351">app/models/rubygem.rb:344-351</a>
-            <span class="why">The one removal path that skips callbacks and closes history itself.</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L130">app/models/organization_onboarding.rb:126-130</a>
+            <span class="why">Where ownerships end through a flow outside the owners pages
+              <span class="tier tier-unc">from unchanged code</span>.</span>
           </span>
-          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
         <li>
           <span class="n">05</span>
           <span class="t">
-            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R7-R19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:7-19</a>
-            <span class="why">Read last, beside the repository's maintenance-task rules: it writes production
-              data once.</span>
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-8dc1e16f6d8ea1d0003c881ea5f61b12fbe89e1956aa2585fe98a884b19531d8R6-R19">app/tasks/maintenance/backfill_historical_ownerships_task.rb:6-19</a>
+            <span class="why">The backfill, read against the callbacks that are already live when it runs.</span>
           </span>
-          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
+          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+        </li>
+        <li>
+          <span class="n">06</span>
+          <span class="t">
+            <a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9802ca3c9c4cf89904fd44bc114e35ebdf2c5dd3d5b645491e2b253e1afef29bR36-R37">app/models/user.rb:36-37</a>
+            <span class="why">The associations that decide what a hard destroy takes with it.</span>
+          </span>
+          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
         </li>
       </ol>
     </section>
 
+    <section id="impact" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+      <h2 style="margin-bottom:22px">Impact outside the diff</h2>
+
+      <figure class="impact">
+        <span class="lbl">Impact paths</span>
+
+        <div class="ip-card">
+          <span class="ip-hd">A &middot; Pushing to an abandoned gem name closes its owners' history</span>
+          <p class="ip-why">Any push to a gem with no indexed versions closes every current owner's history row, even
+            when the pusher is one of them, so an owner re-pushing a fully yanked gem starts a second
+            stint
+            <span class="tier tier-unc">from unchanged code</span>.
+            <a href="#cp-a">Checkpoint A</a></p>
+          <div class="ip-lanes"><span>In this PR's files</span><span>Outside the diff</span></div>
+          <div class="ip-body">
+            <ol class="ip-path">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>Rubygem#disown</b><span class="ip-d">closes current rows</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-3fee39e93d2a0e4dba72202a15bdfac460f321ca56fd3a63ee2e740d7a243503R347">app/models/rubygem.rb:347</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>Pusher#update</b><span class="ip-d">no indexed versions</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/pusher.rb#L236">app/models/pusher.rb:236</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>previous owners recorded as removed</b><span class="ip-d">on the next push</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="ip-card">
+          <span class="ip-hd">B &middot; Organization members recorded as former owners</span>
+          <p class="ip-why">Each member who joins an organization through onboarding gets a closed history
+            row for every onboarded gem, while still publishing it through the organization
+            <span class="tier tier-unc">from unchanged code</span>.
+            <a href="#cp-b">Checkpoint B</a></p>
+          <div class="ip-lanes"><span>In this PR's files</span><span>Outside the diff</span></div>
+          <div class="ip-body">
+            <ol class="ip-path">
+              <li class="ip-n ip-chg"><span class="ip-box"><b>close_historical_ownership</b><span class="ip-d">stamps removed_at</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-9918d784715d6bb7be713176fc2d348ff6b3aae117d0a68d28a259466e839433R156-R159">app/models/ownership.rb:156-159</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>remove_ownerships_for_joining_members</b><span class="ip-d">destroy_all</span><a class="path ip-loc" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L130">app/models/organization_onboarding.rb:126-130</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>member listed as a former owner</b><span class="ip-d">access unchanged</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span><i class="key-chg"></i>In this PR's files</span>
+          <span><i class="key-aff"></i>Affected, not changed</span>
+          <span><i class="key-out"></i>Behaviour</span>
+        </div>
+
+        <p class="note" style="margin-top:16px">Found by name: an ownership changed from a console or by
+          SQL outside this repository is out of its reach.</p>
+      </figure>
+
+      <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
+      <ul class="ev-list">
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/pusher.rb#L236">app/models/pusher.rb:236</a> &mdash; its call to <code>disown</code> now closes history rows. <a href="#cp-a">Checkpoint A</a></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L126-L130">app/models/organization_onboarding.rb:126-130</a> &mdash; its <code>destroy_all</code> now closes each joining member's row. <a href="#cp-b">Checkpoint B</a></li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/rubygem_transfer.rb#L76-L84">app/models/rubygem_transfer.rb:76-84</a> &mdash; the same, for a gem transfer. <a href="#cp-b">Checkpoint B</a></li>
+      </ul>
+    </section>
+
     <details class="evidence">
       <summary><span class="chev">&#9656;</span> Evidence &amp; diff coverage &middot; all 11 changed paths</summary>
+
       <div class="gt gt-paths">
 <!-- A +17/-0 -->
 <div class="c" data-path="app/models/historical_ownership.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-e394cc75eec2f9f77b0a506be2996d9c820184d47b384926aa1a5e20ab41fff3">app/models/historical_ownership.rb</a></div>
@@ -1961,51 +2784,54 @@ figcaption strong { color: var(--ink-3); }
 <!-- A +51/-0 -->
 <div class="c" data-path="test/tasks/maintenance/backfill_historical_ownerships_task_test.rb"><a class="path" href="https://github.com/rubygems/rubygems.org/pull/6699/files#diff-ca63b0d65a1eba9997d9438cde396eab455331ebda6e069fd2f30070ea9f8e70">test/tasks/maintenance/backfill_historical_ownerships_task_test.rb</a></div>
 <!-- 11 rows, generated from git diff --numstat e9b5a3e5da3339c1eaa1e79c6b54fb0557b01781...4199bcb5c646121879386a2897aff5c76ea9ee31 -->
+
       </div>
+
       <details class="searched">
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>rg -n 'update_all|insert_all|upsert_all|update_column|delete_all' app lib</code> <span class="sr-r">ownership hits: notifier toggles, this PR's own writes, and role demotions in <code>RubygemTransfer</code> and <code>OrganizationOnboarding</code></span></li>
-            <li><code>rg -n 'destroy_all|find_each\(&amp;:delete\)' app/models app/avo app/tasks app/controllers lib</code> <span class="sr-r">ownership removals in <code>user.rb</code>, <code>rubygem_transfer.rb</code>, <code>organization_onboarding.rb</code>, and <code>disown</code></span></li>
-            <li><code>rg -n -i 'ownership|destroy|delete' script/</code> <span class="sr-r"><code>merge_users</code> moves ownerships and destroys a user; <code>add_owner</code> creates a confirmed one; <code>permadelete</code> yanks versions only</span></li>
-            <li><code>rg -n '\.disown\b' app lib config script db/seeds.rb</code> <span class="sr-r">one caller, <code>pusher.rb:236</code></span></li>
-            <li><code>rg -n 'Ownership\.new|Ownership\.create|ownerships\.(create|new|build)|create_confirmed' app lib db/seeds.rb</code> <span class="sr-r">owners controllers (web and API), <code>create_confirmed</code>, Avo <code>AddOwner</code>, seeds</span></li>
-            <li><code>rg -n 'confirmed_at' app lib</code> <span class="sr-r">only <code>confirm!</code> and Avo <code>AddOwner</code> write it; nothing sets it back to nil</span></li>
-            <li><code>rg -n 'HistoricalOwnership|historical_ownerships|private_at' app lib config</code> <span class="sr-r">the writers and the two associations; no reader, and no use of <code>private_at</code></span></li>
-            <li><code>rg -n 'record_event!' app/models/ownership.rb</code> <span class="sr-r">four event callbacks, all writing inside the ownership's save</span></li>
-            <li><code>rg -n 'add_foreign_key "(ownerships|historical_ownerships)"' db/schema.rb</code> <span class="sr-r"><code>ownerships</code> cascades on user delete; the history keys do not</span></li>
-            <li><code>rg -n 'ROLES|with_minimum_role|flag_for_role|role_for_flag' app lib</code> <span class="sr-r"><code>Access</code> owns the order; membership, ownership and gem scopes compare through it</span></li>
+            <li><code>rg -n 'ownerships[a-z_]*\b.*\.(delete_all|update_all|delete\b|update_column|insert_all|upsert_all|destroy_all)|&amp;:delete\)' app lib config</code> <span class="sr-r">writer search: <code>rubygem.rb:345</code> deletes without callbacks and compensates; <code>user.rb:376</code> runs them</span></li>
+            <li><code>rg -n 'remove_ownerships_for_joining_members|demote_outside' app</code> <span class="sr-r">onboarding and transfer: <code>destroy_all</code> runs callbacks; <code>update_all(role: :maintainer)</code> is a demotion the ratchet ignores</span></li>
+            <li><code>rg -n 'confirmed_at' app lib</code> <span class="sr-r">Ownership's column written only at <code>ownership.rb:75</code> and <code>avo/actions/add_owner.rb:42</code></span></li>
+            <li><code>rg -n 'Ownership\.(create|new)|ownerships[a-z_]*\.(create|new|build)' app lib</code> <span class="sr-r">five create sites, all saving through callbacks</span></li>
+            <li><code>rg -n 'disown' app lib</code> <span class="sr-r">one caller, <code>pusher.rb:236</code></span></li>
+            <li><code>rg -n '\.destroy\b' script</code> <span class="sr-r"><code>script/merge_users:51</code>, the one hard destroy of a user</span></li>
+            <li><code>rg -n '(user|rubygem|@user|@rubygem|owner)\.(destroy|delete)\b|Rubygem\.[a-z_.()]*(destroy|delete)' app lib</code> <span class="sr-r">no hits</span></li>
+            <li><code>rg -n 'HistoricalOwnership|historical_ownerships' app lib config script</code> <span class="sr-r">only the writers and associations in this diff; no reader</span></li>
           </ul>
-          <p class="sr-limit"><strong>Out of reach.</strong> Console sessions and one-off SQL run by operators,
-            which can delete or move ownerships without any callback, and anything outside this
-            repository.</p>
+          <p class="sr-limit"><strong>Out of reach.</strong> Writes from a console, a one-off SQL
+            statement, or any repository other than this one; whether the Avo resources for users and
+            gems allow a destroy was not established.</p>
         </div>
       </details>
+
       <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/ownership.rb#L48-L50">app/models/ownership.rb:48-50</a> &mdash; <code>create_confirmed</code> creates then confirms in two saves, so first-push history opens from the update callback.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/avo/actions/add_owner.rb#L42">app/avo/actions/add_owner.rb:42</a> &mdash; creates an already-confirmed ownership, so history opens from the create callback.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/ownership.rb#L105-L137">app/models/ownership.rb:105-137</a> &mdash; the existing event callbacks also write inside the ownership's save, as the history callbacks now do.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/models/organization_onboarding.rb#L133-L138">app/models/organization_onboarding.rb:133-138</a> &mdash; demotes with <code>update_all</code>, skipping the upgrade callback.</li>
-        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/db/schema.rb#L865">db/schema.rb:865</a> &mdash; <code>ownerships.user_id</code> cascades on delete; the new foreign keys do not, so history rows go only through <code>dependent: :destroy</code>.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/script/merge_users#L44-L51">script/merge_users:44-51</a> &mdash; re-pointed ownerships keep their open row on the discarded user, which the destroy then deletes.</li>
+        <li><a class="path" href="https://github.com/rubygems/rubygems.org/blob/4199bcb5c646121879386a2897aff5c76ea9ee31/app/avo/actions/add_owner.rb#L42">app/avo/actions/add_owner.rb:42</a> &mdash; an admin-added owner is created confirmed, so the create callback opens a row.</li>
       </ul>
     </details>
+
+  </main>
   </main>
 </div>
 
-<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, and
-     the syntax tint on unchanged excerpts.
-     This is the ONLY script the page carries: no state, no localStorage, no
-     counters. All four are presentation, and the page reads correctly with the
-     whole block removed — the excerpts simply render in one ink, as they did
+<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, the
+     appearance menu, and the syntax tint on unchanged excerpts.
+     Apart from the few lines in the head that apply a saved appearance before
+     first paint, this is the ONLY script the page carries, and its one piece of
+     state is that appearance: two localStorage keys, a viewer's own convenience,
+     never anything about the change. No counters. All five jobs are presentation,
+     and the page reads correctly with the whole block removed — the excerpts simply render in one ink, as they did
      before the tint existed, and a citation lands in the tab it was clicked from.
 
      highlight.js comes from cdnjs because that is the one script host a published
      artifact may load; its stylesheets are NOT loadable, which is why the theme
-     for it lives in our token block above. Two grammars are loaded beside the
+     for it lives in the theme's token block above. Two grammars are loaded beside the
      core bundle because neither is in it and both are code this page quotes:
      erb for Rails views, elixir for Elixir modules. Carry all three lines.
+     Rust needs no fourth: rust is in the core bundle, and TOML tints as ini.
      There is deliberately no heex grammar — highlight.js ships none, and
      excerpt.sh emits no data-lang for .heex for that reason. Loaded plainly, before the inline
      script, so it is defined by the time that runs. If it 404s or is blocked,
@@ -2083,6 +2909,112 @@ figcaption strong { color: var(--ink-3); }
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
   });
+
+  /* ---- The appearance menu ------------------------------------------------
+     Built here, into the right end of the masthead's first line, so the markup
+     half carries no control for a run to copy. Its styles are the style
+     elements page-skeleton.sh emitted, read off the page rather than listed
+     here, so a theme added under references/themes/ appears without touching
+     this block. Choosing one switches media between "all" and "not all"; the
+     light/dark/auto segment sets or clears data-theme, which every theme's
+     tokens already answer. Both choices are saved for the next visit by the
+     head script's two keys. With one theme or no masthead there is nothing to
+     offer, and nothing is drawn. */
+  (function () {
+    var line = document.querySelector('main > header > .lbl-wide');
+    var sheets = document.querySelectorAll('style[data-style]');
+    if (!line || sheets.length < 2) { return; }
+    var root = document.documentElement;
+    function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) { e.className = cls; }
+      if (text) { e.textContent = text; }
+      return e;
+    }
+
+    var rc = el('div', 'rc'), btn = el('button', 'rc-btn'), icon = el('span', 'rc-i');
+    btn.type = 'button';
+    btn.title = 'Appearance';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'rc-pop');
+    btn.appendChild(el('b', '', 'Aa'));
+    icon.setAttribute('aria-hidden', 'true');
+    btn.appendChild(icon);
+    var pop = el('div', 'rc-pop');
+    pop.id = 'rc-pop';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Appearance');
+
+    pop.appendChild(el('div', 'rc-h', 'Style'));
+    var list = el('div', 'rc-styles'), choices = [];
+    function active() {
+      for (var i = 0; i < sheets.length; i++) {
+        if (sheets[i].getAttribute('media') !== 'not all') { return sheets[i].getAttribute('data-style'); }
+      }
+      return '';
+    }
+    function useStyle(name) {
+      var all = document.querySelectorAll('[data-style]');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].getAttribute('data-style') === name) { all[i].removeAttribute('media'); }
+        else { all[i].setAttribute('media', 'not all'); }
+      }
+      choices.forEach(function (c) {
+        var on = c.getAttribute('data-s') === name;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+    }
+    Array.prototype.forEach.call(sheets, function (sh) {
+      var name = sh.getAttribute('data-style');
+      var b = el('button'), sw = el('span', 'rc-sw');
+      b.type = 'button';
+      b.setAttribute('data-s', name);
+      sw.setAttribute('data-sw', name);
+      b.appendChild(sw);
+      b.appendChild(document.createTextNode(sh.getAttribute('data-style-label') || name));
+      b.onclick = function () { useStyle(name); save('review-style', name); };
+      list.appendChild(b);
+      choices.push(b);
+    });
+    pop.appendChild(list);
+
+    pop.appendChild(el('div', 'rc-h', 'Theme'));
+    var seg = el('div', 'rc-seg'), modes = [];
+    seg.setAttribute('role', 'group');
+    seg.setAttribute('aria-label', 'Theme');
+    var glyph = { light: '\u2600', auto: '\u25D0', dark: '\u263E' };
+    function useMode(m) {
+      if (m === 'auto') { root.removeAttribute('data-theme'); } else { root.setAttribute('data-theme', m); }
+      icon.textContent = glyph[m];
+      modes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-t') === m)); });
+    }
+    [['light', 'Light'], ['auto', 'Auto'], ['dark', 'Dark']].forEach(function (m) {
+      var b = el('button', '', glyph[m[0]] + ' ' + m[1]);
+      b.type = 'button';
+      b.setAttribute('data-t', m[0]);
+      b.onclick = function () { useMode(m[0]); save('review-theme', m[0]); };
+      seg.appendChild(b);
+      modes.push(b);
+    });
+    pop.appendChild(seg);
+
+    rc.appendChild(btn);
+    rc.appendChild(pop);
+    line.appendChild(rc);
+    useStyle(active());
+    var t = root.getAttribute('data-theme');
+    useMode(t === 'light' || t === 'dark' ? t : 'auto');
+
+    function close() { rc.classList.remove('rc-on'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.onclick = function () { btn.setAttribute('aria-expanded', String(rc.classList.toggle('rc-on'))); };
+    document.addEventListener('click', function (e) { if (!rc.contains(e.target)) { close(); } });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && rc.classList.contains('rc-on')) { close(); btn.focus(); }
+    });
+  })();
 
   /* ---- Syntax tint, .excerpt--source only -------------------------------
      The rule this obeys: an excerpt is a quotation, so the script may change

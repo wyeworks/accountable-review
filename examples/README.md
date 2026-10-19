@@ -14,11 +14,11 @@ which is most of what makes an example worth reading.
 <!-- examples:begin table — written by bin/examples render; do not edit by hand -->
 | Path | Pull request | Revision (head → base) | Shape |
 |---|---|---|---|
-| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) | `320f173` → `64358ac` | 36 files · 3 context entries · 7 checkpoints · 1 converge figure · 1 lifecycle figure · 2 impact paths |
-| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) | `4199bcb` → `e9b5a3e` | 11 files · 3 context entries · 4 checkpoints · 1 converge figure · no impact path |
+| `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) | `320f173` → `64358ac` | 36 files · 3 context entries · 6 checkpoints · 1 lifecycle figure · 2 impact paths |
+| `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) | `4199bcb` → `e9b5a3e` | 11 files · 3 context entries · 4 checkpoints · 1 converge figure · 2 impact paths |
 
-- `discourse-43845/`: generated on **2026-10-08** by **`accountable-review` 1.2.0** from plugin commit `a9f1673`, at `--effort high`, `--mentor off`, `--context auto`; coverage gate: pass.
-- `rubygems-6699/`: generated on **2026-10-08** by **`accountable-review` 1.2.0** from plugin commit `5f8b758`, at `--effort high`, `--mentor off`, `--context auto`; coverage gate: pass.
+- `discourse-43845/`: generated on **2026-10-19** by **`accountable-review` 1.3.0** from plugin commit `92e31bd`, at `--effort high`, `--mentor off`, `--context auto`; coverage gate: pass.
+- `rubygems-6699/`: generated on **2026-10-19** by **`accountable-review` 1.3.0** from plugin commit `92e31bd`, at `--effort high`, `--mentor off`, `--context auto`; coverage gate: pass.
 <!-- examples:end -->
 
 Each directory is one run's whole output: the page and the `manifest.json` written beside it. The
