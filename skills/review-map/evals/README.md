@@ -209,7 +209,7 @@ judge's file, whose bytes are the instrument sha; a key added there would uncali
 judge — and no criterion mixes the two: the evidence judge's tier rules are three criteria,
 one of each kind a mis-tier can be, so one wrong label fails the rule it breaks and not all of them.
 A third class, **deferred**, is a criterion the harness still judges and reports and holds no bar
-for — § *Deferred criteria* lists them and the reason each is there.
+for — § *Deferred criteria*, with the list in `DEFERRED.md`.
 
 1. **Mechanical checks stay at zero.** `check.rb` is deterministic, so a FAIL is a bug and never
    noise. Any FAIL blocks. WARNs are reported and not counted.
@@ -275,31 +275,11 @@ in step 8; if it was never raised, in the mandate. The prose is the third suspec
 ### Deferred criteria
 
 A deferred criterion is judged on every run, printed on every table with its pooled count, and
-moves nothing: no status, no page cap, no exit code, no release gate. It is the honest form of
-"we know, and we are not working on it now" — the number stays visible so the deferral can be
-lifted on evidence, and nothing teaches a run to game it meanwhile.
-
-**Deferred now: the evidence judge's three tier criteria** — no claim stated as more than it is
-(1), no label on what the diff shows (2), an untouched line of a changed file is cited (3). The
-reading behind it, over the four measured shas (`2212dec`, `719d730`, `21e29c2`, `1dba6d1`) on both
-eval PRs: criteria 1 and 3 never passed on discourse-44560 (0/12 each), and on discourse-44196
-criterion 3 ran 1, 0, 3, 0 with no prose change between the last two. Every one of the 22
-criterion-1 failures named a *true* claim missing its provenance — a tier dropped where a claim is
-restated, a line number typed as `<code>` instead of cited, a citation left in the shut search
-record — and none named a false sentence; the judge's own evidence cites the file where each claim
-holds. The rules those sentences break are already in the prose in exact words
-(`report-format.md` § *Evidence tiers*, `SKILL.md` step 8), two prose rules and the step-10 lint
-did not move the rate, and the criterion fails on the first miss among some forty sentences a page.
-So it is a per-sentence compliance floor the current approach does not lift, on an error that
-costs the reader a click rather than their trust, and it was blocking every release as the truth
-criterion. The lint still warns at step 10 and the judge still reads every page; only the gate is
-off.
-
-**What lifts a deferral** is a change measured on the shape under rule 7, on both PRs, after which
-the criterion goes back to its class in `e2e/criteria.yml` in the same commit. For the tier axis
-the direction is software rather than prose: `scripts/page-lint.sh` already computes the tier a
-cited sentence should carry, so applying it rather than warning leaves uncited claims as the one
-rule left to the run.
+moves nothing: no status, no page cap, no exit code, no release gate. The number stays visible so
+the deferral can be lifted on evidence, and nothing teaches a run to game it meanwhile. Which
+criteria are deferred, the reading behind each, and what lifts it live in `DEFERRED.md`, beside
+the findings a release carries knowingly; a deferral ends by returning the criterion to its class
+in `e2e/criteria.yml` in the same commit as the change that earned it.
 
 The thresholds live in `e2e/summary.rb` (the badge per criterion and per repetition) and
 `e2e/report.rb` (the release table), the class in `e2e/criteria.yml`, and `e2e/test_grade.rb` holds
@@ -322,7 +302,7 @@ loop can see, and only then is a prose change measurable. Each phase has an exit
 
 2. **One criterion per tier rule, and a planted defect for each.** `judges/evidence.md` holds five
    criteria: no claim stated as more than it is, no label on what the diff shows, an untouched
-   line of a changed file is cited (the three tier rules, deferred for now — § *Deferred criteria*),
+   line of a changed file is cited (the three tier rules, deferred for now — `DEFERRED.md`),
    every excerpt earned, the page reads complete shut. Each tier rule has its own defect in `calibration/discourse-43002/make-defects.rb`
    and its row in `labels.yml`, planted on the corrected copy because gold fails all three on its
    own. The split moves the judge's instrument sha, so it is uncalibrated until

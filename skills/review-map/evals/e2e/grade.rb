@@ -13,7 +13,7 @@
 #   form    rated: pass ≥ 5/6 is good, ≥ 4/6 is watch, below that fails and blocks. A fraction,
 #           so a batch of 3 reads the same way a pooled 6 does (3/3 good, 2/3 watch, 1/3 failing).
 #   deferred  judged and shown, never graded: no status but :deferred, no part in the page cap,
-#           no exit code. README § Deferred criteria says which and why.
+#           no exit code. evals/DEFERRED.md says which and why.
 #
 # Where calibration/status.json records the judge splitting its own vote on the gold page for a
 # criterion, the instrument sets the ceiling: a form criterion is good at 4/6 and a truth
