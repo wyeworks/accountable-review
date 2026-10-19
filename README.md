@@ -17,7 +17,7 @@ Elixir/Phoenix and React (a Next.js app or React in general) support still in de
 **`setup-ci`**, which arranges for one to be produced automatically on every review-ready pull
 request.
 
-Built by **WyeWorks**.
+Built by **[WyeWorks](https://www.wyeworks.com)**.
 
 ---
 
@@ -819,7 +819,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the layout, the eval loop and the r
 
 ### WyeWorks
 
-`accountable-review` is an open-source project by **WyeWorks**.
+`accountable-review` is an open-source project by **[WyeWorks](https://www.wyeworks.com)**.
 
 We build software and help teams adopt AI-assisted development practices without giving up the
 engineering understanding required to operate and evolve what they build.
