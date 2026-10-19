@@ -125,6 +125,82 @@ export function bar(frac: number, cells = 20): string {
   return `▕${s.padEnd(cells)}▏`
 }
 
+// What the run's model requests cost, as the API counted each one: the four counts summed over every
+// request made while the run was live, the falsifiers' included and also kept apart.
+export type Usage = { input: number; output: number; cacheRead: number; cacheWrite: number }
+export type ApiUsage = {
+  input_tokens: number
+  output_tokens: number
+  cache_read_input_tokens: number
+  cache_creation_input_tokens: number
+}
+
+export const NO_USAGE: Usage = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }
+
+export function addUsage(t: Usage, u: ApiUsage | null | undefined): Usage {
+  if (!u) return t
+  const n = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : 0)
+  return {
+    input: t.input + n(u.input_tokens),
+    output: t.output + n(u.output_tokens),
+    cacheRead: t.cacheRead + n(u.cache_read_input_tokens),
+    cacheWrite: t.cacheWrite + n(u.cache_creation_input_tokens),
+  }
+}
+
+export function totalTokens(t: Usage): number {
+  return t.input + t.output + t.cacheRead + t.cacheWrite
+}
+
+export function tokens(n: number): string {
+  if (n >= 1e6) return `${(n / 1e6).toFixed(n >= 1e7 ? 1 : 2)}M`
+  if (n >= 1e3) return `${Math.round(n / 1e3)}k`
+  return String(Math.round(n))
+}
+
+// One rate-limit window as the engine reads it off the API's responses. `percentUsed` is the
+// account's, not the session's: anything else the account runs meanwhile moves it too.
+export type Limit = { kind: string; percentUsed: number; resetsAt?: string }
+
+const WINDOW: Record<string, string> = { five_hour: '5-hour', seven_day: '7-day', spend_limit: 'spend limit' }
+
+// How far one window moved between the run's first reading and its latest. A window that reset in
+// between has no readable share, so it has no delta rather than a negative or a guessed one.
+export function moved(from: Limit | undefined, to: Limit | undefined): number | undefined {
+  if (!from || !to || from.kind !== to.kind) return undefined
+  if ((from.resetsAt ?? '') !== (to.resetsAt ?? '')) return undefined
+  return Math.round((to.percentUsed - from.percentUsed) * 10) / 10
+}
+
+function points(d: number): string {
+  return `+${Math.max(0, d).toFixed(d < 10 ? 1 : 0).replace(/\.0$/, '')}%`
+}
+
+// The line the transcript gets when a run ends: what it read, nothing it would have to estimate.
+export function spent(
+  total: Usage,
+  falsifiers: Usage,
+  first: readonly Limit[],
+  last: readonly Limit[],
+): string {
+  const all = totalTokens(total)
+  const bits = [
+    `review map used ${tokens(all)} tokens`,
+    `(${tokens(total.input)} input · ${tokens(total.cacheWrite)} cache write · ` +
+      `${tokens(total.cacheRead)} cache read · ${tokens(total.output)} output` +
+      (totalTokens(falsifiers) > 0 ? `; falsifiers ${tokens(totalTokens(falsifiers))} of it)` : ')'),
+  ]
+  const windows = last.flatMap(to => {
+    const name = WINDOW[to.kind] ?? to.kind
+    const from = first.find(f => f.kind === to.kind)
+    const d = moved(from, to)
+    if (d === undefined) return [`${name} window at ${to.percentUsed}%`]
+    return [`${name} window ${from!.percentUsed}% → ${to.percentUsed}% (${points(d)})`]
+  })
+  if (windows.length > 0) bits.push(`— ${windows.join(', ')}, account-wide`)
+  return bits.join(' ')
+}
+
 export type Reading = {
   tick: number
   elapsed: number // seconds of generation: frozen once the run ends, paused while it waits
@@ -135,6 +211,8 @@ export type Reading = {
   tools: number
   falsifiers: number
   checkpoints?: string
+  tokens?: number // every request the run made so far, falsifiers included
+  window?: number // how far the 5-hour window moved since the run's first reading
 }
 
 // The bar is the only estimate on the line and it is labelled as one (~), held below 100% until
@@ -157,5 +235,7 @@ export function line(r: Reading): string {
   if (r.tools > 0) bits.push(`🔧 ${r.tools}`)
   if (r.falsifiers > 0) bits.push(`🥊 ${r.falsifiers}`)
   if (r.checkpoints) bits.push(r.checkpoints)
+  if (r.tokens !== undefined && r.tokens > 0) bits.push(`🪙 ${tokens(r.tokens)}`)
+  if (r.window !== undefined) bits.push(`⏳ 5h ${points(r.window)}`)
   return bits.join('  ')
 }

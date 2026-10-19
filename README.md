@@ -365,6 +365,13 @@ field is read from the run rather than estimated. The one exception is a bar, la
 measures against earlier runs of the same kind in that repository, so it appears once one such run
 has finished with its coverage gate passed.
 
+The same line counts what the run spends: tokens across every model request, the falsifiers'
+included, and — on a Claude subscription — how far your 5-hour usage window has moved since the
+run began. When the run ends, the transcript gets one line with the breakdown and each window's
+before and after. The window percentages are your account's, so anything else you run meanwhile
+moves them too. In Codex, which has no status line a plugin can draw on, the run reports the same
+line in chat at the end, read from Codex's own session log.
+
 To have one generated for every pull request instead of by hand, see
 [CI integration](#ci-integration-) below.
 

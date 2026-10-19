@@ -43,6 +43,7 @@ DIFF_RENDER=$SKILL_DIR/scripts/diff-render.sh
 CARRY_PLAN=$SKILL_DIR/scripts/carry-plan.sh
 EXCERPT=$SKILL_DIR/scripts/excerpt.sh
 PAGE_LINT=$SKILL_DIR/scripts/page-lint.sh
+USAGE=$SKILL_DIR/scripts/usage.sh
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT INT HUP TERM
@@ -522,6 +523,29 @@ case_lint_red "page-lint.sh stops reading an excerpt summary as the entry's cita
 # 46. Placeholders are not a FAIL any more.
 sed 's|  status=1|  status=0|' "$PAGE_LINT" > "$WORK/lint-ph.sh"
 case_lint_red "page-lint.sh lets a placeholder ship" "$WORK/lint-ph.sh"
+
+# The same, for usage.sh: each mutation is a count that would read plausibly and be wrong.
+case_usage_red() {
+  what=$1; scr=$2
+  chmod 755 "$scr"
+  if REVIEW_MAP_SECTION=usage REVIEW_MAP_USAGE="$scr" "$RUN" >/dev/null 2>&1 </dev/null; then
+    bad=$((bad + 1)); echo "BAD   run.sh stayed green when: $what"
+  else
+    ok=$((ok + 1));  echo "ok    run.sh fails when: $what"
+  fi
+}
+
+# 48. The mark is not subtracted, so the session's tokens before the run are billed to it.
+sed 's|    inp = b\["in"\] - a\["in"\]; cached = b\["cached"\] - a\["cached"\]; out = b\["out"\] - a\["out"\]|    inp = b["in"]; cached = b["cached"]; out = b["out"]|' "$USAGE" > "$WORK/usage-nomark.sh"
+case_usage_red "usage.sh stops subtracting the mark" "$WORK/usage-nomark.sh"
+
+# 49. Any thread begun since the mark counts as a falsifier, another session's included.
+sed 's|  head -n 1 "\$f" \| grep -q "\\"parent_thread_id\\":\\"\$tid\\"" \|\| continue|  :|' "$USAGE" > "$WORK/usage-anychild.sh"
+case_usage_red "usage.sh counts threads that are not this run's" "$WORK/usage-anychild.sh"
+
+# 50. A window that reset is reported as a share — a delta across two different windows.
+sed 's|a\[w "_reset"\] == b\[w "_reset"\] \&\& ||' "$USAGE" > "$WORK/usage-reset.sh"
+case_usage_red "usage.sh reports a share across a window reset" "$WORK/usage-reset.sh"
 
 echo ""
 echo "self-test: $ok ok, $bad bad"
