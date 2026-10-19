@@ -18,7 +18,7 @@ evals/
 │   ├── prs.yml              the pull requests: pinned base and head, role calibration | eval
 │   ├── run.rb               generate → check → judge → profile → one jsonl line
 │   ├── judge.rb             one judge, one page
-│   ├── judges/              what-changed.md is the one working judge; IDEAS.md is the rest
+│   ├── judges/              one file per judge; IDEAS.md is the aspects with no judge yet
 │   ├── calibrate.rb         each judge against gold and its planted defects
 │   ├── calibration/         <id>/gold.html, defects/*.patch, labels.yml; status.json
 │   ├── verdicts.rb          reads one verdicts.json; shared by judge.rb and self-test.rb
@@ -112,18 +112,21 @@ nobody is logged into. `run.rb` checks first and says so.
 
 Every line carries `plugin_version`, `skill_sha` (with `+dirty` when the skill has uncommitted
 edits), the skill's `effort`, the producing `model` (`ambient` when none was named — which is not a
-fact about anything, so name it when you intend to compare), and per judge its file's sha, its
+fact about anything, so name it when you intend to compare), and per judge its instrument sha, its
 model and whether it is calibrated. `report.rb` groups by the first four, so a row measured on one
 version of the prose is never averaged into another; a judge column is only coloured when that
 judge is calibrated at the sha and model it ran at.
 
 ### The judge
 
-One judge per aspect of the page, each a file in `e2e/judges/` with its pinned model, the section it
-grades and at most five criteria in front matter, and the prompt below. **`what-changed.md` is the
-only working one**, deliberately: one judge calibrated against a gold page tells us whether the
-method works before it is copied six times. `IDEAS.md` records the other five and what a planted
-defect for each would look like.
+One judge per aspect of the page, each a file in `e2e/judges/` with its pinned model, the `parts` of
+the page it is handed (section ids, plus `masthead` and `evidence` for the two landmarks that are
+not sections) and at most five criteria in front matter, and the prompt below. Six exist:
+`what-changed` (§ 01 with its masthead), `checkpoint-judgments` and `checkpoint-claims` (§ 03, its
+shape and its truth, split because one judge asked to check both checks each less carefully),
+`reading-path` (§ 04), `impact` (§ 05) and `evidence` (tiers, excerpts and the closed-page rule,
+page-wide). `IDEAS.md` records the aspects with no judge yet, and what a planted defect for each
+would look like.
 
 What makes the verdicts worth anything is not the rubric, it is the anchoring. The judge runs
 **inside the checkout at head**, with Read, Grep, Glob and read-only `git`, so "is this claim right"
@@ -159,14 +162,14 @@ never in the eval set — has a gold page a person certified criterion by criter
 planted defect against it. `calibrate.rb` runs each judge three times on gold and on every variant.
 **Specificity**: gold passes every criterion at least twice. **Sensitivity**: each variant's targeted
 criterion fails at least twice. Both hold, or the judge is uncalibrated, and `status.json` records
-the judge file's sha and model — so editing a judge uncalibrates it, which is the point. Editing the
-rest of the instrument does not yet, and `e2e/calibration/README.md` § *Known gaps* says what that
-and the masthead leave unmeasured.
+the instrument's sha — the judge's file, `judge.rb` and `verdicts.rb` hashed together — and the
+model, so editing any of them uncalibrates, which is the point.
 
 **There is one calibration PR, `discourse/discourse#43002`**, chosen because its claims are easy to
-check by hand. Its gold page is the unedited output of one run, certified by a person on 2026-09-30
-(`calibration/discourse-43002/gold.yml`), and `what-changed` passed calibration against it and its six
-planted defects on 2026-10-02. Making another is a real run and a person's reading, and
+check by hand. Its gold page is the unedited output of one run, and `gold.yml`'s `judges` names the
+judges a person has certified it for; `calibrate.rb` measures no other judge against it. The
+planted defects, one or more per criterion of every judge, are cut by its `make-defects.rb`. Making
+another is a real run and a person's reading, and
 `calibration/README.md` has the steps. Gold is not `examples/` — those are regenerated when the format
 moves, and gold has to stay put as long as its patches apply.
 
@@ -174,12 +177,170 @@ moves, and gold has to stay put as long as its patches apply.
 
 Before a **major** release: `bin/evals calibrate`, then `bin/evals e2e <id> -n 3 -j 3` for every
 `eval` PR, then `bin/evals report --history <version>`, and commit the history file. Read the
-report's notes before its numbers.
+report's notes before its numbers. What the numbers have to show is § *What counts as good*.
 
 What that costs, from § *The money is a different ranking* below: one generation is 20–40 minutes
 and 30–39M cache-read tokens, plus 17–23% for the falsifiers at the default effort, and each judge
 call is a fraction of that. Three repetitions of five PRs is fifteen generations — an afternoon with
 `-j`, and a bill worth deciding on rather than discovering.
+
+## What counts as good
+
+A repetition that passes every criterion of every judge is not the bar, because nothing about the
+instrument can deliver it. Six judges carry 23 criteria; a judge is calibrated when 2 of 3 runs
+agree with a person, so the instrument is allowed to disagree with itself one time in three; and
+the page is sampled, not computed. At a 95% pass rate per criterion, 0.95^23 is about 0.31 — a
+page that is right almost everywhere fails most of its repetitions, and the number says the same
+thing about a good page and a bad one. But the bar is not one number either, because the errors
+are not one kind. **A false sentence costs the reader's trust in every other sentence; a missing
+label costs them a click.** So the criteria split into two classes with two bars, and "good" is a
+floor per criterion within each, measured on a sample large enough to see past one bad run. The
+sample is every `eval` PR times three repetitions at one skill sha: two PRs gives 6 verdicts per
+criterion, and the thresholds below are written for 6.
+
+**The two classes.** A **truth** criterion asks whether the page is right about the code at head:
+a claim or a stated absence holds, a citation's lines show what its clause names, an impact edge
+is a read or a call the code performs, a reading-path stop's *why* is true, § 01 matches the diff,
+and an inference is not stated as fact. A **form** criterion asks whether a true page is built
+right: the tier is on the claim it qualifies, the excerpt is earned, the page reads complete when
+shut, the heading is a judgment and not a category, the stop points at the checkpoint whose
+judgment turns on its code, the order has a reason. `e2e/criteria.yml` names each criterion's class — beside the thresholds and never in the
+judge's file, whose bytes are the instrument sha; a key added there would uncalibrate every
+judge — and no criterion mixes the two: the evidence judge's tier rules are three criteria,
+one of each kind a mis-tier can be, so one wrong label fails the rule it breaks and not all of them.
+A third class, **deferred**, is a criterion the harness still judges and reports and holds no bar
+for — § *Deferred criteria*, with the list in `DEFERRED.md`.
+
+1. **Mechanical checks stay at zero.** `check.rb` is deterministic, so a FAIL is a bug and never
+   noise. Any FAIL blocks. WARNs are reported and not counted.
+
+2. **A truth criterion has a reading floor, not a rate.** Across the 6 verdicts: **two failures
+   block**, and **one failure is read by a person** — the verdict's `evidence` field against the
+   repository — before the sha goes anywhere. A confirmed false sentence blocks the release
+   whatever the rate says; a judge error is recorded in the report's notes and does not. One
+   failure gets a reading rather than an automatic block only because the instrument's own noise
+   is one in three, and a person adjudicating one verdict is cheaper than a rule tuned to it.
+
+3. **A form criterion is judged by its pooled rate**, across PRs and repetitions at one sha:
+
+   | rate (of 6) | status | effect |
+   |---|---|---|
+   | ≥ 5/6 | good | — |
+   | 4/6 | watch | reported, does not block |
+   | ≤ 3/6 | failing | blocks a release |
+
+   `unclear` is not a pass in either class and is listed on its own: several on one criterion mean
+   the criterion is ill-posed for that page shape, which is the judge's problem to fix, not the
+   prose's.
+
+4. **The instrument sets the ceiling.** A criterion's floor never exceeds what its judge showed on
+   the gold page. Where `calibration/status.json` records a split vote on a gold-row criterion,
+   a form criterion's "good" floor drops to 4/6, and a truth criterion's single failure is read
+   with that split in mind, until the judge is tightened and recalibrated. Holding the page to a
+   bar the judge cannot hold itself to produces rounds of prose aimed at judge noise.
+
+5. **A page is acceptable with at most two failed form criteria** and no `check.rb` FAIL; the cap
+   does not reach the truth class, which rule 2 holds per criterion. Per PR, the median repetition
+   must be acceptable. This keeps a page-level signal without demanding a zero-defect page from a
+   sampled generator.
+
+6. **A release needs 1 to 5, and no regression**: no criterion may lose more than 2 verdicts of 6
+   against the previous release's row in `history/`. On 6 samples a drop that size is beyond judge
+   noise.
+
+7. **A wording change is kept only if it shows a general effect, measured on the shape it
+   targets.** Measured on every eval PR at a clean sha. For a form criterion the measure is the
+   pooled rate: the target gains at least 2 verdicts of 6. A truth criterion cannot move in one
+   cycle — it fails on any one of forty claims and a page carries several shapes under it — so
+   its measure is the shape: no judge's evidence names it on any page afterwards, and where the
+   page carries a count of it (a card's why with its tier, a label beside a citation) that count,
+   which is read off the pages and not off a verdict. In either class no other criterion may lose
+   more than 1 of 6 *for a reason the rule explains*: at six verdicts ±2 is the judges' own noise —
+   criteria no rule touched move that far — so a larger drop is read before it is counted, and
+   counted only where its evidence names the rule's wording. A gain on one PR only is reverted as
+   memorisation, whatever the judge wrote about it. The failure this rule exists to stop is the per-round patch: a rule written from one
+   repetition's verdict text, naming that PR's identifiers, that moves the next repetition's
+   failure to a different sentence under the same criterion.
+
+**The eval measures a rate; no rate protects the one page a reader opens.** What protects it is
+the run's own defence: at the default effort, step 6c sends a falsifier at every analysis note and
+step 8 opens every cited file before a claim lands. So a truth failure in the eval is two findings,
+not one. It says the prose let a false sentence be written, and it says the falsification pass let
+it through — a stated *only* that a serializer contradicts, a citation at the wrong block of the
+right file, are the shapes `references/claim-falsifier.md` names as its targets. A truth failure
+that survived that pass is read against the falsifier's transcript under `<session>/subagents/`
+before any rule is written for the prose: if the challenge was raised and not folded in, the fix is
+in step 8; if it was never raised, in the mandate. The prose is the third suspect, not the first.
+
+### Deferred criteria
+
+A deferred criterion is judged on every run, printed on every table with its pooled count, and
+moves nothing: no status, no page cap, no exit code, no release gate. The number stays visible so
+the deferral can be lifted on evidence, and nothing teaches a run to game it meanwhile. Which
+criteria are deferred, the reading behind each, and what lifts it live in `DEFERRED.md`, beside
+the findings a release carries knowingly; a deferral ends by returning the criterion to its class
+in `e2e/criteria.yml` in the same commit as the change that earned it.
+
+The thresholds live in `e2e/summary.rb` (the badge per criterion and per repetition) and
+`e2e/report.rb` (the release table), the class in `e2e/criteria.yml`, and `e2e/test_grade.rb` holds
+the arithmetic and the drift check between that file and the judges; this section owns the
+reasoning. Nothing about them reaches the skill's prose.
+
+## Making the number trustworthy
+
+The order below is the order the work has to happen in: the first three phases change what the
+loop can see, and only then is a prose change measurable. Each phase has an exit condition.
+
+1. **Freeze and baseline.** No new rule in the skill's prose until phase 4 is done. `lib.rb` stamps
+   a result `+dirty` when `skills/review-map` or `agents` has uncommitted changes; `run.rb` refuses
+   that unless `--allow-dirty` is passed, so every row is attributable to a sha. The paths are the
+   bytes a run reads — `SKILL.md`, `references/`, `scripts/`, `agents/` — never `evals/` or
+   `tests/`, because a harness edit changes nothing about the page and a sha that moved on one would
+   separate rows that measure the same prose. `summary.rb` and
+   `report.rb` report the per-criterion pooled rate as the headline number and the all-criteria
+   repetition count second. *Exit*: `bin/evals report` shows a rate per criterion per sha.
+
+2. **One criterion per tier rule, and a planted defect for each.** `judges/evidence.md` holds five
+   criteria: no claim stated as more than it is, no label on what the diff shows, an untouched
+   line of a changed file is cited (the three tier rules, deferred for now — `DEFERRED.md`),
+   every excerpt earned, the page reads complete shut. Each tier rule has its own defect in `calibration/discourse-43002/make-defects.rb`
+   and its row in `labels.yml`, planted on the corrected copy because gold fails all three on its
+   own. The split moves the judge's instrument sha, so it is uncalibrated until
+   `bin/evals calibrate evidence` passes. Then re-judge the existing run directories
+   (`bin/evals e2e discourse-44196 --rejudge <rundir>`, which keeps the original row's stamp)
+   before regenerating anything, so the first thing learned is which of the three rules carries
+   the failures. *Exit*: `status.json` lists the judge's current sha as calibrated, and the
+   release table shows evidence as five lines.
+
+3. **No eval PR in the prose.** A rule in `report-format.md` or `SKILL.md` is written in general
+   terms, and its example is a shape — a validator beside the hunk, a flag's serializer, a parser
+   handed a value no test feeds it — never an identifier from a PR in `prs.yml`. A rule written
+   from one repetition's verdict text, naming that PR's methods, is memorisation of that page and
+   nothing a second PR can confirm. The rule shapes the loop found are kept — the by-file split,
+   the citation that replaces a tier, the tier kept where a claim is restated, the absence that
+   names its hits, insulation out of the affected list, § 01 never vouching for the tests —
+   because each is a rule about every page. The mechanical checks added beside them
+   (`changed.rb`, the excerpt-overlap warning, the masthead sums) are tested and stay. *Exit*:
+   `grep` for the eval PR's identifiers across the skill's bytes finds nothing.
+
+4. **A second eval PR of a different shape.** `prs.yml` carries two `eval` cases: discourse-44196,
+   a 14-file feature with a migration and an Ember client, and discourse-44560, an 8-file backend
+   bugfix inside a plugin with no migration and no client. Small and large PRs fail oppositely — a
+   small one by inflation, a large one by skimming — and a rule that moves only one of them has
+   found something about that PR, not about the skill. A candidate the CI scope gate would skip as
+   trivial is not an eval PR, because CI would never map it: `ci/application-code.sh` over its range
+   is the first check on any addition. Run `bin/evals e2e <id> -n 3 -j 3` for both at the clean
+   sha. *Exit*: a per-criterion table pooled over both PRs at one sha, which is the baseline every
+   later change is measured against.
+
+5. **Prose work, one rule per cycle**, under rule 7 above, and for a truth criterion only after
+   the falsifier transcripts of the failing repetitions have been read (§ *What counts as good*,
+   last paragraph): pick the lowest-rated graded sub-criterion
+   across both PRs, and prefer a check to a rule wherever the shape is mechanical — a label beside
+   a citation can be held against the changed set, and a check corrects the run at step 10 on every
+   page where a rule only instructs it. Otherwise write one rule in general terms. Run both PRs
+   three times, keep or revert on the rule-acceptance test. A cycle that improves one PR and not the other has found something
+   about that PR, not about the skill.
 
 ## Profiling one run
 
@@ -371,12 +532,18 @@ harness cannot see" is an argument, not a measurement.
 
 ## checks/
 
+**None of this runs inside a user's run, and two of its rules are relayed from scripts that do.**
+Ruby is the evals'; a run may depend on shell and awk only. So `completeness.rb` relays
+`scripts/coverage-gate.sh` and `page-invariants.rb` § 10 relays `scripts/page-lint.sh`, the lint
+`SKILL.md` step 10 runs over the finished page, and each of those rules has one implementation —
+the one the run acts on, measured here afterwards.
+
 One script per rule family. Each prints `PASS` / `FAIL` / `WARN` / `SKIP` lines and nothing else;
 `check.rb` decides which apply and adds them up.
 
 | | Owns | Scope |
 |---|---|---|
-| `page-invariants.rb` | severity chips, verdict language, assurance language, evidence tiers, `data-path`, dead links, themes | page and fragment |
+| `page-invariants.rb` | severity chips, verdict language, assurance language, evidence tiers and their agreement with the changed set, `data-path`, dead links, themes, the metric strip | page and fragment |
 | `build-state.rb` | draft / final / stopped | page |
 | `completeness.rb` | the gate, delegated to `scripts/coverage-gate.sh` | page |
 | `excerpts.rb` | collapsed, summarised, tinted in all three themes, no range quoted twice, no syntax colouring written into the quotation, `data-lang` on unchanged blocks only, and a state tag that agrees with the diff — `Unchanged` never on a path the change touched, and no tag outside the generator's vocabulary | page and fragment |

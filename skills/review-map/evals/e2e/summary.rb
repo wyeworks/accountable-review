@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
-# summary.rb — what run.rb prints when it is done: did the page pass, and if not, why.
+# summary.rb — what run.rb prints when it is done: how the batch graded, and why.
 #
-# A repetition PASSES when three things hold, and the summary says which one did not:
+# The headline is the per-criterion table grade.rb computes over this batch's repetitions —
+# every calibrated judge's criteria, each with its class, its pooled count and its status under
+# evals/README.md § What counts as good. The number of repetitions that passed EVERY criterion is
+# printed second, because it is the number that cannot move: a sampled page judged by six
+# stochastic judges fails one of 23 criteria most of the time whatever the prose does.
 #
-#   1. a page was generated;
-#   2. check.rb reported no FAIL;
-#   3. every criterion of every CALIBRATED judge came back pass.
+# Beneath that, one block per repetition says what that page did: whether it was generated,
+# what check.rb found, every verdict with the judge's why where it was not a pass.
 #
 # Three things never decide it, each for a reason:
 #
@@ -18,30 +21,47 @@
 #     says of every length in it.
 #
 # An `unclear` from a calibrated judge is not a pass and not a fail: it is the judge saying it
-# could not tell, and the summary marks the repetition as needing a look rather than guessing on
-# its behalf. This grades the PAGE, never the pull request, like everything in this directory.
+# could not tell, and it is listed beside the counts rather than guessed on its behalf. The exit
+# code moves only on what grade.rb calls blocking. This grades the PAGE, never the pull request,
+# like everything in this directory.
 
+require_relative "grade"
 require_relative "judge"
 require_relative "verdicts"
 
 module Summary
   RULE = "━" * 64
 
-  # :pass, :fail, or :look — and the reasons behind anything but :pass.
-  def self.verdict(row)
+  # One repetition against every GRADED criterion: :pass, :fail, or :look — and the reasons behind
+  # anything but :pass. A deferred criterion's failure is listed and decides nothing, so a page
+  # that fails only those is a :pass with a line saying what it failed. Detail beneath the
+  # headline, never the headline.
+  def self.verdict(row, classes: Grade.classes)
     reasons = []
     look = []
+    deferred = []
     page = File.join(row["rundir"].to_s, "page", "index.html")
     reasons << "no page was generated" unless row["generated"] && File.exist?(page)
     reasons << "check.rb reported #{row['check_failed']} failure(s)" if row["check_failed"].to_i.positive?
     (row["judges"] || {}).each do |name, j|
       next unless j["calibration"] == "calibrated"
 
-      if !j["usable"]
+      unless j["usable"]
         reasons << "#{name} returned no usable verdicts"
-      elsif j.dig("counts", "fail").to_i.positive?
-        reasons << "#{name} failed #{j.dig('counts', 'fail')} criterion/criteria"
-      elsif j.dig("counts", "unclear").to_i.positive?
+        next
+      end
+      doc = begin
+        Verdicts.read(j["verdicts"])
+      rescue Verdicts::Unusable
+        nil
+      end
+      fails = Array(doc&.dig("verdicts")).select { |v| v["verdict"] == "fail" }
+                                         .group_by { |v| Grade.klass(name, v["n"].to_i, classes) == "deferred" }
+      graded = fails.fetch(false, []).size
+      held = fails.fetch(true, []).size
+      reasons << "#{name} failed #{graded} criterion/criteria" if graded.positive?
+      deferred << "#{name} failed #{held} deferred criterion/criteria — reported, not graded" if held.positive?
+      if graded.zero? && j.dig("counts", "unclear").to_i.positive?
         look << "#{name} was unclear on #{j.dig('counts', 'unclear')} criterion/criteria"
       end
     end
@@ -49,30 +69,47 @@ module Summary
              elsif look.any? then :look
              else :pass
              end
-    [status, reasons + look]
+    [status, reasons + look + deferred]
   end
 
   BADGE = { pass: "✅ PASS", fail: "❌ FAIL", look: "🔍 LOOK" }.freeze
+  HEAD = { good: "✅ GOOD", watch: "🔍 WATCH", read: "🔍 READ", block: "❌ BLOCKED" }.freeze
+  STATUS = { good: "good", watch: "watch", read: "read by a person", block: "BLOCKS — two failures",
+             failing: "BLOCKS — below 4/6", deferred: "deferred — reported, not graded", none: "—" }.freeze
 
   def self.print(pr, rows, out: $stdout)
     tty = out.tty?
     paint = ->(s, code) { tty ? "\e[#{code}m#{s}\e[0m" : s }
-    color = { pass: "1;32", fail: "1;31", look: "1;33" }
+    color = { pass: "1;32", fail: "1;31", look: "1;33", good: "1;32", watch: "1;33", read: "1;33", block: "1;31", failing: "1;31", deferred: "2" }
 
     rows = rows.sort_by { |r| r["rep"].to_i }
     verdicts = rows.map { |r| verdict(r) }
-    passed = verdicts.count { |v, _| v == :pass }
-    overall = if verdicts.any? { |v, _| v == :fail } then :fail
-              elsif verdicts.any? { |v, _| v == :look } then :look
-              else :pass
-              end
+    all = verdicts.count { |v, _| v == :pass }
+    lines = Grade.table(rows)
+    overall = Grade.blocking?(rows, lines) ? :block : Grade.overall(lines)
 
     first = rows.first || {}
     out.puts
     out.puts RULE
     out.puts " 🧭 #{pr.id} · #{pr.role} · skill #{first['skill_sha']} · plugin #{first['plugin_version']} · effort #{first['effort']}"
     out.puts RULE
-    out.puts " #{paint.(BADGE[overall], color[overall])}   #{passed}/#{rows.size} repetition#{'s' unless rows.size == 1} passed"
+    out.puts " #{paint.(HEAD[overall], color[overall])}   over #{rows.size} repetition#{'s' unless rows.size == 1}" \
+             " · #{all}/#{rows.size} passed every criterion"
+    out.puts "     #{first['skill_sha']} is uncommitted prose: this batch is attributable to no sha" if first["skill_sha"].to_s.end_with?("+dirty")
+    unless lines.empty?
+      out.puts
+      width = lines.map { |l| l.label.length }.max
+      lines.each do |l|
+        n = l.counts.values.sum
+        extra = []
+        extra << "#{l.counts[:unclear]} unclear" if l.counts[:unclear].positive?
+        extra << "judge split on gold" if l.split
+        out.puts format("   %-22s %d. %-#{width}s  %-5s  %s/%d  %s%s", l.judge, l.n, l.label, l.klass,
+                        l.counts[:pass], n, paint.(STATUS[l.status], color.fetch(l.status, "0")),
+                        extra.empty? ? "" : "  (#{extra.join(', ')})")
+      end
+      out.puts "   median repetition #{Grade.median_acceptable?(rows) ? 'acceptable' : 'NOT acceptable'} (≤ 2 form failures, no check FAIL)"
+    end
 
     rows.zip(verdicts).each do |row, (status, reasons)|
       out.puts

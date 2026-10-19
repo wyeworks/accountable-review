@@ -1,11 +1,44 @@
 # What a correct judge says, per criterion, on gold and on each defects/<variant>.patch.
-# A variant lists only the criteria its defect changes; the rest inherit gold's label.
-# Criteria are numbered as in judges/what-changed.md:
-#   1 accurate · 2 complete at the level of deltas · 3 orients, attributes, tiers
-#   4 stated limits true and once · 5 no verdict
+# A variant lists only the criteria its defect changes; the rest inherit gold's label, or its
+# `base` variant's when it names one — and a variant is gated on the criteria where it differs from
+# that base. A judge runs only on the variants that carry labels for it.
+#
+# `~` on the gold row is a criterion the person certifying could not settle on gold: it is not
+# gated there, and the corrected copy that removes the doubt is gated instead.
+#
+# A judge's gold labels are what a person's reading of gold.html against the code concluded, and
+# calibrate.rb uses them only for the judges gold.yml lists under `judges`. For a judge not listed
+# there, its gold row below is the assumption that reading has to confirm or correct, not a verdict.
+#
+# Criteria are numbered as in judges/<judge>.md:
+#   what-changed          1 accurate · 2 complete at the level of deltas · 3 orients, attributes,
+#                         tiers · 4 stated limits true and once · 5 no verdict
+#   checkpoint-judgments  1 a judgment, not a category · 2 asked once · 3 order is not a grade ·
+#                         4 asks, does not answer
+#   checkpoint-claims     1 Look at entries true · 2 explanations true · 3 stated absences true
+#   reading-path          1 points where its code is judged · 2 order has reasons · 3 points,
+#                         does not re-explain · 4 what a stop says is true
+#   impact                1 affected nodes are real consumers · 2 edges true · 3 affected means
+#                         unchanged · 4 a card's why orients and points
+#   evidence              1 no claim stated as more than it is · 2 no label on what the diff shows ·
+#                         3 untouched line of a changed file cited · 4 excerpts earned · 5 reads complete
+#                         with blocks shut
 gold:
   what-changed: [pass, pass, pass, pass, pass]
+  checkpoint-judgments: [pass, pass, pass, pass]
+  checkpoint-claims: [pass, pass, ~]        # 3: unsettled — cp-a's GAP says no frontend test applies the modal; a system spec does, no QUnit test does
+  reading-path: [pass, pass, ~, ~]          # 3: unsettled — stops 03 and 04 echo checkpoint A in a clause ("which is why a missing size becomes a reset"),
+                                            # a restatement or a set-up for the next stop by reading; reading-path-restates carries the clear case. 4: unsettled — stop 06's
+                                            # "largest part of the diff" is true of reports.gjs's share, not of the PR
+  impact: [~, pass, fail, fail]             # 1: unsettled — BulkFetch is the code whose request now 400s, but the 400 is the controller's; 3: delete_all's file is in
+                                            # the diff; 4: card B's why walks two hops (path A's "called by" holds through the request)
+  evidence: [fail, fail, fail, pass, pass]  # 1: cp-b states the cached-copy claim, which rests on unchanged dashboard.js, untiered and uncited;
+                                            # 2: admin_dashboard.scss:489, a line the diff adds, sits under the foot's Affected, not changed;
+                                            # 3: the bulk-caller and § 01 admins-only claims rest on untouched lines of the changed
+                                            # dashboard_controller.rb and reports.gjs, cited nowhere
 variants:
+  what-changed-headline:             # the <h1> says each admin's sizes are saved for them; the table has no user column
+    what-changed: {1: fail}
   what-changed-wrong-delta:          # "admins and moderators see the handle" — the component checks currentUser?.admin
     what-changed: {1: fail}
   what-changed-steps-as-deltas:      # one delta split into a bullet list of execution steps
@@ -18,3 +51,70 @@ variants:
     what-changed: {5: fail}
   what-changed-coverage:             # "every changed file was reviewed and no other issues were found"
     what-changed: {5: fail}
+
+  checkpoint-judgments-category:     # checkpoint C's question retitled "Controller and model validations"
+    checkpoint-judgments: {1: fail}
+  checkpoint-judgments-unmerged:     # a checkpoint E asking checkpoint A's question from the parser's side
+    checkpoint-judgments: {2: fail}
+  checkpoint-judgments-ranked:       # "This is the most important checkpoint on the page."
+    checkpoint-judgments: {3: fail}
+  checkpoint-judgments-verdict:      # checkpoint D: "This is a bug: the click branch should …"
+    checkpoint-judgments: {4: fail}
+
+  checkpoint-claims-lookat-line:     # the handle-contract entry cites d-resize-handles.gts:86-91, the payload and event docs
+    checkpoint-claims: {1: fail}
+  checkpoint-claims-explanation:     # "LayoutUpdater updates each row in place" — it deletes every row and re-inserts
+    checkpoint-claims: {2: fail}
+  checkpoint-claims-corrected:       # gold with the GAP, cp-b's open question and the "production write" premise made true
+    checkpoint-claims: {3: pass}
+  checkpoint-claims-gap:             # GAP: "no test covers a layout save that omits a size" — the request spec at :2378 does
+    base: checkpoint-claims-corrected
+    checkpoint-claims: {3: fail}
+
+  reading-path-wrong-pointer:        # the layoutItems/loadPayloads stop points at checkpoint D
+    reading-path: {1: fail}
+  reading-path-unreasoned-order:     # the stop that says it comes last, moved first
+    reading-path: {2: fail}
+  reading-path-restates:             # stop 02's why is checkpoint A's explanation again
+    base: reading-path-corrected
+    reading-path: {3: fail}
+  reading-path-corrected:            # gold with stops 03 and 04 pointing, and stop 06's size claim, stop 01's default and stop 02's "only rule" made true
+    reading-path: {3: pass, 4: pass}
+  reading-path-false-claim:          # "only the layout endpoint calls it" — bulk_reports does too
+    base: reading-path-corrected
+    reading-path: {4: fail}
+
+  impact-wrong-consumer:             # path A's affected node is toggleSection, which never PUTs the layout
+    base: impact-corrected
+    impact: {1: fail}
+  impact-corrected:                  # gold with path A's LayoutUpdater node drawn as changed code, the BulkFetch entry gone, card B's why an observation
+    impact: {1: pass, 3: pass, 4: pass}
+  impact-false-edge:                 # "called by": setSize never calls #applyConfigOptimistically
+    base: impact-corrected
+    impact: {2: fail}
+  impact-changed-as-affected:        # section.rb, which the diff changes, listed under Affected, not changed
+    base: impact-corrected
+    impact: {3: fail}
+  impact-why-walks-hops:             # path A's why narrates every node of the path beneath it
+    base: impact-corrected
+    impact: {4: fail}
+
+  evidence-corrected:                # gold with the date-change, cached-copy, seeds, bulk-caller and § 01 admins-only claims cited and tiered, cp-b's open question
+                                     # and card B's title agreeing with them, the changed scss line out of the foot's affected list, the insert_all
+                                     # and click-threshold claims tiered, three restatements keeping their tier, § 01's whole-list claim citing
+                                     # layout_updater.rb:19, stop 02 citing both call sites, cp-b's entry citing the items getter, cp-a's
+                                     # modal premise tiered, and the delete_all node in the changed lane
+    evidence: {1: pass, 2: pass, 3: pass}
+  evidence-unlabelled-inference:     # the overlapping-resize claim loses its `inferred`
+    base: evidence-corrected
+    evidence: {1: fail}
+  evidence-labelled-diff-claim:      # cp-a's default-to-1, which the hunk at :235-240 adds, gains `from unchanged code`
+    base: evidence-corrected
+    evidence: {2: fail}
+  evidence-uncited-untouched-line:   # the bulk-caller claim loses the dashboard_controller.rb:155 citation the corrected copy gave it
+    base: evidence-corrected
+    evidence: {3: fail}
+  evidence-unearned-excerpt:         # a stylesheet excerpt beside the claim that the columns have no CHECK
+    evidence: {4: fail}
+  evidence-hidden-claim:             # checkpoint D's click entry: no clause, and an excerpt summary that says nothing
+    evidence: {5: fail}

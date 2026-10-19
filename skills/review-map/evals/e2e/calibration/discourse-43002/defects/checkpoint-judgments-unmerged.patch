@@ -1,0 +1,34 @@
+--- gold.html
++++ gold.html
+@@ -1678,7 +1678,31 @@
+             <span>covers only 1&times;1 to full width. No test clicks a multi-row card, and none runs in
+               right-to-left</span>
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/tests/integration/components/dashboard/reports-test.gjs#L284-L338">frontend/discourse/tests/integration/components/dashboard/reports-test.gjs:284-338</a>
++          </li>
++        </ul>
++      </section>
++
++      <section class="cp" id="cp-e">
++        <span class="lbl lbl-wide">Checkpoint E</span>
++        <h3>Should a layout save that leaves out a size store that card at 1&times;1?</h3>
++
++        <p>The parser treats a missing <code>rows</code> or <code>cols</code> as 1, at
++          <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>,
++          and <code>LayoutUpdater</code> deletes every row before it writes what it is handed. A save that
++          omits a card's size therefore stores that card at one cell, whatever size it had. Decide whether an
++          omitted size should mean one cell, or should keep the size the card already has.</p>
++
++        <ul class="lookat">
++          <li>
++            <b>Default in the parser</b>
++            <span>falls back to 1 for each missing dimension</span>
++            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>
+           </li>
++          <li>
++            <b>Default-to-1 request spec</b>
++            <span>pins the one-cell fallback for an item sent with no size</span>
++            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-944d3162ab0371dfd9113fb935b2e3216446d4841565b194a446d44ee97dea64R2378-R2392">spec/requests/admin/dashboard_controller_spec.rb:2378-2392</a>
++          </li>
+         </ul>
+       </section>
+     </section>

@@ -61,6 +61,10 @@ jobs:
       # above passed a description that Pi's strict loader rejects outright, so a skill can be
       # valid to Claude Code and silently absent in another Agent Skills host.
       - run: ruby skills/review-map/tests/frontmatter.rb
+      # grade.rb's thresholds on synthetic verdicts, and the drift check that keeps
+      # e2e/criteria.yml the same length as every judge's criteria list — a criterion split
+      # in a judge file without a class would be graded under the wrong bar, silently.
+      - run: ruby skills/review-map/evals/e2e/test_grade.rb
       # Codex reads .codex-plugin/plugin.json ahead of Claude's manifest, so the two can drift
       # with nothing above noticing: a version left behind, setup-ci shipped into Codex, or a
       # marketplace entry naming something else. It mutates its own inputs to prove it fires.

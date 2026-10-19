@@ -1470,6 +1470,26 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment excerpt-overlap-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page excerpt-overlap-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment excerpt-overlap.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page excerpt-overlap.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment excerpt-typed-highlight.html
 exit=0
 SKIP  doc links: none on this input
@@ -1686,6 +1706,26 @@ SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page figures-unknown-kind.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment impact-aff-changed-file.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page impact-aff-changed-file.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment impact-aff-ledger-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page impact-aff-ledger-clean.html
 exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
@@ -1990,12 +2030,88 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment invariants-strip-files.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page invariants-strip-files.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment invariants-strip-kind.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page invariants-strip-kind.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --fragment invariants-tier-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page invariants-tier-clean.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
 ## --page invariants-tier-modifier-only.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment invariants-tier-on-changed.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page invariants-tier-on-changed.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment invariants-tier-uncited.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page invariants-tier-uncited.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --fragment invariants-tier-unlabelled.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+SKIP  runtime probes: none on this input
+## --page invariants-tier-unlabelled.html
 exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor

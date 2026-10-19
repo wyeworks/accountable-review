@@ -114,10 +114,13 @@ LLM judge per aspect of the page, anchored in the checkout and blind to the mech
 **Calibration**: a judge counts only once it has matched a person's verdicts on a certified gold
 page and on copies of it that each plant one defect. Calibration PRs are held out of the eval set.
 
-**One judge exists, deliberately** — `judges/what-changed.md`, for § 01. The other aspects
-(checkpoints, reading path, impact, evidence, voice, recall) are notes in `judges/IDEAS.md`, not
-code: one calibrated judge proves the method before the method is copied. The calibration PR is
-`discourse/discourse#43002`; `calibration/status.json` records the judge's calibration state.
+**Six judges exist** — `what-changed` (§ 01 with its masthead), `checkpoint-judgments` and
+`checkpoint-claims` (§ 03's shape and its truth), `reading-path`, `impact` and `evidence`. The
+aspects with no judge yet (Context, figures, coding decisions, probes, voice, recall) are notes in
+`judges/IDEAS.md`, most waiting on a gold page that carries their subject. The calibration PR is
+`discourse/discourse#43002`; a judge is measured against it only once `gold.yml` lists it as
+certified, and `calibration/status.json` records each judge's calibration state against the
+**instrument's** sha — the judge's file, `judge.rb` and `verdicts.rb` hashed together.
 Whole-run cases with no harness yet (the trivial refusal, `--update`'s P6 refusal, the 7.1 override
 path, a planted recall floor) are listed in `IDEAS.md`; each keeps its mechanical half in
 `tests/run.sh`.
@@ -170,15 +173,16 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the evidence foot's inventory cells and their deep links, so the gate checks the page rather than someone's typing. `--paths-only` is the only mode the page uses |
-| `scripts/coverage-gate.sh` | The one mechanical check — set equality between the inventory and the diff |
+| `scripts/coverage-gate.sh` | The one mechanical gate — set equality between the inventory and the diff |
+| `scripts/page-lint.sh` | The reading a run acts on at step 10, in shell because it runs on the user's machine: a placeholder is the one FAIL, and a tier that disagrees with the changed set is a WARN naming its sentence. `page-invariants.rb` § 10 relays it, so the rule has one implementation |
 | `scripts/read-config.sh` | The only thing that knows `.accountable-review.yml`'s shape, and the one parser every reader uses — the skill at step 1, `page-skeleton.sh`, and the `ci/` scripts. In `review-map` because the skill ships alone |
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/`, `setup-ci/tests/` and `bin/examples check` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
 | `bin/examples` | The published examples — `regen` regenerates each at the revision its committed `manifest.json` pins, `render` writes the provenance regions in `examples/README.md` and `examples/index.html`, `check` fails a version or a region gone stale. Outside `examples/` because Pages uploads that directory |
-| `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right. Not loaded at runtime; see `evals/README.md` |
-| `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one working judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release |
+| `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right, plus `DEFERRED.md`, the one list of what the gate knowingly lets through. Not loaded at runtime; see `evals/README.md` |
+| `evals/e2e/` | The end-to-end harness, in Ruby. `prs.yml` pins real merged OSS pull requests with a `calibration` or `eval` role; `run.rb` generates through `ci/generate-review-map.sh --output`, checks, judges and profiles; `judges/` holds one file per judge and `IDEAS.md`; `calibration/` holds the gold page, the one-defect patches, the labels and `status.json`, which is what makes a judge's column a measurement; `report.rb` writes the HTML report and, with `--history`, the one committed summary per release; `grade.rb` holds the thresholds `evals/README.md` § *What counts as good* owns, reading each criterion's class — truth, form or deferred, the last judged and gated by nothing — from `criteria.yml` — **never from a judge's file**, whose bytes are its instrument sha, so `test_grade.rb` pins the two to the same length |
 | `evals/checks/` | One Ruby script per rule family, ten of them, dispatched by `check.rb`; `self-test.rb` asserts a verdict per row of `self-test-cases.txt`. A check that could only SKIP does not exist, because a SKIP reads as verified. `impact-paths.rb` grades `figure.impact` and nothing else; `figures.rb` grades a checkpoint's figures, `figure.chain` among them. `link-form.rb` grades the href against the citation it sits on — the span, the sha256 fragment, and the routing away from a diff GitHub withholds — which is a relation between the page and a repository, hence `golden/links-repo.sh` and `lib/review_map/fixture.rb`. `lib/review_map/` is their shared library and `lib/test/` its tests. `checks/frozen/` holds every case's exact output, and `frozen.rb` verifies against it |
 | `skills/setup-ci/SKILL.md` | The setup procedure — inspect, decide where it goes, install, report — plus what setup must never touch |
 | `skills/setup-ci/references/workflow.md` | Every part of the generated workflow and why it is that way: the triggers, the draft and fork guards, concurrency, permissions, checkout depth, the pin, the credential |
@@ -298,8 +302,9 @@ Editing one of these means checking the others still agree.
 
   Nothing mechanical grades a checkpoint's quality. `start-here.rb` requires the reading path to
   point at one, `rails-anchors.rb` counts them for its doc-link budget, and `tests/run.sh` asserts the
-  template assembles three. Whether a question is a judgment is the first candidate judge in
-  `evals/e2e/judges/IDEAS.md`.
+  template assembles three. Whether a question is a judgment, asked once and ordered without a grade
+  is `evals/e2e/judges/checkpoint-judgments.md`'s question; whether its claims are true,
+  `checkpoint-claims.md`'s.
 - **Two kinds of checkpoint, and the second is ranked behind the first.** A **behavioural**
   checkpoint judges what the system now does. A **coding-decision** checkpoint judges how the change
   was built — where a class was put, what kind of object it is, which existing abstraction it went
@@ -437,6 +442,19 @@ Editing one of these means checking the others still agree.
 - **Evidence tiers.** Five of them, listed in `report-format.md` § *Evidence tiers*, rendered as
   `span.tier`. A claim the diff shows directly carries **no** label — silence is the first tier.
   Labelling everything is noise, and noise gets skipped.
+
+  **Changed and unchanged split by file, everywhere the page says either.** An untouched line of a
+  changed file is changed code for the tier, the excerpt's `Unchanged` tag, the `.ip-aff` node, the
+  impact lanes (*In this PR's files*, *Outside the diff*) and the *Affected, not changed* lists
+  alike, because one word meaning two things on one page leaves the reader unable to tell which.
+  `report-format.md` § *Evidence tiers* states it for the tier; § *Source excerpts* and § *Impact
+  paths* state it for their components; `SKILL.md` step 6 files such a hop under *Trace*; and
+  `excerpts.rb`, `impact-paths.rb` and `searches.rb` hold the tag, the node and the list against one
+  changed set, `checks/lib/review_map/changed.rb`. `scripts/page-lint.sh`, relayed by `page-invariants.rb` § 10, warns on the three ways a
+  label can disagree with that set — a sentence citing a file outside the diff with no tier, `from
+  unchanged code` with nothing cited, `from unchanged code` on a sentence citing only changed files —
+  never failing, because a hard failure on a label teaches a run to label everything; whether a tier
+  is *earned* is the `evidence` judge's question.
 - **Framework anchors are provenance, not evidence, and there is no sixth tier.** A doc link explains
   why a framework consequence follows; a console probe asks the reviewer's own application; a primer
   states the rule outright, at `--mentor` only. The claim keeps resting on a repo `file:line` at the
@@ -486,7 +504,16 @@ Editing one of these means checking the others still agree.
   check scopes its affected-entry region on the verbatim `Affected, not changed` eyebrow, which appears
   twice — beside the impact panel and in the foot — so `</ul>` and `</section>` must stay among its
   region resets.
-- **Completeness, and the one mechanical check.** Every path in the diff appears in the page, and the
+- **Step 10 lints the finished page with `scripts/page-lint.sh`, and the page carries no trace of
+  it.** Shell and awk only: a user's run may depend on nothing the evals need, and Ruby is the
+  evals'. A placeholder is its one FAIL, fixed before the final publish; a tier that disagrees with
+  the changed set is a WARN whose sentence is corrected or left, in chat. Nothing about it reaches
+  the page, which is the verification-badge rule applied to the run's own tooling. These agree:
+  `SKILL.md` step 10 and its scripts table, `hooks/activity.json` (the call's purpose on the
+  progress line), `tests/run.sh` and `self-test.sh` (its rows and the mutations behind them),
+  `evals/checks/page-invariants.rb` § 10, which relays its tier lines as `completeness.rb` relays
+  the gate, and `ci/generate-review-map.sh`, which runs none of it because the skill already has.
+- **Completeness, and the one mechanical gate.** Every path in the diff appears in the page, and the
   gate runs on the finished page. The carrier is `div.gt.gt-paths` inside `details.evidence` at the
   foot, generated by `ledger-rows.sh --paths-only` as cells carrying `data-path`. It is a grid cell
   (`<div class="c" data-path="…">`) because `coverage-gate.sh` greps `data-path` page-wide and
@@ -759,8 +786,8 @@ Editing one of these means checking the others still agree.
   **The cap stays at 3** — a consequence that does not fit keeps its entry in the affected list and
   its explanation in the checkpoint. **A `p.ip-why` orients and points; it never walks the hops.**
   Shape is a FAIL and vocabulary a WARN, because a hard failure on a verb teaches a run to mislabel a
-  true edge. Whether these are the right paths and whether each edge is **true** is judged; the § 05
-  judge in `evals/e2e/judges/IDEAS.md` is where it would be asked.
+  true edge. Whether each edge is **true** is `evals/e2e/judges/impact.md`'s question; whether these
+  are the right paths has no judge yet (`evals/e2e/judges/IDEAS.md`).
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four `SKELETON:`
   markers. Everything in the head and tail ranges — the `<head>`, the themes' token blocks, the
   highlight.js tags and the tint script — is written straight into the page by

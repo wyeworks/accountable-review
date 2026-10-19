@@ -1,15 +1,18 @@
 # Judges not yet written
 
-**Notes, not code.** `what-changed.md` is the only working judge, on purpose: one judge
-calibrated against a gold page tells us whether the method works before the method is copied
-six times. Everything below is a candidate, recorded so the next one starts from the real
-question rather than from a blank file. `run.rb` and `calibrate.rb` pick up every `*.md` in this
-directory except this one, so writing a judge means writing its file, then its gold labels and
-defect patches. Nothing in the harness changes.
+**Notes, not code.** Six judges exist — `what-changed`, `checkpoint-judgments`,
+`checkpoint-claims`, `reading-path`, `impact` and `evidence` — and each is calibrated only once a
+person has certified a gold page for it. Everything below is a candidate, recorded so the next one
+starts from the real question rather than from a blank file. `run.rb` and `calibrate.rb` pick up
+every `*.md` in this directory except this one, so writing a judge means writing its file, then its
+gold labels and defect patches. Nothing in the harness changes, except where a candidate below
+says otherwise.
 
 Each candidate lists what it would grade and what a planted defect for it would look like,
-because a judge nobody can plant a defect for can't be calibrated. The rule that applies to
-all of them: **grade the page, never the PR.**
+because a judge nobody can plant a defect for can't be calibrated. Most of them wait on a gold page
+that carries their subject: `discourse-43002`'s has no Context, no figure inside a checkpoint, no
+coding-decision checkpoint and no probe. The rule that applies to all of them: **grade the page,
+never the PR.**
 
 ## § 02 context
 
@@ -42,28 +45,21 @@ is. A judge here reads Context and the checkpoints as that reader, and asks:
   checkpoints turn on. Defect: a shift whose moved state is a UI step rather than a request, or
   one with no `ul.lc-cases` on a flow the reviewer's question shows has several.
 
-## § 03 checkpoints
+## § 03 checkpoints, what the two judges leave
 
-The one most likely to be wrong, and the most expensive to judge. It probably needs to be two
-judges, because one judge asked to check thirty things checks each of them less carefully.
+`checkpoint-judgments` grades whether each checkpoint is a judgment, asked once, ordered without a
+grade and left to the reviewer; `checkpoint-claims` opens every cited line. Two things neither asks:
 
-- Each checkpoint is a **judgment, not a category**: a reviewer could answer it by looking at the
-  code and could get the answer wrong. *ProjectSearcher implementation*, *Tests* and *Controller
-  changes* fail. Defect: retitle a checkpoint as the layer it lives in.
-- **The step 7c merge happened.** No two checkpoints are the same question. Defect: split one
-  checkpoint into two that share a cause and a decision.
-- **The order does not read as a grade.** No number beside a question, no *high* in a title, no
-  first checkpoint described as the important one. Defect: insert "the most important" into the
-  first explanation.
-- **Every *Look at* entry is true.** The cited line shows what the clause says. Defect: shift a
-  citation's line range off the line it claims.
 - **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
   decision in the repository, or a convention on the lens file's closed stack list — asks rather
   than answers, raises nothing the repository has itself settled on, is ranked after every
-  behavioural one, and none displaces a behavioural judgment; two that share one precedent should have been merged. Defect: a coding-decision
-  checkpoint with no citation from either source, one that rests on a convention the lens does
-  not list, or one that recommends the fix.
-- **The count scales on the deltas § 01 names**, never on the file count.
+  behavioural one, and none displaces a behavioural judgment; two that share one precedent should
+  have been merged. Defect: a coding-decision checkpoint with no citation from either source, one
+  that rests on a convention the lens does not list, or one that recommends the fix. Needs a gold
+  page with a coding-decision checkpoint on it.
+- **The count scales on the deltas § 01 names**, never on the file count. Defect: three more
+  checkpoints on a one-delta page — which also plants a merge failure, so it needs a page where the
+  extra checkpoints are distinct judgments.
 
 ## § 03 figures
 
@@ -88,28 +84,18 @@ first item is the one that makes the feature worth having or not.
 - **No figure grades.** No *critical* in a `.cv-note`, no figure caption that ranks. `figures.rb`
   warns on the common words; a judge reads the rest.
 
-## § 04 reading path
+## § 05, what `impact` leaves
 
-- It is one list, each stop links into a checkpoint, and the order has reasons.
-- A stop re-explains nothing the checkpoint owns. Defect: a `span.why` restating the
-  checkpoint's explanation.
+- **Omitted, not stubbed.** When nothing crosses into unchanged code the section and its rail entry
+  go. Defect: a stub saying nothing reaches unchanged code, on a gold page whose diff crosses
+  nothing — `discourse-43002`'s crosses, so a stub there would be false as well as a stub.
+- **These are the right paths.** `impact` checks that every edge is true, not that the one to three
+  paths drawn are the crossings a reviewer most needs.
 
-## § 05 impact outside the diff
+## Evidence, what `evidence` leaves
 
-This is the check `CLAUDE.md` tells a person to do on every run, and the strongest reason to
-automate one. The judge opens every entry and confirms the cited file really consumes the
-changed thing, and that each edge's causal verb is true. Defect: point an `.ip-aff` locator at a
-file that doesn't read the value. It also checks that the panel is omitted, not stubbed, when
-nothing crosses into unchanged code.
-
-## Evidence and anchors
-
-- The tiers are honest: inference is labelled, and a claim the diff shows carries no label.
-- Every excerpt is earned by a load-bearing citation, and the page reads complete with every
-  `details` shut, judged field by field.
-- Probes can be answered in a fresh checkout, and the label says what the output would settle.
-- **On a Phoenix page, zero doc links is expected**, because `elixir-docs.md` is closed. A rubric
-  that asks for a doc link fails every correct page of it.
+- **Probes** can be answered in a fresh checkout, and the label says what the output would settle.
+  Needs a gold page that proposes one.
 
 ## Voice and economy
 
@@ -127,6 +113,11 @@ judge reads the page and says, for each one, whether the page reaches it. **Read
 grep it.** Two runs against the retired `monolith-guard-chain` fixture scored 14/15 and 12/15 by
 grep and 15/15 by reading, because a page that cites a line range instead of a method name is
 following the citation rules.
+
+It is the candidate that changes the harness: `judge.rb` hands a judge parts of the page and
+nothing else, so `prs.yml` needs the field, `E2E::Pr` needs the member, and the list has to reach
+the prompt. The threads have to be fetched into `prs.yml` ahead of time, because the judge has no
+network.
 
 # The eval set (one PR so far)
 

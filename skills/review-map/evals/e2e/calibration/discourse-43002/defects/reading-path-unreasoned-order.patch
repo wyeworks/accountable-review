@@ -1,0 +1,70 @@
+--- gold.html
++++ gold.html
+@@ -1690,6 +1690,15 @@
+         <li>
+           <span class="n">01</span>
+           <span class="t">
++            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L290-L386">frontend/discourse/admin/components/dashboard/reports.gjs:290-386</a>
++            <span class="why">The drag handlers come last. They are the largest part of the diff and depend on
++              everything above, and the click branch is at the end.</span>
++          </span>
++          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
++        </li>
++        <li>
++          <span class="n">02</span>
++          <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R307-R315">db/structure.sql:307-315</a>
+             <span class="why">Start with the two new columns and their default, so you know what an omitted size
+               turns into. Each migration is one <code>add_column</code>.</span>
+@@ -1697,7 +1706,7 @@
+           <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+         </li>
+         <li>
+-          <span class="n">02</span>
++          <span class="n">03</span>
+           <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R228-R249">app/controllers/admin/dashboard_controller.rb:228-249</a>
+             <span class="why">The parser holds both the default-to-1 and the only enforced size rule. Both the
+@@ -1706,7 +1715,7 @@
+           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+         </li>
+         <li>
+-          <span class="n">03</span>
++          <span class="n">04</span>
+           <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35">lib/admin_dashboard/reports/layout_updater.rb:18-35</a>
+             <span class="why">Every save replaces the whole list, which is why a missing size becomes a reset.
+@@ -1715,7 +1724,7 @@
+           <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+         </li>
+         <li>
+-          <span class="n">04</span>
++          <span class="n">05</span>
+           <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L194-L213">frontend/discourse/admin/components/modal/manage-reports.gjs:194-213</a>
+             <span class="why">This unchanged file is the third writer of the layout, and the only one that leaves
+@@ -1724,7 +1733,7 @@
+           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+         </li>
+         <li>
+-          <span class="n">05</span>
++          <span class="n">06</span>
+           <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L162-L251">frontend/discourse/admin/components/dashboard/reports.gjs:162-251</a>
+             <span class="why">Read <code>layoutItems</code> and <code>loadPayloads</code> together to see which copy
+@@ -1732,15 +1741,6 @@
+           </span>
+           <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
+         </li>
+-        <li>
+-          <span class="n">06</span>
+-          <span class="t">
+-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L290-L386">frontend/discourse/admin/components/dashboard/reports.gjs:290-386</a>
+-            <span class="why">The drag handlers come last. They are the largest part of the diff and depend on
+-              everything above, and the click branch is at the end.</span>
+-          </span>
+-          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+-        </li>
+       </ol>
+     </section>
+ 

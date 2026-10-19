@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -1416,7 +1416,7 @@
+         <span class="lbl lbl-wide">Checkpoint A</span>
+         <h3>Does applying the Manage reports modal keep the sizes admins have set?</h3>
+ 
+-        <p>The controller now treats a missing <code>rows</code> or <code>cols</code> as 1, at
++        <p>This is the most important checkpoint on the page. The controller now treats a missing <code>rows</code> or <code>cols</code> as 1, at
+           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>.
+           <code>LayoutUpdater</code> deletes every row before it re-inserts the list. The modal's Apply button
+           still sends only <code>source</code> and <code>identifier</code>. So reordering or adding a report

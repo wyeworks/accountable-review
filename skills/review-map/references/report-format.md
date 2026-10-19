@@ -501,7 +501,7 @@ from these same boxes, and § *Topology figures* owns them.
 
 | Kind | Class | Means | Legal in |
 |---|---|---|---|
-| Changed by this PR | `.ip-n.ip-chg` | code the diff touches | both figures |
+| In this PR's files | `.ip-n.ip-chg` | code in a file the diff touches, edited or not | both figures |
 | Affected, not changed | `.ip-n.ip-aff` | unchanged code whose meaning the change altered — a finding | `figure.impact`, and the two fan-in figures in § *Topology figures*; **never `figure.chain`** |
 | Step | `.ip-n.ip-step` | a hop the value passes through that claims nothing about the diff — a framework layer, an unchanged pass-through, the browser | `figure.chain` only |
 | Outcome | `.ip-n.ip-out` | what a user or an operator sees; last, exactly once | both figures |
@@ -877,6 +877,65 @@ hues say what a claim is made of, never how much it should alarm anyone.
 reads as a footnote marker and the reader has to work out what it refers to. Put it at the end of the
 clause it qualifies — *"…on the /my-day and /my-week screens `inferred`. The diff adds…"*, not
 *"…screens. `inferred` — the diff adds…"*.
+
+**Unchanged means a file the diff does not touch, never an untouched line.** A claim resting on
+lines of a changed file that this PR did not edit — the method beside the one it rewrote, the guard
+a hunk's context shows — carries **no label**: it is cited, in whatever form § *Deep links* gives
+that line, since the file is one the reader is about to open anyway. `from unchanged code` is for
+code in a file `git diff --name-only` does not list, and nowhere else. The page splits changed from
+unchanged by file in every place the word appears — this tier, an excerpt's `Unchanged` tag
+(§ *Source excerpts*), the `.ip-aff` node and the *Affected, not changed* lists (§ *Impact paths*)
+— and one page meaning two things by it leaves the reader unable to tell which. Where the line-level
+fact is the point, the prose says it: *"the validator beside it, which this change does not touch"*.
+
+**No label is not no citation.** Silence means *the diff shows this*, and for an untouched line of a
+changed file the diff view does not: the reader can only check the claim if the page hands them the
+line. So the citation is the label's replacement and is just as required — an `a.path` or an
+excerpt's summary location **at the claim**, in the open page. A line in the search record does not
+count, because the record is shut; neither does a citation elsewhere on the page to a different
+range of the same file. Before writing a sentence about what an untouched method of a changed file
+does — what a validator accepts, which inputs a resolver returns early for, what a preset list
+already holds — name its lines, and if they are not cited in that field, cite them.
+
+The other direction is the commoner miss. A claim resting **only** on a file outside the diff —
+what a screen outside the diff shows, which controller reads the value — is not something the diff
+shows, so it carries `from unchanged code` even when it reads as plain description. Unlabelled, it
+claims the first tier.
+
+**A tier labels the claim it sits against, and no other.** A paragraph that says *the endpoint
+checks the stored list* and a *Look at* entry beneath it that cites the controller with
+`from unchanged code` are two fields making the same claim, and the label on the entry does not
+reach the paragraph: a reader of the paragraph meets an unlabelled claim. Each field carries its own
+tier where it states the claim — or the paragraph points at the entry instead of restating it.
+**Every field that restates a claim is one of these**: a checkpoint's paragraph, a *Look at* clause,
+an impact card's `p.ip-why`, a reading-path stop's why. A consequence Checkpoint D labels `inferred`
+is still inferred when Impact path B's `p.ip-why` says it a section later, and a reader who meets it
+there first has no way to know.
+
+**Three kinds of claim pass as fact most often, because each is built from lines the page does show.**
+
+- **What happens when two things interleave.** The lock, the reload and the re-check are in the
+  diff; what they guarantee when a write lands during another request's fetch is reasoning about an order
+  no line shows. It carries `inferred`, or `inferred from tests` where a spec runs that interleaving,
+  and it names the ordering it reasoned about. Stated plainly, it claims the code was seen doing it.
+- **That nothing else does something.** *Read only by one job*, *nothing else writes the flag*,
+  *no other caller* — an absence rests on a search, not on a line, and the search reaches files the
+  diff does not touch. So it carries `from unchanged code`, and it is stated only where a search
+  recorded in § *What was searched* backs it, in that search's scope; without one it carries
+  `inferred` or does not go on the page. **It names every hit it sets aside.** A search for a flag
+  returns the action that sets it, the migration that backfills it and the serializer that displays
+  it, as well as the one reader that branches on it — and *X is its only reader* is true only once
+  each of the others is named and excluded: *the only reader that decides anything; the serializer
+  passes it through for display*. A run that searched and then wrote *only* without listing the
+  hits is the run that misread its own results:
+  these are the sentences most often false at head, and the reader nobody accounted for was in the
+  search output every time.
+- **What the language or a library does with a value.** The line calls a parser; what the parser
+  makes of a value with a stray separator in it is not on that line, or on any line in the
+  repository. Unless a test feeds it that value, it is not shown. When the page proposes
+  a probe to settle it, it carries `uncertain`: the probe *is* what would settle it, which is what
+  that tier asks the page to say, and a claim the page itself offers to test has not been
+  established. `inferred` is for reasoning the page stands behind without a probe.
 
 **Label only the tiers that are not "explicitly changed."** Labelling everything is noise, and noise
 gets skipped, which defeats the purpose. Labelling nothing lets inference pass as fact, which is
@@ -1495,18 +1554,23 @@ first-class part, and adjacency is not asked to imply anything.
 
 | Kind | Class | Reads as |
 |---|---|---|
-| Changed by this PR | `.ip-chg` | solid border, page ground |
+| In this PR's files | `.ip-chg` | solid border, page ground |
 | Affected, not changed | `.ip-aff` | dashed border, teal ground and teal clause |
 | Behaviour / outcome | `.ip-out` | filled, ink ground |
 
-`.legend` is required and names all three. The lane a node sits in — *changed by this PR* on the
-left, *the existing system* on the right, with a **dotted** rule between them — is **derived from
-the kind and never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an
+`.legend` is required and names all three. The lane a node sits in — *in this PR's files* on the
+left, *outside the diff* on the right, with a **dotted** rule between them — is **derived from the
+kind and never authored**: `.ip-chg` left, `.ip-aff` right, `.ip-out` spanning both, since an
 observable behaviour belongs to neither half. So the boundary the reader sees is structurally true,
 and there is no lane class for a run to put on the wrong node.
 
+**The lanes name files, not edits**, because the left lane is where the reader opens the code: the
+file they are already scrolling in *Files changed*. A node there may be a line this PR did not edit
+— the method beside the one it added — and the label stays true of it. When the line being
+untouched is the point, the node's `.ip-d` says so, as § *Evidence tiers* has the prose say it.
+
 **The dash is no longer carrying the distinction alone.** `.ip-aff` is teal — ground, border and
-its `.ip-d` clause — because *changed by this PR* against *the existing system* is the most
+its `.ip-d` clause — because *in this PR's files* against *outside the diff* is the most
 load-bearing thing this figure draws and it was being encoded by border style over two near-identical
 greys. Teal is the page's word for **not in the diff** everywhere else too (the `tier-unc` label, the
 *Affected, not changed* lists), so a node and the entry beneath the panel that names it are visibly
@@ -1519,7 +1583,7 @@ and the panel has to survive being printed.
 and that split is load-bearing rather than decorative: the divider began as a 1px solid hairline in
 the connectors' own ink, so the one line on the figure carrying no direction looked exactly like
 the lines that do, and a path crossing it read as joining it. Dashes are already how `.ip-aff` says
-*the existing system*, so anything drawn solid is now part of a chain and nothing else is.
+*outside the diff*, so anything drawn solid is now part of a chain and nothing else is.
 
 **One path per `.ip-card`, and the card is the frame.** `.impact` is a group, not a box: it carries
 the label, the one `.legend` for every card, and the note. Each card holds its own `.ip-hd` naming
@@ -1533,7 +1597,8 @@ that judges it.
 
 ```html
 <p class="ip-why">Events created before this migration can carry a null location, and the
-registration mailer interpolates it without a guard. <a href="#cp-b">Checkpoint B</a></p>
+registration mailer interpolates it without a guard <span class="tier tier-unc">from unchanged code</span>.
+<a href="#cp-b">Checkpoint B</a></p>
 ```
 
 It exists because a card otherwise opens on geometry. The header names a behaviour and the next thing
@@ -1543,6 +1608,13 @@ and the one figure on the page that is *about* consequences made its consequence
 **It must not walk the hops.** A paragraph naming the chain in sequence makes one of the two
 redundant, and that is precisely the failure the box grid had: a figure with a footnote supplying the
 edges it could not draw. Say the consequence; let the figure say the mechanism.
+
+**It carries the tier the checkpoint gave the claim.** The why restates a consequence the
+checkpoint already labelled — `from unchanged code` because the mailer above is in a file the diff
+does not touch, `inferred` because an interleaving is reasoning about an order no line shows — and
+the label travels with the sentence. A reader who meets the claim here first has no other way to
+know what it rests on, and a why with no label says the diff shows it. § *Evidence tiers* owns the
+rule for every field that restates a claim; this is the field that most often drops it.
 
 **It orients, it does not explain.** The checkpoint owns the explanation, and § *One canonical home*
 applies here exactly as it does to the affected entries below — this is why the paragraph ends in a
@@ -1622,6 +1694,16 @@ like one.**
 - **Every path holds at least one `.ip-aff`.** A path with no unchanged node is a call stack inside
   the diff — true, and visible in the diff already. Unchanged-but-affected code is what this page is
   for, so a path that does not pass through any is not earning its place.
+- **`.ip-aff` is a file the diff does not touch, never an untouched line of one it does.** The
+  method beside the one this PR rewrote is inside a changed file: the reader opens that file in the
+  diff, the evidence foot lists it as changed, and drawing it dashed and teal tells them the
+  opposite. A hop through it is `.ip-chg`, its locator in the form § *Deep links* gives that line.
+  When that leaves a path with no node outside the diff, the chain is mechanism inside the change —
+  a checkpoint's `figure.chain` (§ *Chains*) — and not an impact path. The same rule holds for every
+  entry under *Affected, not changed*, beside the panel and in the evidence foot: an untouched line
+  of a changed file is cited from the checkpoint that turns on it. This is the by-file split §
+  *Evidence tiers* and § *Source excerpts* already make; `impact-paths.rb` holds the nodes and
+  `searches.rb` the lists against the changed set.
 - **At most two lane crossings.** The point is the one or two interactions that carry the
   consequence, not every hop between them.
 - **Labels, never sentences.** `<b>` is an identifier; `.ip-d` is a few words at most. A panel of
@@ -2085,9 +2167,9 @@ ambiguous.
 **Change shape** — a chip naming what kind of change this is: feature · refactor · bugfix ·
 migration · dependency bump · mixed. One word, and it is a category, never a grade.
 
-**A metric strip** of commits, files and a line split. Bucket the files rather than reporting one
-total, because a 40-file PR that is 8 production files and 32 fixtures is a different review from one
-that is 40 production files:
+**A metric strip** of commits, files and the files split by kind. Bucket the files rather than
+reporting one total, because a 40-file PR that is 8 production files and 32 fixtures is a different
+review from one that is 40 production files:
 
 | Bucket | Holds |
 |---|---|
@@ -2096,10 +2178,23 @@ that is 40 production files:
 | Generated | Lockfiles, schema dumps, compiled assets, generated types |
 | Docs | Markdown, comments-only changes |
 
+The *By kind* cell writes them in that order as `11 prod · 3 test · 1 generated`, leaving out an empty
+bucket. **The buckets add up to *Files*, and *Files* is the inventory's count**: every file sits in
+exactly one bucket, so a schema dump or a locale file the run was unsure of still goes somewhere —
+the nearest bucket — rather than nowhere. A strip whose parts do not sum to its total is a
+miscounted first screen, and the reader who adds it up stops trusting the numbers beneath it.
+`page-invariants.rb` § 9 checks both sums.
+
 **Then one paragraph, 80 to 160 words, and at most a handful of bullets.** What problem this solves,
 what is now true that was not, who is affected. Derived from the code, the tests and the commits —
 the PR description is a claim and is attributed when it is used, per `SKILL.md` step 4. Carry an
 evidence tier on the intent itself if it is inferred rather than stated.
+
+**It may say a test was added; it never says the tests cover the change.** *Pin each of them*,
+*covered by specs*, *both behaviours are tested* — each is a sentence about how well the change is
+verified, which is the assurance § *One page shape* refuses, placed on the page's first screen.
+Whether a test pins a behaviour, and which branch it leaves open, is a checkpoint's question. Here,
+name the behaviour a new spec exercises, or leave the tests to the metric strip's bucket.
 
 Bullets only when the PR contains genuinely independent changes, and then one line each as an actor
 plus a behaviour. **Not an execution path**: a path is a chain's job, and a list of them here is the
@@ -2281,6 +2376,16 @@ Each entry carries three things, and one of them is a pointer rather than an exp
 - **Which checkpoint it belongs to** — `href="#cp-x"`, which never re-explains the judgment and never
   repeats the checkpoint's own citation or tier.
 
+**A why claims no more than the checkpoint it points at.** One sentence compresses, and compression
+reaches for exclusivity: *the one place the flag is raised*, *the only check that sends a grant back
+to consent*, *everything after reads this flag*. Each sounds like orientation and each is a
+universal claim about the whole repository, made in the one sentence on the page with no room for
+the citation that would back it — and in real runs each was false at head, contradicted by a create
+action, a backfill, or a checkpoint on the same page. So *only*, *the one*, *every*, *never*,
+*nothing else* and their kin go in a why only where the checkpoint it points at makes the same claim
+on a recorded search. Otherwise say what the file does — *where an admin edit raises the flag* —
+which is true whether or not it is the only such place, and is all a route needs.
+
 **Order by conceptual dependency, not by the diff.** Schema before the code that trusts it; the
 smallest complete example before the bulk; irreversible code last, so it is read twice. Alphabetical,
 diff, layer and commit order are all wrong unless one of them happens to produce the best conceptual
@@ -2325,6 +2430,15 @@ why the entry is affected — and it reaches the entries no path had room for:
 > Checkpoint B.
 
 Not a summary of Checkpoint B. Not its citation again, not its tier again.
+
+**An entry is code whose meaning the change altered, never code the change leaves alone.** The
+search for consumers also turns up insulation — the check that reads a value the change stores
+nowhere, the status computation whose inputs an edit does not move — and it is a real finding: it
+is why what already exists keeps working. But its clause says *the change does not reach this*, and a list under *Affected, not changed* read with that clause tells the reader the
+opposite of what its heading does. Insulation is evidence for the checkpoint that asks whether
+something is reached, cited there as a *Look at* entry; it is never an entry here or in the foot's
+list. The test is the clause: if it says what this code now does differently or now receives, it is
+affected; if it says why this code is untouched, it is not.
 
 **What stays here and what goes to the foot.** The entries a path runs through and the entries a
 checkpoint turns on stay. Everything else the pass found — real, cited, and not something the reviewer

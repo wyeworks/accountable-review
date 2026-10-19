@@ -1,0 +1,21 @@
+<!-- One defect for page-invariants § 10: the first sentence carries `from unchanged code` and cites nothing,
+     so the label names a kind of evidence the reader cannot open. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Does an archived project drop out of the selectable list?</h3>
+  <p>The selectable-projects query has never read <code>archived_at</code>, so an archived project stays selectable <span class="tier tier-unc">from unchanged code</span>. The model sets the column at <a class="path" href="#">app/models/project.rb:41</a> and nothing else.</p>
+  <ul class="lookat">
+    <li><b>Where it is set</b> <span>writes archived_at and nothing else</span> <a class="path" href="#">app/models/project.rb:41</a></li>
+    <li><b>The list that ignores it</b> <span>filters on status only <span class="tier tier-unc">from unchanged code</span></span> <a class="path" href="#">app/queries/active_projects.rb:12</a></li>
+    <li><b>Where the query runs</b> <span>never reads the new column <span class="tier tier-unc">from unchanged code</span></span>
+<details class="excerpt excerpt--source"><summary><span class="chev">&#9656;</span>
+<span class="ex-loc"><a class="cite" href="https://github.com/o/r/blob/0123abcd/app/queries/active_projects.rb#L12-L14">app/queries/active_projects.rb:12-14</a></span>
+<span class="tag">Unchanged</span></summary><div class="ex-body"><pre data-src="app/queries/active_projects.rb">  where(status: :active)</pre></div></details></li>
+  </ul>
+</section>
+<details class="evidence"><summary>Evidence</summary>
+  <div class="gt gt-paths">
+    <div class="c" data-path="app/models/project.rb">app/models/project.rb</div>
+    <div class="c" data-path="db/schema.rb">db/schema.rb</div>
+  </div>
+</details>

@@ -1,11 +1,11 @@
 {
   "what-changed": {
-    "judge_sha": "bb794ab56076",
+    "judge_sha": "5151b61e5c53",
     "model": "claude-opus-5-5",
     "k": 3,
     "need": 2,
     "calibrated": true,
-    "date": "2026-10-02T16:28:05Z",
+    "date": "2026-10-15T18:09:11Z",
     "prs": [
       "discourse-43002"
     ],
@@ -17,7 +17,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": true,
@@ -29,7 +28,6 @@
         "criterion": 2,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -43,7 +41,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": true,
@@ -55,7 +52,6 @@
         "criterion": 4,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -69,7 +65,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": true,
@@ -81,7 +76,6 @@
         "criterion": 1,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -95,7 +89,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -107,7 +100,6 @@
         "criterion": 3,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -121,7 +113,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -134,7 +125,6 @@
         "expected": "fail",
         "got": [
           "fail",
-          "fail",
           "fail"
         ],
         "gated": true,
@@ -146,8 +136,7 @@
         "criterion": 1,
         "expected": "pass",
         "got": [
-          "pass",
-          "pass",
+          "fail",
           "pass"
         ],
         "gated": false,
@@ -159,7 +148,6 @@
         "criterion": 2,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -173,7 +161,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -185,7 +172,6 @@
         "criterion": 4,
         "expected": "fail",
         "got": [
-          "fail",
           "fail",
           "fail"
         ],
@@ -199,7 +185,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -211,7 +196,6 @@
         "criterion": 1,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -225,7 +209,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -237,7 +220,6 @@
         "criterion": 3,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -251,7 +233,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -264,6 +245,18 @@
         "expected": "fail",
         "got": [
           "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-headline",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "pass",
           "fail",
           "fail"
         ],
@@ -272,8 +265,47 @@
       },
       {
         "id": "discourse-43002",
-        "variant": "what-changed-steps-as-deltas",
-        "criterion": 1,
+        "variant": "what-changed-headline",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-headline",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-headline",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-headline",
+        "criterion": 5,
         "expected": "pass",
         "got": [
           "pass",
@@ -286,10 +318,21 @@
       {
         "id": "discourse-43002",
         "variant": "what-changed-steps-as-deltas",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "fail",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "what-changed-steps-as-deltas",
         "criterion": 2,
         "expected": "fail",
         "got": [
-          "fail",
           "fail",
           "fail"
         ],
@@ -302,9 +345,8 @@
         "criterion": 3,
         "expected": "pass",
         "got": [
-          "pass",
-          "pass",
-          "fail"
+          "fail",
+          "pass"
         ],
         "gated": false,
         "held": true
@@ -315,7 +357,6 @@
         "criterion": 4,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -329,7 +370,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -341,7 +381,6 @@
         "criterion": 1,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -355,7 +394,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -367,7 +405,6 @@
         "criterion": 3,
         "expected": "fail",
         "got": [
-          "fail",
           "fail",
           "fail"
         ],
@@ -381,7 +418,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -393,7 +429,6 @@
         "criterion": 5,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -407,7 +442,6 @@
         "expected": "fail",
         "got": [
           "fail",
-          "fail",
           "fail"
         ],
         "gated": true,
@@ -419,7 +453,6 @@
         "criterion": 2,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -433,7 +466,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -445,7 +477,6 @@
         "criterion": 4,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -459,6 +490,1486 @@
         "expected": "pass",
         "got": [
           "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      }
+    ]
+  },
+  "checkpoint-judgments": {
+    "judge_sha": "e8e0fd0b5d6a",
+    "model": "claude-opus-5-5",
+    "k": 3,
+    "need": 2,
+    "calibrated": true,
+    "date": "2026-10-15T17:29:00Z",
+    "prs": [
+      "discourse-43002"
+    ],
+    "findings": [
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-category",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-category",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-category",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-category",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-ranked",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-ranked",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-ranked",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-ranked",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-unmerged",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-unmerged",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-unmerged",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-unmerged",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-verdict",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-verdict",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-verdict",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-judgments-verdict",
+        "criterion": 4,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      }
+    ]
+  },
+  "evidence": {
+    "judge_sha": "1ec324d30c6b",
+    "model": "claude-opus-5-5",
+    "k": 3,
+    "need": 2,
+    "calibrated": true,
+    "date": "2026-10-16T19:12:48Z",
+    "prs": [
+      "discourse-43002"
+    ],
+    "findings": [
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-corrected",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-corrected",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-corrected",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-corrected",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-corrected",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-hidden-claim",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-hidden-claim",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-hidden-claim",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-hidden-claim",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-hidden-claim",
+        "criterion": 5,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-labelled-diff-claim",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-labelled-diff-claim",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-labelled-diff-claim",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-labelled-diff-claim",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-labelled-diff-claim",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-uncited-untouched-line",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-uncited-untouched-line",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-uncited-untouched-line",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-uncited-untouched-line",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-uncited-untouched-line",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unearned-excerpt",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unearned-excerpt",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unearned-excerpt",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unearned-excerpt",
+        "criterion": 4,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unearned-excerpt",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unlabelled-inference",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unlabelled-inference",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unlabelled-inference",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unlabelled-inference",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "evidence-unlabelled-inference",
+        "criterion": 5,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      }
+    ]
+  },
+  "checkpoint-claims": {
+    "judge_sha": "6e2899c9ccca",
+    "model": "claude-opus-5-5",
+    "k": 3,
+    "need": 2,
+    "calibrated": true,
+    "date": "2026-10-15T17:25:54Z",
+    "prs": [
+      "discourse-43002"
+    ],
+    "findings": [
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 3,
+        "expected": null,
+        "got": [
+          "fail",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-corrected",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-corrected",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-corrected",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-explanation",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-explanation",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-explanation",
+        "criterion": 3,
+        "expected": null,
+        "got": [
+          "unclear",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-gap",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-gap",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-gap",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-lookat-line",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-lookat-line",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "checkpoint-claims-lookat-line",
+        "criterion": 3,
+        "expected": null,
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      }
+    ]
+  },
+  "impact": {
+    "judge_sha": "d5f21403003a",
+    "model": "claude-opus-5-5",
+    "k": 3,
+    "need": 2,
+    "calibrated": true,
+    "date": "2026-10-16T12:23:43Z",
+    "prs": [
+      "discourse-43002"
+    ],
+    "findings": [
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 1,
+        "expected": null,
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 4,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-changed-as-affected",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-changed-as-affected",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-changed-as-affected",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-changed-as-affected",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-corrected",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-corrected",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-corrected",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-corrected",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-false-edge",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-false-edge",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-false-edge",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-false-edge",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-why-walks-hops",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-why-walks-hops",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-why-walks-hops",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-why-walks-hops",
+        "criterion": 4,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-wrong-consumer",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-wrong-consumer",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-wrong-consumer",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "impact-wrong-consumer",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      }
+    ]
+  },
+  "reading-path": {
+    "judge_sha": "d1ee163ee193",
+    "model": "claude-opus-5-5",
+    "k": 3,
+    "need": 2,
+    "calibrated": true,
+    "date": "2026-10-15T21:31:38Z",
+    "prs": [
+      "discourse-43002"
+    ],
+    "findings": [
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 3,
+        "expected": null,
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "gold",
+        "criterion": 4,
+        "expected": null,
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-corrected",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-corrected",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-corrected",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-corrected",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-false-claim",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-false-claim",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-false-claim",
+        "criterion": 3,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-false-claim",
+        "criterion": 4,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-restates",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-restates",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-restates",
+        "criterion": 3,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-restates",
+        "criterion": 4,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-unreasoned-order",
+        "criterion": 1,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-unreasoned-order",
+        "criterion": 2,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-unreasoned-order",
+        "criterion": 3,
+        "expected": null,
+        "got": [
+          "pass",
+          "fail"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-unreasoned-order",
+        "criterion": 4,
+        "expected": null,
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-wrong-pointer",
+        "criterion": 1,
+        "expected": "fail",
+        "got": [
+          "fail",
+          "fail"
+        ],
+        "gated": true,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-wrong-pointer",
+        "criterion": 2,
+        "expected": "pass",
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-wrong-pointer",
+        "criterion": 3,
+        "expected": null,
+        "got": [
+          "pass",
+          "pass"
+        ],
+        "gated": false,
+        "held": true
+      },
+      {
+        "id": "discourse-43002",
+        "variant": "reading-path-wrong-pointer",
+        "criterion": 4,
+        "expected": null,
+        "got": [
           "pass",
           "pass"
         ],

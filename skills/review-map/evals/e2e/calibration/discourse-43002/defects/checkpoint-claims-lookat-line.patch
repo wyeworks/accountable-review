@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -1671,7 +1671,7 @@
+           <li>
+             <b>Handle contract for <code>moved</code></b>
+             <span>says a bare click should not be committed as a change</span>
+-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">frontend/discourse/app/ui-kit/d-resize-handles.gts:101-106</a>
++            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L86-L91">frontend/discourse/app/ui-kit/d-resize-handles.gts:86-91</a>
+           </li>
+           <li>
+             <b>Click-toggle test</b>

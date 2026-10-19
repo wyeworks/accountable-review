@@ -35,6 +35,7 @@
 # whose dialect it was written in.
 
 require_relative "lib/review_map/check"
+require_relative "lib/review_map/changed"
 
 module Searches
   TOOL_PREFIX = /^[[:space:]]*(git[[:space:]]+)?(rg|grep|egrep|ag)[[:space:]]/
@@ -233,6 +234,33 @@ end
 
 check = ReviewMap::Check.new(ARGV)
 check.require_input
+
+# --- The second relation between an affected entry and the repository: it sits in a file the
+# diff does not touch. Ahead of the --repo guard because the page's own ledger answers it too.
+# The page splits changed from affected-not-changed BY FILE (report-format.md § Source excerpts
+# and § Impact paths), so an untouched line of a changed file listed here tells the reader the
+# file is outside the change when the inventory beside it says the opposite. Entries that point
+# at a checkpoint are held to it as well: where the provenance lives does not change which file
+# the entry is in.
+changed, set_from, git_unreadable = ReviewMap.changed_set(check, check.page.without_comments)
+if git_unreadable
+  check.maybe("the changed set could not be read from #{check.repo}: #{git_unreadable} — a page carrying a ledger is still checked against that, and one without is not checked at all")
+end
+if set_from.nil?
+  check.skip("affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger")
+else
+  subjects = Searches.affected_entries(check.page.without_comments).filter_map do |entry|
+    Searches.citations(entry).find { |cite| cite.match?(%r{\A[^:\s]+/[^:\s]*:[0-9]}) }
+  end
+  in_diff = subjects.select { |cite| changed.include?(cite.split(":").first) }
+  if subjects.empty?
+    check.skip("no affected entry carries a citation to hold against the diff")
+  elsif in_diff.empty?
+    check.ok("every one of #{subjects.size} affected entr(ies) sits in a file the diff does not touch, against #{set_from}")
+  else
+    check.bad("#{in_diff.size} affected entr(ies) in a file the change touches: #{in_diff.first(5).join(' ')} — affected, not changed means a file outside the diff; an untouched line of a changed file is cited from the checkpoint that turns on it")
+  end
+end
 
 if check.repo.to_s.empty?
   check.skip("search provenance: needs --repo to re-run the searches the page recorded")

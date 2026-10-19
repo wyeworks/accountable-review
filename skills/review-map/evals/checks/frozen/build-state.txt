@@ -340,6 +340,18 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page excerpt-open.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-overlap-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-overlap-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-overlap.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-overlap.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment excerpt-typed-highlight.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -470,6 +482,18 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page figures-unknown-kind.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-aff-changed-file.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-aff-changed-file.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-aff-ledger-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-aff-ledger-clean.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-card-no-lanes.html
@@ -652,10 +676,46 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-standing-disclaimer.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-strip-files.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-strip-files.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-strip-kind.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-strip-kind.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-tier-modifier-only.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-tier-modifier-only.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-on-changed.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-on-changed.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-uncited.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-uncited.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-tier-unlabelled.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-tier-unlabelled.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-update-assurance.html
