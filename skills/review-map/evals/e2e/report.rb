@@ -57,11 +57,11 @@ summary = []
 body = +""
 
 STATUS = { good: "good", watch: "watch", read: "read by a person", block: "BLOCKS — two failures",
-           failing: "BLOCKS — below 4/6", none: "—" }.freeze
-CLS = { good: "good", watch: "mixed", read: "mixed", block: "bad", failing: "bad", none: "plain" }.freeze
+           failing: "BLOCKS — below 4/6", deferred: "deferred — reported, not graded", none: "—" }.freeze
+CLS = { good: "good", watch: "mixed", read: "mixed", block: "bad", failing: "bad", deferred: "plain", none: "plain" }.freeze
 
 body << %(<h2>Release table — every eval PR pooled, per skill sha</h2>)
-body << %(<p class="meta">truth: no failure is good, one is read by a person, two block · form: pass ≥ 5/6 good, ≥ 4/6 watch, below blocks · a page is acceptable with ≤ 2 form failures and no check FAIL, and the median repetition per PR must be.</p>)
+body << %(<p class="meta">truth: no failure is good, one is read by a person, two block · form: pass ≥ 5/6 good, ≥ 4/6 watch, below blocks · deferred: judged and shown, graded by nothing · a page is acceptable with ≤ 2 form failures and no check FAIL, and the median repetition per PR must be.</p>)
 rows.select { |r| E2E.pr(r["id"]).role == "eval" rescue false }.group_by(&key).sort_by { |(_v, _s, _e, _m), g| g.map { |r| r["batch"].to_s }.max.to_s }.reverse.each do |(version, sha, effort, model), group|
   lines = Grade.table(group)
   blocking = Grade.blocking?(group, lines)

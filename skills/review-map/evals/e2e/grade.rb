@@ -12,6 +12,8 @@
 #           false sentence is not diluted by the pages beside it.
 #   form    rated: pass ≥ 5/6 is good, ≥ 4/6 is watch, below that fails and blocks. A fraction,
 #           so a batch of 3 reads the same way a pooled 6 does (3/3 good, 2/3 watch, 1/3 failing).
+#   deferred  judged and shown, never graded: no status but :deferred, no part in the page cap,
+#           no exit code. README § Deferred criteria says which and why.
 #
 # Where calibration/status.json records the judge splitting its own vote on the gold page for a
 # criterion, the instrument sets the ceiling: a form criterion is good at 4/6 and a truth
@@ -21,8 +23,9 @@
 # them. Only CALIBRATED judges count, for the reason report.rb gives.
 #
 # A page is acceptable when it was generated, check.rb reported no FAIL, and at most two FORM
-# criteria failed; truth criteria are held per criterion above, never by a per-page cap. Per PR
-# the median repetition must be acceptable.
+# criteria failed; truth criteria are held per criterion above, never by a per-page cap, and a
+# deferred criterion's failure is counted on its own line. Per PR the median repetition must be
+# acceptable.
 #
 # Blocking is the only thing that moves an exit code: a check FAIL, a truth criterion at two
 # failures, a form criterion below 4/6, no page. Watch and read exit 0 — a number that fails a
@@ -36,9 +39,9 @@ require_relative "verdicts"
 
 module Grade
   CRITERIA = File.join(E2E::HERE, "criteria.yml")
-  CLASSES = %w[truth form].freeze
+  CLASSES = %w[truth form deferred].freeze
   BLOCKING = %i[block failing].freeze
-  ORDER = { block: 0, failing: 1, read: 2, watch: 3, good: 4, none: 5 }.freeze
+  ORDER = { block: 0, failing: 1, read: 2, watch: 3, good: 4, deferred: 5, none: 6 }.freeze
 
   # {judge => {n => "truth"|"form"}}
   def self.classes(path = CRITERIA)
@@ -82,6 +85,7 @@ module Grade
   def self.status(klass, counts, split: false)
     n = counts[:pass] + counts[:fail] + counts[:unclear]
     return :none if n.zero?
+    return :deferred if klass == "deferred"
 
     if klass == "truth"
       counts[:fail] >= 2 ? :block : counts[:fail] == 1 ? :read : :good
@@ -123,24 +127,24 @@ module Grade
   # :good, :watch, :read or :block over a table.
   def self.overall(lines)
     worst = lines.map(&:status).min_by { |s| ORDER[s] } || :none
-    { block: :block, failing: :block, read: :read, watch: :watch, good: :good, none: :good }[worst]
+    { block: :block, failing: :block, read: :read, watch: :watch, good: :good, deferred: :good, none: :good }[worst]
   end
 
-  # One repetition: generated, no check FAIL, at most two form failures.
+  # One repetition: generated, no check FAIL, at most two form failures. Deferred failures are
+  # counted beside the others and weigh nothing.
   def self.page(row, classes: self.classes)
-    form = 0
-    truth = 0
+    fails = { "truth" => 0, "form" => 0, "deferred" => 0 }
     each_doc(row) do |judge, doc|
       doc["verdicts"].each do |v|
         next unless v["verdict"] == "fail"
 
-        klass(judge, v["n"].to_i, classes) == "truth" ? truth += 1 : form += 1
+        fails[klass(judge, v["n"].to_i, classes)] += 1
       end
     end
     checks = row["check_failed"].to_i
     generated = !!row["generated"] && File.exist?(File.join(row["rundir"].to_s, "page", "index.html"))
-    { generated: generated, check_failed: checks, form_fails: form, truth_fails: truth,
-      acceptable: generated && checks.zero? && form <= 2 }
+    { generated: generated, check_failed: checks, form_fails: fails["form"], truth_fails: fails["truth"],
+      deferred_fails: fails["deferred"], acceptable: generated && checks.zero? && fails["form"] <= 2 }
   end
 
   # The median repetition, by how far from acceptable it is, must be acceptable.

@@ -32,22 +32,36 @@ require_relative "verdicts"
 module Summary
   RULE = "━" * 64
 
-  # One repetition against EVERY criterion: :pass, :fail, or :look — and the reasons behind
-  # anything but :pass. Detail beneath the headline, never the headline.
-  def self.verdict(row)
+  # One repetition against every GRADED criterion: :pass, :fail, or :look — and the reasons behind
+  # anything but :pass. A deferred criterion's failure is listed and decides nothing, so a page
+  # that fails only those is a :pass with a line saying what it failed. Detail beneath the
+  # headline, never the headline.
+  def self.verdict(row, classes: Grade.classes)
     reasons = []
     look = []
+    deferred = []
     page = File.join(row["rundir"].to_s, "page", "index.html")
     reasons << "no page was generated" unless row["generated"] && File.exist?(page)
     reasons << "check.rb reported #{row['check_failed']} failure(s)" if row["check_failed"].to_i.positive?
     (row["judges"] || {}).each do |name, j|
       next unless j["calibration"] == "calibrated"
 
-      if !j["usable"]
+      unless j["usable"]
         reasons << "#{name} returned no usable verdicts"
-      elsif j.dig("counts", "fail").to_i.positive?
-        reasons << "#{name} failed #{j.dig('counts', 'fail')} criterion/criteria"
-      elsif j.dig("counts", "unclear").to_i.positive?
+        next
+      end
+      doc = begin
+        Verdicts.read(j["verdicts"])
+      rescue Verdicts::Unusable
+        nil
+      end
+      fails = Array(doc&.dig("verdicts")).select { |v| v["verdict"] == "fail" }
+                                         .group_by { |v| Grade.klass(name, v["n"].to_i, classes) == "deferred" }
+      graded = fails.fetch(false, []).size
+      held = fails.fetch(true, []).size
+      reasons << "#{name} failed #{graded} criterion/criteria" if graded.positive?
+      deferred << "#{name} failed #{held} deferred criterion/criteria — reported, not graded" if held.positive?
+      if graded.zero? && j.dig("counts", "unclear").to_i.positive?
         look << "#{name} was unclear on #{j.dig('counts', 'unclear')} criterion/criteria"
       end
     end
@@ -55,18 +69,18 @@ module Summary
              elsif look.any? then :look
              else :pass
              end
-    [status, reasons + look]
+    [status, reasons + look + deferred]
   end
 
   BADGE = { pass: "✅ PASS", fail: "❌ FAIL", look: "🔍 LOOK" }.freeze
   HEAD = { good: "✅ GOOD", watch: "🔍 WATCH", read: "🔍 READ", block: "❌ BLOCKED" }.freeze
   STATUS = { good: "good", watch: "watch", read: "read by a person", block: "BLOCKS — two failures",
-             failing: "BLOCKS — below 4/6", none: "—" }.freeze
+             failing: "BLOCKS — below 4/6", deferred: "deferred — reported, not graded", none: "—" }.freeze
 
   def self.print(pr, rows, out: $stdout)
     tty = out.tty?
     paint = ->(s, code) { tty ? "\e[#{code}m#{s}\e[0m" : s }
-    color = { pass: "1;32", fail: "1;31", look: "1;33", good: "1;32", watch: "1;33", read: "1;33", block: "1;31", failing: "1;31" }
+    color = { pass: "1;32", fail: "1;31", look: "1;33", good: "1;32", watch: "1;33", read: "1;33", block: "1;31", failing: "1;31", deferred: "2" }
 
     rows = rows.sort_by { |r| r["rep"].to_i }
     verdicts = rows.map { |r| verdict(r) }

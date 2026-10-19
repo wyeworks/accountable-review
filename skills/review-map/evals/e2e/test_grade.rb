@@ -53,10 +53,17 @@ class TestStatus < Minitest::Test
   def test_nothing_counted_is_none
     assert_equal :none, Grade.status("form", c(0))
   end
+
+  def test_a_deferred_criterion_has_one_status_whatever_the_count
+    assert_equal :deferred, Grade.status("deferred", c(6))
+    assert_equal :deferred, Grade.status("deferred", c(0, 6))
+    assert_equal :none, Grade.status("deferred", c(0)), "nothing counted is still none"
+  end
 end
 
 class TestOverRows < Minitest::Test
   CLASSES = { "j" => { 1 => "truth", 2 => "form", 3 => "form", 4 => "form" } }.freeze
+  DEFERRED = { "j" => { 1 => "truth", 2 => "deferred", 3 => "deferred", 4 => "form" } }.freeze
 
   def setup
     @dir = Dir.mktmpdir("grade-")
@@ -122,6 +129,24 @@ class TestOverRows < Minitest::Test
     assert Grade.median_acceptable?(rows, classes: CLASSES)
     rows = [rep(1, %w[pass fail fail fail]), rep(2, %w[pass fail fail fail]), rep(3, %w[pass pass pass pass])]
     refute Grade.median_acceptable?(rows, classes: CLASSES)
+  end
+
+  def test_a_deferred_failure_moves_nothing
+    rows = [rep(1, %w[pass fail fail pass]), rep(2, %w[pass fail fail pass]), rep(3, %w[pass fail fail pass])]
+    lines = Grade.table(rows, classes: DEFERRED, splits: {})
+    assert_equal %i[good deferred deferred good], lines.map(&:status)
+    assert_equal :good, Grade.overall(lines), "deferred lines never set the overall"
+    refute Grade.blocking?(rows, lines, classes: DEFERRED)
+    p = Grade.page(rows.first, classes: DEFERRED)
+    assert_equal 2, p[:deferred_fails]
+    assert_equal 0, p[:form_fails]
+    assert p[:acceptable], "a deferred failure is outside the page cap"
+    assert Grade.median_acceptable?(rows, classes: DEFERRED)
+  end
+
+  def test_the_same_verdicts_graded_as_form_do_block
+    rows = [rep(1, %w[pass fail fail pass]), rep(2, %w[pass fail fail pass]), rep(3, %w[pass fail fail pass])]
+    assert Grade.blocking?(rows, Grade.table(rows, classes: CLASSES, splits: {}), classes: CLASSES)
   end
 
   def test_an_unclassed_criterion_is_an_error_not_a_guess
