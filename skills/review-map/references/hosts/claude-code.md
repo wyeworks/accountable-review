@@ -22,6 +22,10 @@ and follow it; you are read-only — do not write, edit or create any file. Do n
 `Explore`: its own instructions are to read excerpts, and the mandate needs whole files opened. That
 is still an independent reader in a fresh context, which is all step 6c needs; nothing else changes.
 
+The plugin's status line counts what the run spends — tokens across every request, the
+falsifiers' included, and the 5-hour window's movement — and logs one line when the run ends, so
+do not run `scripts/usage.sh` here and do not restate those figures yourself.
+
 Keep drafting while the readers work — step 7, then step 9's stages — and collect their
 results before the final publish. If delegation is unavailable, explain that high effort
 needs independent readers and ask whether to proceed at low effort. Retry a failed reader

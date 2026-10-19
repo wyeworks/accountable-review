@@ -73,6 +73,7 @@ skills/review-map/
 │   ├── ledger-rows.sh             generates the evidence foot's inventory from the diff
 │   ├── coverage-gate.sh           asserts the inventory accounts for every changed path
 │   ├── read-config.sh             the one parser of .accountable-review.yml, for the skill and for CI
+│   ├── usage.sh                   what a Codex run spent, read off Codex's session log; never on the page
 │   └── carry-plan.sh              on --update, what the previous page may keep and what it may not
 ├── tests/                         the deterministic tests for those scripts, and the proof they fire
 └── evals/                         the mechanical checks, and the end-to-end harness over real PRs

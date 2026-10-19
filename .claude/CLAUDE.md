@@ -168,7 +168,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
-| `hooks/` | A Claude Code mod — the status line while `review-map` runs interactively. `progress.ts` reads, `board.ts` formats, `activity.json` is the tool-call-to-purpose table `evals/e2e/progress.rb` reads too, and `skills/review-map/tests/activity.rb` holds that one file to both readers. Inert until the skill expands; `.codex-plugin/plugin.json` names no hooks |
+| `hooks/` | A Claude Code mod — the status line while `review-map` runs interactively, tokens and the 5-hour window included, with one transcript line of what the run spent when it ends. `progress.ts` reads, `board.ts` formats, `activity.json` is the tool-call-to-purpose table `evals/e2e/progress.rb` reads too, and `skills/review-map/tests/activity.rb` holds that one file to both readers. Inert until the skill expands; `.codex-plugin/plugin.json` names no hooks |
 | `scripts/page-skeleton.sh` | Emits the head, the themes (the repository's default switched on) and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
@@ -176,6 +176,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/coverage-gate.sh` | The one mechanical gate — set equality between the inventory and the diff |
 | `scripts/page-lint.sh` | The reading a run acts on at step 10, in shell because it runs on the user's machine: a placeholder is the one FAIL, and a tier that disagrees with the changed set is a WARN naming its sentence. `page-invariants.rb` § 10 relays it, so the rule has one implementation |
 | `scripts/read-config.sh` | The only thing that knows `.accountable-review.yml`'s shape, and the one parser every reader uses — the skill at step 1, `page-skeleton.sh`, and the `ci/` scripts. In `review-map` because the skill ships alone |
+| `scripts/usage.sh` | What a Codex run spent, read off the thread's rollout log and its falsifiers': `mark` at step 1, `report` at step 10, said in chat and never on the page. Claude Code's status line counts the same live, so a Claude run never calls it |
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
@@ -896,6 +897,14 @@ Editing one of these means checking the others still agree.
   the mod writes its own generation times to `$.store`, per repository and per kind of run (high,
   low, `--update`), only for a run whose coverage gate passed before its turn answered, excluding
   time waiting between turns. With nothing recorded it shows elapsed time and no bar.
+
+  **What the run spends is read too, and never reaches the page.** Tokens are the usage of every
+  `turn.step` the run makes, the main loop's and its falsifiers'; the 5-hour figure is how far the
+  engine's `five_hour` reading moved since the run's first one, and a window that reset in
+  between shows no share. The end of a run logs one line to the transcript. Codex has no surface a
+  plugin draws on, so `scripts/usage.sh` reads its rollout log and the run says the same line in
+  chat at step 10 (`references/hosts/generic.md`). A cost figure on the page would grade how hard
+  the run worked, so none is written there.
 
   **One table, two languages.** `hooks/activity.json` is read by Ruby and by JavaScript;
   `tests/activity.rb` refuses a pattern the two engines read differently, and a label that reads as a

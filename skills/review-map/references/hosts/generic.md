@@ -78,6 +78,26 @@ do not advertise a completed high-effort run. A user-authorized switch to low ef
 finish through the normal completeness gate. This limitation belongs in chat, not as an
 assurance badge or a falsification tally on the page.
 
+## What the run spent
+
+Codex has no status line this plugin can draw on, so the run reports its own spend at the end,
+read from Codex's session log rather than estimated. Right after step 1 creates `$W`:
+
+```sh
+<skill base directory>/scripts/usage.sh mark "$W"
+```
+
+and at step 10, after the gate and the lint, before the closing report:
+
+```sh
+<skill base directory>/scripts/usage.sh report "$W"
+```
+
+Quote its `USAGE` line in the closing report, as it printed — tokens, the falsifiers' share and
+each rate-limit window's before and after, which are the account's and say so. A `SKIP` line means
+this host keeps no log the script can read: say nothing about cost rather than estimating one, and
+when `mark` printed `SKIP`, skip `report` too. None of it reaches the page.
+
 ## Scope
 
 This integration supports local `review-map` generation. The bundled `setup-ci` skill and

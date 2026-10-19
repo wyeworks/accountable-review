@@ -2,7 +2,7 @@
 # run.sh — the deterministic tests for review-map's scripts.
 #
 #   Usage: tests/run.sh
-#          REVIEW_MAP_SECTION=skeleton|diff-render|carry-plan|excerpt|page-lint tests/run.sh   one section only
+#          REVIEW_MAP_SECTION=skeleton|diff-render|carry-plan|excerpt|page-lint|usage tests/run.sh   one section only
 #
 # Whether a Review Map is any good is a model run and cannot be asserted on. The scripts underneath
 # it are ordinary software with right answers, and this is where that half is held to account.
@@ -44,6 +44,7 @@ DIFF_RENDER=${REVIEW_MAP_DIFF_RENDER:-$SKILL_DIR/scripts/diff-render.sh}
 CARRY_PLAN=${REVIEW_MAP_CARRY_PLAN:-$SKILL_DIR/scripts/carry-plan.sh}
 EXCERPT=${REVIEW_MAP_EXCERPT:-$SKILL_DIR/scripts/excerpt.sh}
 PAGE_LINT=${REVIEW_MAP_PAGE_LINT:-$SKILL_DIR/scripts/page-lint.sh}
+USAGE=${REVIEW_MAP_USAGE:-$SKILL_DIR/scripts/usage.sh}
 GOLDEN=$SKILL_DIR/evals/golden
 
 # A theme set in the caller's environment would change every page this file emits.
@@ -62,8 +63,8 @@ count() { c=$(grep -c -F -e "$2" "$1" 2>/dev/null) || c=0; printf %s "$c"; }
 # what CI and a person get.
 SECTION=${REVIEW_MAP_SECTION:-all}
 case $SECTION in
-  all|skeleton|diff-render|carry-plan|excerpt|page-lint) ;;
-  *) echo "run.sh: unknown REVIEW_MAP_SECTION: $SECTION (skeleton | diff-render | carry-plan | excerpt | page-lint)" >&2; exit 2 ;;
+  all|skeleton|diff-render|carry-plan|excerpt|page-lint|usage) ;;
+  *) echo "run.sh: unknown REVIEW_MAP_SECTION: $SECTION (skeleton | diff-render | carry-plan | excerpt | page-lint | usage)" >&2; exit 2 ;;
 esac
 section() { [ "$SECTION" = all ] || [ "$SECTION" = "$1" ]; }
 
@@ -1126,6 +1127,73 @@ assert_eq "$(count "$WORK/lint.out" 'WARN')" "0" "and warns on nothing"
 printf '<!-- {{IN_A_COMMENT}} from unchanged code --><p>Plain.</p>\n<div class="c" data-path="a.rb">a</div>\n' > "$WORK/comment.html"
 lint_out "$WORK/comment.html"
 assert_eq "$(count "$WORK/lint.out" 'FAIL')" "0" "a placeholder inside a comment is not on the page"
+fi
+
+if section usage; then
+# ---------------------------------------------------------------- usage.sh
+# What a Codex run spent, read off the session log. The fixture is a CODEX_HOME holding this
+# thread's rollout, one falsifier's (its session meta names this thread as parent), and an
+# unrelated thread's, which must not count. Token lines are the shape Codex's protocol serialises:
+# an event_msg whose payload is a token_count with `info.total_token_usage` and `rate_limits`.
+echo ""
+echo "usage  $USAGE"
+CX=$WORK/codex; TID=0199aaaa-0000-7000-8000-00000000cafe
+mkdir -p "$CX/sessions/2026/10/19" "$WORK/uw"
+ROLL=$CX/sessions/2026/10/19/rollout-2026-10-19T10-00-00-$TID.jsonl
+tc() { # in cached out primary_used [reset] — one token_count line
+  printf '{"timestamp":"t","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":%s,"cached_input_tokens":%s,"output_tokens":%s,"reasoning_output_tokens":0,"total_tokens":0},"last_token_usage":{"input_tokens":1,"cached_input_tokens":1,"output_tokens":1,"reasoning_output_tokens":0,"total_tokens":2},"model_context_window":272000},"rate_limits":{"limit_id":"codex","primary":{"used_percent":%s,"window_minutes":300,"resets_at":%s},"secondary":{"used_percent":12.0,"window_minutes":10080,"resets_at":1761000000}}}}\n' "$1" "$2" "$3" "$4" "${5:-1760900000}"
+}
+meta() { printf '{"timestamp":"t","type":"session_meta","payload":{"id":"%s","session_id":"%s","parent_thread_id":%s,"cwd":"/r"}}\n' "$1" "$TID" "$2"; }
+{ meta "$TID" null; tc 100000 80000 2000 30.0; } > "$ROLL"
+uout() { rc=0; CODEX_THREAD_ID=$1 CODEX_HOME=$CX "$USAGE" "$2" "$WORK/uw" > "$WORK/u.out" 2>/dev/null || rc=$?; echo "$rc" > "$WORK/u.exit"; }
+
+uout "" mark
+assert_eq "$(count "$WORK/u.out" 'SKIP usage: not a Codex session')" "1" "outside Codex it says SKIP, since Claude Code counts its own"
+assert_eq "$(cat "$WORK/u.exit")" "0" "and a count it cannot read never stops a run"
+
+# A subagent of this thread from an earlier task, begun before the mark and still writing after it.
+EARLY=$CX/sessions/2026/10/19/rollout-2026-10-19T09-00-00-0199ffff-early.jsonl
+{ meta 0199ffff-early "\"$TID\""; tc 50000 0 500 29.0; } > "$EARLY"
+uout "$TID" mark
+assert_eq "$(count "$WORK/u.out" 'USAGE marked')" "1" "mark records where the thread stands"
+tc 70000 0 700 36.5 >> "$EARLY"
+tc 900000 800000 12000 36.5 >> "$ROLL"
+{ meta 0199bbbb-child "\"$TID\""; tc 300000 250000 6000 36.5; } > "$CX/sessions/2026/10/19/rollout-2026-10-19T10-05-00-0199bbbb-child.jsonl"
+{ meta 0199cccc-other "\"0199dddd-unrelated\""; tc 999999 0 999 36.5; } > "$CX/sessions/2026/10/19/rollout-2026-10-19T10-06-00-0199cccc-other.jsonl"
+
+uout "$TID" report
+assert_eq "$(count "$WORK/u.out" 'USAGE review map used 1.12M tokens (1.10M input, 970k of it cached · 16k output; falsifiers 306k of it)')" "1" \
+  "report subtracts the mark, adds the falsifier, and leaves another thread's and an earlier subagent's logs out"
+assert_eq "$(count "$WORK/u.out" '5-hour window 30% → 36.5% (+6.5%), 7-day window 12% → 12% (+0%), account-wide')" "1" \
+  "and says how far each window moved, named from its length, account-wide"
+
+tc 950000 850000 13000 4.0 1760918000 >> "$ROLL" # the 5-hour window reset since the mark
+uout "$TID" report
+assert_eq "$(count "$WORK/u.out" '5-hour window at 4%')" "1" "a window that reset is reported where it stands, never as a share"
+assert_eq "$(count "$WORK/u.out" '→ 4%')" "0" "with no delta across the reset"
+
+# A revert writes a newer rollout for the same thread, its totals starting over.
+sleep 1 # -nt has one-second granularity on some file systems
+{ meta "$TID" null; tc 1000 0 10 4.0 1760918000; } > "${ROLL%.jsonl}_0199abcd.jsonl"
+uout "$TID" report
+assert_eq "$(count "$WORK/u.out" 'SKIP usage: the thread was reverted since the mark')" "1" \
+  "a thread reverted since the mark is refused rather than subtracted across two logs"
+rm "${ROLL%.jsonl}_0199abcd.jsonl"
+
+# Just under a million rounds into millions, never to 1000k.
+TID2=0199aaaa-0000-7000-8000-00000000beef
+ROLL2=$CX/sessions/2026/10/19/rollout-2026-10-19T11-00-00-$TID2.jsonl
+mkdir -p "$WORK/uw2"
+{ meta "$TID2" null; tc 0 0 0 30.0; } > "$ROLL2"
+CODEX_THREAD_ID=$TID2 CODEX_HOME=$CX "$USAGE" mark "$WORK/uw2" >/dev/null
+tc 999000 0 700 30.0 >> "$ROLL2"
+CODEX_THREAD_ID=$TID2 CODEX_HOME=$CX "$USAGE" report "$WORK/uw2" > "$WORK/u.out"
+assert_eq "$(count "$WORK/u.out" 'used 1.00M tokens (999k input')" "1" "999,700 tokens read as 1.00M"
+
+uout 0199eeee-not-marked report
+assert_eq "$(count "$WORK/u.out" 'SKIP usage: no Codex session log')" "1" "a thread with no log says SKIP"
+CODEX_THREAD_ID=$TID CODEX_HOME=$CX "$USAGE" report "$WORK/nope" >/dev/null 2>&1 && rc=0 || rc=$?
+assert_eq "$rc" "2" "a missing work directory is a usage error"
 fi
 
 echo "run.sh: $pass passed, $fail failed"

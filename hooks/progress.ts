@@ -1,7 +1,7 @@
 // progress.ts — the e2e progress board (skills/review-map/evals/e2e/progress.rb), as one status
 // line in Claude Code while /accountable-review:review-map runs interactively.
 //
-//   🌔 review map  ▕███████████▍       ▏  47%  11:02 / ~23:30  🔎 tracing consumers  🔧 38  🥊 4  📄 2/4
+//   🌔 review map  ▕███████████▍       ▏  47%  11:02 / ~23:30  🔎 tracing consumers  🔧 38  🥊 4  📄 2/4  🪙 3.12M  ⏳ 5h +6%
 //
 // Every field is READ, never guessed, and that is the rule this file keeps: a progress line that
 // invents progress is the verification badge of the terminal, and the page itself is forbidden
@@ -12,7 +12,10 @@
 //     spawn is counted, and the coverage gate passing then the turn answering ends the run;
 //   * the page the run is staging — checkpoints written against pending ones;
 //   * the clock, against the median of this repository's earlier generations of the same kind,
-//     which this file records itself. With none recorded there is no bar, only elapsed time.
+//     which this file records itself. With none recorded there is no bar, only elapsed time;
+//   * what the run spent: the usage the API reported for every request the run made, the main
+//     loop's and its falsifiers' (another agent working beside the run is not the run's), and the account's 5-hour window as the engine measures it, from the
+//     run's first reading. When the run ends the transcript gets one line with the breakdown.
 //
 // The activity is the latest tool call by purpose, never a step number: steps interleave and
 // cannot be read off a run (evals/README.md § Profiling one run), and this does not pretend
@@ -23,6 +26,8 @@ import type { EngineInterface, Register, Timer } from 'claude-code'
 
 import {
   type Activity,
+  type Limit,
+  type Usage,
   type RunKind,
   type Vars,
   assignedW,
@@ -30,6 +35,11 @@ import {
   label,
   line,
   median,
+  moved,
+  NO_USAGE,
+  addUsage,
+  spent,
+  totalTokens,
   outputPage,
   pagePath,
   parseActivity,
@@ -61,6 +71,11 @@ type Run = {
   repo?: string
   tick: number
   timer?: Timer
+  usage: Usage
+  falsifierUsage: Usage
+  falsifierIds: Set<string>
+  firstLimits: Limit[] // each window's first reading inside this run
+  lastLimits: Limit[]
 }
 
 // The module's own variables start over on a reload, as register runs again.
@@ -71,10 +86,38 @@ function elapsedMs(r: Run, now: number) {
   return (r.endedAt ?? r.waitingSince ?? now) - r.started - r.paused
 }
 
+const FIVE_HOUR = 'five_hour'
+
 async function draw($: EngineInterface) {
   if (!run) return
   const now = await $.clock.now()
-  $.ui.status(line({ ...run, waiting: run.waitingSince !== undefined, elapsed: elapsedMs(run, now) / 1000 }))
+  const at = (ls: Limit[]) => ls.find(l => l.kind === FIVE_HOUR)
+  $.ui.status(line({
+    ...run,
+    waiting: run.waitingSince !== undefined,
+    elapsed: elapsedMs(run, now) / 1000,
+    tokens: totalTokens(run.usage),
+    window: moved(at(run.firstLimits), at(run.lastLimits)),
+  }))
+}
+
+// A window's first reading inside the run is its baseline. A fresh session has no reading before
+// its first response, so there the baseline is the first response's: the share is then short by
+// at most one request, never padded. A window that resets mid-run keeps its old baseline, so it
+// shows no share at all rather than the part since the reset.
+function measured(r: Run, limits: readonly Limit[]) {
+  for (const l of limits) {
+    if (!r.firstLimits.some(f => f.kind === l.kind)) r.firstLimits = [...r.firstLimits, { ...l }]
+  }
+  if (limits.length > 0) r.lastLimits = limits.map(l => ({ ...l }))
+}
+
+async function readLimits($: EngineInterface): Promise<Limit[]> {
+  try {
+    return [...(await $.session.usage()).rateLimits]
+  } catch {
+    return [] // no reading is no reading: the line shows tokens alone
+  }
 }
 
 async function recount($: EngineInterface) {
@@ -125,7 +168,15 @@ async function start($: EngineInterface, command: string) {
     tick: 0,
     repo: key,
     eta: Array.isArray(past) ? median(past.filter((n): n is number => typeof n === 'number')) : undefined,
+    usage: NO_USAGE,
+    falsifierUsage: NO_USAGE,
+    falsifierIds: new Set(),
+    firstLimits: [],
+    lastLimits: [],
   }
+  // A reading from before an idle stretch can belong to a window that has since reset: as a
+  // baseline it would match no later reading, and the run would show no share at all.
+  measured(mine, (await readLimits($)).filter(l => !(Date.parse(l.resetsAt ?? '') <= mine.started)))
   run = mine
   tick($, mine)
   await draw($)
@@ -181,8 +232,43 @@ export const register: Register = on => {
   }).catch(($, e, next) => next(e))
 
   on('agent.spawn', async ($, e, next) => {
-    if (run && !run.ended && FALSIFIER.test(e.subagentType)) {
-      run.falsifiers += 1
+    const mine = run && !run.ended && FALSIFIER.test(e.subagentType) ? run : undefined
+    if (mine) {
+      mine.falsifiers += 1
+      await draw($)
+    }
+    const result = await next(e)
+    if (mine && result.agentId) mine.falsifierIds.add(result.agentId)
+    return result
+  }).catch(($, e, next) => next(e))
+
+  // Every request the run makes, counted once the response is whole: the main loop's and its
+  // falsifiers'. The skill spawns no other agent, so any other subagent is someone else's work
+  // running beside it. A falsifier still reading after the main turn ended is the run's too, so a
+  // waiting run keeps counting. The stream passes through untouched.
+  on('turn.step', async function* ($, e, next) {
+    const mine = run && !run.ended ? run : undefined
+    const result = yield* next(e)
+    const falsifier = e.agentId !== undefined && mine?.falsifierIds.has(e.agentId) === true
+    if (mine && !mine.ended && result.usage && (e.agentId === undefined || falsifier)) {
+      try {
+        mine.usage = addUsage(mine.usage, result.usage)
+        if (falsifier) mine.falsifierUsage = addUsage(mine.falsifierUsage, result.usage)
+        await draw($)
+      } catch {
+        // the count is the line's, never the request's
+      }
+    }
+    return result
+  }).catch(async function* ($, e, next) {
+    return yield* next(e)
+  })
+
+  // The engine's own measurement, pushed after each main-thread turn and whenever a window moves a
+  // whole point.
+  on('session.measure', async ($, e, next) => {
+    if (run && !run.ended) {
+      measured(run, e.rateLimits)
       await draw($)
     }
     return next(e)
@@ -216,6 +302,10 @@ export const register: Register = on => {
         mine.ended = e.reason === 'answer' ? 'done' : e.isAborted ? 'interrupted' : 'stopped'
       }
       await recount($)
+      if (mine.ended) {
+        measured(mine, await readLimits($))
+        $.ui.log(spent(mine.usage, mine.falsifierUsage, mine.firstLimits, mine.lastLimits))
+      }
       await draw($)
       if (mine.ended === 'done' && mine.repo) {
         const key = historyKey(mine.repo, mine.kind)

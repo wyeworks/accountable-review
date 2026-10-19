@@ -2,6 +2,8 @@ import { describe, expect, mock, test } from 'claude-code/testing'
 import type { On } from 'claude-code'
 
 import {
+  NO_USAGE,
+  addUsage,
   assignedW,
   bar,
   checkpoints,
@@ -9,13 +11,16 @@ import {
   label,
   line,
   median,
+  moved,
   outputPage,
   pagePath,
   parseActivity,
   repoKey,
   runKind,
   runsGate,
+  spent,
   summary,
+  tokens,
 } from './board'
 
 // Rows of hooks/activity.json, in its order. A test runs with no file system, so it cannot read the
@@ -29,6 +34,9 @@ const ACTIVITY = `[
   ["\\\\b(rg|grep|Grep)\\\\b", "🔎 tracing consumers"],
   ["\\\\b(sed|cat|head|Read)\\\\b", "👀 reading code"]
 ]`
+
+const API = { input_tokens: 10, output_tokens: 1_000, cache_read_input_tokens: 600_000, cache_creation_input_tokens: 30_000 }
+const FIVE = (percentUsed: number) => ({ kind: 'five_hour', percentUsed, resetsAt: '2026-10-19T20:00:00Z' })
 
 const TMPDIR = '/var/folders/xy/T/'
 const PAGE = '/var/folders/xy/T/review-map/app-pr-7/page.html'
@@ -108,12 +116,53 @@ describe('board', () => {
     expect(clock(1410)).toBe('23:30')
     expect(bar(0.5)).toBe(`▕${'█'.repeat(10)}${' '.repeat(10)}▏`)
   })
+
+  test('tokens are the four counts summed, and a window that reset has no share', () => {
+    const u = addUsage(addUsage(NO_USAGE, API), API)
+    expect(u).toEqual({ input: 20, output: 2_000, cacheRead: 1_200_000, cacheWrite: 60_000 })
+    expect(addUsage(u, null)).toEqual(u)
+    expect(tokens(1_262_020)).toBe('1.26M')
+    expect(tokens(48_400)).toBe('48k')
+    expect(tokens(12_400_000)).toBe('12.4M')
+    expect(tokens(999_700)).toBe('1.00M')
+    expect(tokens(9_996_000)).toBe('10.0M')
+    expect(tokens(999.7)).toBe('1k')
+    expect(moved(FIVE(30), FIVE(38.5))).toBe(8.5)
+    expect(moved(FIVE(30), { ...FIVE(4), resetsAt: '2026-10-19T23:00:00Z' })).toBeUndefined()
+    expect(moved(undefined, FIVE(4))).toBeUndefined()
+    expect(line({ tick: 0, elapsed: 1, tools: 1, falsifiers: 0, tokens: 1_262_020, window: 8.5 }))
+      .toContain('🪙 1.26M  ⏳ 5h +8.5%')
+    expect(line({ tick: 0, elapsed: 1, tools: 1, falsifiers: 0, tokens: 0 })).not.toContain('🪙')
+  })
+
+  test('the closing line says what was read, and names a reset rather than a share', () => {
+    const u = addUsage(NO_USAGE, API)
+    const said = spent(u, u, [FIVE(30), { kind: 'seven_day', percentUsed: 12 }],
+      [FIVE(36), { kind: 'seven_day', percentUsed: 13 }])
+    expect(said).toContain('review map used 631k tokens')
+    expect(said).toContain('falsifiers 631k of it')
+    expect(said).toContain('5-hour window 30% → 36% (+6%)')
+    expect(said).toContain('7-day window 12% → 13% (+1%)')
+    expect(spent(u, NO_USAGE, [FIVE(30)], [{ ...FIVE(2), resetsAt: 'later' }])).toContain('5-hour window at 2%')
+    expect(spent(u, NO_USAGE, [], [])).not.toContain('window')
+    expect(spent(u, NO_USAGE, [], [])).not.toContain('falsifiers')
+  })
 })
 
 // The world beneath the plugin: the shipped table and a staged page on disk, one repository, a
 // TMPDIR, and every status the line sets. A Bash command containing FAIL exits non-zero.
-function world(on: On, files: Record<string, string>) {
+function world(on: On, files: Record<string, string>, limits: { now: unknown[] } = { now: [] }) {
   const statuses: (string | undefined)[] = []
+  const logs: string[] = []
+  on('ui.log', (_$, e) => {
+    logs.push((e as { text: string }).text)
+    return { value: undefined } as never
+  })
+  on('session.usage', () => ({ value: { startedAt: 0, context: { window: 200_000 }, rateLimits: limits.now } }) as never)
+  on('turn.step', async function* (_$, e) {
+    return { turnId: e.turnId, index: e.index, answer: '', toolUses: [], stopReason: 'end_turn',
+      usage: { ...API, model: 'm' } } as never
+  })
   on('fs.read', (_$, e) => {
     if (e.path.endsWith('/hooks/activity.json')) return { value: ACTIVITY }
     const text = files[e.path]
@@ -134,7 +183,15 @@ function world(on: On, files: Record<string, string>) {
   on('turn.start', (_$, e) => ({ turnId: e.turnId }) as never)
   on('turn.complete', () => ({ text: '' }))
   on('prompt.submit', (_$, e) => e as never)
-  return statuses
+  on('session.measure', () => ({ changed: [] }) as never)
+  return Object.assign(statuses, { logs })
+}
+
+// One model request, read to its end as the engine reads it.
+async function step($: { turn: { step: (e: never) => AsyncGenerator<unknown, unknown> & { result: Promise<unknown> } } }, agentId?: string) {
+  const s = $.turn.step({ turnId: 't', index: 0, model: 'm', messageCount: 1, agentId } as never)
+  for await (const _ of s) { /* no chunks */ }
+  return s.result
 }
 
 const bash = (command: string, extra: Record<string, unknown> = {}) =>
@@ -182,6 +239,54 @@ describe('progress line', () => {
 
     await time.advance(61_000)
     expect(statuses.at(-1)).toContain('1:01')
+  })
+
+  test('tokens and the 5-hour window are counted for the run, falsifiers included', async ($, on) => {
+    const time = mock.clock(on)
+    mock.store(on)
+    const limits = { now: [] as unknown[] } // a fresh session: no reading before the first response
+    const statuses = world(on, {}, limits)
+
+    await step($ as never) // before the run: not its tokens
+    await $.prompt.submit({ text: '/review-map 7' } as never)
+    expect(statuses.at(-1)).not.toContain('🪙')
+
+    await step($ as never)
+    expect(statuses.at(-1)).toContain('🪙 631k')
+    expect(statuses.at(-1)).not.toContain('⏳')
+
+    await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(30)] } as never)
+    const spawned = await $.agent.spawn({ subagentType: 'accountable-review:claim-falsifier' } as never)
+    await step($ as never, (spawned as { agentId: string }).agentId)
+    await step($ as never, 'some-other-agent') // a subagent the run did not spawn: not its tokens
+    expect(statuses.at(-1)).toContain('🪙 1.26M')
+
+    await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(34.5)] } as never)
+    expect(statuses.at(-1)).toContain('⏳ 5h +4.5%')
+
+    limits.now = [FIVE(36)]
+    await $.tool.call(bash(GATE))
+    await time.advance(1_000)
+    await $.turn.complete(finish('answer'))
+    expect(statuses.at(-1)).toContain('⏳ 5h +6%')
+    expect(statuses.logs).toEqual([
+      'review map used 1.26M tokens (20 input · 60k cache write · 1.20M cache read · 2k output; ' +
+        'falsifiers 631k of it) — 5-hour window 30% → 36% (+6%), account-wide',
+    ])
+
+    await step($ as never) // after the run: not its tokens
+    expect(statuses.at(-1)).toContain('🪙 1.26M')
+  })
+
+  test('a reading from a window that already reset is no baseline', async ($, on) => {
+    mock.clock(on, { now: Date.parse('2026-10-19T18:00:00Z') })
+    mock.store(on)
+    // the session sat idle past the old window's reset: the reading it kept is that window's
+    const statuses = world(on, {}, { now: [{ ...FIVE(80), resetsAt: '2026-10-19T12:00:00Z' }] })
+    await $.prompt.submit({ text: '/review-map 7' } as never)
+    await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(2)] } as never)
+    await $.session.measure({ context: { window: 200_000 }, rateLimits: [FIVE(5)] } as never)
+    expect(statuses.at(-1)).toContain('⏳ 5h +3%')
   })
 
   test('an --output run reads its page where the command put it', async ($, on) => {

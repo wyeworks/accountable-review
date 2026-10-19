@@ -75,6 +75,7 @@ rule one level up — yours, not the other host's.
 | `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
 | `scripts/page-lint.sh` | step 10 | Reads the finished page: placeholders are a FAIL to fix, a tier that disagrees with the diff is a WARN to read |
+| `scripts/usage.sh` | steps 1 and 10, outside Claude Code | What the run spent, for a host with no status line to show it — the host reference says when. Its line goes in chat, never on the page |
 
 Paths are relative to this skill's base directory; do not rely on a plugin-root environment
 variable such as `$CLAUDE_PLUGIN_ROOT`, which is not set in the shell.
