@@ -64,7 +64,7 @@ end
 # the tokens moved into references/themes/, the raw file has no colour of its own, and grading
 # it bare would record three FAILs about theme states that no published page can have. Spliced
 # here rather than by page-skeleton.sh, so the corpus does not depend on the script it would be
-# used to catch; tests/run.sh owns proving the two agree. Same basename, so the records' labels
+# used to catch; tests/run.rb owns proving the two agree. Same basename, so the records' labels
 # did not move.
 def template_page
   @template_page ||= begin

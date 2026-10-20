@@ -138,7 +138,7 @@ eight merged, public PRs of different shapes, none of them the calibration PR:
 
 ## What retiring the synthetic fixtures lost, at the whole-run level
 
-Each of these still has its mechanical half in `skills/review-map/tests/run.sh`. What's gone is
+Each of these still has its mechanical half in `skills/review-map/tests/run.rb`. What's gone is
 a whole run that exercises it.
 
 - **The trivial refusal** (the old `trivial` fixture). A docs-only OSS PR restores it.
