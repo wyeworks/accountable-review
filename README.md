@@ -723,7 +723,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 Nothing is required, and that is deliberate: every setting is a thing that can go stale against the
 repository it describes.
 
-What you choose per run — effort, mentor and context can also be a team's standing answer in
+What you choose per run — effort, mentor, context and impact can also be a team's standing answer in
 `.accountable-review.yml` (below), and a flag beats the file for one run:
 
 | | |
@@ -732,6 +732,7 @@ What you choose per run — effort, mentor and context can also be a team's stan
 | **Effort** | `--effort high` (default) or `--effort low`. |
 | **Mentor** | Off by default; `--mentor` (optionally `--mentor <stack>`) adds framework primers for a reviewer new to the stack, and `--mentor off` overrides a file that turned it on. |
 | **Context** | `--context auto` by default: the repository-orientation section appears only when a checkpoint needs it. `never` drops it, `always` lowers the bar for a team onboarding people into the codebase (it still never invents an entry), `collapsed` puts it behind a toggle. |
+| **Impact** | `--impact auto` by default: the impact-outside-the-diff panel appears open when something crosses into unchanged code. `collapsed` folds it behind a toggle and `never` leaves it out, for a team that wants a shorter page; every consequence the panel draws is still stated in the checkpoint that judges it. |
 | **Theme** | Daylight by default; `workshop` or `field-notes` via `review_map.theme` in `.accountable-review.yml`. A setting of the repository, not a flag — and only the default: readers switch from the page's *Aa* menu. |
 | **Update** | A flag only, off unless you pass it: `--update` re-reads only the commits since the existing page and edits it in place. CI turns it on for you (`review_map.update`). |
 | **Output** | A published artifact in Claude Code, a local HTML file in Codex; `--output <dir>` writes static HTML to a chosen directory instead. |
@@ -744,6 +745,7 @@ review_map:
   effort: high           # high | low
   mentor: false          # true | false | rails | elixir | phoenix | rust | react | nextjs
   context: auto          # auto | never | always | collapsed
+  impact: auto           # auto | collapsed | never
   theme: daylight        # daylight | workshop | field-notes
   update: true           # CI only: edit the previous map on a push rather than rebuild it
   trivial_files: 2       # CI only: skip a change this small in application files
@@ -753,7 +755,7 @@ review_map:
     retention_days: 14
 ```
 
-**The first four are read by the skill itself**, so they apply to every Review Map of the repository,
+**The first five are read by the skill itself**, so they apply to every Review Map of the repository,
 whoever generates it — on your laptop (from the copy you have checked out) and in CI alike. The rest
 only mean something in CI. The whole file is checked on every run, so a misspelt key stops your
 local run rather than surfacing in a CI job later.

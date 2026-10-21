@@ -1,0 +1,109 @@
+<!-- No defect. Section 05 at --impact collapsed: the whole panel inside one shut details.ip-fold
+     whose summary is the fixed label and each card's behaviour. The checks read through the fold —
+     impact-paths.rb grades the figure as it would open, and start-here.rb sees the checkpoint's
+     pointer land on the section. report-format.md § How much Impact owns the setting. -->
+<nav class="rail">
+  <div class="rail-links">
+    <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
+    <a data-rail="attention" href="#attention"><span class="n">03</span>Needs your attention</a>
+    <a class="sub" data-rail="cp-a" href="#cp-a">Is an archived project still selectable?</a>
+    <a data-rail="start" href="#start"><span class="n">04</span>Read in this order</a>
+    <a data-rail="impact" href="#impact"><span class="n">05</span>Impact outside the diff</a>
+  </div>
+</nav>
+<main>
+    <section id="attention" style="padding-top:48px">
+      <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
+      <h2 style="margin-bottom:18px">What needs your attention</h2>
+      <p>One judgment.</p>
+
+      <section class="cp" id="cp-a">
+        <span class="lbl lbl-wide">Checkpoint A</span>
+        <h3>Is an archived project still selectable?</h3>
+        <p>Archiving now sets <code>archived_at</code>, and the query behind every project picker
+        scopes on <code>status</code> alone, so it keeps returning archived rows. The path from <code>archived_at</code> to the picker is drawn in <a href="#impact">Impact outside the diff</a>.
+        <span class="tier tier-unc">from unchanged code</span></p>
+        <ul class="lookat">
+          <li>
+            <b>The picker's query</b>
+            <span>never reads the new column</span>
+            <span class="path">app/queries/active_projects.rb:8</span>
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    <section id="start" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Where to begin</span><i></i></div>
+      <h2 style="margin-bottom:22px">Read the code in this order</h2>
+      <ol class="begin">
+        <li>
+          <span class="n">01</span>
+          <span class="t">
+            <span class="path">app/models/project.rb:41</span>
+            <span class="why">Where archiving writes the new column.</span>
+          </span>
+          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+        </li>
+      </ol>
+    </section>
+
+    <section id="impact" style="padding-top:62px">
+      <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+      <h2 style="margin-bottom:22px">Impact outside the diff</h2>
+      <details class="ip-fold"><summary><span class="ip-fold-lbl">Impact outside the diff</span> Archiving a project, Building a project in a spec</summary>
+        <figure class="impact">
+          <span class="lbl">Impact paths</span>
+          <div class="ip-card">
+            <span class="ip-hd">A &middot; Archiving a project</span>
+            <p class="ip-why">Archiving sets a column the selectable-projects query has never read, so an archived project stays in every list that matters to a user. <a href="#cp-a">Checkpoint A</a></p>
+            <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+            <div class="ip-body">
+              <ol class="ip-path">
+                <li class="ip-n ip-chg"><span class="ip-box"><b>Project#archive!</b><span class="ip-d">sets archived_at</span><a class="path ip-loc" href="#">app/models/project.rb:41</a></span></li>
+                <li class="ip-n ip-chg"><span class="ip-rel"><i></i>writes</span><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">nullable, no CHECK</span><a class="path ip-loc" href="#">db/schema.rb:118</a></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>ActiveProjects#call</b><span class="ip-d">scopes on status only</span><a class="path ip-loc" href="#">app/queries/active_projects.rb:8</a></span></li>
+                <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Archived project still selectable</b><span class="ip-d">observable behaviour</span></span></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="ip-card">
+            <span class="ip-hd">B &middot; Building a project in a spec</span>
+            <p class="ip-why">The model now treats the column as required, and the factory stamps it directly, so specs can build a row the application would refuse. <a href="#cp-b">Checkpoint B</a></p>
+            <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+            <div class="ip-body">
+              <ol class="ip-path">
+                <li class="ip-n ip-chg"><span class="ip-box"><b>projects.archived_at</b><span class="ip-d">the model treats it as required</span><a class="path ip-loc" href="#">db/schema.rb:118</a></span></li>
+                <li class="ip-n ip-aff"><span class="ip-rel"><i></i>receives a value from</span><span class="ip-box"><b>projects factory trait</b><span class="ip-d">unchanged, stamps it directly</span><a class="path ip-loc" href="#">spec/factories/projects.rb:12</a></span></li>
+                <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Specs build a forbidden state</b><span class="ip-d">observable behaviour</span></span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="legend">
+            <span><i class="key-chg"></i>Changed by this PR</span>
+            <span><i class="key-aff"></i>Affected, not changed</span>
+            <span><i class="key-out"></i>Behaviour</span>
+          </div>
+          <p class="note">Out of reach of a name-based pass: a reader that reaches the column through an enum predicate.</p>
+        </figure>
+
+        <dl class="rows">
+          <dt>Affected, not changed</dt>
+          <dd>
+            <div class="item"><a class="path" href="#">app/queries/active_projects.rb:3</a> &mdash; scopes
+              the selectable list, which archival changes the meaning of
+              <span class="tier">evidenced by unchanged code</span> <a href="#cp-a">Checkpoint A</a></div>
+            <details class="searched">
+              <summary><span class="chev">&#9656;</span> Searches run</summary>
+              <div class="sr-body">
+                <ul class="sr-list">
+                  <li><code>rg 'Project\.(where|all)' app lib</code> <span class="sr-r">one other caller</span></li>
+                </ul>
+              </div>
+            </details>
+          </dd>
+        </dl>
+      </details>
+    </section>
+</main>

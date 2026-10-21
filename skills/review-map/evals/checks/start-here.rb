@@ -179,4 +179,20 @@ if context.has?(/<section id="context"/)
   end
 end
 
+# A CHECKPOINT POINTING AT AN IMPACT PANEL THE PAGE DOES NOT CARRY. The pointer runs the other
+# way from Context's — a checkpoint saying its path *is drawn in Impact* — and fails the same way:
+# a link that lands on nothing. It is how `--impact never` goes wrong (report-format.md § How much
+# Impact drops that clause with the panel, and the rail entry with it), and how a run that
+# omitted section 05 after writing the checkpoints does. WARN, for Context's reason: the setting is never announced, so a page with
+# no section 05 and no such pointer is correct and says nothing here. Read only on input that is
+# a whole page — the rail is how a fragment says so — because a fragment of section 03 carries
+# that pointer correctly with section 05 cut away.
+whole = check.kind == "page" || context.has?(/data-rail=/)
+impact_refs = context.count(/href="#impact"/)
+if whole && impact_refs.positive? && !context.has?(/<section id="impact"/)
+  check.maybe("#{impact_refs} line(s) link to Impact outside the diff, which this page does not carry — at --impact never neither the rail entry nor the clause that points there is written")
+elsif whole && impact_refs.positive?
+  check.ok("every link to Impact outside the diff lands on it (#{impact_refs})")
+end
+
 check.finish

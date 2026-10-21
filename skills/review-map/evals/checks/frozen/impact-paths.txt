@@ -159,469 +159,469 @@ exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-demo-loose.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-demo-loose.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-docsrs-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-docsrs-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-docsrs-unpinned.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-docsrs-unpinned.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-docsrs-wrong-crate.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-docsrs-wrong-crate.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-fabricated-output.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-fabricated-output.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-hexdocs-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-hexdocs-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-hexdocs-unpinned.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-hexdocs-unpinned.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-hexdocs-wrong-package.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-hexdocs-wrong-package.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-invented-attribute.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-invented-attribute.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-invented-scope.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-invented-scope.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-link-alone.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-link-alone.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-link-in-excerpt.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-link-in-excerpt.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-mixed-series.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-mixed-series.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-nextjs-wrong-router.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-nextjs-wrong-router.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-doubled.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-doubled.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-marked.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-marked.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-orphan.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-orphan.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-over-budget.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-over-budget.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-probe-nested.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-probe-nested.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-rails-framed.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-rails-framed.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-rust-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-rust-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-rust-unframed.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-rust-unframed.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-uncited.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-uncited.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-primer-ungated.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-primer-ungated.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-probe-js-forms.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-js-forms.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-probe-label-thin.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-label-thin.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-probe-legit-forms.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-legit-forms.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-probe-lens-forms.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-lens-forms.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-probe-rust-forms.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-rust-forms.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-probe-sandbox-lie.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-sandbox-lie.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-probe-unlabelled.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-probe-unlabelled.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-reactdocs-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-reactdocs-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-reactdocs-unpinned.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-reactdocs-unpinned.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-runner-mutates.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-runner-mutates.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-uncatalogued-url.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-uncatalogued-url.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment anchors-unpinned-link.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-unpinned-link.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment build-state-updated-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page build-state-updated-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment build-state-updated-missing.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page build-state-updated-missing.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment build-state-updated-nosha.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page build-state-updated-nosha.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment build-state-updated-twice.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page build-state-updated-twice.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment context-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page context-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment context-collapsed.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page context-collapsed.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment context-dead-pointer.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page context-dead-pointer.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment context-no-pointer.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page context-no-pointer.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment context-shift-only.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page context-shift-only.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-at-head.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-at-head.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-diff-lang.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-diff-lang.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-duplicate.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-duplicate.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-linked-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-linked-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-linked-duplicate.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-linked-duplicate.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-open.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-open.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-overlap-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-overlap-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-overlap.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-overlap.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-typed-highlight.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-typed-highlight.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-typed-tag.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-typed-tag.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment excerpt-unchanged-changed-file.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page excerpt-unchanged-changed-file.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-chain-aff.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-chain-aff.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-context-chain.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-context-chain.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-converge-grading-note.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-converge-grading-note.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-converge-one-path.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-converge-one-path.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-converge-rel.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-converge-rel.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-converge-target-loc.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-converge-target-loc.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-lifecycle-aff.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-lifecycle-aff.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-lifecycle-method-label.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-lifecycle-method-label.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-lifecycle-no-loc.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-lifecycle-no-loc.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-shift-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-shift-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-shift-in-checkpoint.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-shift-in-checkpoint.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-shift-no-cases.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-shift-no-cases.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-shift-not-moved.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-shift-not-moved.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-shift-one-moved.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-shift-one-moved.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-shift-one-pointer.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-shift-one-pointer.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-structure-erd.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-structure-erd.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-two-figures.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-two-figures.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment figures-unknown-kind.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-unknown-kind.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment impact-aff-changed-file.html
 exit=1
 PASS  one impact panel
@@ -805,6 +805,58 @@ SKIP  affected nodes against the diff: nothing to compare with — needs --repo 
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
 ## --page impact-entities-vocab-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact path(s), within the 1-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every card opens with one p.ip-why
+PASS  no ip-why is empty, and none carries a citation or a list
+PASS  every ip-why is within 45 words
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  every node's label names a thing rather than a place
+PASS  every changed and affected node carries exactly one locator, last in its box
+SKIP  affected nodes against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-fold-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact path(s), within the 1-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every card opens with one p.ip-why
+PASS  no ip-why is empty, and none carries a citation or a list
+PASS  every ip-why is within 45 words
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  every node's label names a thing rather than a place
+PASS  every changed and affected node carries exactly one locator, last in its box
+SKIP  affected nodes against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --page impact-fold-clean.html
 exit=0
 PASS  one impact panel
 PASS  2 impact path(s), within the 1-3 budget
@@ -1038,6 +1090,18 @@ FAIL  no locator on path 1 node 3 — a node naming a symbol and nothing else le
 SKIP  affected nodes against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-never-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page impact-never-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
+## --fragment impact-never-dangling-pointer.html
+exit=0
+SKIP  no .impact panel in this input
+## --page impact-never-dangling-pointer.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment impact-no-affected.html
 exit=1
 PASS  one impact panel
@@ -1511,91 +1575,91 @@ exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-assurance.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-bill-in-comment.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-bill-in-comment.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-bill-in-prose.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-bill-in-prose.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-draft-narration.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-draft-narration.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-flow-designator.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-flow-designator.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-loose-data-path.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-loose-data-path.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-no-tier.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-no-tier.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-risk-score-leading.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-risk-score-leading.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-risk-score-trailing.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-risk-score-trailing.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-risk-score.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-risk-score.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-section-sign-quoted.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-section-sign-quoted.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-section-sign.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-section-sign.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-severity-chip.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-severity-chip.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-standing-disclaimer.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-standing-disclaimer.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-strip-files.html
 exit=0
 PASS  one impact panel
@@ -1705,97 +1769,97 @@ exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-tier-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-tier-modifier-only.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-tier-modifier-only.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-tier-on-changed.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-tier-on-changed.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-tier-uncited.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-tier-uncited.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-tier-unlabelled.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-tier-unlabelled.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-update-assurance.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-update-assurance.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-update-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-update-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-update-narration.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-update-narration.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-update-recency.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-update-recency.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-update-resolved.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-update-resolved.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment invariants-verdict.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page invariants-verdict.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment links-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page links-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment links-collapsed-anchor.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page links-collapsed-anchor.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment links-collapsed-no-excerpt.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page links-collapsed-no-excerpt.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment links-range-truncated.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page links-range-truncated.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment links-unknown-anchor.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page links-unknown-anchor.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment reach-clean.html
 exit=0
 PASS  one impact panel
@@ -1853,37 +1917,37 @@ exit=0
 SKIP  no .impact panel in this input
 ## --page searches-bre-dialect.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment searches-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page searches-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment searches-git-grep.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page searches-git-grep.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment searches-unreachable.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page searches-unreachable.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment start-here-clean.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page start-here-clean.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment start-here-no-why.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page start-here-no-why.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment start-here-orphan-checkpoint.html
 exit=0
 PASS  one impact panel
@@ -1993,7 +2057,7 @@ exit=0
 SKIP  no .impact panel in this input
 ## --page start-here-two-lists.html
 exit=0
-WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never
 ## --fragment page-template.html
 exit=1
 PASS  one impact panel
@@ -2593,6 +2657,32 @@ PASS  the panel is a component, not a drawing
 PASS  every node's label names a thing rather than a place
 PASS  every changed and affected node carries exactly one locator, last in its box
 FAIL  an .ip-aff node in a file the change touches: path 1 node 3 (app/queries/active_projects.rb) — affected means a file outside the diff; a hop through an untouched line of a changed file is .ip-chg, and a path left with no node outside the diff is a checkpoint chain (report-format.md § Impact paths)
+PASS  no unsubstituted placeholders in the panel
+PASS  the panel carries a legend naming all three node kinds
+## --fragment impact-fold-clean.html
+exit=0
+PASS  one impact panel
+PASS  2 impact path(s), within the 1-3 budget
+PASS  each of the 2 paths sits alone in its own .ip-card
+PASS  every card carries its own lane labels
+PASS  every card opens with one p.ip-why
+PASS  no ip-why is empty, and none carries a citation or a list
+PASS  every ip-why is within 45 words
+PASS  every path is 3-5 nodes
+PASS  every node carries one of .ip-chg, .ip-aff, .ip-out
+PASS  every path starts at changed code
+PASS  every path ends at exactly one observable behaviour
+PASS  every path passes through affected-but-unchanged code
+PASS  every edge carries a label
+PASS  no path labels an edge into its first node
+PASS  every edge label is a label, not a sentence
+PASS  every edge label leads with a causal verb from the vocabulary
+PASS  nodes carry labels rather than prose
+PASS  no path crosses the lane boundary more than twice
+PASS  the panel is a component, not a drawing
+PASS  every node's label names a thing rather than a place
+PASS  every changed and affected node carries exactly one locator, last in its box
+SKIP  affected nodes against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
 ## --fragment agenda-clean.html

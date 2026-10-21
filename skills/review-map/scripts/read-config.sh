@@ -17,6 +17,7 @@
 #     mentor: rails          # true | false | rails | elixir | phoenix | rust | react | nextjs  (default false)
 #     theme: daylight        # daylight | workshop | field-notes  (default daylight)
 #     context: auto          # auto | never | always | collapsed  (default auto)
+#     impact: auto           # auto | collapsed | never  (default auto)
 #     update: true           # true | false  (default true; CI only)
 #     trivial_files: 2      # skip when application files <= this AND
 #     trivial_lines: 20      #   application lines <= this; either at 0 disables it
@@ -177,6 +178,14 @@ awk -v prefix="$PREFIX" -v file="$FILE" '
       if (val != "auto" && val != "never" && val != "always" && val != "collapsed") \
         fail("context must be auto, never, always or collapsed, got `" val "`")
       emit("context", val)
+    } else if (key == "impact") {
+      # How section 05 Impact outside the diff is shown. `auto` is the earning rule; `collapsed`
+      # folds it shut and `never` leaves it out, both safe because every card points at the
+      # checkpoint that already states its consequence. report-format.md § How much Impact owns
+      # the three.
+      if (val != "auto" && val != "collapsed" && val != "never") \
+        fail("impact must be auto, collapsed or never, got `" val "`")
+      emit("impact", val)
     } else if (key == "theme") {
       # How the page LOOKS, and nothing about what is on it: typefaces, radii, hues. Validated here
       # for every reader; page-skeleton.sh is the one that uses it, through this script.

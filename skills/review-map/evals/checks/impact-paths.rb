@@ -126,10 +126,11 @@ panels = region.regions(open: PANEL_OPEN, close: PANEL_CLOSE)
 # input it never looked at is the failure mode this whole suite is built against. A PAGE with
 # no panel is different: section 05 is omitted only when nothing crosses into unchanged code,
 # which is legitimate and rare, so it warns rather than failing. Silence would let a page that
-# simply never looked for a consequence read as one that looked and found none.
+# simply never looked for a consequence read as one that looked and found none. A run at
+# `--impact never` lands here too, and the page carries nothing that says so, by design.
 if panels.empty?
   if check.kind == "page"
-    check.maybe("no .impact panel on this page — right only if nothing the change does reaches unchanged code")
+    check.maybe("no .impact panel on this page — right only if nothing the change does reaches unchanged code, or the run was at --impact never")
   else
     check.skip("no .impact panel in this input")
   end

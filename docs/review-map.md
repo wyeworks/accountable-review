@@ -57,7 +57,11 @@ does not earn omitted outright.
   sentence or two on what goes wrong and to whom, so you know whether a chain is worth tracing
   before you trace it. Beneath the figure, each affected entry gets a citation and a clause,
   pointing at the checkpoint that turns on it rather than explaining it twice. If nothing crosses
-  into unchanged code, the section is not there at all.
+  into unchanged code, the section is not there at all. `--impact` (or `review_map.impact`) sets how
+  a team sees it: `auto`, the default, shows it open; `collapsed` keeps it behind one shut toggle
+  whose label names each consequence; `never` leaves it out, and an affected file only a chain
+  reached is listed in the evidence foot instead. Folding or dropping it costs no judgment, because
+  every chain points at the checkpoint that already states its consequence.
 - **Evidence & diff coverage** — one shut disclosure at the foot, holding every changed path, the
   searches the run ran and what they returned, and the affected code no checkpoint turns on. It is
   provenance: the page reads complete with it closed, and nothing a reviewer has to act on lives only

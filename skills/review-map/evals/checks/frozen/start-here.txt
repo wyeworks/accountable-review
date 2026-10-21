@@ -6,6 +6,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -14,6 +15,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment agenda-probe-unlabelled.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -22,6 +24,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page agenda-probe-unlabelled.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -30,6 +33,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment agenda-probes-over-budget.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -38,6 +42,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page agenda-probes-over-budget.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -46,6 +51,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment anchors-clean.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -1072,6 +1078,24 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment impact-fold-clean.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (2)
+## --page impact-fold-clean.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (2)
 ## --fragment impact-four-paths.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -1120,6 +1144,40 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment impact-never-clean.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+## --page impact-never-clean.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+## --fragment impact-never-dangling-pointer.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+WARN  1 line(s) link to Impact outside the diff, which this page does not carry — at --impact never neither the rail entry nor the clause that points there is written
+## --page impact-never-dangling-pointer.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+WARN  1 line(s) link to Impact outside the diff, which this page does not carry — at --impact never neither the rail entry nor the clause that points there is written
 ## --fragment impact-no-affected.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -1384,6 +1442,7 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+WARN  1 line(s) link to Impact outside the diff, which this page does not carry — at --impact never neither the rail entry nor the clause that points there is written
 ## --fragment invariants-severity-chip.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -1416,6 +1475,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page invariants-strip-files.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1424,6 +1484,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment invariants-strip-kind.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1432,6 +1493,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page invariants-strip-kind.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1440,6 +1502,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment invariants-tier-clean.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
@@ -1732,6 +1795,7 @@ PASS  entries link into the checkpoints that explain them (3)
 WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page start-here-orphan-checkpoint.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1740,6 +1804,7 @@ PASS  entries link into the checkpoints that explain them (3)
 WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment start-here-style-comment.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1748,6 +1813,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page start-here-style-comment.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1756,6 +1822,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment start-here-two-lists.html
 exit=1
 PASS  start here: 4 entr(ies), each with a why
@@ -1781,6 +1848,7 @@ SKIP  the reading path's checkpoint links are unsubstituted placeholders — thi
 PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
 PASS  every Context entry points at a checkpoint on this page (2)
+PASS  every link to Impact outside the diff lands on it (1)
 ## --page page-template.html
 exit=0
 PASS  start here: 2 entr(ies), each with a why
@@ -1790,6 +1858,7 @@ SKIP  the reading path's checkpoint links are unsubstituted placeholders — thi
 PASS  citations present alongside the entries (3)
 PASS  2 entries, within the shape of a reading order
 PASS  every Context entry points at a checkpoint on this page (2)
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment start-here-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1822,6 +1891,7 @@ PASS  entries link into the checkpoints that explain them (3)
 WARN  1 of 2 checkpoint(s) have no stop pointing at them (cp-b) — a judgment the reader was asked and never routed to
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1830,6 +1900,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment start-here-style-comment.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1838,6 +1909,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment context-clean.html
 exit=0
 PASS  start here: 2 entr(ies), each with a why
@@ -1883,6 +1955,32 @@ PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (2)
 PASS  2 entries, within the shape of a reading order
 PASS  every Context entry points at a checkpoint on this page (2)
+## --fragment impact-fold-clean.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (2)
+## --fragment impact-never-dangling-pointer.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
+WARN  1 line(s) link to Impact outside the diff, which this page does not carry — at --impact never neither the rail entry nor the clause that points there is written
+## --fragment impact-never-clean.html
+exit=0
+PASS  start here: 1 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (1)
+PASS  every checkpoint is reachable from the reading path (1)
+PASS  citations present alongside the entries (1)
+PASS  1 entries, within the shape of a reading order
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1891,6 +1989,7 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)
 ## --fragment agenda-clean.html
 exit=0
 PASS  start here: 3 entr(ies), each with a why
@@ -1899,3 +1998,4 @@ PASS  entries link into the checkpoints that explain them (3)
 PASS  every checkpoint is reachable from the reading path (2)
 PASS  citations present alongside the entries (3)
 PASS  3 entries, within the shape of a reading order
+PASS  every link to Impact outside the diff lands on it (1)

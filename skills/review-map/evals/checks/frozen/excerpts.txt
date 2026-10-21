@@ -828,6 +828,12 @@ SKIP  no excerpts in this input
 ## --page impact-entities-vocab-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment impact-fold-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-fold-clean.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment impact-four-paths.html
 exit=0
 SKIP  no excerpts in this input
@@ -850,6 +856,18 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page impact-missing-loc.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment impact-never-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-never-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment impact-never-dangling-pointer.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-never-dangling-pointer.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment impact-no-affected.html

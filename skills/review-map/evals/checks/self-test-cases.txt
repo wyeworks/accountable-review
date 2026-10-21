@@ -87,6 +87,14 @@
  start-here         | context-dead-pointer.html     | 0 | Context points at cp-c, which this page does not carry
  start-here         | context-shift-only.html       | 0 | Context holds only the request sequence
  start-here         | context-collapsed.html        | 0 | every Context entry points at a checkpoint on this page (2)
+# --impact (report-format.md § How much Impact). The fold is read through: the figure grades as it
+# would open, and a checkpoint's pointer lands on the section around it. At never, a pointer left
+# behind lands on nothing — a WARN for Context's reason — and the clean never page is pinned on the
+# checkpoint rule so the fixture is known to have been read.
+ impact-paths       | impact-fold-clean.html        | 0 | every card opens with one p.ip-why
+ start-here         | impact-fold-clean.html        | 0 | every link to Impact outside the diff lands on it (2)
+ start-here         | impact-never-dangling-pointer.html | 0 | link to Impact outside the diff, which this page does not carry
+ start-here         | impact-never-clean.html       | 0 | every checkpoint is reachable from the reading path
 # The inventory carrier moved to the evidence foot and data-path moved with it. This row is the
 # POSITIVE case: a page that carries the attribute on a div.c passes, which is what an assertion
 # about where it may NOT sit would otherwise never look at.

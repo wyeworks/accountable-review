@@ -562,6 +562,12 @@ SKIP  no checkpoint figure in this input
 ## --page impact-entities-vocab-clean.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-fold-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-fold-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment impact-four-paths.html
 exit=0
 SKIP  no checkpoint figure in this input
@@ -584,6 +590,18 @@ PASS  no checkpoint carries a figure — a valid result, and most checkpoints ea
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page impact-missing-loc.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-never-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-never-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-never-dangling-pointer.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-never-dangling-pointer.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment impact-no-affected.html

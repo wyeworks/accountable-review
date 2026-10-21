@@ -212,7 +212,7 @@ def regen(e)
              "--output", out, "--repository", pr.repo, "--pr", pr.pr.to_s,
              "--base-sha", pr.base_sha, "--head-sha", pr.head_sha,
              "--repo-dir", repo, "--plugin-dir", ROOT,
-             "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"]]
+             "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"], "--impact", s.fetch("impact", "auto")]
       cmd += ["--claude-bin", ENV["CLAUDE_BIN"]] if ENV["CLAUDE_BIN"]
       env = s["theme"] ? { "ACCOUNTABLE_REVIEW_THEME" => s["theme"] } : {}
       system(env, *cmd) or die("#{e.id}: generation failed; examples/#{e.id}/ is unchanged", 1)

@@ -177,6 +177,8 @@
                             relation in .ip-rel, so an edge is labelled or it is
                             missing. Lane comes from the kind: .ip-chg left,
                             .ip-aff right and teal, .ip-out spans and ends the path
+                            At --impact collapsed, inside one shut details.ip-fold;
+                            at never, omitted with its rail entry
     path preamble ......... p.ip-why — one per .ip-card, above the lanes. What goes
                             wrong and to whom, then the checkpoint. Never the hops
     node locator .......... a.path.ip-loc — last line of an .ip-box, in both figure
@@ -495,6 +497,15 @@ details.ctx-fold > summary::-webkit-details-marker { display: none; }
 details.ctx-fold > summary::marker { content: ""; }
 .ctx-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 details.ctx-fold > .ctx { margin-top: 0; }
+/* --impact collapsed: section 05 behind one shut details.ip-fold, its summary the
+   fixed label and each card's behaviour. The same neutral rules as ctx-fold, for the
+   same reason; report-format.md § How much Impact says why folding it is safe. */
+details.ip-fold { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+details.ip-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
+details.ip-fold > summary::-webkit-details-marker { display: none; }
+details.ip-fold > summary::marker { content: ""; }
+.ip-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+details.ip-fold[open] > summary { margin-bottom: 12px; }
 @media (max-width: 700px) {
   .ctx { grid-template-columns: minmax(0, 1fr); }
   .ctx > dd { padding-top: 4px; }
@@ -2298,7 +2309,19 @@ post.saved_change_to_title?  # =&gt; true</pre>
 
          The affected entries below the figure are the ones the paths run through
          and the ones a checkpoint turns on. Everything else the pass found goes
-         in details.evidence at the foot. ===== -->
+         in details.evidence at the foot.
+
+         --impact (report-format.md § How much Impact). auto is all of the above.
+         never: delete this section and its rail entry, write no checkpoint clause
+         pointing here, and move an affected entry only a path ran through to the
+         foot's list; add nothing anywhere else to make up for it. collapsed: wrap
+         the figure and the affected list in ONE details.ip-fold, shut, directly
+         under the h2:
+           <details class="ip-fold"><summary><span class="ip-fold-lbl">Impact
+           outside the diff</span> Behaviour one, Behaviour two</summary> ...figure,
+           eyebrow, list... </details>
+         The label is fixed and the behaviours are the .ip-hd texts without their
+         letter; no count, no badge. ===== -->
     <section id="impact" style="padding-top:62px">
       <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
       <h2 style="margin-bottom:22px">Impact outside the diff</h2>

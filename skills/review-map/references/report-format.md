@@ -67,6 +67,15 @@ nothing qualifies. None of the four is announced on the page. § *How much Conte
 The line between Context and the primer is unchanged — the framework is `--mentor`'s, the
 repository is everyone's.
 
+**`--impact` is the third, and it changes section 05 only.** `auto` is the default and § *Section 5*
+unchanged. `collapsed` passes the subtraction test as Context's fold does: open it and the `auto`
+page is there. `never` passes it with one stated carve-out — the clause a checkpoint spends pointing
+at a path that is no longer drawn goes with the panel, and an affected entry only a path ran through
+falls to the foot's list, which is that list's job already. It is safe to fold or drop because the
+section is the same change seen through one lens: every card's `p.ip-why` points at the checkpoint
+that judges it, and that checkpoint already says the consequence. None of the three is announced on
+the page. § *How much Impact* owns all of it.
+
 **`--update` is the one run mode that puts a sentence on the page, and the reason is not
 generosity.** It re-reads only the commits since the previous map, so parts of the page it leaves
 describe an earlier revision than the masthead's head. Effort can stay invisible because both
@@ -118,7 +127,7 @@ refusals that hold that line.
 | 02 | Context | when a checkpoint relies on a repository concept a newcomer would not know | One to five concepts, each what a thing *is*, cited, and pointing at the checkpoints that use it; and at most one before-and-after figure, when the change moved which request does what. No judgment |
 | 03 | What needs your attention | always | Three to five checkpoints per delta *What changed* names, seven at the outside. No standing caveat |
 | 04 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
-| 05 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
+| 05 | Impact outside the diff | when a consequence crosses into unchanged code, unless `--impact never` | 1–3 impact paths, and the affected entries they run through |
 | 06 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
 
 The order is the reviewer's path, and each section assumes the ones before it. *Context* comes
@@ -542,7 +551,8 @@ locator is not a second one.
 **The canonical-home rule between the two figures.** A chain that crosses from changed code into
 unchanged code whose meaning the change altered **is an impact path**: it lives in *Impact outside the
 diff*, once, and a checkpoint that turns on it says so in a clause — *"the path from `archived_at` to
-the selector is drawn in Impact"* — and does not redraw it. A chain drawn inside a checkpoint shows
+the selector is drawn in Impact"* — and does not redraw it. At `--impact never` there is no panel,
+so that clause is not written and the checkpoint still does not draw the chain: § *How much Impact*. A chain drawn inside a checkpoint shows
 mechanism **within the change**: the request path, how a value is derived, the order guards run in. It
 therefore contains no `.ip-aff`.
 
@@ -1979,7 +1989,8 @@ addition.
 
 **Omitted and pending must stay distinguishable, and section 05 is where that bites.** A diff whose
 consequences all stay inside it earns no impact section: remove the section and its rail entry, and
-do not leave a stub saying nothing reaches unchanged code. A section that says that is a clean bill
+do not leave a stub saying nothing reaches unchanged code. At `--impact never` the section and its
+rail entry go in stage 1, since nothing will fill them, and no sentence says why. A section that says that is a clean bill
 of health with a marker on it.
 
 **Context bites the same way, from the other side.** It is pending from stage 1 because whether it is
@@ -2313,7 +2324,7 @@ document — and each is held to a rule that keeps the page this one.
   *01, 03* says a section went, as it does when `auto` earns nothing.
 - **`always` — the bar drops, the cap does not.** Condition 1 widens to *a checkpoint or an
   impact path uses it* (an impact card's nodes name repository code a reviewer meets in section 05
-  without an introduction), and condition 2 is waived, so a concept a checkpoint already explains in
+  without an introduction; at `--impact never` there are no cards, so only checkpoints count), and condition 2 is waived, so a concept a checkpoint already explains in
   a clause earns an entry too — **the clause stays in the checkpoint**, and the entry says what the
   thing is rather than repeating it. Conditions 3 and 4 still hold: newcomer to this repository, never
   the framework. The `span.ctx-used` pointer still names checkpoints only: a concept an impact path
@@ -2329,7 +2340,8 @@ document — and each is held to a rule that keeps the page this one.
   are there without opening it. When `auto` earns nothing, the section is omitted exactly as it is
   there; an empty fold is the stub § *Section 2* forbids.
 
-  **This is the one named exception to *a page reads complete with every block shut***, and it is
+  **This is one of two named exceptions to *a page reads complete with every block shut*** — the
+  other is `--impact collapsed`, § *How much Impact* — and it is
   safe for the reason Context is the section it is: an entry says what a thing **is** and carries no
   claim about the change, so nothing a reviewer must decide is behind the toggle. A checkpoint that
   would be wrong without its Context entry was relying on the entry for a claim — which § *Section 2*
@@ -2455,6 +2467,48 @@ disclosed.
 is told not to become — on a real page that was 24 links above a caption explaining that the eight
 worth opening were ranked elsewhere.
 
+### How much Impact
+
+`SKILL.md` step 1 reads `--impact auto|collapsed|never`, else the repository's `review_map.impact`.
+**`auto` is the default and is everything above, unchanged.** The other two are a team's standing
+answer to *how much reading do we spend on a second pass over the same change* — teams that accept
+more risk to move faster tend to want less — and each is held to a rule that keeps the page this one.
+
+What makes this section the one that can go is that it adds no judgment. Every card's `p.ip-why`
+ends in a pointer at the checkpoint that judges it, and § *Chains* has that checkpoint state the
+consequence in its own prose and say so in a clause rather than relying on the figure. The panel
+shows the crossings whole and lists the entries they run through; the checkpoints already carry
+every consequence a reviewer acts on.
+
+- **`collapsed` — the `auto` section, shut.** Same cards, same affected list, decided by step 7i as
+  for `auto`, wrapped in one `details.ip-fold` directly under the eyebrow. Its `summary` is the fixed
+  label *Impact outside the diff*, then each card's `.ip-hd` behaviour joined by commas, so a reader
+  sees which consequences are drawn without opening it. When `auto` earns nothing, the section is
+  omitted exactly as it is there; an empty fold is the stub this section forbids.
+
+  **This is the second named exception to *a page reads complete with every block shut***, beside
+  `--context collapsed`, and it is safe for the reason above: nothing a reviewer must decide is only
+  behind the toggle. A checkpoint that would be wrong with the fold shut was relying on the panel for
+  a claim, which § *Chains* already forbids.
+- **`never` — the section is not written.** No `section#impact`, no rail entry 05, no `.ip-card`;
+  `SKILL.md` step 7i is skipped. The rail does not close up — *01, 03, 04* says a section went, as it
+  does when nothing crosses. **One carve-out from pure subtraction, and it is all bookkeeping:**
+  1. The clause a checkpoint would have spent saying a path *is drawn in Impact* is not written: it
+     would point at nothing.
+  2. An affected entry a checkpoint turns on is already a *Look at* entry in that checkpoint, at
+     every value — so nothing moves for it.
+  3. An affected entry only a path ran through goes to the foot's *Affected, not changed* list,
+     which is where real, cited, secondary consequences already live.
+
+  **And nothing compensates.** A checkpoint does not grow a sentence restating a dropped card, and
+  does not draw the path as its own `figure.chain` — an `.ip-aff` inside one is still a chain in the
+  wrong section, and there is no right section for it on this page.
+
+**No value is announced.** No badge, no line saying Impact was folded or turned off — the first is a
+stub by another name. Say which value you took in chat, as for `--context`. **On an update** the
+value must match the previous run's, by `SKILL.md` § *Re-running over new commits*' rule for every
+page-affecting flag.
+
 ---
 
 ## Section 6 · Evidence & diff coverage — always, collapsed
@@ -2504,6 +2558,9 @@ change has judgments and a fixed total would price them against each other:
 ```
 ≈ What changed (80–160) + Context (0–250) + n × (50–140) + reading path (stops × ≤40) + impact (cards × p.ip-why) + section framing
 ```
+
+The impact term is 0 at `--impact never`, and at `collapsed` too, since nothing inside a collapsed
+`<details>` is counted — which is the whole of what that setting buys.
 
 At four checkpoints on a small or medium PR that comes to roughly **700 to 1,500 words**, which is
 the figure to carry in your head and the one a page of that shape is read against — **plus *Context*

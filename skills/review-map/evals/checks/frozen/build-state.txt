@@ -508,6 +508,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-entities-vocab-clean.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment impact-fold-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-fold-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-four-paths.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -530,6 +536,18 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-missing-loc.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-never-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-never-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-never-dangling-pointer.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-never-dangling-pointer.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-no-affected.html

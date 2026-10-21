@@ -1,7 +1,7 @@
 ---
 name: review-map
 description: >-
-  Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails, Elixir/Phoenix, Rust and React — a Phoenix LiveView app, a Rails, Phoenix or Rust JSON or gRPC API, a Rust library, CLI or workspace that serves nothing, a Next.js app, or a React single-page app or component library, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $accountable-review:review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. --context auto|never|always|collapsed says how much of the repository-orientation section the page carries; auto, the default, writes it only when a checkpoint needs it. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
+  Builds an HTML review map of a pull request — what changed, the judgments the reviewer has to make with the exact lines that settle each one, the order to read the code in, and what the change reaches in code it did not touch — so a reviewer can explain the change before judging it. Targets Rails, Elixir/Phoenix, Rust and React — a Phoenix LiveView app, a Rails, Phoenix or Rust JSON or gRPC API, a Rust library, CLI or workspace that serves nothing, a Next.js app, or a React single-page app or component library, with or without a separate client such as Next.js. Use this whenever someone needs to understand a change rather than grade it: asks what a PR or branch does, where to start on a large diff, which files actually matter, what the change might break, whether the frontend and backend still agree, or needs to bring a reviewer up to speed on someone else's work — even if they never say "review map" or "walkthrough". Invoke with /accountable-review:review-map in Claude Code or $accountable-review:review-map in Codex, optionally passing a PR number, URL, branch, or diff range. There is one page shape and no flag chooses it. An effort level is separate: --effort high is the default and tries to falsify the run's own analysis before the page is written, --effort low skips that pass. --mentor is for a reviewer new to the stack rather than to the change: it adds a framework primer inside the checkpoints that earn one and changes nothing else about the page. --context auto|never|always|collapsed says how much of the repository-orientation section the page carries; auto, the default, writes it only when a checkpoint needs it. --impact auto|collapsed|never says whether the impact-outside-the-diff panel is shown open, folded shut or not written; every consequence it draws is already stated in the checkpoint that judges it. Passing --output <dir> makes the run non-interactive: the page is written to <dir>/index.html as portable static HTML instead of being published, which is how CI generates one. Not for posting review comments or approval verdicts.
 ---
 
 # Review Map
@@ -33,9 +33,9 @@ Use `/accountable-review:review-map` in Claude Code or `$accountable-review:revi
 (`/review-map` and `$review-map` when installed as a standalone skill, as `npx skills add` does).
 Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
-`--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`; and
-`--output <dir>`. The repository's `.accountable-review.yml` supplies the first three when no flag
-does (step 1). `--review` is not implemented.
+`--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`;
+`--impact auto|collapsed|never`; and `--output <dir>`. The repository's `.accountable-review.yml`
+supplies the first four when no flag does (step 1). `--review` is not implemented.
 
 Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
 in Claude Code, and [the one for every other host](references/hosts/generic.md) anywhere else — Codex
@@ -92,7 +92,7 @@ point of putting them in a separate context. The host reference owns how the rea
   current branch against its base.
 - **There is one page shape, and no flag chooses it.** No argument selects a length, a depth or a
   second document, and there is nothing to map one onto if someone invents one. An argument starting
-  with `--` that is not one of `--effort`, `--mentor`, `--context`, `--output`, `--update`, `--repository`,
+  with `--` that is not one of `--effort`, `--mentor`, `--context`, `--impact`, `--output`, `--update`, `--repository`,
   `--base-sha` or `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
   wrong run, and the reader has no way to tell.
 - **Read the repository's settings before the flags that override them.** If the repository's top
@@ -103,7 +103,7 @@ point of putting them in a separate context. The host reference owns how the rea
   ```
 
   It prints one `CFG_<key>='<value>'` line per key the file sets and nothing for a key it does not.
-  `CFG_effort`, `CFG_mentor` and `CFG_context` are the team's standing answers, and the order is
+  `CFG_effort`, `CFG_mentor`, `CFG_context` and `CFG_impact` are the team's standing answers, and the order is
   **flag, then file, then default** — the same order CI applies, so a person's run and a CI run of
   the same repository start from the same settings. `CFG_mentor` reads as the flag would: `true`
   is a bare `--mentor`, `false` is off, a stack name is checked at step 2 like one on the command
@@ -198,6 +198,21 @@ point of putting them in a separate context. The host reference owns how the rea
     concept a checkpoint already explains in a clause qualifies. Same cap, and **still omitted when
     nothing qualifies** — an entry written so the section has one is inventory.
   - `collapsed` — step 7k as for `auto`, the result written inside one shut `details.ctx-fold`.
+
+  **No marker for any of them**, for `--mentor`'s reason. Say which you took in chat.
+- **`--impact` says how section 05 is shown, and `auto` is what no flag and no file setting
+  means.** One of `auto`, `collapsed`, `never`; any other value is **reported, not guessed at**.
+  It is a team's standing answer to how much reading it will spend on a second pass over the same
+  change, and it touches section 05 and nothing else. It is safe to fold or drop for one reason:
+  every impact card's `p.ip-why` points at the checkpoint that judges it, and that checkpoint
+  already states the consequence in its own prose. `references/report-format.md` § *How much
+  Impact* owns all three; in one line each:
+  - `auto` — step 7i as written.
+  - `collapsed` — step 7i as for `auto`, the section written inside one shut `details.ip-fold`.
+  - `never` — skip step 7i; no section 05, no rail entry, no impact card. The checkpoint clause
+    that says a path *is drawn in Impact* is not written, and an affected entry only a path ran
+    through goes to the foot's list. **Nothing compensates**: no checkpoint gains a sentence or a
+    chain it would not have had under `auto`.
 
   **No marker for any of them**, for `--mentor`'s reason. Say which you took in chat.
 - **`--output <dir>` makes the run non-interactive.** It is the only flag that changes where the page
@@ -1022,6 +1037,10 @@ fourth keeps its entry below the figure or in the foot. **If nothing crosses int
 section 05 is omitted and the rail loses its entry** — an empty section saying nothing reaches
 unchanged code reads as a clean bill of health.
 
+**At `--impact never`, skip this step** and write *impact: never* in `agenda.md`; every entry the
+notes marked *affected, not changed* that no checkpoint turns on goes to the foot's list, as the
+fourth path would. At `collapsed` the step is unchanged — the fold is step 9's.
+
 For each path you keep, settle two things here rather than while typing markup. **What the path is
 about** — one or two sentences on what goes wrong and to whom, plus which checkpoint judges it; that
 is the card's `p.ip-why`, and deciding it now is what stops it becoming a retelling of the hops.
@@ -1191,9 +1210,9 @@ someone mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
-| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending — at `--context never`, section 02 and its rail entry are deleted here instead, since nothing will fill them |
+| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending — at `--context never`, section 02 and its rail entry are deleted here instead, since nothing will fill them, and at `--impact never` section 05 and its rail entry the same way |
 | 2 · Agenda | 7, then per checkpoint | Section 03's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
-| 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it (inside its fold at `--context collapsed`) — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it |
+| 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it (inside its fold at `--context collapsed`) — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it (inside its fold at `--impact collapsed`) |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
 **Section 05 cannot publish before the checkpoints exist, which is why it is third and not second.**
@@ -1303,7 +1322,7 @@ Everything else about writing holds at every stage:
   component half and leaves out the 55 KB you are about to be given for free.
 
   **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
-  only when step 7i found nothing crossing into unchanged code, and the 02 entry only when step 7k
+  only when step 7i found nothing crossing into unchanged code or `--impact never` skipped it, and the 02 entry only when step 7k
   earned no concept or `--context never` skipped it, and then remove the section with it. Numbers stay as given when one goes: a
   rail reading 01, 03, 04 says a section was omitted, which is true.
 - **Write the skeleton once, before anything else in stage 1:**
@@ -1703,7 +1722,7 @@ from becoming a level.
 Four checks are yours, because none of them can be recovered from a page. Do them before anything
 else, and on any disagreement run fully and say so in chat:
 
-- **The settings match the previous run.** Effort, mentor and context — as step 1 resolved them,
+- **The settings match the previous run.** Effort, mentor, context and impact — as step 1 resolved them,
   from a flag or from the file — are invisible on the page by design, so nothing can read them back
   off it. An update under different settings would produce a page half of which was written to
   different rules, and an `.accountable-review.yml` changed in the delta is a reason to run fully.
@@ -1817,7 +1836,8 @@ previous map already traced.
   naming no checkpoint is deleted, because a pointer at an id the page no longer carries is an entry
   this page did not earn. The before-and-after figure's caption pointer loses it the same way.
 - **Sections 02 and 05 may need adding rather than filling, and 02 may need removing.** If the
-  previous page omitted 05 and the delta now crosses into unchanged code, or omitted 02 and step 7k
+  previous page omitted 05 and the delta now crosses into unchanged code (never at `--impact
+  never`), or omitted 02 and step 7k
   now earns an entry, the section and its rail entry are new — omitted is not pending, so there is
   no stub to replace. These are the places an update writes where the page does not already carry a
   marker. The reverse is 02's alone: when step 7k leaves no entry standing, the section and its rail

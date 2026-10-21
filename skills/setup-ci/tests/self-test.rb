@@ -251,6 +251,16 @@ CASES = [
            edit: sub('emit("context", val)', ""),
            sections: %i[config], expect: "context is read from the config file"),
 
+  # --impact's default shows section 05; `never` is the plausible edit for a team that finds pages
+  # long, and it would drop the panel from every CI page while the docs say the default is `auto`.
+  Case.new(desc: "impact defaults to never, so every CI page loses section 05", file: GENERATE,
+           edit: sub("IMPACT=${CFG_impact:-auto}", "IMPACT=${CFG_impact:-never}"),
+           sections: %i[config], expect: "impact's default reaches the run as --impact auto"),
+
+  Case.new(desc: "the config parser stops reading impact at all", file: READ_CONFIG,
+           edit: sub('emit("impact", val)', ""),
+           sections: %i[config], expect: "impact is read from the config file"),
+
   # And the peek that reads --mentor's optional value. Consuming ANY next argument turns
   # `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
   Case.new(desc: "the optional stack name swallows whatever flag follows --mentor", file: GENERATE,

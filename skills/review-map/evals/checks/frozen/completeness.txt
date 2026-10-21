@@ -508,6 +508,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page impact-entities-vocab-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-fold-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-fold-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment impact-four-paths.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -530,6 +536,18 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page impact-missing-loc.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-never-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-never-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-never-dangling-pointer.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-never-dangling-pointer.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment impact-no-affected.html
