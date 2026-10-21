@@ -1245,6 +1245,14 @@ paragraph:
 inconsistency: the reading path is a route through the checkpoints and cannot precede them, and the
 foot belongs to step 10's gate. A stage has to be worth opening the tab for.
 
+**Every turn from here re-bills the whole context**, which by stage 2 is past 200k tokens — a request
+spent finding an anchor costs about what one spent writing a checkpoint. So **make every `Edit` that
+is ready in the same turn, side by side**: two checkpoints that are both verified, a section and its
+rail entry, the inventory and the reading path. Edits to different ids do not touch each other. And
+**do not inspect the page to find where an edit goes**: every anchor is an `id` or a marker you read
+in the template's markup, and the skeleton script wrote exactly those. When one is genuinely in
+doubt, `grep -n` for it in the same call that does other work.
+
 **Write to the budget as you draft, not by editing it back down afterwards.** `report-format.md`
 § *The agenda budget* has the numbers, and a stage that overspends and then compresses pays for the
 same prose twice — once streamed, once re-edited — which is the cost step 9 exists to avoid. It also
@@ -1659,7 +1667,9 @@ URL: say where the file is, once, and nothing more.
   cite the line, add the tier, drop the label — as a correction that replaces (step 8), never as a
   note about the page's own drafting; where it is wrong about this page, leave the sentence and say
   so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
-  page whole. Nothing about the lint reaches the page, which carries no account of how it was
+  page whole. **Run the gate, the lint and a grep for leftover markers in one call, fix everything
+  they print in one turn of side-by-side `Edit`s, and re-run that one call once** — a fix per turn
+  re-bills the whole context for every sentence. Nothing about the lint reaches the page, which carries no account of how it was
   checked.
 - Publish the final state to the same path — or, with `--output`, simply leave the finished file at
   `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
