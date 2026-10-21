@@ -1340,7 +1340,10 @@ Everything else about writing holds at every stage:
   asked for is a page somebody has to explain. If the script refuses the theme or the file (exit 2),
   stop and report its message — never retry with a theme of your own choosing. Then
   the first `Edit` replaces its one-line body placeholder with the rail, `<main>`, the build banner,
-  the masthead and section 1. It refuses with exit 3 if the page already has content, which is the
+  the masthead and section 1. The placeholder is the one line containing `SKELETON:BODY`, so that
+  string is the `Edit`'s anchor and needs no looking up; the line after it is the skeleton's own
+  `</main>`, so **open `<main>` and never close it** — every later section goes in before that line.
+  It refuses with exit 3 if the page already has content, which is the
   guard against re-running it over a page a reader is already looking at.
 
   **Make that one call do the rest of the lookups the writing needs**, because every run otherwise
