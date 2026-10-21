@@ -1343,6 +1343,12 @@ Everything else about writing holds at every stage:
   the masthead and section 1. It refuses with exit 3 if the page already has content, which is the
   guard against re-running it over a page a reader is already looking at.
 
+  **Make that one call do the rest of the lookups the writing needs**, because every run otherwise
+  spends a request on each, at a context past 200k tokens: write the markup half to
+  `$W/markup.html` (read below), print the comment header of `scripts/excerpt.sh`, its usage
+  (`sed -n '2,/^[^#]/p'`), and, at rung 1 or 2, write each changed path's `#diff-` anchor —
+  `printf '%s' "$path" | shasum -a 256` — beside it in `$W/anchors.txt`.
+
   **Never write a `<style>` block, a `:root`, a colour, or a `<script>` into the page.** They are
   already there and **you have not read them** — so a token you name is a token you guessed, and a
   second declaration of a colour is a second canonical home for it. This is the same rule as the one
