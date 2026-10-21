@@ -235,7 +235,7 @@ the register. What a Next.js app adds is shapes to look for:
   first edge runtime route, the first `unstable_cache` or `"use cache"`.
 
 ```sh
-rg -ln '^["\x27]use client["\x27]' -g '*.{ts,tsx}' | xargs rg -n "from ['\"]@/(server|lib/db)"   # head
+rg -Un '^["\x27]use client["\x27][\s\S]*?from ["\x27]@/(server|lib/db)' -g '*.{ts,tsx}'   # head: a client file importing server code
 git grep -n -E "import ['\"]server-only['\"]" <merge-base sha> -- '*.ts' '*.tsx'                         # base
 rg -n "export const runtime *= *['\"]edge" -g '*.{ts,tsx}'                                    # a precedent search
 ```

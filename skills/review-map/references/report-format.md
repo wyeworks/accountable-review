@@ -578,8 +578,9 @@ take the page past its ceiling. When room runs out, keep the shifts backed by a 
 then a dependency edge measured both sides, then a precedent.
 
 **On an update**, a checkpoint resting on a recorded search is carried only while `carry-plan.sh`'s
-replay of that search finds no delta path among its hits — the same P6 that protects every recorded
-search. A precedent a new commit has copied is not carried.
+replay of the head half finds no delta path among its hits — the same P6 that protects every
+recorded search. The base half is not replayed: it searches the merge-base, which P2 holds fixed, so
+the new commits cannot change what it returns. A precedent a new commit has copied is not carried.
 
 **Nothing marks it as the third kind.** No label, no chip, no section of its own — the same rule as
 the other two, refused in the same place, `page-template.html`'s header comment.
@@ -617,10 +618,20 @@ and *What changed* says plainly that the delta is a refactor rather than a behav
 being manufactured to stand in front of them. Where the notes found behaviour that did move, the
 delta is not a refactor: class it behavioural, and the moved behaviour is its first judgment.
 
-**Across deltas**, order the deltas by the four criteria applied to each one's first checkpoint, and
-keep each delta's checkpoints together. One rule bounds it: no architectural question or coding
-decision is placed ahead of a behavioural judgment of a behavioural delta, whichever delta it
-belongs to.
+**Across deltas, behaviour goes first, page-wide.** The page is two bands, and the band outranks the
+delta:
+
+1. Every behavioural judgment of a behavioural delta, and every refactor delta's *is behaviour
+   preserved?* — ordered by the four criteria. The equivalence belongs here because misreading it
+   costs production, as misreading a behavioural judgment does.
+2. Every architectural question, then every coding decision — ordered by the four criteria within
+   each kind.
+
+A delta stays together only inside a band: where the criteria tie, its checkpoints sit next to each
+other. So a refactor delta that would rank first contributes its equivalence to the first band and
+its structural questions to the second, behind every behavioural judgment of the other deltas. With
+no behavioural delta on the page, the first band holds only the equivalences and the second is the
+rest of the page, which is the refactor order above.
 
 **The count.** Three to five per delta is the range for its behavioural judgments — or, in a
 refactor, its equivalence and the structural questions that are the page. Architectural questions and

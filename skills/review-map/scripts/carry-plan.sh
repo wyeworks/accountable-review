@@ -309,6 +309,28 @@ while IFS= read -r cmd; do
     UNSAFE=$cmd; break
   fi
 
+  # A SEARCH OF THE MERGE-BASE IS FIXED, NOT REPLAYED. An architectural checkpoint records the
+  # base half of its search as `git grep … <merge-base sha> -- scope` (report-format.md
+  # § Architectural questions), and git prints those hits as `sha:path:line` — a shape the test
+  # below cannot read. It does not need reading: P2 refused any update whose merge-base moved,
+  # so these commits cannot change what a search of it returns. Only the merge-base is exempt; a
+  # search naming any other commit falls through to the shape test and fails closed.
+  if [ "$tool" = "git grep" ]; then
+    at_mb=0
+    for tok in "$@"; do
+      case $tok in
+        *[!0-9a-f]*|'') continue ;;
+      esac
+      [ ${#tok} -ge 7 ] && [ ${#tok} -le 40 ] || continue
+      rev=$(git rev-parse -q --verify "$tok^{commit}" 2>/dev/null) || continue
+      [ "$rev" = "$MB" ] && at_mb=1
+    done
+    if [ "$at_mb" -eq 1 ]; then
+      printf 'search\t%s\tsafe\tsearches the merge-base, which P2 holds fixed\n' "$cmd" >> "$TMP/searchrows"
+      continue
+    fi
+  fi
+
   # grep and rg exit 1 on no match, which is a result rather than a failure.
   "$@" > "$TMP/hits" 2>/dev/null || true
 

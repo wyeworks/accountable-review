@@ -908,9 +908,12 @@ the affected unchanged code is.
 | Behavioural | behavioural judgments → architectural questions → coding decisions |
 | Refactor | *is behaviour preserved?* → architectural questions → coding decisions |
 
-Keep each delta's checkpoints together and order the deltas by the four criteria applied to each
-one's first checkpoint — with one bound: no architectural question or coding decision goes ahead of a
-behavioural judgment of a behavioural delta, whichever delta it belongs to. Coding decisions order
+**Across deltas the band outranks the delta.** First band: every behavioural judgment of a
+behavioural delta and every refactor's *is behaviour preserved?*, by the four criteria — the
+equivalence sits here because misreading it costs production too. Second band: every architectural
+question, then every coding decision. A delta's checkpoints sit together only inside a band, where
+the criteria tie, so a refactor that would rank first gives its equivalence to the first band and its
+structural questions to the second. `report-format.md` § *Ranking by delta* owns it. Coding decisions order
 among themselves by how settled the answer they depart from is — both sources, then a written
 repository decision, then a populated directory or a stack convention; architectural questions by a
 written decision, then an edge measured both sides, then a precedent. Not because structure does not

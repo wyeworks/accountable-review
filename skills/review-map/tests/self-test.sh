@@ -350,6 +350,12 @@ sed 's|^  landed=$(comm -12 "$TMP/delta" "$TMP/hitpaths" \| head -n 1)$|  landed
   "$CARRY_PLAN" > "$WORK/no-p8.sh"
 case_carry_red "a delta path among a recorded search's hits no longer refuses" "$WORK/no-p8.sh"
 
+# 28b. The merge-base exemption. Without it a base-side `git grep … <sha>` reads as a shape the
+#      hit test cannot parse, and every page carrying an architectural checkpoint updates in full.
+sed 's|      \[ "$rev" = "$MB" \] \&\& at_mb=1$|      :|' \
+  "$CARRY_PLAN" > "$WORK/no-mb-exempt.sh"
+case_carry_red "a recorded search of the merge-base is read for its shape again" "$WORK/no-mb-exempt.sh"
+
 # 29. The reason -v is not used. awk's -v processes escape sequences in the value, so a recorded
 #     `rg -n '\bProjects::Archive\b'` arrives with two backspaces where its word boundaries were.
 #     The pattern still runs and still matches things — just not the things the page recorded —

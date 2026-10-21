@@ -319,7 +319,9 @@ Editing one of these means checking the others still agree.
   **Every delta is classed behavioural or refactor**, in `agenda.md`, and the masthead's *Change
   shape* chip is its only trace on the page. A behavioural delta orders behavioural → architectural
   → coding decision; a refactor delta leads with *is behaviour preserved?*, then architectural, then
-  coding decision. No structural checkpoint precedes a behavioural judgment of a behavioural delta.
+  coding decision. Across deltas the band outranks the delta: every behavioural judgment and every
+  refactor's equivalence first, then every architectural question, then every coding decision, so no
+  structural checkpoint precedes a behavioural judgment of any delta.
   A refactor whose notes show moved behaviour is classed behavioural. `report-format.md` § *Ranking
   by delta* owns the table and the ceiling **alone**; `SKILL.md` steps 7a, 7d and 7e carry it.
 
@@ -332,15 +334,17 @@ Editing one of these means checking the others still agree.
   decision outranks the measurement, **no citation, no question**, and three tests sit behind it:
   **new, not moved**, **reaches past the PR**, **no reason in any note**. One that turns on the same
   lines as a behavioural judgment merges into it; one that is also an impact path keeps both homes,
-  each pointing at the other. `carry-plan.sh`'s P6 already replays the head half on `--update`.
+  each pointing at the other. On `--update`, `carry-plan.sh`'s P6 replays the head half and skips
+  the base half as a search of the merge-base, which P2 holds fixed.
 
   These agree: `SKILL.md` step 2 collects the written decisions, step 5 runs and records the
   searches, steps 7a–7e find, merge and rank; `report-format.md` § *Architectural questions* owns
   the bar and the limits **alone**, with § *The review checkpoint*, § *Where checkpoints come from*
   and § *Section 2* pointing at it; every lens file carries § *Architectural questions* with the
   shapes and the both-sides searches, the layered two pointing at their base lens;
-  `claim-falsifier.md` attacks the base half; `README.md` and `docs/review-map.md` are the public
-  wording. Nothing mechanical checks it; `evals/e2e/judges/IDEAS.md` records the judge that would.
+  `claim-falsifier.md` attacks the base half; `carry-plan.sh` exempts a merge-base search from the
+  hit-shape test, behind a `tests/run.sh` row either side and a `self-test.sh` mutation; `README.md`
+  and `docs/review-map.md` are the public wording. Nothing mechanical checks the checkpoint itself; `evals/e2e/judges/IDEAS.md` records the judge that would.
 
   **The rule is name the departure, and cite it from one of two sources.** The form is *the PR chose
   X; Y is the settled answer for the same job; is X deliberate?* `Y` is either **this repository's

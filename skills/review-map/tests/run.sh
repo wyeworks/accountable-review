@@ -874,6 +874,23 @@ cpage "grep -rn &#39;\bsecondpush\b&#39; app"
 plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
 assert_eq "$cprc" "0" "and a boundary that genuinely does not match does not refuse"
 
+# -- P6 · a search of the merge-base is fixed, not replayed --------------------------------------
+# An architectural checkpoint records the base half of its search as `git grep … <merge-base sha>`,
+# and git prints each hit as `sha:path:line`, which the hit-shape test cannot read. P2 already
+# refuses an update whose merge-base moved, so the commits since the last map cannot change what
+# that search returns: it is skipped as fixed, never sent to a full run for its shape. The base
+# here has hits for the pattern, so a row that still read the shape would refuse.
+cpage "git grep -n &#39;class&#39; $CBASE -- app"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "0" "a recorded search of the merge-base does not refuse the update"
+assert_eq "$(printf '%s\n' "$out" | grep -c 'searches the merge-base')" "1" "and is recorded as fixed rather than replayed"
+
+# Any other revision is still a shape this cannot read: only the merge-base has a precondition
+# holding it still.
+cpage "git grep -n &#39;class&#39; $CPREV -- app"
+plan --prev-head "$CPREV" --base "$CBASE" --head "$CHEAD"
+assert_eq "$cprc" "3" "a recorded search of any other revision still refuses"
+
 # -- P6 · the replay is argv, and the gate is quote-aware ---------------------------------------
 # Every alternation in both lens files sits inside quotes, so a blanket refusal of | and < would
 # reject the real searches and send every re-run to a full one. Outside quotes the same
