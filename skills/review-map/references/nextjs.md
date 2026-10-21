@@ -217,6 +217,29 @@ rg -l 'export (async )?function (GET|POST|PUT|PATCH|DELETE)' -g 'route.{ts,js}' 
 rg -n 'auth\(\)|getServerSession|currentUser\(|verifySession' -g '*.{ts,tsx}' | head   # how siblings check the session
 ```
 
+## Architectural questions, measured on both sides
+
+`references/react.md` § *Architectural questions* owns the rule, the import-direction searches and
+the register. What a Next.js app adds is shapes to look for:
+
+- **A server-only module now imported by a client component**, or a `server-only` import removed to
+  make it possible — the boundary § *Server and client components* reads for behaviour, asked here
+  as structure.
+- **Data access moved across the boundary** — a database client or an ORM call outside the
+  data-access layer the codebase has, a route handler that exists so a client component can reach
+  the database.
+- **A route group or a layout that now owns state** every page under it shares.
+- **Middleware, or proxy, that now does a job routes did** — authorization or data loading at the
+  edge, where every other check runs in the route.
+- **The first of its kind.** The first route handler in an app that mutates through actions, the
+  first edge runtime route, the first `unstable_cache` or `"use cache"`.
+
+```sh
+rg -ln '^["\x27]use client["\x27]' -g '*.{ts,tsx}' | xargs rg -n "from ['\"]@/(server|lib/db)"   # head
+git grep -n -E "import ['\"]server-only['\"]" <merge-base sha> -- '*.ts' '*.tsx'                         # base
+rg -n "export const runtime *= *['\"]edge" -g '*.{ts,tsx}'                                    # a precedent search
+```
+
 ## Tests
 
 - **Server components and server actions are hard to unit test**, so most of what this file is about

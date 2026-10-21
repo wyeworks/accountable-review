@@ -140,6 +140,38 @@ rg -ln 'use Ecto.Schema' lib/myapp | wc -l                     # how much of the
 rg -n 'defmodule .*(Service|Manager|Worker)\b' lib             # what the siblings settled on
 ```
 
+## Architectural questions, measured on both sides
+
+What the change made true of how the contexts fit together. `report-format.md` § *Architectural
+questions* owns when it becomes a checkpoint — one per shift, after every behavioural judgment, and
+**never without a citation**: a written decision, or a search at the merge-base and one at head.
+
+**Look first for what the repository wrote down.** `ARCHITECTURE.md`, ADRs, a `boundary`
+declaration (`use Boundary, deps: [...], exports: [...]`) and an umbrella app's `deps` in each
+`apps/*/mix.exs`. A dependency the declaration lists is no question; one it does not is the
+strongest form of one.
+
+The shapes a Phoenix diff produces:
+
+- **A context that now calls another it did not.** `MyApp.Billing` aliasing or calling
+  `MyApp.Accounts` where the call ran only the other way — the context boundary Phoenix generators
+  set up, asked as a structural fact rather than a convention.
+- **A context reading another's schema.** `alias MyApp.Accounts.User` inside `MyApp.Billing`, or a
+  `Repo` query on another context's table, where siblings call that context's public functions.
+- **A new process in the supervision tree.** A child added to `application.ex`, a `GenServer` or an
+  Oban queue where the app had none — what now has to be running for a request to succeed.
+- **A new PubSub topic subscribed across contexts**, coupling two contexts by a string nothing at
+  compile time checks.
+- **The first of its kind.** The first Oban worker, the first `GenServer`, the first external HTTP
+  client, the first `Task.async` in a request path.
+
+```sh
+rg -n 'MyApp\.Accounts\b' lib/myapp/billing                            # head: billing naming accounts
+git grep -n -E 'MyApp\.Accounts\b' <merge-base sha> -- lib/myapp/billing          # base: was it already so?
+rg -n 'children = \[' -A 20 lib/myapp/application.ex                   # what the tree starts
+rg -n 'use Boundary' lib                                                # what the repository declares
+```
+
 ## Controllers, plugs and JSON
 
 - The router pipeline a `scope` inherits — a new scope that omits `pipe_through` inherits **nothing**,

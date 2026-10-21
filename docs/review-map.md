@@ -32,7 +32,8 @@ does not earn omitted outright.
   two columns over the same states with the one that moved filled in both, and lists, a line each,
   the cases that run differently from the path it draws.
 - **What needs your attention** — the page's core. Three to five **review checkpoints** for each
-  independent change the PR makes — seven on the page at the outside — each one
+  independent change the PR makes — seven on the page at the outside, rising to nine or eleven when
+  the change touches a lot of application code — each one
   judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
   intended scope?* rather than *ProjectSearcher implementation*. A checkpoint carries the question,
   two to four sentences on why it is one, one to four places to look — each a short title, a clause
@@ -172,8 +173,16 @@ carries everywhere else on the page.
 Validation steps are real commands against your repository, not invented ceremony, and they appear
 where running one would settle the question rather than gathered into a list of their own.
 
-**Two kinds of judgment share the component.** Most checkpoints are about what the system now does.
-**Some** are about how the change was built — where a class was put, what kind of
+**Three kinds of judgment share the component.** Most checkpoints are about what the system now
+does. **Some** ask what the change makes true of your application's structure — a module that now
+depends on one it did not, a second owner of a fact one module owned, a new process, queue, cache or
+external call, the first of its kind in the app. Each states the shift (*before this PR, nothing in
+`billing` named `Accounts`; `invoice.ex:3` does now*) and exists only when the page can cite what shows
+it: a decision your repository wrote down — an ADR, an `ARCHITECTURE.md`, a packwerk or `boundary`
+declaration — or a search run at both revisions, recorded in the evidence foot so you can re-run it.
+It asks whether the shift was intended, never whether the design is good.
+
+**Others** are about how the change was built — where a class was put, what kind of
 object it is, which existing abstraction it went around, whether it is a second way to do something
 your app already does one way. Those come last, one per departure, and each exists only when the page
 can cite the settled answer it departs from, from one of two sources: **your codebase's own decision**
@@ -184,8 +193,15 @@ are verified). Your
 codebase wins: if it has settled on the PR's choice, there is no question, whatever the framework
 says. With nothing to cite there is no departure and no question, which is what keeps it from
 becoming a style guide — and even with something to cite it asks whether the choice was deliberate
-rather than telling you what it should have been. They never displace a judgment about behaviour, and they never push the page past seven
-checkpoints; when the behavioural agenda leaves no room, they do not appear.
+rather than telling you what it should have been.
+
+**The order depends on what kind of change it is.** Each independent change the PR makes is read as
+a behaviour change or a refactor, and the masthead's change-shape chip says which. In a behaviour
+change, judgments about behaviour come first, then structural questions, then how the code was
+built — the structural kinds never displace a behavioural judgment, and when the behavioural agenda
+leaves no room they do not appear. In a refactor, the first question is whether behaviour really is
+preserved, with the lines where it would not be; the structural questions follow, and may be most of
+the page. Nothing labels which kind a checkpoint is.
 
 ## The code comes to you
 

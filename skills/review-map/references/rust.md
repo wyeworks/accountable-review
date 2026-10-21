@@ -286,6 +286,36 @@ rg -l 'thiserror|anyhow' -g Cargo.toml                           # which crates 
 rg -n 'pub enum \w*Error' -g '*.rs'                              # the error types siblings return
 ```
 
+## Architectural questions, measured on both sides
+
+What the change made true of how the crates and modules depend on one another. `report-format.md`
+§ *Architectural questions* owns when it becomes a checkpoint — one per shift, after every
+behavioural judgment, and **never without a citation**: a written decision, or a reading at the
+merge-base and one at head.
+
+**The workspace writes its structure down.** Each member's `[dependencies]` is a declared edge, so
+an edge between members is measured by reading two `Cargo.toml` files at two revisions — no build,
+no `cargo tree`. `ARCHITECTURE.md` (common in Rust workspaces) and ADRs are the other written source.
+
+The shapes a Rust diff produces:
+
+- **A new edge between workspace members**, above all one that inverts a layer: a `core` crate
+  depending on a `server` or `cli` crate, a library crate depending on the binary's.
+- **A module that now reaches into another's internals** — a `use crate::storage::inner::…` where
+  siblings go through `storage`'s re-exports, a `pub(crate)` widened to `pub` to make it possible.
+- **A new runtime** — a `tokio` runtime built inside a library, a thread spawned where the crate was
+  synchronous, a global (`static`, `OnceLock`, `lazy_static`) holding state that was passed in.
+- **A new feature that changes the dependency graph** — an optional dependency made default.
+- **The first of its kind.** The first `unsafe` block in a crate that had `#![forbid(unsafe_code)]`
+  or none, the first network call in a crate that did no I/O, the first proc macro.
+
+```sh
+rg -n '^\s*\w[\w-]* *= *\{[^}]*path *=' -g 'Cargo.toml'                # head: path edges between members
+git grep -n -E 'path *=' <merge-base sha> -- '*Cargo.toml'                        # base: the same edges
+rg -n 'use crate::\w+::\w+::' -g '*.rs' <changed module>                # reaching past a module's re-exports
+rg -n 'forbid\(unsafe_code\)|unsafe \{' -g '*.rs'                       # a precedent search
+```
+
 ## Tests
 
 - **New behaviour with no test**, or a test that asserts the mock rather than the behaviour.

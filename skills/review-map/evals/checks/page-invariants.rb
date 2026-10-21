@@ -111,8 +111,8 @@ DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, 
 # follows it finds no rail entry for it.
 #
 # FAIL rather than WARN, because unlike a graded noun there is no sentence that legitimately carries
-# one: the name has nothing on the page to mean. The letter class stops at G, seven checkpoints being
-# the page's outside, and the trailing boundary is what keeps the rule off "Flow Hooks" — a letter
+# one: the name has nothing on the page to mean. The letter class stops at K, eleven checkpoints being
+# the page's outside at its highest ceiling (report-format.md § Ranking by delta), and the trailing boundary is what keeps the rule off "Flow Hooks" — a letter
 # class alone would have matched the F-word and the capital after it in any prose.
 #
 # Graded on the comment-stripped copy, for § 2's reason rather than § 3's: a published page carries
@@ -121,7 +121,7 @@ DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, 
 # failing a correct page. Its own fixture therefore must not name the label in its header comment,
 # or deleting this rule's prose half would leave the fixture failing and the mutation test would
 # report a bypass as caught.
-FLOW_LABEL = %r{\bFlows? [A-G]\b|(?:id|href)="\#?flow-}
+FLOW_LABEL = %r{\bFlows? [A-K]\b|(?:id|href)="\#?flow-}
 
 # The section sign, which is the flow label's sibling: a name from the run's reading rather than
 # from the page. SKILL.md and the references used to call the page's sections "§ 01" to "§ 05",

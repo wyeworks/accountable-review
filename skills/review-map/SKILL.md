@@ -506,6 +506,13 @@ step 7b needs to ask whether a coding decision in this diff departs from one, an
 cannot cite — from this inventory, a convention doc, or the lens file's stack conventions — is a
 question it may not ask. A written decision found here is worth noting with its line.
 
+**Architecture, written down.** Look too for what the repository says about its own structure: an
+`ARCHITECTURE.md`, ADRs (`docs/adr/`, `doc/architecture/`), and the files a tool enforces boundaries
+from — packwerk's `package.yml`, an Elixir `boundary` declaration, an eslint import-restriction rule,
+a Cargo workspace's member dependencies. Note each with its path. They are the first source step 7b
+cites for an architectural question, and a shift the repository has written down as allowed is no
+question at all.
+
 ## 3. Inventory the diff
 
 - `git diff --name-status BASE...HEAD` is the source of truth for what changed.
@@ -619,6 +626,18 @@ and it belongs in `details.searched`, shut, inside the evidence foot. Unrecorded
 and the reviewer redoes the work; left *only* inside the toggle, the finding is hidden rather than
 disclosed. **One row per search: the command, then what it returned in a clause** — the form and the
 budget are `references/report-format.md` § *What was searched*, which owns them.
+
+**Then measure the structure, on both sides.** For each changed file, note what it now depends on
+that its module did not: a reference from one top-level module, context, package or crate into
+another, a new writer of a table or a fact, a new process, queue, cache or external call. For each
+candidate, search the merge-base too — `git grep -n -E '<pattern>' <merge-base sha> -- <scope>`, with the sha
+written out so the recorded row reproduces — because
+*new* is a claim about the base and the hunk does not show the base. An empty result at the base for
+an edge that exists at head is the shift; an empty result at head outside the diff for a kind of
+thing the diff adds is a precedent. Record both searches like any other, and write the result into
+the flow's note, because step 7 opens nothing the notes have not cited. The lens file's
+§ *Architectural questions* has the patterns per stack; searches only, never a tool that compiles or
+boots the application to answer.
 
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the run's backbone: step 6 splits it into flows for
@@ -765,11 +784,21 @@ downstream caller now experiences differently. If the notes support two unrelate
 bundles two changes and *What changed* says so, neutrally. This sentence is the spine of section 01,
 and almost every checkpoint has to be a judgment about it.
 
-**Almost, because there are two kinds of checkpoint and only the first answers to this sentence.**
-A **behavioural** checkpoint is a judgment about the delta — what the system now does. A
-**coding-decision** checkpoint is a judgment about how the change was built: where a class was put,
-what kind of object it is, which existing abstraction it went around. That second kind is ranked last
-and never displaces the first, and 7b to 7e say why and how.
+**Almost, because there are three kinds of checkpoint and only the first answers to this sentence.**
+A **behavioural** checkpoint is a judgment about the delta — what the system now does. An
+**architectural** checkpoint is a judgment about what the change makes true of the system's
+structure: a dependency that now runs a new way, a second owner of a fact, a boundary crossed, a new
+runtime component, the first of its kind. A **coding-decision** checkpoint is a judgment about how
+the change was built: where a class was put, what kind of object it is, which existing abstraction it
+went around. The second and third kinds never displace the first, and 7b to 7e say why and how.
+
+**Then class each delta: behavioural or refactor.** A behavioural delta changes what a user, an
+operator or a downstream caller experiences; a refactor intends to change structure and leave
+behaviour as it was. Write the class beside the delta's sentence in `agenda.md`. It reaches the page
+only through the masthead's *Change shape* chip — *refactor* when every delta is one, *mixed* when
+they differ — and it decides the order in 7d. **A refactor whose notes show behaviour that moved is
+not a refactor**: class it behavioural, and the moved behaviour is its first judgment. The author
+calling it a refactor is a claim, attributed, per step 4.
 
 **7b. Identify the human judgments.** For each note, ask what a competent reviewer has to *decide*
 rather than *learn*: whether a scope is still the one that was intended, whether a nil default is
@@ -817,6 +846,28 @@ show matters; a difference no note settled is a reason not to ask.
 knows why the codebase is shaped as it is and you do not — step 6's neutrality rule is the register,
 and a decision you cannot resolve goes on the *Open question* line, not into a verdict.
 
+**Then ask the architectural question, once per shift, behind the same kind of bar: state the
+shift and cite what shows it.** The form is *before this PR, X was not true of the system; at
+`file:line` it now is; is that intended?* — `billing` now names `Accounts` where only the reverse was
+true, a second module now writes `subscriptions.status`, a controller now makes an outbound HTTP call
+inside the request where every other one is enqueued, the first cache in the app. **Two sources,
+the repository first**: a written decision step 2 found — an ADR, an `ARCHITECTURE.md`, a boundary a
+tool enforces — or the two searches step 5 recorded, the base side and the head side. **No citation,
+no question**: *this couples X to Y* with nothing on either side to point at is the page grading the
+design. A shift the repository has written down as allowed is no shift.
+
+**Three tests decide it, and `report-format.md` § *Architectural questions* owns them.** **New, not
+moved** — did the base hold it anywhere, a call moved within a module or a file renamed across a
+boundary being the same edge? **Reaches past the PR** — can later code now follow it, call it or copy
+it, or is it a private helper used once inside the module that owns it? **No reason in any note** —
+the requirement that explains a shift is often in another flow's trace. And the register is the
+coding decision's: no *coupled*, *leaky*, *cleaner* or *should*.
+
+**In a refactor delta, ask the equivalence first.** A refactor's claim is that nothing a caller sees
+moved, so its first judgment is *is behaviour preserved?*, with the lines where it would not be — a
+guard reordered, a default that travelled, a callback no longer run, a scope that changed shape. Skip
+it only when the notes found no place the two versions could differ.
+
 Some judgments hide outside any one flow, and a flow-by-flow reading is exactly what misses them.
 `references/report-format.md` § *The review checkpoint* carries the list to ask against — migration
 safety, an application invariant with no database counterpart, the authorization model, deploy
@@ -837,39 +888,69 @@ every note: a fact another flow traced — a value captured before a write clear
 for a reason — is often the reason the departure exists, and then there is no departure to ask
 about.
 
+**Architectural candidates go through it too, in two directions.** One that turns on the same lines
+as a behavioural judgment merges into it — the behavioural question stays and the shift becomes a
+clause, because what the system now does outranks what it now permits. And three files that each add
+the same edge are one question with three *Look at* entries. A shift that is also an impact path
+keeps both, the checkpoint asking and section 05 drawing, each pointing at the other in a clause.
+
 **7d. Rank.** Order the candidates by four things, in this priority: the consequence if the reviewer
 misunderstands it; how uncertain the notes are about it, because the reviewer's attention is worth
 most where the page's own evidence is weakest; how far it sits from the obvious reading of the diff,
 since a consequence visible in the hunk needs less help than one three files away; and how important
 the affected unchanged code is.
 
-**Coding-decision checkpoints are ranked last, whatever those four say about them** — after every
-behavioural one, and among themselves by how settled the answer they depart from is — both sources, then a
-written repository decision, then a populated directory or a stack convention. Not because it does
-not matter — a class in the wrong place outlives the PR — but because misreading it costs the reviewer
-a conversation and misreading a behavioural one costs them production. The reader meets the
-consequences first and the shape afterwards.
+**Those four order checkpoints within a kind; the kind is ordered by the delta's class**, and
+`report-format.md` § *Ranking by delta* owns the table:
+
+| Delta | Order |
+|---|---|
+| Behavioural | behavioural judgments → architectural questions → coding decisions |
+| Refactor | *is behaviour preserved?* → architectural questions → coding decisions |
+
+Keep each delta's checkpoints together and order the deltas by the four criteria applied to each
+one's first checkpoint — with one bound: no architectural question or coding decision goes ahead of a
+behavioural judgment of a behavioural delta, whichever delta it belongs to. Coding decisions order
+among themselves by how settled the answer they depart from is — both sources, then a written
+repository decision, then a populated directory or a stack convention; architectural questions by a
+written decision, then an edge measured both sides, then a precedent. Not because structure does not
+matter — a dependency in the wrong direction outlives the PR — but because misreading it costs the
+reviewer a conversation about the design and misreading a behavioural one costs them production. The
+reader meets the consequences first and the shape afterwards.
 
 **The order is the order to think about them, and it is not a scale.** No number that reads as
 severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the reading path refer to a
 checkpoint by its question.
 
 **7e. Select the smallest useful agenda.** Three to five checkpoints **per independent semantic delta
-7a named**, and seven on the page at the outside. Fewer for a PR small enough that three would be
+7a named**, and the page's **ceiling** at the outside — seven, nine or eleven, set by the Production
+bucket:
+
+| Production bucket | Ceiling |
+|---|---|
+| up to 20 files and up to 1,000 changed lines | 7 |
+| up to 60 files and up to 3,000 changed lines | 9 |
+| beyond either | 11 |
+
+Files are the *By kind* cell's `prod` count; lines are `git diff --numstat` summed over those same
+paths. Test, generated and docs files never count, so a regenerated lockfile buys no room.
+`report-format.md` § *Ranking by delta* owns the tiers. Fewer for a PR small enough that three would be
 padding — a run that reached this step on a diff step 3 nearly stopped for may have one. Ask: *if the
 reviewer understood and investigated these, would they have the right mental model of this change?* If
 yes, stop.
 
-**The count follows the delta, never the file count.** One delta is three to five whatever the diff
-weighs: eighty files of one rename is one judgment, and one behaviour reaching across four layers is
+**The count follows the delta; the ceiling follows the application code; neither follows the raw
+diff.** One delta is three to five whatever the diff weighs: eighty files of one rename is one judgment, and one behaviour reaching across four layers is
 also one — its reach becomes *Look at* entries, a figure and a card in section 05, not more
-checkpoints. Two delta bullets in *What changed* is what earns a sixth. Since those bullets are on
-the page, the reader has already been told why the agenda is longer.
+checkpoints. Two delta bullets in *What changed* is what earns a sixth behavioural judgment; a higher
+ceiling earns none on its own — it is room for more deltas and for the structural questions, never a
+target. Since the delta bullets and the metric strip are on the page, the reader has already been
+told why the agenda is longer.
 
 **A sixth candidate under one delta is a signal to merge again**, not to add a sixth; if it will not
-merge, the checkpoint nearest to it names it in one clause. Past seven on any PR, stop adding: write
-7a's bundling sentence in *What changed* and, if you skimmed, the statement of which region. An
-eighth checkpoint is a list the reviewer will triage instead of an agenda they can hold.
+merge, the checkpoint nearest to it names it in one clause. At the ceiling, stop adding: write
+7a's bundling sentence in *What changed* and, if you skimmed, the statement of which region. One past
+the ceiling is a list the reviewer will triage instead of an agenda they can hold.
 
 **Two conditions on going past the fifth**, and check both before you do:
 
@@ -895,24 +976,25 @@ which is why the agenda has room to grow rather than a ceiling that would push o
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
 checkpoint is written, never on how many there are.
 
-**Coding decisions take the last slots, as many as clear the bar and fit.** Fitting is a limit, never
-a reason: room left under seven is not a prompt to find one, and none is the common right answer. No
-fixed count, and three limits:
+**Architectural questions and then coding decisions take the last slots of a behavioural delta, as
+many as clear their bars and fit.** Fitting is a limit, never a reason: room left under the ceiling is
+not a prompt to find one, and none is the common right answer. When room runs out, architectural
+questions are kept ahead of coding decisions. No fixed count, and three limits:
 
-- **One per departure, each with its own citation.** If the diff departs from this codebase's
+- **One per departure or shift, each with its own citation.** If the diff departs from this codebase's
   settled answers in two unrelated places, ask both — a reviewer who knows the codebase would. The
   citation is what keeps this from becoming a style review, not a quota: a page can only ask as many
   as the repository and the stack's list have answers to point at. Merge first, as in 7c — three files that went around the
   same convention are one question. A departure with nothing to cite is not written down anywhere.
-- **They never displace a behavioural judgment, and they never justify going past seven.** They sit
-  outside the per-delta three to five and inside the ceiling of seven, filling only the room the
+- **They never displace a behavioural judgment, and they never justify going past the ceiling.**
+  They sit outside the per-delta three to five and inside the ceiling, filling only the room the
   behavioural agenda leaves. A page that dropped *is nil safe for every consumer?* to ask where a
-  class lives has traded the product for a preference — and a page that reached an eighth checkpoint
-  to fit one in has bought a preference with the reviewer's attention. When room runs out first, keep
-  the departures from the most settled answers.
-- **Unless the diff is a refactor**, in which case coding decisions may be the only judgments there
-  are, and then they are the page. Say that plainly in *What changed* rather than manufacturing a
-  behavioural checkpoint to sit in front of them.
+  class lives has traded the product for a preference — and a page that went one past its ceiling to
+  fit one in has bought a preference with the reviewer's attention. When room runs out first, keep
+  the most settled ones.
+- **In a refactor delta they are the judgments**, after its equivalence: the three to five is the
+  equivalence and the structural questions together. Say plainly in *What changed* that the delta is
+  a refactor rather than manufacturing a behavioural checkpoint to sit in front of them.
 
 **7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
 two to four sentences. Then decide whether it also earns a figure, which shape, and how many *Look at*
@@ -1862,11 +1944,14 @@ big.** If the bulk is one change — a rename, a codemod, one behaviour reaching
 more *Look at* entries per checkpoint, the impact figure's third card, and an inventory that grows
 with the diff at no cost to anyone, because it is collapsed. **The agenda does not move**: eighty
 files of one transform is one judgment. If the PR instead ships genuinely independent changes, *What
-changed* says so in a bullet each, and the agenda grows with them — three to five per delta, seven
-on the page at the outside. Step 7e has both conditions on going past the fifth.
+changed* says so in a bullet each, and the agenda grows with them — three to five per delta, under
+the ceiling the Production bucket sets: seven, nine or eleven (step 7e). Step 7e has both conditions
+on going past the fifth.
 
-Seven is the stop because past it section 04 can no longer be a route: every stop has been spent
-naming a checkpoint, and the reading order has become an index of the agenda.
+The ceiling is a stop because past it section 04 can no longer be a route: every stop has been spent
+naming a checkpoint, and the reading order has become an index of the agenda. It rises with the
+application code because more of it is more to route through — and a page that cannot route every
+checkpoint through three to seven stops is wider than it carries, whatever its tier.
 
 **A mentor page is that budget plus its primers**, each 90–200 words and at most three of them,
 counted separately for the reason § *The agenda budget* gives: folded in, a run would buy a lesson by
