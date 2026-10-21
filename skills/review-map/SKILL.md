@@ -1677,8 +1677,10 @@ URL: say where the file is, once, and nothing more.
   note about the page's own drafting; where it is wrong about this page, leave the sentence and say
   so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
   page whole. **Run the gate, the lint and a grep for leftover markers in one call, fix everything
-  they print in one turn of side-by-side `Edit`s, and re-run that one call once** — a fix per turn
-  re-bills the whole context for every sentence. Nothing about the lint reaches the page, which carries no account of how it was
+  they print in one turn of side-by-side `Edit`s, then re-run that one call** — a fix per turn
+  re-bills the whole context for every sentence. A fix can raise a WARN of its own, so keep going
+  until the call prints nothing you have not already fixed or answered in chat; it is usually one
+  more round. Nothing about the lint reaches the page, which carries no account of how it was
   checked.
 - Publish the final state to the same path — or, with `--output`, simply leave the finished file at
   `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
