@@ -64,7 +64,7 @@ rule one level up — yours, not the other host's.
 | File | Read at | For |
 |---|---|---|
 | `references/hosts/claude-code.md` *or* `references/hosts/generic.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
-| `references/report-format.md` | steps 1, 7, 8, 9 | The six sections, the review checkpoint, the Context section, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/report-format.md` | step 1 § *Deep links* only; whole at step 7, for 7, 8 and 9 | The six sections, the review checkpoint, the Context section, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md`, `references/phoenix-liveview.md`, `references/rust.md` (+ `references/rust-backend.md` for a Rust backend) *or* `references/react.md` (+ `references/nextjs.md` for a Next.js app) | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md`, `references/elixir-docs.md`, `references/rust-docs.md` *or* `references/react-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
 | `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, two assembled checkpoints, the chain and the impact panel — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
@@ -288,7 +288,10 @@ point of putting them in a separate context. The host reference owns how the rea
   not read it as unpushed — say in the masthead that reachability could not be determined and render
   citations as plain text, rather than asserting a branch is unpushed on an answer git never gave.
   Pick one rung from the ladder in
-  `references/report-format.md` and hold it for every citation. The rung decides whether anything is
+  `references/report-format.md` § *Deep links* and hold it for every citation. Read that section
+  alone now — it is the file's last, so `sed -n '/^## Deep links$/,$p'` prints it whole — and leave
+  the rest of the file for step 7: nothing in steps 2 to 6 writes the page, and every token loaded
+  here is billed again on each of the requests the tracing makes. The rung decides whether anything is
   clickable; it does not decide the form — inside a rung, a line in the diff links to the diff page
   and a line outside it links to a blob, with one exception that is settled per file in step 3 and
   not per citation. At rung 2 there is no PR page, so check the base SHA for reachability too:
@@ -754,7 +757,11 @@ The notes are the analysis. This step turns them into the page's argument, and i
 own because the failure it prevents is structural: a run that goes from notes straight to prose
 writes one section per flow, which is the page this one replaced.
 
-Nothing here opens a file the notes have not already cited. The work is deciding, not tracing. Do it
+**Read `references/report-format.md` now, whole**, if this run has not — step 1 read only its
+§ *Deep links*. Every rule about the page lives there, and from here to step 10 the run is writing
+the page.
+
+Nothing else here opens a file the notes have not already cited. The work is deciding, not tracing. Do it
 in this order, and write the outcome of each part into `$W/analysis/agenda.md` before moving on — the
 falsifiers' challenges are arriving while you do this, and a written agenda is what lets step 8 fold
 one in without re-deriving the ranking.
