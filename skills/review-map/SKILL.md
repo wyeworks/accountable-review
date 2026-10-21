@@ -759,7 +759,10 @@ writes one section per flow, which is the page this one replaced.
 
 **Read `references/report-format.md` now, whole**, if this run has not — step 1 read only its
 § *Deep links*. Every rule about the page lives there, and from here to step 10 the run is writing
-the page.
+the page. **Read it in one turn**: four `Read` calls side by side, at offsets 1, 701, 1401 and 2101
+with a limit of 700 each, and one more at 2801 only if the last came back full. A `cat` spills past
+the output limit into a file that then comes back one chunk per request, and each of those requests
+re-bills the whole context the run has built by now.
 
 Nothing else here opens a file the notes have not already cited. The work is deciding, not tracing. Do it
 in this order, and write the outcome of each part into `$W/analysis/agenda.md` before moving on — the
@@ -1307,7 +1310,10 @@ Everything else about writing holds at every stage:
 - Follow `references/report-format.md` for the six sections, when each appears, how deep it goes,
   and the rule that each fact has one home. Follow `references/page-template.html` for the design
   system and the components — read with `scripts/page-skeleton.sh --markup`, which prints the
-  component half and leaves out the 55 KB you are about to be given for free.
+  component half and leaves out the 55 KB you are about to be given for free. Write it to
+  `$W/markup.html` and read it in one turn — two `Read` calls side by side, offsets 1 and 501 with a
+  limit of 500, one more at 1001 only if the second came back full — without sizing or indexing it
+  first: every extra request here re-bills a context past 200k tokens.
 
   **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
   only when step 7i found nothing crossing into unchanged code, and the 02 entry only when step 7k
