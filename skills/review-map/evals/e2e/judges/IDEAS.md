@@ -66,8 +66,11 @@ grade and left to the reviewer; `checkpoint-claims` opens every cited line. Four
   carrying a structural shift.
 - **The ranking by delta.** Each delta's class (behavioural or refactor) agrees with the *Change
   shape* chip, a refactor delta leads with its equivalence, and no structural checkpoint precedes a
-  behavioural judgment of a behavioural delta. Defect: a refactor page that opens with where a class
-  lives while the notes show a guard reordered.
+  behavioural judgment of a behavioural delta; the chip reads behavioural, refactor or mixed and follows
+  the class rather than the PR's title; and a behavioural delta that relocates code carries an
+  equivalence question for the callers meant not to notice. Defect: a refactor page that opens with
+  where a class lives while the notes show a guard reordered; a `DEV:`-titled page whose chip says
+  refactor while its own checkpoints describe behaviour that moved.
 - **The count scales on the deltas § 01 names**, never on the file count, and **the ceiling on the
   Production bucket**, never on test, generated or docs files. Defect: three more checkpoints on a
   one-delta page — which also plants a merge failure, so it needs a page where the extra checkpoints

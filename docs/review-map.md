@@ -196,12 +196,15 @@ becoming a style guide — and even with something to cite it asks whether the c
 rather than telling you what it should have been.
 
 **The order depends on what kind of change it is.** Each independent change the PR makes is read as
-a behaviour change or a refactor, and the masthead's change-shape chip says which. In a behaviour
+a behaviour change or a refactor, and the masthead's change-shape chip says which — *behavioural*,
+*refactor* or *mixed*, whatever the PR's own title calls it. In a behaviour
 change, judgments about behaviour come first, then structural questions, then how the code was
 built — the structural kinds never displace a behavioural judgment, and when the behavioural agenda
 leaves no room they do not appear. In a refactor, the first question is whether behaviour really is
 preserved, with the lines where it would not be; the structural questions follow, and may be most of
-the page. Nothing labels which kind a checkpoint is.
+the page. A behaviour change that also moves code its callers should not notice gets that same
+*is behaviour preserved?* question for those callers, ranked among the behaviour judgments. Nothing
+labels which kind a checkpoint is.
 
 ## The code comes to you
 

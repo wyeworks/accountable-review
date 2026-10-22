@@ -795,8 +795,10 @@ went around. The second and third kinds never displace the first, and 7b to 7e s
 **Then class each delta: behavioural or refactor.** A behavioural delta changes what a user, an
 operator or a downstream caller experiences; a refactor intends to change structure and leave
 behaviour as it was. Write the class beside the delta's sentence in `agenda.md`. It reaches the page
-only through the masthead's *Change shape* chip — *refactor* when every delta is one, *mixed* when
-they differ — and it decides the order in 7d. **A refactor whose notes show behaviour that moved is
+only through the masthead's *Change shape* chip, which is the class itself — *behavioural*,
+*refactor*, or *mixed* when the deltas differ — and it decides the order in 7d. The chip follows your
+class, never the PR's title: where the two disagree, *What changed* names the title's claim in a
+clause, attributed. **A refactor whose notes show behaviour that moved is
 not a refactor**: class it behavioural, and the moved behaviour is its first judgment. The author
 calling it a refactor is a claim, attributed, per step 4.
 
@@ -866,7 +868,10 @@ coding decision's: no *coupled*, *leaky*, *cleaner* or *should*.
 **In a refactor delta, ask the equivalence first.** A refactor's claim is that nothing a caller sees
 moved, so its first judgment is *is behaviour preserved?*, with the lines where it would not be — a
 guard reordered, a default that travelled, a callback no longer run, a scope that changed shape. Skip
-it only when the notes found no place the two versions could differ.
+it only when the notes found no place the two versions could differ. **A behavioural delta owes it
+too** where it moves code whose callers are meant not to notice — checks relocated, a method
+extracted — asked once for all of those callers and ranked with the behavioural judgments by the four
+criteria, not first; `report-format.md` § *Ranking by delta* owns it.
 
 Some judgments hide outside any one flow, and a flow-by-flow reading is exactly what misses them.
 `references/report-format.md` § *The review checkpoint* carries the list to ask against — migration

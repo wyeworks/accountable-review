@@ -317,12 +317,16 @@ Editing one of these means checking the others still agree.
   around. They render identically, and nothing labels the kind.
 
   **Every delta is classed behavioural or refactor**, in `agenda.md`, and the masthead's *Change
-  shape* chip is its only trace on the page. A behavioural delta orders behavioural → architectural
+  shape* chip is its only trace on the page: the chip **is** the class — behavioural · refactor ·
+  mixed, nothing finer, because a word like *bugfix* claims an intent the code rarely states — and it
+  follows the run's class, never the PR's title, which *What changed* attributes instead. A behavioural delta orders behavioural → architectural
   → coding decision; a refactor delta leads with *is behaviour preserved?*, then architectural, then
   coding decision. Across deltas the band outranks the delta: every behavioural judgment and every
   refactor's equivalence first, then every architectural question, then every coding decision, so no
   structural checkpoint precedes a behavioural judgment of any delta.
-  A refactor whose notes show moved behaviour is classed behavioural. `report-format.md` § *Ranking
+  A refactor whose notes show moved behaviour is classed behavioural. A behavioural delta that also
+  moves code its callers are meant not to notice owes them one equivalence question, ranked with the
+  behavioural judgments rather than first. `report-format.md` § *Ranking
   by delta* owns the table and the ceiling **alone**; `SKILL.md` steps 7a, 7d and 7e carry it.
 
   **The architectural rule is state the shift, and cite what shows it.** The form is *before this PR,

@@ -595,11 +595,10 @@ ordered. Two classes:
 - **Behavioural** — the delta changes what a user, an operator or a downstream caller experiences.
 - **Refactor** — the delta intends to change structure and leave behaviour as it was.
 
-The class is recorded in `agenda.md` and reaches the page only through the masthead's existing
-*Change shape* chip, § *Section 1*, which already says it in one category word: feature, bugfix,
-migration and dependency bump are behavioural; refactor is refactor; *mixed* is the PR whose deltas
-are classed differently. No other marker, because a class beside a checkpoint is one step from a
-severity.
+The class is recorded in `agenda.md` and reaches the page only through the masthead's *Change
+shape* chip, § *Section 1*, which **is** the class: *behavioural*, *refactor*, or *mixed* when the
+deltas are classed differently. No other marker, because a class beside a checkpoint is one step from
+a severity.
 
 **Inside a delta, the order is fixed by kind**, and the four ranking criteria of `SKILL.md` step 7d
 order checkpoints within each kind:
@@ -617,6 +616,15 @@ notes found no place where the two versions could differ; then the structural qu
 and *What changed* says plainly that the delta is a refactor rather than a behavioural checkpoint
 being manufactured to stand in front of them. Where the notes found behaviour that did move, the
 delta is not a refactor: class it behavioural, and the moved behaviour is its first judgment.
+
+**A behavioural delta owes an equivalence too, where it moves code its callers are meant not to
+notice.** Checks relocated into a shared object, a method extracted, a call path rerouted: the
+delta's point is the behaviour that moved, and alongside it sits code whose callers should see no
+difference. Those callers are owed *is behaviour preserved for them?*, with the lines where it would
+not be. It is a behavioural judgment and sits in the first band, ranked by the four criteria rather
+than first by rule — the behaviour that moved is usually what a reviewer would most regret
+misreading. One per delta, merged like any other: every caller meant to see no change is a *Look at*
+entry of the same question.
 
 **Across deltas, behaviour goes first, page-wide.** The page is two bands, and the band outranks the
 delta:
@@ -2344,10 +2352,12 @@ ambiguous.
 § *An updated page* owns it along with the one sentence that goes with it here. Nothing else about
 *What changed* moves.
 
-**Change shape** — a chip naming what kind of change this is: feature · refactor · bugfix ·
-migration · dependency bump · mixed. One word, and it is a category, never a grade. It is also the
-one visible trace of the class each delta was given — *mixed* when the deltas differ — and
-§ *Ranking by delta* owns what the class decides.
+**Change shape** — a chip naming the class § *Ranking by delta* gave the change: *behavioural* ·
+*refactor* · *mixed*, the last when the deltas are classed differently. One word, and it is a
+category, never a grade. Nothing finer: *feature* and *bugfix* claim an intent the code rarely
+states, and a chip cannot carry the evidence tier such a claim would need. **It follows the run's
+class, never the author's label** — a PR titled as a refactor whose notes show behaviour that moved
+is *behavioural* here, and *What changed* says in one clause what the PR calls itself, attributed.
 
 **A metric strip** of commits, files and the files split by kind. Bucket the files rather than
 reporting one total, because a 40-file PR that is 8 production files and 32 fixtures is a different
