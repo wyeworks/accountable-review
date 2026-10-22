@@ -593,6 +593,14 @@ confident guess, and it is the kind of thing they can resolve in one question to
 What no diff shows is the unchanged code those lines just changed the meaning of — and that is where
 the expensive bugs are. Spend more turns here than on prose.
 
+**The step's first call is the lens's heading index, before any consumer search**: `grep -n '^## '`
+over the lens file the stack selected in step 2 (both files on a Rust backend or a Next.js app).
+Then, in the next turn and side by side, `Read` with `offset` and `limit` the file's opening (above
+its first `##`), § *Search recipes*, and every section for a layer this diff touches. Skipping it is
+not a saving. Its per-layer questions are what a trace improvised from the diff alone does not think
+to ask, and a missing finding fails no check: the page just reads complete. A run that greps for its
+own guesses in the lens instead of reading those sections finds only what it already knew to look for.
+
 Work outward from each changed thing to its consumers:
 
 | Changed thing | Who you have to go find |
@@ -615,10 +623,7 @@ Work outward from each changed thing to its consumers:
 The lens file the stack selected in step 2 — `references/rails-nextjs.md`,
 `references/phoenix-liveview.md`, `references/rust.md` with `references/rust-backend.md` on a Rust
 backend, or `references/react.md` with `references/nextjs.md` on a Next.js app — carries the concrete search patterns per artifact kind. Use them;
-do not improvise a grep and call the area clear. **Read the lens now, before the first consumer
-search, and read the sections for the layers this diff touches** — skipping it is not a saving. Its
-per-layer questions are what a trace improvised from the diff alone does not think to ask, and a
-missing finding fails no check: the page just reads complete.
+do not improvise a grep and call the area clear.
 
 **Record what you searched, not just what you found — but the finding goes in the open prose and the
 search goes in the collapsed record.** "Nothing else calls `Project#archive`" is the finding, and it
