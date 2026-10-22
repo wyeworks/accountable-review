@@ -1238,6 +1238,10 @@ paragraph:
 - **One publish per checkpoint that lands, not per edit.** If two land in the same turn, one publish
   covers both. That bounds the arrivals by turns, which is the right bound: the turn is what a reader
   waits through.
+- **Publish in the turn that completes the stage, never in a turn of its own.** Send the `Edit`s and
+  the `Artifact` publish together — the tool calls run in order, so the publish carries the edited
+  file. A publish alone in a request re-bills the whole context for one call: three of them cost a
+  run 1.2M cache-read tokens at 320k–450k context, about 8% of everything it spent.
 - **Step 8 is the gate on each of them.** More publish boundaries means more gates, not a looser one.
   A checkpoint is published when it is verified, not when it is drafted.
 
