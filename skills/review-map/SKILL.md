@@ -291,7 +291,9 @@ point of putting them in a separate context. The host reference owns how the rea
   `references/report-format.md` § *Deep links* and hold it for every citation. Read that section
   alone now — it is the file's last, so `sed -n '/^## Deep links$/,$p'` prints it whole — and leave
   the rest of the file for step 7: nothing in steps 2 to 6 writes the page, and every token loaded
-  here is billed again on each of the requests the tracing makes. The rung decides whether anything is
+  here is billed again on each of the requests the tracing makes. This defers one file, the page's
+  rules; it is not a rule against reading before step 7 — step 5 reads the stack's lens, because
+  its search recipes are the tracing. The rung decides whether anything is
   clickable; it does not decide the form — inside a rung, a line in the diff links to the diff page
   and a line outside it links to a blob, with one exception that is settled per file in step 3 and
   not per citation. At rung 2 there is no PR page, so check the base SHA for reachability too:
@@ -613,7 +615,10 @@ Work outward from each changed thing to its consumers:
 The lens file the stack selected in step 2 — `references/rails-nextjs.md`,
 `references/phoenix-liveview.md`, `references/rust.md` with `references/rust-backend.md` on a Rust
 backend, or `references/react.md` with `references/nextjs.md` on a Next.js app — carries the concrete search patterns per artifact kind. Use them;
-do not improvise a grep and call the area clear.
+do not improvise a grep and call the area clear. **Read the lens now, before the first consumer
+search, and read the sections for the layers this diff touches** — skipping it is not a saving. Its
+per-layer questions are what a trace improvised from the diff alone does not think to ask, and a
+missing finding fails no check: the page just reads complete.
 
 **Record what you searched, not just what you found — but the finding goes in the open prose and the
 search goes in the collapsed record.** "Nothing else calls `Project#archive`" is the finding, and it
