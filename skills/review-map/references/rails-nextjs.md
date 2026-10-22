@@ -126,6 +126,14 @@ as it is; you know only that this file is shaped differently from its neighbours
 - Strong params complete, and no `permit!`.
 - N+1 introduced. Does the project use `bullet` or a query-count assertion that would have caught
   it?
+- A preload (`includes`, `preload`, `eager_load`) naming an association that only some classes in
+  the loaded set declare — an STI subclass's association preloaded through the base class's
+  `belongs_to`. The preloader asks each record's class for the association and raises
+  `ActiveRecord::AssociationNotFoundError` at the first record whose class lacks it; only a
+  **polymorphic** parent skips such records. It passes every test whose fixtures hold one subclass,
+  and fails for the user whose rows mix them. For each association in a changed preload list, find
+  which classes declare it (`rg -n 'has_one :relay\b|has_many :relay\b' app/models`) against which
+  classes the relation can return.
 - Unbounded collections without pagination or a limit.
 - A `before_action` chain whose order changed, or a new action that misses a filter the others have.
 - Authorization on every new action — check the project's library rather than assuming, and watch
