@@ -64,7 +64,7 @@ rule one level up — yours, not the other host's.
 | File | Read at | For |
 |---|---|---|
 | `references/hosts/claude-code.md` *or* `references/hosts/generic.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
-| `references/report-format.md` | steps 1, 7, 8, 9 | The six sections, the review checkpoint, the Context section, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/report-format.md` | step 1 § *Deep links* only; whole at step 7, for 7, 8 and 9 | The six sections, the review checkpoint, the Context section, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md`, `references/phoenix-liveview.md`, `references/rust.md` (+ `references/rust-backend.md` for a Rust backend) *or* `references/react.md` (+ `references/nextjs.md` for a Next.js app) | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md`, `references/elixir-docs.md`, `references/rust-docs.md` *or* `references/react-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
 | `references/page-template.html` | step 9 | The design system. A run reads its **markup half** — component classes, two assembled checkpoints, the chain and the impact panel — with `scripts/page-skeleton.sh --markup`. The head, the whole token block and the page's one script are in the same file and are emitted rather than read |
@@ -288,7 +288,12 @@ point of putting them in a separate context. The host reference owns how the rea
   not read it as unpushed — say in the masthead that reachability could not be determined and render
   citations as plain text, rather than asserting a branch is unpushed on an answer git never gave.
   Pick one rung from the ladder in
-  `references/report-format.md` and hold it for every citation. The rung decides whether anything is
+  `references/report-format.md` § *Deep links* and hold it for every citation. Read that section
+  alone now — it is the file's last, so `sed -n '/^## Deep links$/,$p'` prints it whole — and leave
+  the rest of the file for step 7: nothing in steps 2 to 6 writes the page, and every token loaded
+  here is billed again on each of the requests the tracing makes. This defers one file, the page's
+  rules; it is not a rule against reading before step 7 — step 5 reads the stack's lens, because
+  its search recipes are the tracing. The rung decides whether anything is
   clickable; it does not decide the form — inside a rung, a line in the diff links to the diff page
   and a line outside it links to a blob, with one exception that is settled per file in step 3 and
   not per citation. At rung 2 there is no PR page, so check the base SHA for reachability too:
@@ -588,6 +593,14 @@ confident guess, and it is the kind of thing they can resolve in one question to
 What no diff shows is the unchanged code those lines just changed the meaning of — and that is where
 the expensive bugs are. Spend more turns here than on prose.
 
+**The step's first call is the lens's heading index, before any consumer search**: `grep -n '^## '`
+over the lens file the stack selected in step 2 (both files on a Rust backend or a Next.js app).
+Then, in the next turn and side by side, `Read` with `offset` and `limit` the file's opening (above
+its first `##`), § *Search recipes*, and every section for a layer this diff touches. Skipping it is
+not a saving. Its per-layer questions are what a trace improvised from the diff alone does not think
+to ask, and a missing finding fails no check: the page just reads complete. A run that greps for its
+own guesses in the lens instead of reading those sections finds only what it already knew to look for.
+
 Work outward from each changed thing to its consumers:
 
 | Changed thing | Who you have to go find |
@@ -619,6 +632,13 @@ and it belongs in `details.searched`, shut, inside the evidence foot. Unrecorded
 and the reviewer redoes the work; left *only* inside the toggle, the finding is hidden rather than
 disclosed. **One row per search: the command, then what it returned in a clause** — the form and the
 budget are `references/report-format.md` § *What was searched*, which owns them.
+
+**Every affected entry needs a row that reproduces it, including one you reached without searching.**
+That file is not read until step 7, so the rule is here, where the rows are made: an evaluation re-runs
+each recorded search and fails an entry no row returns. The entry this misses is the one found by
+following a call — the diff adds `AuditTrail.record(changes: …)`, you open `record` and see what it
+does with the hash. Reading the callee is how you found it; a search is how the reviewer re-finds it,
+so record the one that does (`rg -n 'def (self\.)?record\b' app`).
 
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the run's backbone: step 6 splits it into flows for
@@ -696,7 +716,10 @@ Each note carries, under these headings:
   — is insulation: file it under *Trace* or *Open* as evidence for whichever judgment asks whether
   it is reached, never here, because whatever is filed here becomes an *Affected, not changed* entry.
 - **Searched** — one line per search, the command then the result clause, in the form
-  `details.searched` will take.
+  `details.searched` will take. **Every *Affected, not changed* entry is in some line's output**;
+  for one you reached by opening a callee rather than by searching, add the search that finds it
+  now. The reviewer re-finds an entry by re-running the record; one no line returns is an assertion
+  however true it is, and a later run's replay of the record cannot see it.
 - **Tests** — which behaviour each pins, which branch it leaves open.
 - **Open** — what you could not establish, and what would settle it.
 
@@ -754,7 +777,14 @@ The notes are the analysis. This step turns them into the page's argument, and i
 own because the failure it prevents is structural: a run that goes from notes straight to prose
 writes one section per flow, which is the page this one replaced.
 
-Nothing here opens a file the notes have not already cited. The work is deciding, not tracing. Do it
+**Read `references/report-format.md` now, whole**, if this run has not — step 1 read only its
+§ *Deep links*. Every rule about the page lives there, and from here to step 10 the run is writing
+the page. **Read it in one turn**: four `Read` calls side by side, at offsets 1, 701, 1401 and 2101
+with a limit of 700 each, and one more at 2801 only if the last came back full. A `cat` spills past
+the output limit into a file that then comes back one chunk per request, and each of those requests
+re-bills the whole context the run has built by now.
+
+Nothing else here opens a file the notes have not already cited. The work is deciding, not tracing. Do it
 in this order, and write the outcome of each part into `$W/analysis/agenda.md` before moving on — the
 falsifiers' challenges are arriving while you do this, and a written agenda is what lets step 8 fold
 one in without re-deriving the ranking.
@@ -1228,12 +1258,24 @@ paragraph:
 - **One publish per checkpoint that lands, not per edit.** If two land in the same turn, one publish
   covers both. That bounds the arrivals by turns, which is the right bound: the turn is what a reader
   waits through.
+- **Publish in the turn that completes the stage, never in a turn of its own.** Send the `Edit`s and
+  the `Artifact` publish together — the tool calls run in order, so the publish carries the edited
+  file. A publish alone in a request re-bills the whole context for one call: three of them cost a
+  run 1.2M cache-read tokens at 320k–450k context, about 8% of everything it spent.
 - **Step 8 is the gate on each of them.** More publish boundaries means more gates, not a looser one.
   A checkpoint is published when it is verified, not when it is drafted.
 
 *Read the code in this order* and the evidence foot land together in stage 4, and that is not
 inconsistency: the reading path is a route through the checkpoints and cannot precede them, and the
 foot belongs to step 10's gate. A stage has to be worth opening the tab for.
+
+**Every turn from here re-bills the whole context**, which by stage 2 is past 200k tokens — a request
+spent finding an anchor costs about what one spent writing a checkpoint. So **make every `Edit` that
+is ready in the same turn, side by side**: two checkpoints that are both verified, a section and its
+rail entry, the inventory and the reading path. Edits to different ids do not touch each other. And
+**do not inspect the page to find where an edit goes**: every anchor is an `id` or a marker you read
+in the template's markup, and the skeleton script wrote exactly those. When one is genuinely in
+doubt, `grep -n` for it in the same call that does other work.
 
 **Write to the budget as you draft, not by editing it back down afterwards.** `report-format.md`
 § *The agenda budget* has the numbers, and a stage that overspends and then compresses pays for the
@@ -1300,7 +1342,10 @@ Everything else about writing holds at every stage:
 - Follow `references/report-format.md` for the six sections, when each appears, how deep it goes,
   and the rule that each fact has one home. Follow `references/page-template.html` for the design
   system and the components — read with `scripts/page-skeleton.sh --markup`, which prints the
-  component half and leaves out the 55 KB you are about to be given for free.
+  component half and leaves out the 55 KB you are about to be given for free. Write it to
+  `$W/markup.html` and read it in one turn — two `Read` calls side by side, offsets 1 and 501 with a
+  limit of 500, one more at 1001 only if the second came back full — without sizing or indexing it
+  first: every extra request here re-bills a context past 200k tokens.
 
   **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
   only when step 7i found nothing crossing into unchanged code, and the 02 entry only when step 7k
@@ -1319,8 +1364,17 @@ Everything else about writing holds at every stage:
   asked for is a page somebody has to explain. If the script refuses the theme or the file (exit 2),
   stop and report its message — never retry with a theme of your own choosing. Then
   the first `Edit` replaces its one-line body placeholder with the rail, `<main>`, the build banner,
-  the masthead and section 1. It refuses with exit 3 if the page already has content, which is the
+  the masthead and section 1. The placeholder is the one line containing `SKELETON:BODY`, so that
+  string is the `Edit`'s anchor and needs no looking up; the line after it is the skeleton's own
+  `</main>`, so **open `<main>` and never close it** — every later section goes in before that line.
+  It refuses with exit 3 if the page already has content, which is the
   guard against re-running it over a page a reader is already looking at.
+
+  **Make that one call do the rest of the lookups the writing needs**, because every run otherwise
+  spends a request on each, at a context past 200k tokens: write the markup half to
+  `$W/markup.html` (read below), print the comment header of `scripts/excerpt.sh`, its usage
+  (`sed -n '2,/^[^#]/p'`), and, at rung 1 or 2, write each changed path's `#diff-` anchor —
+  `printf '%s' "$path" | shasum -a 256` — beside it in `$W/anchors.txt`.
 
   **Never write a `<style>` block, a `:root`, a colour, or a `<script>` into the page.** They are
   already there and **you have not read them** — so a token you name is a token you guessed, and a
@@ -1646,7 +1700,11 @@ URL: say where the file is, once, and nothing more.
   cite the line, add the tier, drop the label — as a correction that replaces (step 8), never as a
   note about the page's own drafting; where it is wrong about this page, leave the sentence and say
   so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
-  page whole. Nothing about the lint reaches the page, which carries no account of how it was
+  page whole. **Run the gate, the lint and a grep for leftover markers in one call, fix everything
+  they print in one turn of side-by-side `Edit`s, then re-run that one call** — a fix per turn
+  re-bills the whole context for every sentence. A fix can raise a WARN of its own, so keep going
+  until the call prints nothing you have not already fixed or answered in chat; it is usually one
+  more round. Nothing about the lint reaches the page, which carries no account of how it was
   checked.
 - Publish the final state to the same path — or, with `--output`, simply leave the finished file at
   `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,

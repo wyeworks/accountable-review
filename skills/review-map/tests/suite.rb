@@ -921,6 +921,16 @@ class ReviewMapSuite
     _, code = replay.("grep -rn &#39;\\bsecondpush\\b&#39; app")
     assert_eq code, 0, "and a boundary that genuinely does not match does not refuse"
 
+    # A context window is a search searches.rb credits, so the replay has to read it. Its output
+    # carries `path-2-text` lines no path:line:text parse reads; project.rb has a second line for
+    # the window to reach, and it is not in the delta.
+    _, code = replay.("grep -rn -A2 &#39;class Project&#39; app")
+    assert_eq code, 0, "a recorded search with a context window is replayed rather than refused"
+    out, = replay.("grep -rn -A2 &#39;second push&#39; app")
+    assert_eq rows(out, /now finds/), 1, "and a windowed search that reaches the delta refuses for that reason"
+    _, code = replay.("grep -n &#39;class Project&#39; app/models/project.rb")
+    assert_eq code, 0, "a search over one file, which prints no filename column, is replayed too"
+
     # -- P6 · the replay is argv, and the gate is quote-aware ---------------------------------------
     # Every alternation in both lens files sits inside quotes, so a blanket refusal of | and < would
     # reject the real searches and send every re-run to a full one. Outside quotes the same

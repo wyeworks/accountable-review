@@ -179,9 +179,9 @@ Before a **major** release: `bin/evals calibrate`, then `bin/evals e2e <id> -n 3
 `eval` PR, then `bin/evals report --history <version>`, and commit the history file. Read the
 report's notes before its numbers. What the numbers have to show is § *What counts as good*.
 
-What that costs, from § *The money is a different ranking* below: one generation is 20–40 minutes
-and 30–39M cache-read tokens, plus 17–23% for the falsifiers at the default effort, and each judge
-call is a fraction of that. Three repetitions of five PRs is fifteen generations — an afternoon with
+What that costs, from § *The money is a different ranking* below: on the two discourse `eval` PRs
+one generation is 9–14 minutes and 4–8M cache-read tokens at the default effort, falsifiers
+included, and each judge call is a fraction of that. Three repetitions of five PRs is fifteen generations — an afternoon with
 `-j`, and a bill worth deciding on rather than discovering.
 
 ## What counts as good
@@ -383,8 +383,25 @@ above are what retired it — *for wall clock*, which is the only thing they mea
 Context is billed once per request, so a run does not pay its context once — it pays it per request.
 On three real `review-map` runs (fayron #529 and #21819999, oli-torus), the parent spent **30-39M
 cache-read tokens against 160-190k of output**, carrying **250-305k of context across 121-141
-requests**. Cache reads are roughly **70% of the bill**. So *when* a file is loaded matters as much
-as whether, and the paragraph above is true of the clock and false of the invoice.
+requests**, and cache reads were roughly **70% of the bill**. So *when* a file is loaded matters as
+much as whether, and the paragraph above is true of the clock and false of the invoice.
+
+That ranking is what PR #107 acted on: it moved `report-format.md`'s whole-file read from step 1 to
+step 7, read files in one turn of side-by-side `Read`s and batched the late turns. A same-day A/B on
+the two discourse `eval` PRs, three judged runs a side, with the falsifiers counted:
+
+| | `main` (skill `6369cbd`) | after (`57d0ac0`) |
+|---|---|---|
+| cache reads, discourse-44560 | 9.6–10.8M, median 10.40M | 6.2–6.8M, median 6.84M |
+| cache reads, discourse-44196 | 9.3–11.2M, median 9.61M | 4.1–7.9M, median 6.05M (6 runs) |
+| parent requests | 41–51 | 23–39 |
+| mean context per request | 195–229k | 164–198k |
+| output tokens | 47–59k | 43–58k |
+| model seconds, median | 703–740s | 532–606s |
+
+Output barely moved and requests fell by a quarter, so the cut is re-billed context, which is the
+ranking this section says to read. Wall clock fell too, because the lever for the clock is fewer
+requests and that is what batching bought.
 
 Both tables print, and they rank differently. On fayron #529 the `search` bucket was 66% of cache
 reads and 75% of model seconds — agreeing — while `publish` was 4% of the money and 1% of the time.
@@ -392,12 +409,14 @@ A change that helps one can be neutral for the other, so read them side by side 
 question you are actually answering.
 
 **`profile.sh` also reads the subagent transcripts now**, under `<session>/subagents/`, which nothing
-used to. The falsification pass is the case that matters: **0.9% of blocked wall clock and 17-23% of
-every cache-read token**, over 145-216 requests. Reporting only the first is why the pass read as
-free, and a run cost taken from the parent transcript alone is a fifth to a quarter short. **Both
-numbers were measured against the old seam**, where a falsifier read a published flow section rather
-than an analysis note, so the token figure is an upper bound nobody has re-measured; the wall-clock
-one should hold, since what makes it small is that the parent keeps working. The report
+used to. The falsification pass is the case that matters: **0.9% of blocked wall clock**, and a
+token share that depends on what a falsifier reads. Against the old seam, where it read a published
+flow section, the pass was **17-23% of every cache-read token** over 145-216 requests, and reporting
+only the wall-clock figure is why it read as free. Against the current seam, one analysis note per
+falsifier, the A/B runs above put it at **2-5% of cache reads over 13-33 requests**. A run cost taken
+from the parent transcript alone is short by that share, so it is still worth printing; the
+wall-clock figure should hold at either seam, since what makes it small is that the parent keeps
+working. The report
 prints the model those transcripts recorded, because `--agents` accepts a `model` key it may not
 honour — the transcript is the check, not the flag.
 
@@ -526,9 +545,12 @@ experiment.** A section eval produces one fragment from the frozen upstream. It 
 discovery and no tracing across a real diff, so the two phases with a genuine fan-out are exactly the
 ones it cannot exercise — it can detect the cost of the prose and never the benefit. Deciding whether
 batching helps needs a whole-page run, profiled — `bin/evals e2e` and `profile.sh` are that
-instrument now, and nobody has run the experiment on them yet. Until someone does, the general
-version stays out: on the only evidence available it is a regression, and "the benefit is somewhere the
-harness cannot see" is an argument, not a measurement.
+instrument now. PR #107 ran the narrow half of the experiment on them: named batches in the writing
+phase (ready `Edit`s side by side, the gate, lint and marker grep in one call) are part of what took
+parent requests from 41–51 to 23–39 in § *The money is a different ranking*, with quality held. The
+general version — a section telling the run to probe wide during discovery and tracing — has still
+not been measured there, and stays out: on the only evidence available it is a regression, and "the
+benefit is somewhere the harness cannot see" is an argument, not a measurement.
 
 ## checks/
 
