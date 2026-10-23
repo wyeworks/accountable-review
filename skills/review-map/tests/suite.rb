@@ -946,6 +946,11 @@ class ReviewMapSuite
     _, code = replay.("git grep -n &#39;class&#39; #{cprev} -- app")
     assert_eq code, 3, "a recorded search of any other revision still refuses"
 
+    # Nor does naming the merge-base buy an exemption for the other trees beside it: HEAD is a
+    # tree these commits changed, and it is not hex.
+    _, code = replay.("git grep -n &#39;class&#39; #{cbase} HEAD -- app")
+    assert_eq code, 3, "a recorded search of the merge-base and HEAD together still refuses"
+
     # -- P6 · the replay is argv, and the gate is quote-aware ---------------------------------------
     # Every alternation in both lens files sits inside quotes, so a blanket refusal of | and < would
     # reject the real searches and send every re-run to a full one. Outside quotes the same

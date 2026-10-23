@@ -654,9 +654,13 @@ so record the one that does (`rg -n 'def (self\.)?record\b' app`).
 **Then measure the structure, on both sides.** For each changed file, note what it now depends on
 that its module did not: a reference from one top-level module, context, package or crate into
 another, a new writer of a table or a fact, a new process, queue, cache or external call. For each
-candidate, search the merge-base too — `git grep -n -E '<pattern>' <merge-base sha> -- <scope>`, with the sha
-written out so the recorded row reproduces — because
-*new* is a claim about the base and the hunk does not show the base. An empty result at the base for
+candidate, search the merge-base too — `git grep -n -P '<pattern>' <merge-base sha> -- <scope>`, with the sha
+written out so the recorded row reproduces — because *new* is a claim about the base and the hunk
+does not show the base. **The base search measures what the head search measures, at another
+revision** — the same pattern and scope wherever `git grep` can carry them; two patterns measure two
+facts, and their difference is not a shift. `-P`, not `-E`:
+git's ERE takes no `\b`, `\w` or `\s` on macOS and returns nothing rather than failing, which reads
+as *absent at the base*. An empty result at the base for
 an edge that exists at head is the shift; an empty result at head outside the diff for a kind of
 thing the diff adds is a precedent. Record both searches like any other, and write the result into
 the flow's note, because step 7 opens nothing the notes have not cited. The lens file's

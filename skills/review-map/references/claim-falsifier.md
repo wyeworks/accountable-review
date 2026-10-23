@@ -64,7 +64,7 @@ In descending order of how often it is worth the search:
 - **A structural shift whose *before* is wrong.** A note claiming the change is the first of its
   kind, or that a dependency between two modules is new, is a claim about the merge-base, and the
   hunk does not show it. Search the base yourself, at the merge-base of the `BASE` and `HEAD` you were
-  given — `git grep -n -E '<pattern>' "$(git merge-base BASE HEAD)" -- <scope>` — and look for the edge that was already there: in another file of the same module, through an alias
+  given — `git grep -n -P '<pattern>' "$(git merge-base BASE HEAD)" -- <scope>` (`-P`, because `-E` silently ignores `\b` on macOS) — and look for the edge that was already there: in another file of the same module, through an alias
   or a re-export, under a name the note's pattern does not match. A precedent is falsified by one
   earlier instance anywhere in the application.
 - **A trace that stops early.** The note's hops end where the run stopped reading; the behaviour may

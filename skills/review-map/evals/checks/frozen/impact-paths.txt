@@ -1878,6 +1878,12 @@ SKIP  no .impact panel in this input
 ## --page searches-git-grep.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment searches-other-tree.html
+exit=0
+SKIP  no .impact panel in this input
+## --page searches-other-tree.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment searches-unreachable.html
 exit=0
 SKIP  no .impact panel in this input

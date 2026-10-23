@@ -1320,6 +1320,12 @@ SKIP  no excerpts in this input
 ## --page searches-git-grep.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment searches-other-tree.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-other-tree.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment searches-unreachable.html
 exit=0
 SKIP  no excerpts in this input

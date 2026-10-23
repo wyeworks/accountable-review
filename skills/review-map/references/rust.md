@@ -311,7 +311,7 @@ The shapes a Rust diff produces:
 
 ```sh
 rg -n '^\s*\w[\w-]* *= *\{[^}]*path *=' -g 'Cargo.toml'                # head: path edges between members
-git grep -n -E 'path *=' <merge-base sha> -- '*Cargo.toml'                        # base: the same edges
+git grep -n -P '^\s*\w[\w-]* *= *\{[^}]*path *=' <merge-base sha> -- '*Cargo.toml'   # base: the same edges
 rg -n 'use crate::\w+::\w+::' -g '*.rs' <changed module>                # reaching past a module's re-exports
 rg -n 'forbid\(unsafe_code\)|unsafe \{' -g '*.rs'                       # a precedent search
 ```

@@ -236,7 +236,7 @@ the register. What a Next.js app adds is shapes to look for:
 
 ```sh
 rg -Un '^["\x27]use client["\x27][\s\S]*?from ["\x27]@/(server|lib/db)' -g '*.{ts,tsx}'   # head: a client file importing server code
-git grep -n -E "import ['\"]server-only['\"]" <merge-base sha> -- '*.ts' '*.tsx'                         # base
+git grep -l -E --all-match -e "^['\"]use client['\"]" -e "from ['\"]@/(server|lib/db)" <merge-base sha> -- '*.ts' '*.tsx'   # base: the same files
 rg -n "export const runtime *= *['\"]edge" -g '*.{ts,tsx}'                                    # a precedent search
 ```
 

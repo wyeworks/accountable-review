@@ -820,6 +820,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page searches-git-grep.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment searches-other-tree.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page searches-other-tree.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment searches-unreachable.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment

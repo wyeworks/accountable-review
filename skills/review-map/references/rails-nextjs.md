@@ -151,7 +151,7 @@ The shapes a Rails diff produces:
 
 ```sh
 rg -n '\bAccounts::' app/models/billing app/services/billing          # head: billing naming accounts
-git grep -n -E '\bAccounts::' <merge-base sha> -- app/models/billing app/services/billing   # base: was it already so?
+git grep -n -P '\bAccounts::' <merge-base sha> -- app/models/billing app/services/billing   # base: was it already so?
 rg -ln 'Net::HTTP|Faraday|HTTParty|RestClient' app/controllers app/models   # outbound calls where they run inline
 rg -n 'Rails\.cache\.' app lib                                          # a precedent search: is this the first?
 rg -n 'enforce_dependencies|dependencies:' -g 'package.yml'             # what packwerk declares

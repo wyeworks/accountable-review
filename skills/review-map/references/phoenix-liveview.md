@@ -167,7 +167,7 @@ The shapes a Phoenix diff produces:
 
 ```sh
 rg -n 'MyApp\.Accounts\b' lib/myapp/billing                            # head: billing naming accounts
-git grep -n -E 'MyApp\.Accounts\b' <merge-base sha> -- lib/myapp/billing          # base: was it already so?
+git grep -n -P 'MyApp\.Accounts\b' <merge-base sha> -- lib/myapp/billing          # base: was it already so?
 rg -n 'children = \[' -A 20 lib/myapp/application.ex                   # what the tree starts
 rg -n 'use Boundary' lib                                                # what the repository declares
 ```
