@@ -65,6 +65,9 @@ jobs:
       # e2e/criteria.yml the same length as every judge's criteria list — a criterion split
       # in a judge file without a class would be graded under the wrong bar, silently.
       - run: ruby skills/review-map/evals/e2e/test_grade.rb
+      # triage.rb's queue: which verdicts reach a person, evidence as links, data that cannot
+      # close the <script> it is embedded in.
+      - run: ruby skills/review-map/evals/e2e/test_triage.rb
       # Codex reads .codex-plugin/plugin.json ahead of Claude's manifest, so the two can drift
       # with nothing above noticing: a version left behind, setup-ci shipped into Codex, or a
       # marketplace entry naming something else. It mutates its own inputs to prove it fires.
