@@ -716,7 +716,10 @@ Each note carries, under these headings:
   — is insulation: file it under *Trace* or *Open* as evidence for whichever judgment asks whether
   it is reached, never here, because whatever is filed here becomes an *Affected, not changed* entry.
 - **Searched** — one line per search, the command then the result clause, in the form
-  `details.searched` will take.
+  `details.searched` will take. **Every *Affected, not changed* entry is in some line's output**;
+  for one you reached by opening a callee rather than by searching, add the search that finds it
+  now. The reviewer re-finds an entry by re-running the record; one no line returns is an assertion
+  however true it is, and a later run's replay of the record cannot see it.
 - **Tests** — which behaviour each pins, which branch it leaves open.
 - **Open** — what you could not establish, and what would settle it.
 
