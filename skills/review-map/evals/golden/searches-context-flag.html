@@ -1,0 +1,25 @@
+<!-- No defect in the page. This pins a defect the CHECK had: a run that reaches an entry by
+     opening a callee records the search that finds the method with a context window, and cites
+     the line inside it. `-A2` puts :5 in that search's output, two lines below the `def` on :4;
+     the check dropped every flag before re-running, saw only :4, and failed a search that did
+     reproduce the entry. -->
+<section id="reach">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>What this change reaches</h2>
+
+  <dl class="rows">
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:5</a> &mdash; archive! writes the new column, so the call the diff adds stamps it
+        <span class="tier">evidenced by unchanged code</span></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>rg -n 'def archive!' -A2 app/models</code> <span class="sr-r">the method and its body</span></li>
+          </ul>
+        </div>
+      </details>
+    </dd>
+  </dl>
+</section>

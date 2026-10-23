@@ -802,6 +802,18 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page searches-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment searches-context-beyond.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page searches-context-beyond.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment searches-context-flag.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page searches-context-flag.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment searches-git-grep.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment

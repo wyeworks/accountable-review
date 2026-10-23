@@ -158,6 +158,35 @@ module Searches
        .any? { |dir| File.executable?(File.join(dir, name)) }
   end
 
+  # A RECORDED CONTEXT FLAG IS PART OF WHAT THE SEARCH RETURNS. The flag filter drops every flag
+  # before the re-run, and for -n or -i that changes nothing an entry can cite. -A, -B and -C are
+  # different: a run that opened a callee from the diff recorded `rg -n 'def log_custom' -A12
+  # app/services/...`, cited the line inside the method the change reaches, and a reviewer
+  # re-running that command sees it. Dropping the flag failed the entry as unreachable — a
+  # search that did reproduce it, reported as false provenance. So the window is read off the
+  # command outside its pattern, wherever the flag sits (before the pattern or after it — the
+  # caller passes prefix and paths, never the pattern itself), and the hits are widened by
+  # it arithmetically rather than by parsing `path-N-` context lines, whose `-` separator a
+  # hyphenated path makes ambiguous. Returns [before, after].
+  def self.context(command)
+    before = after = 0
+    tokens = command.to_s.split
+    tokens.each_with_index do |token, i|
+      long = token.match(/\A--(after-|before-)?context(?:=([0-9]+))?\z/)
+      short = token.match(/\A-[a-zA-Z]*([ABC])([0-9]*)\z/) unless long
+      next unless long || short
+
+      n = long ? long[2] : short[2]
+      n = tokens[i + 1].to_s if n.to_s.empty?
+      next unless n.match?(/\A[0-9]+\z/)
+
+      kind = long ? { "after-" => "A", "before-" => "B" }.fetch(long[1].to_s, "C") : short[1]
+      after = [after, n.to_i].max unless kind == "B"
+      before = [before, n.to_i].max unless kind == "A"
+    end
+    [before, after]
+  end
+
   def self.argv_for(engine, pattern, paths)
     case engine
     when :rg    then ["rg", "--no-heading", "--line-number", "--no-messages", "--regexp", pattern, "--", *paths]
@@ -300,8 +329,18 @@ commands.each do |command|
 
   engine = Searches.engine_for(parsed.prefix)
   out, = check.shell(*Searches.argv_for(engine, parsed.pattern, paths), chdir: check.repo)
-  # cut -d: -f1,2 — path and line, which is the granularity an entry cites.
-  hits.concat(out.lines.map { |line| line.chomp.split(":", 3).first(2).join(":") })
+  # cut -d: -f1,2 — path and line, which is the granularity an entry cites — widened by the
+  # recorded context window, if any.
+  before, after = Searches.context("#{parsed.prefix} #{parsed.paths}")
+  out.lines.each do |line|
+    path, number = line.chomp.split(":", 3)
+    unless number.to_s.match?(/\A[0-9]+\z/)
+      hits << [path, number].compact.join(":")
+      next
+    end
+
+    ([number.to_i - before, 1].max..(number.to_i + after)).each { |n| hits << "#{path}:#{n}" }
+  end
 end
 
 hits = hits.sort.uniq
