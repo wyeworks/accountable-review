@@ -353,6 +353,12 @@ CASES = [
            edit: sed(/^    UNSAFE=\$cmd$/, "    continue"),
            section: :carry_plan, expect: "a shell metacharacter outside quotes refuses the whole update"),
 
+  # The replay without -l. Every plain search still answers, but a recorded context window prints
+  # lines the parse cannot read, so a page carrying one refuses every update.
+  Case.new(desc: "the replay keeps the recorded window instead of asking only which files it hits", file: CARRY,
+           edit: sed(/^  if \[ "\$first" = git \]; then .*$/, %(  set -- "$first" "$@")),
+           section: :carry_plan, expect: "a recorded search with a context window is replayed rather than refused"),
+
   # The substring trap. Without the token boundaries api/Gemfile matches inside api/Gemfile.lock.
   Case.new(desc: "the path test is a substring match rather than a whole token", file: CARRY,
            edit: sed(%r{^BOUND='\[\^A-Za-z0-9\._/-\]'$}, "BOUND=''"),
