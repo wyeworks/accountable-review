@@ -633,6 +633,13 @@ and the reviewer redoes the work; left *only* inside the toggle, the finding is 
 disclosed. **One row per search: the command, then what it returned in a clause** — the form and the
 budget are `references/report-format.md` § *What was searched*, which owns them.
 
+**Every affected entry needs a row that reproduces it, including one you reached without searching.**
+That file is not read until step 7, so the rule is here, where the rows are made: an evaluation re-runs
+each recorded search and fails an entry no row returns. The entry this misses is the one found by
+following a call — the diff adds `AuditTrail.record(changes: …)`, you open `record` and see what it
+does with the hash. Reading the callee is how you found it; a search is how the reviewer re-finds it,
+so record the one that does (`rg -n 'def (self\.)?record\b' app`).
+
 Then draw the primary flow end to end, from user action to persistence and back, and list the
 secondary effects hanging off it. That flow is the run's backbone: step 6 splits it into flows for
 analysis, *Impact outside the diff* shows the crossings whole, and the checkpoints are the judgments
