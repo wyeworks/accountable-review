@@ -1038,9 +1038,10 @@ Same rule as above: editing one of these means checking the others still agree.
 - **CI must not become the place that runs the application.** The page proposes validation commands
   and never runs them. The template starts no service, runs no migration, and executes no script from
   the pull request; `tests/suite.rb` asserts all three against the comment-stripped file.
-- **The workflow posts one comment, and that is the entire write surface.** A link to the Review Map
-  and the revision it describes, upserted against `<!-- accountable-review -->` so a reopen or a
-  ready/draft toggle updates it. It is what `pull-requests: write` is for and the only thing that
+- **The workflow posts one comment per revision, and that is the entire write surface.** A link to
+  the Review Map and the revision it describes, marked `<!-- accountable-review -->`: a map for a new
+  head is a new comment, because an edit notifies nobody, and a re-run at a head a comment already
+  names (a reopen, a ready/draft toggle) edits that one. It is what `pull-requests: write` is for and the only thing that
   scope is used for, and `--no-pr-comment` removes the step and the permission **together**. The
   comment exists because a map nobody is told about is not read.
 
@@ -1058,7 +1059,7 @@ Same rule as above: editing one of these means checking the others still agree.
   `SETUP:IF:comment` blocks, `render-workflow.sh` renders both or neither, `SKILL.md` step 3 names the
   write scope out loud and its hard rules bound what may be posted, `references/workflow.md` § *The
   comment* owns the rules **alone**, `references/delivery.md` owns what it reads, and
-  `tests/suite.rb` executes the step against a stubbed `gh` on both the create and the upsert path.
+  `tests/suite.rb` executes the step against a stubbed `gh` on the create, the same-head and the new-head path.
 - **The product principle reaches the artifact, not just the page.** `manifest.json` is provenance —
   which revision, which plugin version, which settings, whether the coverage gate passed — and carries
   no severity, no score and no approval. The job summary says what the Review Map is *for* and that it
