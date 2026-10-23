@@ -21,7 +21,7 @@
 # excerpts.rb exist to catch cannot be produced at all.
 #
 # THE TEMPLATE STAYS THE ONE SOURCE OF TRUTH. This script copies bytes out of it; it holds none of
-# its own. tests/run.sh proves that by asserting the emitted head is an exact byte PREFIX of the
+# its own. tests/run.rb proves that by asserting the emitted head is an exact byte PREFIX of the
 # template with its markers stripped, and the tail an exact byte SUFFIX — so inlining any CSS here
 # fails immediately, and a marker moved in either file fails too. Extraction is an awk line range
 # and nothing else: no printf reconstruction, no re-indentation, no round trip through $(…), which

@@ -13,7 +13,7 @@
 # the page has no right to say.
 #
 # Nothing graded a checkpoint chain before this. impact-paths.rb scopes itself inside
-# figure.impact on purpose, and tests/run.sh checks only the template — so a published page
+# figure.impact on purpose, and tests/run.rb checks only the template — so a published page
 # could put an .ip-aff in a chain, which is the canonical-home regression arriving as a figure,
 # and no check would have read it.
 #
@@ -24,7 +24,7 @@
 # the reader. A hard failure there teaches a run to rename a true edge to get past the check.
 #
 # TWO WARNINGS ARE ABOUT WHAT THE FIGURE CLAIMS RATHER THAN HOW IT IS DRAWN, and both are the
-# reason this check exists rather than a footnote in tests/run.sh.
+# reason this check exists rather than a footnote in tests/run.rb.
 #
 #   A converge with no recorded search on the page. The figure's list implicitly claims to be
 #   ALL the writers of its invariant, and it looks most complete when it is most wrong, because

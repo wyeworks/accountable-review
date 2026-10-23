@@ -51,14 +51,14 @@ running the skill against a real PR and reading the page it produces. `claude pl
 
 **The scripts are the exception, in both skills: the boundary is prose versus software.**
 `setup-ci`'s templates and scripts and `review-map`'s scripts are ordinary software with right
-answers, so they have ordinary tests: `skills/review-map/tests/run.sh` and
+answers, so they have ordinary tests: `skills/review-map/tests/run.rb` and
 `skills/setup-ci/tests/run.rb` (no model, no network, seconds). Each sits beside a self-test that
 breaks the things the suite claims to check and asserts it notices each one: a check that passes
 because it never looked is worse than no check. **A self-test row runs only the section its
-mutation can reach.** `review-map/tests/self-test.sh`'s header owns its rule — a row earns its
-`run.sh` pass only where the sanity row cannot vouch for the assertion. `setup-ci`'s `self-test.rb`
-runs every row in parallel and names the one assertion each must turn red, so a break that fails
-for an unrelated reason is reported rather than counted. Only the tests are Ruby; the scripts they
+mutation can reach, and names the one assertion it must turn red**, so a break that fails for an
+unrelated reason is reported rather than counted; both self-tests run their rows in parallel.
+`review-map/tests/self-test.rb`'s header owns which defects earn a row — only where the sanity row
+cannot vouch for the assertion. Only the tests are Ruby; the scripts they
 call stay shell, because shell is what runs on a team's runner. When you edit either template, or
 any script under `skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them —
 `bin/evals offline` runs every suite together, which is what CI does too.
@@ -123,7 +123,7 @@ certified, and `calibration/status.json` records each judge's calibration state 
 **instrument's** sha — the judge's file, `judge.rb` and `verdicts.rb` hashed together.
 Whole-run cases with no harness yet (the trivial refusal, `--update`'s P6 refusal, the 7.1 override
 path, a planted recall floor) are listed in `IDEAS.md`; each keeps its mechanical half in
-`tests/run.sh`.
+`tests/run.rb`.
 
 `bin/evals offline` is what CI runs and what you run before pushing. `bin/evals e2e`, `calibrate`
 and `report` are the rest, run before a major release. Results carry the skill's git sha, so a pass
@@ -169,7 +169,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
 | `hooks/` | A Claude Code mod — the status line while `review-map` runs interactively, tokens and the 5-hour window included, with one transcript line of what the run spent when it ends. `progress.ts` reads, `board.ts` formats, `activity.json` is the tool-call-to-purpose table `evals/e2e/progress.rb` reads too, and `skills/review-map/tests/activity.rb` holds that one file to both readers. Inert until the skill expands; `.codex-plugin/plugin.json` names no hooks |
-| `scripts/page-skeleton.sh` | Emits the head, the themes (the repository's default switched on) and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.sh` proves that by partition |
+| `scripts/page-skeleton.sh` | Emits the head, the themes (the repository's default switched on) and the tint script straight into the page, and prints the markup half with `--markup`. Holds no bytes of its own — `tests/run.rb` proves that by partition |
 | `scripts/diff-render.sh` | Says per path whether GitHub will render that file's diff, which decides the URL form for a line inside it. GitHub's documented thresholds as constants, `.gitattributes` through `git check-attr`, and one dated name heuristic |
 | `scripts/excerpt.sh` | Generates the collapsed source excerpts, so the quotation is the real bytes |
 | `scripts/ledger-rows.sh` | Generates the evidence foot's inventory cells and their deep links, so the gate checks the page rather than someone's typing. `--paths-only` is the only mode the page uses |
@@ -178,7 +178,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/read-config.sh` | The only thing that knows `.accountable-review.yml`'s shape, and the one parser every reader uses — the skill at step 1, `page-skeleton.sh`, and the `ci/` scripts. In `review-map` because the skill ships alone |
 | `scripts/usage.sh` | What a Codex run spent, read off the thread's rollout log and its falsifiers': `mark` at step 1, `report` at step 10, said in chat and never on the page. Claude Code's status line counts the same live, so a Claude run never calls it |
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
-| `skills/review-map/tests/` | The deterministic tests for those scripts, and the self-test that proves they fire. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently |
+| `skills/review-map/tests/` | The deterministic tests for those scripts, in Ruby: `suite.rb` holds them one method per section, `run.rb` runs every section, and `self-test.rb` breaks each rule on a copy of the skill and runs only the section that should notice. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/`, `setup-ci/tests/` and `bin/examples check` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
 | `bin/examples` | The published examples — `regen` regenerates each at the revision its committed `manifest.json` pins, `render` writes the provenance regions in `examples/README.md` and `examples/index.html`, `check` fails a version or a region gone stale. Outside `examples/` because Pages uploads that directory |
@@ -232,7 +232,7 @@ Editing one of these means checking the others still agree.
 
   **The rail is emitted, not edited down.** `page-skeleton.sh --markup` hands a run the whole markup
   half, eleven `data-rail` entries: five numbered sections and six checkpoint sub-entries.
-  `tests/run.sh` counts the entries, and the sanity row of `self-test.sh` proves that count looked.
+  `tests/run.rb` counts the entries, and the sanity row of `self-test.rb` proves that count looked.
 - **`--mentor` is the only flag that puts anything inside a checkpoint, and subtraction is what keeps
   it from being a level.** It admits one component — the primer callout, `aside.primer`, the third
   framework anchor — inside the checkpoints that earn one, for a reviewer new to the *stack* rather
@@ -262,8 +262,8 @@ Editing one of these means checking the others still agree.
   catalogue at step 2, earns one at step 7g, writes it at step 9 and carries the demo exception in
   its hard rules; `page-template.html` holds the CSS in the head range and the callout inside
   checkpoint A; `evals/checks/rails-anchors.rb` § 8 grades it on the **comment-stripped** copy, behind
-  the `golden/anchors-primer-*` fixtures and `anchors-demo-loose`; `tests/run.sh` asserts the template
-  assembles exactly one and `tests/self-test.sh` breaks it; and the CI half is
+  the `golden/anchors-primer-*` fixtures and `anchors-demo-loose`; `tests/run.rb` asserts the template
+  assembles exactly one and `tests/self-test.rb` breaks it; and the CI half is
   `ci/generate-review-map.sh` (which always passes `--mentor`, `--mentor off` or `--mentor <stack>`),
   `read-config.sh`, `references/config.md` and `setup-ci/tests/`.
 
@@ -302,7 +302,7 @@ Editing one of these means checking the others still agree.
   label.
 
   Nothing mechanical grades a checkpoint's quality. `start-here.rb` requires the reading path to
-  point at one, `rails-anchors.rb` counts them for its doc-link budget, and `tests/run.sh` asserts the
+  point at one, `rails-anchors.rb` counts them for its doc-link budget, and `tests/run.rb` asserts the
   template assembles three. Whether a question is a judgment, asked once and ordered without a grade
   is `evals/e2e/judges/checkpoint-judgments.md`'s question; whether its claims are true,
   `checkpoint-claims.md`'s.
@@ -347,7 +347,7 @@ Editing one of these means checking the others still agree.
   **A chain that crosses from changed code into unchanged code whose meaning the change altered is an
   impact path.** It lives in section 05, drawn once, and a checkpoint that turns on it says so in a
   clause. A chain inside a checkpoint shows mechanism *within* the change and carries **no
-  `.ip-aff`**; `tests/run.sh` checks it on the template with an awk range over the assembled chain.
+  `.ip-aff`**; `tests/run.rb` checks it on the template with a range over the assembled chain.
   `.ip-step` exists only in a checkpoint's chain: a hop that claims nothing about the diff.
 
   **Every code node carries a locator**: an `a.path.ip-loc`, last inside `.ip-box`, `{{DIFF}}` on
@@ -384,7 +384,7 @@ Editing one of these means checking the others still agree.
   it; `SKILL.md` step 7f selects and step 9 builds; `page-template.html` holds the CSS (head range,
   including the print rule for the `.ip-out` fill) and assembles one each in checkpoints C to E;
   both lens files say which signal earns which shape; `claim-falsifier.md` attacks a writer list for
-  the path it missed; `evals/checks/figures.rb` grades shape and locators; and `tests/run.sh`
+  the path it missed; `evals/checks/figures.rb` grades shape and locators; and `tests/run.rb`
   asserts the template. `CAUSAL` lives in `checks/lib/review_map/vocabulary.rb` because two checks
   read it, and `lib/test/test_page.rb` fails when it and § *Impact paths*'s list disagree.
 - **One stack reference per run, and the stack is invisible on the page.** `SKILL.md` step 2 detects
@@ -511,7 +511,7 @@ Editing one of these means checking the others still agree.
   the changed set is a WARN whose sentence is corrected or left, in chat. Nothing about it reaches
   the page, which is the verification-badge rule applied to the run's own tooling. These agree:
   `SKILL.md` step 10 and its scripts table, `hooks/activity.json` (the call's purpose on the
-  progress line), `tests/run.sh` and `self-test.sh` (its rows and the mutations behind them),
+  progress line), `tests/run.rb` and `self-test.rb` (its rows and the mutations behind them),
   `evals/checks/page-invariants.rb` § 10, which relays its tier lines as `completeness.rb` relays
   the gate, and `ci/generate-review-map.sh`, which runs none of it because the skill already has.
 - **Completeness, and the one mechanical gate.** Every path in the diff appears in the page, and the
@@ -621,7 +621,7 @@ Editing one of these means checking the others still agree.
   `page-invariants.rb` §§ 2b, 2c and 2e (no recency marker on any page) and `build-state.rb
   --updated` (the disclosure, once), behind the `golden/invariants-update-*` fixtures — `-clean` must
   stay green, because a rule that fails a page for admitting its limits gets the admission removed.
-  `tests/run.sh` covers each precondition either side of its boundary; the whole-run eval waits on a
+  `tests/run.rb` covers each precondition either side of its boundary; the whole-run eval waits on a
   `prs.yml` entry with `update_from` (`evals/e2e/judges/IDEAS.md`).
 - **Findings are a sample, not an audit, and the page asserts no coverage.** The skill explains;
   explanation is reproducible, defect discovery is not. The page carries no *no issues found*, no
@@ -653,7 +653,7 @@ Editing one of these means checking the others still agree.
   These agree: `report-format.md` § *When the diff will not render* owns the rule **alone** and
   § *Deep links* the three URL forms and the ladder; `SKILL.md` step 3 runs the classifier once and
   step 9 points at both; `scripts/diff-render.sh` holds the verdict and its constants;
-  `tests/run.sh` covers every signal it reads; `evals/checks/link-form.rb` re-asks that same script,
+  `tests/run.rb` covers every signal it reads; `evals/checks/link-form.rb` re-asks that same script,
   which is why `golden/links-repo.sh` is a real git repository.
 
   **The template spells the anchor out at every line-bearing citation**, with `{{DIFF}}` and
@@ -664,8 +664,8 @@ Editing one of these means checking the others still agree.
   `rel="noopener noreferrer"`, set on load by the tail script `page-skeleton.sh` emits. The page's own
   links — same document, differing only by fragment — are exempt. These agree: `page-template.html`
   holds the pass and the comment saying not to type one, `report-format.md` § *Every off-page link
-  opens in a new tab* owns the rule, `SKILL.md` step 9 forbids the attribute, and `tests/run.sh`
-  asserts the rule in the tail and zero `target=` in the markup half, with a `self-test.sh` row
+  opens in a new tab* owns the rule, `SKILL.md` step 9 forbids the attribute, and `tests/run.rb`
+  asserts the rule in the tail and zero `target=` in the markup half, with a `self-test.rb` row
   behind the zero.
 
   **Asked and unable to answer is not an empty diff.** A `git diff` feeding a pipeline leaves the exit
@@ -709,7 +709,7 @@ Editing one of these means checking the others still agree.
   values **alone**, with § *One canonical home*, § *The agenda budget*, § *Build state*, § *Mentor
   mode*, § *A future full mode* and § *Topology figures* (the shift's shape) pointing at it;
   `SKILL.md` steps 1, 7k and 9 and § *Re-running*; `page-template.html` holds `dl.ctx`, its rail entry
-  and `details.ctx-fold`; `tests/run.sh` and `self-test.sh` assert its place, pointers, absences and
+  and `details.ctx-fold`; `tests/run.rb` and `self-test.rb` assert its place, pointers, absences and
   exactly one figure; `checks/start-here.rb` warns on an entry with no pointer or a dead one, behind
   the `golden/context-*` fixtures, and reads through the fold; `figures.rb` grades the shift behind
   the `golden/figures-shift-*` fixtures and `figures-context-chain`; the CI half is `read-config.sh`,
@@ -768,7 +768,7 @@ Editing one of these means checking the others still agree.
   and the per-checkpoint ration covers only excerpts that add to the prose. These agree: `excerpt.sh`
   links `.ex-loc`, `page-template.html` assembles entries that way, `report-format.md` § *The review
   checkpoint* and § *Source excerpts* own the rule, `excerpts.rb` reads a linked location, and
-  `tests/run.sh` asserts both the script and the template, with `self-test.sh` rows behind each zero.
+  `tests/run.rb` asserts both the script and the template, with `self-test.rb` rows behind each zero.
 - **Impact paths are section 05's figure, and the edge is the point of them.** A path runs from
   changed code, through the affected-but-unchanged code that gives the change its consequence, to an
   observable behaviour, every hop past the first carrying its incoming relation as a causal verb.
@@ -798,15 +798,15 @@ Editing one of these means checking the others still agree.
 
   These agree: the template holds the markers and the bytes, `page-skeleton.sh` extracts them,
   `SKILL.md` step 9 calls it once and forbids writing a `<style>`, a `:root`, a colour or a `<script>`
-  into the page, and `tests/run.sh` proves the script holds no bytes of its own by **partition**:
+  into the page, and `tests/run.rb` proves the script holds no bytes of its own by **partition**:
   strip the markers and the preamble, and head + markup + tail must be the template byte for byte.
-  Two of `self-test.sh`'s cases mutate the *script*, because a template mutation moves both sides of
+  Two of `self-test.rb`'s cases mutate the *script*, because a template mutation moves both sides of
   that comparison together.
 
   A marker holds no opening `style`, `script` or `svg` tag (`Page#range` re-opens on its own `from`
   pattern), and each marker is **one line** (extraction is a line range over it).
 
-  **The markup half contains no `<svg` and no literal tint class**; `tests/run.sh` counts both at
+  **The markup half contains no `<svg` and no literal tint class**; `tests/run.rb` counts both at
   zero. The template's excerpt comment describes that class rather than spelling it.
 - **Three themes on every page; the repository picks the default and the reader picks theirs.**
   Daylight, Workshop and Field Notes share every byte of markup and every base rule; a theme is one
@@ -820,8 +820,8 @@ Editing one of these means checking the others still agree.
   keys, every call in a `try`.
 
   **Every byte of it is emitted, none of it typed.** The menu's CSS is in the head range and its
-  markup is built at load, so a run neither reads nor writes any of it; `tests/run.sh` counts the
-  menu at zero in the markup half, with a `self-test.sh` row behind the zero.
+  markup is built at load, so a run neither reads nor writes any of it; `tests/run.rb` counts the
+  menu at zero in the markup half, with a `self-test.rb` row behind the zero.
 
   **A theme is a look, never a page shape.** No skill flag names it, the run never chooses it, and a
   page's content is identical in all three. A theme treatment (a highlighter, a glyph on `p.open` and
@@ -832,7 +832,7 @@ Editing one of these means checking the others still agree.
   the tail script's menu and the head script; `read-config.sh`'s theme list, which
   `setup-ci/tests/suite.rb` compares with the directory; `references/config.md`;
   `ci/generate-review-map.sh`, which passes a `--config` file's theme through the environment;
-  `tests/run.sh` (the partition with every theme spliced in, the menu's absence from the markup half,
+  `tests/run.rb` (the partition with every theme spliced in, the menu's absence from the markup half,
   the guarded storage, every theme's colours on bare `:root` and in both dark blocks tagged by
   selector, and the refusals); and `evals/checks/frozen.rb`, which grades the template with the themes
   spliced in, because the bare template declares no colour.
@@ -841,7 +841,7 @@ Editing one of these means checking the others still agree.
   the classic unreadable-artifact bug. `evals/checks/page-invariants.rb` § 6 enforces the three
   states and `excerpts.rb` enforces it for the excerpt tints. The `--syn-*` tints are counted **by
   name** — `--syn-key` in `excerpts.rb`; `--syn-key`, `--ex-add`, `--primer-ink` and
-  `--primer-rust-ink` in `tests/run.sh` — because three blocks existing is not a colour in all three.
+  `--primer-rust-ink` in `tests/run.rb` — because three blocks existing is not a colour in all three.
   Each theme's dark half is ours; `.ip-out`, the one filled node that inverts, is written against
   tokens so it inverts relative to the page in every theme.
 - **Semantic colour families, and a rule about what each may mean.** `--nav-*` (slate), `--gap-*`
@@ -926,7 +926,7 @@ Same rule as above: editing one of these means checking the others still agree.
 
   These agree: `read-config.sh`; `SKILL.md` step 1 and § *Re-running*; `page-skeleton.sh`;
   `ci/generate-review-map.sh`; `setup-ci/references/config.md` § *Who reads which key*, which owns the
-  split **alone**; `README.md` § *Configuration*; and the two suites, `tests/run.sh` for the local
+  split **alone**; `README.md` § *Configuration*; and the two suites, `tests/run.rb` for the local
   refusal and `setup-ci/tests/suite.rb` for the explicit pass-through.
 - **Generation does not know where the page goes.** `review-map` writes a portable static directory;
   `ci/delivery/deliver.sh` is the only thing that knows what happens to it afterwards. A team that
