@@ -1,0 +1,24 @@
+<!-- The planted defect: the search's context window does not reach the cited line. `-A2` after
+     the `def` on :4 covers :5 and :6; the enum on :9 is outside it, so the provenance is false.
+     The partner of searches-context-flag.html — it fails a check that widens hits without
+     bound, which the clean fixture cannot. -->
+<section id="reach">
+  <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
+  <h2>What this change reaches</h2>
+
+  <dl class="rows">
+    <dt>Affected, not changed</dt>
+    <dd>
+      <div class="item"><a class="path" href="#">app/models/project.rb:9</a> &mdash; the status enum is read by the same scope the change narrows
+        <span class="tier">evidenced by unchanged code</span></div>
+      <details class="searched">
+        <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
+        <div class="sr-body">
+          <ul class="sr-list">
+            <li><code>rg -n 'def archive!' -A2 app/models</code> <span class="sr-r">the method and its body</span></li>
+          </ul>
+        </div>
+      </details>
+    </dd>
+  </dl>
+</section>

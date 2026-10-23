@@ -13,7 +13,7 @@
      checkpoint and inventory class and attribute names, and of the syntax-tint class prefix:
      each opens a range that some check scans for, and Page#range re-opens.
 
-     Two things must not appear in the markup half at all, and tests/run.sh counts both at
+     Two things must not appear in the markup half at all, and tests/run.rb counts both at
      zero: an svg opening tag, because this page has no drawings, and a literal tint class,
      because the tint is applied at read time and a hand-coloured quotation is a quotation
      someone edited. That is why the excerpt block below describes that class rather than
@@ -637,7 +637,7 @@ pre.probe {
 
    The ramp is declared in all three theme states like every other
    colour here, which is the defect the tint tokens are counted by
-   name to catch, and tests/run.sh counts --primer-ink the same way
+   name to catch, and tests/run.rb counts --primer-ink the same way
    for the same reason.
 
    THE HEADER IS THE STACK, IN WORDS — "Understanding Ruby on
@@ -1905,7 +1905,7 @@ figcaption strong { color: var(--ink-3); }
                to that stack needs, rather than the eyebrow it replaced, which
                spent the widest line in the block naming a kind of component the
                reader can already see. The title is not quoted again in this
-               comment on purpose: tests/run.sh counts it at exactly one, and a
+               comment on purpose: tests/run.rb counts it at exactly one, and a
                comment repeating it would satisfy that count while the header
                itself was missing. The subject stays on the right, in mono, where
                the API is scannable without competing with the title. A gem

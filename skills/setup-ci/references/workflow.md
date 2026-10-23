@@ -590,10 +590,14 @@ commented as a page; the artifact provider has none, so the artifact's own downl
 the wording says it is a zip to extract. Reading the DeliveryResult rather than reaching past it is
 what keeps this step from becoming a second thing that knows where the map goes — see `delivery.md`.
 
-**It is upserted, not appended**, against the hidden marker `<!-- accountable-review -->`. The job
-runs once per pull request by default, but a ready/draft/ready toggle or a reopen runs it again, and
-three identical comments teach people to scroll past all of them. Only the first match is edited, so
-a race that somehow produced two leaves the spare visible rather than silently orphaned.
+**One comment per revision**, behind the hidden marker `<!-- accountable-review -->`. A map for a head
+no marked comment names is posted as a new comment, because an edited comment notifies nobody: a
+reviewer who read the first link would never learn there is a second. A map for a head a comment
+already names — a ready/draft/ready toggle or a reopen with nothing pushed — edits that comment,
+because identical comments teach people to scroll past all of them. Earlier comments stay; each
+names its own revision, so none claims to describe the tip. The SHA is matched in shell against
+what the listing prints, never spliced into the jq filter. Only the first match is edited, so a race
+that somehow produced two leaves the spare visible rather than silently orphaned.
 
 **It names the head SHA.** That is the one defence against the staleness a workflow without
 `synchronize` accepts: a reviewer who sees a SHA that is not the tip knows the map is behind. It is

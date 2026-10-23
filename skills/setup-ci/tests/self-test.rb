@@ -217,9 +217,13 @@ CASES = [
                      "          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}"),
            sections: %i[comment], expect: "and by no other step, so the model step never sees a write-capable credential"),
 
-  Case.new(desc: "the comment is appended rather than upserted", file: W,
+  Case.new(desc: "a re-run of the same head is appended rather than edited", file: W,
            edit: sub(/^          if \[ -n "\$existing" \]; then$/, '          if [ -z "$existing" ]; then'),
-           sections: %i[comment], expect: "an existing comment is patched, not duplicated"),
+           sections: %i[comment], expect: "a comment naming this head is patched, not duplicated"),
+
+  Case.new(desc: "a map for a new head edits the earlier revision's comment", file: W,
+           edit: sub(%q{grep -F "for \`$short\`" | }, ""),
+           sections: %i[comment], expect: "a map for a new head is posted, so the reviewer is notified"),
 
   Case.new(desc: "the comment stops naming the revision it describes", file: W,
            edit: sub("for \\`$short\\` —", "—"),

@@ -1070,6 +1070,22 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-context-beyond.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page searches-context-beyond.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-context-flag.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page searches-context-flag.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment searches-git-grep.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
@@ -1162,6 +1178,16 @@ exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 PASS  1 recorded search(es) re-run inside the repository
 PASS  every one of 1 cited entr(ies) is reachable from a recorded search
+## --fragment searches-context-flag.html --repo searches-repo
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+PASS  1 recorded search(es) re-run inside the repository
+PASS  every one of 1 cited entr(ies) is reachable from a recorded search
+## --fragment searches-context-beyond.html --repo searches-repo
+exit=1
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+PASS  1 recorded search(es) re-run inside the repository
+FAIL  1 of 1 cited entr(ies) are reachable from no recorded search: app/models/project.rb:9
 ## --fragment searches-clean.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger

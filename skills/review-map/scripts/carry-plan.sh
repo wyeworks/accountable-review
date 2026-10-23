@@ -331,12 +331,20 @@ while IFS= read -r cmd; do
     fi
   fi
 
+  # REPLAYED WITH -l, because the question is which files it hits and nothing else. A recorded
+  # -A12 or -C3 is legitimate — searches.rb credits the lines its window reaches — and without -l
+  # its output carries `path-12-text` context lines and `--` separators, which no parse of
+  # path:line:text reads, so every page that recorded one would refuse every update. -l drops the
+  # window in all three tools, and names the file even when one file is searched.
+  first=$1; shift
+  if [ "$first" = git ]; then sub=$1; shift; set -- git "$sub" -l "$@"; else set -- "$first" -l "$@"; fi
+
   # grep and rg exit 1 on no match, which is a result rather than a failure.
   "$@" > "$TMP/hits" 2>/dev/null || true
 
-  # rg and grep print path:line:text. A non-empty line whose first field is not a file in this
-  # repository means the output is a shape this cannot read — one file searched, so no filename
-  # column, or a flag that changed the format — and an unreadable result is not an empty one.
+  # One path per line, or path:count where rg is also given -c. A non-empty line whose first
+  # field is not a file in this repository means the output is a shape this cannot read — a flag
+  # that changed the format — and an unreadable result is not an empty one.
   : > "$TMP/hitpaths"
   bad=0
   while IFS= read -r hit; do

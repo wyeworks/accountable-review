@@ -109,8 +109,8 @@ anyone can read it.
 
 **The workflow comments the link on the pull request**, which is the answer to the other half of the
 problem — a map nobody can find is a map nobody reads, and nobody opens a workflow run to check
-whether there is one. One comment, updated in place rather than repeated, naming the revision the map
-describes. That is the only thing the job writes anywhere, and the only reason it holds
+whether there is one. One comment per revision the map describes, naming it: a new head gets a new comment, so the
+reviewer is notified, and a re-run of the same head updates its comment rather than repeating it. That is the only thing the job writes anywhere, and the only reason it holds
 `pull-requests: write`; it sets no check and no status, because a passing check is a verdict and this
 page does not carry verdicts.
 

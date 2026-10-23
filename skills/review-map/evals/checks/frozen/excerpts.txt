@@ -1302,6 +1302,18 @@ SKIP  no excerpts in this input
 ## --page searches-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment searches-context-beyond.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-context-beyond.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment searches-context-flag.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-context-flag.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment searches-git-grep.html
 exit=0
 SKIP  no excerpts in this input
