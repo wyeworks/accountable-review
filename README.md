@@ -349,9 +349,9 @@ Run it from inside the repository you are reviewing:
 /accountable-review:review-map feature/some-branch
 ```
 
-In Claude Code you get back a URL. The page is a private Claude Artifact until you share it, and
-re-running for the same PR republishes to the same URL — so the Review Map tracks the PR across pushes instead of
-scattering links.
+In Claude Code you get back a URL. The page is a private Claude Artifact until you share it.
+Re-running for the same PR publishes a new map and leaves the earlier one where it was; `--update`
+edits the earlier map in place, so the Review Map tracks the PR across pushes at one URL.
 
 It publishes early and fills in as parts complete: open it at minute two, watch it arrive, start
 reading the moment the part you need lands. The checkpoints arrive one at a time, and their

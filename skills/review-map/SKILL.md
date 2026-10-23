@@ -274,9 +274,13 @@ point of putting them in a separate context. The host reference owns how the rea
   mkdir -p "$W"                                     # the page is $W/page.html
   ```
 
-  Derived, not invented, because step 9 republishes to the same file path and step 10 reuses it on a
-  re-run — one PR, one URL, across pushes as well as stages — and a session-scoped scratch directory
-  cannot satisfy that: the next session gets a different one. Export `W` once and use it in every
+  Derived, not invented, because step 9 republishes to the same file path across stages and a re-run
+  finds the previous page there — `--update` edits it, a fresh run sets it aside — and a
+  session-scoped scratch directory cannot satisfy that: the next session gets a different one.
+  Whether a fresh run keeps the earlier page's link is the host reference's to say. A fresh run that
+  finds a page there moves the directory aside — `mv "$W" "$W.prev-$(date +%Y%m%d%H%M)"`, then
+  `mkdir -p "$W"` — before writing anything: never delete it, and never `--force` the skeleton over
+  it. Export `W` once and use it in every
   later command. A run that instead picked a path per command spent nine calls and seventy seconds
   re-establishing it while splicing excerpt files it had first written somewhere else and then had
   to move.
@@ -1710,9 +1714,10 @@ URL: say where the file is, once, and nothing more.
   `<dir>/index.html`; there is nothing to publish and nothing to remember. Report that it is complete,
   what the change does in two or three lines, and anything you could not verify. Mention the project's
   own review command if it has one.
-- On a re-run for the same PR, the path is the **same one step 1 derives** — that derivation is what
-  makes the URL survive across pushes as well as across stages. One PR, one link, however many times
-  this runs, without having to remember where the last run put it.
+- On a re-run for the same PR, the path is the **same one step 1 derives**, so the previous page is
+  found without remembering where the last run put it. `--update` edits that page and keeps its
+  link; whether a fresh run publishes over an earlier link is the host reference's rule, and in
+  Claude Code it does not.
 - **The inventory and this gate are in full on an update too.** `--update` narrows which claims got
   re-read and narrows nothing about which paths must be accounted for, so the inventory is
   regenerated whole and the gate runs over `BASE...HEAD` exactly as above. See § *Re-running over

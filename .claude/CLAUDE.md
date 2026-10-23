@@ -1204,8 +1204,12 @@ These are deliberate scope limits, not omissions — do not "improve" the skill 
 - It never writes the page into the repository under review — a work directory under `$TMPDIR` only,
   **derived** in step 1 from the repo and the target, or the directory `--output` names, which
   `ci/generate-review-map.sh` refuses to let sit inside the checkout.
-- It re-publishes to the same file path on a re-run, so one PR keeps one URL across pushes. The path
-  is derived, not picked, so "the same path again" is a rule rather than a memory.
+- It republishes to the same file path across stages, and the path is derived, not picked, so a
+  re-run finds the previous page by rule rather than memory. **A fresh run never publishes over an
+  earlier session's page**: `--update` keeps one PR at one URL, because it edits that page; a fresh
+  run in Claude Code publishes a new Artifact, since overwriting means reading the old page whole
+  first and replaces a review someone may be comparing against. `references/hosts/claude-code.md`
+  owns the rule.
 - It assumes Claude Code or Codex plus a git repo containing a Rails or a Phoenix app, a Rust crate
   or workspace, or a React or Next.js app. Everything else — which of them it is, the Rails root or
   the `lib/<app>` and `lib/<app>_web` split, a Cargo workspace's members and whether the changed ones

@@ -8,6 +8,17 @@ Without `--output`, publish with `Artifact` at each shared milestone, reusing th
 `$W/page.html` path so the URL stays stable. With `--output`, save `<dir>/index.html`
 and skip every publishing call. The shared staging and completeness rules apply to both.
 
+**A page an earlier session published is not this run's to overwrite**, unless the run is
+`--update` or the user asked to keep that link. A fresh run's first publish creates a new
+Artifact: pass no `url`, do not list or look up the earlier one, and name it in chat at the end
+if you know it, so the reader can compare the two. Two reasons. The earlier page is a review
+someone may still be reading or comparing against, and replacing it with a different analysis
+of the same PR is not what a re-run was asked to do. And `Artifact` refuses to publish over a
+page this session has not read, so overwriting means reading that page whole first — tens of
+thousands of tokens, billed again on every request after it — for a page about to be replaced.
+`--update` pays that read on purpose, because it edits that page in place
+(`SKILL.md` § *Re-running over new commits*).
+
 At high effort, spawn the registered `accountable-review:claim-falsifier` agent in the
 background for each selected analysis note, up to the shared cap and available concurrency,
 all in a single message. Supply the absolute path to the shared `references/claim-falsifier.md`
