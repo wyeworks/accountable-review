@@ -830,6 +830,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-flow-io.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-flow-io.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-loose-data-path.html
 exit=0
 SKIP  no affected entry carries a citation to hold against the diff

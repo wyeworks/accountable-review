@@ -668,8 +668,11 @@ A tier is reached only when both its numbers hold, so the first row needs both u
 moves to the next. The files are the *By kind* cell's `prod` count; the lines are `git diff --numstat`
 summed over those same paths, additions and deletions together. **The ceiling is room, never a target**: an eighty-file rename of production code
 is one delta, carries three to five, and the room above it goes to structural questions only if the
-rename made any. The reason a page may be longer is already on it — the metric strip and the delta
-bullets — so nothing names the tier. These numbers are a first calibration; the test they answer to
+rename made any. **Nothing names the tier**, and the page owes no account of it: what makes a page
+longer is its delta bullets and its structural questions, each checkpoint carrying its own reason
+to be there, and the ceiling only lets them fit. The metric strip shows the tier's file half and not
+its line half, so a reader cannot always derive the tier from it — and does not need to, since no
+checkpoint is on the page because of the tier. These numbers are a first calibration; the test they answer to
 is § *The review checkpoint*'s, whether section 04 still reads as a route.
 
 ---

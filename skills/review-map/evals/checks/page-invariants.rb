@@ -113,7 +113,9 @@ DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, 
 # FAIL rather than WARN, because unlike a graded noun there is no sentence that legitimately carries
 # one: the name has nothing on the page to mean. The letter class stops at K, eleven checkpoints being
 # the page's outside at its highest ceiling (report-format.md § Ranking by delta), and the trailing boundary is what keeps the rule off "Flow Hooks" — a letter
-# class alone would have matched the F-word and the capital after it in any prose.
+# class alone would have matched the F-word and the capital after it in any prose. Reaching I adds
+# one more word to keep off, "Flow I/O", so a slash after the letter is not a designator; a full
+# stop is, because "see Flow B." ends a sentence. golden/invariants-flow-io.html pins it.
 #
 # Graded on the comment-stripped copy, for § 2's reason rather than § 3's: a published page carries
 # page-template.html's comments verbatim, so a comment there explaining why the page names no flow
@@ -121,7 +123,7 @@ DISCLAIM = /not an? (full )?audit|not (an )?exhaustive|this pass surfaced|pass, 
 # failing a correct page. Its own fixture therefore must not name the label in its header comment,
 # or deleting this rule's prose half would leave the fixture failing and the mutation test would
 # report a bypass as caught.
-FLOW_LABEL = %r{\bFlows? [A-K]\b|(?:id|href)="\#?flow-}
+FLOW_LABEL = %r{\bFlows? [A-K]\b(?!/)|(?:id|href)="\#?flow-}
 
 # The section sign, which is the flow label's sibling: a name from the run's reading rather than
 # from the page. SKILL.md and the references used to call the page's sections "§ 01" to "§ 05",

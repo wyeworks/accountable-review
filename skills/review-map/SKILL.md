@@ -971,8 +971,8 @@ diff.** One delta is three to five whatever the diff weighs: eighty files of one
 also one — its reach becomes *Look at* entries, a figure and a card in section 05, not more
 checkpoints. Two delta bullets in *What changed* is what earns a sixth behavioural judgment; a higher
 ceiling earns none on its own — it is room for more deltas and for the structural questions, never a
-target. Since the delta bullets and the metric strip are on the page, the reader has already been
-told why the agenda is longer.
+target. The delta bullets are on the page, so the reader has already been told why the agenda is
+longer; never name the tier.
 
 **A sixth candidate under one delta is a signal to merge again**, not to add a sixth; if it will not
 merge, the checkpoint nearest to it names it in one clause. At the ceiling, stop adding: write

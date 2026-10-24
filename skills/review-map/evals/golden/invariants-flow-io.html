@@ -1,0 +1,18 @@
+<!-- No defect. The clean twin of invariants-flow-designator.html: the same checkpoint, with its
+     one lettered analysis unit replaced by prose that happens to put the ninth letter after the
+     same word, followed by a slash — the input/output sense. § 7's letter class reaches K now that
+     the highest ceiling is eleven, so this is the one ordinary phrase it would otherwise fail. The
+     correct pointer at the impact panel stays, so § 7 has a legitimate designator beside it. -->
+<section class="cp" id="cp-a">
+  <h3>Does accepting a connect request survive an existing leader-opened thread?</h3>
+  <p>A leader-opened thread, opened on the Flow I/O path, has no <code>connection_id</code>, but
+    <code>ConnectRequest#create_connection!</code> still looks one up by <code>connection:</code>
+    before creating a new <code>Conversation</code>. If the pair already has a connectionless
+    thread the lookup misses it, and <code>accept!</code> raises where its own rescue only
+    retries a database-level unique violation
+    <span class="tier">from unchanged code</span>. Traced as <a href="#ip-a">Impact path A</a>.</p>
+  <ul class="lookat">
+    <li><b>The lookup</b> — finds nothing for a connectionless thread
+      <a class="cite" href="#">app/models/connect_request.rb:48</a></li>
+  </ul>
+</section>
