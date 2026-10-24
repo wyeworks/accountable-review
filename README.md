@@ -191,7 +191,9 @@ What changed                    one paragraph: what is now true that was not
 Context                         when earned: the pieces of this repository the judgments rely
                                 on, for a reader who knows the stack but not the codebase
 What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the
-                                outside; each one judgment, framed as a question, and at
+                                outside (9 or 11 on a broad change to application code);
+                                about behaviour, structure or how the code was built;
+                                each one judgment, framed as a question, and at
                                 most one small figure where its shape is clearer than prose:
                                 a chain, paths converging on one invariant, a lifecycle, or
                                 an entity and its relationships

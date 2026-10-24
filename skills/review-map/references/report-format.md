@@ -91,6 +91,10 @@ refusals that hold that line.
 - *One page shape* — above: no level, and what effort and stack do not change
 - *The review checkpoint* — the page's primitive: one judgment, framed as a question
 - *Coding decisions* — the second kind of checkpoint, its citation bar and the limits on how many
+- *Architectural questions* — the third kind: what the change makes true of the system's structure,
+  cited from a written decision or measured on both sides of the diff
+- *Ranking by delta* — each delta classed behavioural or refactor, the order of the three kinds
+  inside each, and the ceiling the Production bucket sets
 - *Chains* — the one figure vocabulary, in two places with two jobs
 - *Evidence tiers* — five tiers, and the rule that only four of them get a label
 - *Framework anchors* — the doc link and the runtime probe, and why neither is evidence
@@ -116,7 +120,7 @@ refusals that hold that line.
 |---|---|---|---|
 | 01 | What changed | always | The masthead, the semantic delta, intent and its tier |
 | 02 | Context | when a checkpoint relies on a repository concept a newcomer would not know | One to five concepts, each what a thing *is*, cited, and pointing at the checkpoints that use it; and at most one before-and-after figure, when the change moved which request does what. No judgment |
-| 03 | What needs your attention | always | Three to five checkpoints per delta *What changed* names, seven at the outside. No standing caveat |
+| 03 | What needs your attention | always | Three to five checkpoints per delta *What changed* names, under a ceiling of seven, nine or eleven set by the Production bucket. No standing caveat |
 | 04 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
 | 05 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
 | 06 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
@@ -141,17 +145,20 @@ selected — `references/rails-docs.md`, `references/elixir-docs.md`, `reference
 ## The review checkpoint
 
 The page's primitive. Where the reviewer's attention goes is expressed as a handful of these under
-*What needs your attention* — three to five per independent change the PR makes, seven on the page at
-the outside — and each is **one judgment** the reviewer has to make: framed as a question, explained
+*What needs your attention* — three to five per independent change the PR makes, under a ceiling of
+seven to eleven the change's Production bucket sets — and each is **one judgment** the reviewer has to make: framed as a question, explained
 in a few sentences, and anchored to the exact lines that let them make it.
 
-**Two kinds of judgment, one component.** A **behavioural** checkpoint asks what the system now does:
-*is nil safe for every consumer?*, *does the new guard admit a class it used to refuse?* A
+**Three kinds of judgment, one component.** A **behavioural** checkpoint asks what the system now
+does: *is nil safe for every consumer?*, *does the new guard admit a class it used to refuse?* A
 **coding-decision** checkpoint asks how the change was built: *the PR chose X; this codebase already
-does Y for the same job; is X deliberate?* They render identically — same `h3`, same explanation, same
-*Look at* list — and nothing on the page labels which is which, for the same reason nothing labels the
-stack or the effort. § *Coding decisions* below carries the second kind's own rules, and they are
-constraints on **when** it may be written, never on how.
+does Y for the same job; is X deliberate?* An **architectural** checkpoint asks what the change makes
+true of the system's structure: *before this PR nothing in `billing` depended on `accounts`; now
+`invoice.ex:3` does; is that direction intended?* They render identically — same `h3`, same
+explanation, same *Look at* list — and nothing on the page labels which is which, for the same reason
+nothing labels the stack or the effort. § *Coding decisions* and § *Architectural questions* below
+carry the second and third kinds' own rules, and they are constraints on **when** each may be
+written, never on how. § *Ranking by delta* orders the three.
 
 It replaced a seven-field review unit, and the reason is worth keeping because the unit looked
 thorough. Every meaningful change got the same grid — implementation, tests, affected code, things to
@@ -263,28 +270,35 @@ page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. 
 reading path refer to a checkpoint by its question, and section 03's intro says in one sentence that
 the order is the order to think about them.
 
-**Three to five per independent semantic delta named in *What changed*, and seven on the page is the
-stop.** `SKILL.md` step 7e has the selection rule. A PR with one delta carries three to five
-whatever its line count; a PR whose *What changed* legitimately carries two delta bullets may carry
-up to seven. Fewer than three is right for a PR small enough that a third would be padding.
+**Three to five per independent semantic delta named in *What changed*, under a ceiling the
+Production bucket sets.** `SKILL.md` step 7e has the selection rule and § *Ranking by delta* owns
+the ceiling. A PR with one delta carries three to five behavioural judgments whatever its line
+count; a PR whose *What changed* legitimately carries two delta bullets may carry more, up to the
+ceiling. Architectural and coding-decision checkpoints sit outside the per-delta range and inside the
+ceiling. Fewer than three is right for a PR small enough that a third would be padding.
 
 **The driver is the delta, not the diff, and that is the whole point.** A rename across eighty
 files, a codemod and a regenerated lockfile are one semantic delta, so the count does not move —
 what a big diff of that kind buys is a longer inventory, which is collapsed and costs the reader
 nothing. One behaviour reaching a long way is also one delta: the reach shows up as more *Look at*
 entries, a chain, a card in *Impact outside the diff*. Only a PR that ships genuinely independent
-changes has more than one delta, and that is the only shape that earns a sixth checkpoint. Since the
+changes has more than one delta, and that is the only shape that earns a sixth behavioural
+checkpoint. Since the
 deltas are already the bullets *What changed* carries, **the reader has already read the reason the
 agenda is longer** — it is not a number this page asserts about itself.
 
-**Seven is where it stops, and the reason is the reading path rather than arithmetic.** At some
-width the reading order can no longer be a route through the code — schema before the code that
+**The ceiling is where it stops, and the reason is the reading path rather than arithmetic.** At
+some width the reading order can no longer be a route through the code — schema before the code that
 trusts it, the smallest complete example before the bulk — because every stop has been spent naming
 a checkpoint, and *Read the code in this order* has become an index of *What needs your attention*.
-Seven is a first calibration of where that happens, in the sense § *The agenda budget* means it; the
-test is whether *Read the code in this order* still reads as a route.
+More application code is more code to route through, so the ceiling rises with the Production
+bucket — seven, nine, eleven, § *Ranking by delta* — and the reading path stays three to seven stops,
+reaching the extra checkpoints through stops whose `span.why` names two. The tiers are a first
+calibration, in the sense § *The agenda budget* means it; the test at every tier is whether *Read the
+code in this order* still reads as a route, and a page that cannot route every checkpoint is wider
+than it carries whatever its tier says.
 
-Past seven the answer is not an eighth checkpoint. It is `SKILL.md` step 7a's bundling sentence in
+Past the ceiling the answer is not one more checkpoint. It is `SKILL.md` step 7a's bundling sentence in
 *What changed*, and, if the diff strained the run, the statement of which region was skimmed.
 
 A finding that does not become a checkpoint keeps its entry in *Impact outside the diff* or in the
@@ -325,6 +339,11 @@ step 7b:
 - **Background jobs** — safe to run twice, in-flight jobs carrying the old argument shape. Feature
   flags and their default. An environment variable, and **what happens when it is unset**. External
   calls, and whether they block a request. Transaction boundaries, and what sits outside them.
+- **Structural shifts** — a dependency between two modules that ran only the other way, a second
+  writer of a fact one module owned, a declared boundary crossed, a new process, queue, cache or
+  external service, a synchronous call where the app was asynchronous, the first of its kind in the
+  app. Ask them only where a written decision or a search on both sides of the diff shows the shift.
+  § *Architectural questions* owns the bar and the limits.
 - **Coding decisions that depart from something this repository already does** — a value object
   under `app/models` where `app/services/` holds four of its kind, a query built in a controller where
   `app/queries/` exists, a hand-rolled guard where a policy class was waiting. Ask them last, ask one
@@ -453,28 +472,208 @@ common right page, and the bar above is the only thing that admits one.
   `app/services/` convention are one question with three *Look at* entries, not three questions. A
   departure that did not clear the bar is not written anywhere else — an observation about shape with
   nothing to cite is noise, not a finding.
-- **They never displace a behavioural judgment, and they never justify going past seven.** They sit
-  outside the per-delta three to five — that range is for what the system now does — and inside the
-  page's ceiling of seven, filling only the room the behavioural agenda leaves. A page that dropped
+- **They never displace a behavioural judgment, and they never justify going past the ceiling.**
+  They sit outside the per-delta three to five — that range is for what the system now does — and
+  inside the page's ceiling, § *Ranking by delta*, filling only the room the behavioural agenda and
+  the architectural questions leave. A page that dropped
   *is nil safe for every consumer?* in order to ask where a class lives has traded the product for a
-  preference; a page that reached an eighth checkpoint to fit one in has bought a preference with the
+  preference; a page that went one past its ceiling to fit one in has bought a preference with the
   reviewer's attention. When the room runs out before the departures do, keep the ones whose answer
   is most settled — backed by both sources, then a written repository decision, then a populated
   directory or a stack convention, then a single counter-example.
-- **Ranked last**, per `SKILL.md` step 7d, whatever the four ranking criteria say — after every
-  behavioural checkpoint, and among themselves in that same order of how settled their answer is.
+- **Ranked last on the page**, whatever the four ranking criteria say — after every behavioural
+  checkpoint and every architectural question, of every delta. § *Ranking by delta* owns that order
+  and their order among themselves.
   Misreading where a class lives costs a conversation; misreading a behavioural judgment costs
   production.
 
-**Unless the diff is a refactor**, where coding decisions may be the only judgments there are — and
-then they are the page. Say so plainly in *What changed* rather than manufacturing a behavioural
-checkpoint to stand in front of it.
+**In a refactor delta** they follow its equivalence and its architectural questions, and may be most
+of the page — § *Ranking by delta* owns that order.
 
 **Nothing marks it as the second kind.** No label, no chip, no section of its own, no sentence
 announcing that the page also checks conventions. It is an ordinary `section.cp` in an ordinary
 position, and a reader should not be able to tell which kind they are looking at except by reading the
 question. That is the same rule the stack and the effort answer to, and it is refused in the same
 place — `page-template.html`'s header comment.
+
+---
+
+## Architectural questions
+
+The third kind of checkpoint. It asks whether a change to **the system's structure** is intended —
+what the change makes true of how the application's parts depend on one another, who owns which
+fact, where its boundaries run and what runs where. A coding decision is about one piece measured
+against a settled answer for the same job; an architectural question is about what every later
+change may now do because this one landed. `SKILL.md` step 7b is where it is found and the stack's
+lens file has the searches; this section owns the rule.
+
+**What it covers**, and nothing else:
+
+- **Dependency direction** — a module, context, package or crate that now depends on one it did not
+  depend on, above all one that depended on it.
+- **Ownership** — a second writer of a fact one module owned, a second place a rule is decided.
+- **A declared boundary crossed** — one context reading another's tables or reaching into its
+  internals, the client encoding a rule the server decides.
+- **Runtime topology** — a new process, queue, cache, scheduled job or external service; a
+  synchronous call where the app called that kind of thing asynchronously.
+- **Precedent** — the first of its kind in the application: the first background job, the first
+  cache layer, the first outbound call inside a request. Once merged it is the template the next one
+  copies.
+
+**State the shift, and cite what shows it.** The form is *before this PR, X was not true of the
+system; at `file:line` it now is; is that intended?* The citation is not optional, and it comes from
+one of two sources:
+
+- **A written decision** — an ADR, an `ARCHITECTURE.md`, a line in the convention doc, or a rule a
+  tool enforces: packwerk's `package.yml`, an Elixir `boundary` declaration, an eslint import rule, a
+  Cargo workspace's declared dependencies. Cited as a *Look at* entry. Where the repository has
+  written down that the PR's shift is allowed, there is no question: the team decided.
+- **A structural fact measured on both sides of the diff** — a search that shows the shift did not
+  exist at the merge-base and does at head: no file under `lib/billing` named `Accounts` at the base;
+  `lib/billing/invoice.ex:3` does now. A precedent is the same measurement with an empty result on the
+  other side: nothing else in `app/` makes an outbound HTTP call inside a request. The search is a
+  row in `details.searched`, § *What was searched*, and the finding is a sentence in the open
+  explanation, never left to be inferred from the row. **Searches only** — `rg` at head, `git grep`
+  at the base ref, or a read of a file that declares the structure (a `Cargo.toml`, a `package.yml`).
+  A tool that compiles or boots the application to answer — `mix xref`, `packwerk check` — is a probe
+  proposed in a `pre.probe`, never run.
+
+**No citation, no question.** *This couples X to Y*, *this layering is wrong* and *this belongs
+behind an interface* with nothing on either side to point at are the page grading the design, which
+it does not do. The written decision outranks the measurement: a shift the repository has written
+down as allowed is no shift, however new the edge.
+
+**Three tests behind the citation**, for the reason § *Coding decisions* has three — a citation
+proves only that something changed, not that the reviewer has a decision to make:
+
+- **New, not moved.** The fact did not hold at the base anywhere. A call moved from one file of
+  `billing` to another is the same edge; a file renamed across a boundary is a move. Search the base
+  ref, never infer the base from the hunk.
+- **Reaches past the PR.** It changes what later code may do — a dependency others can now follow, a
+  writer others can now call, a pattern others can now copy. A private helper used once inside the
+  module that owns it reaches nothing.
+- **No reason in any note.** The ordering, the requirement or the constraint that explains a shift is
+  often recorded by a different flow; a note that explains it means the question is answered.
+
+**Ask; never answer.** No *coupled*, *leaky*, *cleaner*, *tangled*, *should*, *better kept behind*.
+The page knows the structure moved; the reviewer knows whether the team meant it to. Where the run
+cannot resolve it, the *Open question* line is where that goes.
+
+**One home for a crossing.** A new dependency that also carries a consequence into unchanged code is
+an impact path in § *Impact outside the diff* and a question here; the checkpoint asks, the panel
+draws, and each points at the other in a clause — § *One canonical home*. And it is not *Context*:
+Context says what a part of this repository *is*; this says what the change did to how the parts fit.
+
+**Merge before counting.** Three files that each add a call from `billing` into `accounts` are one
+question with three *Look at* entries. An architectural candidate that turns on the same lines as a
+behavioural judgment merges into it — the behavioural question stays, and the structural fact
+becomes a clause — because what the system now does outranks what it now permits.
+
+**Figures:** `figure.structure` for a new relationship between parts, `figure.lifecycle.lc-shift` in
+*Context* when the change moved which request does what. No new component.
+
+**Limits.** One per shift, ranked by § *Ranking by delta*: after every behavioural judgment on the
+page, ahead of every coding decision. They never displace a behavioural judgment and never
+take the page past its ceiling. When room runs out, keep the shifts backed by a written decision,
+then a dependency edge measured both sides, then a precedent.
+
+**On an update**, a checkpoint resting on a recorded search is carried only while `carry-plan.sh`'s
+replay of the head half finds no delta path among its hits — the same P6 that protects every
+recorded search. The base half is not replayed: it searches the merge-base, which P2 holds fixed, so
+the new commits cannot change what it returns. A precedent a new commit has copied is not carried.
+
+**Nothing marks it as the third kind.** No label, no chip, no section of its own — the same rule as
+the other two, refused in the same place, `page-template.html`'s header comment.
+
+---
+
+## Ranking by delta
+
+Every delta `SKILL.md` step 7a names is **classed**, and the class decides how its checkpoints are
+ordered. Two classes:
+
+- **Behavioural** — the delta changes what a user, an operator or a downstream caller experiences.
+- **Refactor** — the delta intends to change structure and leave behaviour as it was.
+
+The class is recorded in `agenda.md` and reaches the page only through the masthead's *Change
+shape* chip, § *Section 1*, which **is** the class: *behavioural*, *refactor*, or *mixed* when the
+deltas are classed differently. No other marker, because a class beside a checkpoint is one step from
+a severity.
+
+**Inside a delta, the order is fixed by kind.** Within a kind, this section owns the order alone:
+
+- **Behavioural judgments and equivalences** by the four ranking criteria of `SKILL.md` step 7d.
+- **Architectural questions** by what backs them — a written decision, then an edge measured on both
+  sides, then a precedent.
+- **Coding decisions** by how settled the answer they depart from is — both sources, then a written
+  repository decision, then a populated directory or a stack convention, then a single
+  counter-example.
+
+The four criteria break a tie inside either of the last two. The kinds themselves:
+
+| Delta | Order |
+|---|---|
+| Behavioural | behavioural judgments → architectural questions → coding decisions |
+| Refactor | *is behaviour preserved?* → architectural questions → coding decisions |
+
+**A refactor leads with its equivalence.** A refactor's claim is that nothing a caller sees has
+moved, and that is the judgment a reviewer most regrets getting wrong: one checkpoint asking whether
+behaviour is preserved, citing the lines where it would not be — a guard reordered, a default that
+travelled, a callback no longer run, a query whose scope changed shape. It is omitted only when the
+notes found no place where the two versions could differ; then the structural questions are the page,
+and *What changed* says plainly that the delta is a refactor rather than a behavioural checkpoint
+being manufactured to stand in front of them. Where the notes found behaviour that did move, the
+delta is not a refactor: class it behavioural, and the moved behaviour is its first judgment.
+
+**A behavioural delta owes an equivalence too, where it moves code its callers are meant not to
+notice.** Checks relocated into a shared object, a method extracted, a call path rerouted: the
+delta's point is the behaviour that moved, and alongside it sits code whose callers should see no
+difference. Those callers are owed *is behaviour preserved for them?*, with the lines where it would
+not be. It is a behavioural judgment and sits in the first band, ranked by the four criteria rather
+than first by rule — the behaviour that moved is usually what a reviewer would most regret
+misreading. One per delta, merged like any other: every caller meant to see no change is a *Look at*
+entry of the same question.
+
+**Across deltas, behaviour goes first, page-wide.** The page is two bands, and the band outranks the
+delta:
+
+1. Every behavioural judgment of a behavioural delta, and every refactor delta's *is behaviour
+   preserved?* — ordered by the four criteria. The equivalence belongs here because misreading it
+   costs production, as misreading a behavioural judgment does.
+2. Every architectural question, then every coding decision — each kind in its own order above,
+   whichever delta it came from.
+
+A delta stays together only inside a band: where the criteria tie, its checkpoints sit next to each
+other. So a refactor delta that would rank first contributes its equivalence to the first band and
+its structural questions to the second, behind every behavioural judgment of the other deltas. With
+no behavioural delta on the page, the first band holds only the equivalences and the second is the
+rest of the page, which is the refactor order above.
+
+**The count.** Three to five per delta is the range for its behavioural judgments — or, in a
+refactor, its equivalence and the structural questions that are the page. Architectural questions and
+coding decisions of a behavioural delta sit outside it, filling the room the ceiling leaves; when room
+runs out, architectural questions are kept ahead of coding decisions.
+
+**The ceiling follows the Production bucket**, the metric strip's count of application code the
+change is about. Test, generated and docs files never count, so a regenerated lockfile or a fixture
+sweep buys nothing:
+
+| Production bucket | Ceiling |
+|---|---|
+| up to 20 files and up to 1,000 changed lines | 7 |
+| up to 60 files and up to 3,000 changed lines | 9 |
+| beyond either | 11 |
+
+A tier is reached only when both its numbers hold, so the first row needs both under; one past either
+moves to the next. The files are the *By kind* cell's `prod` count; the lines are `git diff --numstat`
+summed over those same paths, additions and deletions together. **The ceiling is room, never a target**: an eighty-file rename of production code
+is one delta, carries three to five, and the room above it goes to structural questions only if the
+rename made any. **Nothing names the tier**, and the page owes no account of it: what makes a page
+longer is its delta bullets and its structural questions, each checkpoint carrying its own reason
+to be there, and the ceiling only lets them fit. The metric strip shows the tier's file half and not
+its line half, so a reader cannot always derive the tier from it — and does not need to, since no
+checkpoint is on the page because of the tier. These numbers are a first calibration; the test they answer to
+is § *The review checkpoint*'s, whether section 04 still reads as a route.
 
 ---
 
@@ -2164,8 +2363,12 @@ ambiguous.
 § *An updated page* owns it along with the one sentence that goes with it here. Nothing else about
 *What changed* moves.
 
-**Change shape** — a chip naming what kind of change this is: feature · refactor · bugfix ·
-migration · dependency bump · mixed. One word, and it is a category, never a grade.
+**Change shape** — a chip naming the class § *Ranking by delta* gave the change: *behavioural* ·
+*refactor* · *mixed*, the last when the deltas are classed differently. One word, and it is a
+category, never a grade. Nothing finer: *feature* and *bugfix* claim an intent the code rarely
+states, and a chip cannot carry the evidence tier such a claim would need. **It follows the run's
+class, never the author's label** — a PR titled as a refactor whose notes show behaviour that moved
+is *behavioural* here, and *What changed* says in one clause what the PR calls itself, attributed.
 
 **A metric strip** of commits, files and the files split by kind. Bucket the files rather than
 reporting one total, because a 40-file PR that is 8 production files and 32 fixtures is a different
@@ -2216,6 +2419,10 @@ big should the page be?* is what decides when one is owed.
 The pieces of **this repository** the checkpoints talk about, named before the checkpoints talk about
 them, for a reader who does not already know them. *What changed* says what is now true; *Context*
 says what the parts are; the checkpoints say what to decide. This section owns every rule about it.
+
+**Not an architectural question.** Context says what a part of this repository *is*, as it stood
+before the change; a structural shift the change made is a checkpoint, § *Architectural questions*.
+An entry that says *now depends on* has moved a judgment into the section that holds none.
 
 **Why it exists.** A checkpoint can be correct, cited and well framed, and still be unfollowable to a
 reviewer new to the codebase, because it assumes three things it never says. The case that produced
@@ -2354,8 +2561,8 @@ owns the procedure, including when the section is added or removed.
 ## Section 3 · What needs your attention — always
 
 The page's core, and the one section a reader who has time for nothing else should read. Three to
-five checkpoints per independent delta *What changed* names, seven at the outside; § *The review
-checkpoint* owns every rule about them, the count included.
+five checkpoints per independent delta *What changed* names, under the ceiling § *Ranking by delta*
+sets; § *The review checkpoint* owns every rule about them, the count included.
 
 The section itself carries only a heading and one sentence saying what these turn on and that the
 order is the order to think about them. Then the checkpoints, in ranked order. No caveat under the
@@ -2509,8 +2716,8 @@ At four checkpoints on a small or medium PR that comes to roughly **700 to 1,500
 the figure to carry in your head and the one a page of that shape is read against — **plus *Context*
 when it is earned**, which is additive for the reason the next paragraph gives the checkpoints: a
 page that bought its *Context* by thinning a checkpoint has paid for orientation with a judgment. A seven-checkpoint
-page over two independent deltas is legitimately longer, and **it does not get there by writing seven
-checkpoints at thirty words each.** That was the trap in stating the total flat: the arithmetic of a
+page over two independent deltas, or an eleven-checkpoint page over a broad change, is legitimately
+longer, and **it does not get there by writing those checkpoints at thirty words each.** That was the trap in stating the total flat: the arithmetic of a
 wide agenda under a fixed ceiling forces every checkpoint under its own floor, and the floor rule
 below is what that violates.
 

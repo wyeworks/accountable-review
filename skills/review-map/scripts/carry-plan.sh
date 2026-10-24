@@ -309,6 +309,31 @@ while IFS= read -r cmd; do
     UNSAFE=$cmd; break
   fi
 
+  # A SEARCH OF THE MERGE-BASE IS FIXED, NOT REPLAYED. An architectural checkpoint records the
+  # base half of its search as `git grep … <merge-base sha> -- scope` (report-format.md
+  # § Architectural questions), and git prints those hits as `sha:path:line` — a shape the test
+  # below cannot read. It does not need reading: P2 refused any update whose merge-base moved,
+  # so these commits cannot change what a search of it returns. Only a search of the merge-base
+  # and nothing else is exempt: one that also names HEAD, a branch or any other commit searches a
+  # tree these commits can change, so it falls through to the shape test and fails closed. Every
+  # token before `--` that names a commit counts, hex or not; after `--` they are paths.
+  if [ "$tool" = "git grep" ]; then
+    at_mb=0 other=0 paths=0
+    for tok in "$@"; do
+      [ "$paths" -eq 1 ] && break
+      case $tok in
+        --) paths=1; continue ;;
+        -*|'') continue ;;
+      esac
+      rev=$(git rev-parse -q --verify "$tok^{commit}" 2>/dev/null) || continue
+      if [ "$rev" = "$MB" ]; then at_mb=1; else other=1; fi
+    done
+    if [ "$at_mb" -eq 1 ] && [ "$other" -eq 0 ]; then
+      printf 'search\t%s\tsafe\tsearches the merge-base, which P2 holds fixed\n' "$cmd" >> "$TMP/searchrows"
+      continue
+    fi
+  fi
+
   # REPLAYED WITH -l, because the question is which files it hits and nothing else. A recorded
   # -A12 or -C3 is legitimate — searches.rb credits the lines its window reaches — and without -l
   # its output carries `path-12-text` context lines and `--` separators, which no parse of

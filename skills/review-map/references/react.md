@@ -257,6 +257,39 @@ rg -l 'create\(|configureStore|createContext' -g '*.{ts,tsx,js,jsx}' | head   # 
 rg -n '"(styled-components|@emotion/react|tailwindcss|@vanilla-extract/css)"' package.json
 ```
 
+## Architectural questions, measured on both sides
+
+What the change made true of how the app's parts depend on one another. `report-format.md`
+§ *Architectural questions* owns when it becomes a checkpoint — one per shift, after every
+behavioural judgment, and **never without a citation**: a written decision, or a search at the
+merge-base and one at head. On a React stack the components are the application, so this is about
+import direction and ownership of state, never about component taste.
+
+**Look first for what the repository wrote down.** `ARCHITECTURE.md`, ADRs, an eslint
+`no-restricted-imports` or `import/no-restricted-paths` rule, `eslint-plugin-boundaries` element
+types, a JavaScript workspace's `package.json` dependencies between its own packages, and the
+`paths` in `tsconfig.json` that name the layers.
+
+The shapes a React diff produces:
+
+- **A feature folder that now imports another's internals** — `features/billing` importing from
+  `features/accounts/components/…` where siblings import only a feature's `index.ts`.
+- **A shared package that now imports an app** — `packages/ui` importing from `apps/web`, inverting
+  the direction the workspace declares.
+- **A second owner of server state** — the same resource fetched into a global store and into a
+  query cache, or a context mirroring what a query already holds.
+- **A new global** — a provider added at the root, a store, a module-level singleton every consumer
+  now shares.
+- **The first of its kind.** The first global store, the first service worker, the first direct
+  `fetch` in a codebase whose every request goes through one client.
+
+```sh
+rg -n "from ['\"](\.\./)+accounts/|from ['\"]@/features/accounts/" src/features/billing   # head
+git grep -n -E "from ['\"](\.\./)+accounts/|from ['\"]@/features/accounts/" <merge-base sha> -- src/features/billing
+rg -n 'no-restricted-imports|no-restricted-paths|boundaries/' -g '.eslintrc*' -g 'eslint.config.*'
+rg -ln 'createStore|configureStore|create\(\(set' -g '*.{ts,tsx,js,jsx}'          # a precedent search
+```
+
 ## Tests
 
 - **New behaviour with no test**, or a test that asserts the mock rather than the behaviour.

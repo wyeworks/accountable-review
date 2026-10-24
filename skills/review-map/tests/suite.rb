@@ -931,6 +931,26 @@ class ReviewMapSuite
     _, code = replay.("grep -n &#39;class Project&#39; app/models/project.rb")
     assert_eq code, 0, "a search over one file, which prints no filename column, is replayed too"
 
+    # -- P6 · a search of the merge-base is fixed, not replayed --------------------------------------
+    # An architectural checkpoint records the base half of its search as `git grep … <merge-base sha>`,
+    # and git prints each hit as `sha:path`, which the hit-shape test cannot read. P2 already refuses
+    # an update whose merge-base moved, so the commits since the last map cannot change what that
+    # search returns: it is skipped as fixed, never sent to a full run for its shape. The base here
+    # has hits for the pattern, so a row that still read the shape would refuse.
+    out, code = replay.("git grep -n &#39;class&#39; #{cbase} -- app")
+    assert_eq code, 0, "a recorded search of the merge-base does not refuse the update"
+    assert_eq rows(out, /searches the merge-base/), 1, "and is recorded as fixed rather than replayed"
+
+    # Any other revision is still a shape this cannot read: only the merge-base has a precondition
+    # holding it still.
+    _, code = replay.("git grep -n &#39;class&#39; #{cprev} -- app")
+    assert_eq code, 3, "a recorded search of any other revision still refuses"
+
+    # Nor does naming the merge-base buy an exemption for the other trees beside it: HEAD is a
+    # tree these commits changed, and it is not hex.
+    _, code = replay.("git grep -n &#39;class&#39; #{cbase} HEAD -- app")
+    assert_eq code, 3, "a recorded search of the merge-base and HEAD together still refuses"
+
     # -- P6 · the replay is argv, and the gate is quote-aware ---------------------------------------
     # Every alternation in both lens files sits inside quotes, so a blanket refusal of | and < would
     # reject the real searches and send every re-run to a full one. Outside quotes the same

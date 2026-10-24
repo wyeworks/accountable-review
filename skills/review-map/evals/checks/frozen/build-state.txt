@@ -622,6 +622,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page invariants-flow-designator.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment invariants-flow-io.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page invariants-flow-io.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment invariants-loose-data-path.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -818,6 +824,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page searches-git-grep.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment searches-other-tree.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page searches-other-tree.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment searches-unreachable.html
