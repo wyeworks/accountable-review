@@ -309,75 +309,38 @@ Editing one of these means checking the others still agree.
   template assembles three. Whether a question is a judgment, asked once and ordered without a grade
   is `evals/e2e/judges/checkpoint-judgments.md`'s question; whether its claims are true,
   `checkpoint-claims.md`'s.
-- **Three kinds of checkpoint, ordered by the class of their delta.** A **behavioural** checkpoint
-  judges what the system now does. An **architectural** checkpoint judges what the change made true of
-  the system's structure — a dependency direction, a second owner of a fact, a boundary crossed, a
-  new runtime component, the first of its kind. A **coding-decision** checkpoint judges how the change
-  was built — where a class was put, what kind of object it is, which existing abstraction it went
-  around. They render identically, and nothing labels the kind.
+- **Three kinds of checkpoint, and the structural two rank behind every behavioural judgment.** A
+  **behavioural** checkpoint judges what the system now does; an **architectural** one, what the
+  change made true of its structure (a dependency direction, a second owner of a fact, a boundary
+  crossed, a new runtime component, the first of its kind); a **coding-decision** one, how the change
+  was built (where a class was put, what kind of object it is, which abstraction it went around).
+  They render identically and nothing labels the kind.
 
-  **Every delta is classed behavioural or refactor**, in `agenda.md`, and the masthead's *Change
-  shape* chip is its only trace on the page: the chip **is** the class — behavioural · refactor ·
-  mixed, nothing finer, because a word like *bugfix* claims an intent the code rarely states — and it
-  follows the run's class, never the PR's title, which *What changed* attributes instead. A behavioural delta orders behavioural → architectural
-  → coding decision; a refactor delta leads with *is behaviour preserved?*, then architectural, then
-  coding decision. Across deltas the band outranks the delta: every behavioural judgment and every
-  refactor's equivalence first, then every architectural question, then every coding decision, so no
-  structural checkpoint precedes a behavioural judgment of any delta.
-  A refactor whose notes show moved behaviour is classed behavioural. A behavioural delta that also
-  moves code its callers are meant not to notice owes them one equivalence question, ranked with the
-  behavioural judgments rather than first. `report-format.md` § *Ranking
-  by delta* owns the table and the ceiling **alone**; `SKILL.md` steps 7a, 7d and 7e carry it.
+  **Every delta is classed behavioural or refactor**, and the masthead's *Change shape* chip is the
+  class and its only trace — behavioural · refactor · mixed, nothing finer, because *bugfix* claims an
+  intent the code rarely states. **The band outranks the delta**: every behavioural judgment and every
+  refactor's *is behaviour preserved?* first, page-wide, then architectural questions, then coding
+  decisions, because misreading structure costs a conversation and misreading behaviour costs
+  production. `report-format.md` § *Ranking by delta* owns the order, the within-kind order and the
+  ceiling tiers **alone**; `SKILL.md` steps 7a, 7d and 7e point at it rather than copy it.
 
-  **The architectural rule is state the shift, and cite what shows it.** The form is *before this PR,
-  X was not true of the system; at `file:line` it now is; is that intended?* The citation is **a
-  written decision** — an ADR, an `ARCHITECTURE.md`, a boundary a tool enforces — or **a search at
-  both revisions**, the base half by `git grep` at the merge-base sha, both recorded in
-  `details.searched`. A precedent is the same measurement with an empty other side. **Searches only**:
-  a tool that compiles or boots the application to answer is a probe, never run. The written
-  decision outranks the measurement, **no citation, no question**, and three tests sit behind it:
-  **new, not moved**, **reaches past the PR**, **no reason in any note**. One that turns on the same
-  lines as a behavioural judgment merges into it; one that is also an impact path keeps both homes,
-  each pointing at the other. On `--update`, `carry-plan.sh`'s P6 replays the head half and skips
-  the base half as a search of the merge-base, which P2 holds fixed.
+  **Both structural kinds share one bar: no citation, no question**, because a structural opinion
+  with nothing to point at is the page grading the design or the author's taste. An architectural
+  question cites a written decision or a search at both revisions — the base half a `git grep -P` at
+  the merge-base sha, never a tool that compiles or boots the app. A coding decision names the
+  departure and cites this repository's settled answer or a row of the lens file's closed stack list,
+  the repository outranking the stack; Phoenix is repo-only until its catalogue opens. Each has three
+  tests behind the citation, merges into a behavioural judgment that turns on the same lines, never
+  displaces one, and never takes the page past its ceiling; free room is never a reason to look for
+  one.
 
-  These agree: `SKILL.md` step 2 collects the written decisions, step 5 runs and records the
-  searches, steps 7a–7e find, merge and rank; `report-format.md` § *Architectural questions* owns
-  the bar and the limits **alone**, with § *The review checkpoint*, § *Where checkpoints come from*
-  and § *Section 2* pointing at it; every lens file carries § *Architectural questions* with the
-  shapes and the both-sides searches, the layered two pointing at their base lens;
-  `claim-falsifier.md` attacks the base half; `carry-plan.sh` exempts a merge-base search from the
-  hit-shape test, behind a `tests/run.rb` row either side and a `self-test.rb` mutation; `README.md`
-  and `docs/review-map.md` are the public wording. Nothing mechanical checks the checkpoint itself; `evals/e2e/judges/IDEAS.md` records the judge that would.
-
-  **The rule is name the departure, and cite it from one of two sources.** The form is *the PR chose
-  X; Y is the settled answer for the same job; is X deliberate?* `Y` is either **this repository's
-  decision** — a line in its convention doc, else a sibling file or populated directory, as a *Look
-  at* entry — or **a stack convention on the lens file's closed list**, cited through its catalogue
-  row as the checkpoint's one doc link. **The repository outranks the stack.** **No citation from
-  either, no question** — a preference with nothing to cite is the page grading the author's taste.
-  The run may not extend the closed list; adding a row means adding its catalogue row through
-  `verify-catalogue.sh`. The list exists only where the catalogue is open, so Phoenix is repo-only.
-
-  **No fixed count; the bar is the cap.** One per departure, merged first when two share a
-  precedent; they **never displace a behavioural judgment** and never push the page past its
-  ceiling — ranked last in their delta, after the architectural questions. A departure
-  with nothing to cite is written nowhere. The page must be able to ask a structural question, not
-  only behavioural ones: step 7a does not restrict judgments to behavioural terms.
-
-  **A citation admits a candidate; it does not make a departure.** A citation proves only that
-  something similar exists, so three tests sit behind it: **same job as it stands** (no new
-  parameter, call site or moment), **big enough** (a few copied lines is a clause, as a name
-  already was), and **no reason in any note**, checked across every flow in step 7c. Free room
-  under the ceiling is never a reason to look for one. Issue #97 is the run that asked about a one-line
-  copy whose reason — a snapshot before its own write — sat in another flow's note.
-
-  These agree: `SKILL.md` step 2 collects the directory inventory and steps 7a, 7b, 7d and 7e spend
-  it; `report-format.md` § *Coding decisions* owns the bar and the caps **alone** and § *Where
-  checkpoints come from* lists it last; both lens files carry the shapes and the searches that
-  produce the citation, and `rails-nextjs.md` the closed stack list, every row naming a
-  `rails-docs.md` row; `README.md` and `docs/review-map.md` are the public wording. Nothing mechanical
-  checks it; `evals/e2e/judges/IDEAS.md` records the judge that would.
+  These agree: `SKILL.md` steps 2, 5 and 7a–7e; `report-format.md` § *Architectural questions* and
+  § *Coding decisions*, each owning its bar and tests **alone**; every lens file's shapes and
+  searches, and `rails-nextjs.md`'s closed list naming `rails-docs.md` rows; `claim-falsifier.md`,
+  which attacks the base half; `carry-plan.sh`'s P6, which exempts a search whose every tree is the
+  merge-base (P2 holds it fixed), behind `tests/run.rb` rows and `self-test.rb` mutations;
+  `searches.rb`, which credits no head entry to it, behind `golden/searches-other-tree.html`; `README.md` and `docs/review-map.md`. No judge grades either kind
+  yet; `evals/e2e/judges/IDEAS.md` records the ones that would.
 - **Chains are the one figure vocabulary, in two places with two jobs, and the rule between them is
   mechanical.** `figure.impact` in section 05 and `figure.chain` inside a checkpoint are the same
   `ol.ip-path` with the same node kinds and causal verbs. `report-format.md` § *Chains* owns what

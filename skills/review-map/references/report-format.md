@@ -481,9 +481,9 @@ common right page, and the bar above is the only thing that admits one.
   reviewer's attention. When the room runs out before the departures do, keep the ones whose answer
   is most settled — backed by both sources, then a written repository decision, then a populated
   directory or a stack convention, then a single counter-example.
-- **Ranked last** in their delta, per § *Ranking by delta*, whatever the four ranking criteria say —
-  after every behavioural checkpoint and architectural question, and among themselves in that same
-  order of how settled their answer is.
+- **Ranked last on the page**, whatever the four ranking criteria say — after every behavioural
+  checkpoint and every architectural question, of every delta. § *Ranking by delta* owns that order
+  and their order among themselves.
   Misreading where a class lives costs a conversation; misreading a behavioural judgment costs
   production.
 
@@ -572,8 +572,8 @@ becomes a clause — because what the system now does outranks what it now permi
 **Figures:** `figure.structure` for a new relationship between parts, `figure.lifecycle.lc-shift` in
 *Context* when the change moved which request does what. No new component.
 
-**Limits.** One per shift, ranked by § *Ranking by delta*: after every behavioural judgment of a
-behavioural delta, ahead of coding decisions. They never displace a behavioural judgment and never
+**Limits.** One per shift, ranked by § *Ranking by delta*: after every behavioural judgment on the
+page, ahead of every coding decision. They never displace a behavioural judgment and never
 take the page past its ceiling. When room runs out, keep the shifts backed by a written decision,
 then a dependency edge measured both sides, then a precedent.
 
@@ -600,8 +600,16 @@ shape* chip, § *Section 1*, which **is** the class: *behavioural*, *refactor*, 
 deltas are classed differently. No other marker, because a class beside a checkpoint is one step from
 a severity.
 
-**Inside a delta, the order is fixed by kind**, and the four ranking criteria of `SKILL.md` step 7d
-order checkpoints within each kind:
+**Inside a delta, the order is fixed by kind.** Within a kind, this section owns the order alone:
+
+- **Behavioural judgments and equivalences** by the four ranking criteria of `SKILL.md` step 7d.
+- **Architectural questions** by what backs them — a written decision, then an edge measured on both
+  sides, then a precedent.
+- **Coding decisions** by how settled the answer they depart from is — both sources, then a written
+  repository decision, then a populated directory or a stack convention, then a single
+  counter-example.
+
+The four criteria break a tie inside either of the last two. The kinds themselves:
 
 | Delta | Order |
 |---|---|
@@ -632,8 +640,8 @@ delta:
 1. Every behavioural judgment of a behavioural delta, and every refactor delta's *is behaviour
    preserved?* — ordered by the four criteria. The equivalence belongs here because misreading it
    costs production, as misreading a behavioural judgment does.
-2. Every architectural question, then every coding decision — ordered by the four criteria within
-   each kind.
+2. Every architectural question, then every coding decision — each kind in its own order above,
+   whichever delta it came from.
 
 A delta stays together only inside a band: where the criteria tie, its checkpoints sit next to each
 other. So a refactor delta that would rank first contributes its equivalence to the first band and

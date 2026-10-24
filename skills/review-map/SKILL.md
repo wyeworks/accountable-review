@@ -943,23 +943,12 @@ most where the page's own evidence is weakest; how far it sits from the obvious 
 since a consequence visible in the hunk needs less help than one three files away; and how important
 the affected unchanged code is.
 
-**Those four order checkpoints within a kind; the kind is ordered by the delta's class**, and
-`report-format.md` § *Ranking by delta* owns the table:
-
-| Delta | Order |
-|---|---|
-| Behavioural | behavioural judgments → architectural questions → coding decisions |
-| Refactor | *is behaviour preserved?* → architectural questions → coding decisions |
-
-**Across deltas the band outranks the delta.** First band: every behavioural judgment of a
-behavioural delta and every refactor's *is behaviour preserved?*, by the four criteria — the
-equivalence sits here because misreading it costs production too. Second band: every architectural
-question, then every coding decision. A delta's checkpoints sit together only inside a band, where
-the criteria tie, so a refactor that would rank first gives its equivalence to the first band and its
-structural questions to the second. `report-format.md` § *Ranking by delta* owns it. Coding decisions order
-among themselves by how settled the answer they depart from is — both sources, then a written
-repository decision, then a populated directory or a stack convention; architectural questions by a
-written decision, then an edge measured both sides, then a precedent. Not because structure does not
+**Those four order the behavioural judgments; the rest of the order is `report-format.md`
+§ *Ranking by delta*'s alone**, which you read at the top of this step: the order of kinds inside a
+delta, the two page-wide bands, and how architectural questions and coding decisions order among
+themselves. In one line: **the band outranks the delta** — every behavioural judgment and every
+refactor's *is behaviour preserved?* first, page-wide, then every architectural question, then every
+coding decision. Not because structure does not
 matter — a dependency in the wrong direction outlives the PR — but because misreading it costs the
 reviewer a conversation about the design and misreading a behavioural one costs them production. The
 reader meets the consequences first and the shape afterwards.
@@ -969,18 +958,10 @@ severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the readin
 checkpoint by its question.
 
 **7e. Select the smallest useful agenda.** Three to five checkpoints **per independent semantic delta
-7a named**, and the page's **ceiling** at the outside — seven, nine or eleven, set by the Production
-bucket:
-
-| Production bucket | Ceiling |
-|---|---|
-| up to 20 files and up to 1,000 changed lines | 7 |
-| up to 60 files and up to 3,000 changed lines | 9 |
-| beyond either | 11 |
-
-Files are the *By kind* cell's `prod` count; lines are `git diff --numstat` summed over those same
-paths. Test, generated and docs files never count, so a regenerated lockfile buys no room.
-`report-format.md` § *Ranking by delta* owns the tiers. Fewer for a PR small enough that three would be
+7a named**, and the page's **ceiling** at the outside — seven, nine or eleven, set by the files and
+changed lines of the Production bucket. `report-format.md` § *Ranking by delta* owns the tiers and
+how they are counted; test, generated and docs files never count, so a regenerated lockfile buys no
+room. Fewer for a PR small enough that three would be
 padding — a run that reached this step on a diff step 3 nearly stopped for may have one. Ask: *if the
 reviewer understood and investigated these, would they have the right mental model of this change?* If
 yes, stop.
@@ -1022,7 +1003,7 @@ which is why the agenda has room to grow rather than a ceiling that would push o
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
 checkpoint is written, never on how many there are.
 
-**Architectural questions and then coding decisions take the last slots of a behavioural delta, as
+**Architectural questions and then coding decisions take the last slots on the page, as
 many as clear their bars and fit.** Fitting is a limit, never a reason: room left under the ceiling is
 not a prompt to find one, and none is the common right answer. When room runs out, architectural
 questions are kept ahead of coding decisions. No fixed count, and three limits:
