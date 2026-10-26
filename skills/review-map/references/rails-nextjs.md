@@ -121,11 +121,55 @@ the question, whatever the list above says.
 be Y* is a verdict, and this page does not carry one. The reviewer knows why their codebase is shaped
 as it is; you know only that this file is shaped differently from its neighbours.
 
+## Architectural questions, measured on both sides
+
+Every other section here asks what the change does, and § *Coding decisions* asks how one piece was
+built; this one asks what the change made true of how the application's parts fit together.
+`report-format.md` § *Architectural questions* owns when it becomes a checkpoint — one per shift,
+after every behavioural judgment, and **never without a citation**: a written decision, or two
+searches, one at the merge-base and one at head.
+
+**Look first for what the repository wrote down.** `ARCHITECTURE.md`, `docs/adr/` or
+`doc/architecture/`, packwerk's `package.yml` files (`enforce_dependencies`, `dependencies:`), an
+engine's `*.gemspec` dependencies under `engines/` or `components/`. A shift the repository has
+declared allowed is no question.
+
+The shapes a Rails diff produces:
+
+- **A namespace that now reaches into another.** `Billing::` code naming `Accounts::` where only
+  `Accounts` named `Billing` before; a component under `engines/` calling into the host app. The
+  direction is the question, so search both names both ways at both revisions.
+- **A second writer.** A model's column written from a second namespace — an `update_columns`, an
+  `update_all`, a raw `UPDATE` — where one model or one service owned every write.
+- **A model that now calls out.** An HTTP client, a mailer or a job enqueued from inside a model
+  callback, in an app where models were persistence only.
+- **A request that now waits on the outside.** A `Net::HTTP`, `Faraday` or SDK call inside a
+  controller action or a `before_action`, where every other external call in `app/controllers`
+  goes through a job.
+- **The first of its kind.** The first job backend, the first `Rails.cache` use, the first
+  `ActionCable` channel, the first engine, the first `concerns/` module shared across namespaces.
+
+```sh
+rg -n '\bAccounts::' app/models/billing app/services/billing          # head: billing naming accounts
+git grep -n -P '\bAccounts::' <merge-base sha> -- app/models/billing app/services/billing   # base: was it already so?
+rg -ln 'Net::HTTP|Faraday|HTTParty|RestClient' app/controllers app/models   # outbound calls where they run inline
+rg -n 'Rails\.cache\.' app lib                                          # a precedent search: is this the first?
+rg -n 'enforce_dependencies|dependencies:' -g 'package.yml'             # what packwerk declares
+```
+
 ## Controllers, routes, serialization
 
 - Strong params complete, and no `permit!`.
 - N+1 introduced. Does the project use `bullet` or a query-count assertion that would have caught
   it?
+- A preload (`includes`, `preload`, `eager_load`) naming an association that only some classes in
+  the loaded set declare — an STI subclass's association preloaded through the base class's
+  `belongs_to`. The preloader asks each record's class for the association and raises
+  `ActiveRecord::AssociationNotFoundError` at the first record whose class lacks it; only a
+  **polymorphic** parent skips such records. It passes every test whose fixtures hold one subclass,
+  and fails for the user whose rows mix them. For each association in a changed preload list, find
+  which classes declare it (`rg -n 'has_one :relay\b|has_many :relay\b' app/models`) against which
+  classes the relation can return.
 - Unbounded collections without pagination or a limit.
 - A `before_action` chain whose order changed, or a new action that misses a filter the others have.
 - Authorization on every new action — check the project's library rather than assuming, and watch

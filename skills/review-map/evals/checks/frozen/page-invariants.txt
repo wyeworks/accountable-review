@@ -3558,6 +3558,40 @@ FAIL  the page names a flow — that is the run's analysis unit, and the page re
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
 SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --fragment invariants-flow-io.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --page invariants-flow-io.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
 ## --fragment invariants-loose-data-path.html
 exit=1
 PASS  no severity chips
@@ -4598,6 +4632,74 @@ PASS  no flow designator — the page refers to checkpoints and impact paths onl
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
 SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --fragment searches-context-beyond.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --page searches-context-beyond.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --fragment searches-context-flag.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --page searches-context-flag.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
 ## --fragment searches-git-grep.html
 exit=0
 PASS  no severity chips
@@ -4616,6 +4718,40 @@ PASS  no section-sign pointers — every reference names something the reader ca
 SKIP  metric strip: the page carries no masthead Files count
 SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
 ## --page searches-git-grep.html
+exit=1
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+FAIL  theme states missing: prefers-color-scheme data-theme=dark bare-:root
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --fragment searches-other-tree.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --page searches-other-tree.html
 exit=1
 PASS  no severity chips
 PASS  no verdict or approval language
@@ -5455,6 +5591,23 @@ PASS  data-path is only on ledger rows (0)
 SKIP  link reachability: needs --repo to ask git what is pushed
 SKIP  theme states: a fragment carries no token block
 FAIL  the page names a flow — that is the run's analysis unit, and the page refers to Checkpoint <letter> and Impact path <letter> only: Flow A 
+PASS  no section-sign pointers — every reference names something the reader can follow
+SKIP  metric strip: the page carries no masthead Files count
+SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against
+## --fragment invariants-flow-io.html
+exit=0
+PASS  no severity chips
+PASS  no verdict or approval language
+PASS  no asserted risk or severity score
+PASS  no assurance language — the effort level is invisible on the page
+PASS  no 'clean bill of health' in the prose
+PASS  no draft narration — corrections are written as claims, not as revisions
+PASS  no recency markers — an answered checkpoint is deleted rather than ticked
+PASS  evidence tiers used (1 label(s))
+PASS  data-path is only on ledger rows (0)
+SKIP  link reachability: needs --repo to ask git what is pushed
+SKIP  theme states: a fragment carries no token block
+PASS  no flow designator — the page refers to checkpoints and impact paths only
 PASS  no section-sign pointers — every reference names something the reader can follow
 SKIP  metric strip: the page carries no masthead Files count
 SKIP  tiers: no --repo/--base and no ledger on the page — nothing to hold a label against

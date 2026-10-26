@@ -111,6 +111,25 @@ module Searches
     Command.new(command[0...first], command[(first + 1)...second], command[(second + 1)..])
   end
 
+  # A `git grep` THAT NAMES A TREE SEARCHED THAT TREE, NOT THIS ONE. An architectural checkpoint
+  # records the base half of its measurement as `git grep -n -P '…' <merge-base sha> -- scope`, and
+  # a working-tree grep of the same pattern would read the sha as a missing path and search the
+  # scope at head — crediting head hits to a search the page says ran at the base, which is false
+  # provenance of exactly the kind this file exists to catch. So the trees are read off the command
+  # and such a search credits no entry: the entries cite head. A tree is what git's grammar puts
+  # between the pattern and `--`, written as a sha or a HEAD-relative name; without the `--`, only
+  # a sha is unambiguous. searches-repo is not a git repository, so nothing here asks git.
+  TREE = /\A(?:\h{7,40}|[A-Z_]*HEAD)(?:[~^][0-9]*)*\z/
+
+  def self.trees(command)
+    return [] unless command.prefix.to_s.split.first == "git"
+
+    tokens = command.paths.to_s.split
+    split = tokens.index("--")
+    tree = split ? TREE : /\A\h{7,40}\z/
+    (split ? tokens.take(split) : tokens).select { |t| t.match?(tree) }
+  end
+
   # RE-RUN IT WITH THE DIALECT IT WAS WRITTEN IN. This is not fussiness: `\|` is alternation
   # in grep's default BRE and a LITERAL PIPE in rg, so running a recorded
   # `grep -rn "recommendable\|general_recommendations_eligible" app` through rg matches
@@ -156,6 +175,35 @@ module Searches
   def self.which(name)
     ENV.fetch("PATH", "").split(File::PATH_SEPARATOR)
        .any? { |dir| File.executable?(File.join(dir, name)) }
+  end
+
+  # A RECORDED CONTEXT FLAG IS PART OF WHAT THE SEARCH RETURNS. The flag filter drops every flag
+  # before the re-run, and for -n or -i that changes nothing an entry can cite. -A, -B and -C are
+  # different: a run that opened a callee from the diff recorded `rg -n 'def log_custom' -A12
+  # app/services/...`, cited the line inside the method the change reaches, and a reviewer
+  # re-running that command sees it. Dropping the flag failed the entry as unreachable — a
+  # search that did reproduce it, reported as false provenance. So the window is read off the
+  # command outside its pattern, wherever the flag sits (before the pattern or after it — the
+  # caller passes prefix and paths, never the pattern itself), and the hits are widened by
+  # it arithmetically rather than by parsing `path-N-` context lines, whose `-` separator a
+  # hyphenated path makes ambiguous. Returns [before, after].
+  def self.context(command)
+    before = after = 0
+    tokens = command.to_s.split
+    tokens.each_with_index do |token, i|
+      long = token.match(/\A--(after-|before-)?context(?:=([0-9]+))?\z/)
+      short = token.match(/\A-[a-zA-Z]*([ABC])([0-9]*)\z/) unless long
+      next unless long || short
+
+      n = long ? long[2] : short[2]
+      n = tokens[i + 1].to_s if n.to_s.empty?
+      next unless n.match?(/\A[0-9]+\z/)
+
+      kind = long ? { "after-" => "A", "before-" => "B" }.fetch(long[1].to_s, "C") : short[1]
+      after = [after, n.to_i].max unless kind == "B"
+      before = [before, n.to_i].max unless kind == "A"
+    end
+    [before, after]
   end
 
   def self.argv_for(engine, pattern, paths)
@@ -282,6 +330,7 @@ commands = Searches.text_nodes(page)
 
 hits = []
 unparsed = []
+other_trees = []
 recorded = 0
 
 commands.each do |command|
@@ -293,6 +342,12 @@ commands.each do |command|
     next
   end
 
+  named = Searches.trees(parsed)
+  if named.any?
+    other_trees << named.first
+    next
+  end
+
   # Drop any remaining flags from the path list; an empty list means the whole repo.
   paths = parsed.paths.to_s.split.reject { |p| p.start_with?("-") }
   paths = ["."] if paths.empty?
@@ -300,8 +355,18 @@ commands.each do |command|
 
   engine = Searches.engine_for(parsed.prefix)
   out, = check.shell(*Searches.argv_for(engine, parsed.pattern, paths), chdir: check.repo)
-  # cut -d: -f1,2 — path and line, which is the granularity an entry cites.
-  hits.concat(out.lines.map { |line| line.chomp.split(":", 3).first(2).join(":") })
+  # cut -d: -f1,2 — path and line, which is the granularity an entry cites — widened by the
+  # recorded context window, if any.
+  before, after = Searches.context("#{parsed.prefix} #{parsed.paths}")
+  out.lines.each do |line|
+    path, number = line.chomp.split(":", 3)
+    unless number.to_s.match?(/\A[0-9]+\z/)
+      hits << [path, number].compact.join(":")
+      next
+    end
+
+    ([number.to_i - before, 1].max..(number.to_i + after)).each { |n| hits << "#{path}:#{n}" }
+  end
 end
 
 hits = hits.sort.uniq
@@ -376,12 +441,16 @@ end
 # ---------------------------------------------------------------- verdicts
 if recorded.zero?
   if checked.positive? || pointers.positive?
-    check.maybe("affected entries are present but no search is recorded anywhere — provenance cannot be checked, and unrecorded, absence and omission look identical")
+    check.maybe("affected entries are present but #{other_trees.any? ? "no search of the tree they cite is recorded" : "no search is recorded anywhere"} — provenance cannot be checked, and unrecorded, absence and omission look identical")
   else
     check.skip("no recorded search and no affected entry to check one against")
   end
 else
   check.ok("#{recorded} recorded search(es) re-run inside the repository")
+end
+
+if other_trees.any?
+  check.skip("#{other_trees.size} recorded search(es) name another tree (#{other_trees.uniq.first(3).join(' ')}): they describe that revision, not the one the entries cite, so they credit none of them")
 end
 
 if unparsed.any?

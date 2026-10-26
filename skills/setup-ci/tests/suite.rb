@@ -458,11 +458,19 @@ class SetupCiSuite
     assert_in calls, "no verdict, no score and no approval",
               "and says on the pull request itself that it is not a review"
 
-    r, calls = run_step.call("upsert", "998877\n998899")
-    check r.code.zero?, "the comment step runs clean when one is already there", r.err.strip
-    assert_in calls, "issues/comments/998877",      "an existing comment is patched, not duplicated"
+    # The stub answers the listing with what the step's jq filter prints: an id and the line naming
+    # the revision.
+    same = "998877 **Review Map** for `a93bd21` — x.\n998899 **Review Map** for `a93bd21` — y."
+    r, calls = run_step.call("same-head", same)
+    check r.code.zero?, "the comment step runs clean when one already names this head", r.err.strip
+    assert_in calls, "issues/comments/998877",      "a comment naming this head is patched, not duplicated"
     assert_not_in calls, "-X POST",                 "and no second comment is posted"
     assert_not_in calls, "issues/comments/998899",  "only the first match is touched"
+
+    r, calls = run_step.call("new-head", "998877 **Review Map** for `5c01d4e` — x.")
+    check r.code.zero?, "the comment step runs clean when a comment names an earlier head", r.err.strip
+    assert_in calls, "-X POST",                     "a map for a new head is posted, so the reviewer is notified"
+    assert_not_in calls, "-X PATCH",                "and the earlier revision's comment is left as it was"
 
     # A browsable provider gets its own URL, through the delivery seam rather than around it — the
     # comment must not be a second thing that knows about artifacts.

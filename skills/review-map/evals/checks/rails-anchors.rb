@@ -507,8 +507,8 @@ unless external.empty?
   # links than judgments has stopped selecting, and that needs a reader.
   #
   # PINNED AT FIVE. The denominator was the raw checkpoint count, and the agenda may now run to
-  # seven on a PR shipping two independent changes — which would have raised this threshold from
-  # five to seven silently, loosening the one rule standing between the page and the failure the
+  # its ceiling — seven to eleven, report-format.md § Ranking by delta — which would have raised
+  # this threshold past five silently, loosening the one rule standing between the page and the failure the
   # anchor budget exists for: a page that links everything and reads as a framework tutorial with
   # a diff attached. Whether a link is earned does not scale with how many judgments there are.
   cps = [page.count(/<section class="cp/), 5].min

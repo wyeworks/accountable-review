@@ -48,7 +48,7 @@ is. A judge here reads Context and the checkpoints as that reader, and asks:
 ## § 03 checkpoints, what the two judges leave
 
 `checkpoint-judgments` grades whether each checkpoint is a judgment, asked once, ordered without a
-grade and left to the reviewer; `checkpoint-claims` opens every cited line. Two things neither asks:
+grade and left to the reviewer; `checkpoint-claims` opens every cited line. Four things neither asks:
 
 - **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
   decision in the repository, or a convention on the lens file's closed stack list — asks rather
@@ -57,9 +57,24 @@ grade and left to the reviewer; `checkpoint-claims` opens every cited line. Two 
   have been merged. Defect: a coding-decision checkpoint with no citation from either source, one
   that rests on a convention the lens does not list, or one that recommends the fix. Needs a gold
   page with a coding-decision checkpoint on it.
-- **The count scales on the deltas § 01 names**, never on the file count. Defect: three more
-  checkpoints on a one-delta page — which also plants a merge failure, so it needs a page where the
-  extra checkpoints are distinct judgments.
+- **The architectural bar.** Each architectural checkpoint states a shift — before, X was not true;
+  at `file:line` it now is — and cites a written decision or a search at both revisions, the base
+  half of which reproduces at the merge-base; it asks rather than answers, merges into a behavioural
+  judgment that turns on the same lines, and is ranked after every behavioural judgment of a
+  behavioural delta. Defect: a precedent an earlier instance falsifies, an edge that existed at the
+  base in another file of the module, or *this couples X to Y* with nothing cited. Needs a gold page
+  carrying a structural shift.
+- **The ranking by delta.** Each delta's class (behavioural or refactor) agrees with the *Change
+  shape* chip, a refactor delta leads with its equivalence, and no structural checkpoint precedes a
+  behavioural judgment of a behavioural delta; the chip reads behavioural, refactor or mixed and follows
+  the class rather than the PR's title; and a behavioural delta that relocates code carries an
+  equivalence question for the callers meant not to notice. Defect: a refactor page that opens with
+  where a class lives while the notes show a guard reordered; a `DEV:`-titled page whose chip says
+  refactor while its own checkpoints describe behaviour that moved.
+- **The count scales on the deltas § 01 names**, never on the file count, and **the ceiling on the
+  Production bucket**, never on test, generated or docs files. Defect: three more checkpoints on a
+  one-delta page — which also plants a merge failure, so it needs a page where the extra checkpoints
+  are distinct judgments — or a page past seven whose Production bucket is under the first tier.
 
 ## § 03 figures
 
@@ -138,7 +153,7 @@ eight merged, public PRs of different shapes, none of them the calibration PR:
 
 ## What retiring the synthetic fixtures lost, at the whole-run level
 
-Each of these still has its mechanical half in `skills/review-map/tests/run.sh`. What's gone is
+Each of these still has its mechanical half in `skills/review-map/tests/run.rb`. What's gone is
 a whole run that exercises it.
 
 - **The trivial refusal** (the old `trivial` fixture). A docs-only OSS PR restores it.

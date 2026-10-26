@@ -191,7 +191,9 @@ What changed                    one paragraph: what is now true that was not
 Context                         when earned: the pieces of this repository the judgments rely
                                 on, for a reader who knows the stack but not the codebase
 What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the
-                                outside; each one judgment, framed as a question, and at
+                                outside (9 or 11 on a broad change to application code);
+                                about behaviour, structure or how the code was built;
+                                each one judgment, framed as a question, and at
                                 most one small figure where its shape is clearer than prose:
                                 a chain, paths converging on one invariant, a lifecycle, or
                                 an entity and its relationships
@@ -349,9 +351,9 @@ Run it from inside the repository you are reviewing:
 /accountable-review:review-map feature/some-branch
 ```
 
-In Claude Code you get back a URL. The page is a private Claude Artifact until you share it, and
-re-running for the same PR republishes to the same URL — so the Review Map tracks the PR across pushes instead of
-scattering links.
+In Claude Code you get back a URL. The page is a private Claude Artifact until you share it.
+Re-running for the same PR publishes a new map and leaves the earlier one where it was; `--update`
+edits the earlier map in place, so the Review Map tracks the PR across pushes at one URL.
 
 It publishes early and fills in as parts complete: open it at minute two, watch it arrive, start
 reading the moment the part you need lands. The checkpoints arrive one at a time, and their
@@ -716,7 +718,7 @@ is separated from delivery so a team can send it somewhere browsable instead. Se
 | **Output format** | One self-contained HTML page — its own design system, light and dark, with collapsed source excerpts, figures built from components rather than drawn per run, and deep links chosen from a four-rung ladder depending on whether the head SHA is reachable on a remote. On an unpushed branch it degrades to plain text rather than emitting permalinks that would 404. |
 | **Publishing** | In Codex or any other agent, a local HTML file. In Claude Code interactively, a Claude Artifact — private until you share it, republished to the same path per PR. `--output <dir>` makes the run non-interactive and writes `<dir>/index.html` as portable static HTML instead, which is how CI generates one. The page is never written into the repository under review; scratch files go to a work directory under `$TMPDIR`, derived from the repo and the target. It never posts to GitHub. |
 | **Completeness** | One mechanical check at the final publish: set equality between the page's own inventory and `git diff --name-only`. A file cannot be silently dropped. |
-| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one upserted comment linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
+| **CI execution** | GitHub Actions, via `setup-ci`: one workflow, superseded runs cancelled, delivery through a provider seam that defaults to a build artifact, and one comment per revision linking the map on the pull request — the only write the job can do, and the only reason it holds `pull-requests: write`. The triggers, the guard that skips drafts, forks and bots, and whether it comments are confirmed with you at setup, rendered from flags, and recorded in the file so a later upgrade does not revert them. Whether a given pull request is worth a map is decided after checkout by `ci/application-code.sh` — no application code, or too little of it — and a skipped run says which rule fired and what it counted. |
 
 ### Configuration
 

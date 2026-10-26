@@ -942,6 +942,12 @@ SKIP  no excerpts in this input
 ## --page invariants-flow-designator.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment invariants-flow-io.html
+exit=0
+SKIP  no excerpts in this input
+## --page invariants-flow-io.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment invariants-loose-data-path.html
 exit=0
 PASS  1 source excerpt(s), each with a summary
@@ -1302,10 +1308,28 @@ SKIP  no excerpts in this input
 ## --page searches-clean.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment searches-context-beyond.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-context-beyond.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment searches-context-flag.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-context-flag.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment searches-git-grep.html
 exit=0
 SKIP  no excerpts in this input
 ## --page searches-git-grep.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment searches-other-tree.html
+exit=0
+SKIP  no excerpts in this input
+## --page searches-other-tree.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment searches-unreachable.html

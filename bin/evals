@@ -58,8 +58,8 @@ skills/review-map/evals/e2e/test_triage.rb
 skills/review-map/tests/frontmatter.rb
 skills/review-map/tests/codex-plugin.rb
 skills/review-map/tests/activity.rb
-skills/review-map/tests/run.sh
-skills/review-map/tests/self-test.sh
+skills/review-map/tests/run.rb
+skills/review-map/tests/self-test.rb
 skills/setup-ci/tests/run.rb
 skills/setup-ci/tests/self-test.rb
 bin/examples"
@@ -101,8 +101,8 @@ run_suite() {
     codex-plugin) suite codex-plugin ruby ruby "$SKILL/tests/codex-plugin.rb" ;;
     activity)  suite activity  ruby ruby "$SKILL/tests/activity.rb" ;;
     examples)  suite examples  ruby ruby "$ROOT/bin/examples" check ;;
-    review-map) suite review-map sh sh "$SKILL/tests/run.sh"
-               suite review-map-self sh sh "$SKILL/tests/self-test.sh" ;;
+    review-map) suite review-map ruby ruby "$SKILL/tests/run.rb"
+               suite review-map-self ruby ruby "$SKILL/tests/self-test.rb" ;;
     setup-ci)  suite setup-ci  ruby ruby "$SETUP/tests/run.rb"
                suite setup-ci-self ruby ruby "$SETUP/tests/self-test.rb" ;;
     manifest)  suite manifest  claude claude plugin validate . --strict ;;

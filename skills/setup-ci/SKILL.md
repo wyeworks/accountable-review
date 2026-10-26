@@ -361,7 +361,7 @@ permissions:
 
 | | | |
 |---|---|---|
-| Link on the pull request | One comment, upserted, naming the revision | `--no-pr-comment` |
+| Link on the pull request | One comment per revision, naming it | `--no-pr-comment` |
 | Permissions | `contents: read`, plus `pull-requests: write` **only** for that comment | — |
 
 The rest is not confirmed and has no flag, because none of it decides what gets spent, what gets
@@ -417,10 +417,10 @@ skipped, or what the job is allowed to do:
   tests; that is a property of the product, not an optimisation. `review-map` proposes validation
   commands for a human to run and never runs them, and CI must not quietly become the place that
   does.
-- **One comment, and nothing else on GitHub.** The generated workflow may post exactly one comment
-  per pull request — a link to the Review Map and the revision it describes — upserted against a
-  hidden marker so a reopen updates it rather than adding a second. No checks, no statuses, no
-  reviews, no labels, no approvals, no second comment, and nothing in the comment that grades the
+- **One comment, and nothing else on GitHub.** The generated workflow may post one comment
+  per revision — a link to the Review Map and the revision it describes — behind a hidden marker, so
+  a reopen at the same head updates its comment rather than adding a second. No checks, no statuses,
+  no reviews, no labels, no approvals, no other comment, and nothing in the comment that grades the
   change.
 
   **The line is between discoverability and verdict, and it is narrower than it looks.** A link is

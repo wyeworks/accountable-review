@@ -171,8 +171,8 @@ regression suites, which run in CI and take a few seconds:
 ruby skills/review-map/evals/checks/self-test.rb        # every golden fragment's asserted verdict
 ruby skills/review-map/evals/checks/lib/test/test_page.rb  # the region scanner, directly
 skills/review-map/evals/checks/frozen.rb                # ~1000 cases against their recorded output
-skills/review-map/tests/run.sh                          # page-skeleton.sh, diff-render.sh, carry-plan.sh
-skills/review-map/tests/self-test.sh                    # every break run.sh claims to catch
+ruby skills/review-map/tests/run.rb                     # page-skeleton.sh, diff-render.sh, carry-plan.sh and the rest
+ruby skills/review-map/tests/self-test.rb               # every break run.rb claims to catch
 ruby skills/review-map/tests/activity.rb                # hooks/activity.json, read the same by Ruby and JS
 claude plugin test .                                    # the progress line, against the engine's test kit
 ruby skills/setup-ci/tests/run.rb                       # what the generated workflow contains

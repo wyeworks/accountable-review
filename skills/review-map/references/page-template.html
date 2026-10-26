@@ -13,7 +13,7 @@
      checkpoint and inventory class and attribute names, and of the syntax-tint class prefix:
      each opens a range that some check scans for, and Page#range re-opens.
 
-     Two things must not appear in the markup half at all, and tests/run.sh counts both at
+     Two things must not appear in the markup half at all, and tests/run.rb counts both at
      zero: an svg opening tag, because this page has no drawings, and a literal tint class,
      because the tint is applied at read time and a hand-coloured quotation is a quotation
      someone edited. That is why the excerpt block below describes that class rather than
@@ -86,14 +86,16 @@
   offer. A "mentor mode" banner, a count of the primers, an "onboarding" eyebrow:
   each one is the badge shape coming back through the one door that looks open.
 
-  AND NOTHING MARKS A CODING-DECISION CHECKPOINT AS ONE, which is the fifth and
-  the one that hides inside a component rather than beside it. A checkpoint that
-  judges how the change was built rather than what it now does — see
-  report-format.md § Coding decisions — is an ordinary section.cp in the last
-  positions. No label, no eyebrow, no section of its own, and no sentence
-  announcing that the page also checks conventions. Announcing it is how it turns
-  into a style review: a reader who is told a convention section exists expects it
-  filled every time, and a run that knows the reader expects it will fill it.
+  AND NOTHING MARKS A CODING-DECISION OR AN ARCHITECTURAL CHECKPOINT AS ONE, which
+  is the fifth and the one that hides inside a component rather than beside it. A
+  checkpoint that judges how the change was built — report-format.md § Coding
+  decisions — or what it made true of the system's structure — § Architectural
+  questions — rather than what it now does is an ordinary section.cp in the
+  positions § Ranking by delta gives it. No label, no eyebrow, no section of its
+  own, and no sentence announcing that the page also checks conventions or the
+  architecture. Announcing it is how it turns into a style review or a design
+  review: a reader who is told such a section exists expects it filled every
+  time, and a run that knows the reader expects it will fill it.
 
   AND NO CARRY BADGE, which is the sixth and now the one with the best excuse of
   all. --update re-reads only the commits since the previous map (SKILL.md
@@ -635,7 +637,7 @@ pre.probe {
 
    The ramp is declared in all three theme states like every other
    colour here, which is the defect the tint tokens are counted by
-   name to catch, and tests/run.sh counts --primer-ink the same way
+   name to catch, and tests/run.rb counts --primer-ink the same way
    for the same reason.
 
    THE HEADER IS THE STACK, IN WORDS — "Understanding Ruby on
@@ -1646,7 +1648,7 @@ figcaption strong { color: var(--ink-3); }
              wording. Do not add it on an ordinary run: a page built in one pass
              was not updated from anything. -->
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">{{HEAD}} <span style="color:var(--fainter)">&rarr;</span> {{BASE}}</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">{{HEAD_SHORT_SHA}} <span>&rarr;</span> {{BASE_SHORT_SHA}}</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{FEATURE_REFACTOR_FIX}}</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">{{BEHAVIOURAL_REFACTOR_OR_MIXED}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">{{N}}</div></div>
         <!-- BY KIND: the Files count split into report-format.md § Section 1's four buckets,
@@ -1785,7 +1787,8 @@ figcaption strong { color: var(--ink-3); }
          section a reader who has time for nothing else should read.
 
          Three to five checkpoints PER INDEPENDENT DELTA SECTION 01 NAMES, each
-         ONE JUDGMENT the reviewer has to make; seven on the page at the outside.
+         ONE JUDGMENT the reviewer has to make, under the ceiling the Production
+         bucket sets: seven, nine or eleven (report-format.md § Ranking by delta).
          Fewer for a small PR. A sixth candidate under one delta is a signal that
          two of them are the same question — merge, or name it in a clause of the
          nearest one. A hundred files of one rename is still one delta: the count
@@ -1902,7 +1905,7 @@ figcaption strong { color: var(--ink-3); }
                to that stack needs, rather than the eyebrow it replaced, which
                spent the widest line in the block naming a kind of component the
                reader can already see. The title is not quoted again in this
-               comment on purpose: tests/run.sh counts it at exactly one, and a
+               comment on purpose: tests/run.rb counts it at exactly one, and a
                comment repeating it would satisfy that count while the header
                itself was missing. The subject stays on the right, in mono, where
                the API is scannable without competing with the title. A gem
