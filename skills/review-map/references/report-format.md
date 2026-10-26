@@ -27,7 +27,8 @@ full mode* at the foot of this file records what a deeper page would pick back u
 
 What the page carries is not a length setting. It is the answer to one question — *what does a
 competent reviewer have to judge before approving this, and where do they look to judge it?* — and
-everything in this file is in service of answering that in as few words as the answer needs.
+everything in this file is in service of answering that so the reader can follow it — as few words
+as the answer needs, and never so few that the reader has to assemble the explanation themselves.
 
 **Effort is not a level, and this file has nothing else to say about it.** `--effort high` (the
 default) and `--effort low` decide how hard the run works to be right — at `high`, `SKILL.md` step 6
@@ -89,7 +90,7 @@ refusals that hold that line.
 **Primitives and rules** — read these before writing anything.
 
 - *One page shape* — above: no level, and what effort and stack do not change
-- *The review checkpoint* — the page's primitive: one judgment, framed as a question
+- *The review checkpoint* — the page's primitive: one judgment, explained first and asked last
 - *Coding decisions* — the second kind of checkpoint, its citation bar and the limits on how many
 - *Architectural questions* — the third kind: what the change makes true of the system's structure,
   cited from a written decision or measured on both sides of the diff
@@ -107,8 +108,8 @@ refusals that hold that line.
 - *Impact paths* — section 05's figure: directed chains from changed code, through the unchanged code
   that gives the change its consequence, to an observable behaviour
 - *One canonical home* — every fact explained once, referenced from everywhere else
-- *The agenda budget* — how much prose each part may spend, what it never counts, and the one number
-  it never touches
+- *The agenda budget* — why there is no word budget, what still bounds the page, and the one number
+  length never touches
 - *The completeness invariant* — why every diff path appears, and why the check is one-directional
 - *What was searched* — the collapsed record, and why the finding is never left inside it
 - *Build state* — the banner and pending markers that keep a staged page honest while it fills in
@@ -146,8 +147,57 @@ selected — `references/rails-docs.md`, `references/elixir-docs.md`, `reference
 
 The page's primitive. Where the reviewer's attention goes is expressed as a handful of these under
 *What needs your attention* — three to five per independent change the PR makes, under a ceiling of
-seven to eleven the change's Production bucket sets — and each is **one judgment** the reviewer has to make: framed as a question, explained
-in a few sentences, and anchored to the exact lines that let them make it.
+seven to eleven the change's Production bucket sets — and each is **one judgment** the reviewer has to make: explained
+first, asked last, and anchored to the exact lines that let them make it.
+
+**Explain first, challenge second.** The agent does the work of explaining; the human does the work
+of judging. A checkpoint that opens on its question asks the reviewer to reason about a situation
+before they have it, and they spend the next paragraph reconstructing what the question meant —
+the effort the page exists to take off them. So the reader meets the behaviour, then what the change
+did to it and why that matters, and only then the question, at the point where they can answer it.
+The difficulty kept is the judgment's; the difficulty removed is decoding the explanation.
+
+**Each checkpoint stands alone.** A reviewer may jump straight to any checkpoint from the rail, the
+reading path or a link someone pasted, and must be able to understand what changed, why it matters
+and what to judge without having read anything above it. So a checkpoint is a short, complete
+technical conversation about one concern, not a fragment of a larger investigation report: it says
+what it needs of the domain and the code itself, connects the existing behaviour, the change, its
+consequences and the question into one explanation, and **brings the consequences in** — when the
+change reaches unchanged callers or something a user sees, the checkpoint names them and says what
+they now do, rather than leaving that to *Impact outside the diff*. A pointer to *Context*, another
+checkpoint, the impact panel or a source file is optional depth; the reader follows one to
+investigate further, never to understand what the checkpoint is saying.
+
+**That allows purposeful repetition, in one direction.** A checkpoint repeats the little background
+it needs — what a concept is, the part of *What changed* it turns on — in its own words, because a
+checkpoint that is shorter by depending on another section has moved the assembly onto the reader.
+What keeps one home is the **finding and the judgment**: the sections after the agenda point back at
+a checkpoint and never retell it, and two checkpoints never explain the same finding. § *One
+canonical home* draws the line. **Self-contained is not exhaustive** either: the checkpoint carries
+what the reviewer needs to understand and evaluate this concern, not everything step 5 found.
+
+A self-contained checkpoint is often longer than the compressed one it replaces, and that is
+correct. This one was correct, cited and short:
+
+> *Is it safe for reservations and the fee calculator to share a loaded product instead of
+> reloading it?* With `inverse_of: :product`, a reservation loaded or built through
+> `instrument.reservations` holds that instrument object rather than querying for it: the finder's
+> candidate slots, but also the admin reservation actions, the instrument schedule page and the
+> auto-end service from unchanged code. The calculator now gives its copy the caller's product
+> before `time_data=` asks that product where the time data lives. Decide whether any of these paths
+> relies on reading a fresh product rather than the caller's object, unsaved edits included.
+
+and the reader has to hold how the association works, why the calculator makes a copy and why
+unchanged callers matter, all at once, to follow one paragraph. Rewritten, under the heading
+*Reusing loaded products instead of fetching them again*, it says that loading reservations through
+an instrument used to cost a query per reservation for its product, and that the association now
+hands each reservation the instrument already in memory; that the cancellation fee calculator, which
+copies an order detail so it can compute a fee without touching the original, now gives the copy the
+original's loaded product too; that both save queries but mean sharing an object's current state,
+unsaved changes included; and that more than the finder loads reservations this way — the admin
+reservation actions, the instrument schedule and the auto-end service — each named and cited. Only
+then: *could any of these behave differently now that it reads the caller's product rather than a
+fresh copy from the database?* Longer, and every paragraph does one job.
 
 **Three kinds of judgment, one component.** A **behavioural** checkpoint asks what the system now
 does: *is nil safe for every consumer?*, *does the new guard admit a class it used to refuse?* A
@@ -155,7 +205,7 @@ does: *is nil safe for every consumer?*, *does the new guard admit a class it us
 does Y for the same job; is X deliberate?* An **architectural** checkpoint asks what the change makes
 true of the system's structure: *before this PR nothing in `billing` depended on `accounts`; now
 `invoice.ex:3` does; is that direction intended?* They render identically — same `h3`, same
-explanation, same *Look at* list — and nothing on the page labels which is which, for the same reason
+explanation, same review question — and nothing on the page labels which is which, for the same reason
 nothing labels the stack or the effort. § *Coding decisions* and § *Architectural questions* below
 carry the second and third kinds' own rules, and they are constraints on **when** each may be
 written, never on how. § *Ranking by delta* orders the three.
@@ -171,9 +221,11 @@ change the judgment, and the page carries the judgment.
 
 ```html
 <section class="cp" id="cp-a">
-  <h3>Does the new Project filter preserve the intended scope?</h3>
-  <p>Two to four sentences: what changed here, what follows from it, and what the reviewer has
-     to decide <span class="tier tier-unc">from unchanged code</span>.</p>
+  <h3>Archived projects in the project filter</h3>
+  <p>What the system does here, in terms of the behaviour a user or a caller sees, and the
+     concepts needed to follow the rest.</p>
+  <p>What the change did to it, the mechanism and what follows from it, with facts stated as
+     facts and the rest marked <span class="tier tier-unc">from unchanged code</span>.</p>
   <figure class="chain">…</figure>                       <!-- optional: at most ONE figure, of any kind -->
   <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <ul class="lookat">
@@ -185,26 +237,77 @@ change the judgment, and the page carries the judgment.
         <a class="path" href="…">app/controllers/projects_controller.rb:18-60</a></li>
   </ul>
   <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
-  <p class="open"><b>Open question</b> Whether archived projects should still appear in
-     historical reports; no test pins it.</p>            <!-- optional -->
+  <p class="open"><b>Review question</b> Does the filter still hide archived projects for every
+     caller, including the two reports that build their own scope?</p>   <!-- always, always last -->
 </section>
 ```
 
-- **The question, as the `h3`.** A judgment, never a category. *Controller changes* names a
-  directory; *Does the new filter preserve the intended scope?* names something a reviewer can get
-  wrong. The test: could a reviewer answer it by looking at the code? If the honest answer is "there
-  is nothing to decide here", it is an explanation and belongs in a sentence somewhere else.
-- **The explanation, one `<p>`.** Meaning, consequence, judgment — in that order and in two to four
-  sentences. What the change does here, what follows from it in code the reader may not have opened,
-  and what they are being asked to decide. Evidence tiers sit against the clause they qualify. This
-  paragraph is the checkpoint's canonical home for its finding; every other mention on the page is a
-  clause pointing here.
+**The order is the sequence of understanding, not a form.** Context, then the change and its
+consequence, then the question — that sequence is the rule. How many paragraphs it takes, and where
+one idea ends and the next begins, is the writer's call: no sub-headings, no fixed paragraph per
+idea, no *Context:* or *What changed:* labels inside a checkpoint. A checkpoint where the situation
+takes one sentence says it in one sentence; one whose mechanism takes three paragraphs takes three.
+Five checkpoints cut from the same three-paragraph template read as a form, which is the page this
+one replaced.
+
+- **The heading, as the `h3`: the behaviour, not the question.** Name what the system does in this
+  part of the change, in the reader's words — *Moving a reservation earlier*, *Archived projects in
+  the project filter* — so the reader knows what they are about to understand before they read it.
+  **Never an implementation identifier alone** (*`earliest_possible`*, *`ProjectSearcher`*) and never
+  a place (*Controller changes*, *Tests*, *Migration*): an identifier asks the reader to already know
+  what it does, and a place names where code sits rather than what it does. The judgment is not in
+  the heading — it is the review question at the end — so the heading's test is whether a reader new
+  to this code learns what the checkpoint is about from it.
+- **The explanation, as prose.** It does three things, in order:
+
+  1. **Establish the situation.** What the system does here, described as behaviour. Introduce only
+     the concepts the rest of the checkpoint needs — a domain term this repository uses, what a
+     method is *for* before its name is used as shorthand — and nothing the question does not turn
+     on.
+  2. **Explain what changed and why it matters.** The mechanism and its consequence, with the cause
+     stated as a cause: *because*, *so*, *which means*. Say what is established as established, and
+     mark what is not — the evidence tier against the clause it qualifies, and *the run could not
+     tell whether…* in a plain sentence where something is unknown. The reader should never have to
+     work out which parts the run has already settled and which are left to them.
+  3. **Lead into the question** — the explanation stops where the reader has what they need to
+     judge, and the review question takes it from there.
+
+  This prose is the checkpoint's canonical home for its finding; every other mention of the finding
+  on the page is a clause pointing here. It is written for a colleague who knows the stack and not this codebase.
+- **The writing, which is where readability is won or lost:**
+
+  - **Lead with the behaviour or the concept, not an identifier or an abstract question.** *The
+    system lets customers move a reservation to an earlier slot* before *`earliest_possible` now
+    returns nil*. Once the reader knows what a method does, its name is shorthand they can follow.
+  - **Prefer clear, natural technical language to compressed sentences.** A sentence carrying four
+    relationships — *the preload takes two routes to each instrument: through the order detail, for
+    the facility link and the offline warning, and through the reservation, for the action links* —
+    is short and expensive. Two sentences that each carry one or two are longer and cheaper to read.
+    Brevity bought by conceptual compression moves the work onto the reader.
+  - **Keep the precision; add the plain sentence rather than swapping it in.** Plain is not vague.
+    *The existing logic already rejects any slot that is not earlier* is readable and unverifiable;
+    *the finder only proposes slots starting at or after `after`, and the guard the change kept drops
+    any slot at or after the reservation's own start* is the claim the reviewer has to check. Say the
+    first, then the second. Simplifying away the mechanism removes the engineering difficulty along
+    with the reading difficulty, and the first is the one the reviewer is here for.
+  - **Don't make the reader assemble the explanation from elsewhere.** If understanding this
+    checkpoint needs a fact, state it here, even when *Context* or another checkpoint explains it at
+    length — the checkpoint stands alone. A pointer is for depth the reader may want, never for a
+    step of the argument they need, and a consequence in unchanged code is explained here in plain
+    terms, with the impact path as the drawing of it.
+  - **Don't repeat the explanation in the question.** The question names the judgment; the prose
+    above has already given the facts it rests on.
+  - **Concise, but never at the expense of clarity.** Cut what the judgment does not turn on; never
+    cut a step the reader needs to follow it.
+
+  The test of the whole: it should read like an experienced engineer explaining a change to a
+  colleague, and then asking the question that matters.
 - **The chain, `figure.chain`, optional.** Earned when the judgment turns on a mechanism the reader
   cannot hold from prose — a guard order, a value derived across three or more hops, a request path
   with a branch. It shows mechanism **inside the change** and holds no affected-unchanged node;
   § *Chains* owns the component and the rule that sends a crossing chain to *Impact outside the
   diff*. A chain followed by a paragraph that names each node again is the defect: the figure says
-  how the value gets there, the paragraph says what to judge about it. The same slot holds one of
+  how the value gets there, the prose says why that matters, and the review question what to judge. The same slot holds one of
   the three shapes a chain cannot draw — `figure.converge`, `figure.lifecycle`, `figure.structure`
   — and § *Topology figures* owns which shape a judgment has and the order the questions are asked
   in. **One figure per checkpoint, of any kind.**
@@ -243,31 +346,46 @@ change the judgment, and the page carries the judgment.
   tests leave open **where that changes the judgment**. It is earned by the same test as everything
   else here: *"no request spec covers the archived branch"* is a gap when the reviewer's decision
   turns on whether that branch was exercised, and is noise when it does not. At most one per
-  checkpoint, and it counts against the checkpoint's word budget like any other prose.
+  checkpoint.
 
-  **It states an absence; it does not grade one.** The label is fixed for the reason `p.open`'s is —
+  **It states an absence; it does not grade one.** The label is fixed for the reason the review question's is —
   *Missing*, *Untested* and *Risk* are a severity vocabulary in a component the palette already
   marks ochre — and a gap never implies the change should not ship. Silence is not a claim of
   coverage either: a checkpoint with nothing the tests leave open writes no `div.gap`, and the page
   never says the tests are complete. That is the same rule as the omitted section, one component
   down.
-- **Open question, `p.open`, optional.** One line, labelled **Open question** and nothing else. What
-  only the author can settle, or what the run could not establish and what would settle it. The label
-  is fixed: *Watch* and *Blocking* are severity by another name, and `evals/checks/page-invariants.rb`
-  warns on both.
+- **The review question, `p.open`, always, and always last.** Labelled **Review question** and
+  nothing else, in the ochre box the theme gives it: the moment the checkpoint hands the reader the
+  judgment, set apart so a reader returning to the page finds every question by scanning for the box.
+  **One per checkpoint**, a single question, naming the specific assumption, behaviour or tradeoff
+  the reviewer has to decide — *does this reasoning hold for every caller, including walk-up
+  reservations?* It is a judgment, never a category: could a reviewer answer it by looking at the
+  code, and could they get the answer wrong? If the honest answer is "there is nothing to decide
+  here", the checkpoint is an explanation and belongs in a sentence somewhere else. It does not
+  restate the explanation, and it carries a tier or a citation only where the question itself
+  introduces a fact.
+
+  **What only the author can settle is a review question too**, asked as one: *was the change meant
+  to cover approval-gated instruments, whose schedule rules skip the preload?* — with the prose above
+  saying the code cannot answer it. There is no second unresolved-thing line beside it.
+
+  The label is fixed because the box is ochre and the question is the one free-text line every
+  checkpoint carries: *Watch*, *Blocking* and *Check* are severity by another name, and
+  `evals/checks/page-invariants.rb` warns on the first two.
 
 **Facets, not rows.** Tests appear inside a checkpoint when they change how the reviewer judges it —
 *"the spec at `:88` pins the admin branch and leaves the invitee branch open"* is part of the
 judgment; a list of the specs that touch the file is not. A validation command or a `pre.probe`
 appears when running it would settle the question *and would answer in the reviewer's own checkout*,
 after the explanation, at most one per checkpoint; § *Framework anchors* has both tests.
-An author question appears as the open line. Anything that would have been a row with nothing in it is
+An author question is the review question. Anything that would have been a row with nothing in it is
 not written, and no label is left behind to say so.
 
 **Ordered by consequence if misunderstood, and the order is not a scale.** The first checkpoint is the
 one a reviewer would most regret getting wrong; the last is still a judgment or it would not be on the
-page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. The rail and the
-reading path refer to a checkpoint by its question, and section 03's intro says in one sentence that
+page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. The rail names a
+checkpoint by a short form of its review question, so a skimming reader still sees every judgment
+before reading any explanation; the reading path refers to it by its heading. Section 03's intro says in one sentence that
 the order is the order to think about them.
 
 **Three to five per independent semantic delta named in *What changed*, under a ceiling the
@@ -294,7 +412,7 @@ a checkpoint, and *Read the code in this order* has become an index of *What nee
 More application code is more code to route through, so the ceiling rises with the Production
 bucket — seven, nine, eleven, § *Ranking by delta* — and the reading path stays three to seven stops,
 reaching the extra checkpoints through stops whose `span.why` names two. The tiers are a first
-calibration, in the sense § *The agenda budget* means it; the test at every tier is whether *Read the
+calibration; the test at every tier is whether *Read the
 code in this order* still reads as a route, and a page that cannot route every checkpoint is wider
 than it carries whatever its tier says.
 
@@ -455,8 +573,8 @@ not to ask.
 **Ask; never answer.** No *should have been*, no *unidiomatic*, no *the Rails way*, no *consider
 moving*. A stack convention is stated as what the manual documents, linked, never as a standard the
 PR failed. The reviewer knows why the codebase is shaped the way it is; the page knows only that the
-shapes differ. Where the run cannot resolve it — and it usually cannot — the *Open question* line is
-where that goes.
+shapes differ. Whether the departure is deliberate — and the run usually cannot resolve it — is the
+review question.
 
 **No fixed count — every one that clears the bar, within three limits.** Free room under the ceiling
 is not a reason to look harder for one: four behavioural checkpoints and no coding decision is the
@@ -557,11 +675,11 @@ proves only that something changed, not that the reviewer has a decision to make
 
 **Ask; never answer.** No *coupled*, *leaky*, *cleaner*, *tangled*, *should*, *better kept behind*.
 The page knows the structure moved; the reviewer knows whether the team meant it to. Where the run
-cannot resolve it, the *Open question* line is where that goes.
+cannot resolve it, the review question asks it.
 
 **One home for a crossing.** A new dependency that also carries a consequence into unchanged code is
-an impact path in § *Impact outside the diff* and a question here; the checkpoint asks, the panel
-draws, and each points at the other in a clause — § *One canonical home*. And it is not *Context*:
+an impact path in § *Impact outside the diff* and a question here; the checkpoint explains and
+asks, the panel draws, and each points at the other — § *One canonical home*. And it is not *Context*:
 Context says what a part of this repository *is*; this says what the change did to how the parts fit.
 
 **Merge before counting.** Three files that each add a call from `billing` into `accounts` are one
@@ -740,8 +858,9 @@ locator is not a second one.
 
 **The canonical-home rule between the two figures.** A chain that crosses from changed code into
 unchanged code whose meaning the change altered **is an impact path**: it lives in *Impact outside the
-diff*, once, and a checkpoint that turns on it says so in a clause — *"the path from `archived_at` to
-the selector is drawn in Impact"* — and does not redraw it. A chain drawn inside a checkpoint shows
+diff*, drawn once. A checkpoint that turns on it explains the consequence in its own prose — which
+code is reached and what it now does — then points at the drawing — *"the path from `archived_at`
+to the selector is drawn in Impact"* — and does not redraw it. A chain drawn inside a checkpoint shows
 mechanism **within the change**: the request path, how a value is derived, the order guards run in. It
 therefore contains no `.ip-aff`.
 
@@ -879,7 +998,7 @@ list keeps its row as it would for any other.
 
 **`.cv-note` says what the path skips, and nothing else.** *skips destroy callbacks*, *writes with
 `update_column`* — a fact about the code, in about six words. It is a free-text slot on a node, which
-makes it the third place on the page a severity word can get in after `GAP` and *Open question*, and
+makes it the third place on the page a severity word can get in after `GAP` and *Review question*, and
 the only one with no fixed label: *critical bypass* is a grade, and why the path matters is the
 checkpoint's to say. `figures.rb` warns on the common grading words. Name **whose** callbacks are
 skipped — *ownerships deleted without callbacks*, not *deletes skip callbacks* — because a path that
@@ -1047,7 +1166,7 @@ its explanation and before its `ul.lookat`, and is checked by `evals/checks/figu
 shape and locators and can grade nothing about whether the shape was the right one.
 
 When a figure shows a correctness boundary — a path that bypasses what the others run — that boundary
-is usually the checkpoint's question, or its *Open question*: *are there other removal paths that skip
+is usually the checkpoint's review question: *are there other removal paths that skip
 the destroy callbacks?* The figure supports the agenda; it is never a finding of its own.
 
 ---
@@ -1067,7 +1186,7 @@ The page's second primitive, and what separates it from a plausible-sounding sum
 **The modifier is the material, not the worry.** `tier-unc` is teal because the evidence is code
 outside the diff, and teal is what this page's palette means by *not in the diff* everywhere else —
 the dashed `.ip-aff` node, the *Affected, not changed* lists. `tier-inf` is ochre because something
-is missing and the page is saying so, which is the same thing `p.open` and the build banner say.
+is unsettled and the page is saying so, which is the same thing `p.open` and the build banner say.
 Uncertain stays neutral deliberately: it is the weakest tier, and giving it the loudest treatment
 would be a severity scale assembled out of colour. **Five tiers, four labels, two hues** — and the
 hues say what a claim is made of, never how much it should alarm anyone.
@@ -1403,10 +1522,21 @@ exactly the fiction the probe rule exists to prevent, with the rule switched off
 only inside a primer**, and the two anchors are adjacent, never nested — no `pre.probe` inside an
 `aside.primer`, because one states the framework's rule and the other asks what this app did with it.
 
-**The budget: one per checkpoint, three per page, 90–200 words of primer prose each.** They are
-counted **separately** from § *The agenda budget*, and that separation is the load-bearing half: a
-mentor page is that budget *plus* its primers. Folded together, a run would pay for a lesson by
-dropping a judgment, which is the one thing that budget forbids.
+**The budget: one per checkpoint, three per page, 90–200 words of primer prose each.** A primer is
+**added** to the checkpoint it sits in, never paid for out of it: a run that thins a checkpoint's
+explanation, or drops a judgment, to make room for a lesson has traded the reviewer's understanding of
+the change for a framework tutorial.
+
+**The checkpoint reads complete without its primer, and the primer is not verbosity.** Two rules
+that hold each other up. The checkpoint's own explanation gives the reviewer what they need to follow
+the review and judge it — *reservations now reuse the instrument already in memory* is said there,
+in a sentence — so a reader who skips the callout loses depth, never a step; that is the subtraction
+test read from the reviewer's side. And the callout is intentional teaching material: the rule, the
+example in `pre.demo` and what follows from them are kept whole, never shortened toward the floor of
+the range for the sake of a shorter page, because a lesson cut to a slogan teaches nothing. It
+teaches the mechanism **this** code demonstrates — the line that earned it is cited inside — never
+the framework topic at large, and it deepens the reviewer's understanding without becoming the
+judgment: the review question stays the checkpoint's, asked in the checkpoint's terms.
 
 **Earned by the judgment, never by the flag.** Without `--mentor` the test is *could the reviewer
 decide this without the rule?*; with it, *would they decide it better knowing the rule?* That is a
@@ -1824,8 +1954,8 @@ without anyone noticing has written the checkpoint twice.
 reach — sits once under the whole group, and says nothing about any particular path. Two components,
 two subjects; a run that merges them loses the disclosure.
 
-These paragraphs **count toward the page's visible words**. Chain *labels* are exempt from that count
-because they are figure furniture; this is prose, and three cards of it is a paragraph of budget.
+These paragraphs are prose the reader reads, not figure furniture like a chain's labels, and three
+cards of it is a paragraph: they orient and point, and the checkpoint carries the explanation.
 
 The first version stacked every path inside one bordered panel under a run of `.ip-hd` headers, and
 on a real page that meant five chains in one frame. At that length they stop being read as diagrams:
@@ -1939,8 +2069,12 @@ canvas that survives all four, so a drawing would mean coordinates derived per r
 
 ## One canonical home
 
-Every fact, finding, risk, uncertainty and reviewer action has **exactly one place** in the page that
-explains it. Everywhere else refers to it in a sentence and moves on.
+Every finding, risk, uncertainty and reviewer action has **exactly one place** in the page that
+explains it. Everywhere else refers to it in a sentence and moves on. **Background is the one
+exception, and it runs one way: into a checkpoint.** A checkpoint stands alone (§ *The review
+checkpoint*), so it says in its own words what it needs of a concept, of *What changed* or of a
+consequence in unchanged code, even where another section holds the full account; a section never
+retells a checkpoint's finding, and two checkpoints never explain the same one.
 
 This is a structural rule, not an editing tip, and it is the reason the sections below are shaped the
 way they are. An earlier version of this format had twelve parts, three of which existed to restate
@@ -1954,15 +2088,15 @@ reading, and everything after that point is wasted regardless of how good it is.
 
 | The concept | Lives in | Referenced from |
 |---|---|---|
-| The semantic delta, and intent | *What changed* | Nowhere else — a checkpoint assumes it |
-| What a repository concept *is* — an endpoint sequence, a plugin hooking core, a domain term a setting introduces | Its *Context* entry | The checkpoint that relies on it names it and moves on; it never re-explains it |
-| How the request sequence changed, when two or more checkpoints turn on it | *Context*'s `figure.lifecycle.lc-shift` | Each of those checkpoints, in one clause naming the request; *What changed*'s `dl.ba` says it in product terms, never as requests |
+| The semantic delta, and intent | *What changed* | A checkpoint restates the part its judgment turns on, in a sentence |
+| What a repository concept *is* — an endpoint sequence, a plugin hooking core, a domain term a setting introduces | Its *Context* entry | Each checkpoint that relies on it says what it needs of it in its own words; the entry is the fuller picture, never a step the checkpoint leaves out |
+| How the request sequence changed, when two or more checkpoints turn on it | *Context*'s `figure.lifecycle.lc-shift` | Each of those checkpoints, saying in its own sentence which request moved and what that means for its judgment; *What changed*'s `dl.ba` says it in product terms, never as requests |
 | A judgment the reviewer has to make | Its checkpoint's explanation | The reading path, as one stop's why; *Impact outside the diff*, in one clause |
 | Mechanism inside the change | That checkpoint's `figure.chain`, or its explanation | Nowhere else |
 | An unchanged writer that must keep an invariant the change relies on — a path flowing **in** | That checkpoint's `figure.converge`, with a `ul.lookat` entry carrying its clause | Never an impact card: impact paths flow **out**, to a consequence |
-| A consequence that crosses into unchanged code | *Impact outside the diff* — the figure, and the affected entry beside it | The checkpoint that turns on it, in one clause |
+| A consequence that crosses into unchanged code | *Impact outside the diff* — the figure, and the affected entry beside it | The checkpoint that turns on it explains it — which callers, what they now do — and points at the path for its hops; it never redraws the figure |
 | Unchanged code the change reaches that no checkpoint turns on | The affected entries beside the panel, or the evidence foot's list | Nowhere else |
-| An open question for the author | The checkpoint's `p.open` line | Nowhere else |
+| The judgment, including one only the author can settle | The checkpoint's review question, `p.open` | Nowhere else |
 | A validation step or a probe | The checkpoint it settles | Not the foot |
 | What was searched | `details.searched`, in the evidence foot | The finding it supports, stated in the open prose above |
 | Every changed path | The inventory, in the evidence foot | Nowhere else |
@@ -1972,20 +2106,25 @@ boundary never had sections, and now neither do behaviour flows: a flow's materi
 checkpoint where it needed a judgment, an impact path where it crossed into unchanged code, and a
 foot entry otherwise. The reading order became section 04 pointing at checkpoints. Cross-cutting
 consequences became a checkpoint wherever they are a judgment for this diff and nothing otherwise.
-Author questions became the `p.open` line and validations moved inside the checkpoint they settle;
+Author questions became review questions and validations moved inside the checkpoint they settle;
 the comprehension checkpoint is gone entirely, because the checkpoint's own question is the question.
 The coverage ledger became the foot's unclassified inventory.
 
 **Context and the checkpoint split one fact along one line: what a thing is, and what the change
 does to it.** *Context* says that CAPTCHA is a plugin hooking a controller method; the checkpoint
-says the change moved which request that hook inspects, and asks whether that is safe. An entry that
-says what the change did, or hints at what to decide, is the checkpoint arriving early, and the
-reader meets the judgment twice — the restatement regression, one section earlier than usual.
+says the change moved which request that hook inspects, and asks whether that is safe — and says,
+in the sentence it needs, that the hook is a plugin, because a reader who jumped to it may not have
+read *Context*. An entry that says what the change did, or hints at what to decide, is the
+checkpoint arriving early, and the reader meets the judgment twice — the restatement regression,
+one section earlier than usual. The repetition the rule allows is background into a checkpoint;
+the judgment never travels the other way.
 
 **The checkpoint owns the explanation, and the sections after it point back.** That is what the
 ordering buys: *Read the code in this order* and *Impact outside the diff* both come after *What
 needs your attention*, so neither has to re-explain a judgment to be readable. A section that finds
-itself explaining a checkpoint's finding a second time is in the wrong section.
+itself explaining a checkpoint's finding a second time is in the wrong section. **The checkpoint
+never points forward for a step of its own argument**: *see Impact outside the diff* is depth the
+reader may follow after understanding the checkpoint, never the place its consequence is explained.
 
 **The page has two designators, and a flow is not one of them.** A checkpoint is *Checkpoint A*,
 the letter its `id="cp-a"` and its rail entry already carry; an impact path is *Impact path A*, the
@@ -2023,7 +2162,7 @@ So a pointer takes one of three forms, each one a reader can follow:
 A `§` inside a `<code>` span or an excerpt is a quotation of the repository rather than a pointer,
 and is left alone. Everywhere else `evals/checks/page-invariants.rb` § 8 fails the page for one.
 
-The reference form is one sentence, no re-explanation:
+A pointer **at** a checkpoint takes one sentence, no re-explanation:
 
 > The `ActiveProjects` consequence is what Checkpoint B turns on.
 
@@ -2140,8 +2279,9 @@ anyway — *how much is still coming*, not *how far through its own plan the run
 ```
 
 One line of substance in the stub — which files, what it turns on — turns a placeholder into
-information. "Coming soon" does not. And for a checkpoint the `<h3>` is doing the real work: the
-question is legible before the explanation exists, which is why stage 2 opens with the stubs.
+information. "Coming soon" does not. And for a checkpoint the heading and the review question are
+doing the real work: the judgment is legible before the explanation exists, which is why stage 2
+opens with the stubs.
 
 Note that the stub is a whole `<section>` with its own `id`, which makes it a unique anchor a later
 stage can `Edit` in place. That is deliberate and worth keeping: it is what lets a stage write only
@@ -2167,7 +2307,8 @@ A **checkpoint**, because *What needs your attention* is delivered one at a time
 9). An unwritten checkpoint is a whole `<section class="cp" id="cp-x">` stub — assembled in
 `page-template.html` beside the pending section, and copied from there rather than rebuilt — and
 *What needs your attention*'s rail entry keeps a marker until every checkpoint under it is written.
-**A checkpoint stub's line of substance is its question**: that is what lets the agenda be read
+**A checkpoint stub carries its heading and its review question**, the explanation pending
+between them: that is what lets the agenda be read
 before any of it is written, and it is the reason opening stage 2 is worth a publish of its own. A
 reader who learns what the three judgments are has most of what they came for, ten minutes before
 the explanations arrive.
@@ -2432,14 +2573,20 @@ email-code account still passes CAPTCHA. It assumed the reader knew that email-c
 sequence of requests of which only one creates the account, that CAPTCHA there is a plugin wrapping a
 `SessionController` method rather than core code, and what an *approval signup* is. None of those is
 about Rails, so `--mentor` could not have helped: a primer teaches the framework, and these are
-facts about one repository.
+facts about one repository. **The first fix is the checkpoint's own**: it stands alone, so it says
+what it needs of each of those three things. *Context* is where the fuller picture goes — for the
+reader going top to bottom, and for the one who wants more than the checkpoint's sentence.
 
 **An entry is earned, per concept, by four conditions together:**
 
 1. **A checkpoint on this page uses it.** Not the diff — a checkpoint. A concept only the evidence
    foot touches is not one a reviewer has to hold.
-2. **That checkpoint would otherwise assume it.** If the checkpoint's own sentences already say what
-   the thing is in a clause, the entry is a second home for the same fact.
+2. **It takes more than the checkpoint's own sentence.** Every checkpoint stands alone, so it
+   already says what it needs of the concept, in its own words (§ *The review checkpoint*). An
+   entry is earned where the fuller picture helps — the whole sequence rather than the one step a
+   checkpoint mentions, where the code lives and what wraps what — or where several checkpoints
+   lean on the same concept and a reader going top to bottom should meet it once before them. An
+   entry that says no more than the checkpoint's sentence is a second copy.
 3. **A reader new to *this repository* would not know it.** Competent in the stack, a stranger to the
    codebase: that is the reader, and the test is whether they could name the piece from the
    checkpoint alone.
@@ -2481,16 +2628,18 @@ names is inventory.
   earning condition made visible, and a mechanical check holds it: an entry that points at nothing,
   or at a checkpoint the page does not carry, was not earned by this page.
 
-One to five entries, 15–60 words each — a shift counts as one of the five — about 250 words for the section — § *The agenda budget* adds
-them to the page total rather than taking them out of a checkpoint. A sixth concept means the agenda
+One to five entries — a shift counts as one of the five — each as long as the concept takes to say
+and no longer, and never taken out of a checkpoint's explanation. A sixth concept means the agenda
 leans on more unexplained machinery than a page can introduce, which is a limit to state in *What
 changed*, not a longer *Context*.
 
 **The canonical-home line runs through every entry.** *Context* says what a thing **is**; the
 checkpoint says **what the change does to it and what to decide**. An entry saying that the PR moved
 the CAPTCHA check to a later request has said the checkpoint's sentence early, and the reader meets
-it twice. A checkpoint that re-explains what Context already established has made the same mistake
-in the other direction. § *One canonical home* carries the row.
+it twice. The other direction is allowed and required: a checkpoint says in its own words what it
+needs of an entry's concept, because a reader may reach it without passing through *Context*, and a
+checkpoint that leaves a step of its argument to an entry has made the page fragmented. The entry is
+depth, never the only place a checkpoint's background lives. § *One canonical home* carries the row.
 
 **No tier, as a rule, and no grade, ever.** An entry asserts nothing about the change, so it rests on
 its citation the way a fact about unchanged code always does, without a label. The one exception is a
@@ -2514,20 +2663,20 @@ team's standing answer to *how well do our reviewers know this repository* — n
 document — and each is held to a rule that keeps the page this one.
 
 - **`never` — the section is not written.** No `section#context`, no rail entry 02, no
-  `figure.lifecycle.lc-shift`, no `span.ctx-used`; step 7k is skipped. **And nothing compensates.**
-  A checkpoint does not grow a clause explaining what the omitted entry would have said, because the
-  page with the section deleted is exactly what this value asks for; a checkpoint that already
-  explains a concept in a clause keeps it, as it would under `auto`. The rail does not close up —
+  `figure.lifecycle.lc-shift`, no `span.ctx-used`; step 7k is skipped. **And no checkpoint
+  changes.** Every checkpoint already says what it needs of each concept at every setting, so
+  deleting the section removes depth and never a step of an argument; a checkpoint written longer
+  under `never` than under `auto` was leaning on *Context* under `auto`. The rail does not close up —
   *01, 03* says a section went, as it does when `auto` earns nothing.
 - **`always` — the bar drops, the cap does not.** Condition 1 widens to *a checkpoint or an
   impact path uses it* (an impact card's nodes name repository code a reviewer meets in section 05
-  without an introduction), and condition 2 is waived, so a concept a checkpoint already explains in
-  a clause earns an entry too — **the clause stays in the checkpoint**, and the entry says what the
+  without an introduction), and condition 2 is waived, so a concept a checkpoint's own sentence
+  already covers earns an entry too — **the clause stays in the checkpoint**, and the entry says what the
   thing is rather than repeating it. Conditions 3 and 4 still hold: newcomer to this repository, never
   the framework. The `span.ctx-used` pointer still names checkpoints only: a concept an impact path
   uses points at the checkpoint that card's `p.ip-why` already points at, so every entry stays
   reachable from a judgment and `checks/start-here.rb` reads it unchanged. **Still one to five entries,
-  still about 250 words, and still omitted when nothing qualifies.** The name says the section is
+  and still omitted when nothing qualifies.** The name says the section is
   always *considered*, never that it always appears: an entry written so the section has one is
   inventory, which is the per-layer regression this section exists to refuse, and the
   never-manufacture rule is `--mentor`'s for the same reason.
@@ -2538,10 +2687,11 @@ document — and each is held to a rule that keeps the page this one.
   there; an empty fold is the stub § *Section 2* forbids.
 
   **This is the one named exception to *a page reads complete with every block shut***, and it is
-  safe for the reason Context is the section it is: an entry says what a thing **is** and carries no
-  claim about the change, so nothing a reviewer must decide is behind the toggle. A checkpoint that
-  would be wrong without its Context entry was relying on the entry for a claim — which § *Section 2*
-  already forbids, and which `collapsed` merely makes visible.
+  safe for two reasons: an entry says what a thing **is** and carries no claim about the change, so
+  nothing a reviewer must decide is behind the toggle, and every checkpoint stands alone, so none
+  needs the fold opened to be followed. A checkpoint that would be unfollowable or wrong without its
+  Context entry was relying on the entry for a step of its argument — which § *Section 2* already
+  forbids, and which `collapsed` merely makes visible.
 
 **No value is announced.** No badge, no line saying Context was turned off, no count of entries a
 lowered bar added — the first is a stub by another name, and the last is the page grading its own
@@ -2694,60 +2844,36 @@ No findings, no attention level, no group, and no ranking of any kind.
 
 ## The agenda budget
 
-Guidance, not limits. Every number here is a WARN in the same sense the excerpt budget is: a page
-outside one of them is a page to read again, not a page that is wrong.
+**There is no word budget.** Length follows from what the reader needs in order to understand each
+judgment, and a page is never cut toward a number. A word count is the wrong instrument for this
+page: the cheapest way under one is conceptual compression — four relationships packed into a
+sentence, a step of the argument replaced by a pointer — and that moves the work of assembling the
+explanation onto the reader, which is the difficulty the page exists to remove. § *The review
+checkpoint* says how a checkpoint is written; this section says only what length is never allowed to
+buy.
 
-| Part | Words |
-|---|---|
-| *What changed* | 80–160 |
-| *Context*, when earned — one to five entries of 15–60 words each, and a shift's `ul.lc-cases` lines; the same at `--context always`, and 0 at `never` | 0–250 |
-| A checkpoint — question, explanation, *Look at* clauses, open line | 50–140 |
-| A reading-path stop's `span.why` | ≤ 40 |
-| An affected entry's clause | ≤ 30 |
-| **The page, visible prose** | **the parts above, summed** |
+**What still bounds the page is relevance, not size.** Every sentence has to serve a judgment the
+reader is asked to make or the route through the code: a checkpoint's explanation stops where the
+reader has what they need to judge, and a fact the judgment does not turn on is not written however
+true it is. **Trim only content that fails its own test** — a chain whose explanation walks its
+nodes, a *Look at* entry with no clause or a title that repeats its citation, an explanation that
+retells *What changed* whole rather than the part its judgment turns on, a question that restates
+its explanation, a checkpoint that turns out to be a
+category. Never trim a step the reader needs to follow an explanation.
 
-**The page total is derived, not a separate number**, because a page has as many checkpoints as the
-change has judgments and a fixed total would price them against each other:
+**The one number this section never touches is the checkpoint count.** A page that got shorter by
+losing a judgment has done the one thing this section forbids. Fewer checkpoints is legitimate only
+when two merged into one question (`SKILL.md` step 7c) or when the PR is small enough that three
+would be padding (step 7e).
 
-```
-≈ What changed (80–160) + Context (0–250) + n × (50–140) + reading path (stops × ≤40) + impact (cards × p.ip-why) + section framing
-```
+**And the floor is a rule rather than a number.** A *Look at* entry has a title and a clause; a
+checkpoint has an explanation that establishes the situation and the change before its review
+question; an impact card has its `p.ip-why`. A field compressed into its own label reads exactly like
+a filled one and is the compression that deletes rather than tightens. Omitting a part is honest;
+stubbing it is not.
 
-At four checkpoints on a small or medium PR that comes to roughly **700 to 1,500 words**, which is
-the figure to carry in your head and the one a page of that shape is read against — **plus *Context*
-when it is earned**, which is additive for the reason the next paragraph gives the checkpoints: a
-page that bought its *Context* by thinning a checkpoint has paid for orientation with a judgment. A seven-checkpoint
-page over two independent deltas, or an eleven-checkpoint page over a broad change, is legitimately
-longer, and **it does not get there by writing those checkpoints at thirty words each.** That was the trap in stating the total flat: the arithmetic of a
-wide agenda under a fixed ceiling forces every checkpoint under its own floor, and the floor rule
-below is what that violates.
-
-**What is never counted:** anything inside a figure, of any kind — node labels, `.ip-d` details,
-`.ip-rel` verbs, a `.cv-note`, a relation and its cardinality, a back transition, lane labels, the
-legend, a `figcaption` — but not a shift's `ul.lc-cases`, whose lines are sentences and count
-toward *Context*; anything inside `<code>` or `<pre>`, which includes every
-probe and every command; anything inside a collapsed `<details>`; and the masthead. A page is never
-over budget by a figure or a quotation.
-
-**And a primer is counted on its own, not against these.** At `--mentor` the page is this budget
-*plus* its primers, each 90–200 words, at most three of them — § *Mentor mode* owns those numbers.
-Folding the two together would make a run buy a lesson by dropping a judgment, which is precisely
-what the next paragraph forbids.
-
-**The one number this budget never touches is the checkpoint count.** A page that came in under the
-ceiling by losing a judgment has done the one thing the budget forbids. Fewer checkpoints is
-legitimate only when two merged into one question (`SKILL.md` step 7c) or when the PR is small enough
-that three would be padding (step 7e) — never because a number said so.
-
-**And the floor is a rule rather than a number.** A *Look at* entry has a title and a clause — its
-title counts toward the checkpoint's words along with its clause, and the numbers above are unchanged
-by it; a checkpoint has an explanation of at least two sentences; an impact card has its `p.ip-why`,
-which counts too. A field compressed into its own label reads exactly like a filled one and is the
-compression that deletes rather than tightens. Omitting a part is honest; stubbing it is not.
-
-These numbers are a **first calibration**, derived from the component budgets rather than measured on
-published pages. The way to move them is three runs and a number that came out of a page, not an
-argument.
+**A primer is its own allowance**, at `--mentor` only — § *Mentor mode* owns its numbers — and a
+primer is never a reason to write a checkpoint's explanation thinner.
 
 ---
 

@@ -320,7 +320,7 @@ class ReviewMapSuite
     assert_eq count(markup, 'class="cp"'),     6, "five checkpoints assembled whole and one pending stub"
     assert_eq count(markup, 'id="cp-a"'),      1, "the first checkpoint is anchored for the rail and the reading path"
     assert_eq count(markup, 'class="lookat"'), 5, "each written checkpoint carries its own where-to-look list"
-    assert_eq count(markup, 'class="open"'),   1, "the open-question line is assembled once"
+    assert_eq count(markup, 'class="open"'),   6, "every checkpoint, the pending stub included, ends in its review question"
 
     # THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 05. A chain inside a checkpoint shows
     # mechanism inside the change, so it holds .ip-step and never .ip-aff: a hop into unchanged code

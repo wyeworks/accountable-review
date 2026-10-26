@@ -22,7 +22,9 @@ does not earn omitted outright.
   does what, code that is a plugin wrapping a core method rather than core code, a domain term a
   setting introduces. One to five entries, each a sentence or two on what the thing **is**, a
   citation, and a pointer at the checkpoints that rely on it. It never says what the change did to
-  the thing — that is the checkpoint's — and it is not `--mentor`: a primer teaches the framework,
+  the thing — that is the checkpoint's — and no checkpoint depends on it: each says what it needs of
+  these concepts itself, so Context is the fuller picture rather than a step you have to read
+  first. It is not `--mentor` either: a primer teaches the framework,
   Context names the repository. `--context` (or `review_map.context`) sets how much of it a team
   wants: `auto`, the default, is the rule above; `never` leaves it out and changes nothing else;
   `always` lowers the bar — a concept an impact path relies on, or one a checkpoint already explains
@@ -34,13 +36,18 @@ does not earn omitted outright.
 - **What needs your attention** — the page's core. Three to five **review checkpoints** for each
   independent change the PR makes — seven on the page at the outside, rising to nine or eleven when
   the change touches a lot of application code — each one
-  judgment the reviewer has to make, framed as a question: *Does the new Project filter preserve the
-  intended scope?* rather than *ProjectSearcher implementation*. A checkpoint carries the question,
-  two to four sentences on why it is one, one to four places to look — each a short title, a clause
-  and its citation — and, when the judgment turns on something prose cannot hold, one small figure
-  of the shape it has: a chain for a mechanism, several paths converging on one invariant they must
-  all keep, the states an entity moves between, or an entity and what it is now attached to. A line
-  labelled *Open question* names what only the author can settle.
+  judgment the reviewer has to make, **explained first and asked last**. A checkpoint is headed by the
+  behaviour it is about — *Archived projects in the project filter*, not *ProjectSearcher
+  implementation* — then explains what the system does there, what the change did to it and why that
+  matters, and only then asks the question, in a box labelled *Review question*: *Does the filter
+  still hide archived projects for every caller?* Around that it carries one to four places to look
+  — each a short title, a clause and its citation — and, when the judgment turns on something prose
+  cannot hold, one small figure of the shape it has: a chain for a mechanism, several paths
+  converging on one invariant they must all keep, the states an entity moves between, or an entity
+  and what it is now attached to. A question only the author can settle is asked the same way.
+  **Each checkpoint stands alone**: jump to one from the rail and it tells you what you need of the
+  domain and the code, and which callers outside the diff the change reaches and what they now do,
+  without sending you to Context or another section first. Links there are for going deeper.
 
   They are ordered by what a reviewer would most regret misunderstanding. **That order is not a
   scale**: there is no severity word, no number beside a question, and nothing that reads as a
@@ -84,7 +91,8 @@ document. It is for a reviewer new to the *stack* rather than to the change: whe
 on a framework rule they may not know, the page states the rule in a primer inside that checkpoint
 instead of linking to it. Nothing else moves — same sections, same checkpoints in the same order,
 same reading path, same budget on every other part — so deleting the primers from a mentor page
-gives you back the ordinary page. That subtraction is the test, and it is why there is no badge
+gives you back the ordinary page. Each checkpoint reads complete without its primer, and the primer
+is kept whole: it is teaching material about the mechanism this code uses, not padding to trim. That subtraction is the test, and it is why there is no badge
 saying which one you are holding: you can see.
 
 **It comes in three looks, and you pick yours.** Daylight, Workshop and Field Notes are all on every
@@ -102,8 +110,10 @@ One behaviour crosses all three, so giving each its own section meant describing
 times — and an earlier version did, along with a findings section that got re-explained later and a
 checkpoint that quizzed you on the paragraph above it.
 
-Now every fact, finding, risk and reviewer action is explained in exactly one place and referenced
-from anywhere else in a sentence. On a real PR that took a 21-page page to 9 with nothing of value
+Now every finding, risk and reviewer action is explained in exactly one place and referenced from
+anywhere else in a sentence. The one exception is background, and it runs into a checkpoint: a
+checkpoint repeats the little it needs — what a concept is, the callers a change reaches — so you
+can read it on its own, while no other section retells it. On a real PR that took a 21-page page to 9 with nothing of value
 removed. The reader who thinks *"I already read this"* stops reading, and everything after that is
 wasted no matter how good it is.
 
@@ -118,7 +128,7 @@ The page is published early and republished as parts complete, always to the sam
 minute two, watch it fill in, start reading the moment the part you need lands.
 
 The checkpoints are the bulk of the page, so they arrive **one at a time** — and the stage that opens
-them publishes every checkpoint's *question* first, before any explanation is written. A reader who
+them publishes every checkpoint's heading and *question* first, before any explanation is written. A reader who
 learns what the three judgments are has most of what they came for, well before the prose arrives.
 
 While it is still being written it says so, in a banner, and every part that is coming but not yet
@@ -159,8 +169,8 @@ block asked you to read implementation, tests, affected code, things to understa
 questions for each one, whether or not each row had anything to say — right as analysis, a form as a
 reading obligation.
 
-A checkpoint carries only what that judgment needs. One may need a chain and an open question;
-another two links and three sentences; another a test that pins one branch and leaves another open.
+A checkpoint carries only what that judgment needs. One may need a chain and three paragraphs of
+explanation; another two links and a few sentences; another a test that pins one branch and leaves another open.
 
 The figures are the part most easily mistaken for decoration, so they are held to one test: a
 reviewer who meets one understands that part of the change faster than from the prose and the diff.
@@ -310,7 +320,7 @@ Class-level reflection answers in any checkout, with no rows in the database. A 
 answers only where those rows exist — so the rows have to be plausible on the branch, and whatever
 seeds them is a line of the same block. A probe against behaviour the change *introduces* has no rows
 behind it by definition, and asks the classes instead. And a probe never settles what anyone meant:
-an open question about intent is for the author, not for the console.
+a review question about intent is for the author, not for the console.
 
 **Its label says what the output would settle** — `rails runner · read-only · how many rows this
 touches`, rather than the instrument and nothing more. That third part is what you read before

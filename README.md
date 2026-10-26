@@ -386,8 +386,8 @@ be merged, but it also works well with already-merged PRs when you want to catch
 /accountable-review:review-map 412
 ```
 
-What makes it onto the page is the part you actually need to act on. For a small or medium-sized PR,
-that usually means around 700 to 1,500 words.
+What makes it onto the page is the part you actually need to act on, explained so you can follow it
+without reconstructing it yourself.
 
 ### How hard it works
 

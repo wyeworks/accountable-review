@@ -23,8 +23,10 @@ still passes CAPTCHA and was unfollowable without three things the page never sa
 sequence of requests, CAPTCHA as a plugin wrapping a controller method, and what an approval signup
 is. A judge here reads Context and the checkpoints as that reader, and asks:
 
-- **Followable.** Each checkpoint can be understood with only *What changed* and Context in hand.
-  Defect: delete the entry a checkpoint relies on most; the page still passes every mechanical rule.
+- **Depth, never a step.** Each checkpoint can be understood on its own, Context unread, and an
+  entry adds the fuller picture rather than a fact the checkpoint left out. Defect: delete from a
+  checkpoint the sentence saying what a concept is, leaving only the Context entry; the page still
+  passes every mechanical rule.
 - **What it is, never what the change did.** No entry previews a judgment. Defect: append the
   checkpoint's own claim to the entry it relies on — *"and this PR moved the check to the later
   request"*.
@@ -48,7 +50,22 @@ is. A judge here reads Context and the checkpoints as that reader, and asks:
 ## § 03 checkpoints, what the two judges leave
 
 `checkpoint-judgments` grades whether each checkpoint is a judgment, asked once, ordered without a
-grade and left to the reviewer; `checkpoint-claims` opens every cited line. Four things neither asks:
+grade and left to the reviewer; `checkpoint-claims` opens every cited line. Five things neither asks:
+
+- **Explain first, challenge second — and the judge reads the wrong element for it.** The
+  checkpoint's `<h3>` names a behaviour and its question is the `p.open` labelled *Review question*,
+  last (`report-format.md` § *The review checkpoint*). `checkpoint-judgments.md` still reads the
+  `<h3>` as the question, so it fails a correct page on *a judgment, not a category*; its criteria
+  move to `p.open`, and a new one asks whether the prose establishes the situation and the change
+  before the question, without the reader assembling it from another section. The gold page and
+  `make-defects.rb` carry the question-as-heading shape: the category defect at `make-defects.rb:106`
+  (`<h3>Controller and model validations</h3>`) is correct markup under the current shape and has to
+  be re-planted on the question line. Defect for the new criterion: a checkpoint whose explanation
+  leads with an identifier and leaves a step of the argument to *Context*. A third criterion asks
+  whether each checkpoint stands alone — read it having jumped straight to it — and explains the
+  unchanged callers it reaches rather than leaving them to *Impact outside the diff*. Defect: cut a
+  checkpoint's sentence naming the affected callers down to *see Impact path A*. Recalibrate once
+  moved.
 
 - **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
   decision in the repository, or a convention on the lens file's closed stack list — asks rather

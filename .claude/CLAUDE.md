@@ -91,10 +91,15 @@ failure modes.
 
 **What to check on every run:**
 
-- **Is every checkpoint a judgment?** The failure mode is a heading: *ProjectSearcher
+- **Is every review question a judgment?** The failure mode is a category: *ProjectSearcher
   implementation*, *Tests*, *Controller changes* — a place rather than a decision, and it reads as
   organised. The test is whether a reviewer could answer it by looking at the code and could get the
-  answer wrong.
+  answer wrong. The heading names a behaviour, so a place there is the same failure one line up.
+- **Could you follow each checkpoint without leaving it?** Read the explanation before the question
+  and ask whether it told you what the system does, what changed and why it matters — or whether you
+  had to assemble that from *Context*, another checkpoint or a link. Jump to one from the rail and
+  check that the unchanged callers it reaches are explained there, not only in *Impact*. A dense,
+  correct sentence that packs four relationships is the failure, and it reads as concise.
 - **Did the merge happen?** Step 7c is what makes the agenda short honestly. A constructor change,
   the nil default it introduces and the two consumers that do not handle nil are one judgment, not
   three. Read the agenda asking which two of these are the same question.
@@ -104,13 +109,11 @@ failure modes.
   scale — a number beside a question, a *high* in a title, a first checkpoint described as the
   important one. It arrives as helpfulness.
 
-**The page has a word budget and nothing checks it.** `report-format.md` § *The agenda budget* is
-prose: 80–160 for *What changed*, 50–140 a checkpoint, and a page total that is those parts summed —
-about 700–1,500 visible words at four checkpoints on a small or medium PR, derived so that a wider
-agenda cannot be forced under its own per-checkpoint floor. The numbers are read by a person, except
-§ 01's word count, which `evals/e2e/run.rb` records as guidance, never as a verdict. A page drifting
-long drifts silently. **The checkpoint count is never graded**: a page that came in under a ceiling
-by losing a judgment has done the one thing the budget forbids.
+**The page has no word budget.** `report-format.md` § *The agenda budget* says why: the cheapest way
+under a word count is conceptual compression, which moves the work of assembling the explanation onto
+the reader. What bounds the page is relevance to a judgment. § 01's word count is still recorded by
+`evals/e2e/run.rb`, as an observation and never a verdict. **The checkpoint count is never graded**:
+a page that got shorter by losing a judgment has done the one thing that section forbids.
 
 `skills/review-map/evals/` is where judging happens, in three layers. **Mechanical**: `check.rb`
 and the ten checks, run on every push. **End to end** (`evals/e2e/`): a whole run of the skill
@@ -235,9 +238,10 @@ Editing one of these means checking the others still agree.
   mode is the same agenda with depth beneath it — `report-format.md` § *A future full mode* — never
   a second document reached by a flag.
 
-  **The agenda budget is guidance and has no check.** `report-format.md` § *The agenda budget* owns
-  the per-part caps and the page total. Length is never a failure, because a hard failure on length
-  teaches a run to drop a claim to get under a number. **The checkpoint count is never budgeted.**
+  **There is no word budget, and length has no check.** `report-format.md` § *The agenda budget*
+  owns what bounds the page instead. Length is never a failure, because a failure on length teaches a
+  run to compress an explanation or drop a claim to get under a number. **The checkpoint count is
+  never budgeted.**
 
   **The rail is emitted, not edited down.** `page-skeleton.sh --markup` hands a run the whole markup
   half, eleven `data-rail` entries: five numbered sections and six checkpoint sub-entries.
@@ -267,7 +271,7 @@ Editing one of these means checking the others still agree.
 
   These agree: `report-format.md` § *Mentor mode* owns every rule **alone**, with § *One page shape*,
   § *The review checkpoint*'s slot, § *Framework anchors*' third row and § *The agenda budget*'s
-  separate count pointing at it; `SKILL.md` parses it at step 1, checks the stack name and the
+  primer line pointing at it; `SKILL.md` parses it at step 1, checks the stack name and the
   catalogue at step 2, earns one at step 7g, writes it at step 9 and carries the demo exception in
   its hard rules; `page-template.html` holds the CSS in the head range and the callout inside
   checkpoint A; `evals/checks/rails-anchors.rb` § 8 grades it on the **comment-stripped** copy, behind
@@ -280,20 +284,35 @@ Editing one of these means checking the others still agree.
   callout is a judged question, and `evals/e2e/judges/IDEAS.md` is where its judge would go.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
   attention* **per independent semantic delta *What changed* names**, under a ceiling of seven, nine
-  or eleven that the Production bucket sets, each **one judgment** the reviewer has to make: an `<h3>` question, two to four
-  sentences, an optional figure, a `ul.lookat` of one to four entries — each a short title, a clause
-  and its deep-linked citation, in that order — an optional `div.gap` labelled *GAP*, and an optional
-  `p.open` labelled *Open question*. Both labels are fixed, because an absence and an unresolved
-  question are the two places a severity word gets in. `report-format.md` § *The review checkpoint*
-  owns all of it **alone**; `page-template.html` assembles one with every optional part, one without,
-  and a pending stub.
+  or eleven that the Production bucket sets, each **one judgment** the reviewer has to make: an `<h3>`
+  naming the behaviour, prose that explains before it asks, an optional figure, a `ul.lookat` of one
+  to four entries — each a short title, a clause and its deep-linked citation, in that order — an
+  optional `div.gap` labelled *GAP*, and, always and last, `p.open` labelled *Review question*. Both
+  labels are fixed, because an absence and the question are the two places a severity word gets in.
+  `report-format.md` § *The review checkpoint* owns all of it **alone**; `page-template.html`
+  assembles one with every optional part, one without, and a pending stub carrying its heading and
+  question.
+
+  **Explain first, challenge second.** The prose establishes what the system does, then what the
+  change did and why it matters, facts and unknowns told apart in the sentence, and only then is the
+  question asked — because a question met before its situation makes the reviewer reconstruct the
+  explanation, and the page keeps the difficulty of the judgment, not of reading. The sequence is the
+  rule, never a paragraph count or a sub-heading.
+
+  **Each checkpoint stands alone.** A reader who jumps straight to one learns from it what it needs of
+  the domain, the code and *What changed*, and which unchanged callers the change reaches and what
+  they now do; a pointer to *Context*, *Impact* or another checkpoint is depth, never a step. So
+  background is repeated into a checkpoint on purpose, while the finding and the question keep one
+  home — the *Six sections* bullet below. Under `--mentor` the checkpoint reads complete without its primer,
+  and the primer is kept whole as teaching material. `report-format.md` § *The review checkpoint*
+  owns it, with § *One canonical home*, § *Section 2* and § *Mentor mode* agreeing.
 
   **Analysis facets are not a reading obligation.** A test appears inside a checkpoint when it
   changes the judgment; a list of the specs that touch a file does not appear at all.
 
   **Failure mode one: a checkpoint that is a category** — *ProjectSearcher implementation*, *Tests*,
-  *Controller changes*. The test is whether a reviewer could answer it by looking at the code and
-  could get the answer wrong. **Failure mode two: a checkpoint that should have been merged** —
+  *Controller changes*. The test is whether a reviewer could answer its review question by looking at
+  the code and could get the answer wrong. **Failure mode two: a checkpoint that should have been merged** —
   `SKILL.md` step 7c.
 
   **The count scales on the delta, the ceiling on the Production bucket, and neither on the raw
@@ -309,8 +328,8 @@ Editing one of these means checking the others still agree.
 
   **Ordering is not grading.** Checkpoints are ranked by what a reviewer would most regret
   misunderstanding. A number beside a question, a *high* in a title, a first checkpoint described as
-  the important one — each is a severity scale. The one line that names an unresolved thing is
-  `p.open`, labelled *Open question*; `page-invariants.rb` warns on a bare `Watch` or `Blocking`
+  the important one — each is a severity scale. The one line that hands over the judgment is
+  `p.open`, labelled *Review question*; `page-invariants.rb` warns on a bare `Watch` or `Blocking`
   label.
 
   Nothing mechanical grades a checkpoint's quality. `start-here.rb` requires the reading path to
@@ -389,7 +408,7 @@ Editing one of these means checking the others still agree.
   earned only by a recorded writer search, and `carry-plan.sh`'s P6 replays that search so `--update`
   refuses to carry a converge a new writer has falsified.
 
-  **`.cv-note` is a free-text slot a severity word can enter**, beside `GAP` and *Open question*, and
+  **`.cv-note` is a free-text slot a severity word can enter**, beside `GAP` and *Review question*, and
   the only one without a fixed label. It says what a path skips, never how much that matters.
 
   These agree: `report-format.md` § *Topology figures* owns the shapes, gates and caps **alone**, and
@@ -689,7 +708,9 @@ Editing one of these means checking the others still agree.
   layer describes it four times. Persistence, endpoint contracts and the backend/frontend boundary
   have **no sections of their own** — they are covered inside the checkpoint whose judgment turns on
   them. `report-format.md` § *One canonical home* carries the routing table and the one-sentence
-  reference form. **The agenda's version of the per-layer page is a checkpoint per file** — *Migration*,
+  reference form. **The one home is for a finding and a judgment; background runs one way, into a
+  checkpoint**, which repeats what it needs of a concept, *What changed* or a consequence in unchanged
+  code so it stands alone, while no other section retells a checkpoint. **The agenda's version of the per-layer page is a checkpoint per file** — *Migration*,
   *Tests* — and it is cheaper to write than merged judgments, which is why a run reaches for it.
 - **Context is earned per concept, names the repository rather than the framework, and its setting
   tunes the bar rather than choosing a document.** Section 02 sits between *What changed* and the
@@ -698,14 +719,15 @@ Editing one of these means checking the others still agree.
 
   **Three lines hold it.** It is **earned**, so most pages carry none and the section is omitted with
   its rail entry — never a stub saying no context is needed. It says **what a thing is, never what the
-  change did to it**. And its entries are **concepts the checkpoints need, never the layers the diff
-  touched**. The pointer each entry ends in — `span.ctx-used`, naming the checkpoints that rely on it
+  change did to it**. It is **depth, never a step**: every checkpoint already says what it needs of
+  the concept, and an entry is earned where the fuller picture helps. And its entries are **concepts
+  the checkpoints need, never the layers the diff touched**. The pointer each entry ends in — `span.ctx-used`, naming the checkpoints that rely on it
   — makes the last rule checkable.
 
   **`--context` / `review_map.context` is not a second document.** `auto` is the default and the rule
   above. `never` and `collapsed` pass `--mentor`'s subtraction test — delete section 02, or open its
-  fold, and the `auto` page remains; a `never` page must not compensate with a clause in a
-  checkpoint. `always` **lowers the bar and never fills the section**: an impact path's use counts, a
+  fold, and the `auto` page remains, with every checkpoint unchanged because none leaned on the
+  section. `always` **lowers the bar and never fills the section**: an impact path's use counts, a
   clause-explained concept qualifies, the cap stays at five, and nothing qualifying still omits the
   section. `collapsed` is the one named exception to the reads-complete-when-shut rule, safe because
   an entry carries no claim. No value is announced on the page.
@@ -732,7 +754,7 @@ Editing one of these means checking the others still agree.
 - **The order is the reviewer's path, and the checkpoint owns the explanation.** *What needs your
   attention* teaches the judgments; *Read the code in this order* is the moment they open the code;
   *Impact outside the diff* is the same change through one lens. Everything after the attention
-  section **points back** at it — a checkpoint never defers an explanation forward, and the reading
+  section **points back** at it — a checkpoint never defers a step of its explanation forward, and the reading
   path and the impact panel never re-explain one. The reading path is **one list**: what most needs
   judgment and what to read first are the same question. Every other file is accounted for in the
   evidence foot, unranked.
@@ -866,7 +888,7 @@ Editing one of these means checking the others still agree.
   `page-skeleton.sh`: a run never types a colour.
 
   **The rule is the system.** Slate means *you can click it* and appears on nothing else. Ochre means
-  *something is missing and the page is saying so* — `p.open`, the inferred tier, the build banner —
+  *something is unsettled and the page is saying so* — `p.open`, the inferred tier, the build banner —
   never a severity. Teal means *this code is not in the diff*: the `from unchanged code` tier, the
   dashed `.ip-aff` node and its legend key, the *Affected, not changed* lists. Plum means *how a thing
   is known*: the excerpt `.tag`, `details.searched`, the evidence foot, the probe label. Green and red
