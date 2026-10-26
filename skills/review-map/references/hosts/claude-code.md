@@ -17,7 +17,7 @@ of the same PR is not what a re-run was asked to do. And `Artifact` refuses to p
 page this session has not read, so overwriting means reading that page whole first — tens of
 thousands of tokens, billed again on every request after it — for a page about to be replaced.
 `--update` pays that read on purpose, because it edits that page in place
-(`SKILL.md` § *Re-running over new commits*).
+(`references/update.md`).
 
 At high effort, spawn the registered `accountable-review:claim-falsifier` agent in the
 background for each selected analysis note, up to the shared cap and available concurrency,

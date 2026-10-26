@@ -13,7 +13,7 @@
 # say here".
 #
 # --updated is a FOURTH AXIS, not a fourth state, and it composes with final rather than
-# replacing it. An updated page (SKILL.md § Re-running over new commits) re-reads only the commits
+# replacing it. An updated page (references/update.md) re-reads only the commits
 # since the previous map, so parts of it describe an earlier head — but it is finished, so every
 # rule above still applies to it and the mode stays `final`. What it adds is the one thing only an
 # updated page owes: the disclosure sentence, exactly once, and a masthead naming both revisions.

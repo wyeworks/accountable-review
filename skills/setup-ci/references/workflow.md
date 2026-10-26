@@ -185,7 +185,7 @@ and, after delivery, an `actions/cache/save@v4` under the same key.
 
 **What it is for.** With the previous page sitting where the run is about to write,
 `ci/generate-review-map.sh` passes `--update` and the skill re-reads only the commits since that
-page's revision instead of rebuilding it — `review-map`'s § *Re-running over new commits*. Without
+page's revision instead of rebuilding it — `review-map`'s `references/update.md`. Without
 the restore that flag reaches nothing in CI, because `$RUNNER_TEMP` dies with the runner and a
 second run starts from an empty directory.
 

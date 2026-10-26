@@ -26,7 +26,7 @@
 # WHAT THIS CANNOT KNOW, and what therefore stays with the run. Effort and mentor are invisible
 # on the page by design, the plugin version is recorded only in CI's manifest, and the deep-link
 # rung is a property of a remote rather than of these bytes. None of the four can be recovered
-# from a page, so SKILL.md § Re-running over new commits makes them the run's own checks before
+# from a page, so references/update.md makes them the run's own checks before
 # it calls this script. What is checkable here is checked here.
 #
 # Output is tab-separated rows, plus comment lines a run can read or ignore:

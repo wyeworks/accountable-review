@@ -165,6 +165,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/rust-docs.md` | The documentation catalogue, **Rust** — docs.rs paths pinned per crate and doc.rust-lang.org paths pinned to the toolchain, each stored **with its host** because `cargo` is both a crate and a book. **Open** |
 | `references/page-template.html` | Design system — the rules every theme's tokens keep (it declares none of its own), component classes, the assembled checkpoint, the chain, one of each topology figure and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads. A fifth, `SKELETON:THEME`, inside the head, is where the themes go |
 | `references/themes/` | The three looks — `daylight` (the default), `workshop`, `field-notes` — each one file: a font link and one `<style>` holding its tokens in all three theme states and its overrides, every element carrying `data-style`. All emitted at the `SKELETON:THEME` line, the unchosen ones `media="not all"`; never read by a run |
+| `references/update.md` | The `--update` procedure — the four checks no page can answer, `carry-plan.sh`'s plan and what each row means, which steps run in full and which narrow, and how the existing page is edited. Read only when the flag is passed, so a fresh run never carries it |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
@@ -612,7 +613,7 @@ Editing one of these means checking the others still agree.
   artifact.
 
   Owners, each **alone** for its part: `scripts/carry-plan.sh` (preconditions, carry rule);
-  `SKILL.md` § *Re-running over new commits* (procedure; steps 1, 9, 10 and two hard rules point at
+  `references/update.md` (procedure; `SKILL.md` steps 1, 9, 10 and two hard rules point at
   it); `report-format.md` § *Build state* § *An updated page* (the wording and the refusals);
   `setup-ci/references/workflow.md` § *The previous map* (the cache, ripgrep, why not the artifact).
   Also agreeing: `report-format.md` §§ *Section 1* (masthead segment, merge-base), *One page shape*,
@@ -710,7 +711,7 @@ Editing one of these means checking the others still agree.
   These agree: `report-format.md` § *Section 2* owns the rules and § *How much Context* the four
   values **alone**, with § *One canonical home*, § *The agenda budget*, § *Build state*, § *Mentor
   mode*, § *A future full mode* and § *Topology figures* (the shift's shape) pointing at it;
-  `SKILL.md` steps 1, 7k and 9 and § *Re-running*; `page-template.html` holds `dl.ctx`, its rail entry
+  `SKILL.md` steps 1, 7k and 9 and `references/update.md`; `page-template.html` holds `dl.ctx`, its rail entry
   and `details.ctx-fold`; `tests/run.rb` and `self-test.rb` assert its place, pointers, absences and
   exactly one figure; `checks/start-here.rb` warns on an entry with no pointer or a dead one, behind
   the `golden/context-*` fixtures, and reads through the fold; `figures.rb` grades the shift behind
@@ -926,7 +927,7 @@ Same rule as above: editing one of these means checking the others still agree.
   auto`), because the skill reads the checkout's file under its flags and an absent flag would be
   decided twice.
 
-  These agree: `read-config.sh`; `SKILL.md` step 1 and § *Re-running*; `page-skeleton.sh`;
+  These agree: `read-config.sh`; `SKILL.md` step 1 and `references/update.md`; `page-skeleton.sh`;
   `ci/generate-review-map.sh`; `setup-ci/references/config.md` § *Who reads which key*, which owns the
   split **alone**; `README.md` § *Configuration*; and the two suites, `tests/run.rb` for the local
   refusal and `setup-ci/tests/suite.rb` for the explicit pass-through.

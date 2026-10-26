@@ -358,7 +358,7 @@ borderless, so one that spills its *Look at* list beside the `<section>` rather 
 very nearly right.
 
 **A checkpoint the change has since answered is deleted, never ticked.** On an update
-(`SKILL.md` § *Re-running over new commits*) the new commits will sometimes settle a question the
+(`references/update.md`) the new commits will sometimes settle a question the
 previous map asked. The question then goes, with its stop on the reading path and its rail entry,
 and nothing marks where it was. Not a strikethrough, not a *resolved* label, not a "3 of 5
 addressed" line anywhere on the page.
@@ -1582,7 +1582,7 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   `hljs-` class in the HTML a run writes is a defect whichever variant it is on: the colouring is the
   page script's job at read time, so the bytes on the page stay the bytes `git` produced.
 - **An excerpt is never carried across a delta that touches its file.** On an update
-  (`SKILL.md` § *Re-running over new commits*) every excerpt whose `data-src` moved in the delta is
+  (`references/update.md`) every excerpt whose `data-src` moved in the delta is
   regenerated, in the same single `excerpt.sh` call as any other. Two things go stale at once and
   only one of them is obvious: the lines move, and the **state tag** is computed from `BASE...HEAD`,
   so a file entering the diff turns an `Unchanged` into an `Added` while the quoted bytes stay
@@ -2195,7 +2195,7 @@ pending is a promise, a stated limit is a fact.
 ### An updated page, and why it is not a fourth state
 
 `--update` re-reads only the commits since the previous map and edits that page in place
-(`SKILL.md` § *Re-running over new commits*). The page it leaves behind has parts that were
+(`references/update.md`). The page it leaves behind has parts that were
 analysed at one revision and parts analysed at an earlier one, and the reader is owed that.
 
 **It is not a build state, and filing it as one would break both.** Written, pending, omitted — and
@@ -2545,7 +2545,7 @@ document — and each is held to a rule that keeps the page this one.
 **No value is announced.** No badge, no line saying Context was turned off, no count of entries a
 lowered bar added — the first is a stub by another name, and the last is the page grading its own
 thoroughness. Say which value you took in chat, as for `--mentor`. **On an update** the value must
-match the previous run's, by `SKILL.md` § *Re-running over new commits*' rule for every
+match the previous run's, by `references/update.md`'s rule for every
 page-affecting flag.
 
 **Staging.** Pending from stage 1, decided at `SKILL.md` step 7k once the agenda exists, and written
@@ -2553,7 +2553,7 @@ in stage 3 beside *Impact outside the diff* — after the agenda's stubs have pu
 never delays the questions. § *Build state* has the omitted case.
 
 **On an update** the section is re-decided against the re-ranked agenda, and an entry citing a file
-the new commits moved is re-read rather than carried; `SKILL.md` § *Re-running over new commits*
+the new commits moved is re-read rather than carried; `references/update.md`
 owns the procedure, including when the section is added or removed.
 
 ---
