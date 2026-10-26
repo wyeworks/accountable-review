@@ -46,11 +46,12 @@ not the repository being reviewed. User instructions take precedence over skill 
 
 ## What is bundled
 
-The procedure below relies on the bundled files in this table. Read each at the step that needs it rather than up
-front — the procedure itself is the only part that has to be in context the whole way through.
+The procedure below relies on the bundled files in this table. Read each at the step that needs it
+rather than up front — the procedure itself is the only part that has to be in context the whole way
+through.
 
-Three of the ten are chosen per run, and **you read your own and never another's.** Step 2's stack
-detection picks the lens and the catalogue: a Rails run reads the Rails pair, a Phoenix run the
+The stack's files are chosen per run, and **you read your own and never another's.** Step 2's stack
+detection picks the discovery file, the lens and the catalogue: a Rails run reads the Rails pair, a Phoenix run the
 Phoenix pair, a Rust run the Rust lens and the Rust catalogue, a React run the React lens and the
 React catalogue — and reading another stack's file costs context and teaches the wrong searches.
 **Two stacks have a lens of two files, and they are built the same way.** The Rust backend reads
@@ -87,6 +88,21 @@ mandate. At `--effort high`, which is the default, a reader is sent at each anal
 wrote at the end of step 6, and its challenges are folded in at step 8. You hand that reader the
 mandate's absolute path; you never load it yourself — its instructions are its own, which is the
 point of putting them in a separate context. The host reference owns how the reader is launched.
+
+## The run at a glance
+
+Copy this into your own notes and tick it as you go; a long run loses its place in the middle.
+
+- [ ] 1 · Resolve the target, the settings, `$W` and the link rung (`--update`: read `references/update.md`)
+- [ ] 2 · Detect the stack, read its discovery file, record the versions
+- [ ] 3 · Inventory the diff; ask `diff-render.sh` which files GitHub withholds
+- [ ] 4 · Derive what changed → **stage 1 publishes** (skeleton, masthead, *What changed*)
+- [ ] 5 · Read the lens's sections, trace consumers, record every search
+- [ ] 6 · One analysis note per flow; at `high`, send the falsifiers and keep working
+- [ ] 7 · Read `report-format.md`, synthesise into `agenda.md` → **stage 2** (stubs, then each checkpoint) → **stage 3** (Context, impact)
+- [ ] 8 · Verify every claim before it lands; fold the falsifiers' challenges in
+- [ ] 9 · Write by `Edit` only, generated excerpts only
+- [ ] 10 · Reading path, inventory, **coverage gate**, lint, banner off → **stage 4**, then say it is complete
 
 ## 1. Resolve the target and the effort
 
