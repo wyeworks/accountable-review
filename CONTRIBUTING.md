@@ -154,6 +154,7 @@ bin/evals e2e                              # the pull requests it knows
 bin/evals e2e discourse-43002 -n 3 -j 3    # three whole runs, at once
 bin/evals calibrate                        # each judge against its gold page and planted defects
 bin/evals report                           # the HTML report
+bin/evals triage                           # the verdicts a person has to read, one by one
 ```
 
 A generation needs a credential in the environment (`ANTHROPIC_API_KEY`, or the
@@ -218,6 +219,7 @@ Before a **major** release, run the end-to-end evals and keep what they said: ca
 ```bash
 bin/evals calibrate
 bin/evals e2e <id> -n 3 -j 3     # for each eval PR in evals/e2e/prs.yml
+bin/evals triage                 # read every truth failure, unclear and judge note; export the readings
 bin/evals report --history <version>
 ```
 
