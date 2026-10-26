@@ -134,20 +134,15 @@ point of putting them in a separate context. The host reference owns how the rea
   Take it silently rather than reporting it: an invocation someone had in a script is not a typo,
   and this is the one `--effort` value that is not guessing.
 
-  **`high` is the default because it changes what the page finds, and it costs time it does not cost
-  tokens.** Measured on one 28-file PR: the falsifiers cost **23 seconds of blocked
+  **`high` is the default because it changes what the page finds, and what it costs is tokens rather
+  than time.** Measured on one 28-file PR: the falsifiers cost **23 seconds of blocked
   parent, 0.9% of a 2607-second run**, because they run while the next stage is drafted rather than instead
   of it. The same target at `low` missed five findings the falsified run carried, including the two
   the reviewer most needed.
 
   **That 0.9% is blocked wall clock and is not what the pass costs.** Each falsifier reads in its own
-  context, and those tokens are the run's tokens: measured across three real runs, the pass was
-  **17-23% of every cache-read token the run spent**, on 145-216 requests. Both numbers are true and
-  they answer different questions — the first is why spawning them does not slow the run down, the
-  second is what they add to the bill. `evals/profile.sh` prints them side by side, and Claude's falsifier
-  runs on its own model (`agents/claim-falsifier.md`) so the second number can be bought down without
-  touching the first. Codex inherits its configured model, and both measurements are from Claude
-  runs. **Effort is what decides whether the page is right, and nothing makes a run
+  context, and those tokens are the run's tokens; step 6c says how many and what holds them down.
+  **Effort is what decides whether the page is right, and nothing makes a run
   faster by making the page shorter** — the time goes into tracing consumers at step 5, not into
   writing sections. Three rules:
   - **It produces no section, no marker, no chip and no sentence.** Two pages of the same target at
@@ -779,11 +774,19 @@ and the parent's job in the meantime is step 7. Measured on a real run: five fal
 365 seconds later while the parent drafted. Blocked time was **0.9% of the run**. A run that spawns
 them and then idles has converted the cheapest thing in this procedure into the most expensive.
 
-**Cheap in wall clock is not cheap in tokens, and the cap is what holds the second one down.** Each
-falsifier reads in its own context, and across three real runs the pass came to **17-23% of every
-cache-read token the run spent** over 145-216 requests — the most expensive thing in the procedure
-after step 5, and invisible in the parent's transcript. That is the cap's real job: six agents is the
-point past which a second reader stops paying for itself.
+**Cheap in wall clock is not free in tokens, and the cap is what holds both costs down.** Each
+falsifier reads in its own context, and those tokens are the run's: with one note per falsifier the
+pass came to **2-5% of every cache-read token the run spent**, over 13-33 requests, and none of it
+shows in the parent's transcript — `evals/profile.sh` reads the subagents' to count it. It is that
+small because a note is all a falsifier reads; hand one more than its note and the share grows with
+what it was handed. Claude's falsifier runs on its own model (`agents/claim-falsifier.md`), so that
+share can be bought down without touching the wall clock; Codex inherits its configured model, and
+both measurements are from Claude runs.
+
+The other cost lands in your context, not theirs: every challenge comes back to you, and step 8 has
+you open its cited file before acting on it. That is the cap's real job. Six agents is the point past
+which a second reader stops paying for itself — in their tokens and in the verification each
+challenge asks of you.
 
 Launch the selected readers without waiting between launches, up to the host’s concurrency
 limit. Queue any remaining notes and continue drafting. A run that reached for a single blocking

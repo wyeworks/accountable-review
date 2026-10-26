@@ -33,9 +33,10 @@
 # the lever precisely because it is re-read. Both tables print; read them side by side, because a
 # change can help one and be neutral for the other.
 #
-# The falsifiers of step 8 are the case in point. They cost 23s of blocked parent (0.9% of a run)
-# and 17-23% of all cache reads, measured on three real runs — the first number is why the pass
-# looks free and the second is what it actually spends. They live in their own transcripts under
+# The falsifiers spawned at step 6c are the case in point. They cost 23s of blocked parent (0.9% of
+# a run) and a share of all cache reads that depends on what each one reads: 17-23% when a
+# falsifier read a published flow section, 2-5% with one analysis note each — the first number is
+# why the pass looks free and the second is what it actually spends. They live in their own transcripts under
 # <session>/subagents/, which nothing here used to read, so the report now charges them to the run.
 #
 # What it will NOT do is reconstruct the ten steps, because the transcript does not carry a
@@ -151,9 +152,10 @@ DATA=$(jq -s \
   echo "FAIL  profile.jq failed on $TRANSCRIPT" >&2; exit 1; }
 
 # ---- subagent cost, which the parent transcript does not carry ----
-# The falsifiers of step 8 read in their own transcripts under <session>/subagents/, and their
-# tokens are the run's tokens. A pass measured only by the parent's blocked time reads as free and
-# is not: on three real runs the falsifiers were 17-23% of all cache reads. They belong to the
+# The falsifiers spawned at step 6c read in their own transcripts under <session>/subagents/, and
+# their tokens are the run's tokens. A pass measured only by the parent's blocked time reads as free
+# and is not: the falsifiers were 17-23% of all cache reads when each read a flow section, and 2-5%
+# with one analysis note each. They belong to the
 # SESSION rather than to a run, so a multi-run session is told the number covers the session.
 SUBDIR="${TRANSCRIPT%.jsonl}/subagents"
 SUB=null

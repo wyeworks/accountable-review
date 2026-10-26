@@ -405,9 +405,10 @@ contradicts it. It rewrites nothing; it returns challenges, each anchored in a l
 then opens the cited file itself and corrects, downgrades or drops the claim. A challenge it cannot
 confirm is dropped, exactly as an unconfirmed finding is.
 
-It is on by default because it is very nearly free and it changes what the page finds: on a 28-file
-pull request the whole pass cost 23 seconds of waiting, under 1% of the run, and the same change
-reviewed without it missed five things the falsified page carried. `--effort low` turns it off, which
+It is on by default because it costs almost no waiting and it changes what the page finds: on a
+28-file pull request the whole pass cost 23 seconds of waiting, under 1% of the run, and the same
+change reviewed without it missed five things the falsified page carried. What it does cost is tokens
+in the readers' own contexts, a few percent of the run's. `--effort low` turns it off, which
 is worth doing when the diff is small enough that a second reader has nothing to find.
 
 ### Onboarding a reviewer into the stack
