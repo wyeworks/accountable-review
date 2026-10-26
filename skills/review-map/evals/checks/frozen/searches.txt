@@ -830,6 +830,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-flow-io.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-flow-io.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-loose-data-path.html
 exit=0
 SKIP  no affected entry carries a citation to hold against the diff
@@ -1094,6 +1102,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment searches-other-tree.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page searches-other-tree.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment searches-unreachable.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
@@ -1188,6 +1204,12 @@ exit=1
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 PASS  1 recorded search(es) re-run inside the repository
 FAIL  1 of 1 cited entr(ies) are reachable from no recorded search: app/models/project.rb:9
+## --fragment searches-other-tree.html --repo searches-repo
+exit=1
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+PASS  1 recorded search(es) re-run inside the repository
+SKIP  1 recorded search(es) name another tree (3f2a9c1): they describe that revision, not the one the entries cite, so they credit none of them
+FAIL  1 of 1 cited entr(ies) are reachable from no recorded search: app/models/project.rb:2
 ## --fragment searches-clean.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger

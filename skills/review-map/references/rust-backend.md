@@ -210,6 +210,26 @@ rg -n 'impl +IntoResponse +for|impl +ResponseError +for' -g '*.rs'
 rg -n 'sqlx::query\(|sqlx::query_as\(' -g '*.rs'              # unchecked queries, against the checked ones
 ```
 
+## Architectural questions, measured on both sides
+
+`references/rust.md` § *Architectural questions* owns the rule, the searches between workspace
+members and the register. What a backend adds is shapes to look for:
+
+- **A handler that now calls another service over the network** inside the request, where siblings
+  publish a message or enqueue work.
+- **A second owner of a table** — a second crate or module issuing writes to it.
+- **A new background task spawned from a handler** (`tokio::spawn` with no handle kept), where the
+  app's other background work runs in a worker the router does not own.
+- **A new layer that every route now passes through**, or a router merged under another's state.
+- **The first of its kind.** The first outbound HTTP client, the first cache, the first message
+  broker connection, the first migration touching another service's schema.
+
+```sh
+rg -n 'reqwest::|hyper::Client|tonic::transport::Channel' -g '*.rs' <the handlers directory>
+rg -n 'tokio::spawn' -g '*.rs' <the handlers directory>
+git grep -n -E 'reqwest::|tokio::spawn' <merge-base sha> -- '*.rs'
+```
+
 ## Tests
 
 - **`#[sqlx::test]` gives each test its own database**, with migrations applied, and drops it after.

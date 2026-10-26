@@ -342,6 +342,18 @@ CASES = [
            edit: sed(/^  landed=\$\(comm -12 "\$TMP\/delta" "\$TMP\/hitpaths" \| head -n 1\)$/, "  landed="),
            section: :carry_plan, expect: "a delta path among a recorded search's hits refuses the update"),
 
+  # The merge-base exemption. Without it a base-side `git grep … <sha>` reads as a shape the hit
+  # test cannot parse, and every page carrying an architectural checkpoint updates in full.
+  Case.new(desc: "a recorded search of the merge-base is read for its shape again", file: CARRY,
+           edit: sed(/^      if \[ "\$rev" = "\$MB" \]; then at_mb=1; else other=1; fi$/, "      other=1"),
+           section: :carry_plan, expect: "a recorded search of the merge-base does not refuse the update"),
+
+  # The exemption's other half. Counting only the merge-base among the trees named lets a search
+  # of it and HEAD together skip the replay, and HEAD is exactly what these commits changed.
+  Case.new(desc: "a search naming the merge-base beside another tree is exempt too", file: CARRY,
+           edit: sed(/^      if \[ "\$rev" = "\$MB" \]; then at_mb=1; else other=1; fi$/, %(      [ "$rev" = "$MB" ] && at_mb=1)),
+           section: :carry_plan, expect: "a recorded search of the merge-base and HEAD together still refuses"),
+
   # The reason -v is not used. awk's -v processes escape sequences in the value, so a recorded
   # `\bProjects::Archive\b` arrives with two backspaces where its word boundaries were.
   Case.new(desc: "the recorded pattern reaches awk through -v, which eats its backslash escapes", file: CARRY,

@@ -111,6 +111,25 @@ module Searches
     Command.new(command[0...first], command[(first + 1)...second], command[(second + 1)..])
   end
 
+  # A `git grep` THAT NAMES A TREE SEARCHED THAT TREE, NOT THIS ONE. An architectural checkpoint
+  # records the base half of its measurement as `git grep -n -P '…' <merge-base sha> -- scope`, and
+  # a working-tree grep of the same pattern would read the sha as a missing path and search the
+  # scope at head — crediting head hits to a search the page says ran at the base, which is false
+  # provenance of exactly the kind this file exists to catch. So the trees are read off the command
+  # and such a search credits no entry: the entries cite head. A tree is what git's grammar puts
+  # between the pattern and `--`, written as a sha or a HEAD-relative name; without the `--`, only
+  # a sha is unambiguous. searches-repo is not a git repository, so nothing here asks git.
+  TREE = /\A(?:\h{7,40}|[A-Z_]*HEAD)(?:[~^][0-9]*)*\z/
+
+  def self.trees(command)
+    return [] unless command.prefix.to_s.split.first == "git"
+
+    tokens = command.paths.to_s.split
+    split = tokens.index("--")
+    tree = split ? TREE : /\A\h{7,40}\z/
+    (split ? tokens.take(split) : tokens).select { |t| t.match?(tree) }
+  end
+
   # RE-RUN IT WITH THE DIALECT IT WAS WRITTEN IN. This is not fussiness: `\|` is alternation
   # in grep's default BRE and a LITERAL PIPE in rg, so running a recorded
   # `grep -rn "recommendable\|general_recommendations_eligible" app` through rg matches
@@ -311,6 +330,7 @@ commands = Searches.text_nodes(page)
 
 hits = []
 unparsed = []
+other_trees = []
 recorded = 0
 
 commands.each do |command|
@@ -319,6 +339,12 @@ commands.each do |command|
   parsed = Searches.parse(command)
   if parsed.pattern.to_s.empty?
     unparsed << command
+    next
+  end
+
+  named = Searches.trees(parsed)
+  if named.any?
+    other_trees << named.first
     next
   end
 
@@ -415,12 +441,16 @@ end
 # ---------------------------------------------------------------- verdicts
 if recorded.zero?
   if checked.positive? || pointers.positive?
-    check.maybe("affected entries are present but no search is recorded anywhere — provenance cannot be checked, and unrecorded, absence and omission look identical")
+    check.maybe("affected entries are present but #{other_trees.any? ? "no search of the tree they cite is recorded" : "no search is recorded anywhere"} — provenance cannot be checked, and unrecorded, absence and omission look identical")
   else
     check.skip("no recorded search and no affected entry to check one against")
   end
 else
   check.ok("#{recorded} recorded search(es) re-run inside the repository")
+end
+
+if other_trees.any?
+  check.skip("#{other_trees.size} recorded search(es) name another tree (#{other_trees.uniq.first(3).join(' ')}): they describe that revision, not the one the entries cite, so they credit none of them")
 end
 
 if unparsed.any?

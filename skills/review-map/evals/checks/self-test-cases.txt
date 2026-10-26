@@ -62,6 +62,7 @@
  searches           | searches-git-grep.html        | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
  searches           | searches-context-flag.html    | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
  searches           | searches-context-beyond.html  | 1 | reachable from no recorded search: app/models/project.rb:9 | --repo @GOLD@/searches-repo
+ searches           | searches-other-tree.html      | 1 | reachable from no recorded search: app/models/project.rb:2 | --repo @GOLD@/searches-repo
  searches           | searches-clean.html           | 0 | needs --repo to re-run
  start-here         | start-here-clean.html         | 0 | each with a why
  start-here         | start-here-no-why.html        | 1 | is not a reading order
@@ -143,6 +144,7 @@
 # stops at the label rather than at every capitalised word near a letter. The renamed corpus is
 # the wider pass half, pinned by frozen.rb.
  page-invariants    | invariants-flow-designator.html | 1 | the page names a flow
+ page-invariants    | invariants-flow-io.html         | 0 | no flow designator
  page-invariants    | invariants-clean.html         | 0 | no flow designator
 # The section sign, § 8 — the flow label's sibling. The FAIL row plants the sentence a real page
 # wrote; the PASS row holds the sign only where it is a quotation (a <code> span, an excerpt's
@@ -197,8 +199,8 @@
 # one over the ratio, so the row pins THIS ratio rather than passing all the way down from a
 # looser one.
 #
-# The denominator is min(checkpoints, 5), not the checkpoint count. The agenda may run to seven
-# on a PR shipping two independent changes, and letting this threshold ride up with it would
+# The denominator is min(checkpoints, 5), not the checkpoint count. The agenda may run to eleven
+# on a large PR shipping several independent changes, and letting this threshold ride up with it would
 # have loosened the anchor budget silently — whether a link is earned does not scale with how
 # many judgments a page carries.
  rails-anchors      | anchors-probe-label-thin.html  | 0 | no segment saying what the output would settle | --repo @GOLD@/searches-repo
