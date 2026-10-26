@@ -1,0 +1,83 @@
+# Size ceilings for every skill's SKILL.md and Markdown reference, read by skill-budget.rb.
+# A ratchet: lower a ceiling when its file shrinks, and raise one only on purpose, in the same
+# commit as the growth. Each starts about 5% above the file it governs.
+
+files:
+  skills/review-map/SKILL.md:
+    lines: 1589
+    bytes: 121834
+  skills/review-map/references/claim-falsifier.md:
+    lines: 103
+    bytes: 6468
+  skills/review-map/references/discover/phoenix.md:
+    lines: 37
+    bytes: 2294
+  skills/review-map/references/discover/rails.md:
+    lines: 20
+    bytes: 1026
+  skills/review-map/references/discover/react.md:
+    lines: 50
+    bytes: 3224
+  skills/review-map/references/discover/rust.md:
+    lines: 48
+    bytes: 3031
+  skills/review-map/references/elixir-docs.md:
+    lines: 317
+    bytes: 19707
+  skills/review-map/references/hosts/claude-code.md:
+    lines: 53
+    bytes: 3859
+  skills/review-map/references/hosts/generic.md:
+    lines: 110
+    bytes: 6916
+  skills/review-map/references/nextjs.md:
+    lines: 392
+    bytes: 25781
+  skills/review-map/references/phoenix-liveview.md:
+    lines: 627
+    bytes: 37470
+  skills/review-map/references/rails-docs.md:
+    lines: 360
+    bytes: 25963
+  skills/review-map/references/rails-nextjs.md:
+    lines: 574
+    bytes: 33659
+  skills/review-map/references/react-docs.md:
+    lines: 310
+    bytes: 18899
+  skills/review-map/references/react.md:
+    lines: 544
+    bytes: 35755
+  skills/review-map/references/report-format.md:
+    lines: 3095
+    bytes: 220214
+  skills/review-map/references/rust-backend.md:
+    lines: 429
+    bytes: 26718
+  skills/review-map/references/rust-docs.md:
+    lines: 344
+    bytes: 22498
+  skills/review-map/references/rust.md:
+    lines: 559
+    bytes: 37369
+  skills/review-map/references/update.md:
+    lines: 172
+    bytes: 11850
+  skills/setup-ci/SKILL.md:
+    lines: 464
+    bytes: 29187
+  skills/setup-ci/references/config.md:
+    lines: 132
+    bytes: 11918
+  skills/setup-ci/references/delivery.md:
+    lines: 124
+    bytes: 5960
+  skills/setup-ci/references/workflow.md:
+    lines: 654
+    bytes: 39226
+
+# Run-history markers (used to, no longer, earlier version, back when, measured, one run) per
+# SKILL.md. Over the ceiling is a WARN: skill prose may keep the observation behind a rule.
+history:
+  skills/review-map/SKILL.md: 6
+  skills/setup-ci/SKILL.md: 3

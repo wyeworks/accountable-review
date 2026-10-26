@@ -63,6 +63,12 @@ call stay shell, because shell is what runs on a team's runner. When you edit ei
 any script under `skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them —
 `bin/evals offline` runs every suite together, which is what CI does too.
 
+**The skill's size ceilings are a ratchet.** `SKILL.md` is loaded whole on every run and grows one
+reasonable paragraph at a time, so `tests/skill-budget.rb` holds it and every reference to a
+ceiling in `tests/budgets.yml`: lower one when its file shrinks, and raise one only on purpose, in
+the same commit as the growth, so the growth is in the diff a reviewer reads. A new reference needs
+a row and a sentence in `SKILL.md` saying when to read it.
+
 ## Working on the skill
 
 Run a Rails or a Phoenix project against this checkout — no install, and `/reload-plugins` picks up
@@ -182,6 +188,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
 | `skills/review-map/tests/` | The deterministic tests for those scripts, in Ruby: `suite.rb` holds them one method per section, `run.rb` runs every section, and `self-test.rb` breaks each rule on a copy of the skill and runs only the section that should notice. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently, and holds a skill's name and description to the Agent Skills spec's limits, which the same validator does not check |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
+| `skills/review-map/tests/skill-budget.rb` and `budgets.yml` | Every skill's `SKILL.md` and Markdown reference under a line and byte ceiling, every reference named in its `SKILL.md`, every `references/` path it names present; a `SKILL.md` past the spec's 500 lines, or over its history-marker ceiling, is a WARN. The ceilings live in `budgets.yml` and nowhere else |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/`, `setup-ci/tests/` and `bin/examples check` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
 | `bin/examples` | The published examples — `regen` regenerates each at the revision its committed `manifest.json` pins, `render` writes the provenance regions in `examples/README.md` and `examples/index.html`, `check` fails a version or a region gone stale. Outside `examples/` because Pages uploads that directory |
 | `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right, plus `DEFERRED.md`, the one list of what the gate knowingly lets through. Not loaded at runtime; see `evals/README.md` |
