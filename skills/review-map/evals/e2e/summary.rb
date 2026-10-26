@@ -121,7 +121,7 @@ module Summary
     end
 
     out.puts
-    out.puts " 📊 bin/evals report      📂 #{File.join(E2E::RESULTS, 'e2e.jsonl')}"
+    out.puts " 📊 bin/evals report      🔍 bin/evals triage      📂 #{File.join(E2E::RESULTS, 'e2e.jsonl')}"
     out.puts RULE
     overall
   end

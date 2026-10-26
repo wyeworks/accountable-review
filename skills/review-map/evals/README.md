@@ -23,6 +23,7 @@ evals/
 │   ├── calibration/         <id>/gold.html, defects/*.patch, labels.yml; status.json
 │   ├── verdicts.rb          reads one verdicts.json; shared by judge.rb and self-test.rb
 │   ├── report.rb            results/e2e.jsonl as an HTML page
+│   ├── triage.rb / .html    the verdicts a person has to read, as a local queue with readings
 │   └── history/             one summary per release, committed
 ├── profile.sh / profile.jq  where one run's time and money went, from the session transcript
 ├── verify-catalogue.sh      the documentation catalogues, opened. Needs network
@@ -69,6 +70,7 @@ bin/evals e2e                              # the PRs in e2e/prs.yml
 bin/evals e2e discourse-43002 -n 3 -j 3    # three whole runs of one, at once
 bin/evals calibrate                        # every judge against its gold page
 bin/evals report                           # the HTML report
+bin/evals triage                           # what a person has to read before the report's numbers stand
 bin/evals catalogue elixir                 # the maintenance pass, per catalogue (rails | elixir | rust | react). Needs network.
 ```
 
@@ -178,6 +180,19 @@ moves, and gold has to stay put as long as its patches apply.
 Before a **major** release: `bin/evals calibrate`, then `bin/evals e2e <id> -n 3 -j 3` for every
 `eval` PR, then `bin/evals report --history <version>`, and commit the history file. Read the
 report's notes before its numbers. What the numbers have to show is § *What counts as good*.
+
+The readings that section leaves to a person are worked through in `bin/evals triage`, which writes
+`$EVAL_OUT/triage.html`: one sha at a time, the criteria as tiles in grade.rb's status, and a queue
+of every **truth failure** (a claim to check against the repository), every calibrated **unclear**
+and every judge **note** — form and deferred failures, check lines and uncalibrated judges behind
+filters. Each item links to what settles it: the generated page scrolled to the quoted sentence,
+the cited `file:line` as a permalink at the PR's pinned head, `check.txt` and the raw verdicts.
+A reading is a decision on an item — for a claim, *confirmed false*, *judge error* or *can't
+settle it* — with a note, kept in the browser and exported as JSON. Save the export as
+`results/adjudications.json` and the next `triage` opens with it. The page shows what a criterion's
+status becomes with the readings counted, beside grade.rb's and never instead of it: a confirmed
+false sentence blocks whatever the rate says, and a judge error is the note this section says to
+record, in a file rather than in memory.
 
 What that costs, from § *The money is a different ranking* below: on the two discourse `eval` PRs
 one generation is 9–14 minutes and 4–8M cache-read tokens at the default effort, falsifiers

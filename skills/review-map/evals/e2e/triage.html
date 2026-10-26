@@ -1,0 +1,317 @@
+<!doctype html>
+<!-- triage.html — the template triage.rb fills. Two placeholders carry the data; nothing here is
+     a rule. What goes in the queue and why is triage.rb's header; what the bar is, grade.rb's. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eval triage</title>
+<style>
+  :root{--bg:#fbfaf7;--panel:#ffffff;--ink:#1d1d1b;--mute:#6b6a64;--rule:#dedbd2;--accent:#3b5bdb;
+    --good:#dff0dc;--good-ink:#24622f;--bad:#f6dcd6;--bad-ink:#9b2f17;--mixed:#f5ecd0;--mixed-ink:#7a5a00;--plain:#efede7;--plain-ink:#55534d;
+    --claim:#9b2f17;--unclear:#7a5a00;--note:#5b3e8c;--other:#55534d}
+  @media (prefers-color-scheme:dark){:root{--bg:#1b1b19;--panel:#232321;--ink:#e9e7e0;--mute:#a19f97;--rule:#3a3935;--accent:#8ea4ff;
+    --good:#23402a;--good-ink:#9fdcab;--bad:#4a2a24;--bad-ink:#f2a593;--mixed:#44391d;--mixed-ink:#e8cd7a;--plain:#2d2c29;--plain-ink:#bdbab1;
+    --claim:#f2a593;--unclear:#e8cd7a;--note:#c4aef0;--other:#bdbab1}}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif;margin:0}
+  header{padding:20px 20px 8px;max-width:1200px;margin:0 auto}
+  main{padding:0 20px 60px;max-width:1200px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;margin:24px 0 8px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+  .meta{color:var(--mute);font-size:12.5px}
+  select,button,input,textarea{font:inherit;color:inherit}
+  select{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:4px 8px;max-width:100%}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+  .stat{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:8px 12px;min-width:120px}
+  .stat b{display:block;font-size:22px;line-height:1.2}
+  .stat.claim b{color:var(--claim)}.stat.unclear b{color:var(--unclear)}.stat.note b{color:var(--note)}
+  .progress{flex:1;min-width:200px}
+  .progress .track{height:8px;border-radius:4px;background:var(--plain);overflow:hidden;margin-top:6px}
+  .progress .fill{height:100%;background:var(--good-ink)}
+  .status{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600}
+  .s-good{background:var(--good);color:var(--good-ink)}.s-block,.s-failing{background:var(--bad);color:var(--bad-ink)}
+  .s-read,.s-watch{background:var(--mixed);color:var(--mixed-ink)}.s-deferred,.s-none{background:var(--plain);color:var(--plain-ink)}
+  .grid{display:grid;grid-template-columns:minmax(140px,180px) 1fr;gap:6px 12px;align-items:start}
+  .grid .j{font-weight:600;padding-top:6px;overflow-wrap:anywhere}
+  .tiles{display:flex;flex-wrap:wrap;gap:6px}
+  .tile{border:1px solid var(--rule);border-radius:8px;padding:6px 8px;width:190px;cursor:pointer;text-align:left;background:var(--panel)}
+  .tile.on{outline:2px solid var(--accent)}
+  .tile .lab{font-size:12.5px;display:block;margin:2px 0 4px}
+  .tile .cnt{font-size:12px;color:var(--mute)}
+  .tile .after{display:block;font-size:11.5px;margin-top:3px}
+  .filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .chip{border:1px solid var(--rule);background:var(--panel);border-radius:14px;padding:3px 10px;cursor:pointer;font-size:12.5px}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  label.tog{font-size:12.5px;display:inline-flex;gap:4px;align-items:center;margin-left:6px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-left:4px solid var(--other);border-radius:8px;padding:12px 14px;margin:10px 0}
+  .card.k-claim{border-left-color:var(--claim)}.card.k-unclear{border-left-color:var(--unclear)}.card.k-note{border-left-color:var(--note)}
+  .card.done{opacity:.62}.card.focus{outline:2px solid var(--accent)}
+  .card .top{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+  .kind{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+  .k-claim .kind{color:var(--claim)}.k-unclear .kind{color:var(--unclear)}.k-note .kind{color:var(--note)}.kind{color:var(--other)}
+  .card h3{font-size:15px;margin:0;flex:1;min-width:200px}
+  .where{font-size:12px;color:var(--mute)}
+  .why{margin:8px 0 4px}
+  .ev{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;background:var(--plain);border-radius:6px;padding:6px 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .links{display:flex;flex-wrap:wrap;gap:4px 14px;margin:8px 0 2px;font-size:12.5px}
+  .links a{color:var(--accent)}
+  .links a.code::before{content:"⌁ "}.links a.page::before{content:"❝ "}
+  .warn{font-size:12px;color:var(--mixed-ink)}
+  .decide{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+  .decide button{border:1px solid var(--rule);background:var(--bg);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12.5px}
+  .decide button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .decide button kbd{font-size:10.5px;opacity:.7;margin-right:4px}
+  textarea{width:100%;min-height:38px;margin-top:6px;border:1px solid var(--rule);border-radius:6px;padding:6px 8px;background:var(--bg);resize:vertical;font-size:13px}
+  .empty{padding:24px;text-align:center;color:var(--mute);border:1px dashed var(--rule);border-radius:8px}
+  footer{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--rule);padding:8px 20px}
+  footer .in{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  footer button,footer label.btn{border:1px solid var(--rule);background:var(--panel);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12.5px}
+  footer .hint{margin-left:auto}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}.tile{width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Eval triage</h1>
+  <p class="meta">What evals/README.md § <i>What counts as good</i> leaves to a person: each truth failure checked against the repository, each <i>unclear</i>, each judge note. These grade the pages, never the pull requests. Written <!--WRITTEN--> from <!--SOURCE-->.</p>
+  <div class="bar"><label class="meta" for="group">skill sha · effort · model</label> <select id="group"></select> <span id="overall"></span></div>
+</header>
+<main>
+  <div class="bar" id="stats"></div>
+  <h2>Criteria at this sha</h2>
+  <p class="meta">Status is grade.rb's over the calibrated judges. Where you have read a failure, the line beneath says what the status becomes with your readings counted: a confirmed false sentence blocks, a judge error comes off the count. Click a criterion to see its items.</p>
+  <div class="grid" id="grid"></div>
+  <h2>Items</h2>
+  <div class="filters" id="filters"></div>
+  <div id="items"></div>
+</main>
+<footer><div class="in">
+  <button id="export">Export readings</button>
+  <label class="btn">Import… <input type="file" id="import" accept="application/json" hidden></label>
+  <button id="clear">Forget readings</button>
+  <span class="meta hint">Readings stay in this browser. Export, and save the file as <code>results/adjudications.json</code> so the next <code>bin/evals triage</code> opens with them. Keys: <kbd>j</kbd>/<kbd>k</kbd> move, <kbd>1</kbd>–<kbd>3</kbd> decide, <kbd>o</kbd> opens the page.</span>
+</div></footer>
+
+<script id="data" type="application/json">/*DATA*/null</script>
+<script id="readings" type="application/json">/*READINGS*/null</script>
+<script>
+(function () {
+  "use strict";
+  var DATA = JSON.parse(document.getElementById("data").textContent);
+  var FILE = JSON.parse(document.getElementById("readings").textContent) || {};
+  var KEY = "accountable-review:eval-triage";
+  var KINDS = { claim: "Verify a claim", unclear: "Judge was unclear", note: "Judge note", form: "Form failure", deferred: "Deferred failure", check: "Check line" };
+  var QUEUE = ["claim", "unclear", "note"];
+  var STATUS = { good: "good", watch: "watch", read: "read by a person", block: "blocks", failing: "blocks — below 4/6", deferred: "deferred", none: "—" };
+
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(readings)); } catch (e) { /* private window: readings live until the tab closes */ } }
+  var readings = (function () {
+    var out = {}, mine = load(), id;
+    for (id in FILE) out[id] = FILE[id];
+    for (id in mine) if (!out[id] || String(mine[id].at) > String(out[id].at)) out[id] = mine[id];
+    return out;
+  })();
+
+  var state = { group: DATA.groups.length ? DATA.groups[0].key : null, kinds: QUEUE.slice(), pr: "", uncal: false, hideRead: false, crit: null, focus: 0 };
+
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag), k;
+    for (k in attrs || {}) {
+      if (k === "text") e.textContent = attrs[k];
+      else if (k === "class") e.className = attrs[k];
+      else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]);
+      else if (attrs[k] !== null && attrs[k] !== undefined && attrs[k] !== false) e.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function status(s) { return el("span", { class: "status s-" + s, text: STATUS[s] || s }); }
+  function fileUrl(p) { return p ? "file://" + encodeURI(p) : null; }
+  function group() { return DATA.groups.filter(function (g) { return g.key === state.group; })[0]; }
+  function inGroup() { return DATA.items.filter(function (i) { return i.group === state.group; }); }
+  function counted(i) { return i.calibrated && QUEUE.indexOf(i.kind) >= 0; }
+
+  // What a criterion's status becomes with the person's readings counted. grade.rb's arithmetic,
+  // repeated here only to show the consequence of a reading; the file of readings is the record.
+  function after(c) {
+    var items = inGroup().filter(function (i) { return i.calibrated && i.judge === c.judge && i.n === c.n && i.verdict === "fail"; });
+    var decided = items.filter(function (i) { return readings[i.id]; });
+    if (!decided.length) return null;
+    var errors = decided.filter(function (i) { return readings[i.id].decision === "judge-error"; }).length;
+    var confirmed = decided.filter(function (i) { return readings[i.id].decision === "false"; }).length;
+    var fail = c.fail - errors, pass = c.pass + errors, n = c.pass + c.fail + c.unclear, s;
+    if (c["class"] === "deferred") s = "deferred";
+    else if (c["class"] === "truth") s = confirmed ? "block" : fail >= 2 ? "block" : fail === 1 ? "read" : "good";
+    else s = pass / n >= (c.split ? 4 / 6 : 5 / 6) ? "good" : pass / n >= 4 / 6 ? "watch" : "failing";
+    return { status: s, read: decided.length, of: items.length };
+  }
+
+  function renderGroups() {
+    var sel = document.getElementById("group");
+    sel.innerHTML = "";
+    DATA.groups.forEach(function (g) {
+      sel.appendChild(el("option", { value: g.key, text: g.key + " — " + g.reps + " rep(s), " + g.prs.join(", ") + (g.dirty ? " · uncommitted prose" : ""), selected: g.key === state.group ? "selected" : null }));
+    });
+    sel.onchange = function () { state.group = sel.value; state.crit = null; state.pr = ""; state.focus = 0; render(); };
+  }
+
+  function renderStats() {
+    var g = group(), box = document.getElementById("stats"), items = inGroup();
+    document.getElementById("overall").replaceChildren(g ? status(g.overall) : "");
+    box.innerHTML = "";
+    QUEUE.forEach(function (k) {
+      var n = items.filter(function (i) { return i.kind === k && i.calibrated; }).length;
+      box.appendChild(el("div", { class: "stat " + k }, [el("b", { text: String(n) }), KINDS[k]]));
+    });
+    var q = items.filter(counted), done = q.filter(function (i) { return readings[i.id]; }).length;
+    var pct = q.length ? Math.round(100 * done / q.length) : 100;
+    box.appendChild(el("div", { class: "stat progress" }, [
+      el("span", { text: q.length ? done + " of " + q.length + " read" : "nothing waits on a person" }),
+      el("div", { class: "track" }, [el("div", { class: "fill", style: "width:" + pct + "%" })])
+    ]));
+  }
+
+  function renderGrid() {
+    var g = group(), box = document.getElementById("grid"), by = {};
+    box.innerHTML = "";
+    if (!g || !g.criteria.length) { box.appendChild(el("p", { class: "meta", text: "No calibrated judge's verdicts at this sha." })); return; }
+    g.criteria.forEach(function (c) { (by[c.judge] = by[c.judge] || []).push(c); });
+    Object.keys(by).forEach(function (j) {
+      box.appendChild(el("div", { class: "j", text: j }));
+      box.appendChild(el("div", { class: "tiles" }, by[j].map(function (c) {
+        var key = c.judge + "#" + c.n, a = after(c), n = c.pass + c.fail + c.unclear;
+        var cnt = c.pass + "/" + n + " pass" + (c.unclear ? " · " + c.unclear + " unclear" : "") + (c.split ? " · split on gold" : "");
+        return el("button", { class: "tile" + (state.crit === key ? " on" : ""), type: "button", title: c["class"] + " criterion",
+          onclick: function () { state.crit = state.crit === key ? null : key; if (state.crit) state.kinds = Object.keys(KINDS); render(); } }, [
+          status(c.status), el("span", { class: "lab", text: c.n + ". " + c.label }),
+          el("span", { class: "cnt", text: c["class"] + " · " + cnt }),
+          a ? el("span", { class: "after" }, ["with your readings (" + a.read + "/" + a.of + "): ", status(a.status)]) : null
+        ]);
+      })));
+    });
+  }
+
+  function renderFilters() {
+    var box = document.getElementById("filters"), items = inGroup();
+    box.innerHTML = "";
+    Object.keys(KINDS).forEach(function (k) {
+      var n = items.filter(function (i) { return i.kind === k && (state.uncal || i.calibrated); }).length;
+      if (!n && QUEUE.indexOf(k) < 0) return;
+      box.appendChild(el("button", { class: "chip", type: "button", "aria-pressed": String(state.kinds.indexOf(k) >= 0),
+        onclick: function () { var x = state.kinds.indexOf(k); if (x >= 0) state.kinds.splice(x, 1); else state.kinds.push(k); state.focus = 0; render(); },
+        text: KINDS[k] + " " + n }));
+    });
+    var prs = group() ? group().prs : [];
+    if (prs.length > 1) {
+      var sel = el("select", { onchange: function () { state.pr = sel.value; state.focus = 0; render(); } },
+        [el("option", { value: "", text: "every PR" })].concat(prs.map(function (p) { return el("option", { value: p, text: p, selected: state.pr === p ? "selected" : null }); })));
+      box.appendChild(sel);
+    }
+    box.appendChild(el("label", { class: "tog" }, [el("input", { type: "checkbox", checked: state.uncal ? "checked" : null, onchange: function (e) { state.uncal = e.target.checked; render(); } }), "uncalibrated judges"]));
+    box.appendChild(el("label", { class: "tog" }, [el("input", { type: "checkbox", checked: state.hideRead ? "checked" : null, onchange: function (e) { state.hideRead = e.target.checked; render(); } }), "hide what I've read"]));
+    if (state.crit) box.appendChild(el("button", { class: "chip", type: "button", "aria-pressed": "true", onclick: function () { state.crit = null; render(); }, text: "criterion " + state.crit.replace("#", " ") + " ✕" }));
+  }
+
+  function visible() {
+    var order = { claim: 0, unclear: 1, note: 2, form: 3, deferred: 4, check: 5 };
+    return inGroup().filter(function (i) {
+      if (state.kinds.indexOf(i.kind) < 0) return false;
+      if (!state.uncal && !i.calibrated) return false;
+      if (state.pr && i.pr !== state.pr) return false;
+      if (state.hideRead && readings[i.id]) return false;
+      if (state.crit && i.judge + "#" + i.n !== state.crit) return false;
+      return true;
+    }).sort(function (a, b) { return (order[a.kind] - order[b.kind]) || a.judge.localeCompare(b.judge) || ((a.n || 0) - (b.n || 0)) || a.pr.localeCompare(b.pr) || (a.rep - b.rep); });
+  }
+
+  function decide(i, key) {
+    var r = readings[i.id];
+    if (r && r.decision === key) delete readings[i.id];
+    else readings[i.id] = { decision: key, note: r ? r.note : "", at: new Date().toISOString(), judge: i.judge, n: i.n || null, kind: i.kind, pr: i.pr, rep: i.rep, group: i.group };
+    save(); render();
+  }
+
+  function card(i, idx) {
+    var r = readings[i.id], ds = DATA.decisions[i.kind] || [];
+    var title = i.title || (i.n ? i.n + ". " + i.label : "notes from " + i.judge);
+    var links = (i.links || []).map(function (l) { return el("a", { class: l.kind, href: l.href, target: "_blank", rel: "noopener", text: l.text }); });
+    if (i.page) links.push(el("a", { href: fileUrl(i.page), target: "_blank", rel: "noopener", text: "open the page" }));
+    if (i.check) links.push(el("a", { href: fileUrl(i.check), target: "_blank", rel: "noopener", text: "check.txt" }));
+    if (i.verdicts) links.push(el("a", { href: fileUrl(i.verdicts), target: "_blank", rel: "noopener", text: "verdicts.json" }));
+    if (i.repo && i.number) links.push(el("a", { href: "https://github.com/" + i.repo + "/pull/" + i.number + "/files", target: "_blank", rel: "noopener", text: i.repo + "#" + i.number }));
+    var note = el("textarea", { placeholder: "what you checked, and what you found", oninput: function () {
+      var x = readings[i.id]; if (!x) return; x.note = note.value; x.at = new Date().toISOString(); save();
+    } });
+    note.value = r ? r.note || "" : "";
+    note.disabled = !r;
+    return el("article", { class: "card k-" + i.kind + (r ? " done" : "") + (idx === state.focus ? " focus" : ""), "data-idx": String(idx), onclick: function () { state.focus = idx; markFocus(); } }, [
+      el("div", { class: "top" }, [
+        el("span", { class: "kind", text: KINDS[i.kind] }),
+        el("h3", { text: title }),
+        el("span", { class: "where", text: i.judge + (i["class"] ? " · " + i["class"] : "") + " · " + i.pr + " r" + i.rep + (i.calibrated ? "" : " · UNCALIBRATED, not counted") + (i.split ? " · judge split on gold" : "") })
+      ]),
+      i.why ? el("p", { class: "why", text: i.why }) : null,
+      i.evidence ? el("div", { class: "ev", text: i.evidence }) : null,
+      links.length ? el("div", { class: "links" }, links) : null,
+      i.page ? null : el("div", { class: "warn", text: "the page is no longer on disk — re-run, or open the PR" }),
+      ds.length ? el("div", { class: "decide" }, ds.map(function (d, n) {
+        return el("button", { type: "button", "aria-pressed": String(!!(r && r.decision === d[0])), onclick: function (e) { e.stopPropagation(); decide(i, d[0]); } }, [el("kbd", { text: String(n + 1) }), d[1]]);
+      })) : null,
+      ds.length ? note : null
+    ]);
+  }
+
+  var shown = [];
+  function renderItems() {
+    var box = document.getElementById("items");
+    shown = visible();
+    box.innerHTML = "";
+    if (state.focus >= shown.length) state.focus = Math.max(0, shown.length - 1);
+    if (!shown.length) { box.appendChild(el("div", { class: "empty", text: inGroup().some(counted) ? "Nothing matches these filters." : "Nothing at this sha waits on a person." })); return; }
+    shown.forEach(function (i, n) { box.appendChild(card(i, n)); });
+  }
+  function markFocus() {
+    document.querySelectorAll(".card").forEach(function (c) { c.classList.toggle("focus", Number(c.getAttribute("data-idx")) === state.focus); });
+  }
+
+  function render() { renderStats(); renderGrid(); renderFilters(); renderItems(); }
+
+  document.addEventListener("keydown", function (e) {
+    if (/^(TEXTAREA|INPUT|SELECT)$/.test(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+    var i = shown[state.focus];
+    if (e.key === "j" || e.key === "k") {
+      state.focus = Math.max(0, Math.min(shown.length - 1, state.focus + (e.key === "j" ? 1 : -1)));
+      markFocus();
+      var c = document.querySelector('.card[data-idx="' + state.focus + '"]'); if (c) c.scrollIntoView({ block: "nearest" });
+    } else if (i && /^[1-3]$/.test(e.key)) {
+      var d = (DATA.decisions[i.kind] || [])[Number(e.key) - 1]; if (d) decide(i, d[0]);
+    } else if (i && e.key === "o" && i.page) {
+      window.open((i.links.filter(function (l) { return l.kind === "page"; })[0] || {}).href || fileUrl(i.page), "_blank", "noopener");
+    }
+  });
+
+  document.getElementById("export").onclick = function () {
+    var blob = new Blob([JSON.stringify({ written: new Date().toISOString(), readings: readings }, null, 2) + "\n"], { type: "application/json" });
+    var a = el("a", { href: URL.createObjectURL(blob), download: "adjudications.json" });
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+  document.getElementById("import").onchange = function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    f.text().then(function (t) {
+      var doc = JSON.parse(t), got = doc.readings || doc, id;
+      for (id in got) if (!readings[id] || String(got[id].at) > String(readings[id].at)) readings[id] = got[id];
+      save(); render();
+    }).catch(function () { alert("That file is not an export of this page."); });
+  };
+  document.getElementById("clear").onclick = function () {
+    if (!confirm("Forget every reading in this browser? An exported file is not touched.")) return;
+    readings = {}; save(); render();
+  };
+
+  renderGroups();
+  render();
+})();
+</script>
+</body>
+</html>

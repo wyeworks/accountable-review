@@ -2369,6 +2369,7 @@ category, never a grade. Nothing finer: *feature* and *bugfix* claim an intent t
 states, and a chip cannot carry the evidence tier such a claim would need. **It follows the run's
 class, never the author's label** — a PR titled as a refactor whose notes show behaviour that moved
 is *behavioural* here, and *What changed* says in one clause what the PR calls itself, attributed.
+`page-invariants.rb` § 9b warns on any other word, so a class added here is added to its list too.
 
 **A metric strip** of commits, files and the files split by kind. Bucket the files rather than
 reporting one total, because a 40-file PR that is 8 production files and 32 fixtures is a different

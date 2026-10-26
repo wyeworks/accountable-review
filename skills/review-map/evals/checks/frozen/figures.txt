@@ -730,6 +730,46 @@ SKIP  no checkpoint figure in this input
 ## --page invariants-severity-chip.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-shape-missing.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page invariants-shape-missing.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment invariants-shape-reflowed.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page invariants-shape-reflowed.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment invariants-shape-retired.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page invariants-shape-retired.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment invariants-shape-spelling.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page invariants-shape-spelling.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment invariants-shape-wrapped.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page invariants-shape-wrapped.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
 ## --fragment invariants-standing-disclaimer.html
 exit=0
 SKIP  no checkpoint figure in this input

@@ -1408,6 +1408,86 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 PASS  section 04 is a single list
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment invariants-shape-missing.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page invariants-shape-missing.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --fragment invariants-shape-reflowed.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page invariants-shape-reflowed.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --fragment invariants-shape-retired.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page invariants-shape-retired.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --fragment invariants-shape-spelling.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page invariants-shape-spelling.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --fragment invariants-shape-wrapped.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
+## --page invariants-shape-wrapped.html
+exit=0
+PASS  start here: 3 entr(ies), each with a why
+PASS  section 04 is a single list
+PASS  entries link into the checkpoints that explain them (3)
+PASS  every checkpoint is reachable from the reading path (2)
+PASS  citations present alongside the entries (3)
+PASS  3 entries, within the shape of a reading order
 ## --fragment invariants-standing-disclaimer.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
