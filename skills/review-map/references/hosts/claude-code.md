@@ -8,6 +8,11 @@ Without `--output`, publish with `Artifact` at each shared milestone, reusing th
 `$W/page.html` path so the URL stays stable. With `--output`, save `<dir>/index.html`
 and skip every publishing call. The shared staging and completeness rules apply to both.
 
+**Do not load the `artifact-design` skill.** `references/page-template.html` and the themes
+`page-skeleton.sh` emits are this page's design system; that skill exists to choose a palette and
+pair typefaces, and its own first instruction is to apply an existing system when there is one.
+Loading it costs a turn and yields nothing.
+
 **A page an earlier session published is not this run's to overwrite**, unless the run is
 `--update` or the user asked to keep that link. A fresh run's first publish creates a new
 Artifact: pass no `url`, do not list or look up the earlier one, and name it in chat at the end

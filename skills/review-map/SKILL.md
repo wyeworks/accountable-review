@@ -1150,23 +1150,21 @@ above: a claim retracted before the final publish beats one that is never retrac
 A large diff takes many turns to explain, and a reviewer holding a ticket does not want to wait for
 all of them. Publish early and republish as parts complete: **the same file path every time, so the
 URL never changes.** The reader can open it at minute two, watch it fill in, and start reading the
-moment the part they need lands.
+moment the part they need lands. A crash then leaves a useful page rather than nothing.
 
 The host reference supplies the delivery mechanics. Claude publishes an Artifact; Codex and every
 other host save portable HTML locally. There, every later “publish” means saving that same local file,
 not calling a publishing tool. `Write` and `Edit` below mean file creation and targeted edits
 with the host’s available tools, not required tool names.
 
-**Non-interactively (`--output`, step 1) there is nothing to publish, and no reader waiting.** The
-stages stop being arrivals and become save points: write each one to `<dir>/index.html` as it
-completes, with `Edit` rather than a rewrite exactly as below, and skip every `Artifact` call. Keep
-writing them — a run that dies two thirds of the way through leaves a page worth having, which is the
-other reason staging exists — but do not spend a turn announcing a boundary nobody is watching. The
-banner and the markers still come off at the end: step 10 is unchanged, and the CI adapter refuses to
-deliver a page still carrying one.
+**Non-interactively (`--output`, step 1) the stages are save points, not arrivals.** Write each to
+`<dir>/index.html` as it completes, with `Edit` exactly as below, skip every `Artifact` call, and do
+not spend a turn announcing a boundary nobody is watching. The banner and the markers still come off
+at step 10, and the CI adapter refuses a page still carrying one. **With `--update` there are no
+stages and no banner at all** — `references/update.md` owns that run's writing.
 
-**Four milestones.** Each is a coherent thing to read, which is the point — a URL that changes under
-someone mid-paragraph is worse than one that arrives late.
+**Four milestones.** Each is a coherent thing to read — a URL that changes under someone
+mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
@@ -1175,380 +1173,121 @@ someone mid-paragraph is worse than one that arrives late.
 | 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it (inside its fold at `--context collapsed`) — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
-**Section 05 cannot publish before the checkpoints exist, which is why it is third and not second.**
-*Context* sits above the agenda on the page and still arrives after it, for the same reason: every
-entry ends in a pointer at the checkpoints that use it, and whether any entry is earned at all is a
-question about the agenda. Orientation that delayed the questions would cost the reader the arrival
-they came for.
-Every impact card's `p.ip-why` ends in a pointer at the checkpoint that judges it
-(`references/report-format.md` § *Impact paths*), and until stage 2's opening publish has landed the
-stubs there is no `#cp-x` to point at. Publishing it after step 5 meant either a dead fragment or an
-invented one. Step 5 still *finds* the crossings — it just no longer publishes them, and 7c may merge
-two of them into one judgment before the reader ever sees either.
+**Context and section 05 arrive after the agenda because they point into it.** Every Context entry
+and every impact card's `p.ip-why` ends in a pointer at a checkpoint, and until stage 2's opening
+publish has landed the stubs there is no `#cp-x` to point at. *Read the code in this order* is a
+route through the checkpoints, so it is written last and lands with the evidence foot. The
+falsifiers fold in during stage 2 (step 8) and add no milestone.
 
-**At `--effort high` the falsifiers were spawned at the end of step 6 and fold in during stage 2** —
-see step 8. They add no milestone: they produce corrections to analysis, not an arrival worth opening
-the tab for, and the reader never learns they ran.
+**The checkpoint is the unit of staging, not section 03.** `<section id="attention">` carries the
+heading and its lead sentence, and each checkpoint is its own `<section class="cp" id="cp-x">` with
+a unique `id` — the anchor a later stage edits. Take the per-checkpoint rail marker and the pending
+stub from the template rather than inventing markup. Stage 2 **opens with a cheap publish**: the
+heading, the lead, and one stub per checkpoint whose line of substance is **the question** — a reader
+learns what the judgments *are* before any is written. Then:
 
-**The checkpoint is the unit of staging, not section 03.** Section 03 is the bulk, so a stage that
-delivered it whole would put the longest wait of the run behind one arrival — which is the shape
-staging exists to avoid. Nothing new is needed to split it: `<section id="attention">` carries the
-heading and its lead sentence, and each checkpoint is already its own nested `<section class="cp" id="cp-x">`
-with a unique `id`, which is exactly the anchor a later stage edits. The rail already renders a
-per-checkpoint marker — take it and the pending stub from `references/page-template.html` rather than
-inventing markup.
-
-So stage 2 **opens with a cheap publish**: the heading, its lead sentence, and one stub per checkpoint whose
-line of substance is **the question**. That arrival is worth having on its own — a reader learns what
-the judgments *are* before any of them is written, which is most of what they came for. Each
-checkpoint then lands in its own republish. Two rules keep this from becoming a republish per
-paragraph:
-
-- **One publish per checkpoint that lands, not per edit.** If two land in the same turn, one publish
-  covers both. That bounds the arrivals by turns, which is the right bound: the turn is what a reader
-  waits through.
+- **One publish per checkpoint that lands, not per edit.** Two landing in one turn share a publish.
 - **Publish in the turn that completes the stage, never in a turn of its own.** Send the `Edit`s and
-  the `Artifact` publish together — the tool calls run in order, so the publish carries the edited
-  file. A publish alone in a request re-bills the whole context for one call: three of them cost a
-  run 1.2M cache-read tokens at 320k–450k context, about 8% of everything it spent.
-- **Step 8 is the gate on each of them.** More publish boundaries means more gates, not a looser one.
-  A checkpoint is published when it is verified, not when it is drafted.
+  the `Artifact` publish together; the calls run in order, so the publish carries the edited file. A
+  publish alone in a request re-bills the whole context for one call.
+- **Step 8 is the gate on each of them.** A checkpoint is published when it is verified, not when it
+  is drafted.
 
-*Read the code in this order* and the evidence foot land together in stage 4, and that is not
-inconsistency: the reading path is a route through the checkpoints and cannot precede them, and the
-foot belongs to step 10's gate. A stage has to be worth opening the tab for.
+**Every turn from here re-bills the whole context**, which by stage 2 is past 200k tokens. So **make
+every `Edit` that is ready in the same turn, side by side** — edits to different ids do not touch each
+other — and **do not inspect the page to find where an edit goes**: every anchor is an `id` or a
+marker the template names. When one is genuinely in doubt, `grep -n` for it in a call that does other
+work. **Write to the budget as you draft** (§ *How big should the page be?*); compressing afterwards
+pays for the same prose twice and tends to cut the clause a claim rested on.
 
-**Every turn from here re-bills the whole context**, which by stage 2 is past 200k tokens — a request
-spent finding an anchor costs about what one spent writing a checkpoint. So **make every `Edit` that
-is ready in the same turn, side by side**: two checkpoints that are both verified, a section and its
-rail entry, the inventory and the reading path. Edits to different ids do not touch each other. And
-**do not inspect the page to find where an edit goes**: every anchor is an `id` or a marker you read
-in the template's markup, and the skeleton script wrote exactly those. When one is genuinely in
-doubt, `grep -n` for it in the same call that does other work.
+**Fill the page in; never rewrite it.** After the first `Write`, every later stage replaces a
+*pending* marker with `Edit`. Re-emitting a page already on disk is the single largest cost a profile
+of this skill has found — one run's finished page as a single 35,000-token `Write`, 56% of everything
+it streamed — and the pending marker is the anchor you already have. Its read-side twin holds too:
+never read the page whole.
 
-**Write to the budget as you draft, not by editing it back down afterwards.** `report-format.md`
-§ *The agenda budget* has the numbers, and a stage that overspends and then compresses pays for the
-same prose twice — once streamed, once re-edited — which is the cost step 9 exists to avoid. It also
-compresses in the wrong direction: cutting a drafted paragraph tends to take the clause a claim
-rested on, where writing to the cap takes the sentence that was never needed. Nothing there is
-negotiable against a figure: the count exempts everything inside a figure of any kind, every `<code>` and
-`<pre>`, and everything inside a collapsed block, so a long page is never fixed by dropping a
-drawing. An impact card's `p.ip-why` is prose and does count.
+**Write the markup the way the template writes it, prose included**: tags on their own lines, one
+component per block, and paragraph text wrapped at about a hundred characters, never one long line
+per element and never minified. A later stage edits a block it has to be able to name, and the page
+checks scan by line.
 
-**The page fills in out of document order, and that is fine.** Section 03 arrives one checkpoint at a
-time, so a written checkpoint sits above a pending sibling for most of stage 2, and section 05 is
-still a stub below both of them until stage 3. The pending marker is what makes all of it readable —
-the risk the build state exists to prevent is an unwritten section looking like an empty one, not a
-section arriving out of order.
+**Until the final publish the page carries the build banner and a *pending* marker** for every part
+still to come, in the rail and in place — never an absence and never an "N/A".
+`references/report-format.md` § *Build state* has the form. The page fills in out of document order,
+and the markers are what keep an unwritten section from reading as an empty one. **Pin the title and
+favicon at the first publish** and never change them: readers find a tab by its name and icon.
 
-Saving as each checkpoint completes has a second payoff worth stating: a crash then leaves a useful page
-rather than nothing.
-
-**Fill the page in; do not rewrite it.** After the first `Write`, every later stage replaces that
-section's *pending* marker with the written section, using `Edit` on the block the marker sits in.
-The file is already on disk and the earlier sections have not changed, so re-emitting them buys
-nothing and costs the whole page again in generated tokens. This is not a small saving and it is the
-single largest cost a profile of this skill finds: one run wrote a 23 KB staged page, then produced
-its finished 82 KB version as one 35,000-token `Write` that re-emitted the first 23 KB byte for byte
-— 258 seconds, 56% of everything that run spent streaming output. An intermediate save is one tool
-call; an intermediate *rewrite* is the whole document. Use `Edit` and the pending marker is the
-anchor you already have.
-
-**Write the markup the way the template writes it, prose included.** Copy its line discipline
-rather than only its classes: opening and closing tags on their own lines, one component per
-block, and **paragraph text wrapped at the width the template wraps it at** — around a hundred
-characters — not run out to one long line per element. Never minify. Two things depend on it.
-A later stage edits a block it has to be able to name, and a paragraph that is one 800-character
-line is one indivisible block. And the page checks scan by line, so markup packed onto fewer
-lines makes them read the wrong region. *Separate lines for fields and components* was the
-earlier wording here and it produced the opposite of what it asked for: read as one line per
-component, it gives every paragraph on a single line, which is the densest legal form of the
-thing the rule is against.
-
-**With `--update` there are no stages and no banner at all** — the page is finished before this run
-started and is finished at every instant of it. The skeleton is not called, the `Revision` cell is
-the last edit, and `references/update.md` owns the rest. The same `Edit` rule holds for the
-same reason, and so does its read-side twin: do not read the whole page either.
-
-**Write *Read the code in this order* last of the prose sections** — which is why it sits in stage 4
-above. It is a route through the checkpoints and an index into them, so it cannot be written before
-they exist without being guessed at.
-
-**The banner is what makes this honest.** An unfinished page that looks finished is a worse artifact
-than no page at all: a reviewer sees no cross-cutting section, concludes there was nothing to say
-about it, and moves on. It was simply not written yet. So until the final publish the page carries a
-build-state banner naming which sections are still pending, and every pending section appears in
-the rail and in place as an explicit *pending* marker — not as an absence, and not as an "N/A"
-placeholder. The two look nothing alike on purpose. `references/report-format.md` § *Build state*
-has the form.
-
-**Pin the title and favicon at the first publish** and do not change them, even if your understanding
-of the PR improves. Readers find a tab by its name and icon; a page that renames itself mid-run reads
-as a different page. The title is pinned earlier than that and by the script — `--title` substitutes it
-into the head and HTML-escapes it, which a PR title containing an `&` needs — so do not write it again.
 Everything else about writing holds at every stage:
 
-- Follow `references/report-format.md` for the six sections, when each appears, how deep it goes,
-  and the rule that each fact has one home. Follow `references/page-template.html` for the design
-  system and the components — read with `scripts/page-skeleton.sh --markup`, which prints the
-  component half and leaves out the 55 KB you are about to be given for free. Write it to
-  `$W/markup.html` and read it in one turn — two `Read` calls side by side, offsets 1 and 501 with a
-  limit of 500, one more at 1001 only if the second came back full — without sizing or indexing it
-  first: every extra request here re-bills a context past 200k tokens.
-
-  **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
-  only when step 7i found nothing crossing into unchanged code, and the 02 entry only when step 7k
-  earned no concept or `--context never` skipped it, and then remove the section with it. Numbers stay as given when one goes: a
-  rail reading 01, 03, 04 says a section was omitted, which is true.
 - **Write the skeleton once, before anything else in stage 1:**
 
   ```sh
   <skill base directory>/scripts/page-skeleton.sh --out "$W/page.html" --title "<PR title or branch>"
   ```
 
-  That puts the head, the entire token block and the page's one script into the file already. The
-  token block is the repository's **theme** — `review_map.theme` in its `.accountable-review.yml`,
-  Daylight when there is none — which the script finds by itself. **Pass no `--theme`**: the look is
-  the team's setting, not the run's, and a page that came out in another theme than the repository
-  asked for is a page somebody has to explain. If the script refuses the theme or the file (exit 2),
-  stop and report its message — never retry with a theme of your own choosing. Then
-  the first `Edit` replaces its one-line body placeholder with the rail, `<main>`, the build banner,
-  the masthead and section 1. The placeholder is the one line containing `SKELETON:BODY`, so that
-  string is the `Edit`'s anchor and needs no looking up; the line after it is the skeleton's own
-  `</main>`, so **open `<main>` and never close it** — every later section goes in before that line.
-  It refuses with exit 3 if the page already has content, which is the
-  guard against re-running it over a page a reader is already looking at.
+  It writes the head, the repository's **theme** (`review_map.theme`, else Daylight — the script
+  finds it) and the page's one script, and HTML-escapes the title, so do not write it again. **Pass
+  no `--theme`**: the look is the team's setting, not the run's. If it refuses the theme or the file
+  (exit 2), stop and report its message; it refuses with exit 3 if the page already has content. The
+  first `Edit` then replaces the one line containing `SKELETON:BODY` with the rail, `<main>`, the
+  build banner, the masthead and section 1. The line after it is the skeleton's own `</main>`, so
+  **open `<main>` and never close it** — every later section goes in before that line.
 
-  **Make that one call do the rest of the lookups the writing needs**, because every run otherwise
-  spends a request on each, at a context past 200k tokens: write the markup half to
-  `$W/markup.html` (read below), print the comment header of `scripts/excerpt.sh`, its usage
-  (`sed -n '2,/^[^#]/p'`), and, at rung 1 or 2, write each changed path's `#diff-` anchor —
-  `printf '%s' "$path" | shasum -a 256` — beside it in `$W/anchors.txt`.
-
-  **Never write a `<style>` block, a `:root`, a colour, or a `<script>` into the page.** They are
-  already there and **you have not read them** — so a token you name is a token you guessed, and a
-  second declaration of a colour is a second canonical home for it. This is the same rule as the one
-  below about excerpts, for the same reason: bytes a script generated are bytes you must not retype.
-
-  **And never write a `target` on a link.** Every link that leaves the page already opens in a new
-  tab — that script applies it on load, and it exempts the page's own rail and Checkpoint pointers,
-  which must stay in this tab. An attribute typed at every citation is one missing from a citation
-  nobody checks. `report-format.md` § *Every off-page link opens in a new tab* owns the rule.
-- **One fact, one home.** Before writing a section, ask what it *owns* that no other section owns. If
-  the answer is "it re-explains something from earlier", write the reference instead: one sentence
-  pointing at where the explanation lives. `report-format.md` § *One canonical home* has the routing
-  table and the reference form.
-
-  This is the difference between a page a reviewer finishes and one they abandon. A 21-page page from
-  this skill condensed to 9 with nothing of value removed — half of it was the same content arriving
-  again. A reader who thinks *"I have read this already"* stops reading, and every section after that
-  is wasted no matter how good it is.
-- **Prefer an excerpt to a paragraph that narrates code.** Five lines plus one sentence of implication
-  is shorter, checkable and more useful than describing the mechanism in prose. The sentence still has
-  to stand alone with the block closed, because it carries the *implication* — what you drop is the
-  narration, never the consequence. See `report-format.md` § *Excerpts are also the shortest way to say
-  what code does*.
-- **The template is the design system — do not load `artifact-design` to re-derive one.** That skill
-  exists to choose a palette and pair typefaces; those decisions are already made here, and its own
-  first instruction is to apply an existing system when one exists. Loading it costs a turn and
-  yields nothing. Load it only if you have a deliberate reason to depart from the template.
-- **Figures are components, and there is no `<svg>` on this page.** The template assembles every one:
-  the vertical labelled chain — `figure.impact` in section 05, `figure.chain` inside a checkpoint —
-  the three topology figures a checkpoint may carry instead of a chain (`figure.converge`,
-  `figure.lifecycle`, `figure.structure`, in checkpoints C to E), *Context*'s one figure
-  (`figure.lifecycle.lc-shift`, the request sequence before and after), and the `dl.ba` before/after
-  pair. Build them from the template's markup, and type a topology figure only from its `agenda.md`
-  block — the shift from the one step 7k wrote.
-  `report-format.md` § *Chains* owns the node kinds, the causal vocabulary and the rule that decides
-  which of the two chain figures a given chain is; § *Topology figures* owns the other three; § *Impact
-  paths* owns the panel's own caps and owns them alone.
-
-  What this replaced was four SVG layouts worked out to scale in the template. They cost more than
-  they carried: an `<svg>` is the most expensive thing on a page to type, so the characteristic
-  failure was never a wrong drawing but **no drawing** — two real pages published nine flows and zero
-  figures with the layouts sitting readable in the template the whole time. A component reflows on a
-  phone, has no canvas to overflow, and cannot be drawn wrong. The only thing left to get wrong is
-  whether the edges are true, which is the part worth your attention.
-- **A checkpoint chain shows mechanism inside the change, and holds no affected-unchanged node.** A
-  request path, a value derived over several hops, the order guards run in — `.ip-chg` and `.ip-step`
-  nodes ending at one `.ip-out`. The moment a hop lands in unchanged code whose meaning the change
-  altered, it is an impact path: draw it once in section 05 and let the checkpoint say so in a clause.
-  Redrawing it there is the canonical-home regression arriving as a figure.
-- **A converge and a structure may hold unchanged code, and the direction of the edge is why.** An
-  impact path flows *out* of the change to a consequence; a converge's paths flow *in*, from writers
-  upstream, to an invariant. An unchanged writer that skips what the others run is drawn in the
-  converge and nowhere else, with a *Look at* entry carrying the clause its node cannot. A converge's
-  paths carry no `.ip-rel` — they are siblings, and a connector between two of them fires the impact
-  panel's lane crossing — and its target, being an invariant, carries no locator.
-- **Inherit the markup, never the strings.** Every label in the assembled examples is a claim about a
-  file, and a claim copied out of a specimen is a false claim nothing catches — a run once inherited
-  a specimen's last box caption onto a component that never touches the field, and only a reader
-  comparing the figure with the code noticed.
-- **An impact path ends at a behaviour, and passes through unchanged code on the way.** The panel is
-  1–3 chains, **each in its own `.ip-card`**, each starting in the diff and ending at something a
-  user or an operator would see, with every hop carrying its causal verb — *reads*, *falls back to*,
-  *filtered out by*. A chain that stops at a function has not reached a consequence; a chain with no
-  unchanged node is a call stack inside the diff, and belongs inside the checkpoint it explains. And
-  it carries **labels, not sentences**: a node is an identifier, a few words, and its locator. The
-  panel this replaced was a grid of boxes, and every real page filled the boxes with prose to supply
-  the relation the layout could not express — which is the failure to watch for coming back.
-- **Every card opens with its `p.ip-why`, and every code node carries its locator.** The paragraph
-  says what goes wrong and to whom and points at a checkpoint, **carrying the tier the checkpoint
-  gave the claim** — a why restates a `from unchanged code` or `inferred` consequence a section
-  later, and unlabelled it says the diff shows it; it never walks the chain, because a
-  paragraph that names the hops in sequence makes one of the two redundant. The locator is
-  `a.path.ip-loc`, last inside the box — `{{DIFF}}` on a changed node, `{{BLOB}}` on an unchanged
-  one, and never on the outcome, which is a behaviour rather than a file. Both apply to a
-  checkpoint's `figure.chain` too, except the paragraph: the checkpoint's own sentences are already
-  that. `report-format.md` § *Chains* owns the locator and § *Impact paths* owns the paragraph.
-- **Three paths, not five, and one per card.** Choosing the third-best consequence over the fifth is
-  the work here: the two that do not make the panel are not dropped, their entries are in the
-  affected list below it or in the evidence foot, and their explanation is in the checkpoint that
-  turns on them, if one does. A run that stacks four or five chains inside one card has rebuilt the
-  panel this replaced, where the reader on the third chain has the first one's geometry behind them.
-- **Generate source excerpts, do not type them.** An excerpt sits collapsed **beside the claim or the
-  *Look at* entry it confirms** — never in a block of its own, and never in the evidence foot. What
-  earns one is a citation the judgment turns on: the lines a reader would otherwise take on faith,
-  above all *affected, not changed*, which no diff view can address, and the changed hunk where
-  seeing it is what makes the judgment possible. **In a *Look at* entry, a short citation (about
-  twelve lines or fewer) carries its excerpt by default.** There the excerpt is the entry's citation
-  rather than an addition to it, so a closed one costs nothing. `report-format.md` § *Source
-  excerpts* › *Budget* has the four cases that take a bare `a.path` instead. Quote inline as
-  collapsed excerpts, from the generator, with `--blob` (or `--link`) whenever the rung allows,
-  because the summary's location is the excerpt's only link:
+  **Make that one call do the writing's lookups too**, since each would otherwise cost a request at a
+  context past 200k tokens: write the markup half (`page-skeleton.sh --markup`) to `$W/markup.html`,
+  print `scripts/excerpt.sh`'s usage (`sed -n '2,/^[^#]/p'`), and at rung 1 or 2 write each changed
+  path's `#diff-` anchor — `printf '%s' "$path" | shasum -a 256` — beside it in `$W/anchors.txt`.
+  Read `$W/markup.html` in one turn: two `Read` calls side by side, offsets 1 and 501 with a limit of
+  500, one more at 1001 only if the second came back full.
+- **The template is the design system.** Follow `references/page-template.html` for the components
+  and `references/report-format.md` for what goes in them, which step 7 has already read: § *One
+  canonical home* for what each section owns, § *Chains*, § *Topology figures* and § *Impact paths*
+  for every figure, § *Source excerpts* for the excerpt budget and placement, § *Framework anchors*
+  and the catalogue's § *Pinning* and § *What the marks mean* for every doc link, § *Mentor mode* for
+  the primer, § *Deep links* and § *When the diff will not render* for every href. Two of those
+  decide a sentence as you write it: **every doc link is a catalogue row pinned with the versions
+  step 2 recorded** — no verified path for this version, no link, and the claim rests on its repo
+  line in prose — and **an excerpt plus one sentence of implication beats a paragraph narrating the
+  code** (§ *Excerpts are also the shortest way to say what code does*).
+- **Never write a `<style>` block, a `:root`, a colour, or a `<script>` into the page.** They are
+  already there and **you have not read them**, so a token you name is a token you guessed. **Never
+  write a `target` on a link**: the page's script opens off-page links in a new tab on load and
+  exempts the page's own pointers.
+- **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
+  only when step 7i found nothing crossing into unchanged code and the 02 entry only when step 7k
+  earned no concept or `--context never` skipped it, removing the section with it. A rail reading 01,
+  03, 04 says a section was omitted, which is true.
+- **Inherit the markup, never the strings.** Every label in the template's assembled examples — a
+  figure's box captions, a primer's prose about `ActiveModel::Dirty` — is a claim about a file, and a
+  claim copied out of a specimen is a false claim nothing catches. Type a topology figure only from
+  its `agenda.md` block, and the shift from the one step 7k wrote.
+- **Figures are components, and there is no `<svg>` on this page.** A component reflows, has no
+  canvas to overflow and cannot be drawn wrong; the only thing left to get wrong is whether the edges
+  are true. A chain that lands in unchanged code is an impact path, drawn once in section 05.
+- **Generate source excerpts; never type them.** An excerpt is a quotation, and a paraphrased
+  quotation is a false one nothing catches. The script reads the real bytes, escapes them, tags the
+  language and derives the state tag from the diff:
 
   ```sh
   <skill base directory>/scripts/excerpt.sh --at app/models/project.rb:41-52 --base BASE --blob URL --in-entry
   <skill base directory>/scripts/excerpt.sh --diff app/models/project.rb --base BASE --link DIFF_ANCHOR --why "..."
   ```
 
-  **An entry with an excerpt has no `a.path` of its own.** It is a title, a clause, then the
-  excerpt, generated with `--in-entry` so its summary has no why to repeat the clause. Outside an
-  entry, give `--why`.
+  **Both forms need `--base`**, because the tag is a claim about the diff. Pass `--blob` or `--link`
+  whenever the rung allows; an entry with an excerpt has no `a.path` of its own and uses `--in-entry`.
+  **Generate all of them in one call**, one line per excerpt, each to a file in `$W`. **Never read the
+  generated HTML back and retype it**: leave a one-line placeholder where each belongs and splice the
+  files in with shell at the end. Never write a colour class into the code; pass `--lang` only when
+  the extension lies.
+- **A probe is proposed, never run**, in the project's real constants and module names, with the
+  runner and safety rule the lens's § *Runtime probes* gives for this stack. The hard rules say why
+  no output ever follows it.
+- The page lives at `$W/page.html`, or `<dir>/index.html` with `--output`, and never in the repo.
+  Excerpt fragments go in `$W` either way.
 
-  An excerpt is a *quotation*, and that is why it is generated. A mistyped ledger row fails the gate
-  loudly; a paraphrased quotation is a false quotation, and nothing in the page or in the reader's
-  experience catches it. The script reads the real bytes and does the HTML escaping, which matters
-  more than it sounds — ERB, TSX and HEEx are full of `<`, `>` and `&`. It also tags the `--source` block
-  with the language, which is what the page tints from at read time — pass `--lang` only when the
-  extension lies, and never write a colour class into the code yourself: a hand-coloured quotation is
-  a quotation someone edited.
-
-  So **do not read the generated HTML back and retype it into the page.** Send each excerpt to a file
-  in `$W`, leave a one-line placeholder where it belongs, and splice the files in with shell at the
-  end. Retyping is how a generated quotation quietly becomes a typed one — the failure this bullet
-  exists to prevent — and it pays for every excerpt twice in generated tokens.
-
-  **Generate all of them in one call.** The excerpts do not depend on each other, so one call with a
-  line per excerpt costs one round trip where seven calls cost seven. A run that did it one at a time
-  spent ten requests on work worth two.
-
-  **Both forms need `--base`, including `--at`**, because the state tag in the summary is a claim
-  about the diff and the script reads it off the diff rather than assuming it — a changed file quoted
-  at head is tagged `At head`, not `Unchanged`. It is the one part of an excerpt the bytes cannot
-  vouch for: before it was derived, a run published a changed `db/structure.sql` labelled Unchanged on
-  a page whose own ledger listed it as changed. Quoting a changed file that way is right where a hunk
-  cannot show what the committed code permits; the tag is what has to be true.
-
-  Two rules travel with them. The page must read completely with every excerpt **closed** — that one
-  is a hard rule below, and it is judged entry by entry, not page-wide. And an excerpt is earned by a
-  citation that is **load-bearing for a decision the reviewer has to make**, not by a citation merely
-  pointing at unchanged code — otherwise every affected entry earns one automatically and the budget
-  caps nothing. There is no per-section floor: a checkpoint about a changed guard quotes the guard
-  because the judgment turns on it, not because a rule says every part of the page shows its diff.
-
-  **Do not carry a number in your head for this.** The budget, the locations excerpts may appear in,
-  and how the link rung changes it all live in `references/report-format.md` § *Source excerpts*, and
-  they live there only — an earlier version of this bullet restated the cap in slightly different
-  words and the two drifted apart within one run.
-- **Pin every documentation URL to the version this app runs**, using the versions recorded in step 2.
-  Every catalogue stores paths with no version segment; a link that reaches the page without one
-  silently means *current stable*, which is how a 7.1 app gets handed 8.1 documentation. What gets
-  substituted differs: Rails pins **one series** for the framework and an exact tag per gem, while
-  Elixir pins **each package's exact locked version independently**, and Rust pins each crate the
-  same way and the toolchain's own documentation to the toolchain release, and React pins the
-  **major** of `react` and of `next` separately — so a correct Elixir, Rust or Next.js page carries
-  several different version segments and that is not a defect. Where the catalogue has no verified path
-  for this app's version, **emit no link** — explain it in prose and cite the repo line. Each
-  catalogue's § *Pinning* owns the forms and the overrides.
-- **A `‡ probe` row may not be asserted.** Those are behaviours that changed inside the supported
-  range, so no sentence about them is true of every app. Name the setting or the version that decides
-  it and propose a probe; the page asks rather than tells. A `‡ since X` row is stated as the default,
-  naming X. Each catalogue's § *What the marks mean*.
-- **Take every documentation URL from the catalogue step 2 selected, and never construct one.** You
-  cannot check a URL from here — there is no fetch step, and the sandboxes this runs in commonly block
-  those hosts — so a plausible-looking API path is a 404 the reader finds on your behalf, which costs
-  the same trust as an invented rake task. A concept the catalogue does not carry is explained in prose
-  with the repo citation it applies to; that is the ordinary outcome, not a failure. The rules and the
-  budget are in `references/report-format.md` § *Framework anchors*, and they live there only.
-
-  **A catalogue can also be closed as a whole**, and two currently are: `references/elixir-docs.md`
-  and `references/react-docs.md` withhold every link in their § *Version* until a verification run
-  dates them. Read that section before emitting an Elixir, React or Next.js doc link — while it is closed, the answer for every concept is *no link*, and the
-  run anchors with probes and prose instead. This is the fail-closed rule at file scope, not a bug to
-  work around. `references/rust-docs.md` is open; read its § *Version* for the floor below which it
-  emits nothing.
-- **At `--mentor`, take the primer's markup from the template like any other component.** It is
-  assembled whole inside checkpoint A in `page-skeleton.sh --markup`: the header, which names the
-  stack in words and not the component — *Understanding Ruby on Rails*, *Understanding Phoenix*,
-  *Understanding Rust*, or
-  the library a gem-level primer is about — with the API on the right; then the two paragraphs, the
-  `.item` citation, the pinned `a.doc` and the `pre.demo` beside them. **A Rust primer** — one whose
-  `a.doc` is a `docs.rs` or `doc.rust-lang.org` row — adds `pr-rust` to the aside's class and nothing
-  else; that class is the stack's, never a choice, and no other primer carries it.
-  Copy the composition and replace every string — the specimen explains `ActiveModel::Dirty` about a
-  `Post`, and a specimen's prose inherited onto a different API is a false claim nothing catches.
-
-  **The demo's receiver is the one thing that makes its result line legal**, and it is the part
-  easiest to get wrong while making the block look more relevant. `pre.demo` quotes documented
-  framework behaviour on a class **this repository does not have**, so the line quotes the manual;
-  swap in one of this app's models and the block becomes output nobody observed, with the probe rule
-  switched off. A demo goes nowhere but inside a primer, and no `pre.probe` goes inside one — the two
-  anchors sit beside each other and never nest.
-
-  Everything else about the primer is `references/report-format.md` § *Mentor mode*, and lives there
-  only: the gate on the doc link, the placement above `ul.lookat`, the budget, and that a page with
-  no `--mentor` has no `aside.primer` anywhere in it.
-- **A probe is proposed, never run.** Do not boot the application under review. The page shows the
-  command; it never shows output, because there is none to show — and a fabricated `=>` or
-  `{:ok, %Project{}}` line is the most concrete-looking thing on the page and the one part of it that
-  is fiction. Name which runner the snippet wants — `bin/rails runner` or `bin/rails console --sandbox`
-  in Rails, `mix run -e` or `iex -S mix` in Elixir, a `cargo` subcommand in Rust — and say when a
-  write needs wrapping, because **Elixir has no sandbox console**: anything that writes goes inside
-  `Repo.transaction(fn -> …; Repo.rollback(:probe) end)` or it changes the reviewer's database. **Rust
-  has no console at all**, so a probe there reads the build — `cargo tree`, `cargo metadata`,
-  `cargo test -- --list` — always with `--locked`, says when it compiles (which runs build scripts and
-  macros), and names any tool that is not part of Cargo; a probe that would have to call the changed
-  code is an existing test, never a scratch file. `references/rust.md` § *Runtime probes* owns those
-  rules. **React has no console either**, and its probes read the toolchain — `npm ls`, `tsc
-  --noEmit`, a test runner's list mode, and on Next.js `next build`'s route table — in the project's
-  own package manager, with `--no-install` on every `npx` so a mistyped probe cannot download and run
-  a package, never an install, and saying when a command runs the project's configuration and what it
-  writes. `references/react.md` § *Runtime probes* owns those rules.
-  Use the project's real constants and module names: a probe naming a scope or a context this repo does
-  not have is an invented command.
-- Render citations in the rung chosen in step 1. Inside a rung the form is not a preference: a line
-  the diff contains gets the PR diff anchor, so the reviewer lands in the review they are already
-  working in rather than in the file at head, where nothing marks what the line replaced. A line the
-  diff does not contain gets a blob permalink at the SHA that line actually exists at — head for
-  unchanged code, base for code the change removed or for behaviour described as it was. Both forms,
-  and the rung table, are in `references/report-format.md` § *Deep links*.
-
-  Two things decide the rest of the href, and both are mechanical. A line in a file step 3 listed as
-  **collapsed** takes the blob form despite being in the diff — § *When the diff will not render*.
-  And **a citation that names a range links the range**: `:51-72` under an href ending at `R51`
-  promises a span and delivers a line, with nothing on the page to say the two disagree. `R51-R72`
-  in a diff anchor, `#L51-L72` in a blob, both ends on the same side.
-- The page lives at `$W/page.html` — the work directory derived in step 1 — and never in the repo.
-  `page-skeleton.sh --out` creates it; every stage after that edits it in place.
-  The page must never become part of the diff it describes. Excerpt fragments go in the same
-  directory, so splicing them in is a path away rather than a move. With `--output` the page is
-  `<dir>/index.html` instead; the fragments still go in `$W`, and nothing but the page belongs in
-  `<dir>`.
-
-Tell the user the URL (or local file link outside Claude Code) when stage 1 goes out, say it will fill in,
-and do not repeat it on every republish — one link, mentioned once, then a note when it is complete. With `--output` there is no
-URL: say where the file is, once, and nothing more.
+Tell the user the URL (or local file link outside Claude Code) when stage 1 goes out, say it will fill
+in, and do not repeat it on every republish — one link, mentioned once, then a note when it is
+complete. With `--output` there is no URL: say where the file is, once.
 
 ## 10. Complete the page and gate it
 
