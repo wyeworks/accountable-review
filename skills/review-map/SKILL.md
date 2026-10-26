@@ -718,60 +718,35 @@ migration is safe to run against the rows that already exist. Write each as a qu
 A judgment is something the reviewer could get wrong, with consequences. A fact is something they
 read once. Facts feed the explanations; only judgments become checkpoints.
 
-**Then ask the coding-decision question, once per departure, and it has a bar in front of it: name
-the departure.**
-The form is *the PR chose X; this codebase already does Y for the same job; is X deliberate?* — a
-value object under `app/models` where `app/services/` already holds four of its kind, a query built in
-a controller where `app/queries/` exists, a hand-rolled guard where a policy class was waiting, a
-`*Manager` among a dozen `*Service`s, a ranking or lookup table re-declared beside the module that
-already owns it. Step 2 collected the conventions; this is where they are spent.
+**Then ask the two structural questions, each behind the same bar: no citation, no question.**
 
-**Placement is one axis of three, and the one a run checks first and stops at.** The definition
-above names three: where a thing was put, what kind of object it is, and which existing abstraction
-it went around. A run that confirms the new code sits where its siblings sit has answered the first
-and asked nothing about the third — and the third is the departure a reviewer who knows the codebase
-spots, because it is a second source of truth for a fact the app already defines. When a note
-already cites the module that owns that fact, a **candidate** is in front of you — not yet a
-departure. Something similar existing is where the question starts, and most candidates end there.
+- **A coding decision names the departure**: *the PR chose X; this codebase already does Y for the
+  same job; is X deliberate?* — a value object under `app/models` where `app/services/` holds four of
+  its kind, a query built in a controller where `app/queries/` exists, a lookup table re-declared
+  beside the module that already owns it. **Placement is one axis of three** — where it was put,
+  what kind of object it is, which existing abstraction it went around — and the third is the one a
+  run stops before reaching: a second source of truth for a fact the app already defines. `Y` is
+  cited from **this repository's decision** (a convention-doc line, else a populated directory or a
+  sibling file step 2 inventoried) or **a stack convention on the lens file's closed list**, through
+  its catalogue row, and **the repository outranks the stack**. A convention you know but the lens
+  does not list is taste.
+- **An architectural question states the shift**: *before this PR, X was not true of the system; at
+  `file:line` it now is; is that intended?* — a module that now names one it never did, a second
+  writer of a column, an outbound call inside a request where every other one is enqueued, the first
+  cache in the app. It is cited from a written decision step 2 found (an ADR, an `ARCHITECTURE.md`, a
+  boundary a tool enforces), else from the two searches step 5 recorded, base and head. A shift the
+  repository has written down as allowed is no shift.
 
-**The bar is a citation, from one of two sources.** The question exists only if you can point at
-the answer it departs from: **this repository's decision** — a line in its convention doc, else a
-populated directory or a sibling file — or **a stack convention on the lens file's closed list**,
-cited through its catalogue row. **The repository outranks the stack**: where the codebase has
-settled on the PR's choice there is no departure, whatever the stack convention says; where it is
-silent, the stack convention stands; where both agree, cite both. **No citation from either, no
-question** — a convention you know but the lens does not list is taste. The lens file's search
-recipes are how; `report-format.md` § *Coding decisions* owns the rest of the rule.
+**A citation admits a candidate; it does not make one.** Something similar existing is where the
+question starts, and most candidates end there: `report-format.md` § *Coding decisions* and
+§ *Architectural questions* each own three tests, and the one both share is **no reason in any note**
+— read the candidate against every note, because the ordering that explains a copy, or the
+requirement that explains a shift, is usually in another flow's trace.
 
-**A citation admits a candidate; three tests decide it**, and `report-format.md` § *Coding
-decisions* owns them. **Same job, as it stands** — could `Y` do `X`'s job with no new parameter, no
-other call site and no other moment in the sequence? **Big enough** — would the two drifting apart
-cost anything, or is it a few copied lines with one consumer each, which is a clause at most?
-**No reason in any note** — ask why the author might have built it this way and read the answer
-against every note, not the one that raised it: the ordering that explains a copy is usually in
-another flow's trace. And a difference you would name as the reason to ask has to be one the notes
-show matters; a difference no note settled is a reason not to ask.
-
-**Ask it; never answer it.** No *should have been*, no *unidiomatic*, no *the Rails way*. The reviewer
-knows why the codebase is shaped as it is and you do not — step 6's neutrality rule is the register,
-and a decision you cannot resolve goes on the *Open question* line, not into a verdict.
-
-**Then ask the architectural question, once per shift, behind the same kind of bar: state the
-shift and cite what shows it.** The form is *before this PR, X was not true of the system; at
-`file:line` it now is; is that intended?* — `billing` now names `Accounts` where only the reverse was
-true, a second module now writes `subscriptions.status`, a controller now makes an outbound HTTP call
-inside the request where every other one is enqueued, the first cache in the app. **Two sources,
-the repository first**: a written decision step 2 found — an ADR, an `ARCHITECTURE.md`, a boundary a
-tool enforces — or the two searches step 5 recorded, the base side and the head side. **No citation,
-no question**: *this couples X to Y* with nothing on either side to point at is the page grading the
-design. A shift the repository has written down as allowed is no shift.
-
-**Three tests decide it, and `report-format.md` § *Architectural questions* owns them.** **New, not
-moved** — did the base hold it anywhere, a call moved within a module or a file renamed across a
-boundary being the same edge? **Reaches past the PR** — can later code now follow it, call it or copy
-it, or is it a private helper used once inside the module that owns it? **No reason in any note** —
-the requirement that explains a shift is often in another flow's trace. And the register is the
-coding decision's: no *coupled*, *leaky*, *cleaner* or *should*.
+**Ask it; never answer it.** No *should have been*, *unidiomatic*, *the Rails way*, *coupled*,
+*leaky* or *cleaner*. The reviewer knows why the codebase is shaped as it is and you do not — step
+6's neutrality rule is the register, and a decision you cannot resolve goes on the *Open question*
+line, not into a verdict.
 
 **In a refactor delta, ask the equivalence first.** A refactor's claim is that nothing a caller sees
 moved, so its first judgment is *is behaviour preserved?*, with the lines where it would not be — a
@@ -813,15 +788,11 @@ most where the page's own evidence is weakest; how far it sits from the obvious 
 since a consequence visible in the hunk needs less help than one three files away; and how important
 the affected unchanged code is.
 
-**Those four order the behavioural judgments; the rest of the order is `report-format.md`
-§ *Ranking by delta*'s alone**, which you read at the top of this step: the order of kinds inside a
-delta, the two page-wide bands, and how architectural questions and coding decisions order among
-themselves. In one line: **the band outranks the delta** — every behavioural judgment and every
-refactor's *is behaviour preserved?* first, page-wide, then every architectural question, then every
-coding decision. Not because structure does not
-matter — a dependency in the wrong direction outlives the PR — but because misreading it costs the
-reviewer a conversation about the design and misreading a behavioural one costs them production. The
-reader meets the consequences first and the shape afterwards.
+**Those four order the behavioural judgments; `report-format.md` § *Ranking by delta* owns the rest
+of the order.** In one line: **the band outranks the delta** — every behavioural judgment and every
+refactor's *is behaviour preserved?* first, page-wide, then architectural questions, then coding
+decisions, because misreading structure costs the reviewer a conversation and misreading behaviour
+costs them production.
 
 **The order is the order to think about them, and it is not a scale.** No number that reads as
 severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the reading path refer to a
@@ -873,25 +844,13 @@ which is why the agenda has room to grow rather than a ceiling that would push o
 never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
 checkpoint is written, never on how many there are.
 
-**Architectural questions and then coding decisions take the last slots on the page, as
-many as clear their bars and fit.** Fitting is a limit, never a reason: room left under the ceiling is
-not a prompt to find one, and none is the common right answer. When room runs out, architectural
-questions are kept ahead of coding decisions. No fixed count, and three limits:
-
-- **One per departure or shift, each with its own citation.** If the diff departs from this codebase's
-  settled answers in two unrelated places, ask both — a reviewer who knows the codebase would. The
-  citation is what keeps this from becoming a style review, not a quota: a page can only ask as many
-  as the repository and the stack's list have answers to point at. Merge first, as in 7c — three files that went around the
-  same convention are one question. A departure with nothing to cite is not written down anywhere.
-- **They never displace a behavioural judgment, and they never justify going past the ceiling.**
-  They sit outside the per-delta three to five and inside the ceiling, filling only the room the
-  behavioural agenda leaves. A page that dropped *is nil safe for every consumer?* to ask where a
-  class lives has traded the product for a preference — and a page that went one past its ceiling to
-  fit one in has bought a preference with the reviewer's attention. When room runs out first, keep
-  the most settled ones.
-- **In a refactor delta they are the judgments**, after its equivalence: the three to five is the
-  equivalence and the structural questions together. Say plainly in *What changed* that the delta is
-  a refactor rather than manufacturing a behavioural checkpoint to sit in front of them.
+**Architectural questions and then coding decisions take the last slots, as many as clear their
+bars and fit** — fitting is a limit, never a reason, and none is the common right answer. One per
+departure or shift, each with its own citation, merged first as in 7c. **They never displace a
+behavioural judgment and never take the page past its ceiling**; when room runs out, the most settled
+ones stay and architectural questions are kept ahead of coding decisions. **In a refactor delta they
+are the judgments**, after its equivalence — say plainly in *What changed* that the delta is a
+refactor rather than manufacturing a behavioural checkpoint to sit in front of them.
 
 **7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
 two to four sentences. Then decide whether it also earns a figure, which shape, and how many *Look at*
@@ -916,11 +875,9 @@ judgment actually has — in this order, stopping at the first yes:
 4. Would the explanation otherwise name three hops in sequence? → `figure.chain`
 5. None of these → no figure, which is the commonest answer and a correct one.
 
-Converge is first because it is the shape that shows where correctness fails: the path that does not
-keep the invariant is the finding, and a chain drawn through any one path hides it. Then four gates,
-all of which must hold — a reviewer question the figure answers, a real shape rather than files with
-arrows, simpler than the prose, and every node and edge evidenced by a line you read. `report-format.md`
-§ *Topology figures* owns all of it.
+Converge is first because the path that does not keep the invariant is the finding, and a chain
+drawn through any one path hides it. A figure also has to pass four gates; `report-format.md`
+§ *Topology figures* owns them and every shape's rules.
 
 **A converge needs its writer search before it may be drawn.** Its list claims to be every path, and
 the missing one is the defect it exists to show. So run the lens's recipe for a changed validation,
@@ -954,27 +911,16 @@ run reaches for when it is unsure the figure landed.
   at* entry they confirm, generated in step 9.
 - Which claims carry an evidence tier.
 - Whether a probe would settle the question **and would answer where the reviewer runs it** — a
-  `pre.probe`, proposed and never run, inside the checkpoint after its explanation, at most one per
-  checkpoint. There is no separate validations section to send it to. Class-level reflection answers
-  in any checkout; a probe that reads rows answers only where those rows exist, so its setup is a
-  line of the same block, and a probe against behaviour this change *introduces* has no rows to read
-  and asks the classes instead. Label it in three parts — the instrument, the safety, and what the
-  output would settle: **a probe whose label you cannot complete is a probe that was not earned.**
-  § *Framework anchors* owns all of it.
-- Whether a doc link explains why the framework consequence follows. At most one `a.doc` per
+  `pre.probe`, proposed and never run, after the explanation, at most one per checkpoint. **A probe
+  whose three-part label you cannot complete — instrument, safety, what the output would settle — was
+  not earned.** § *Framework anchors* owns answerability and the label.
+- Whether a doc link explains why the framework consequence follows: at most one `a.doc` per
   checkpoint, and never on a claim with no `file:line` beside it.
 - **At `--mentor` only: whether that link should be a primer instead.** Ask it of the judgment, not
-  of the flag. Without the flag the test is *could the reviewer decide this without knowing the
-  framework's rule?*; with it, *would they decide it better knowing the rule than knowing where to
-  read it?* That is a lower bar and it is still a bar — a behaviour every developer in the stack
-  already knows earns nothing at either setting. One per checkpoint, **three per page**, and the
-  primer *holds* that checkpoint's one doc link rather than adding a second.
-
-  **A run that earns none writes none.** Three primers is a ceiling, never a quota, and the flag is
-  not an instruction to find lessons. Manufacturing one is how the page becomes a framework manual
-  with a diff attached, and it arrives looking generous. A `‡ probe` row is never a primer's
-  subject: those behaviours changed inside the supported range, so no paragraph about one is true of
-  every app. `references/report-format.md` § *Mentor mode* owns the rest.
+  of the flag: *would the reviewer decide this better knowing the framework's rule than knowing where
+  to read it?* One per checkpoint, three per page, holding that checkpoint's one doc link. **A run
+  that earns none writes none** — three is a ceiling, never a quota, and a manufactured lesson turns
+  the page into a framework manual. § *Mentor mode* owns the rest.
 
 **The catalogue opens here** — `references/rails-docs.md`, `references/elixir-docs.md`,
 `references/rust-docs.md` or `references/react-docs.md`, whichever step 2 named, and not before. It is a lookup table: you go to it with a concept a claim already
