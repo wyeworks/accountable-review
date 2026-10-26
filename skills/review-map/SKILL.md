@@ -35,7 +35,7 @@ Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
 `--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`; and
 `--output <dir>`. The repository's `.accountable-review.yml` supplies the first three when no flag
-does (step 1). `--review` is not implemented.
+does (step 1).
 
 Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
 in Claude Code, and [the one for every other host](references/hosts/generic.md) anywhere else — Codex
@@ -219,10 +219,8 @@ point of putting them in a separate context. The host reference owns how the rea
   Whether a fresh run keeps the earlier page's link is the host reference's to say. A fresh run that
   finds a page there moves the directory aside — `mv "$W" "$W.prev-$(date +%Y%m%d%H%M)"`, then
   `mkdir -p "$W"` — before writing anything: never delete it, and never `--force` the skeleton over
-  it. Export `W` once and use it in every
-  later command. A run that instead picked a path per command spent nine calls and seventy seconds
-  re-establishing it while splicing excerpt files it had first written somewhere else and then had
-  to move.
+  it. Export `W` once and use it in every later command, so excerpt fragments land beside the page
+  rather than somewhere they have to be moved from.
 - **Fix the deep-link mode now, not at render time.** Check whether the head SHA is even reachable
   on a remote — `git branch -r --contains <HEAD_SHA>`, where **exit 0 and empty output** means it was
   never pushed and every permalink to it would 404. Unpushed branches and worktrees are among the most
@@ -552,7 +550,7 @@ Flow C — Showing archived projects in historical reports
 Say why you split it that way, to yourself. The split *is* the insight, and it is what keeps a
 checkpoint from turning out to be a directory.
 
-**The flow is the unit of ANALYSIS and no longer a unit of the page.** Nothing below writes a flow
+**The flow is the unit of ANALYSIS and never a unit of the page.** Nothing below writes a flow
 section: a flow becomes a note, the note is what gets attacked, and step 7 turns notes into the
 ranked handful of judgments the reader actually gets.
 
@@ -612,10 +610,8 @@ Each note carries, under these headings:
 - **Tests** — which behaviour each pins, which branch it leaves open.
 - **Open** — what you could not establish, and what would settle it.
 
-**Why a file and not a slice of the page.** The falsifier used to be handed a published
-`<section id="flow-x">`, which meant a flow was wrong in public for as long as a challenge took to
-arrive, and meant the agent read markup, excerpts and a rail to find the claims. A note has neither
-cost. It also survives the run: on a diff that strains the context, `$W/analysis/` is what says which
+**Why a file and not a slice of the page.** A note can be attacked before any of it is public, and
+the falsifier reads claims rather than markup, excerpts and a rail. It also survives the run: on a diff that strains the context, `$W/analysis/` is what says which
 region got a trace and which got skimmed.
 
 ### 6c. At `--effort high`: send the falsifiers at the notes
@@ -624,9 +620,8 @@ Everything so far is this run checking its own work. That is the weakest kind of
 that wrote a claim is the one least able to see what it assumed. At `--effort high` the notes get a
 second reader whose only job is to break them.
 
-**When.** Here, as soon as the notes are written, and **before any of it reaches the page.** That is
-the whole reason this moved: the pass used to run after the flows were published, so a corrected
-claim had been public for as long as the challenge took to arrive.
+**When.** Here, as soon as the notes are written, and **before any of it reaches the page**, so a
+corrected claim is never one a reader saw.
 
 **How.** One independent reader per note, launched the way **your host reference** says — Claude
 spawns the registered `accountable-review:claim-falsifier` agent (a general-purpose one when
@@ -636,10 +631,10 @@ subagent tool, else a read-only background run of its own CLI —
 § *Hard rules*.
 
 **Then keep working — do not wait on them.** They come back as notifications, not as a blocked turn,
-and the parent's job in the meantime is step 7. Measured on a real run: five falsifiers launched over
-23 seconds, each returning a launch receipt in about 2 seconds, with the first challenges arriving
-365 seconds later while the parent drafted. Blocked time was **0.9% of the run**. A run that spawns
-them and then idles has converted the cheapest thing in this procedure into the most expensive.
+and the parent's job in the meantime is step 7. Launch receipts come back in seconds and the first
+challenges minutes later, which is why the pass costs under 1% of the run's wall clock — and only
+while you keep drafting. A run that spawns them and then idles has converted the cheapest thing in
+this procedure into the most expensive.
 
 **Cheap in wall clock is not free in tokens, and the cap is what holds both costs down.** Each
 falsifier reads in its own context, and those tokens are the run's: with one note per falsifier the
@@ -656,8 +651,8 @@ which a second reader stops paying for itself — in their tokens and in the ver
 challenge asks of you.
 
 Launch the selected readers without waiting between launches, up to the host’s concurrency
-limit. Queue any remaining notes and continue drafting. A run that reached for a single blocking
-`Explore` agent paid 997 seconds, 41% of its wall clock, for one sequential spawn.
+limit. Queue any remaining notes and continue drafting; one blocking spawn is the failure the hard
+rules describe.
 
 Give each agent four things and no more: the absolute path of `references/claim-falsifier.md`, which
 it is asked to read first; the repository path; `BASE` and `HEAD`; and **the path of that one note**.
@@ -1042,10 +1037,9 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
   which is exactly the disguise a page forbidden to claim assurance is vulnerable to. One real page
   carried ten of them: *"the mistake the first version of this section made"*, *"the first pass ran
   this over `app/views` alone and found six"*, *"seven controllers, not the four the first pass
-  reported"*. Every one of those sentences had a true and useful fact inside it and buried it in the
-  run's own history. Note that this repository's prose is deliberately written the *other* way — a
-  rule here states the observation that produced it — and that register is right for whoever edits
-  the skill next and wrong for the page. The reviewer is reading about a pull request; how this
+  reported"*. Every one had a true and useful fact inside it, buried in the run's own history. This
+  file states the observation behind a rule on purpose; that register is for whoever edits the skill,
+  never for the page. The reviewer is reading about a pull request; how this
   document got drafted is not part of it. `evals/checks/page-invariants.rb` § 2c fails a page that
   does it.
 
@@ -1058,7 +1052,7 @@ synthesised. Their challenges are the second half of this step.
 the notes it draws on. Draft in ranked order; if the next checkpoint's note still has a falsifier out,
 draft the one after it. If every checkpoint is drafted and one agent is still out, publish — the rules
 above ran on your own reading of the files — and fold the late challenge in as an `Edit`. **Never
-idle waiting**: the 0.9% holds only because the parent works while they read.
+idle waiting**: the pass is cheap in wall clock only because you work while they read.
 
 **A launch receipt is not a result.** Before the final publish, account for every reader you sent: a
 challenge folded in, or nothing found, or a reader that failed. If one failed, or delegation was
@@ -1081,15 +1075,11 @@ corrected. Two reasons, and both are hard rules already: a tally of corrected cl
 page's own draft, and a page advertising that it was checked reads as the clean bill of health the
 page must never be. Say what changed to the user, in chat, and leave the artifact silent.
 
-**The form this actually takes never mentions the pass at all.** It is *"the first version of this
-section got it wrong"* — a correction annotated with the history that produced it, which is this pass,
-narrated. A run reads that as honesty and writes ten of them. The rule against it is the correction
-rule above, and it applies to every claim you revise here: fix the sentence, keep the caveat a reader
-would need, and let the draft history go.
-
-**A checkpoint is published only after the analysis under it has been attacked**, which is what moving
-the pass ahead of the page bought. What remains is the late challenge, and the rule for it is the one
-above: a claim retracted before the final publish beats one that is never retracted.
+**The correction rule above applies to every claim you revise here.** The pass's own trace is never
+a sentence about the pass; it is *"the first version of this section got it wrong"*, and the fix is
+the same — correct the sentence, keep the caveat a reader would need, let the draft history go. A
+late challenge is still folded in: a claim retracted before the final publish beats one never
+retracted.
 
 ## 9. Write and publish in stages
 
@@ -1251,11 +1241,9 @@ complete. With `--output` there is no URL: say where the file is, once.
   ```
 
   One cell per path, each with its `data-path` attribute already set and preceded by a hint comment
-  carrying the git status letter and line counts. No section, no attention level, no group: those
-  three judgements were a classified ledger the page no longer carries. Where a reviewer's attention
-  goes is said by what is on the reading path, and saying it again in a column beside every file was
-  the second inventory section 05 is told not to become — on a real page, 24 links above a caption
-  explaining that the eight worth opening were ranked elsewhere.
+  carrying the git status letter and line counts. No section, no attention level, no group: where a
+  reviewer's attention goes is said by the reading path, and a column ranking every file beside it is
+  a second inventory.
 
   **It does not go in section 05.** That section is about consequences, and a list of every changed
   file inside it is exactly the shape above.
