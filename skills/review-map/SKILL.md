@@ -65,6 +65,7 @@ rule one level up — yours, not the other host's.
 |---|---|---|
 | `references/hosts/claude-code.md` *or* `references/hosts/generic.md` | before step 1 | Delivery and delegation mechanics for **the host this run is in** — Claude Code's, or the one for every other host (Codex, Pi, …) — how a stage reaches the reader, and how step 6c's independent reader is launched. The ten steps own the review; this owns the machinery under it |
 | `references/report-format.md` | step 1 § *Deep links* only; whole at step 7, for 7, 8 and 9 | The six sections, the review checkpoint, the Context section, the chain component, the evidence tiers, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
+| `references/discover/rails.md`, `phoenix.md`, `rust.md` *or* `react.md` | step 2, once, after detection | What to detect about **the stack step 2 found** — its layout, libraries and test runner — and which versions the documentation links are pinned to. Small, and read whole |
 | `references/rails-nextjs.md`, `references/phoenix-liveview.md`, `references/rust.md` (+ `references/rust-backend.md` for a Rust backend) *or* `references/react.md` (+ `references/nextjs.md` for a Next.js app) | step 5, then while reading any layer | What a senior reviewer of **the stack step 2 detected** looks for, the runtime probes, and the search recipes for code the diff did not touch. Step 2 names it; step 5 is where it is read |
 | `references/rails-docs.md`, `references/elixir-docs.md`, `references/rust-docs.md` *or* `references/react-docs.md` | step 7, when a claim first asks for an anchor | The documentation URLs the page may cite, for that same stack. It is an allowlist, not a starting point: you look a concept up in it, you never read it to find concepts |
 | `references/update.md` | step 1, only with `--update` | Re-running over new commits: whether this can be an update at all, `scripts/carry-plan.sh` and its plan, which steps run in full or narrowed, and how the existing page is edited. A run without the flag never opens it |
@@ -387,87 +388,17 @@ consumer tracing happens and where the context is already largest. The versions 
 come out of `Gemfile.lock`, `mix.lock`, `Cargo.lock` or the JavaScript lock file, not out of the
 catalogue.
 
-**Backend, Rails.** Locate the Rails root by finding `config/application.rb`. It may be at the repo
-root, under a subdirectory such as `api/`, or there may be several (engines, monorepo). Detect, don't
-assume: RSpec vs Minitest; API-only (`config.api_only`) vs server-rendered; the authorization library,
-if any; the serializer library; the background job adapter; whether `strong_migrations` is present.
-
-**Backend, Phoenix.** Locate the Mix project by finding `mix.exs`, and read the OTP app name from it —
-that is what `lib/<app>` (the domain) and `lib/<app>_web` (the web layer) are named after, and the
-split is where the context boundary lives. Detect, don't assume: the `Repo` module and its adapter;
-**whether this is a LiveView app, a JSON API, or both** (`live "…"` in the router versus `json`
-responses, `@derive {Jason.Encoder, …}` or a `…JSON` render module); how authentication is attached
-(`on_mount` inside a `live_session`, or a plug in a `pipe_through` pipeline) — the two are different
-mechanisms and a route can miss either; whether Oban, Broadway or bare `Task` does background work;
-whether `assets/` holds JS hooks; and whether a separate frontend application exists at all.
-
-**Rust.** Read the root `Cargo.toml` first: a `[workspace]` table and its `members` say where the
-crates are, and each member's own manifest says what it is — a `[lib]`, one or more `[[bin]]`s, a
-`proc-macro = true`. Record each crate's **package name**, because that is what `-p` and every probe
-takes and it is not always the directory's. Detect, don't assume: the edition and `rust-version`;
-whether `rust-toolchain.toml` pins a toolchain; the features each changed crate declares and its
-`default` set; whether a crate is published (`publish = false` says it is not, and an unpublished
-crate's public API has no consumers outside this workspace); whether there is a `build.rs`; the test
-runner CI invokes — `cargo test` or `cargo nextest`, which skips doc tests — and the feature
-combinations it builds; and whether the crate root carries `#![forbid(unsafe_code)]`.
-
-On a **Rust backend**, also: the server framework and its version; the database layer — `sqlx` (and
-whether `.sqlx/` holds offline query data), `diesel` (and where `schema.rs` lives), `sea-orm`, or
-none; where migrations live and whether they are embedded in the binary; how authentication is
-attached — a layer on the router, an extractor in the handler signature, or both, which are different
-mechanisms and a route can miss either; the async runtime; and whether a separate frontend exists,
-and if so whether its types are generated from the Rust ones (`ts-rs`, `specta`, `typeshare`, or an
-OpenAPI document from `utoipa` or `aide`).
-
-**React.** Find the `package.json` the changed files belong to, and the root one if this is a
-workspace: its `workspaces` field, `pnpm-workspace.yaml`, or a `turbo.json` or `nx.json` says where
-the packages are, and each package's own `name` is what a probe filters on. Record **the package
-manager from the lock file** — `package-lock.json` is npm, `pnpm-lock.yaml` pnpm, `yarn.lock` Yarn,
-`bun.lock` or `bun.lockb` Bun — because every probe is written in its syntax. Detect, don't assume:
-TypeScript or JavaScript, and whether CI runs `tsc`; whether `<StrictMode>` wraps the tree; whether
-the React Compiler is on (`babel-plugin-react-compiler`, or `reactCompiler` in a Next.js config); the
-state layer (Redux, Zustand, Jotai, context alone); the data-fetching layer (React Query, SWR, RTK
-Query, Apollo, server components); the form and validation libraries; the router; the test runner
-(Vitest or Jest), the DOM library (Testing Library, and jsdom or happy-dom), and whether Playwright or
-Cypress drives a browser; whether `eslint-plugin-react-hooks` is configured; and, for a library, the
-`exports`, `peerDependencies` and the version it publishes.
-
-On a **Next.js app**, also: **which router the changed files live under** — `app/` (the App Router),
-`pages/` (the Pages Router), or both, either possibly under `src/` — because half of `nextjs.md` and
-every `nextjs.org` catalogue row is router-specific; whether a `middleware.*` or `proxy.*` exists and
-its `matcher`; how authentication is attached (a session helper, middleware, a data-access layer);
-the `output` mode and any `experimental` flags in `next.config.*`; where server actions and route
-handlers live; and the database layer if there is one — Prisma (`prisma/schema.prisma` and its
-`migrations/`), Drizzle, or none.
+**Then read the detected stack's discovery file, once, whole**: `references/discover/rails.md`,
+`phoenix.md`, `rust.md` or `react.md` — the Rust and React files carry the backend and Next.js
+additions in a section of their own. It says what to detect about the application before any
+tracing and which versions to record. Read no other stack's; a run whose stack step 2 did not
+detect reads none.
 
 **Record the versions the documentation links are pinned to.** This is not bookkeeping: **every
 documentation link on the page is pinned with them**, so a run that skipped this step cannot emit a
 doc link at all — recording the version is this step's job, and knowing which URL to pin is
-step 7's. What to record differs by stack, and so does its shape:
-
-- **Rails** — the Rails version and its *series* from the `rails (x.y.z)` line in `Gemfile.lock`
-  (`rails (8.0.2)` gives `8.0`), plus the exact locked versions of the gems above, which pin to a tag.
-  One series covers the whole framework.
-- **Elixir** — the **exact locked version of each package** from `mix.lock` (`phoenix`,
-  `phoenix_live_view`, `ecto`, `ecto_sql`, `plug`, `oban`), plus
-  the Elixir version from `.tool-versions` or `mix.exs`. There is **no series**: hexdocs serves exact
-  versions, each package pins independently, and a page carrying several different version segments is
-  correct rather than broken. The catalogue carries a few packages beyond that list; if step 7 asks
-  for one of them, `grep` its line out of `mix.lock` then — opening the catalogue here to find out
-  which names to look for is the read this step is trying not to do.
-- **Rust** — the **exact locked version of each crate** the changed code uses from the framework
-  layer (`tokio`, and on a backend the server framework, `tower`, `sqlx` or `diesel`), read from
-  `Cargo.lock`'s `[[package]]` entries; plus the **toolchain version**: the `channel` in
-  `rust-toolchain.toml` when it names a release, otherwise the manifest's `rust-version`, otherwise
-  none. Like Elixir there is no series, and two traps are Cargo's own: `Cargo.lock` can hold the same
-  crate at two versions, and a `stable` channel names no version at all. `references/rust-docs.md`
-  § *Pinning* says what to do with each — in both cases the answer can be *no link*.
-- **React** — the **locked version of `react`, and of `next` on a Next.js app**, read from the lock
-  file rather than from `package.json`'s range: `npm ls react next`, or the entry in
-  `pnpm-lock.yaml` or `yarn.lock`. What the catalogue pins is the **major** — both documentation
-  sites publish one page per API per major — and each package pins its own, so a Next.js page
-  carrying `15` for Next.js and `19` for React is correct. A workspace can resolve two versions of
-  React for two packages; the one that counts is the version the changed package resolves.
+step 7's. What to record differs by stack, and so does its shape — the stack's discovery file says
+which versions, from which lock file, and in what form.
 
 Each catalogue's § *Pinning* owns the emitted forms. The same versions also decide what the page may
 **claim**, because two marks in each catalogue turn a version-sensitive behaviour into a probe rather
@@ -476,22 +407,15 @@ than a sentence.
 **At `--mentor`, a closed catalogue also decides whether the flag can do anything.** A primer is what
 a doc link escalates into and is gated on carrying one, so while `elixir-docs.md` § *Version*
 withholds every link a Phoenix run at `--mentor` writes no primers at all and produces the ordinary
-page — and the same holds for a React or Next.js run while `react-docs.md` is closed. Say that to the user, in chat, when the run starts — a flag that silently did nothing is worse
-than one that says why it could not. Do **not** say it on the page: a line explaining the absence of
+page — and the same holds for a React or Next.js run while `react-docs.md` is closed. Say that to
+the user, in chat, when the run starts — a flag that silently did nothing is worse than one that
+says why it could not. Do **not** say it on the page: a line explaining the absence of
 primers is the mentor badge § *Mentor mode* refuses, with an apology attached.
 
-**Frontend.** If the stack is Phoenix LiveView with no separate client application, the frontend is the
-`.heex` templates and whatever sits in `assets/` — there is no second application and no generated
-type to reconcile, so skip to *Conventions* and let § *LiveView* in the lens file carry the seam. A
-LiveView app's boundary is the `phx-*` attribute and the callback that answers it, not a JSON contract.
-**Rust in general has no frontend to find** — a library's boundary is its public API, which
-`references/rust.md` covers — so skip to *Conventions*. A Rust backend may have one, and
-`references/rust-backend.md` § *When the client is a separate app* says how much of what follows
-applies.
-**On a React stack the frontend is the application**, recorded above; what is left to find is the
-API it talks to, if any, and the seam below applies to it unchanged, with `references/react.md`
-§ *When there is an API across the wire* saying which lens sections cover the client half. Otherwise locate the client the same way — `package.json`, `next.config.*`, `app/` versus `pages/`. Then
-find the seam between the two sides, because that is what a contract judgment is built from:
+**Frontend.** The discovery file says what the frontend is on this stack — LiveView templates, a
+library with none, or on React the application itself — and when to skip what follows. Where a
+separate client exists, locate it (`package.json`, `next.config.*`, `app/` versus `pages/`) and find
+the seam between the two sides, because that is what a contract judgment is built from:
 
 - the API client or fetch wrapper, and where base URLs and error handling live;
 - **whether types crossing the boundary are generated from the backend or hand-written.** Generated
