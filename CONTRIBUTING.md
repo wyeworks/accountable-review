@@ -134,8 +134,18 @@ Before pushing, the manifest check must pass. CI runs the same one:
 claude plugin validate . --strict
 ```
 
-That checks the manifest, not the prose, which is the part that matters here. The prose is verified
-by running the skill against a real PR and reading the page it produces.
+That checks the manifest, not the prose, which is the part that matters here. It also accepts a
+skill description past the Agent Skills specification's 1024-character limit, so `bin/evals offline`
+holds every skill's name and description to the spec in `tests/frontmatter.rb`. Before a release,
+the specification's own validator is worth one run as well — it needs Python, which is why CI does
+not run it:
+
+```bash
+pip install "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref"
+skills-ref validate skills/review-map && skills-ref validate skills/setup-ci
+```
+
+The prose is verified by running the skill against a real PR and reading the page it produces.
 
 Because defect discovery is sampling rather than a deterministic function of the diff, a single run
 is weak evidence. When judging whether a wording change improved things, run the same target more
