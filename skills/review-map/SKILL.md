@@ -879,6 +879,14 @@ unchanged callers or something a user sees, the checkpoint names them and says w
 pointer to *Context*, the impact panel or another checkpoint is depth, never a step of the argument.
 Repeat a little background when standing alone takes it; what keeps one home is the finding and the
 judgment. Self-contained is not exhaustive — what this concern needs, not everything step 5 found.
+**Then separate the narrative from its proof.** Everything down to the review question reads
+continuously — no excerpt, no figure, no walk through files, and citations only where a sentence
+resting on unchanged code keeps one beside its tier. What the reviewer would open to *verify* it —
+the figure, the *Look at* list with its excerpts, the probe — goes after the question in the
+checkpoint's shut *Supporting evidence* block. The test: what a reviewer needs to understand or
+challenge the change is explanation, so a test that leaves the boundary open is said above the
+question; what they need to substantiate it is evidence, so that test's code is an entry below.
+Uncertainty stays in the explanation even when the line that settles it is in the block.
 `report-format.md` § *The review checkpoint* owns these rules. Then decide
 whether it also earns a figure, which shape, and how many *Look at* entries it needs. **Each entry is three things in order — a title, a clause, then the citation.** The title names
 what is at that location in two to six words, so four entries can be scanned rather than read; the
@@ -929,15 +937,19 @@ a node nobody traced.
 Diagram and prose have different jobs. The figure says how the value gets there, or which paths must
 hold; the explanation says what the reader has to judge about it. **An explanation that walks the
 figure node by node is the defect** — it doubles the length and teaches nothing twice, and it is what a
-run reaches for when it is unsure the figure landed.
+run reaches for when it is unsure the figure landed. The figure sits in the supporting evidence, so
+the explanation states its upshot in a sentence — which path skips the invariant, what the guard
+order lets through — and reads complete with the block shut.
 
 **7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it:
 
-- Which citations are load-bearing for the judgment. Those get a collapsed excerpt beside the *Look
-  at* entry they confirm, generated in step 9.
+- Which citations are load-bearing for the judgment. Those get a collapsed excerpt in the *Look at*
+  entry they confirm, inside the checkpoint's supporting evidence, generated in step 9. A claim in the
+  explanation a reader would otherwise take on faith gets an entry of its own, never an excerpt in
+  the prose.
 - Which claims carry an evidence tier.
 - Whether a probe would settle the question **and would answer where the reviewer runs it** — a
-  `pre.probe`, proposed and never run, after the explanation, at most one per checkpoint. **A probe
+  `pre.probe`, proposed and never run, last in the supporting evidence, at most one per checkpoint. **A probe
   whose three-part label you cannot complete — instrument, safety, what the output would settle — was
   not earned.** § *Framework anchors* owns answerability and the label.
 - Whether a doc link explains why the framework consequence follows: at most one `a.doc` per

@@ -40,11 +40,15 @@ does not earn omitted outright.
   behaviour it is about — *Archived projects in the project filter*, not *ProjectSearcher
   implementation* — then explains what the system does there, what the change did to it and why that
   matters, and only then asks the question, in a box labelled *Review question*: *Does the filter
-  still hide archived projects for every caller?* Around that it carries one to four places to look
-  — each a short title, a clause and its citation — and, when the judgment turns on something prose
-  cannot hold, one small figure of the shape it has: a chain for a mechanism, several paths
-  converging on one invariant they must all keep, the states an entity moves between, or an entity
-  and what it is now attached to. A question only the author can settle is asked the same way.
+  still hide archived projects for every caller?* The explanation reads straight through: no code
+  excerpts, no diagrams, no tour of files, and anything that would change your judgment — a test
+  that leaves the boundary open, something the run could not establish — is said there. The proof
+  sits under the question in a closed *Supporting evidence* block: one to four places to look, each
+  a short title, a clause and its citation, and, when the judgment turns on steps prose cannot hold,
+  one small figure of the shape it has — a chain for a mechanism, several paths converging on one
+  invariant they must all keep, the states an entity moves between, or an entity and what it is now
+  attached to. Understand first, open it to verify. A question only the author can settle is asked
+  the same way.
   **Each checkpoint stands alone**: jump to one from the rail and it tells you what you need of the
   domain and the code, and which callers outside the diff the change reaches and what they now do,
   without sending you to Context or another section first. Links there are for going deeper.

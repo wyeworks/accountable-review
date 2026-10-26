@@ -64,8 +64,12 @@ grade and left to the reviewer; `checkpoint-claims` opens every cited line. Five
   leads with an identifier and leaves a step of the argument to *Context*. A third criterion asks
   whether each checkpoint stands alone — read it having jumped straight to it — and explains the
   unchanged callers it reaches rather than leaving them to *Impact outside the diff*. Defect: cut a
-  checkpoint's sentence naming the affected callers down to *see Impact path A*. Recalibrate once
-  moved.
+  checkpoint's sentence naming the affected callers down to *see Impact path A*. A fourth asks
+  whether the explanation reads complete with the supporting evidence shut, and whether what
+  changes the judgment — a test gap, an unknown — is above the question rather than only in the
+  block. Defect: move a checkpoint's GAP into a *Look at* clause, or rewrite its explanation as a
+  walk through the files its entries cite. The gold page and `make-defects.rb` also predate the
+  evidence block, so both are regenerated in the new shape. Recalibrate once moved.
 
 - **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
   decision in the repository, or a convention on the lens file's closed stack list — asks rather

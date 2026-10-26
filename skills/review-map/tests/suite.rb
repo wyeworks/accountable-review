@@ -320,7 +320,22 @@ class ReviewMapSuite
     assert_eq count(markup, 'class="cp"'),     6, "five checkpoints assembled whole and one pending stub"
     assert_eq count(markup, 'id="cp-a"'),      1, "the first checkpoint is anchored for the rail and the reading path"
     assert_eq count(markup, 'class="lookat"'), 5, "each written checkpoint carries its own where-to-look list"
-    assert_eq count(markup, 'class="open"'),   6, "every checkpoint, the pending stub included, ends in its review question"
+    assert_eq count(markup, 'class="open"'),   6, "every checkpoint, the pending stub included, ends its explanation in its review question"
+    assert_eq count(markup, '<details class="cp-ev">'), 5, "each written checkpoint carries its supporting evidence in one block"
+
+    # NARRATIVE FIRST, PROOF BENEATH IT. The explanation reads straight through to the question, so
+    # nothing a reader opens to verify it — a figure, an excerpt, the where-to-look list, a probe —
+    # sits above the question, and all of it sits inside the evidence block after it.
+    %w[a b c d e].each do |x|
+      cp = markup[/<section class="cp" id="cp-#{x}">.*?\n      <\/section>/m].to_s
+      q = cp.index('class="open"')
+      ev = cp.index('<details class="cp-ev">')
+      check q && ev && q < ev, "checkpoint #{x.upcase} asks its question before its supporting evidence"
+      narrative = cp[0...(q || 0)]
+      %w[<figure class="excerpt class="lookat" class="probe"].each do |part|
+        check !narrative.include?(part), "checkpoint #{x.upcase}'s explanation carries no #{part.delete('<"')} — it is evidence"
+      end
+    end
 
     # THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 05. A chain inside a checkpoint shows
     # mechanism inside the change, so it holds .ip-step and never .ip-aff: a hop into unchanged code
