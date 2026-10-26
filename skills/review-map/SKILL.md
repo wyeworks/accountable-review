@@ -117,92 +117,49 @@ point of putting them in a separate context. The host reference owns how the rea
   default — the unknown-flag rule, one file over. The file read is the working tree's, which is the
   copy the person has checked out. Say in chat which settings came from it.
 - **The page has a word budget, stated as guidance, and you write to it rather than trimming to
-  it.** `references/report-format.md` § *The agenda budget* owns the numbers — 80 to 160 words for
-  *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about 700
-  to 1,500 visible words at four checkpoints on a small or medium PR. Read it now, with the rest of
-  that file, rather than discovering the caps while drafting. It caps prose
-  and nothing else: no checkpoint, no citation, no evidence tier and no figure comes out for the
-  budget's sake, and **the number it never touches is the checkpoint count.**
-- **Read the effort off the invocation too, and hold it the same way.** One of `--effort high`,
-  `--effort low`, in any position; **no flag means the file's `effort`, and no file setting means
-  `high`**. It decides how hard the run works to
-  be right, and at `--effort high` that buys exactly one thing today: the falsification pass —
-  spawned at the end of step 6 against the analysis notes, folded in at step 8. `--effort low` opts
-  out of it, and is the flag to reach for when the diff is small enough that a second reader has
-  nothing to find.
+  it.** `references/report-format.md` § *The agenda budget* owns the numbers, and you read it with
+  the rest of that file at step 7, before a word of the page is drafted. It caps prose and nothing
+  else, and **the number it never touches is the checkpoint count.**
+- **Resolve the page settings — effort, mentor, context — flag first, then the file, then the
+  default**, and hold them for the whole run. Every value not listed below is **reported, not
+  guessed at**: a flag read wrongly is work that silently differs, with nothing on the page to tell
+  the reader which run they got.
 
-  **`--effort normal` is accepted and means `low`.** It was the name of the opt-out back when it was
-  the default, and a name that says *normal* for the path fewer runs take is the wrong way round.
-  Take it silently rather than reporting it: an invocation someone had in a script is not a typo,
-  and this is the one `--effort` value that is not guessing.
+  | Flag | Values | Default | What it decides | Owned by |
+  |---|---|---|---|---|
+  | `--effort` | `high`, `low` | `high` | Whether step 6c sends falsifiers at the notes | step 6c, step 8 |
+  | `--mentor` | bare, a stack name, `off` | off | Whether a checkpoint may carry a primer | `report-format.md` § *Mentor mode*, step 7g |
+  | `--context` | `auto`, `never`, `always`, `collapsed` | `auto` | How much of section 02 the page carries, and nothing else | `report-format.md` § *How much Context*, step 7k |
+  | `--output <dir>` | a directory outside the repository | — | Where the page lands: `<dir>/index.html`, nothing published | below |
+  | `--update` | — | — | Edit the existing page over the commits since its revision | `references/update.md` |
 
-  **`high` is the default because it changes what the page finds, and what it costs is tokens rather
-  than time.** Measured on one 28-file PR: the falsifiers cost **23 seconds of blocked
-  parent, 0.9% of a 2607-second run**, because they run while the next stage is drafted rather than instead
-  of it. The same target at `low` missed five findings the falsified run carried, including the two
-  the reviewer most needed.
+  **None of them is announced on the page** — no marker, chip, banner or sentence for any setting.
+  Two pages of one target at different settings differ in their claims (effort), their primers
+  (mentor) or section 02 (context), never in a component that names the setting. Say which settings
+  you took, and from where, in chat.
 
-  **That 0.9% is blocked wall clock and is not what the pass costs.** Each falsifier reads in its own
-  context, and those tokens are the run's tokens; step 6c says how many and what holds them down.
-  **Effort is what decides whether the page is right, and nothing makes a run
-  faster by making the page shorter** — the time goes into tracing consumers at step 5, not into
-  writing sections. Three rules:
-  - **It produces no section, no marker, no chip and no sentence.** Two pages of the same target at
-    the two efforts differ in their claims, never in their shape, and a reader cannot tell which
-    produced the one in front of them.
-  - An `--effort` value that is none of the three is **reported, not guessed at** — work that
-    silently differs, with nothing in the output to tell the reader which they got.
-
-  **Do not announce the effort** — nothing about the pass reaches the page, and step 8 says why.
-- **`--mentor` is the one flag that puts anything inside a checkpoint, and it is off by default.** It says
-  the reviewer is new to the **stack** rather than to the change, so a judgment that turns on a
-  framework rule they may not know gets that rule stated rather than linked. What it admits is one
-  component and nothing else: the **primer callout**, `aside.primer`, inside the checkpoints that
-  earn one. `references/report-format.md` § *Mentor mode* owns every rule about it, and step 7g is
-  where a checkpoint earns one.
-
-  **It may carry a stack name — `--mentor rails`, `--mentor elixir`, `--mentor phoenix`,
-  `--mentor rust`, `--mentor react`, `--mentor nextjs` — and the name is checked, never used to
-  choose.** Step 2 detects the stack from the repository; a name on
-  the command line that disagrees with what is in front of you is **reported, not obeyed**. Taking
-  it as an override would reintroduce the worst regression this skill has: a Rails lens over a
-  service that is not Rails, inventing findings confidently. A bare `--mentor` is the ordinary form
-  and the one to prefer. **`--mentor off` turns it off**, which matters only when the repository's
-  file turned it on, and a value that is none of those six names or `off` is reported like any other
-  unknown flag. `react` agrees with either React stack, because a Next.js app is a React app;
-  `nextjs` agrees only with a Next.js one.
-
-  **Hold it, and hold the subtraction rule with it.** Everything else about the page is the page a
-  run without the flag writes — same sections, the same checkpoints in the same ranked order, same
-  reading path, same impact panel, same evidence foot, same prose budget on every other part. Delete
-  the primers and you have that page back. A run that also lengthened its explanations, added a
-  checkpoint or reordered anything "because the reader is new" has turned a flag into
-  a second document.
-
-  **There is no mentor marker, chip or banner.** The flag's effect is visible by being on the page,
-  which is exactly why it needs nothing announcing it — and a count of primers would be the page
-  grading its own thoroughness. Say which flags you took in chat, not in the artifact.
-- **`--context` says how much of section 02 the page carries, and `auto` is what no flag and no
-  file setting means.**
-  One of `auto`, `never`, `always`, `collapsed`; any other value is **reported, not guessed at**.
-  It is a team's standing answer to how well its reviewers know this repository, and it touches
-  section 02 and nothing else. `references/report-format.md` § *How much Context* owns all four;
-  in one line each:
-  - `auto` — step 7k as written: four conditions, most pages earn nothing.
-  - `never` — skip step 7k; no section 02, no rail entry, no shift. **Nothing compensates**: no
-    checkpoint gains a clause it would not have had under `auto`.
-  - `always` — step 7k with the lowered bar: an impact path's use counts as a checkpoint's, and a
-    concept a checkpoint already explains in a clause qualifies. Same cap, and **still omitted when
-    nothing qualifies** — an entry written so the section has one is inventory.
-  - `collapsed` — step 7k as for `auto`, the result written inside one shut `details.ctx-fold`.
-
-  **No marker for any of them**, for `--mentor`'s reason. Say which you took in chat.
-- **`--output <dir>` makes the run non-interactive.** It is the only flag that changes where the page
-  goes rather than what is on it: the page is written to `<dir>/index.html` and **nothing is
-  published** — no `Artifact` call, at any stage. Everything else is identical, and has to be. Same
-  sections, same depth rules, same excerpt budget, same gate. A CI run and a person's run produce the
-  same page from the same procedure; the moment this flag starts meaning a cheaper page, there are two
-  products and only one of them is developed against.
+  - **`--effort`.** `high` is the default because it changes what the page finds, and what it costs
+    is tokens rather than time: on one 28-file PR the falsifiers cost **23 seconds of blocked
+    parent, 0.9% of a 2607-second run**, because they read while the next stage is drafted, and the
+    same target at `low` missed five findings the falsified run carried, including the two the
+    reviewer most needed. Step 6c says what the tokens are. `--effort low` is for a diff small
+    enough that a second reader has nothing to find. **`--effort normal` is accepted silently and
+    means `low`** — the old name of the opt-out, still in people's scripts, and the one value that
+    is not guessing. Nothing makes a run faster by making the page shorter: the time goes into
+    tracing consumers at step 5.
+  - **`--mentor`** says the reviewer is new to the **stack** rather than to the change. A stack name
+    — `rails`, `elixir`, `phoenix`, `rust`, `react`, `nextjs` — **is checked at step 2, never used to
+    choose**: taking it as an override would put a Rails lens over a service that is not Rails.
+    `react` agrees with either React stack; `nextjs` only with a Next.js one. A bare `--mentor` is
+    the form to prefer; `--mentor off` matters only when the repository's file turned it on.
+    `report-format.md` § *Mentor mode* owns the rest — above all the subtraction rule: delete the
+    primers and what remains is the page the run would have written without the flag.
+  - **`--context`** tunes section 02 and nothing else; `never` compensates nowhere, and `always`
+    lowers the bar without filling the section. § *How much Context* owns all four values.
+- **`--output <dir>` makes the run non-interactive.** It changes where the page goes and nothing
+  else: the page is written to `<dir>/index.html` and **nothing is published** — no `Artifact` call,
+  at any stage. Same sections, same depth rules, same excerpt budget, same gate; the moment this flag
+  starts meaning a cheaper page, there are two products and only one of them is developed against.
 
   Three flags travel with it, carrying what `gh` would otherwise be asked for:
 
@@ -212,37 +169,22 @@ point of putting them in a separate context. The host reference owns how the rea
 
   **Prefer them over anything you derive.** `--base-sha` is `BASE` and `--head-sha` is `HEAD` for
   every diff in this run; do not compute a merge-base over them and do not call `gh` for what they
-  already say. The caller knows which revision it asked about, and a run that recomputed a base from a
-  branch that has since moved would describe a revision nobody requested. With `--repository` and a PR
-  number the run also has what link rung 1 needs without `gh` at all — check reachability as always,
-  but do not re-derive the identity of the change. The flags are legal on their own; they simply have
-  no other reason to appear.
+  already say — a base recomputed from a branch that has since moved describes a revision nobody
+  requested. With `--repository` and a PR number the run has what link rung 1 needs without `gh`;
+  check reachability as always. The flags are legal on their own.
 
-  `<dir>` must be **outside the repository under review**, for the reason the hard rules give: the
-  page must never become part of the diff it describes.
-
-  **`$W` is unchanged by this, and that matters.** `--output` moves the finished page, not the run's
-  scratch: `$W` stays the derived work directory and excerpt fragments keep landing there. Write the
-  page itself straight to `<dir>/index.html` — a crash then leaves a useful page where the caller is
-  going to look for one — and leave `<dir>` holding nothing else, because whatever is in it is what
-  gets delivered.
-
-  `ci/generate-review-map.sh`, at the plugin root, uses this path for Claude CI. It supplies all four
-  flags, checks afterwards that the page names its revision and no longer says it is being written,
-  and refuses to deliver one that does.
-- **`--update` re-reads only the commits since the last map.** It takes no value, and it says: a
-  page for this target already exists where this run would write, so inspect the delta since the
-  revision that page names and edit it in place rather than rebuilding it. `references/update.md`
-  owns every rule about it; read that file before acting on the flag.
-
-  Two things about it belong here, beside the flags it sits with. **It is not a level and not an
-  effort.** It never lowers a cap, never skips the gate, never skips step 8 for anything it writes,
-  and never admits or removes a component; the moment it means "fewer excerpts" or "skip section
-  05" it has become a second document reached by a flag, which is the thing this page has no
-  shapes for. And **with no
-  previous page, or when its carry plan refuses, it falls back to a full run and says so in chat.**
-  That is not an error: a full run is always the better page, so every way this flag can fail leads
-  to one.
+  `<dir>` must be **outside the repository under review** (the hard rules say why), and holds the
+  page and nothing else, because whatever is in it is what gets delivered. **`$W` is unchanged**:
+  excerpt fragments and notes still go there, and the page itself is written straight to
+  `<dir>/index.html`, so a crash leaves a useful page where the caller looks.
+  `ci/generate-review-map.sh` drives this path, supplies all four flags, and refuses to deliver a
+  page that does not name its revision or still says it is being written.
+- **`--update` re-reads only the commits since the last map**, editing the page that already exists
+  where this run would write. `references/update.md` owns every rule about it; read that file before
+  acting on the flag. **It is not a level and not an effort**: it never lowers a cap, skips the gate,
+  skips step 8 for anything it writes, or admits or removes a component. **With no previous page, or
+  when its carry plan refuses, it falls back to a full run and says so in chat** — a full run is
+  always the better page, so every way the flag can fail leads to one.
 - Find the base *ref*: the PR's base if there is one, else the default branch
   (`git symbolic-ref refs/remotes/origin/HEAD`, falling back to `main`, then `master`). This gives
   you a ref, not a merge point — do not compute a merge-base yourself. The three-dot diff below
