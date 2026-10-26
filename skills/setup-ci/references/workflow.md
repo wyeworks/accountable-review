@@ -185,7 +185,7 @@ and, after delivery, an `actions/cache/save@v4` under the same key.
 
 **What it is for.** With the previous page sitting where the run is about to write,
 `ci/generate-review-map.sh` passes `--update` and the skill re-reads only the commits since that
-page's revision instead of rebuilding it — `review-map`'s § *Re-running over new commits*. Without
+page's revision instead of rebuilding it — `review-map`'s `references/update.md`. Without
 the restore that flag reaches nothing in CI, because `$RUNNER_TEMP` dies with the runner and a
 second run starts from an empty directory.
 
@@ -199,7 +199,7 @@ is the better page.
 - A half-written page restored here carries a pending marker, and `carry-plan.sh`'s preconditions
   refuse to update from one.
 - A run that dies *after* the restore leaves a page still naming the old head — because
-  `SKILL.md` step 9 makes the `Revision` cell the last edit of an update — and the generate step
+  `review-map`'s `references/update.md` makes the `Revision` cell the last edit of an update — and the generate step
   already refuses to deliver a page that does not contain the current short head SHA. So the
   failure mode that would matter most, shipping an old map as a current one, is caught by a check
   that predates the cache.

@@ -8,6 +8,11 @@ Without `--output`, publish with `Artifact` at each shared milestone, reusing th
 `$W/page.html` path so the URL stays stable. With `--output`, save `<dir>/index.html`
 and skip every publishing call. The shared staging and completeness rules apply to both.
 
+**Do not load the `artifact-design` skill.** `references/page-template.html` and the themes
+`page-skeleton.sh` emits are this page's design system; that skill exists to choose a palette and
+pair typefaces, and its own first instruction is to apply an existing system when there is one.
+Loading it costs a turn and yields nothing.
+
 **A page an earlier session published is not this run's to overwrite**, unless the run is
 `--update` or the user asked to keep that link. A fresh run's first publish creates a new
 Artifact: pass no `url`, do not list or look up the earlier one, and name it in chat at the end
@@ -17,7 +22,7 @@ of the same PR is not what a re-run was asked to do. And `Artifact` refuses to p
 page this session has not read, so overwriting means reading that page whole first — tens of
 thousands of tokens, billed again on every request after it — for a page about to be replaced.
 `--update` pays that read on purpose, because it edits that page in place
-(`SKILL.md` § *Re-running over new commits*).
+(`references/update.md`).
 
 At high effort, spawn the registered `accountable-review:claim-falsifier` agent in the
 background for each selected analysis note, up to the shared cap and available concurrency,

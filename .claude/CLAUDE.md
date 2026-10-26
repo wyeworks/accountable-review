@@ -63,6 +63,12 @@ call stay shell, because shell is what runs on a team's runner. When you edit ei
 any script under `skills/review-map/scripts/`, `skills/setup-ci/scripts/` or `ci/`, run them —
 `bin/evals offline` runs every suite together, which is what CI does too.
 
+**The skill's size ceilings are a ratchet.** `SKILL.md` is loaded whole on every run and grows one
+reasonable paragraph at a time, so `tests/skill-budget.rb` holds it and every reference to a
+ceiling in `tests/budgets.yml`: lower one when its file shrinks, and raise one only on purpose, in
+the same commit as the growth, so the growth is in the diff a reviewer reads. A new reference needs
+a row and a sentence in `SKILL.md` saying when to read it.
+
 ## Working on the skill
 
 Run a Rails or a Phoenix project against this checkout — no install, and `/reload-plugins` picks up
@@ -155,6 +161,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/report-format.md` | Page structure — the six sections and what triggers each, **Context** and its earning test, **the review checkpoint**, its coding-decision and architectural kinds, and the ranking by delta with the ceiling, **chains** and the rule that decides which figure a chain is, **the three topology figures** and the order a shape is chosen in, the evidence tiers, **mentor mode and the primer callout**, source excerpts, impact paths, the canonical-home rule, the agenda budget and the deep-link ladder |
 | `references/rails-nextjs.md` | Domain knowledge, **Rails** — what a senior reviewer of that stack looks for, per layer, plus § *Coding decisions*, the runtime probes and the search recipes for affected-but-unchanged code. Its three client-side sections are stack-independent, and the other lens files point at them rather than restating them |
 | `references/phoenix-liveview.md` | Domain knowledge, **Phoenix/LiveView** — the same three parts for that stack. Its centre of gravity is § *LiveView*: the `phx-*`-to-`handle_event` seam, the stack's compiler-free boundary and its richest source of affected-but-unchanged code |
+| `references/discover/` | What to detect per stack at `SKILL.md` step 2 — `rails.md`, `phoenix.md`, `rust.md` (with its backend section) and `react.md` (with its Next.js section): the layout, the libraries, the test runner, the frontend's shape, and the versions every doc link is pinned with. One file per stack, read once and whole after detection, so a run carries only its own stack's |
 | `references/rails-docs.md` | The documentation catalogue, **Rails** — the Rails and gem URL *paths* the page may cite, the per-series overrides, and the two marks that say what a sentence may claim. Data, not lenses: an allowlist, dated and re-verified by `evals/verify-catalogue.sh` |
 | `references/elixir-docs.md` | The documentation catalogue, **Elixir** — hexdocs paths pinned per package, the same two marks, and a § *Version* that **withholds every link** until a verification run opens its rows. Closed, so an Elixir run anchors with probes and prose |
 | `references/rust.md` | Domain knowledge, **Rust of any kind** — organised around what the compiler was told not to check or cannot see: the wildcard arm, the `pub` item, the unbuilt feature combination, the module whose safe code keeps an `unsafe` block sound. The whole lens for Rust in general, and the first layer for a Rust backend. Its probes read the build — `--locked` always — because Rust has no console |
@@ -165,6 +172,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `references/rust-docs.md` | The documentation catalogue, **Rust** — docs.rs paths pinned per crate and doc.rust-lang.org paths pinned to the toolchain, each stored **with its host** because `cargo` is both a crate and a book. **Open** |
 | `references/page-template.html` | Design system — the rules every theme's tokens keep (it declares none of its own), component classes, the assembled checkpoint, the chain, one of each topology figure and the impact panel, and the page's one small script. **No `<svg>` anywhere.** Four `SKELETON:` markers divide it: the head and tail ranges are **emitted** into the page by `page-skeleton.sh`, the middle is the markup a run reads. A fifth, `SKELETON:THEME`, inside the head, is where the themes go |
 | `references/themes/` | The three looks — `daylight` (the default), `workshop`, `field-notes` — each one file: a font link and one `<style>` holding its tokens in all three theme states and its overrides, every element carrying `data-style`. All emitted at the `SKELETON:THEME` line, the unchosen ones `media="not all"`; never read by a run |
+| `references/update.md` | The `--update` procedure — the four checks no page can answer, `carry-plan.sh`'s plan and what each row means, which steps run in full and which narrow, and how the existing page is edited. Read only when the flag is passed, so a fresh run never carries it |
 | `references/claim-falsifier.md` | The shared adversarial mandate, read by an independent reader in either host — what to attack in one **analysis note**, that every challenge cites a line it opened, and that a claim it failed to break is reported too |
 | `references/hosts/` | Host-specific delivery and delegation: Claude Artifact or local HTML everywhere else (`generic.md` is the reference for every non-Claude host, Codex and Pi the primary examples), named Claude agent (a general-purpose one when `npx skills add` installed the skill without the plugin, so `agents/` never arrived) or Codex subagent tools |
 | `agents/claim-falsifier.md` | The Claude agent wrapper — tools and model. At the **plugin root**, not under `skills/`: it is addressed by name, never read, and its parent supplies the absolute path to the shared mandate |
@@ -178,8 +186,9 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `scripts/read-config.sh` | The only thing that knows `.accountable-review.yml`'s shape, and the one parser every reader uses — the skill at step 1, `page-skeleton.sh`, and the `ci/` scripts. In `review-map` because the skill ships alone |
 | `scripts/usage.sh` | What a Codex run spent, read off the thread's rollout log and its falsifiers': `mark` at step 1, `report` at step 10, said in chat and never on the page. Claude Code's status line counts the same live, so a Claude run never calls it |
 | `scripts/carry-plan.sh` | The re-run decision — the delta since the previous map, the preconditions that refuse one, and per checkpoint and per Context entry whether it may be carried. Mechanical because by eye every checkpoint looks carryable |
-| `skills/review-map/tests/` | The deterministic tests for those scripts, in Ruby: `suite.rb` holds them one method per section, `run.rb` runs every section, and `self-test.rb` breaks each rule on a copy of the skill and runs only the section that should notice. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently |
+| `skills/review-map/tests/` | The deterministic tests for those scripts, in Ruby: `suite.rb` holds them one method per section, `run.rb` runs every section, and `self-test.rb` breaks each rule on a copy of the skill and runs only the section that should notice. `diff-render.sh`'s rows build their own two-commit repository, because its answer is a function of git. `frontmatter.rb` puts every skill's and agent's frontmatter through a strict YAML parser, because `claude plugin validate --strict` accepts an unquoted `: ` that Pi's loader rejects silently, and holds a skill's name and description to the Agent Skills spec's limits, which the same validator does not check |
 | `skills/review-map/tests/codex-plugin.rb` | The Codex manifest and catalogue against Claude's manifest — same name and version, `review-map` the only skill shipped, the catalogue's one entry pointing at this repository — and seven mutations of its own inputs that it must catch |
+| `skills/review-map/tests/skill-budget.rb` and `budgets.yml` | Every skill's `SKILL.md` and Markdown reference under a line and byte ceiling, every reference named in its `SKILL.md`, every `references/` path it names present; a `SKILL.md` past the spec's 500 lines, or over its history-marker ceiling, is a WARN. The ceilings live in `budgets.yml` and nowhere else |
 | `bin/evals` | One command per eval scenario — `offline`, `e2e`, `calibrate`, `report`, `catalogue`, and the rest in its own header. A dispatcher over `evals/`, `setup-ci/tests/` and `bin/examples check` that owns the paths and defaults and **no rule of its own**. Its `parity` line stops its suite table drifting from `validate.yml` |
 | `bin/examples` | The published examples — `regen` regenerates each at the revision its committed `manifest.json` pins, `render` writes the provenance regions in `examples/README.md` and `examples/index.html`, `check` fails a version or a region gone stale. Outside `examples/` because Pages uploads that directory |
 | `evals/` | `checks/`, `golden/`, `e2e/` and `profile.sh`, which measures what a run *cost* rather than whether it was right, plus `DEFERRED.md`, the one list of what the gate knowingly lets through. Not loaded at runtime; see `evals/README.md` |
@@ -614,7 +623,7 @@ Editing one of these means checking the others still agree.
   artifact.
 
   Owners, each **alone** for its part: `scripts/carry-plan.sh` (preconditions, carry rule);
-  `SKILL.md` § *Re-running over new commits* (procedure; steps 1, 9, 10 and two hard rules point at
+  `references/update.md` (procedure; `SKILL.md` steps 1, 9, 10 and two hard rules point at
   it); `report-format.md` § *Build state* § *An updated page* (the wording and the refusals);
   `setup-ci/references/workflow.md` § *The previous map* (the cache, ripgrep, why not the artifact).
   Also agreeing: `report-format.md` §§ *Section 1* (masthead segment, merge-base), *One page shape*,
@@ -712,7 +721,7 @@ Editing one of these means checking the others still agree.
   These agree: `report-format.md` § *Section 2* owns the rules and § *How much Context* the four
   values **alone**, with § *One canonical home*, § *The agenda budget*, § *Build state*, § *Mentor
   mode*, § *A future full mode* and § *Topology figures* (the shift's shape) pointing at it;
-  `SKILL.md` steps 1, 7k and 9 and § *Re-running*; `page-template.html` holds `dl.ctx`, its rail entry
+  `SKILL.md` steps 1, 7k and 9 and `references/update.md`; `page-template.html` holds `dl.ctx`, its rail entry
   and `details.ctx-fold`; `tests/run.rb` and `self-test.rb` assert its place, pointers, absences and
   exactly one figure; `checks/start-here.rb` warns on an entry with no pointer or a dead one, behind
   the `golden/context-*` fixtures, and reads through the fold; `figures.rb` grades the shift behind
@@ -928,7 +937,7 @@ Same rule as above: editing one of these means checking the others still agree.
   auto`), because the skill reads the checkout's file under its flags and an absent flag would be
   decided twice.
 
-  These agree: `read-config.sh`; `SKILL.md` step 1 and § *Re-running*; `page-skeleton.sh`;
+  These agree: `read-config.sh`; `SKILL.md` step 1 and `references/update.md`; `page-skeleton.sh`;
   `ci/generate-review-map.sh`; `setup-ci/references/config.md` § *Who reads which key*, which owns the
   split **alone**; `README.md` § *Configuration*; and the two suites, `tests/run.rb` for the local
   refusal and `setup-ci/tests/suite.rb` for the explicit pass-through.

@@ -54,6 +54,7 @@ skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
 │   ├── report-format.md           the six sections, Context, the checkpoint, chains, tiers, deep links
+│   ├── discover/                  per stack: what step 2 detects, and the versions doc links pin to
 │   ├── rails-nextjs.md            Rails: what to look for per layer, runtime probes, search recipes
 │   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the second stack
 │   ├── rust.md                    Rust, any kind of crate: the same, and the whole lens for Rust in general
@@ -64,6 +65,8 @@ skills/review-map/
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
 │   ├── rust-docs.md               the docs.rs and doc.rust-lang.org paths, pinned per crate and toolchain
 │   ├── react-docs.md              the react.dev and nextjs.org paths, pinned per major — closed pending verification
+│   ├── update.md                  the --update procedure, read only when the flag is passed
+│   ├── hosts/                     delivery and delegation, one file for Claude Code and one for every other host
 │   ├── page-template.html         design system and components — no svg, by design
 │   └── themes/                    daylight (default), workshop, field-notes — fonts, tokens, overrides
 ├── scripts/
@@ -89,8 +92,8 @@ skills/setup-ci/
 ```
 
 Each reference owns one axis — procedure, page format, per-stack domain knowledge, documentation
-catalogue, design system — and several invariants span more than one file. A Rails run reads the Rails
-lens and the Rails catalogue; a Phoenix run reads the Phoenix pair; a Rust run reads `rust.md` and
+catalogue, design system — and several invariants span more than one file. Every run reads its
+stack's one discovery file at step 2. A Rails run reads the Rails lens and the Rails catalogue; a Phoenix run reads the Phoenix pair; a Rust run reads `rust.md` and
 `rust-docs.md`, and a Rust backend run `rust-backend.md` on top; a React run reads `react.md` and
 `react-docs.md`, and a Next.js run `nextjs.md` on top — and none should learn about another
 stack's contents. `.claude/CLAUDE.md` documents how the
@@ -134,8 +137,21 @@ Before pushing, the manifest check must pass. CI runs the same one:
 claude plugin validate . --strict
 ```
 
-That checks the manifest, not the prose, which is the part that matters here. The prose is verified
-by running the skill against a real PR and reading the page it produces.
+That checks the manifest, not the prose, which is the part that matters here. It also accepts a
+skill description past the Agent Skills specification's 1024-character limit, so `bin/evals offline`
+holds every skill's name and description to the spec in `tests/frontmatter.rb`, and every
+`SKILL.md` and reference to a size ceiling in `tests/skill-budget.rb`. A file that grows past its
+ceiling fails until `tests/budgets.yml` is raised in the same commit, and a file that shrinks
+lowers its own. Before a release,
+the specification's own validator is worth one run as well — it needs Python, which is why CI does
+not run it:
+
+```bash
+pip install "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref"
+skills-ref validate skills/review-map && skills-ref validate skills/setup-ci
+```
+
+The prose is verified by running the skill against a real PR and reading the page it produces.
 
 Because defect discovery is sampling rather than a deterministic function of the diff, a single run
 is weak evidence. When judging whether a wording change improved things, run the same target more
@@ -174,6 +190,7 @@ skills/review-map/evals/checks/frozen.rb                # ~1000 cases against th
 ruby skills/review-map/tests/run.rb                     # page-skeleton.sh, diff-render.sh, carry-plan.sh and the rest
 ruby skills/review-map/tests/self-test.rb               # every break run.rb claims to catch
 ruby skills/review-map/tests/activity.rb                # hooks/activity.json, read the same by Ruby and JS
+ruby skills/review-map/tests/skill-budget.rb            # every SKILL.md and reference under its ceiling in budgets.yml
 claude plugin test .                                    # the progress line, against the engine's test kit
 ruby skills/setup-ci/tests/run.rb                       # what the generated workflow contains
 ruby skills/setup-ci/tests/self-test.rb                 # every break run.rb claims to catch
