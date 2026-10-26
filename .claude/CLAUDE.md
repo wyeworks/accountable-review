@@ -318,7 +318,8 @@ Editing one of these means checking the others still agree.
 
   **Every delta is classed behavioural or refactor**, and the masthead's *Change shape* chip is the
   class and its only trace — behavioural · refactor · mixed, nothing finer, because *bugfix* claims an
-  intent the code rarely states. **The band outranks the delta**: every behavioural judgment and every
+  intent the code rarely states; `page-invariants.rb` § 9b warns on any other word, since a retired
+  one can still be true and no judge would notice. **The band outranks the delta**: every behavioural judgment and every
   refactor's *is behaviour preserved?* first, page-wide, then architectural questions, then coding
   decisions, because misreading structure costs a conversation and misreading behaviour costs
   production. `report-format.md` § *Ranking by delta* owns the order, the within-kind order and the

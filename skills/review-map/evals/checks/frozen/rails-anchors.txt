@@ -2030,6 +2030,24 @@ exit=0
 SKIP  doc links: none on this input
 PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
 SKIP  runtime probes: none on this input
+## --fragment invariants-shape-retired.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
+## --page invariants-shape-retired.html
+exit=0
+SKIP  doc links: none on this input
+PASS  no primer callout and no pre.demo — the shape of a page written without --mentor
+PASS  every probe carries a label
+PASS  1 probe(s), none showing output the run did not observe
+PASS  no probe targets production
+PASS  every probe is read-only
+SKIP  probe identifiers: needs --repo to ask whether the constants exist
 ## --fragment invariants-standing-disclaimer.html
 exit=0
 SKIP  doc links: none on this input

@@ -902,6 +902,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment invariants-shape-retired.html
+exit=0
+PASS  every one of 2 affected entr(ies) sits in a file the diff does not touch, against the page's own ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page invariants-shape-retired.html
+exit=0
+PASS  every one of 2 affected entr(ies) sits in a file the diff does not touch, against the page's own ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment invariants-standing-disclaimer.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger

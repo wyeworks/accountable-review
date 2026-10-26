@@ -405,6 +405,27 @@ else
   end
 end
 
+# 9b · The Shape chip is the delta's class, from a closed list. report-format.md § Section 1 owns
+#     it: behavioural, refactor or mixed, and nothing finer, because feature and bugfix claim an
+#     intent the code rarely states. No judge sees this — the what-changed judge asks whether the
+#     chip is TRUE of the code, and an old word can be true — so a run still writing the retired
+#     vocabulary would pass everything else. WARN rather than FAIL for § 9's reason: the class is a
+#     classification the run made, and a hard failure on a label teaches a run to pick whichever
+#     allowed word clears it. An unfilled placeholder is skipped: page-lint.sh fails that already.
+SHAPE_CELL = %r{>Shape</div><div[^>]*>[^<]*<}
+SHAPES = %w[behavioural refactor mixed].freeze
+shape_hit = prose.scan(SHAPE_CELL).first
+shape = shape_hit.to_s.sub(%r{\A>Shape</div><div[^>]*>}, "").chomp("<").strip
+if shape_hit.nil?
+  check.skip("shape chip: the page carries no masthead Shape cell")
+elsif shape.start_with?("{{")
+  check.skip("shape chip: still a placeholder")
+elsif SHAPES.include?(shape.downcase)
+  check.ok("Shape is the delta's class (#{shape})")
+else
+  check.maybe("Shape reads '#{shape}' — the chip is the delta's class: behavioural, refactor or mixed, and nothing finer")
+end
+
 # 10 · Tiers against the changed set. Delegated to scripts/page-lint.sh for completeness.rb's
 #      reason: the script is runtime code, run by SKILL.md step 10 inside the user's own project
 #      with nothing but shell and awk, so the three shapes it warns on — a sentence citing a file

@@ -138,6 +138,10 @@
  page-invariants    | invariants-strip-kind.html    | 0 | By kind adds up to 4 but Files is 5
  page-invariants    | agenda-clean.html             | 0 | masthead Files (5) is the inventory's count
  page-invariants    | agenda-clean.html             | 0 | By kind adds up to Files
+# The Shape chip, § 9b: the delta's class from a closed list, a WARN pinned at exit 0. agenda-clean
+# carries a correct one, so a rule that fires on behavioural goes red there.
+ page-invariants    | invariants-shape-retired.html | 0 | Shape reads 'feature'
+ page-invariants    | agenda-clean.html             | 0 | Shape is the delta's class (behavioural)
 # The flow designator, § 7 — the rule that guards a deleted vocabulary, the way § 1's severity
 # chips do. Two rows, because the corpus itself carried the old vocabulary until this rule
 # landed: the FAIL row proves it fires, and the PASS row on a clean fixture proves the pattern
