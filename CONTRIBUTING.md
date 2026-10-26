@@ -54,6 +54,7 @@ skills/review-map/
 ├── SKILL.md                       the procedure Claude follows
 ├── references/
 │   ├── report-format.md           the six sections, Context, the checkpoint, chains, tiers, deep links
+│   ├── discover/                  per stack: what step 2 detects, and the versions doc links pin to
 │   ├── rails-nextjs.md            Rails: what to look for per layer, runtime probes, search recipes
 │   ├── phoenix-liveview.md        Phoenix/LiveView: the same, for the second stack
 │   ├── rust.md                    Rust, any kind of crate: the same, and the whole lens for Rust in general
@@ -64,6 +65,8 @@ skills/review-map/
 │   ├── elixir-docs.md             the hexdocs paths, pinned per package — closed pending verification
 │   ├── rust-docs.md               the docs.rs and doc.rust-lang.org paths, pinned per crate and toolchain
 │   ├── react-docs.md              the react.dev and nextjs.org paths, pinned per major — closed pending verification
+│   ├── update.md                  the --update procedure, read only when the flag is passed
+│   ├── hosts/                     delivery and delegation, one file for Claude Code and one for every other host
 │   ├── page-template.html         design system and components — no svg, by design
 │   └── themes/                    daylight (default), workshop, field-notes — fonts, tokens, overrides
 ├── scripts/
@@ -89,8 +92,8 @@ skills/setup-ci/
 ```
 
 Each reference owns one axis — procedure, page format, per-stack domain knowledge, documentation
-catalogue, design system — and several invariants span more than one file. A Rails run reads the Rails
-lens and the Rails catalogue; a Phoenix run reads the Phoenix pair; a Rust run reads `rust.md` and
+catalogue, design system — and several invariants span more than one file. Every run reads its
+stack's one discovery file at step 2. A Rails run reads the Rails lens and the Rails catalogue; a Phoenix run reads the Phoenix pair; a Rust run reads `rust.md` and
 `rust-docs.md`, and a Rust backend run `rust-backend.md` on top; a React run reads `react.md` and
 `react-docs.md`, and a Next.js run `nextjs.md` on top — and none should learn about another
 stack's contents. `.claude/CLAUDE.md` documents how the
