@@ -676,10 +676,34 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-severity-chip.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-shape-missing.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-shape-missing.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-shape-reflowed.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-shape-reflowed.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-shape-retired.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page invariants-shape-retired.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-shape-spelling.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-shape-spelling.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-shape-wrapped.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-shape-wrapped.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-standing-disclaimer.html

@@ -372,14 +372,24 @@ end
 #     failure there would teach it to file a schema dump under prod to make the arithmetic work, so
 #     WARN. Read on the comment-stripped copy, because the template's comment beside the cell
 #     carries a worked example.
-FILES_CELL = %r{>Files</div><div[^>]*>\s*\d+\s*<}
-KIND_CELL  = %r{>By kind</div><div[^>]*>[^<]*<}
-BUCKET     = /(\d+)\s+(prod|test|generated|docs)\b/
-files_hit = prose.scan(FILES_CELL).first
-if files_hit.nil?
+#
+#     ONE READER FOR EVERY MASTHEAD CELL. A cell is a label div and a value div, and a run may put
+#     a line break between them or wrap the value in a span; a reader that needs the two divs
+#     touching and the value bare reads either as no cell at all, and a check that cannot find its
+#     subject SKIPs, which reads as verified. So the label and the value are matched across
+#     whitespace and the value's own markup is dropped, for § 9 and § 9b alike.
+def masthead_cell(page, label)
+  hit = page.lines.join.match(%r{>\s*#{Regexp.escape(label)}\s*</div>\s*<div[^>]*>(.*?)</div>}m)
+  hit && hit[1].gsub(/<[^>]*>/, "").gsub(/\s+/, " ").strip
+end
+
+BUCKET = /(\d+)\s+(prod|test|generated|docs)\b/
+files_value = masthead_cell(prose, "Files")
+files_value = nil unless files_value.to_s.match?(/\A\d+\z/)
+if files_value.nil?
   check.skip("metric strip: the page carries no masthead Files count")
 else
-  files = files_hit[/(\d+)\s*<\z/, 1].to_i
+  files = files_value.to_i
   inventory = page.scan(/<(?:td|div class="c")[[:space:]]+data-path="/).size
   if inventory.zero?
     check.skip("metric strip: no inventory yet to count Files against")
@@ -389,12 +399,12 @@ else
     check.bad("masthead says #{files} files but the inventory lists #{inventory} — Files is the inventory's count")
   end
 
-  kind_hit = prose.scan(KIND_CELL).first
-  value = kind_hit.to_s.sub(%r{\A>By kind</div><div[^>]*>}, "").chomp("<").gsub("&middot;", "·").strip
+  kind = masthead_cell(prose, "By kind")
+  value = kind.to_s.gsub("&middot;", "·")
   buckets = value.to_enum(:scan, BUCKET).map { [Regexp.last_match(1).to_i, Regexp.last_match(2)] }
   leftover = value.gsub(BUCKET, "").delete("·").strip
   sum = buckets.sum(&:first)
-  if kind_hit.nil?
+  if kind.nil?
     check.maybe("metric strip: no By kind cell — the masthead splits Files into prod, test, generated and docs")
   elsif buckets.empty? || !leftover.empty?
     check.maybe("metric strip: By kind reads '#{value}' — write each bucket as 'N prod', 'N test', 'N generated' or 'N docs'")
@@ -408,16 +418,18 @@ end
 # 9b · The Shape chip is the delta's class, from a closed list. report-format.md § Section 1 owns
 #     it: behavioural, refactor or mixed, and nothing finer, because feature and bugfix claim an
 #     intent the code rarely states. No judge sees this — the what-changed judge asks whether the
-#     chip is TRUE of the code, and an old word can be true — so a run still writing the retired
-#     vocabulary would pass everything else. WARN rather than FAIL for § 9's reason: the class is a
-#     classification the run made, and a hard failure on a label teaches a run to pick whichever
-#     allowed word clears it. An unfilled placeholder is skipped: page-lint.sh fails that already.
-SHAPE_CELL = %r{>Shape</div><div[^>]*>[^<]*<}
-SHAPES = %w[behavioural refactor mixed].freeze
-shape_hit = prose.scan(SHAPE_CELL).first
-shape = shape_hit.to_s.sub(%r{\A>Shape</div><div[^>]*>}, "").chomp("<").strip
-if shape_hit.nil?
-  check.skip("shape chip: the page carries no masthead Shape cell")
+#     chip is TRUE of the code, and feature can be true — so this is the only thing that does.
+#     WARN rather than FAIL for § 9's reason: the class is a classification the run made, and a
+#     hard failure on a label teaches a run to pick whichever allowed word clears it. Either
+#     spelling of behavioural is the class; a spelling is not a category. A page with a masthead
+#     and no Shape cell warns, because the masthead requires one; with no masthead at all there is
+#     nothing to read. An unfilled placeholder is skipped: page-lint.sh fails that already.
+SHAPES = %w[behavioural behavioral refactor mixed].freeze
+shape = masthead_cell(prose, "Shape")
+if shape.nil? && files_value
+  check.maybe("shape chip: the masthead carries no Shape cell — it names the delta's class: behavioural, refactor or mixed")
+elsif shape.nil?
+  check.skip("shape chip: the page carries no masthead")
 elsif shape.start_with?("{{")
   check.skip("shape chip: still a placeholder")
 elsif SHAPES.include?(shape.downcase)
