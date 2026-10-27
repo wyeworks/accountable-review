@@ -1,7 +1,7 @@
 ---
 # Evidence across the page: is no claim stated as more than it is, is nothing the diff shows
-# labelled, is every untouched line of a changed file cited, is every excerpt earned, and does the
-# page read complete with every collapsed block shut? The first is the truth criterion, and the
+# labelled, is every untouched line of a changed file cited, is every excerpt earned, and does each
+# field read complete with its excerpt shut? The first is the truth criterion, and the
 # three tier rules are three criteria so that one mis-tier among forty claims fails the one rule it
 # breaks and not all of them. The model is pinned for the reason what-changed.md
 # gives: changing it, or any byte of the instrument, invalidates calibration.
@@ -28,8 +28,9 @@ criteria:
     being edited. Run `git diff` to settle which files the diff touches.
   - >-
     AN UNTOUCHED LINE OF A CHANGED FILE IS CITED. A claim resting on untouched lines of a file
-    the diff changes needs a citation, not a tier: an `a.path` or an excerpt's summary location
-    at the claim, in the open page. The diff view does not show that line, so without the
+    the diff changes needs a citation, not a tier: at the claim, in the open page — in prose an
+    `a.ref`, the claim itself linked to that range; elsewhere an `a.path` or an excerpt's summary
+    location. The diff view does not show that line, so without the
     citation the reader has no way to check the sentence. A citation elsewhere on the page to a
     different range of the same file, or a line in the shut search record, does not count.
   - >-
@@ -37,13 +38,14 @@ criteria:
     confirms, and its quoted lines bear on that claim: they are what the reviewer's judgment turns
     on there. An excerpt of code the claim beside it is not about fails, however real its bytes.
   - >-
-    THE PAGE READS COMPLETE WITH EVERY BLOCK SHUT, FIELD BY FIELD. With every excerpt and every
-    other collapsed block in the page's body closed, each claim, tier and citation is still visible,
-    and each *Look at* entry still has its title, a
-    clause saying what to see in the cited lines, and a citation (an `a.path`, or the excerpt's
-    summary location). Judge each field on its own: a claim made elsewhere on the page does not
-    stand in for an entry's missing clause, and a citation elsewhere does not rescue a field whose
-    only `file:line` is inside a collapsed block. The evidence foot (`details.evidence`) is
+    EVERY FIELD READS COMPLETE WITH ITS EXCERPT SHUT. With every excerpt closed, each claim, tier
+    and citation outside a checkpoint's supporting evidence is still visible, and each *Look at*
+    entry — read with its `details.cp-ev` open — still has its title, a clause saying what to see in
+    the cited lines, and a citation (an `a.path`, or the excerpt's summary location). Judge each
+    field on its own: a claim made elsewhere on the page does not stand in for an entry's missing
+    clause, and a citation elsewhere does not rescue a field whose only `file:line` is inside a
+    collapsed excerpt. Whether a checkpoint's explanation reads complete with its `details.cp-ev`
+    shut is a different judge's question; do not grade it here. The evidence foot (`details.evidence`) is
     collapsed by design and is not held to this: what it holds is provenance and real but minor
     entries no judgment rests on. It fails only if something the reviewer has to decide about lives
     there and nowhere in the open page.
@@ -68,7 +70,13 @@ The aspect is **evidence**, across every section. Three things carry it:
 - **Source excerpts**, `details.excerpt`, collapsed: verbatim code beside the claim it confirms. An
   excerpt confirms what the prose already said; it never carries it.
 - **The closed-page rule**: the page reads complete with every `<details>` shut — excerpts, the
-  evidence foot, the search record. The `<summary>` of a closed block stays visible.
+  evidence foot, the search record. The `<summary>` of a closed block stays visible. A checkpoint's
+  `details.cp-ev`, *Supporting evidence*, is shut too and holds its *Look at* list; whether the
+  explanation above it reads complete without it is graded by `checkpoint-explanation`, and here an
+  entry inside it is read with that block open and only its excerpt shut.
+- **Citations in prose** are the claim itself, linked: `a.ref`, whose visible text is the phrase
+  that makes the claim and whose href names the file and line span. Settle which file it cites from
+  the href, never the text.
 
 A page may carry no doc link at all: when the stack's documentation catalogue is closed (Phoenix,
 React), zero doc links is correct, and nothing here asks for one.

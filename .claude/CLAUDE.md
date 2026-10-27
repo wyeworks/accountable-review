@@ -129,8 +129,9 @@ LLM judge per aspect of the page, anchored in the checkout and blind to the mech
 **Calibration**: a judge counts only once it has matched a person's verdicts on a certified gold
 page and on copies of it that each plant one defect. Calibration PRs are held out of the eval set.
 
-**Six judges exist** — `what-changed` (§ 01 with its masthead), `checkpoint-judgments` and
-`checkpoint-claims` (§ 03's shape and its truth), `reading-path`, `impact` and `evidence`. The
+**Seven judges exist** — `what-changed` (§ 01 with its masthead), `checkpoint-judgments`,
+`checkpoint-explanation` and `checkpoint-claims` (§ 03's shape, its prose and its truth),
+`reading-path`, `impact` and `evidence`. The
 aspects with no judge yet (Context, figures, coding decisions, probes, voice, recall) are notes in
 `judges/IDEAS.md`, most waiting on a gold page that carries their subject. The calibration PR is
 `discourse/discourse#43002`; a judge is measured against it only once `gold.yml` lists it as
@@ -360,8 +361,9 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   Nothing mechanical grades a checkpoint's quality. `start-here.rb` requires the reading path to
   point at one, `rails-anchors.rb` counts them for its doc-link budget, and `tests/run.rb` asserts the
   template assembles three. Whether a question is a judgment, asked once and ordered without a grade
-  is `evals/e2e/judges/checkpoint-judgments.md`'s question; whether its claims are true,
-  `checkpoint-claims.md`'s.
+  is `evals/e2e/judges/checkpoint-judgments.md`'s question; whether its prose explains before it
+  asks, stands alone and reads complete with its evidence shut, `checkpoint-explanation.md`'s;
+  whether its claims are true, `checkpoint-claims.md`'s.
 - **Three kinds of checkpoint, and the structural two rank behind every behavioural judgment.** A
   **behavioural** checkpoint judges what the system now does; an **architectural** one, what the
   change made true of its structure (a dependency direction, a second owner of a fact, a boundary

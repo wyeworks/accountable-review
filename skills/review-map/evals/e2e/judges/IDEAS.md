@@ -1,7 +1,7 @@
 # Judges not yet written
 
-**Notes, not code.** Six judges exist — `what-changed`, `checkpoint-judgments`,
-`checkpoint-claims`, `reading-path`, `impact` and `evidence` — and each is calibrated only once a
+**Notes, not code.** Seven judges exist — `what-changed`, `checkpoint-judgments`,
+`checkpoint-explanation`, `checkpoint-claims`, `reading-path`, `impact` and `evidence` — and each is calibrated only once a
 person has certified a gold page for it. Everything below is a candidate, recorded so the next one
 starts from the real question rather than from a blank file. `run.rb` and `calibrate.rb` pick up
 every `*.md` in this directory except this one, so writing a judge means writing its file, then its
@@ -47,42 +47,12 @@ is. A judge here reads Context and the checkpoints as that reader, and asks:
   checkpoints turn on. Defect: a shift whose moved state is a UI step rather than a request, or
   one with no `ul.lc-cases` on a flow the reviewer's question shows has several.
 
-## § 03 checkpoints, what the two judges leave
+## § 03 checkpoints, what the three judges leave
 
 `checkpoint-judgments` grades whether each checkpoint is a judgment, asked once, ordered without a
-grade and left to the reviewer; `checkpoint-claims` opens every cited line. Five things neither asks:
-
-- **Explain first, challenge second — and the judge reads the wrong element for it.** The
-  checkpoint's `<h3>` names a behaviour and its question is the `p.open` labelled *Review question*,
-  last (`report-format.md` § *The review checkpoint*). `checkpoint-judgments.md` still reads the
-  `<h3>` as the question, so it fails a correct page on *a judgment, not a category*; its criteria
-  move to `p.open`, and a new one asks whether the prose establishes the situation and the change
-  before the question, without the reader assembling it from another section. The gold page and
-  `make-defects.rb` carry the question-as-heading shape: the category defect at `make-defects.rb:106`
-  (`<h3>Controller and model validations</h3>`) is correct markup under the current shape and has to
-  be re-planted on the question line. Defect for the new criterion: a checkpoint whose explanation
-  leads with an identifier and leaves a step of the argument to *Context*. A third criterion asks
-  whether each checkpoint stands alone — read it having jumped straight to it — and explains the
-  unchanged callers it reaches rather than leaving them to *Impact outside the diff*. Defect: cut a
-  checkpoint's sentence naming the affected callers down to *see Impact path A*. Its other side is
-  exhaustiveness, and the same criterion catches it: a counter-defect pads a checkpoint's prose with
-  every traced caller, or the framework internals, that do not change the question. A fourth asks
-  whether the explanation reads complete with the supporting evidence shut, and whether what
-  changes the judgment — a test gap, an unknown — is above the question rather than only in the
-  block. Defect: move a checkpoint's GAP into a *Look at* clause, or rewrite its explanation as a
-  walk through the files its entries cite. The gold page and `make-defects.rb` also predate the
-  evidence block, so both are regenerated in the new shape. Recalibrate once moved.
-
-- **A citation can be the claim, linked.** In prose the citation is an `a.ref` whose text is the
-  claim and whose href carries the file and span (`report-format.md` § *A citation inside the
-  narration*). `evidence.md`'s *an untouched line of a changed file is cited* and *reads complete
-  with every block shut* name only `a.path` and an excerpt's location, so they would read an
-  `a.ref`-cited claim as uncited; `checkpoint-claims.md`'s *every explanation is true* should open
-  an `a.ref`'s href range as it opens an entry's. Both move with the gold page above, in one
-  recalibration. A voice criterion goes beside them: no explanation carries a `(path:line)` aside
-  where a link was possible, and each `<strong>` marks a sentence the judgment turns on and grades
-  nothing. Defects: restore a parenthesised path mid-sentence; bold *the important part* of a
-  checkpoint.
+grade and left to the reviewer; `checkpoint-explanation` whether its prose explains before it asks,
+stands alone and reads complete with its evidence shut; `checkpoint-claims` opens every cited line,
+the explanation's figure and inline snippet included. Four things none of them asks:
 
 - **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
   decision in the repository, or a convention on the lens file's closed stack list — asks rather
@@ -154,8 +124,12 @@ first item is the one that makes the feature worth having or not.
 - An explanation's figure and inline snippet (`report-format.md` § *The review checkpoint*,
   *Narrative first*): each earned — the reader would otherwise rebuild what it shows — introduced by
   the sentence before it, followed by what it means rather than a walk through its nodes, and no
-  qualification the prose owed left out because the figure tells a clean story. `checkpoint-claims`
-  would also need to read a figure's edges and a snippet's lines as claims of the explanation.
+  qualification the prose owed left out because the figure tells a clean story. Whether its edges
+  and lines are true is already `checkpoint-claims`'s.
+- Citations and emphasis in the explanation (`report-format.md` § *The review checkpoint*, *The
+  writing*): no `(path:line)` aside where a link was possible, and each `<strong>` marks a sentence
+  the judgment turns on and grades nothing. Defects: restore a parenthesised path mid-sentence; bold
+  *the important part* of a checkpoint.
 - The voice pass (`report-format.md` § *The voice pass*): each explanation carries one named idea,
   every paragraph opens on its turn in the argument, nothing is in the first person or in design-review
   vocabulary, and no hedge the draft had was smoothed into a statement. The last needs the run's

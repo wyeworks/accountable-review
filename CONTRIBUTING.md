@@ -175,7 +175,7 @@ bin/evals triage                           # the verdicts a person has to read, 
 
 A generation needs a credential in the environment (`ANTHROPIC_API_KEY`, or the
 `CLAUDE_CODE_OAUTH_TOKEN` that `claude setup-token` prints), because it runs through the same
-non-interactive adapter CI does. Six judges exist, one per aspect of the page; the aspects with no
+non-interactive adapter CI does. Seven judges exist, one per aspect of the page; the aspects with no
 judge yet are notes in `e2e/judges/IDEAS.md`. Results carry the skill's git sha, the model and the effort, so a pass rate is
 attributable to a version of the prose. `evals/README.md` has the rest, including `profile.sh` for
 when the question is where a run's minutes went rather than whether the page was right.

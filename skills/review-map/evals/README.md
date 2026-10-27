@@ -123,11 +123,11 @@ judge is calibrated at the sha and model it ran at.
 
 One judge per aspect of the page, each a file in `e2e/judges/` with its pinned model, the `parts` of
 the page it is handed (section ids, plus `masthead` and `evidence` for the two landmarks that are
-not sections) and at most five criteria in front matter, and the prompt below. Six exist:
-`what-changed` (§ 01 with its masthead), `checkpoint-judgments` and `checkpoint-claims` (§ 03, its
-shape and its truth, split because one judge asked to check both checks each less carefully),
-`reading-path` (§ 04), `impact` (§ 05) and `evidence` (tiers, excerpts and the closed-page rule,
-page-wide). `IDEAS.md` records the aspects with no judge yet, and what a planted defect for each
+not sections) and at most five criteria in front matter, and the prompt below. Seven exist:
+`what-changed` (§ 01 with its masthead), `checkpoint-judgments`, `checkpoint-explanation` and
+`checkpoint-claims` (§ 03 — its shape, its prose and its truth, split because one judge asked to
+check all three checks each less carefully), `reading-path` (§ 04), `impact` (§ 05) and `evidence`
+(tiers, excerpts and the closed-page rule, page-wide). `IDEAS.md` records the aspects with no judge yet, and what a planted defect for each
 would look like.
 
 What makes the verdicts worth anything is not the rubric, it is the anchoring. The judge runs
@@ -204,9 +204,9 @@ included, and each judge call is a fraction of that. Three repetitions of five P
 ## What counts as good
 
 A repetition that passes every criterion of every judge is not the bar, because nothing about the
-instrument can deliver it. Six judges carry 23 criteria; a judge is calibrated when 2 of 3 runs
+instrument can deliver it. Seven judges carry 26 criteria; a judge is calibrated when 2 of 3 runs
 agree with a person, so the instrument is allowed to disagree with itself one time in three; and
-the page is sampled, not computed. At a 95% pass rate per criterion, 0.95^23 is about 0.31 — a
+the page is sampled, not computed. At a 95% pass rate per criterion, 0.95^26 is about 0.26 — a
 page that is right almost everywhere fails most of its repetitions, and the number says the same
 thing about a good page and a bad one. But the bar is not one number either, because the errors
 are not one kind. **A false sentence costs the reader's trust in every other sentence; a missing
