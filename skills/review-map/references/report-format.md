@@ -390,7 +390,9 @@ narrative a second time.
   tests leave open **where that changes the judgment**. It is earned by the same test as everything
   else here: *"no request spec covers the archived branch"* is a gap when the reviewer's decision
   turns on whether that branch was exercised, and is noise when it does not. At most one per
-  checkpoint.
+  checkpoint. **It is secondary to the review question below it**, and the page sets it that way in
+  every theme — a note with a thin ochre rule, quieter type, no box — because two filled boxes in a
+  row read as two equal calls to act, and only the question is one.
 
   **It states an absence; it does not grade one.** The label is fixed for the reason the review question's is —
   *Missing*, *Untested* and *Risk* are a severity vocabulary in a component the palette already

@@ -225,7 +225,7 @@
 /* ---- Workshop overrides ---- */
 .tier,.tag,.pending{border-radius:var(--r-tag)}
 code{border-radius:var(--r-sm)}
-.gap,.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
 .ip-box{border-radius:var(--r-box)}
 .key-chg,.key-aff,.key-out{border-radius:3px}
 
@@ -233,11 +233,9 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-0.03em;font-variation-settings:norma
 h1{letter-spacing:-0.045em;line-height:1.02}
 .rail-id .tick{font-weight:600;letter-spacing:-0.02em}
 .tier,.tag{font-size:10.5px;letter-spacing:0;text-transform:none;border-color:transparent;padding:2px 8px}
-.open,.gap{position:relative;margin-left:16px;border:1px solid var(--gap-rule);padding:16px 18px 16px 28px}
-.gap{margin-top:16px}
-.open::before,.gap::before{content:"?";position:absolute;left:-16px;top:-14px;width:32px;height:32px;box-sizing:border-box;border-radius:50%;background:var(--badge);border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--body);color:#0a0a0a}
-.gap::before{content:"!"}
-.open>b,.gap>b{font-family:var(--body);font-weight:600;font-size:13.5px;letter-spacing:0}
+.open{position:relative;margin-left:16px;border:1px solid var(--gap-rule);padding:16px 18px 16px 28px}
+.open::before{content:"?";position:absolute;left:-16px;top:-14px;width:32px;height:32px;box-sizing:border-box;border-radius:50%;background:var(--badge);border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--body);color:#0a0a0a}
+.open>b{font-family:var(--body);font-weight:600;font-size:13.5px;letter-spacing:0}
 details.searched>summary,details.evidence>summary{font-weight:500}
 
 /* ---- Highlighter accents. Tints for the two labelled tiers and the excerpt tag, never a grade ---- */
@@ -272,8 +270,8 @@ h1{letter-spacing:-0.04em;line-height:1}
 .ip-card,figure.chain{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
 details.excerpt,details.searched,.gt,.primer{border:2px solid var(--frame)}
 .gt{background:var(--frame)}
-.open,.gap{border:2px solid var(--frame);box-shadow:4px 4px 0 var(--shadow)}
-.open::before,.gap::before{border-radius:0;border:2px solid var(--frame);width:30px;height:30px}
+.open{border:2px solid var(--frame);box-shadow:4px 4px 0 var(--shadow)}
+.open::before{border-radius:0;border:2px solid var(--frame);width:30px;height:30px}
 .tier,.tag{border:1.5px solid var(--frame)}
 .ip-box{border-width:2px !important}
 

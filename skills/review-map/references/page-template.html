@@ -538,10 +538,14 @@ details.ctx-fold > .ctx { margin-top: 0; }
 .tag { border: 1px solid var(--prov-rule); background: var(--prov-bg); color: var(--prov-ink); }
 
 /* A stated absence. Ochre, deliberately not the accent: a gap is
-   evidence, not a feature, and never a severity. */
-.gap { display: flex; gap: 12px; padding: 14px 16px; background: var(--gap-bg-2); border: 1px solid var(--gap-rule); }
-.gap > b { flex: 0 0 auto; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); }
-.gap > span { font-size: 14.5px; line-height: 1.6; color: var(--ink-3); }
+   evidence, not a feature, and never a severity. It is SECONDARY to the review
+   question below it, and set as a note rather than a box: no fill, no frame, a
+   thin ochre rule on the left, smaller and quieter type. Two filled ochre boxes
+   in a row read as two equal calls to act, and only the question is one — the
+   gap is a fact the question takes into account. Every theme keeps it that way. */
+.gap { display: flex; gap: 10px; margin-top: 14px; padding: 2px 0 2px 12px; background: none; border: 0; border-left: 2px solid var(--gap-rule); border-radius: 0; }
+.gap > b { flex: 0 0 auto; font-family: var(--mono); font-size: 10.5px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); line-height: 2; }
+.gap > span { font-size: 13.5px; line-height: 1.6; color: var(--muted); }
 /* What was grepped, including the searches that came up empty — collapsed, and the
    second component on the page that is. It is provenance, not a claim: the entries it
    backs are the div.item rows above it, so the page must read complete with it shut.

@@ -876,9 +876,10 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   menu at zero in the markup half, with a `self-test.rb` row behind the zero.
 
   **A theme is a look, never a page shape.** No skill flag names it, the run never chooses it, and a
-  page's content is identical in all three. A theme treatment (a highlighter, a glyph on `p.open` and
-  `.gap`) **applies to every instance of its component alike** — a theme that marked one checkpoint
-  differently from another, or used red on a claim, would be the severity chip as a palette.
+  page's content is identical in all three. A theme treatment (a highlighter, a glyph on `p.open`)
+  **applies to every instance of its component alike** — a theme that marked one checkpoint
+  differently from another, or used red on a claim, would be the severity chip as a palette — and no
+  theme boxes `.gap` like the question: the GAP is a quieter note beneath which only `p.open` is a box.
 
   These agree: the theme files; the template's marker and the comment beside it; `page-skeleton.sh`;
   the tail script's menu and the head script; `read-config.sh`'s theme list, which
