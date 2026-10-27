@@ -181,7 +181,9 @@ function quote(s,   t) {
 # One citation: is the file it names in the diff? The path is in the blob href when the text is
 # short; a diff-form href is a changed file by definition; plain text matches on its suffix.
 function in_diff(attrs, text,   path, k, p) {
-  if (index(attrs, "/files#diff-")) return 1
+  # A diff-page anchor, on a pull request (rung 1) or a compare range (rung 2), is a changed file by
+  # definition: GitHub only anchors files that are in the diff.
+  if (attrs ~ /#diff-[0-9a-f]/) return 1
   path = ""
   if (match(attrs, /\/blob\/[0-9a-f]+\/[^#"]+/)) {
     path = substr(attrs, RSTART, RLENGTH); sub(/^\/blob\/[0-9a-f]+\//, "", path)

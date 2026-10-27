@@ -465,8 +465,9 @@ ProjectSettings → PATCH /api/projects/:id → ProjectsController#update
   → Projects::Archive → Project → projects.archived_at
 ```
 
-**That is analysis, and it is not the page.** *What changed* gets one paragraph and at most a handful
-of bullets — `references/report-format.md` § *Section 1* — and the paths feed step 6's clustering and
+**That is analysis, and it is not the page.** *What changed* gets a short narrative — the situation,
+the change as one named idea with its moves a sentence each, what is now true — written and revised
+like a checkpoint's explanation (`references/report-format.md` § *Section 1*), and the paths feed step 6's clustering and
 step 7's chains rather than being published as a list. A page that opened with five use cases and
 their execution paths spent its first screen on material the checkpoints then said again.
 
@@ -807,8 +808,8 @@ decisions, because misreading structure costs the reviewer a conversation and mi
 costs them production.
 
 **The order is the order to think about them, and it is not a scale.** No number that reads as
-severity, no *high* or *low*, no *blocking*, no *watch*. The rail names a checkpoint by a short form
-of its review question, and the reading path by its heading.
+severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the reading path both name a
+checkpoint by its heading.
 
 **7e. Select the smallest useful agenda.** Three to five checkpoints **per independent semantic delta
 7a named**, and the page's **ceiling** at the outside — seven, nine or eleven, set by the files and
@@ -1267,7 +1268,9 @@ Everything else about writing holds at every stage:
   supporting evidence land as drafted. The draft carries the figure and the inline snippet in their
   places, and the revision moves sentences around them, never them out. Draft every checkpoint that
   is ready in one turn and land their revisions together in the next, so the pass costs a turn per
-  batch, not per checkpoint, and keep the draft files: step 10 holds the page to them.
+  batch, not per checkpoint, and keep the draft files: step 10 holds the page to them. **Empty
+  `$W/voice/` before the first draft** — every run, `--update` included, which keeps `$W` — so
+  step 10 compares this run's drafts and never a checkpoint since deleted or re-lettered.
 - **Figures are components, and there is no `<svg>` on this page.** A component reflows, has no
   canvas to overflow and cannot be drawn wrong; the only thing left to get wrong is whether the edges
   are true. A chain that lands in unchanged code is an impact path, drawn once in section 05. A
@@ -1398,16 +1401,22 @@ complete. With `--output` there is no URL: say where the file is, once.
   note about the page's own drafting; where it is wrong about this page, leave the sentence and say
   so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
   page whole. The same call checks that the voice pass (step 9) kept every link, tier and figure of each
-  draft, comparing the draft with what landed down to the supporting evidence:
+  draft of this run, comparing the draft with what landed down to the review question:
 
   ```sh
   refs() { grep -oE 'class="(ref|path ip-loc)" href="[^"]*"|class="tier[^"]*"|<figure class="[^"]*"' | sort; }
-  for f in "$W"/voice/*.html; do id=$(basename "$f" .html)
-    awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="cp-ev"|<\/section>/ {exit} on' \
-      "$W/page.html" | refs | diff -q - <(refs < "$f") >/dev/null || echo "voice: $id"
+  for f in "$W"/voice/*.html; do
+    [ -e "$f" ] || continue; id=$(basename "$f" .html)
+    grep -q "id=\"$id\"" <page.html> || continue
+    awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="open"|<\/section>/ {print; exit} on' \
+      <page.html> | refs > "$W/voice/.page"
+    refs < "$f" > "$W/voice/.draft"
+    cmp -s "$W/voice/.page" "$W/voice/.draft" || echo "voice: $id"
   done
   ```
 
+  `<page.html>` is the page itself — `$W/page.html`, or `<dir>/index.html` with `--output`. The page
+  side stops at the review question, so a primer below it is never compared, and plain `sh` runs it.
   A `voice:` line is a citation, a tier or a figure the revision dropped or added; put the draft's back. **Run
   the gate, the lint, the voice check and a grep for leftover markers in one call, fix everything
   they print in one turn of side-by-side `Edit`s, then re-run that one call** — a fix per turn

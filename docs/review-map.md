@@ -13,8 +13,9 @@ The product principle every rule below serves:
 Six parts in the order a reviewer actually works, each owning one kind of thing, with any the diff
 does not earn omitted outright.
 
-- **What changed** — the masthead, then one paragraph: what problem this solves, what is now true
-  that was not, who is affected. Derived from tests, code and commits rather than copied from a
+- **What changed** — the masthead, then a short narrative written like a checkpoint: what this part
+  of the system does and what was wrong, the change as one idea with each of its moves in a sentence
+  of its own, and what is now true and for whom. Derived from tests, code and commits rather than copied from a
   possibly-stale PR description. A limit the run hit — a region it had to skim, a client it could not
   read — is stated here and nowhere else.
 - **Context** — only when a checkpoint earns it. The pieces of *this repository* the

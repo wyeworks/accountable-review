@@ -285,10 +285,11 @@ Editing one of these means checking the others still agree.
 - **The review checkpoint is the page's primitive.** Three to five of them under *What needs your
   attention* **per independent semantic delta *What changed* names**, under a ceiling of seven, nine
   or eleven that the Production bucket sets, each **one judgment** the reviewer has to make: an `<h3>`
-  naming the behaviour, prose that explains before it asks, an optional `div.gap` labelled *GAP*,
-  `p.open` labelled *Review question*, always and last in the explanation, the primer at `--mentor`,
-  and then `details.cp-ev`, shut and labelled *Supporting evidence*: an optional figure, a
-  `ul.lookat` of one to four entries — each a short title, a clause and its deep-linked citation, in
+  naming the behaviour (the rail and the reading path name it by that heading), prose that explains
+  before it asks — with at most one figure and one inline snippet where they carry the argument — an
+  optional `div.gap` labelled *GAP*, `p.open` labelled *Review question*, always and last in the
+  explanation, the primer at `--mentor`, and then `details.cp-ev`, shut and labelled *Supporting
+  evidence*: a `ul.lookat` of one to four entries — each a short title, a clause and its deep-linked citation, in
   that order — and an optional probe. Both GAP and the question's labels are fixed, because an
   absence and the question are the two places a severity word gets in.
   `report-format.md` § *The review checkpoint* owns all of it **alone**; `page-template.html`
@@ -309,28 +310,18 @@ Editing one of these means checking the others still agree.
   and the primer is kept whole as teaching material. `report-format.md` § *The review checkpoint*
   owns it, with § *One canonical home*, § *Section 2* and § *Mentor mode* agreeing.
 
-  **Narrative first, proof beneath it, and purpose decides the side, not format.** The explanation
-  reads continuously and complete with the evidence shut: no collapsed excerpt, no walk through
-  files, and a citation only where a sentence resting on unchanged code keeps it beside its tier,
-  because `page-lint.sh` holds a tier to a citation in its sentence. **A figure, and at most one
-  inline snippet (`excerpt.sh --inline`), are explanation** where they carry the argument: set in
-  the prose with no card and no `figcaption`, introduced by the sentence before and never walked
-  node by node, and never owed. `tests/run.rb` asserts the template's figures and snippet sit above
-  the question, `figures.rb` asks a caption only of a figure filed in the evidence
-  (`golden/figures-narrative-clean.html`, `-evidence-no-caption`), and `excerpts.rb` reads the
-  inline form's tag (`golden/excerpt-inline-unchanged-changed-file.html`). **That citation is the claim, linked** — `a.ref`, its href the file and
-  span, never a `(path:line)` aside the reader decodes mid-argument — and the paragraph's one
-  `<strong>` marks the sentence the judgment turns on, never a grade. Each explanation is revised once
-for voice from a `$W/voice/` draft, the question untouched, and `SKILL.md` step 10 holds the page's
-links and tiers to that draft (`report-format.md` § *The voice pass*). `page-lint.sh`,
-  `link-form.rb`, `rails-anchors.rb` and `carry-plan.sh` read an `a.ref`'s file from its href
-  alone — a diff href by its hash — behind `tests/run.rb` rows, `self-test.rb` mutations and the
-  `golden/links-collapsed-ref*` fixtures, and `impact-paths.rb` refuses one in a `p.ip-why`
-  (`golden/impact-why-citation-ref.html`); `report-format.md`
-  § *A citation inside the narration* owns the form and the plain-text rungs. What a reviewer needs to understand or challenge the change is
-  explanation, uncertainty and test gaps included; what they need to substantiate it is evidence,
-  one click from the question rather than in the foot, and it never retells the narrative. The block
-  carries no count, which would read as thoroughness.
+**Narrative first, proof beneath it, and purpose decides the side, not format.** The explanation
+reads continuously and complete with the evidence shut; a figure or a short inline snippet sits in
+it only where it carries the argument, and a citation only where a sentence resting on unchanged
+code keeps it beside its tier, as the claim itself linked (`a.ref`), never a `(path:line)` aside.
+One `<strong>` per paragraph marks the sentence the judgment turns on, never a grade, and each
+explanation is revised once for voice from a draft that step 10 holds it to. What a reviewer needs
+to understand or challenge the change is explanation, uncertainty and test gaps included; what they
+need to substantiate it is evidence, one click from the question, never retelling the narrative and
+carrying no count. `report-format.md` owns the rules (§ *The review checkpoint*, § *The voice
+pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline`, `page-lint.sh`,
+`link-form.rb`, `rails-anchors.rb`, `carry-plan.sh`, `figures.rb`, `excerpts.rb` and
+`impact-paths.rb` must agree with them, and each says in its own header which rule it holds.
   **Analysis facets are not a reading obligation.** A test appears inside a checkpoint when it
   changes the judgment; a list of the specs that touch a file does not appear at all.
 

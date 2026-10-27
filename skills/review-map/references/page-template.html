@@ -1663,12 +1663,12 @@ figcaption strong { color: var(--ink-3); }
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
       <a data-rail="context" href="#context"><span class="n">02</span>Context</a>
       <a data-rail="attention" href="#attention"><span class="n">03</span>Needs your attention</a>
-      <a class="sub" data-rail="cp-a" href="#cp-a">{{SHORT_FORM_OF_THE_REVIEW_QUESTION}}</a>
-      <a class="sub" data-rail="cp-b" href="#cp-b">{{SHORT_FORM_OF_THE_REVIEW_QUESTION}}</a>
-      <a class="sub" data-rail="cp-c" href="#cp-c">{{SHORT_FORM_OF_THE_REVIEW_QUESTION}}</a>
-      <a class="sub" data-rail="cp-d" href="#cp-d">{{SHORT_FORM_OF_THE_REVIEW_QUESTION}}</a>
-      <a class="sub" data-rail="cp-e" href="#cp-e">{{SHORT_FORM_OF_THE_REVIEW_QUESTION}}</a>
-      <a class="sub" data-rail="cp-x" href="#cp-x">{{SHORT_FORM_OF_THE_REVIEW_QUESTION}} <span class="pending">pending</span></a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">{{THE_CHECKPOINT_HEADING}}</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">{{THE_CHECKPOINT_HEADING}}</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">{{THE_CHECKPOINT_HEADING}}</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">{{THE_CHECKPOINT_HEADING}}</a>
+      <a class="sub" data-rail="cp-e" href="#cp-e">{{THE_CHECKPOINT_HEADING}}</a>
+      <a class="sub" data-rail="cp-x" href="#cp-x">{{THE_CHECKPOINT_HEADING}} <span class="pending">pending</span></a>
       <a data-rail="start" href="#start"><span class="n">04</span>Read in this order</a>
       <a data-rail="impact" href="#impact"><span class="n">05</span>Impact outside the diff</a>
     </div>
@@ -1730,9 +1730,13 @@ figcaption strong { color: var(--ink-3); }
       </div>
     </header>
 
-    <!-- ===== Section 01 · What changed. One paragraph of 80 to 160 words, and at
-         most a handful of bullets when the PR genuinely contains independent
-         changes. It answers "what is this PR doing", never "what files changed".
+    <!-- ===== Section 01 · What changed. A short narrative, written and revised
+         like a checkpoint's explanation: the situation and its problem, then the
+         change as one named idea with its moves a sentence each, then what is now
+         true and for whom. A sentence listing four moves joined by "and" is the
+         failure, and it reads as concise. Bullets, one line each, only when the PR
+         genuinely contains independent changes. It answers "what is this PR
+         doing", never "what files changed". report-format.md § Section 1.
 
          A stated limit goes here and only here: a region you had to skim, a dirty
          working tree, a client you could not read. Say it in a sentence, in the
@@ -1741,8 +1745,9 @@ figcaption strong { color: var(--ink-3); }
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
       <h2 style="max-width:30ch;margin-bottom:18px">{{BEHAVIOURAL_CHANGE}}</h2>
 
-      <p>{{WHAT_IS_TRUE_OF_THE_SYSTEM_NOW_THAT_WAS_NOT_BEFORE}}</p>
-      <p>{{THE_MECHANISM_ONLY_WHERE_IT_IS_NEEDED_TO_FOLLOW_THE_CHANGE}} <span class="tier tier-inf">{{TIER_IF_NOT_SHOWN_BY_THE_DIFF}}</span></p>
+      <p>{{WHAT_THIS_PART_OF_THE_SYSTEM_DOES_AND_WHAT_WAS_WRONG_OR_MISSING}}</p>
+      <p><strong>{{THE_CHANGE_AS_ONE_IDEA}}</strong> {{ITS_MOVES_ONE_SENTENCE_EACH}} <span class="tier tier-inf">{{TIER_IF_NOT_SHOWN_BY_THE_DIFF}}</span></p>
+      <p>{{WHAT_IS_NOW_TRUE_AND_FOR_WHOM}}</p>
 
       <!-- OPTIONAL, and most pages do not earn it: the before/after pair is for a
            workflow that fundamentally changed, not for every PR. Two rows, never

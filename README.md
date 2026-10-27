@@ -187,7 +187,7 @@ approve a change, with the code that settles each one attached.
 Five parts, and a shut evidence block at the foot:
 
 ```text
-What changed                    one paragraph: what is now true that was not
+What changed                    a short narrative: what is now true that was not
 Context                         when earned: the pieces of this repository the judgments rely
                                 on, for a reader who knows the stack but not the codebase
 What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the

@@ -482,9 +482,10 @@ not written, and no label is left behind to say so.
 
 **Ordered by consequence if misunderstood, and the order is not a scale.** The first checkpoint is the
 one a reviewer would most regret getting wrong; the last is still a judgment or it would not be on the
-page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. The rail names a
-checkpoint by a short form of its review question, so a skimming reader still sees every judgment
-before reading any explanation; the reading path refers to it by its heading. Section 03's intro says in one sentence that
+page. No severity word, no *high* or *low*, no *blocking*, no *watch*, no chip. The rail and the
+reading path both name a checkpoint by its heading, verbatim — the behaviour it is about — so the
+rail reads as a table of contents a reader can navigate by, and the question is met where the
+explanation has earned it rather than first, out of context, in the margin. Section 03's intro says in one sentence that
 the order is the order to think about them.
 
 **Three to five per independent semantic delta named in *What changed*, under a ceiling the
@@ -2708,12 +2709,32 @@ the nearest bucket — rather than nowhere. A strip whose parts do not sum to it
 miscounted first screen, and the reader who adds it up stops trusting the numbers beneath it.
 `page-invariants.rb` § 9 checks both sums.
 
-**Then one paragraph, 80 to 160 words, and at most a handful of bullets.** What problem this solves,
-what is now true that was not, who is affected. Derived from the code, the tests and the commits —
-the PR description is a claim and is attributed when it is used, per `SKILL.md` step 4. Carry an
-evidence tier on the intent itself if it is inferred rather than stated. Where it cites, it cites the
-way a checkpoint's explanation does — the claim linked, never a path in parentheses — and its bold,
-if any, follows the same rule (§ *The review checkpoint*).
+**Then a short narrative, written like a checkpoint's explanation.** It is the first prose a reviewer
+reads, so it is held to the same writing as the checkpoints — § *The review checkpoint*'s *The
+writing* and § *The voice pass* — and gets the same draft-and-revise. Two or three short paragraphs,
+each with one job:
+
+1. **The situation.** What the part of the system the change touches does, in a user's or a caller's
+   terms, and what was wrong with it or missing — the problem, said before the fix.
+2. **The change, as one idea.** Name what the change does in a phrase the reader can carry — *the
+   page now loads what its rows read in batches, instead of one row at a time* — and then its moves,
+   **one per sentence**, each saying what it is for. A sentence that lists four moves joined by
+   *and* is the compressed paragraph this rule replaces: correct, short, and a list the reader has to
+   unpack.
+3. **What is now true, and for whom** — what a user or a caller would notice, or that nothing should
+   change and the judgments below are about whether that holds.
+
+Derived from the code, the tests and the commits — the PR description is a claim and is attributed
+when it is used, per `SKILL.md` step 4. Carry an evidence tier on the intent itself if it is inferred
+rather than stated. Where it cites, it cites the way a checkpoint's explanation does — the claim
+linked, never a path in parentheses — and its one `<strong>`, if any, is the sentence that says what
+the change is. **It orients; it does not teach**: mechanism only as far as following the change
+needs, and nothing a checkpoint will explain properly. There is no word count, and length is not the
+test: a reader should finish it knowing what the change is for and what it does, without having
+unpacked a sentence.
+
+**Bullets only when the PR contains genuinely independent changes**, one line each as an actor plus
+a behaviour, after the narrative's first paragraph and in place of its second.
 
 **It may say a test was added; it never says the tests cover the change.** *Pin each of them*,
 *covered by specs*, *both behaviours are tested* — each is a sentence about how well the change is
@@ -2721,8 +2742,7 @@ verified, which is the assurance § *One page shape* refuses, placed on the page
 Whether a test pins a behaviour, and which branch it leaves open, is a checkpoint's question. Here,
 name the behaviour a new spec exercises, or leave the tests to the metric strip's bucket.
 
-Bullets only when the PR contains genuinely independent changes, and then one line each as an actor
-plus a behaviour. **Not an execution path**: a path is a chain's job, and a list of them here is the
+A bullet is **not an execution path**: a path is a chain's job, and a list of them here is the
 use-case inventory this section stopped carrying, which spent the reader's first screen on material
 the checkpoints then said again.
 

@@ -539,6 +539,12 @@ CASES = [
            edit: sed('    pr = match(rest, /<a class="ref"[^>]*>/) ? RSTART : 0; lr = RLENGTH', "    pr = 0"),
            section: :page_lint, expect: "a linked phrase is a citation read from its href: one outside the diff with no tier is unlabelled"),
 
+  # Only a pull request's diff anchor counts as changed, so on a branch with no pull request every
+  # linked phrase into the diff is unplaceable and its tier goes unchecked.
+  Case.new(desc: "page-lint.sh reads only /files#diff- as a diff anchor", file: LINT,
+           edit: sed("  if (attrs ~ /#diff-[0-9a-f]/) return 1", '  if (index(attrs, "/files#diff-")) return 1'),
+           section: :page_lint, expect: "a linked phrase into a compare range's diff is changed code, so the unchanged label on it is on-changed"),
+
   # An inline snippet's caption is read as a sentence, so every snippet quoting unchanged code in an
   # explanation draws an unlabelled WARN, and a run learns to stop using the form.
   Case.new(desc: "page-lint.sh reads an inline snippet's caption as a sentence", file: LINT,

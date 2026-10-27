@@ -1226,6 +1226,11 @@ class ReviewMapSuite
     assert_eq count(r.out, "WARN  on-changed"), 1, "and one over a changed file under the unchanged label is on-changed"
     assert_eq count(r.out, "WARN"), 2, "while a diff-form phrase holding a code chip is changed code, and clean"
 
+    # On a branch with no pull request (rung 2) the diff-page anchor hangs off a compare range. A
+    # linked phrase has no path in its text to fall back on, so the anchor alone has to say changed.
+    write(path("ref-compare.html"), %(<p>The <a class="ref" href="https://github.com/o/r/compare/aaa...bbb#diff-0123abcdR4">guard</a> accepts nil <span class="tier tier-unc">from unchanged code</span>.</p>\n) + ledger)
+    assert_eq count(lint(path("ref-compare.html")).out, "WARN  on-changed"), 1, "a linked phrase into a compare range's diff is changed code, so the unchanged label on it is on-changed"
+
     # An inline snippet's caption is a location and a computed tag, the open twin of an excerpt's
     # summary, so it is not a sentence: an Unchanged snippet in the explanation draws no unlabelled
     # WARN, while the prose around it is still read.
