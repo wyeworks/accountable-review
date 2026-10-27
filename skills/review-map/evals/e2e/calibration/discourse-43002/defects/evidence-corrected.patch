@@ -1,0 +1,13 @@
+--- gold.html
++++ gold.html
+@@ -2698,7 +2698,9 @@
+           once. An admin who presses a tall card&#39;s corner meaning to start a drag, and lets go,
+           loses the height and has to drag it back. A press only becomes a drag after
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight
+-          pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>
++          pixels of travel</a>, because
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">the handles report a move only past it</a>
++          <span class="tier tier-unc">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>
+         <div class="gap"><b>GAP</b><span>Nothing tests a click on a card that is already larger than the smallest size.</span></div>
+         <p class="open"><b>Review question</b>Should a click on a tall card&#39;s handle take it all the way back to the smallest size?</p>
+         <details class="cp-ev">

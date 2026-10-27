@@ -235,11 +235,19 @@ FIX = {
     ["The shortcut is a toggle between two sizes over a range of eight,",
      "The shortcut is a toggle between two sizes over a range of five,"],
   ],
+  # c1, unsettled on gold: what the eight-pixel threshold means — that a move is reported only past
+  # it — is d-resize-handles.gts, a file the diff does not touch; the corrected copy cites and tiers it
+  "evidence" => [
+    ["pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>",
+     "pixels of travel</a>, because\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106\">the handles report a move only past it</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>"],
+  ],
 }.freeze
 
-# The defects planted on a corrected copy, because gold already fails the criterion they target.
+# The defects planted on a corrected copy, because gold already fails, or may fail, the criterion
+# they target.
 REBASED = {
   "checkpoint-claims-explanation" => "checkpoint-claims",
+  "evidence-unlabelled-inference" => "evidence",
 }.freeze
 
 VARIANTS = D.map { |name, old, new| [name, FIX.fetch(REBASED[name], []) + [[old, new]]] } +

@@ -100,7 +100,10 @@ variants:
   impact-why-walks-hops:             # card A's why narrates both nodes of the path beneath it
     impact: {4: fail}
 
+  evidence-corrected:                # gold with cp-d's eight-pixel claim citing d-resize-handles.gts and tiered `from unchanged code`
+    evidence: {1: pass}
   evidence-unlabelled-inference:     # the overlapping-saves claim loses its `inferred`
+    base: evidence-corrected
     evidence: {1: fail}
   evidence-labelled-diff-claim:      # § 01's default of 1, which the migration adds, gains `from unchanged code`
     evidence: {2: fail}
