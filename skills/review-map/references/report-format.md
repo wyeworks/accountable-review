@@ -417,7 +417,9 @@ narrative a second time.
   marks ochre — and a gap never implies the change should not ship. Silence is not a claim of
   coverage either: a checkpoint with nothing the tests leave open writes no `div.gap`, and the page
   never says the tests are complete. That is the same rule as the omitted section, one component
-  down.
+  down. The voice pass never revises it, so it is drafted in the voice: the case left open in the
+  behaviour's words, as the prose named it — *nothing tests a reservation that has already started*,
+  not *no spec covers the `started?` branch of `move_earlier`*.
 - **The review question, `p.open`, always, and last in the explanation.** Labelled **Review question** and
   nothing else, in the ochre box the theme gives it: the moment the checkpoint hands the reader the
   judgment, set apart so a reader returning to the page finds every question by scanning for the box.
@@ -429,9 +431,15 @@ narrative a second time.
   restate the explanation, and it carries a tier or a citation only where the question itself
   introduces a fact.
 
+  **The voice pass never revises it, so it is drafted in the voice.** It is what a teammate would
+  naturally ask next once the explanation stops, never a summary of that explanation. It names the
+  behaviour in the words the prose gave it, not by identifier, and carries one relationship: a
+  qualifying clause (*…, whose schedule rules skip the preload?*) is a fact, and the fact belongs in
+  the prose above, leaving the question short enough to hold while reading the code.
+
   **What only the author can settle is a review question too**, asked as one: *was the change meant
-  to cover approval-gated instruments, whose schedule rules skip the preload?* — with the prose above
-  saying the code cannot answer it. There is no second unresolved-thing line beside it.
+  to cover approval-gated instruments too?* — with the prose above saying their schedule rules skip
+  the preload and that the code cannot answer it. There is no second unresolved-thing line beside it.
 
   The label is fixed because the box is ochre and the question is the one free-text line every
   checkpoint carries: *Watch*, *Blocking* and *Check* are severity by another name, and

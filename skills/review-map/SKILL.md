@@ -1274,7 +1274,9 @@ Everything else about writing holds at every stage:
   split 7g made, then
   revise the explanation once as `report-format.md` § *The voice pass* says, carrying the idea 7f
   named; the revision is what the `Edit` replacing the stub lands. The GAP, the question and the
-  supporting evidence land as drafted. The draft carries the figure and the inline snippet in their
+  supporting evidence land as drafted, so draft the GAP and the question in the voice to begin with:
+  the behaviour's words rather than identifiers, one relationship, the qualifying fact left to the
+  prose (`report-format.md` § *The review checkpoint* owns both). The draft carries the figure and the inline snippet in their
   places, and the revision moves sentences around them, never them out. Draft every checkpoint that
   is ready in one turn and land their revisions together in the next, so the pass costs a turn per
   batch, not per checkpoint, and keep the draft files: step 10 holds the page to them. **Empty
