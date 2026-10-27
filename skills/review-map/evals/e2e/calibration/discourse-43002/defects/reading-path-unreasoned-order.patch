@@ -1,70 +1,66 @@
 --- gold.html
 +++ gold.html
-@@ -1690,6 +1690,15 @@
+@@ -2817,14 +2817,6 @@
+       <ol class="begin">
          <li>
            <span class="n">01</span>
-           <span class="t">
-+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L290-L386">frontend/discourse/admin/components/dashboard/reports.gjs:290-386</a>
-+            <span class="why">The drag handlers come last. They are the largest part of the diff and depend on
-+              everything above, and the click branch is at the end.</span>
-+          </span>
-+          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
-+        </li>
-+        <li>
-+          <span class="n">02</span>
-+          <span class="t">
-             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R307-R315">db/structure.sql:307-315</a>
-             <span class="why">Start with the two new columns and their default, so you know what an omitted size
-               turns into. Each migration is one <code>add_column</code>.</span>
-@@ -1697,7 +1706,7 @@
-           <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
-         </li>
-         <li>
+-          <span class="t">
+-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R5-R24">app/models/admin_dashboard_report.rb:5-24</a>
+-            <span class="why">The size limits and the full-width rule as the model states them, before the code that checks them elsewhere.</span>
+-          </span>
+-          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+-        </li>
+-        <li>
 -          <span class="n">02</span>
-+          <span class="n">03</span>
            <span class="t">
-             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R228-R249">app/controllers/admin/dashboard_controller.rb:228-249</a>
-             <span class="why">The parser holds both the default-to-1 and the only enforced size rule. Both the
-@@ -1706,7 +1715,7 @@
-           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
+             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R228-R248">app/controllers/admin/dashboard_controller.rb:228-248</a>
+             <span class="why">How the layout endpoint reads, defaults and checks each size before saving; the default of 1 is what Checkpoint A turns on.</span>
+@@ -2832,7 +2824,7 @@
+           <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
          </li>
          <li>
 -          <span class="n">03</span>
-+          <span class="n">04</span>
++          <span class="n">02</span>
            <span class="t">
-             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35">lib/admin_dashboard/reports/layout_updater.rb:18-35</a>
-             <span class="why">Every save replaces the whole list, which is why a missing size becomes a reset.
-@@ -1715,7 +1724,7 @@
-           <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
-         </li>
-         <li>
--          <span class="n">04</span>
-+          <span class="n">05</span>
-           <span class="t">
-             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L194-L213">frontend/discourse/admin/components/modal/manage-reports.gjs:194-213</a>
-             <span class="why">This unchanged file is the third writer of the layout, and the only one that leaves
-@@ -1724,7 +1733,7 @@
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a>
+             <span class="why">A second sender to that endpoint, outside the diff, that sends no size <span class="tier tier-unc">from unchanged code</span>.</span>
+@@ -2840,7 +2832,7 @@
            <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
          </li>
          <li>
--          <span class="n">05</span>
-+          <span class="n">06</span>
+-          <span class="n">04</span>
++          <span class="n">03</span>
            <span class="t">
-             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L162-L251">frontend/discourse/admin/components/dashboard/reports.gjs:162-251</a>
-             <span class="why">Read <code>layoutItems</code> and <code>loadPayloads</code> together to see which copy
-@@ -1732,15 +1741,6 @@
-           </span>
+             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R33">lib/admin_dashboard/reports/layout_updater.rb:18-33</a>
+             <span class="why">Where a received list replaces the stored layout, and where the bulk insert writes the sizes.</span>
+@@ -2848,7 +2840,7 @@
            <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
          </li>
--        <li>
+         <li>
+-          <span class="n">05</span>
++          <span class="n">04</span>
+           <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L356-L409">frontend/discourse/admin/components/dashboard/reports.gjs:356-409</a>
+             <span class="why">The end of a resize gesture: the click shortcut Checkpoint D asks about, then the whole-layout save Checkpoint B asks about.</span>
+@@ -2856,12 +2848,20 @@
+           <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+         </li>
+         <li>
 -          <span class="n">06</span>
--          <span class="t">
--            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L290-L386">frontend/discourse/admin/components/dashboard/reports.gjs:290-386</a>
--            <span class="why">The drag handlers come last. They are the largest part of the diff and depend on
--              everything above, and the click branch is at the end.</span>
--          </span>
--          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
--        </li>
++          <span class="n">05</span>
+           <span class="t">
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L54-L122">frontend/discourse/admin/components/dashboard/reports.gjs:54-122</a>
+             <span class="why">The two modifier classes the live resize uses for its animation and its floating card.</span>
+           </span>
+           <a class="ptr" href="#cp-e">Checkpoint E &rarr;</a>
++        </li>
++        <li>
++          <span class="n">06</span>
++          <span class="t">
++            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R5-R24">app/models/admin_dashboard_report.rb:5-24</a>
++            <span class="why">The size limits and the full-width rule as the model states them, before the code that checks them elsewhere.</span>
++          </span>
++          <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
+         </li>
        </ol>
      </section>
- 

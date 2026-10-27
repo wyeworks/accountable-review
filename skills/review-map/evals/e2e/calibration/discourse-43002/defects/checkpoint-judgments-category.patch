@@ -1,11 +1,11 @@
 --- gold.html
 +++ gold.html
-@@ -1556,7 +1556,7 @@
- 
-       <section class="cp" id="cp-c">
-         <span class="lbl lbl-wide">Checkpoint C</span>
--        <h3>Which layer actually enforces &ldquo;a multi-row card is full width&rdquo;?</h3>
-+        <h3>Controller and model validations</h3>
- 
-         <p>The rule is written three times: in the controller at
-           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R244-R246">app/controllers/admin/dashboard_controller.rb:244-246</a>,
+@@ -2588,7 +2588,7 @@
+           seeders</a>, the only other writers, can store such a size
+           <span class="tier tier-unc">from unchanged code</span>; a later writer that skips the endpoint
+           could.</p>
+-        <p class="open"><b>Review question</b>Is the layout endpoint&#39;s check meant to be the only guard on stored sizes?</p>
++        <p class="open"><b>Review question</b>Review the controller and model validations.</p>
+         <details class="cp-ev">
+           <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
+         <ul class="lookat">

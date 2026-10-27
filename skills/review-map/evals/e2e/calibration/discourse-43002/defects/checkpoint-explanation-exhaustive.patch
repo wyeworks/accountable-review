@@ -1,0 +1,17 @@
+--- gold.html
++++ gold.html
+@@ -2699,6 +2699,14 @@
+           loses the height and has to drag it back. A press only becomes a drag after
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight
+           pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>
++        <p>The handles are drawn by the shared <code>DResizeHandles</code> component, which takes a
++          list of corners from <code>handleDirectionsFor</code>, a <code>measure</code> callback and the
++          <code>--resizing</code> class for the card being dragged. <code>onCardResizeStart</code> records
++          the card&#39;s rectangle, its row height and the grid&#39;s gaps; <code>onCardResize</code>
++          recomputes a live row count and column span on every pointer move, and a rectangle for the
++          floating card to follow; <code>onCardResizeCancel</code> clears all of it. The live size
++          feeds <code>effectiveCards</code>, which the grid&#39;s column computation reads, and the
++          reflow animation runs whenever <code>resizeSignature</code> changes.</p>
+         <div class="gap"><b>GAP</b><span>Nothing tests a click on a card that is already larger than the smallest size.</span></div>
+         <p class="open"><b>Review question</b>Should a click on a tall card&#39;s handle take it all the way back to the smallest size?</p>
+         <details class="cp-ev">

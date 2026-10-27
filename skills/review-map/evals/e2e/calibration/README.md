@@ -119,8 +119,7 @@ certifying.
 
 - **One calibration PR, and it's Rails** (`discourse-43002`, with the Ember client in the same
   repository). No judge is calibrated against a Phoenix page, and the judges whose subject this
-  page does not carry — Context, a checkpoint's figure, a coding-decision checkpoint, a probe — wait
-  for a second gold (`../judges/IDEAS.md`).
+  page does not carry — a checkpoint's figure, a probe — wait for a second gold (`../judges/IDEAS.md`).
 - **Blindness is assumed, not tested.** "Blind to the mechanical results" and "a sibling variant must
   not be readable" both rest on `claude -p` confining `Read` to the working directory and the
   `--add-dir` directories. `check.txt` sits one level above the judge's working directory

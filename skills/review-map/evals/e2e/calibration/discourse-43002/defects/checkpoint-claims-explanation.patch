@@ -1,11 +1,22 @@
 --- gold.html
 +++ gold.html
-@@ -1418,7 +1418,7 @@
- 
-         <p>The controller now treats a missing <code>rows</code> or <code>cols</code> as 1, at
-           <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>.
--          <code>LayoutUpdater</code> deletes every row before it re-inserts the list. The modal's Apply button
-+          <code>LayoutUpdater</code> updates each row in place and leaves the others alone. The modal's Apply button
-           still sends only <code>source</code> and <code>identifier</code>. So reordering or adding a report
-           there resets every card to 1&times;1, including cards the admin never touched
-           <span class="tier tier-unc">from unchanged code</span>. The drawing is Impact path A. Decide whether
+@@ -2464,8 +2464,8 @@
+         <span class="lbl lbl-wide">Checkpoint B</span>
+         <h3>Saving one card&#39;s size by rewriting the whole layout</h3>
+         <p>The dashboard stores its pinned reports as one list, and the only way to change any part of
+-          it is to send the whole list again: the layout endpoint deletes every stored row and inserts
+-          the list it was given. Removing a report from the dashboard already worked this way.</p>
++          it is to send the whole list again: the layout endpoint updates the stored rows in place and
++          leaves the others alone. Removing a report from the dashboard already worked this way.</p>
+         <p>Resizing now works this way too, and an admin does it far more often. When a resize ends,
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L390-L409">the
+           handler builds the full list from the cards this browser holds</a>, with the new size swapped
+@@ -2694,7 +2694,7 @@
+ </div>
+         <p>A card at the smallest size becomes one row at full width. <strong>Every other size,
+           including a card two, three or four rows tall, goes straight back to the smallest.</strong>
+-          The shortcut is a toggle between two sizes over a range of eight, and the result is saved at
++          The shortcut is a toggle between two sizes over a range of five, and the result is saved at
+           once. An admin who presses a tall card&#39;s corner meaning to start a drag, and lets go,
+           loses the height and has to drag it back. A press only becomes a drag after
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight

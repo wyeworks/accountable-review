@@ -1,11 +1,11 @@
 --- gold.html
 +++ gold.html
-@@ -1375,7 +1375,7 @@
-         <span>discourse</span><span style="color:var(--rule-strong)">/</span><span>discourse</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/discourse/discourse/pull/43002">PR #43002</a><span style="color:var(--rule-strong)">&middot;</span><span>OsamaSayegh</span>
-       </div>
+@@ -2334,7 +2334,7 @@
  
--      <h1>Admins can resize report cards on the admin dashboard, and the size is saved</h1>
-+      <h1>Admins can resize report cards on the admin dashboard, and each admin's sizes are saved for them</h1>
+     <section id="changed">
+       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
+-      <h2 style="max-width:30ch;margin-bottom:18px">Admins can resize report cards, and each card keeps its size</h2>
++      <h2 style="max-width:30ch;margin-bottom:18px">Admins can resize report cards, and each admin's sizes are saved for them</h2>
  
-       <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">Each report card gets a corner handle.
-         Dragging it sets a width of one or two columns and a height of one to four rows. A card taller than
+       <p>The redesigned admin dashboard shows the reports an admin has pinned as a grid of cards, two
+         columns wide. Admins already choose which reports appear and in what order. Every card was the

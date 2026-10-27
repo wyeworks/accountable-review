@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -2557,7 +2557,7 @@
+ 
+       <section class="cp" id="cp-c">
+         <span class="lbl lbl-wide">Checkpoint C</span>
+-        <h3>Where the card-size rules are enforced</h3>
++        <h3>Controller and model changes</h3>
+         <p>A card&#39;s size has three rules: one to four rows, one or two columns, and a card more than
+           one row tall must span both columns. The last rule keeps the grid free of gaps that the
+           browser&#39;s own placement arithmetic does not expect <span class="tier tier-inf">inferred</span>. The change writes these rules down

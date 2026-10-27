@@ -10,8 +10,8 @@ says otherwise.
 
 Each candidate lists what it would grade and what a planted defect for it would look like,
 because a judge nobody can plant a defect for can't be calibrated. Most of them wait on a gold page
-that carries their subject: `discourse-43002`'s has no Context, no figure inside a checkpoint, no
-coding-decision checkpoint and no probe. The rule that applies to all of them: **grade the page,
+that carries their subject: `discourse-43002`'s carries one Context entry and one coding-decision
+checkpoint, and no figure inside a checkpoint and no probe. The rule that applies to all of them: **grade the page,
 never the PR.**
 
 ## § 02 context
