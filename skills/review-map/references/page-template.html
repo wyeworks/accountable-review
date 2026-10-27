@@ -941,6 +941,8 @@ div.excerpt.ex-inline .ex-body > pre { margin: 0; }
    inside are details with a .chev of their own, and opening this block must not
    rotate theirs. */
 details.cp-ev { margin-top: 22px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+/* The next checkpoint's top rule closes the block, so its own would draw a second line beside it. */
+.cp:has(+ .cp) > details.cp-ev:last-child { border-bottom: 0; }
 details.cp-ev > summary { display: flex; gap: 10px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; }
 details.cp-ev > summary::-webkit-details-marker { display: none; }
 details.cp-ev > summary::marker { content: ""; }
