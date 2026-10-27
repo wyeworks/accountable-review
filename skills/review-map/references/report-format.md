@@ -158,24 +158,32 @@ the effort the page exists to take off them. So the reader meets the behaviour, 
 did to it and why that matters, and only then the question, at the point where they can answer it.
 The difficulty kept is the judgment's; the difficulty removed is decoding the explanation.
 
-**Each checkpoint stands alone.** A reviewer may jump straight to any checkpoint from the rail, the
-reading path or a link someone pasted, and must be able to understand what changed, why it matters
-and what to judge without having read anything above it. So a checkpoint is a short, complete
-technical conversation about one concern, not a fragment of a larger investigation report: it says
-what it needs of the domain and the code itself, connects the existing behaviour, the change, its
-consequences and the question into one explanation, and **brings the consequences in** — when the
-change reaches unchanged callers or something a user sees, the checkpoint names them and says what
-they now do, rather than leaving that to *Impact outside the diff*. A pointer to *Context*, another
-checkpoint, the impact panel or a source file is optional depth; the reader follows one to
+**Each checkpoint stands alone: understandable on its own, never exhaustive.** A reviewer may jump
+straight to any checkpoint from the rail, the reading path or a link someone pasted, and must be able
+to understand what changed, why it matters and what to judge without having read anything above it.
+So a checkpoint is a short, complete technical conversation about one concern, not a fragment of a
+larger investigation report: it says what it needs of the domain and the code itself, connects the
+existing behaviour, the change, its consequences and the question into one explanation, and **brings
+the consequences in** rather than leaving them to *Impact outside the diff*. A pointer to *Context*,
+another checkpoint, the impact panel or a source file is optional depth; the reader follows one to
 investigate further, never to understand what the checkpoint is saying.
+
+**Complete for the judgment is not complete for the investigation.** The explanation carries the
+background, the mechanism and the consequences the question turns on, and no more. The trail step 5
+walked, the full list of what it traced, framework internals and secondary observations are
+*Supporting evidence*, unless one of them would change the question. **An unchanged caller enters
+the prose when what it now does bears on the judgment**, a clause each; callers the change reaches
+in the same way are a count and one clause — *three other paths load reservations this way, and all
+of them now read the caller's product* — and their list is *Look at* entries. Prefer the focused
+explanation to a complete account of everything the run found: a paragraph the judgment does not
+turn on is reading the reviewer pays for and gets nothing back.
 
 **That allows purposeful repetition, in one direction.** A checkpoint repeats the little background
 it needs — what a concept is, the part of *What changed* it turns on — in its own words, because a
 checkpoint that is shorter by depending on another section has moved the assembly onto the reader.
 What keeps one home is the **finding and the judgment**: the sections after the agenda point back at
 a checkpoint and never retell it, and two checkpoints never explain the same finding. § *One
-canonical home* draws the line. **Self-contained is not exhaustive** either: the checkpoint carries
-what the reviewer needs to understand and evaluate this concern, not everything step 5 found.
+canonical home* draws the line.
 
 A self-contained checkpoint is often longer than the compressed one it replaces, and that is
 correct. This one was correct, cited and short:
@@ -195,10 +203,12 @@ an instrument used to cost a query per reservation for its product, and that the
 hands each reservation the instrument already in memory; that the cancellation fee calculator, which
 copies an order detail so it can compute a fee without touching the original, now gives the copy the
 original's loaded product too; that both save queries but mean sharing an object's current state,
-unsaved changes included; and that more than the finder loads reservations this way — the admin
-reservation actions, the instrument schedule and the auto-end service — each named and cited. Only
-then: *could any of these behave differently now that it reads the caller's product rather than a
-fresh copy from the database?* Longer, and every paragraph does one job.
+unsaved changes included; and that three paths besides the finder load reservations this way, so
+they read the shared product too — counted in a clause, with the admin reservation actions, the
+instrument schedule and the auto-end service as *Look at* entries. Only then: *could any of these
+behave differently now that it reads the caller's product rather than a fresh copy from the
+database?* Longer, and every paragraph does one job; a caller that the run found *would* behave
+differently would have had its own sentence.
 
 **Three kinds of judgment, one component.** A **behavioural** checkpoint asks what the system now
 does: *is nil safe for every consumer?*, *does the new guard admit a class it used to refuse?* A
@@ -278,10 +288,12 @@ change sometimes the two lines that make it, as in a well-written engineering ar
 - **A figure carries part of the argument, so it sits in the explanation**, where the argument
   reaches it — at most one per checkpoint, of any kind, and never required (§ *Topology figures*
   owns which shape and whether one is earned). It is set like prose rather than shown like an
-  exhibit: no card, no `figcaption`. **The sentence before it is its caption** — *the old search
-  could not have found an earlier slot either, and this is why:* — and the sentence after it says
-  what follows, never a walk through the nodes the figure has just shown. A figure the explanation
-  has to narrate node by node was drawn for the wrong job.
+  exhibit: no card, no `figcaption`. **The figure replaces the paragraph that would have walked those
+  hops; it never sits between two copies of it.** The sentence before it is its caption — *the old
+  search could not have found an earlier slot either, and this is why:* — and introduces what the
+  reader is about to see without explaining it first; the sentence after it says what follows, never
+  a walk through the nodes the figure has just shown. A figure the explanation has to narrate, before
+  or after, was drawn for the wrong job.
 - **A few lines of code may sit in the explanation** when they say the idea more clearly than a
   sentence about them would — the change itself, or the invariant the argument stands on: an
   inline snippet, `excerpt.sh --inline`, at most one per checkpoint, about ten lines at the most,
@@ -311,10 +323,12 @@ narrative a second time.
   to this code learns what the checkpoint is about from it.
 - **The explanation, as prose.** It does three things, in order:
 
-  1. **Establish the situation.** What the system does here, described as behaviour. Introduce only
+  1. **Establish the situation.** What the system does here, described as behaviour — the shortest
+     account that makes the change intelligible, bounded by the checkpoint's one idea. Introduce only
      the concepts the rest of the checkpoint needs — a domain term this repository uses, what a
      method is *for* before its name is used as shorthand — and nothing the question does not turn
-     on.
+     on. This is where the reader gets to the question sooner: by a situation that stops when it is
+     enough, never by asking the question before it.
   2. **Explain what changed and why it matters.** The mechanism and its consequence, with the cause
      stated as a cause: *because*, *so*, *which means*. Say what is established as established, and
      mark what is not — the evidence tier against the clause it qualifies, and *the run could not
@@ -382,11 +396,13 @@ narrative a second time.
     bolding the same position in every checkpoint is a habit, not emphasis.
   - **Don't repeat the explanation in the question.** The question names the judgment; the prose
     above has already given the facts it rests on.
-  - **Concise, but never at the expense of clarity.** Cut what the judgment does not turn on; never
-    cut a step the reader needs to follow it.
+  - **Focused, never compressed.** Cut what the judgment does not turn on — a whole sentence, moved
+    to the evidence or dropped; never cut a step the reader needs to follow it, and never shorten by
+    packing. There is no length to reach: the bound is relevance to the judgment.
 
-  The test of the whole: it should read like an experienced engineer explaining a change to a
-  colleague, and then asking the question that matters. The draft is then revised once for voice —
+  The test of the whole: it should read like an experienced engineer explaining a change aloud to a
+  teammate who knows the stack, and then asking the question that matters — what they would say,
+  not everything they looked at. The draft is then revised once for voice —
   § *The voice pass*, below.
 - **The gap, `div.gap`, optional.** One line, labelled **GAP** and nothing else, naming what the
   tests leave open **where that changes the judgment**. It is earned by the same test as everything
@@ -598,7 +614,7 @@ A first draft is written while the run is still holding the claims, the tiers, t
 the order of the explanation, and the voice is what gives way under that load: the rules above were
 in force on a real page that still packed four relationships into one sentence. So once a
 checkpoint's facts are settled, its explanation is **revised once with one goal — that a colleague
-follows it on the first read** — the way Martin Fowler explains a design: one idea, named, carried
+follows it on the first read, as though it were said aloud to them** — the way Martin Fowler explains a design: one idea, named, carried
 through an argument whose every paragraph moves it forward. Fowler is the reference point and never
 the instruction; what is borrowed is the five habits below, never his first person, his anecdotes or
 his vocabulary.
@@ -620,6 +636,9 @@ his vocabulary.
 - **Narrow the claim with the old behaviour.** What the old code already did, said in its own
   paragraph, is what turns *the page can now fail* into *the change is confined to canceled
   reservations*.
+- **Drop the sentence that says a thing twice** — the paragraph that walks the hops the figure draws,
+  a restatement of the sentence before it. Said aloud, nobody explains the same mechanism twice. A
+  sentence that carries a claim, a link or a tier is never the one dropped.
 - **Give the unknown its own sentence, separated from what the code shows**: *The code only says
   what can be written today. Whether production still holds older rows like that is a question about
   data, and no search of the code can answer it.*

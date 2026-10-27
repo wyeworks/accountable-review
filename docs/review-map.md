@@ -57,8 +57,10 @@ does not earn omitted outright.
   verify. A question only the author can settle is asked
   the same way.
   **Each checkpoint stands alone**: jump to one from the rail and it tells you what you need of the
-  domain and the code, and which callers outside the diff the change reaches and what they now do,
-  without sending you to Context or another section first. Links there are for going deeper.
+  domain and the code, and what the callers outside the diff now do, without sending you to Context
+  or another section first. Links there are for going deeper. Standing alone is not saying
+  everything: a caller whose behaviour bears on the question gets its own sentence, the ones reached
+  the same way get a count, and the rest of what the run traced is in the evidence.
 
   They are ordered by what a reviewer would most regret misunderstanding. **That order is not a
   scale**: there is no severity word, no number beside a question, and nothing that reads as a

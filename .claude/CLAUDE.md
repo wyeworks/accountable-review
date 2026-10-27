@@ -309,9 +309,12 @@ Editing one of these means checking the others still agree.
   explanation, and the page keeps the difficulty of the judgment, not of reading. The sequence is the
   rule, never a paragraph count or a sub-heading.
 
-  **Each checkpoint stands alone.** A reader who jumps straight to one learns from it what it needs of
-  the domain, the code and *What changed*, and which unchanged callers the change reaches and what
-  they now do; a pointer to *Context*, *Impact* or another checkpoint is depth, never a step. So
+  **Each checkpoint stands alone — understandable, never exhaustive.** A reader who jumps straight to
+  one learns from it what it needs of the domain, the code and *What changed*, and what the unchanged
+  callers it reaches now do — a sentence for a caller whose behaviour bears on the judgment, a count
+  for the ones reached the same way, their list in the evidence; a pointer to *Context*, *Impact* or
+  another checkpoint is depth, never a step. The trail the run walked and framework internals are
+  evidence unless they change the question, and a figure replaces the prose that would walk it. So
   background is repeated into a checkpoint on purpose, while the finding and the question keep one
   home — the *Six sections* bullet below. Under `--mentor` the checkpoint reads complete without its primer,
   and the primer is kept whole as teaching material. `report-format.md` § *The review checkpoint*

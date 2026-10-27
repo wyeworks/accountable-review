@@ -874,12 +874,14 @@ judgment's own difficulty is the one to keep. Write it as an experienced enginee
 change to a colleague who knows the stack and not this codebase: the behaviour before the identifier,
 two plain sentences rather than one compressed one, the precise mechanism kept rather than smoothed
 into *the existing logic handles it*, and nothing the reader has to fetch from another section to
-follow the argument. **Each checkpoint stands alone**: a reviewer who jumps straight to it learns
-from it what it needs of the domain, the code and *What changed*, and when the change reaches
-unchanged callers or something a user sees, the checkpoint names them and says what they now do. A
-pointer to *Context*, the impact panel or another checkpoint is depth, never a step of the argument.
-Repeat a little background when standing alone takes it; what keeps one home is the finding and the
-judgment. Self-contained is not exhaustive — what this concern needs, not everything step 5 found.
+follow the argument. **Each checkpoint stands alone — understandable, never exhaustive**: a reviewer
+who jumps straight to it learns from it what it needs of the domain, the code and *What changed*, and
+when the change reaches unchanged callers or something a user sees, the checkpoint says what they now
+do — a sentence for a caller whose behaviour bears on the judgment, a count and a clause for the ones
+reached the same way, their list in the evidence. A pointer to *Context*, the impact panel or another
+checkpoint is depth, never a step of the argument. Repeat a little background when standing alone
+takes it; what keeps one home is the finding and the judgment. Write what you would say aloud to a
+teammate, not everything step 5 found.
 **Then separate the narrative from its proof — by purpose, not by format.** Everything down to the
 review question reads continuously — no collapsed excerpt, no walk through files, and citations only
 where a sentence resting on unchanged code keeps one beside its tier, or a claim about an untouched
@@ -945,13 +947,18 @@ a node nobody traced.
 
 Diagram and prose have different jobs. The figure says how the value gets there, or which paths must
 hold; the explanation says what the reader has to judge about it. **An explanation that walks the
-figure node by node is the defect** — it doubles the length and teaches nothing twice, and it is what a
-run reaches for when it is unsure the figure landed. The figure sits in the explanation, set like
+figure node by node is the defect**, before it as much as after — it doubles the length and teaches
+nothing twice, and it is what a run reaches for when it is unsure the figure landed. The figure
+replaces the paragraph that would have walked those hops. It sits in the explanation, set like
 prose with no card and no `figcaption`: the sentence before it says what the reader is about to see,
 and the sentence after it states the upshot — which path skips the invariant, what the guard order
 lets through.
 
-**7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it:
+**7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it — and
+**split it first**: what the explanation carries is what the question turns on; everything else the
+run found that substantiates it — the trail it walked, the callers that behave the same way, the
+framework internals — is a *Look at* entry. Decide that here, before the draft: step 10 holds the
+landed explanation to the draft's links and tiers, so nothing moves from prose to evidence after it.
 
 - Which citations are load-bearing for the judgment. Those get a collapsed excerpt in the *Look at*
   entry they confirm, inside the checkpoint's supporting evidence, generated in step 9. A claim in the
@@ -1263,7 +1270,8 @@ Everything else about writing holds at every stage:
   turns on, stated and never graded. `report-format.md` § *The review checkpoint* and § *A citation
   inside the narration* own both.
 - **Draft, revise for voice, then land it.** Write each checkpoint's explanation, GAP and review
-  question — and *What changed*'s prose at stage 1 — to `$W/voice/<section id>.html` first, then
+  question — and *What changed*'s prose at stage 1 — to `$W/voice/<section id>.html` first, from the
+  split 7g made, then
   revise the explanation once as `report-format.md` § *The voice pass* says, carrying the idea 7f
   named; the revision is what the `Edit` replacing the stub lands. The GAP, the question and the
   supporting evidence land as drafted. The draft carries the figure and the inline snippet in their
