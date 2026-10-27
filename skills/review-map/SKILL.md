@@ -1244,6 +1244,11 @@ Everything else about writing holds at every stage:
   figure's box captions, a primer's prose about `ActiveModel::Dirty` — is a claim about a file, and a
   claim copied out of a specimen is a false claim nothing catches. Type a topology figure only from
   its `agenda.md` block, and the shift from the one step 7k wrote.
+- **Prose reads as prose.** In an explanation, *What changed* and a GAP, a citation is the phrase
+  that makes the claim, linked as `a.ref` — never `(path:line)` mid-sentence, which the reader
+  decodes and skips. The paragraph's one `<strong>`, if it has one, is the sentence the judgment
+  turns on, stated and never graded. `report-format.md` § *The review checkpoint* and § *A citation
+  inside the narration* own both.
 - **Figures are components, and there is no `<svg>` on this page.** A component reflows, has no
   canvas to overflow and cannot be drawn wrong; the only thing left to get wrong is whether the edges
   are true. A chain that lands in unchanged code is an impact path, drawn once in section 05.
@@ -1460,7 +1465,8 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
 
 ## Hard rules
 
-- Every claim carries a `file:line`, linked when a link is possible.
+- Every claim carries a `file:line`, linked when a link is possible — in prose, as the claim itself
+  linked (`a.ref`) rather than a path in parentheses.
 - **Never grade the PR.** No approval recommendation, no risk score, no confidence percentage, no
   "looks good". The reviewer decides; the page equips them. Evidence, relationships, invariants,
   uncertainty, and validation steps are the output — verdicts are not. **The checkpoints are ordered

@@ -474,9 +474,10 @@ end
 
 unless external.empty?
   # A doc link is provenance. The claim it decorates still has to cite this repository, so the
-  # element carrying the link needs a file:line — its own, not one from elsewhere on the page.
+  # element carrying the link needs a file:line — its own, not one from elsewhere on the page. In
+  # prose that citation is the claim linked, an a.ref, whose href is the file:line.
   alone = RailsAnchors.link_blocks(page.lines).count do |block|
-    next false if block.include?('class="path"') || block.include?('class="cite"')
+    next false if block.include?('class="path"') || block.include?('class="cite"') || block.include?('class="ref"')
 
     # A bare path:line with no anchor counts too — that is the rung-3 and rung-4 form.
     !block.match?(RailsAnchors::FILE_LINE)

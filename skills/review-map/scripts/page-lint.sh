@@ -29,7 +29,9 @@
 # elements. A card's why (p.ip-why) may not carry a citation — its nodes' locators are its
 # citations — so it is never held to `uncited`. A citation's path comes from its blob href when
 # the link text is short (`oauth.rb:35`); a diff-form href names no path and is a changed file by
-# definition; plain text is matched on its suffix.
+# definition; plain text is matched on its suffix. A citation woven into the prose — `a.ref`, whose
+# text is the claim rather than a path (report-format.md § Deep links) — is read from its href
+# alone, because its text names no file.
 #
 # The changed set is `git diff --name-only BASE...HEAD` when --repo and --base are given, else the
 # page's own ledger (the data-path cells). With neither there is nothing to hold a label against,
@@ -190,18 +192,30 @@ function in_diff(attrs, text,   path, k, p) {
   for (p in changed) { k = length(p) - length(path); if (k > 0 && substr(p, k) == "/" path) return 1 }
   return 0
 }
-function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, unc, m, tag_end, pa, la, pe, inner, e) {
+function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, unc, m, tag_end, pa, la, pe, pr, lr, inner, e) {
   outside = 0; inside = 0; any = 0
   rest = s
-  # Two citation forms. An a.path carries its text directly. An excerpt summary location is a
-  # span.ex-loc whose first child is the link (excerpt.sh: <span class="ex-loc"><a class="cite"
-  # href="…">path:line</a></span>), or the plain text on an unlinked rung — so the span is taken
-  # whole, its href from the inner <a> and its text with the tags stripped. Reading it as an
-  # element with empty text made every entry whose citation is an excerpt read as uncited.
+  # Three citation forms. An a.path carries its text directly. An a.ref is a phrase of the prose
+  # linked, so only its opening tag is read: the href is the citation and the text, which may hold
+  # a <code>, names no file. An excerpt summary location is a span.ex-loc whose first child is the
+  # link (excerpt.sh: <span class="ex-loc"><a class="cite" href="…">path:line</a></span>), or the
+  # plain text on an unlinked rung — so the span is taken whole, its href from the inner <a> and
+  # its text with the tags stripped. Reading it as an element with empty text made every entry
+  # whose citation is an excerpt read as uncited.
   while (1) {
     pa = match(rest, /<a class="path[^"]*"[^>]*>[^<]*</) ? RSTART : 0; la = RLENGTH
+    pr = match(rest, /<a class="ref"[^>]*>/) ? RSTART : 0; lr = RLENGTH
     pe = index(rest, "<span class=\"ex-loc\">")
-    if (!pa && !pe) break
+    if (!pa && !pe && !pr) break
+    if (pr && (!pa || pr < pa) && (!pe || pr < pe)) {
+      attrs = substr(rest, pr, lr); rest = substr(rest, pr + lr)
+      # A linked phrase is a citation even when its href cannot be placed in or out of the diff.
+      any = 1
+      v = in_diff(attrs, "")
+      if (v < 0) continue
+      if (v) inside = 1; else outside = 1
+      continue
+    }
     if (pa && (!pe || pa < pe)) {
       m = substr(rest, pa, la); rest = substr(rest, pa + la)
       tag_end = index(m, ">")

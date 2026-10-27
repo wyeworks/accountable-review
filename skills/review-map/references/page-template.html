@@ -121,7 +121,7 @@
                             --primer-* is the fifth ramp and the only one that
                             means nothing: it is one component's frame
     shell, rail ........... .wrap, main, .progress, and the sticky numbered rail
-    type .................. headings, .lede, .note, .lbl, .path, .cite, code
+    type .................. headings, .lede, .note, .lbl, .path, .cite, a.ref, code
     section furniture ..... .eyebrow — a label and a rule that fills the row
     before / after ........ dl.ba — two rows, never one paragraph. Section 01
                             only, and only when a workflow fundamentally changed
@@ -382,6 +382,11 @@ h3 code, h4 code { font-size: .72em; }
    underline is slate, because the underline is the part that says "clickable" and
    an off-family hairline here is exactly what --accent-line was. */
 a.path, a.cite { text-decoration-color: var(--nav-rule); }
+/* A citation woven into the prose: the claim itself is the link, so it reads as a sentence and
+   not as a filename. It keeps the prose ink — a run of slate across a clause would outshout the
+   argument it carries — and says "clickable" with the slate underline alone, as a.path does. */
+a.ref { color: inherit; text-decoration-color: var(--nav-rule-2); }
+a.ref:hover { color: var(--nav-ink-hi); text-decoration-color: currentColor; }
 
 /* The uppercase mono micro-label. The most-used device in this system:
    it is how a field, a section and a legend all announce themselves. */
@@ -1494,6 +1499,18 @@ figcaption strong { color: var(--ink-3); }
            <a class="path" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a>
 
        — which is why they are written as two placeholders and not as one {{LINES}}.
+
+       IN THE EXPLANATION THE CITATION IS THE CLAIM, LINKED. A checkpoint explanation,
+       section 1 and a GAP line read as prose, and a path in parentheses is a filename
+       the reader has to decode mid-sentence. So there the link wraps the shortest
+       phrase that makes the claim, and the href carries the file and the span:
+
+           <a class="ref" href="{{BLOB}}#L{{START}}-L{{END}}">{{THE_PHRASE_THAT_MAKES_THE_CLAIM}}</a>
+
+       Same two URL forms, chosen the same way. The full path stays where the path IS
+       the information — a Look at entry, an excerpt, a figure locator, the reading
+       path, the Affected lists, the foot. On a rung with nothing clickable there is no
+       phrase to link: the sentence keeps a short <code>file.rb:46</code> after it.
        Repeat the side letter on both ends and keep both ends on the same side: R is
        the right of the hunk, L the left, and a range starting left and ending right
        is not addressable. A renderer that ignores the range lands the reader at its
@@ -1882,8 +1899,16 @@ figcaption strong { color: var(--ink-3); }
         <span class="lbl lbl-wide">Checkpoint A</span>
         <h3>{{THE_BEHAVIOUR_THIS_JUDGMENT_IS_ABOUT}}</h3>
 
+        <!-- THE EXPLANATION READS AS PROSE. A citation is the claim linked (a.ref, see
+             CITATION LINKS above), never a path in parentheses; the tier sits beside the
+             phrase it qualifies. At most one <strong> per paragraph, on the sentence the
+             judgment turns on — a mechanism or a consequence, stated. Never on a severity
+             word, never in the review question or the GAP, whose labels already set them
+             apart. report-format.md § The review checkpoint, The writing. -->
         <p>{{WHAT_THE_SYSTEM_DOES_HERE_AND_THE_CONCEPTS_NEEDED_TO_FOLLOW_IT}}</p>
-        <p>{{WHAT_THE_CHANGE_DID_TO_IT_AND_WHAT_FOLLOWS_BECAUSE_OF_IT}} {{WHAT_IS_ESTABLISHED_AND_WHAT_IS_NOT}}</p>
+        <p>{{WHAT_THE_CHANGE_DID_TO_IT}} <strong>{{THE_CONSEQUENCE_THE_JUDGMENT_TURNS_ON}}</strong>
+          {{WHY_IT_FOLLOWS}}: <a class="ref" href="{{BLOB}}#L{{START}}-L{{END}}">{{THE_UNCHANGED_FACT_IT_RESTS_ON}}</a>
+          <span class="tier tier-unc">from unchanged code</span>. {{WHAT_IS_ESTABLISHED_AND_WHAT_IS_NOT}}</p>
 
         <!-- THE REVIEW QUESTION, ALWAYS, AND LAST IN THE EXPLANATION. The judgment
              the prose above was leading to: one question, naming the assumption,
@@ -2126,8 +2151,8 @@ post.saved_change_to_title?  # =&gt; true</pre>
 
       <!-- ===== A CHECKPOINT WITHOUT A FIGURE, which is the ordinary shape. The
            doc link sits inside the sentence it explains, and the sentence still
-           carries its own file:line: a link with no citation beside it is an
-           unevidenced claim wearing one. At most one doc link per checkpoint.
+           carries its own citation, a linked phrase: a doc link with no citation
+           beside it is an unevidenced claim wearing one. At most one doc link per checkpoint.
 
            THE VERSION IS NOT PART OF THE URL — it is substituted per run from this
            app's own lock file. The catalogue stores the path without it. The value
@@ -2137,7 +2162,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
 
            ELIXIR: read elixir-docs.md § Version FIRST. That catalogue is closed
            until a verification run opens it, so today a Phoenix page omits the doc
-           link entirely and the sentence keeps only its file:line and its tier. The
+           link entirely and the sentence keeps only its citation and its tier. The
            probe is unaffected, and is what those pages anchor with. rust-docs.md is
            open, and a Rust link pins per crate and per toolchain. ===== -->
       <section class="cp" id="cp-b">
@@ -2146,7 +2171,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
 
         <p>{{WHAT_THE_SYSTEM_DOES_HERE_IN_ONE_PLAIN_SENTENCE}}</p>
 
-        <p>Bulk writes at <a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> never run this
+        <p><a class="ref" href="{{BLOB}}#L{{LINE}}">The nightly import&#39;s bulk write</a> never runs this
           validation &mdash; <a class="doc" href="https://api.rubyonrails.org/v{{RAILS_SERIES}}/classes/ActiveRecord/Relation.html#method-i-update_all">update_all</a>
           skips validations and callbacks. {{WHAT_THAT_MEANS_FOR_THE_ROWS_THIS_PR_TOUCHES}}
           <span class="tier tier-unc">from unchanged code</span></p>

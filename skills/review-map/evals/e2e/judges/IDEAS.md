@@ -71,6 +71,17 @@ grade and left to the reviewer; `checkpoint-claims` opens every cited line. Five
   walk through the files its entries cite. The gold page and `make-defects.rb` also predate the
   evidence block, so both are regenerated in the new shape. Recalibrate once moved.
 
+- **A citation can be the claim, linked.** In prose the citation is an `a.ref` whose text is the
+  claim and whose href carries the file and span (`report-format.md` § *A citation inside the
+  narration*). `evidence.md`'s *an untouched line of a changed file is cited* and *reads complete
+  with every block shut* name only `a.path` and an excerpt's location, so they would read an
+  `a.ref`-cited claim as uncited; `checkpoint-claims.md`'s *every explanation is true* should open
+  an `a.ref`'s href range as it opens an entry's. Both move with the gold page above, in one
+  recalibration. A voice criterion goes beside them: no explanation carries a `(path:line)` aside
+  where a link was possible, and each `<strong>` marks a sentence the judgment turns on and grades
+  nothing. Defects: restore a parenthesised path mid-sentence; bold *the important part* of a
+  checkpoint.
+
 - **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
   decision in the repository, or a convention on the lens file's closed stack list — asks rather
   than answers, raises nothing the repository has itself settled on, is ranked after every

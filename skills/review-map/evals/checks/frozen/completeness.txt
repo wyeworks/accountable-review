@@ -574,6 +574,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page impact-unlabelled-edge.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment impact-why-citation-ref.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page impact-why-citation-ref.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment impact-why-citation.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -806,6 +812,18 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page links-collapsed-no-excerpt.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment links-collapsed-ref-no-excerpt.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page links-collapsed-ref-no-excerpt.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment links-collapsed-ref.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page links-collapsed-ref.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment links-range-truncated.html

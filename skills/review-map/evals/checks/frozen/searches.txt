@@ -766,6 +766,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-why-citation-ref.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-why-citation-ref.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-why-citation.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
@@ -1075,6 +1083,22 @@ exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-collapsed-ref-no-excerpt.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-collapsed-ref-no-excerpt.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-collapsed-ref.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-collapsed-ref.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded

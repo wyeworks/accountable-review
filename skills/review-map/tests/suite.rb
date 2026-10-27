@@ -34,6 +34,7 @@
 # EVERY RECORDED SEARCH IN THIS SUITE IS A grep, AND NONE MAY BE AN rg. GitHub's runners have no
 # ripgrep, so a fixture recording an rg search is a row asserting that ripgrep is installed.
 
+require "digest"
 require "fileutils"
 require "open3"
 
@@ -907,6 +908,18 @@ class ReviewMapSuite
     assert_eq rows(out, /^cp\tcp-c\tcarry\t-$/), 1, "api/Gemfile in the delta does not match api/Gemfile.lock on the page"
     assert_eq rows(out, /^ctx\tLock & bundle\tcarry\t-$/), 1, "and a Context entry citing api/Gemfile.lock is carried by the same boundary"
 
+    # A citation woven into the prose shows a claim and keeps its file in the href: a blob href
+    # spells the path, a diff href only its sha256. Either one citing the delta file is a redo — a
+    # carry here is a checkpoint that turns on the changed file, never re-read.
+    hash = Digest::SHA256.hexdigest("app/queries/active.rb")
+    cpage(NOHIT, <<~REFS)
+      <section class="cp" id="cp-r1"><h3>R1</h3><p>The <a class="ref" href="https://github.com/o/r/blob/#{"0" * 40}/app/queries/active.rb#L1">scope filters on status</a>.</p></section>
+      <section class="cp" id="cp-r2"><h3>R2</h3><p>The <a class="ref" href="https://github.com/o/r/pull/1/files#diff-#{hash}R1">scope now filters on status</a>.</p></section>
+    REFS
+    out, = plan("--prev-head", cprev, "--base", cbase, "--head", chead)
+    assert_eq rows(out, %r{^cp\tcp-r1\tredo\tcites app/queries/active\.rb$}), 1, "a linked phrase whose blob href names a delta path is re-derived"
+    assert_eq rows(out, %r{^cp\tcp-r2\tredo\tcites app/queries/active\.rb$}), 1, "and so is one whose diff href hashes to it"
+
     # Back to the first scenario, because the rows below read its plan.
     cpage(NOHIT)
     out, = plan("--prev-head", cprev, "--base", cbase, "--head", chead)
@@ -1160,6 +1173,23 @@ class ReviewMapSuite
     r = lint(path("href.html"))
     assert_eq count(r.out, "WARN"), 1, "a citation's path is read from its href, a diff href is changed, plain text matches on its suffix"
     assert_eq count(r.out, "other.rb:3"), 1, "and the one WARN names the file outside the ledger"
+
+    # A citation woven into the prose is an a.ref: its text is the claim, so the path comes from
+    # the href alone. Three sentences, one per answer — a diff href over a phrase holding a <code>
+    # (changed, untiered: clean), a blob href outside the ledger with no tier (unlabelled), and a
+    # blob href inside it under the unchanged label (on-changed).
+    write(path("ref.html"), <<~HTML)
+      <section class="cp" id="cp-a">
+        <p>The <a class="ref" href="https://github.com/o/r/pull/1/files#diff-abc">column is now set in <code>save</code></a>. The <a class="ref" href="https://github.com/o/r/blob/0123abcd/lib/other.rb#L3">helper reads it unguarded</a>. The <a class="ref" href="https://github.com/o/r/blob/0123abcd/app/models/project.rb#L9">validator beside it</a> accepts nil <span class="tier tier-unc">from unchanged code</span>.</p>
+      </section>
+      <details class="evidence"><summary>Evidence</summary><div class="gt gt-paths">
+      <div class="c" data-path="app/models/project.rb">app/models/project.rb</div>
+      </div></details>
+    HTML
+    r = lint(path("ref.html"))
+    assert_eq count(r.out, "WARN  unlabelled"), 1, "a linked phrase is a citation read from its href: one outside the diff with no tier is unlabelled"
+    assert_eq count(r.out, "WARN  on-changed"), 1, "and one over a changed file under the unchanged label is on-changed"
+    assert_eq count(r.out, "WARN"), 2, "while a diff-form phrase holding a code chip is changed code, and clean"
 
     # A card's why may not carry a citation — impact-paths.rb holds that line — so its unchanged-code
     # label is never the uncited shape. The same label in a paragraph is.

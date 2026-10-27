@@ -894,6 +894,12 @@ SKIP  no excerpts in this input
 ## --page impact-unlabelled-edge.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment impact-why-citation-ref.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-why-citation-ref.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment impact-why-citation.html
 exit=0
 SKIP  no excerpts in this input
@@ -1406,6 +1412,18 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment links-collapsed-ref-no-excerpt.html
+exit=0
+SKIP  no excerpts in this input
+## --page links-collapsed-ref-no-excerpt.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment links-collapsed-ref.html
+exit=0
+SKIP  no excerpts in this input
+## --page links-collapsed-ref.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment links-range-truncated.html

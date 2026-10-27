@@ -312,7 +312,14 @@ Editing one of these means checking the others still agree.
   **Narrative first, proof beneath it.** The explanation reads continuously and complete with the
   evidence shut: no excerpt, no figure, no walk through files, and a citation only where a sentence
   resting on unchanged code keeps it beside its tier, because `page-lint.sh` holds a tier to a
-  citation in its sentence. What a reviewer needs to understand or challenge the change is
+  citation in its sentence. **That citation is the claim, linked** — `a.ref`, its href the file and
+  span, never a `(path:line)` aside the reader decodes mid-argument — and the paragraph's one
+  `<strong>` marks the sentence the judgment turns on, never a grade. `page-lint.sh`,
+  `link-form.rb`, `rails-anchors.rb` and `carry-plan.sh` read an `a.ref`'s file from its href
+  alone — a diff href by its hash — behind `tests/run.rb` rows, `self-test.rb` mutations and the
+  `golden/links-collapsed-ref*` fixtures, and `impact-paths.rb` refuses one in a `p.ip-why`
+  (`golden/impact-why-citation-ref.html`); `report-format.md`
+  § *A citation inside the narration* owns the form and the plain-text rungs. What a reviewer needs to understand or challenge the change is
   explanation, uncertainty and test gaps included; what they need to substantiate it is evidence,
   one click from the question rather than in the foot, and it never retells the narrative. The block
   carries no count, which would read as thoroughness.

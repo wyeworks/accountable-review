@@ -293,7 +293,12 @@ narrative a second time.
      stated as a cause: *because*, *so*, *which means*. Say what is established as established, and
      mark what is not — the evidence tier against the clause it qualifies, and *the run could not
      tell whether…* in a plain sentence where something is unknown. The reader should never have to
-     work out which parts the run has already settled and which are left to them.
+     work out which parts the run has already settled and which are left to them. **A fact earns its
+     place by what it does to the judgment, so say that too**: a side effect, a disappeared write or
+     a caller the change reaches is followed by what would observably differ — or by why nothing
+     would. *One side effect disappears with the skipped work: unsaved reservations no longer
+     collect on the product* stops where the reader most needs it to go on; *…and nothing on this
+     path reads that collection, so nothing a user sees moves* finishes it.
   3. **Lead into the question** — the explanation stops where the reader has what they need to
      judge, and the review question takes it from there.
 
@@ -308,7 +313,10 @@ narrative a second time.
     relationships — *the preload takes two routes to each instrument: through the order detail, for
     the facility link and the offline warning, and through the reservation, for the action links* —
     is short and expensive. Two sentences that each carry one or two are longer and cheaper to read.
-    Brevity bought by conceptual compression moves the work onto the reader.
+    Brevity bought by conceptual compression moves the work onto the reader. **A proof chain is
+    where it happens most**, because each step is short: *rounding only adds minutes, a conflict only
+    moves the candidate later, and the next day starts after this one ends* is three premises the
+    reader has to hold at once. One premise per sentence, then the conclusion in its own.
   - **Keep the precision; add the plain sentence rather than swapping it in.** Plain is not vague.
     *The existing logic already rejects any slot that is not earlier* is readable and unverifiable;
     *the finder only proposes slots starting at or after `after`, and the guard the change kept drops
@@ -325,6 +333,25 @@ narrative a second time.
     — when the behaviour can be said directly. Name code where naming it helps, as `<code>`;
     citations belong in the evidence block, except the one a sentence resting on unchanged code
     keeps beside its tier, because that tier names its source (§ *Evidence tiers*).
+  - **Link the claim, never a path in parentheses.** Where the explanation does cite, the link is
+    the shortest phrase that makes the claim — *the order detail’s
+    `<a class="ref">product association is not polymorphic</a>`* — and the href carries the file
+    and the span. A `(app/models/order_detail.rb:46)` aside is a filename the reader decodes in the
+    middle of the argument and then skips, and six of them in two paragraphs is the investigation
+    log back by another route. Link a noun phrase or a clause, never a whole sentence, never *here*
+    or *this line*; a sentence that needs three locations is a sentence for the evidence block. The
+    tier stays against the linked phrase it qualifies. The full path keeps its place where the path
+    *is* the information — a *Look at* entry, an excerpt, a figure locator, the reading path, the
+    *Affected, not changed* lists, the foot. § *Deep links* owns the URL and the rung with nothing
+    to link.
+  - **Bold the sentence the judgment turns on.** `<strong>` marks the mechanism or the consequence a
+    reader skimming the checkpoint must not miss, so the argument can be followed by its bold lines
+    alone: *a single such row anywhere on the page would fail the whole page, before anything
+    renders*. At most one per paragraph, a clause or a sentence and never a lone word. **Bold
+    states; it never grades** — not on *critical*, *dangerous* or *the important part*, which are
+    the severity chip set in heavier type, and never inside the review question or the GAP, whose
+    labels already set them apart. A paragraph with nothing a reader must not miss has no bold, and
+    bolding the same position in every checkpoint is a habit, not emphasis.
   - **Don't repeat the explanation in the question.** The question names the judgment; the prose
     above has already given the facts it rests on.
   - **Concise, but never at the expense of clarity.** Cut what the judgment does not turn on; never
@@ -1249,7 +1276,7 @@ fact is the point, the prose says it: *"the validator beside it, which this chan
 **No label is not no citation.** Silence means *the diff shows this*, and for an untouched line of a
 changed file the diff view does not: the reader can only check the claim if the page hands them the
 line. So the citation is the label's replacement and is just as required — an `a.path` or an
-excerpt's summary location **at the claim**, in the open page. A line in the search record does not
+excerpt's summary location, or the claim itself linked (`a.ref`), **at the claim**, in the open page. A line in the search record does not
 count, because the record is shut; neither does a citation elsewhere on the page to a different
 range of the same file. Before writing a sentence about what an untouched method of a changed file
 does — what a validator accepts, which inputs a resolver returns early for, what a preset list
@@ -1968,7 +1995,9 @@ the behaviour, its own `p.ip-why`, its own `.ip-lanes`, and one `ol.ip-path`.
 
 **Every card opens with one `p.ip-why`**, between the `.ip-hd` and the lanes — one or two sentences,
 at most about 45 words, saying what goes wrong and to whom, and ending in a pointer at the checkpoint
-that judges it.
+that judges it. **Reach is not a consequence**: *the calculator also sets the cost saved on a real
+cancellation* says where the change goes; *a fee computed against an unsaved product edit would be
+the one charged* says what goes wrong there, and is the sentence the card owes.
 
 ```html
 <p class="ip-why">Events created before this migration can carry a null location, and the
@@ -2579,7 +2608,9 @@ miscounted first screen, and the reader who adds it up stops trusting the number
 **Then one paragraph, 80 to 160 words, and at most a handful of bullets.** What problem this solves,
 what is now true that was not, who is affected. Derived from the code, the tests and the commits —
 the PR description is a claim and is attributed when it is used, per `SKILL.md` step 4. Carry an
-evidence tier on the intent itself if it is inferred rather than stated.
+evidence tier on the intent itself if it is inferred rather than stated. Where it cites, it cites the
+way a checkpoint's explanation does — the claim linked, never a path in parentheses — and its bold,
+if any, follows the same rule (§ *The review checkpoint*).
 
 **It may say a test was added; it never says the tests cover the change.** *Pin each of them*,
 *covered by specs*, *both behaviours are tested* — each is a sentence about how well the change is
@@ -2762,7 +2793,10 @@ five checkpoints per independent delta *What changed* names, under the ceiling �
 sets; § *The review checkpoint* owns every rule about them, the count included.
 
 The section itself carries only a heading and one sentence saying what these turn on and that the
-order is the order to think about them. Then the checkpoints, in ranked order. No caveat under the
+order is the order to think about them. **The sentence describes the order; it never ranks one
+checkpoint above the rest** — *starting with the one that could take the whole page down* calls the
+first checkpoint the important one, which is the severity scale § *The review checkpoint* forbids,
+arriving as an introduction. Then the checkpoints, in ranked order. No caveat under the
 heading — see § *The review checkpoint* for where that sentence went and what stayed behind.
 
 ---
@@ -2992,6 +3026,23 @@ Pin a SHA rather than a branch in either form, so links stay correct after later
 That includes the one citation inside a figure: a node's `a.path.ip-loc` has already had the question
 answered by its kind — `.ip-chg` is changed code and takes the diff anchor, `.ip-aff` and `.ip-step`
 are not and take the blob. § *Chains* carries that table.
+
+### A citation inside the narration
+
+In prose a reader reads straight through — a checkpoint's explanation, *What changed*, a GAP — the
+citation is **the claim, linked**: `<a class="ref" href="…">the phrase that makes the claim</a>`.
+The text says what is true; the href says where, in exactly the forms above, chosen by the line, with
+the range in the href when the claim spans one. Nothing about the URL changes, only what the reader
+sees: a sentence instead of a filename. § *The review checkpoint* owns where one is written and how
+long the phrase is.
+
+Every reader of a citation takes an `a.ref`'s file from its href, never from its text, because the
+text names no file: `page-lint.sh` holds its tier to the changed set that way, and
+`evals/checks/link-form.rb`'s routing and excerpt rules read the same href.
+
+**On rungs 3 and 4 there is nothing to link**, so there is no `a.ref`: the phrase stays plain and the
+sentence keeps a short `<code>order_detail.rb:46</code>` after it, the one place a path still
+interrupts the prose, because with no link it is the only way a reader can find the line.
 
 ### Every off-page link opens in a new tab
 

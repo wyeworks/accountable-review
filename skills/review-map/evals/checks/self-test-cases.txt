@@ -30,6 +30,7 @@
 # linking somewhere real — which is the shape every regression in this repository arrives in.
  impact-paths       | impact-no-why.html            | 1 | p.ip-why for 2 .ip-card(s)
  impact-paths       | impact-why-citation.html      | 1 | carrying a citation or a list
+ impact-paths       | impact-why-citation-ref.html  | 1 | carrying a citation or a list
  impact-paths       | impact-why-variant-class.html | 1 | carrying a citation or a list
  impact-paths       | impact-missing-loc.html       | 1 | no locator on path 1 node 3
  impact-paths       | impact-loc-on-outcome.html    | 1 | a behaviour and not a file
@@ -325,8 +326,10 @@
  link-form          | links-clean.html                | 0 | no citation anchors into one       | --repo @REPO@ --base @REPO_BASE@
  link-form          | links-range-truncated.html      | 1 | names a range and links only       | --repo @REPO@ --base @REPO_BASE@
  link-form          | links-collapsed-anchor.html     | 1 | will not render                    | --repo @REPO@ --base @REPO_BASE@
+ link-form          | links-collapsed-ref.html        | 1 | will not render                    | --repo @REPO@ --base @REPO_BASE@
  link-form          | links-unknown-anchor.html       | 1 | hash to no path in                 | --repo @REPO@ --base @REPO_BASE@
  link-form          | links-collapsed-no-excerpt.html | 0 | with no excerpt to make up for it  | --repo @REPO@ --base @REPO_BASE@
+ link-form          | links-collapsed-ref-no-excerpt.html | 0 | with no excerpt to make up for it | --repo @REPO@ --base @REPO_BASE@
 # And the two answers that are not verdicts. The first is an ordinary fragment at rungs 3 and 4,
 # where there is nothing to route; the second is git asked and unable to answer, which read as
 # "no file is withheld" until diff-render.sh grew a ref guard — the reassuring output, on no

@@ -42,7 +42,9 @@ does not earn omitted outright.
   matters, and only then asks the question, in a box labelled *Review question*: *Does the filter
   still hide archived projects for every caller?* The explanation reads straight through: no code
   excerpts, no diagrams, no tour of files, and anything that would change your judgment — a test
-  that leaves the boundary open, something the run could not establish — is said there. The proof
+  that leaves the boundary open, something the run could not establish — is said there. Where a
+  sentence cites code, the claim itself is the link rather than a file path in parentheses, and the
+  one sentence in a paragraph the judgment turns on is set in bold. The proof
   sits under the question in a closed *Supporting evidence* block: one to four places to look, each
   a short title, a clause and its citation, and, when the judgment turns on steps prose cannot hold,
   one small figure of the shape it has — a chain for a mechanism, several paths converging on one

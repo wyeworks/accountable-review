@@ -372,6 +372,15 @@ CASES = [
            section: :carry_plan, expect: "a recorded search with a context window is replayed rather than refused"),
 
   # The substring trap. Without the token boundaries api/Gemfile matches inside api/Gemfile.lock.
+  # A linked phrase keeps its file in the href, so a carry rule reading only visible text carries a
+  # checkpoint that turns on the changed file — once per href form.
+  Case.new(desc: "a linked phrase's blob href is not read as a path", file: CARRY,
+           edit: sed(%q<  body=$(printf '%s' "$1" | sed 's#/blob/[0-9a-f]\{7,40\}/# #g')>, '  body=$1'),
+           section: :carry_plan, expect: "a linked phrase whose blob href names a delta path is re-derived"),
+  Case.new(desc: "a linked phrase's diff href is not hashed against the delta", file: CARRY,
+           edit: sed('grep -qF "#diff-$h"', 'grep -qF "#diff-x$h"'),
+           section: :carry_plan, expect: "and so is one whose diff href hashes to it"),
+
   Case.new(desc: "the path test is a substring match rather than a whole token", file: CARRY,
            edit: sed(%r{^BOUND='\[\^A-Za-z0-9\._/-\]'$}, "BOUND=''"),
            section: :carry_plan, expect: "api/Gemfile in the delta does not match api/Gemfile.lock on the page"),
@@ -511,6 +520,12 @@ CASES = [
   Case.new(desc: "page-lint.sh stops resolving a citation to the changed set", file: LINT,
            edit: sed("  if (path in changed) return 1", "  return 0"),
            section: :page_lint, expect: "a citation's path is read from its href, a diff href is changed, plain text matches on its suffix"),
+
+  # The linked phrase is no longer a citation, so a claim woven into the prose resting on a file
+  # outside the diff carries no tier and nothing notices.
+  Case.new(desc: "page-lint.sh stops reading a linked phrase as a citation", file: LINT,
+           edit: sed('    pr = match(rest, /<a class="ref"[^>]*>/) ? RSTART : 0; lr = RLENGTH', "    pr = 0"),
+           section: :page_lint, expect: "a linked phrase is a citation read from its href: one outside the diff with no tier is unlabelled"),
 
   # The on-changed shape is dropped, so a label on changed code passes.
   Case.new(desc: "page-lint.sh stops warning on from-unchanged-code over changed files", file: LINT,
