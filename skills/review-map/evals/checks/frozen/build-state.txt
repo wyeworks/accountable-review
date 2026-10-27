@@ -226,10 +226,22 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-reactdocs-unpinned.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-repo-tree-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-repo-tree-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-runner-mutates.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-runner-mutates.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-tree-tag-uncatalogued.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-tree-tag-uncatalogued.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-uncatalogued-url.html

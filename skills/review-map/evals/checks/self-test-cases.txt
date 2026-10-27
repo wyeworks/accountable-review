@@ -172,6 +172,8 @@
  excerpts           | excerpt-overlap-clean.html    | 0 | no two excerpts quote overlapping lines
  rails-anchors      | anchors-clean.html            | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-uncatalogued-url.html | 1 | in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md, react-docs.md) | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-repo-tree-clean.html  | 0 | all from the catalogue            | --repo @GOLD@/searches-repo
+ rails-anchors      | anchors-tree-tag-uncatalogued.html | 1 | in no catalogue (references/rails-docs.md, elixir-docs.md, rust-docs.md, react-docs.md) | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-unpinned-link.html    | 1 | unpinned Rails doc link           | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-mixed-series.html     | 1 | different Rails series            | --repo @GOLD@/searches-repo
  rails-anchors      | anchors-link-alone.html       | 1 | with no file:line beside them     | --repo @GOLD@/searches-repo

@@ -364,10 +364,22 @@ SKIP  no .impact panel in this input
 ## --page anchors-reactdocs-unpinned.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-repo-tree-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-repo-tree-clean.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment anchors-runner-mutates.html
 exit=0
 SKIP  no .impact panel in this input
 ## --page anchors-runner-mutates.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment anchors-tree-tag-uncatalogued.html
+exit=0
+SKIP  no .impact panel in this input
+## --page anchors-tree-tag-uncatalogued.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment anchors-uncatalogued-url.html

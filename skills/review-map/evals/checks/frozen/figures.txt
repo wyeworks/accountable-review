@@ -232,10 +232,22 @@ SKIP  no checkpoint figure in this input
 ## --page anchors-reactdocs-unpinned.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-repo-tree-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-repo-tree-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-runner-mutates.html
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page anchors-runner-mutates.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-tree-tag-uncatalogued.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-tree-tag-uncatalogued.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-uncatalogued-url.html

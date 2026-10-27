@@ -226,10 +226,22 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-reactdocs-unpinned.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-repo-tree-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-repo-tree-clean.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-runner-mutates.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page anchors-runner-mutates.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment anchors-tree-tag-uncatalogued.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page anchors-tree-tag-uncatalogued.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment anchors-uncatalogued-url.html
