@@ -1060,6 +1060,18 @@ FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
 FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
 SKIP  no entries to check for checkpoint links
 SKIP  no entries to check for checkpoint coverage
+## --fragment impact-collapsed.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
+## --page impact-collapsed.html
+exit=1
+FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none
+FAIL  section 04 carries 2 lists — it is one list; a second is the findings/reading-order split this format removed
+SKIP  no entries to check for checkpoint links
+SKIP  no entries to check for checkpoint coverage
 ## --fragment impact-entities-vocab-clean.html
 exit=1
 FAIL  no ol.begin — section 4 is one ordered list, and this fragment has none

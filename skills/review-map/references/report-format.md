@@ -67,6 +67,13 @@ nothing qualifies. None of the four is announced on the page. § *How much Conte
 The line between Context and the primer is unchanged — the framework is `--mentor`'s, the
 repository is everyone's.
 
+**`--impact` changes one section too, and only how it is shown.** Section 05 is earned exactly as
+§ *Section 5* says at every value; `--impact collapsed` — the default — puts its cards and its
+affected list behind one shut fold under the heading, `open` shows them, and `never` writes no
+section. All three pass the subtraction test: open the fold, or delete the section and the
+pointers into it, and what is left is the `open` page — same checkpoints, same *Look at* entries,
+same words. None of them is announced. § *How much Impact* owns all of it.
+
 **`--update` is the one run mode that puts a sentence on the page, and the reason is not
 generosity.** It re-reads only the commits since the previous map, so parts of the page it leaves
 describe an earlier revision than the masthead's head. Effort can stay invisible because both
@@ -122,7 +129,7 @@ refusals that hold that line.
 | 02 | Context | when a checkpoint relies on a repository concept a newcomer would not know | One to five concepts, each what a thing *is*, cited, and pointing at the checkpoints that use it; and at most one before-and-after figure, when the change moved which request does what. No judgment |
 | 03 | What needs your attention | always | Three to five checkpoints per delta *What changed* names, under a ceiling of seven, nine or eleven set by the Production bucket. No standing caveat |
 | 04 | Read the code in this order | always | The route through the code: 3–7 stops, each pointing at a checkpoint |
-| 05 | Impact outside the diff | when a consequence crosses into unchanged code | 1–3 impact paths, and the affected entries they run through |
+| 05 | Impact outside the diff | when a consequence crosses into unchanged code, unless `--impact never` | 1–3 impact paths, and the affected entries they run through — behind one shut fold by default |
 | 06 | Evidence & diff coverage | always, collapsed | The inventory, the recorded searches, the affected code no checkpoint turns on. No findings |
 
 The order is the reviewer's path, and each section assumes the ones before it. *Context* comes
@@ -2537,9 +2544,9 @@ document — and each is held to a rule that keeps the page this one.
   are there without opening it. When `auto` earns nothing, the section is omitted exactly as it is
   there; an empty fold is the stub § *Section 2* forbids.
 
-  **This is the one named exception to *a page reads complete with every block shut***, and it is
-  safe for the reason Context is the section it is: an entry says what a thing **is** and carries no
-  claim about the change, so nothing a reviewer must decide is behind the toggle. A checkpoint that
+  **This is one of the two named exceptions to *a page reads complete with every block shut***,
+  § *How much Impact*'s being the other, and it is safe for the reason Context is the section it
+  is: an entry says what a thing **is** and carries no claim about the change, so nothing a reviewer must decide is behind the toggle. A checkpoint that
   would be wrong without its Context entry was relying on the entry for a claim — which § *Section 2*
   already forbids, and which `collapsed` merely makes visible.
 
@@ -2663,6 +2670,42 @@ disclosed.
 is told not to become — on a real page that was 24 links above a caption explaining that the eight
 worth opening were ranked elsewhere.
 
+### How much Impact
+
+`SKILL.md` step 1 reads `--impact collapsed|open|never`, else the repository's
+`review_map.impact`. **Whether the section is earned never changes**: step 5 traces every consumer
+and step 7i chooses the paths the same way at all three, because the tracing is how the checkpoints
+find what they turn on. The setting decides only how much of the result section 05 shows.
+
+- **`collapsed` — the default: the earned section, shut.** The eyebrow and the `<h2>` stay where they
+  are, so the rail entry lands on a heading, and directly under the `<h2>` one `details.imp-fold`
+  holds the whole `figure.impact` and the *Affected, not changed* list beneath it. Its `summary` is
+  the fixed label *Impact paths* and the cards' behaviours, the text of each `.ip-hd` after its
+  letter, joined by commas — so a reader sees which consequences are drawn without opening it. No
+  count, no badge. When nothing crosses, the section is omitted exactly as it is at `open`; an
+  empty fold is the stub this section forbids.
+- **`open` — the section as the rest of this file describes it**, with no fold.
+- **`never` — the section is not written.** No `section#impact`, no rail entry 05, and step 7i is
+  skipped. **And nothing compensates.** No checkpoint grows a clause for what a card would have
+  shown, and no crossing chain moves into a checkpoint's figure slot — a chain with an `.ip-aff`
+  is an impact path, and with no section it is not drawn. What goes is only what pointed into the
+  section: a clause naming *Impact path A* is not written, since its target does not exist. An
+  affected entry that only this section carried — one a path ran through that no checkpoint cites —
+  is listed in the evidence foot instead, because it is real, cited and found, and the foot is
+  where such an entry lives when nothing above it carries it. The rail does not close up.
+
+**`collapsed` is the second named exception to *a page reads complete with every block shut***,
+beside § *How much Context*'s, and it is safe for the reason this section points back rather than
+explains: every card's `p.ip-why` ends in the checkpoint that judges it, every affected entry here
+points at the checkpoint that turns on it, and § *One canonical home* puts the explanation in that
+checkpoint, never here. So nothing a reviewer must decide is behind the toggle. A card whose
+consequence no checkpoint explains was already a mis-filed judgment; `collapsed` hides it, and
+that is a reason to fix the agenda, never to open the fold.
+
+**No value is announced**, and **on an update** the value must match the previous run's, by
+`references/update.md`'s rule for every page-affecting flag. Staging is unchanged: the section
+publishes last in stage 3, inside its fold at `collapsed`.
+
 ---
 
 ## Section 6 · Evidence & diff coverage — always, collapsed
@@ -2678,7 +2721,8 @@ Inside, in this order:
 2. **What was searched** — `details.searched`, shut inside the shut block. § *What was searched* owns
    the form.
 3. **The affected code no checkpoint turns on and no impact path runs through** — under the same
-   verbatim *Affected, not changed* eyebrow, one citation and a clause each.
+   verbatim *Affected, not changed* eyebrow, one citation and a clause each. At `--impact never`
+   this also holds the entries only section 05 would have carried (§ *How much Impact*).
 
 **Everything in here is provenance**, which is what makes collapsing it legal under the hard rule that
 the page reads complete with every collapsed block shut. An inventory, a record of searches and a list
@@ -2710,7 +2754,7 @@ outside one of them is a page to read again, not a page that is wrong.
 change has judgments and a fixed total would price them against each other:
 
 ```
-≈ What changed (80–160) + Context (0–250) + n × (50–140) + reading path (stops × ≤40) + impact (cards × p.ip-why) + section framing
+≈ What changed (80–160) + Context (0–250) + n × (50–140) + reading path (stops × ≤40) + impact (cards × p.ip-why, at --impact open) + section framing
 ```
 
 At four checkpoints on a small or medium PR that comes to roughly **700 to 1,500 words**, which is

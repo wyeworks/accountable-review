@@ -22,9 +22,9 @@ from becoming a level.
 Four checks are yours, because none of them can be recovered from a page. Do them before anything
 else, and on any disagreement run fully and say so in chat:
 
-- **The settings match the previous run.** Effort, mentor and context — as step 1 resolved them,
-  from a flag or from the file — are invisible on the page by design, so nothing can read them back
-  off it. An update under different settings would produce a page half of which was written to
+- **The settings match the previous run.** Effort, mentor, context and impact — as step 1 resolved
+  them, from a flag or from the file — are invisible on the page by design, so nothing can read them
+  back off it. An update under different settings would produce a page half of which was written to
   different rules, and an `.accountable-review.yml` changed in the delta is a reason to run fully.
 - **The stack is the one the page was written for**, per step 2.
 - **The rung is the one step 1 just resolved.** The rung decides whether anything on the page is
@@ -137,7 +137,8 @@ previous map already traced.
   this page did not earn. The before-and-after figure's caption pointer loses it the same way.
 - **Sections 02 and 05 may need adding rather than filling, and 02 may need removing.** If the
   previous page omitted 05 and the delta now crosses into unchanged code, or omitted 02 and step 7k
-  now earns an entry, the section and its rail entry are new — omitted is not pending, so there is
+  now earns an entry, the section and its rail entry are new — 05 inside its fold at `--impact
+  collapsed` — and omitted is not pending, so there is
   no stub to replace. These are the places an update writes where the page does not already carry a
   marker. The reverse is 02's alone: when step 7k leaves no entry standing, the section and its rail
   entry are deleted rather than emptied, since a Context with no entries is a stub saying the change

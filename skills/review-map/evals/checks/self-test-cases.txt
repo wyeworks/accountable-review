@@ -56,6 +56,11 @@
  impact-paths       | impact-aff-changed-file.html  | 1 | an .ip-aff node in a file the change touches
  searches           | impact-aff-ledger-clean.html  | 0 | sits in a file the diff does not touch
  searches           | impact-aff-changed-file.html  | 1 | affected entr(ies) in a file the change touches
+# --impact collapsed, the default, puts the panel and its list inside details.imp-fold. Both
+# rules above must read through it, so the folded twin is pinned on the same PASS lines.
+ impact-paths       | impact-collapsed.html         | 0 | every .ip-aff node sits in a file the diff does not touch
+ impact-paths       | impact-collapsed.html         | 0 | every card opens with one p.ip-why
+ searches           | impact-collapsed.html         | 0 | sits in a file the diff does not touch
  searches           | searches-clean.html           | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo
  searches           | searches-unreachable.html     | 1 | reachable from no recorded search | --repo @GOLD@/searches-repo
  searches           | searches-bre-dialect.html     | 0 | reachable from a recorded search | --repo @GOLD@/searches-repo

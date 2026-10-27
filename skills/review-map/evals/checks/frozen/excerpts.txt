@@ -822,6 +822,12 @@ SKIP  no excerpts in this input
 ## --page impact-card-no-lanes.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment impact-collapsed.html
+exit=0
+SKIP  no excerpts in this input
+## --page impact-collapsed.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment impact-entities-vocab-clean.html
 exit=0
 SKIP  no excerpts in this input

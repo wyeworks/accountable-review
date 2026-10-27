@@ -33,9 +33,9 @@ Use `/accountable-review:review-map` in Claude Code or `$accountable-review:revi
 (`/review-map` and `$review-map` when installed as a standalone skill, as `npx skills add` does).
 Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
-`--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`; and
-`--output <dir>`. The repository's `.accountable-review.yml` supplies the first three when no flag
-does (step 1).
+`--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`;
+`--impact collapsed|open|never`; and `--output <dir>`. The repository's `.accountable-review.yml`
+supplies the first four when no flag does (step 1).
 
 Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
 in Claude Code, and [the one for every other host](references/hosts/generic.md) anywhere else — Codex
@@ -110,7 +110,7 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
   current branch against its base.
 - **There is one page shape, and no flag chooses it.** No argument selects a length, a depth or a
   second document, and there is nothing to map one onto if someone invents one. An argument starting
-  with `--` that is not one of `--effort`, `--mentor`, `--context`, `--output`, `--update`, `--repository`,
+  with `--` that is not one of `--effort`, `--mentor`, `--context`, `--impact`, `--output`, `--update`, `--repository`,
   `--base-sha` or `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
   wrong run, and the reader has no way to tell.
 - **Read the repository's settings before the flags that override them.** If the repository's top
@@ -121,7 +121,7 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
   ```
 
   It prints one `CFG_<key>='<value>'` line per key the file sets and nothing for a key it does not.
-  `CFG_effort`, `CFG_mentor` and `CFG_context` are the team's standing answers, and the order is
+  `CFG_effort`, `CFG_mentor`, `CFG_context` and `CFG_impact` are the team's standing answers, and the order is
   **flag, then file, then default** — the same order CI applies, so a person's run and a CI run of
   the same repository start from the same settings. `CFG_mentor` reads as the flag would: `true`
   is a bare `--mentor`, `false` is off, a stack name is checked at step 2 like one on the command
@@ -136,7 +136,7 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
   it.** `references/report-format.md` § *The agenda budget* owns the numbers, and you read it with
   the rest of that file at step 7, before a word of the page is drafted. It caps prose and nothing
   else, and **the number it never touches is the checkpoint count.**
-- **Resolve the page settings — effort, mentor, context — flag first, then the file, then the
+- **Resolve the page settings — effort, mentor, context, impact — flag first, then the file, then the
   default**, and hold them for the whole run. Every value not listed below is **reported, not
   guessed at**: a flag read wrongly is work that silently differs, with nothing on the page to tell
   the reader which run they got.
@@ -146,12 +146,13 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
   | `--effort` | `high`, `low` | `high` | Whether step 6c sends falsifiers at the notes | step 6c, step 8 |
   | `--mentor` | bare, a stack name, `off` | off | Whether a checkpoint may carry a primer | `report-format.md` § *Mentor mode*, step 7g |
   | `--context` | `auto`, `never`, `always`, `collapsed` | `auto` | How much of section 02 the page carries, and nothing else | `report-format.md` § *How much Context*, step 7k |
+  | `--impact` | `collapsed`, `open`, `never` | `collapsed` | How section 05 is shown, and nothing else | `report-format.md` § *How much Impact*, step 7i |
   | `--output <dir>` | a directory outside the repository | — | Where the page lands: `<dir>/index.html`, nothing published | below |
   | `--update` | — | — | Edit the existing page over the commits since its revision | `references/update.md` |
 
   **None of them is announced on the page** — no marker, chip, banner or sentence for any setting.
   Two pages of one target at different settings differ in their claims (effort), their primers
-  (mentor) or section 02 (context), never in a component that names the setting. Say which settings
+  (mentor), section 02 (context) or section 05 (impact), never in a component that names the setting. Say which settings
   you took, and from where, in chat.
 
   - **`--effort`.** `high` is the default because it changes what the page finds, and what it costs
@@ -172,6 +173,10 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
     primers and what remains is the page the run would have written without the flag.
   - **`--context`** tunes section 02 and nothing else; `never` compensates nowhere, and `always`
     lowers the bar without filling the section. § *How much Context* owns all four values.
+  - **`--impact`** decides how section 05 is shown and never whether consumers are traced: step 5
+    runs in full at every value, because the checkpoints are built from what it finds. `collapsed`
+    shuts the earned section behind one fold, `open` shows it, `never` writes none and compensates
+    nowhere. § *How much Impact* owns all three.
 - **`--output <dir>` makes the run non-interactive.** It changes where the page goes and nothing
   else: the page is written to `<dir>/index.html` and **nothing is published** — no `Artifact` call,
   at any stage. Same sections, same depth rules, same excerpt budget, same gate; the moment this flag
@@ -951,7 +956,9 @@ to understand first for the next file to make sense?* A why says what the file d
 the only place something happens only where its checkpoint does — `report-format.md` § *Section 4*
 says why that is the sentence most often false at head.
 
-**7i. Identify the external impact.** One to three paths from the notes' *affected, not changed*
+**7i. Identify the external impact.** At `--impact never`, skip this step, write *impact: never*
+in `agenda.md`, and file under the foot any affected entry no checkpoint cites (§ *How much
+Impact*); at `collapsed` and `open` it runs exactly as written. One to three paths from the notes' *affected, not changed*
 entries: each starts in changed code, passes through at least one unchanged consumer, and ends at
 something a user or an operator would see. Choosing the third-best over the fourth is the work; the
 fourth keeps its entry below the figure or in the foot. **If nothing crosses into unchanged code,
@@ -1120,9 +1127,9 @@ mid-paragraph is worse than one that arrives late.
 
 | Stage | After step | The page holds |
 |---|---|---|
-| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending — at `--context never`, section 02 and its rail entry are deleted here instead, since nothing will fill them |
+| 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending — at `--context never` or `--impact never`, that section and its rail entry are deleted here instead, since nothing will fill them |
 | 2 · Agenda | 7, then per checkpoint | Section 03's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
-| 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it (inside its fold at `--context collapsed`) — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it |
+| 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it (inside its fold at `--context collapsed`) — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it (inside its fold at `--impact collapsed`, the default) |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
 **Context and section 05 arrive after the agenda because they point into it.** Every Context entry
@@ -1206,9 +1213,9 @@ Everything else about writing holds at every stage:
   write a `target` on a link**: the page's script opens off-page links in a new tab on load and
   exempts the page's own pointers.
 - **The rail you are given is the rail to publish.** Copy it; do not renumber it. Remove the 05 entry
-  only when step 7i found nothing crossing into unchanged code and the 02 entry only when step 7k
-  earned no concept or `--context never` skipped it, removing the section with it. A rail reading 01,
-  03, 04 says a section was omitted, which is true.
+  only when step 7i found nothing crossing into unchanged code or `--impact never` skipped it, and
+  the 02 entry only when step 7k earned no concept or `--context never` skipped it, removing the
+  section with it. A rail reading 01, 03, 04 says a section was omitted, which is true.
 - **Inherit the markup, never the strings.** Every label in the template's assembled examples — a
   figure's box captions, a primer's prose about `ActiveModel::Dirty` — is a claim about a file, and a
   claim copied out of a specimen is a false claim nothing catches. Type a topology figure only from
@@ -1466,7 +1473,9 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   made, and never carry one. A claim that exists only inside a collapsed block is hidden content
   wearing the clothes of progressive disclosure. Judge this **entry by entry**: a citation that
   appears elsewhere on the page does not rescue a *Look at* entry whose only `file:line` is inside the
-  block a reader has not opened.
+  block a reader has not opened. Two section folds are named exceptions, each for its own reason:
+  Context's at `--context collapsed`, whose entries carry no claim, and section 05's at `--impact
+  collapsed`, whose every card and entry points back at the checkpoint that makes the claim.
 
   For the search record the trap is the empty result: "no other caller" is a finding and belongs in
   the open; the grep proving it is what collapses. For the foot the trap is **promotion by omission** —

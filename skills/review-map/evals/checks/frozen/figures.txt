@@ -556,6 +556,12 @@ SKIP  no checkpoint figure in this input
 ## --page impact-card-no-lanes.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-collapsed.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-collapsed.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment impact-entities-vocab-clean.html
 exit=0
 SKIP  no checkpoint figure in this input

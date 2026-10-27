@@ -37,9 +37,10 @@ by looking less hard.
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are namespaced by the
 plugin name. It takes a target, an **effort** — `--effort high` (the default, sending an adversarial
 pass at the run's own analysis before any of it is written) or `--effort low`, which opts out —
-`--mentor`, off by default, the one flag that puts anything inside a checkpoint, and
-`--context auto|never|always|collapsed`, which tunes section 02 alone. The repository's
-`.accountable-review.yml` supplies effort, mentor and context when no flag does. All of it is parsed
+`--mentor`, off by default, the one flag that puts anything inside a checkpoint,
+`--context auto|never|always|collapsed`, which tunes section 02 alone, and
+`--impact collapsed|open|never`, which tunes how section 05 is shown. The repository's
+`.accountable-review.yml` supplies effort, mentor, context and impact when no flag does. All of it is parsed
 in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills frontmatter
 allowlist and `claude plugin validate --strict` rejects an unknown key. **There is no level flag**,
 and an unrecognised one is reported rather than guessed at. The "source" is prose that another Claude
@@ -617,7 +618,7 @@ Editing one of these means checking the others still agree.
   agenda on every update. **Which checkpoints carry is a script**: `carry-plan.sh`, six
   preconditions joined by AND, failing to a *full* run. P6 replays the page's recorded searches,
   because the dangerous delta is a new consumer in a file no checkpoint cites. The resolved settings
-  (effort, mentor, context) must match the previous run's, and an `.accountable-review.yml` changed in
+  (effort, mentor, context, impact) must match the previous run's, and an `.accountable-review.yml` changed in
   the delta forces a full run. **Every way it can go wrong leads to a full run** — a cache miss, a
   missing `rg`, a refused precondition. In CI the carrier is `actions/cache`, never the previous
   artifact.
@@ -707,8 +708,8 @@ Editing one of these means checking the others still agree.
   fold, and the `auto` page remains; a `never` page must not compensate with a clause in a
   checkpoint. `always` **lowers the bar and never fills the section**: an impact path's use counts, a
   clause-explained concept qualifies, the cap stays at five, and nothing qualifying still omits the
-  section. `collapsed` is the one named exception to the reads-complete-when-shut rule, safe because
-  an entry carries no claim. No value is announced on the page.
+  section. `collapsed` is one of the two named exceptions to the reads-complete-when-shut rule, safe
+  because an entry carries no claim. No value is announced on the page.
 
   **The rail does not close up when Context is omitted**: *01, 03* says a section went, which is true.
 
@@ -802,6 +803,20 @@ Editing one of these means checking the others still agree.
   Shape is a FAIL and vocabulary a WARN, because a hard failure on a verb teaches a run to mislabel a
   true edge. Whether each edge is **true** is `evals/e2e/judges/impact.md`'s question; whether these
   are the right paths has no judge yet (`evals/e2e/judges/IDEAS.md`).
+
+  **Section 05 is shut by default, and `--impact` tunes what it shows, never what is traced.**
+  `collapsed` (the default) keeps the eyebrow and `<h2>` and puts the panel and the affected list in
+  one shut `details.imp-fold`; `open` drops the fold; `never` writes no section and compensates
+  nowhere — only the pointers into it go, and an affected entry only it carried moves to the foot.
+  Step 5 runs in full at every value, because cutting the trace is the shorter page that looks like
+  success. `collapsed` is the second named exception to the reads-complete-when-shut rule, safe
+  because every card and entry points back at the checkpoint that owns its explanation. No value is
+  announced. These agree: `report-format.md` § *How much Impact* **alone**, with § *One page shape*,
+  § *Section 6* and § *The agenda budget* pointing at it; `SKILL.md` steps 1, 7i and 9;
+  `references/update.md`; the template's fold, its CSS in the head range, and `tests/run.rb` with a
+  `self-test.rb` row on the fold's range; `golden/impact-collapsed.html`, which `impact-paths.rb` and
+  `searches.rb` must read through; and the CI half — `read-config.sh`, `references/config.md`,
+  `ci/generate-review-map.sh` (always passes `--impact`), `bin/examples` and `setup-ci/tests/`.
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four `SKELETON:`
   markers. Everything in the head and tail ranges — the `<head>`, the themes' token blocks, the
   highlight.js tags and the tint script — is written straight into the page by
@@ -929,12 +944,12 @@ Editing one of these means checking the others still agree.
 Same rule as above: editing one of these means checking the others still agree.
 
 - **`.accountable-review.yml` means the same thing wherever it is read.** The page keys — `effort`,
-  `mentor`, `context`, `theme` — are read by the skill itself, so a person's run and a CI run of one
+  `mentor`, `context`, `impact`, `theme` — are read by the skill itself, so a person's run and a CI run of one
   repository start from the same settings; `update`, `trivial_*` and `delivery` are CI's. Precedence
   is flag > file > default in both, and every reader parses the **whole** file with
   `skills/review-map/scripts/read-config.sh`, so a key CI refuses stops a person's run too. The CI
   adapter passes every page key **explicitly**, defaults included (`--mentor off`, `--context
-  auto`), because the skill reads the checkout's file under its flags and an absent flag would be
+  auto`, `--impact collapsed`), because the skill reads the checkout's file under its flags and an absent flag would be
   decided twice.
 
   These agree: `read-config.sh`; `SKILL.md` step 1 and `references/update.md`; `page-skeleton.sh`;

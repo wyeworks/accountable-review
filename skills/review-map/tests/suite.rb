@@ -329,6 +329,15 @@ class ReviewMapSuite
     chain = between(markup, '<figure class="chain">', "</figure>")
     assert_eq count(markup, '<figure class="chain">'),  1, "one chain is assembled inside a checkpoint"
     assert_eq count(markup, '<figure class="impact">'), 1, "one impact panel is assembled, in section 05"
+    # --impact collapsed is the default, so the template assembles section 05 shut: one fold, directly
+    # under the h2, holding the panel AND the affected list, styled in the emitted head like the rest.
+    imp = first_block(markup, /^ *<section id="impact"/, %r{^ *</section>})
+    fold = first_block(imp, '<details class="imp-fold">', %r{^ *</details>})
+    assert_eq count(imp, '<details class="imp-fold">'), 1, "section 05 is assembled inside one impact fold, its default"
+    check fold.include?('<figure class="impact">') && fold.include?('<ul class="ev-list">'),
+          "the impact fold holds the panel and the affected list both"
+    check fold.include?('<summary><span class="imp-fold-lbl">Impact paths</span>'), "the impact fold's summary opens on its fixed label"
+    assert_eq count(head, /details\.imp-fold \{/), 1, "the impact fold is styled in the emitted head"
     check count(markup, 'class="ip-n ip-step"') >= 1, "the chain uses .ip-step, the neutral hop that exists only there"
     assert_eq count(chain, "ip-aff"), 0, "no .ip-aff node inside the chain — that hop is an impact path"
 
@@ -434,7 +443,7 @@ class ReviewMapSuite
     assert_eq count(markup, '<dl class="ctx">'), 1, "one Context list is assembled"
     # --context collapsed wraps that list in a details.ctx-fold the run types; its CSS is emitted,
     # like every other rule, so a collapsed page needs nothing from the run but the element.
-    assert_eq count(head, /^details\.ctx-fold \{/), 1, "the collapsed Context fold is styled in the emitted head"
+    assert_eq count(head, /^details\.ctx-fold, details\.imp-fold \{/), 1, "the collapsed Context fold is styled in the emitted head"
     mlines = markup.lines
     ctx_line = mlines.index { |l| l.match?(/^ *<section id="context">/) }
     att_line = mlines.index { |l| l.match?(/^ *<section id="attention"/) }
