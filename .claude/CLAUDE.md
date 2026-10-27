@@ -34,6 +34,12 @@ what reaches the reader is the part they have to act on. Reducing the reading ob
 Reducing the analysis is the failure, and it looks like success — a shorter page is easy to produce
 by looking less hard.
 
+**Every change to the plugin answers to `docs/MANTRA.md`: preserve the difficulty of engineering
+judgment, eliminate the difficulty of understanding the explanation.** Read it before changing what
+a page says or how it says it. A change that makes the page harder to read is a defect however
+correct it is. So is a change that answers a question the reviewer should be left to judge, however
+helpful it seems. The agent does the work of explaining; the human does the work of judging.
+
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are namespaced by the
 plugin name. It takes a target, an **effort** — `--effort high` (the default, sending an adversarial
 pass at the run's own analysis before any of it is written) or `--effort low`, which opts out —
@@ -211,6 +217,7 @@ Each reference owns one axis; keep them from bleeding into each other.
 | `README.md` | The public face — why comprehension debt is the problem, what a Review Map is, install, usage, CI setup, and the technical overview. Written for someone deciding whether to use this, so depth past that decision belongs in `docs/` |
 | `docs/review-map.md` | The page anatomy for a reader who already wants it. It **restates** `report-format.md` for the public and owns nothing — where the two disagree, the reference wins |
 | `docs/ci.md` | The public half of `setup-ci/references/delivery.md`. Same rule: it restates, the reference owns |
+| `docs/MANTRA.md` | The principle every change to the plugin is weighed against: which difficulty the page keeps (the judgment) and which it removes (understanding the explanation). Written for whoever develops the plugin. A run never reads it; the skill's prose carries it as rules |
 | `CONTRIBUTING.md` | How to work on the plugin from a checkout — the layout, the eval loop, the self-tests, and the release process. Why a rule exists stays in this file; `CONTRIBUTING.md` is only how to run things |
 | `evals/verify-catalogue.sh` | The only script here that needs the network: opens every URL in a catalogue and reports dead pages, dead anchors, and the rows that differ by version. Maintenance for an open catalogue, the **release gate** for a closed one, never part of a run — see § *The catalogue is the one thing a run cannot verify* |
 
