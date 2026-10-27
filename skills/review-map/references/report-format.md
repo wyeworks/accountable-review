@@ -90,7 +90,8 @@ refusals that hold that line.
 **Primitives and rules** — read these before writing anything.
 
 - *One page shape* — above: no level, and what effort and stack do not change
-- *The review checkpoint* — the page's primitive: one judgment, explained first and asked last
+- *The review checkpoint* — the page's primitive: one judgment, explained first and asked last,
+  and the voice pass that revises each explanation once its facts are settled
 - *Coding decisions* — the second kind of checkpoint, its citation bar and the limits on how many
 - *Architectural questions* — the third kind: what the change makes true of the system's structure,
   cited from a written decision or measured on both sides of the diff
@@ -358,7 +359,8 @@ narrative a second time.
     cut a step the reader needs to follow it.
 
   The test of the whole: it should read like an experienced engineer explaining a change to a
-  colleague, and then asking the question that matters.
+  colleague, and then asking the question that matters. The draft is then revised once for voice —
+  § *The voice pass*, below.
 - **The gap, `div.gap`, optional.** One line, labelled **GAP** and nothing else, naming what the
   tests leave open **where that changes the judgment**. It is earned by the same test as everything
   else here: *"no request spec covers the archived branch"* is a gap when the reviewer's decision
@@ -554,6 +556,65 @@ already refuses checkboxes, tick state and an n-of-m counter on the checkpoints,
 cleared items reads as progress toward approval. A resolved marker is that counter with the
 arithmetic left to the reader, and an update is the one thing in this design that makes it easy to
 write.
+
+### The voice pass
+
+A first draft is written while the run is still holding the claims, the tiers, the citations and
+the order of the explanation, and the voice is what gives way under that load: the rules above were
+in force on a real page that still packed four relationships into one sentence. So once a
+checkpoint's facts are settled, its explanation is **revised once with one goal — that a colleague
+follows it on the first read** — the way Martin Fowler explains a design: one idea, named, carried
+through an argument whose every paragraph moves it forward. Fowler is the reference point and never
+the instruction; what is borrowed is the five habits below, never his first person, his anecdotes or
+his vocabulary.
+
+**What the pass does:**
+
+- **Give the checkpoint its one idea, and a name for it.** `SKILL.md` step 7f records it in
+  `agenda.md` — *convention versus construction*: the page is about instruments by convention, the
+  timeline by construction. The explanation introduces the name once, builds on it, and comes back
+  to it where the argument closes. The facts were all in the draft; the name is what saves the reader
+  assembling the comparison.
+- **Open each paragraph on its turn in the argument** — *That distinction matters once you look at
+  the new preload*, *The old code already reached this method for most rows, and that narrows the
+  difference* — so the
+  reasoning reads as one line of thought and each paragraph's facts arrive after the reader knows
+  what they are for.
+- **Say up front why the next paragraphs are worth reading**: *My Reservations looks like a page
+  about instruments, and in practice it is one — but the new code relies on that without saying so.*
+- **Narrow the claim with the old behaviour.** What the old code already did, said in its own
+  paragraph, is what turns *the page can now fail* into *the change is confined to canceled
+  reservations*.
+- **Give the unknown its own sentence, separated from what the code shows**: *The code only says
+  what can be written today. Whether production still holds older rows like that is a question about
+  data, and no search of the code can answer it.*
+
+**What the pass never does:**
+
+- **Change a claim.** Every claim, citation, tier and unknown in the draft survives, and nothing new
+  is asserted; what moves is the order, the sentence breaks and the sentences that join them. A
+  hedge is a claim — *probably* smoothed into a statement is the pass's characteristic error, and the
+  link comparison in `SKILL.md` step 9 cannot see it.
+- **Write in the first person.** *I'm reading that from the preloader source* puts a person on the
+  page, and *I found nothing* reads as a person vouching for coverage. The same facts are impersonal:
+  *That comes from activerecord 8.0.5.1's preloader source, not from this repository*; *nothing in
+  the code creates one*.
+- **Borrow the vocabulary of design review.** *Smell*, *cleaner*, *a better design would* and a
+  named refactoring grade the code — the severity chip in a famous voice.
+- **Touch the review question, the GAP or the supporting evidence.** Restyled, a question turns into a
+  choice between two actions, and a choice leans toward one of them. The question keeps the form the
+  rules above gave it.
+
+A revised paragraph from a real page, for the shape:
+
+> That distinction matters once you look at the new preload. It asks each row's product, and each
+> reservation's product, for `relay`, and the reservation side for `schedule_rules` too. Those are not
+> associations every product has: `relay` comes only from Instrument, and `schedule_rules` from
+> Instrument and SecureRoom. **One non-instrument row anywhere on the current page takes the whole
+> page down, at the query, before anything renders.** Preloading turns a per-row problem into a
+> per-page one.
+
+*What changed*'s prose takes the same pass. Nothing on the page says it ran.
 
 ---
 

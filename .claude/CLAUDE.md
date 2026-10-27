@@ -314,7 +314,9 @@ Editing one of these means checking the others still agree.
   resting on unchanged code keeps it beside its tier, because `page-lint.sh` holds a tier to a
   citation in its sentence. **That citation is the claim, linked** — `a.ref`, its href the file and
   span, never a `(path:line)` aside the reader decodes mid-argument — and the paragraph's one
-  `<strong>` marks the sentence the judgment turns on, never a grade. `page-lint.sh`,
+  `<strong>` marks the sentence the judgment turns on, never a grade. Each explanation is revised once
+for voice from a `$W/voice/` draft, the question untouched, and `SKILL.md` step 10 holds the page's
+links and tiers to that draft (`report-format.md` § *The voice pass*). `page-lint.sh`,
   `link-form.rb`, `rails-anchors.rb` and `carry-plan.sh` read an `a.ref`'s file from its href
   alone — a diff href by its hash — behind `tests/run.rb` rows, `self-test.rb` mutations and the
   `golden/links-collapsed-ref*` fixtures, and `impact-paths.rb` refuses one in a `p.ip-why`

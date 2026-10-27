@@ -149,6 +149,11 @@ first item is the one that makes the feature worth having or not.
 - One canonical home: each fact is explained once, and later mentions are a one-sentence
   pointer.
 - No assurance, no narrated drafting, and no autobiography in a correction (SKILL.md step 8).
+- The voice pass (`report-format.md` § *The voice pass*): each explanation carries one named idea,
+  every paragraph opens on its turn in the argument, nothing is in the first person or in design-review
+  vocabulary, and no hedge the draft had was smoothed into a statement. The last needs the run's
+  `$W/voice/` drafts beside the page, so the harness would have to keep them. Judged against the
+  same target with and without the pass, it is also the measure of whether the pass earns its turn.
 - The page's word total is measured mechanically, not judged, the way `run.rb` already measures
   § 01.
 

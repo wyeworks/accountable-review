@@ -887,7 +887,10 @@ checkpoint's shut *Supporting evidence* block. The test: what a reviewer needs t
 challenge the change is explanation, so a test that leaves the boundary open is said above the
 question; what they need to substantiate it is evidence, so that test's code is an entry below.
 Uncertainty stays in the explanation even when the line that settles it is in the block.
-`report-format.md` § *The review checkpoint* owns these rules. Then decide
+`report-format.md` § *The review checkpoint* owns these rules. **Name each checkpoint's one idea** in
+`agenda.md`, a line each — `cp-a idea: convention versus construction — the page is about
+instruments by convention, the timeline by construction` — the thread step 9's voice pass carries the
+explanation along. One that will not fit a line is worth a second look at 7c. Then decide
 whether it also earns a figure, which shape, and how many *Look at* entries it needs. **Each entry is three things in order — a title, a clause, then the citation.** The title names
 what is at that location in two to six words, so four entries can be scanned rather than read; the
 file name is not a title, because the citation says that already. `report-format.md` § *The review
@@ -1181,7 +1184,8 @@ every `Edit` that is ready in the same turn, side by side** — edits to differe
 other — and **do not inspect the page to find where an edit goes**: every anchor is an `id` or a
 marker the template names. When one is genuinely in doubt, `grep -n` for it in a call that does other
 work. **Write it plain the first time** (§ *How big should the page be?*); compressing afterwards
-pays for the same prose twice and tends to cut the clause a claim rested on.
+pays for the same prose twice and tends to cut the clause a claim rested on. The voice pass below is
+the one second writing, and it revises a draft file before the page carries it, never the page.
 
 **Fill the page in; never rewrite it.** After the first `Write`, every later stage replaces a
 *pending* marker with `Edit`. Re-emitting a page already on disk is the single largest cost a profile
@@ -1249,6 +1253,13 @@ Everything else about writing holds at every stage:
   decodes and skips. The paragraph's one `<strong>`, if it has one, is the sentence the judgment
   turns on, stated and never graded. `report-format.md` § *The review checkpoint* and § *A citation
   inside the narration* own both.
+- **Draft, revise for voice, then land it.** Write each checkpoint's explanation, GAP and review
+  question — and *What changed*'s prose at stage 1 — to `$W/voice/<section id>.html` first, then
+  revise the explanation once as `report-format.md` § *The voice pass* says, carrying the idea 7f
+  named; the revision is what the `Edit` replacing the stub lands. The GAP, the question and the
+  supporting evidence land as drafted. Draft every checkpoint that is ready in one turn and land
+  their revisions together in the next, so the pass costs a turn per batch, not per checkpoint, and
+  keep the draft files: step 10 holds the page to them.
 - **Figures are components, and there is no `<svg>` on this page.** A component reflows, has no
   canvas to overflow and cannot be drawn wrong; the only thing left to get wrong is whether the edges
   are true. A chain that lands in unchanged code is an impact path, drawn once in section 05.
@@ -1374,7 +1385,19 @@ complete. With `--output` there is no URL: say where the file is, once.
   cite the line, add the tier, drop the label — as a correction that replaces (step 8), never as a
   note about the page's own drafting; where it is wrong about this page, leave the sentence and say
   so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
-  page whole. **Run the gate, the lint and a grep for leftover markers in one call, fix everything
+  page whole. The same call checks that the voice pass (step 9) kept every link and tier of each
+  draft, comparing the draft with what landed down to the supporting evidence:
+
+  ```sh
+  refs() { grep -oE 'class="ref" href="[^"]*"|class="tier[^"]*"' | sort; }
+  for f in "$W"/voice/*.html; do id=$(basename "$f" .html)
+    awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="cp-ev"|<\/section>/ {exit} on' \
+      "$W/page.html" | refs | diff -q - <(refs < "$f") >/dev/null || echo "voice: $id"
+  done
+  ```
+
+  A `voice:` line is a citation or a tier the revision dropped or added; put the draft's back. **Run
+  the gate, the lint, the voice check and a grep for leftover markers in one call, fix everything
   they print in one turn of side-by-side `Edit`s, then re-run that one call** — a fix per turn
   re-bills the whole context for every sentence. A fix can raise a WARN of its own, so keep going
   until the call prints nothing you have not already fixed or answered in chat; it is usually one
