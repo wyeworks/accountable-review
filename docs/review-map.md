@@ -40,17 +40,20 @@ does not earn omitted outright.
   behaviour it is about — *Archived projects in the project filter*, not *ProjectSearcher
   implementation* — then explains what the system does there, what the change did to it and why that
   matters, and only then asks the question, in a box labelled *Review question*: *Does the filter
-  still hide archived projects for every caller?* The explanation reads straight through: no code
-  excerpts, no diagrams, no tour of files, and anything that would change your judgment — a test
-  that leaves the boundary open, something the run could not establish — is said there. Where a
+  still hide archived projects for every caller?* The explanation reads straight through, the way a
+  good engineering article does: no tour of files, and anything that would change your judgment — a
+  test that leaves the boundary open, something the run could not establish — is said there. When a
+  mechanism is easier to see than to read, a small figure sits in the prose where the argument
+  reaches it — a chain for a mechanism, several paths converging on one invariant they must all
+  keep, the states an entity moves between, or an entity and what it is now attached to — and when
+  two lines of code say the change better than a sentence would, those two lines are quoted there
+  too. Where a
   sentence cites code, the claim itself is the link rather than a file path in parentheses, and the
   one sentence in a paragraph the judgment turns on is set in bold. Each explanation is revised once,
   after its facts are settled, so it reads as one argument around one named idea. The proof
   sits under the question in a closed *Supporting evidence* block: one to four places to look, each
-  a short title, a clause and its citation, and, when the judgment turns on steps prose cannot hold,
-  one small figure of the shape it has — a chain for a mechanism, several paths converging on one
-  invariant they must all keep, the states an entity moves between, or an entity and what it is now
-  attached to. Understand first, open it to verify. A question only the author can settle is asked
+  a short title, a clause and its citation, the code quoted beside it. Understand first, open it to
+  verify. A question only the author can settle is asked
   the same way.
   **Each checkpoint stands alone**: jump to one from the rail and it tells you what you need of the
   domain and the code, and which callers outside the diff the change reaches and what they now do,

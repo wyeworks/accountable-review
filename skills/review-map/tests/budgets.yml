@@ -4,8 +4,8 @@
 
 files:
   skills/review-map/SKILL.md:
-    lines: 1589
-    bytes: 121834
+    lines: 1664
+    bytes: 128724
   skills/review-map/references/claim-falsifier.md:
     lines: 103
     bytes: 6468
@@ -49,8 +49,8 @@ files:
     lines: 544
     bytes: 35755
   skills/review-map/references/report-format.md:
-    lines: 3275
-    bytes: 236000
+    lines: 3437
+    bytes: 249071
   skills/review-map/references/rust-backend.md:
     lines: 429
     bytes: 26718

@@ -24,7 +24,8 @@
 #
 # Read per sentence inside the prose fields — a <p>, a <li> — on the comment-stripped page with the
 # regions that carry no claim or are labelled by their heading removed: <style>, <script>, <pre>,
-# the chain nodes (ol.ip-path), the Affected lists (ul.ev-list), the search record, Context, the
+# the chain nodes (ol.ip-path), an inline snippet's caption (p.ex-cap, a location and its computed
+# tag, like an excerpt's summary), the Affected lists (ul.ev-list), the search record, Context, the
 # evidence foot. A list entry is one unit, because its clause and its citation are separate
 # elements. A card's why (p.ip-why) may not carry a citation — its nodes' locators are its
 # citations — so it is never held to `uncited`. A citation's path comes from its blob href when
@@ -245,7 +246,7 @@ function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, 
 {
   f = $0
   if (f ~ /^<li[^>]*class="ip-n/) next
-  if (f ~ /^<p[^>]*class="(note|buildstate)/) next
+  if (f ~ /^<p[^>]*class="(note|buildstate|ex-cap)/) next
   if (f ~ /^<li/) { sentence(f, 1); next }
   cites = (f !~ /^<p[^>]*class="ip-why/)
   sub(/^<p[^>]*>/, "", f)

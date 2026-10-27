@@ -5,7 +5,8 @@
 #
 # The half that matters is not here: does the prose still read completely with every
 # excerpt CLOSED, judged field by field. That needs a reader and lives in the cases.
-# What a script can settle is shape — collapsed by default, a summary that says what is
+# What a script can settle is shape — collapsed by default (the inline snippet an explanation
+# shows is a div, not a disclosure, and is read rather than opened), a summary that says what is
 # inside, tints that exist in all three theme blocks, no range quoted twice, a quotation
 # nobody coloured by hand, and a state tag that agrees with the diff it describes.
 #
@@ -22,6 +23,14 @@ require_relative "lib/review_map/changed"
 # the quotation by hand — which is to say edited it.
 HAND_COLOURED = /class="hljs-|class="l hljs-/
 
+# Where an excerpt's block ends. A disclosure ends at </details>; the inline snippet a checkpoint's
+# explanation shows (excerpt.sh --inline) is a div.excerpt.ex-inline with no disclosure, and its
+# first </div> closes .ex-body, after the caption's tag and location and the pre's data-src have
+# all been read. A disclosure's .ex-body closes the same way, one line before </details>, so the
+# block ends there with nothing left unread. Reading only </details> left every inline snippet's
+# state tag unchecked — the excerpt a reader is surest to see.
+BLOCK_END = %r{</details>|</div>}
+
 # data-lang belongs to --source only. A diff hunk is not one lexical stream, so a tinted one
 # is mis-lexed from the first unbalanced quote onward.
 def diff_excerpt_carries_lang?(page)
@@ -29,7 +38,7 @@ def diff_excerpt_carries_lang?(page)
   page.lines.each do |raw|
     line = raw.chomp
     in_diff = true if line.match?(/class="excerpt excerpt--diff"/)
-    in_diff = false if line.match?(%r{</details>})
+    in_diff = false if line.match?(BLOCK_END)
     return true if in_diff && line.match?(/data-lang=/)
   end
   false
@@ -72,7 +81,7 @@ def blocks_in(page)
     current.tag = line.sub(/.*class="tag">/, "").sub(/<.*/, "") if line.match?(/class="tag"/)
     current.loc = line[EX_LOC, 1] if line.match?(EX_LOC)
     current.src = line.sub(/.*data-src="/, "").sub(/".*/, "") if line.match?(/data-src="/)
-    next unless line.match?(%r{</details>})
+    next unless line.match?(BLOCK_END)
 
     found << current
     current = nil

@@ -322,6 +322,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-duplicate.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment excerpt-inline-unchanged-changed-file.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page excerpt-inline-unchanged-changed-file.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-linked-clean.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -412,6 +418,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page figures-converge-target-loc.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-evidence-no-caption.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-evidence-no-caption.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment figures-lifecycle-aff.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -428,6 +440,12 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page figures-lifecycle-no-loc.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment figures-narrative-clean.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page figures-narrative-clean.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment figures-shift-clean.html

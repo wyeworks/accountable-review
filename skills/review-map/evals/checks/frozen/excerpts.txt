@@ -482,6 +482,32 @@ PASS  data-lang is on unchanged excerpts only
 SKIP  no syntax tokens on this page
 FAIL  the same range is excerpted more than once: app/models/project.rb:31-35 
 PASS  no two excerpts quote overlapping lines
+## --fragment excerpt-inline-unchanged-changed-file.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:310-311 — quote it and let excerpt.sh --base tag the state
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
+## --page excerpt-inline-unchanged-changed-file.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:310-311 — quote it and let excerpt.sh --base tag the state
+FAIL  --ex-add appears 0 time(s), needs 3 — bare :root plus both dark blocks
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  no syntax tokens on this page
+PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
 ## --fragment excerpt-linked-clean.html
 exit=0
 PASS  2 source excerpt(s), each with a summary
@@ -732,6 +758,12 @@ SKIP  no excerpts in this input
 ## --page figures-converge-target-loc.html
 exit=0
 SKIP  no excerpts in this input
+## --fragment figures-evidence-no-caption.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-evidence-no-caption.html
+exit=0
+SKIP  no excerpts in this input
 ## --fragment figures-lifecycle-aff.html
 exit=0
 SKIP  no excerpts in this input
@@ -748,6 +780,12 @@ SKIP  no excerpts in this input
 exit=0
 SKIP  no excerpts in this input
 ## --page figures-lifecycle-no-loc.html
+exit=0
+SKIP  no excerpts in this input
+## --fragment figures-narrative-clean.html
+exit=0
+SKIP  no excerpts in this input
+## --page figures-narrative-clean.html
 exit=0
 SKIP  no excerpts in this input
 ## --fragment figures-shift-clean.html
@@ -1558,7 +1596,7 @@ exit=0
 SKIP  no excerpts in this input
 ## --fragment page-template.html
 exit=1
-PASS  3 source excerpt(s), each with a summary
+PASS  4 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
@@ -1571,7 +1609,7 @@ PASS  no excerpt quotes the same lines twice
 PASS  no two excerpts quote overlapping lines
 ## --page page-template.html
 exit=1
-PASS  3 source excerpt(s), each with a summary
+PASS  4 source excerpt(s), each with a summary
 PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
@@ -1706,6 +1744,19 @@ PASS  every excerpt is collapsed by default
 PASS  no placeholder summaries
 PASS  every state tag is one excerpt.sh emits
 FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:304-313 — quote it and let excerpt.sh --base tag the state
+SKIP  excerpt tints: a fragment carries no token block
+PASS  no hand-written syntax colouring inside a quotation
+PASS  data-lang is on unchanged excerpts only
+SKIP  syntax tints: a fragment carries no token block
+PASS  no excerpt quotes the same lines twice
+PASS  no two excerpts quote overlapping lines
+## --fragment excerpt-inline-unchanged-changed-file.html
+exit=1
+PASS  1 source excerpt(s), each with a summary
+PASS  every excerpt is collapsed by default
+PASS  no placeholder summaries
+PASS  every state tag is one excerpt.sh emits
+FAIL  labelled Unchanged, but the change touches the file: db/structure.sql:310-311 — quote it and let excerpt.sh --base tag the state
 SKIP  excerpt tints: a fragment carries no token block
 PASS  no hand-written syntax colouring inside a quotation
 PASS  data-lang is on unchanged excerpts only

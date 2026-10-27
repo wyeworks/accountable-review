@@ -475,6 +475,12 @@ CASES = [
            edit: sed(/^  if \[ "\$name" = "\$THEME" \]; then$/, '  [ "$name" = "$THEME" ] || continue; if true; then'),
            section: :skeleton, expect: "and all but one arrive switched off"),
 
+  # A figure in the explanation keeps the caption it carried as evidence, so the sentence before it
+  # and the line under it say one thing twice, in the middle of the argument.
+  Case.new(desc: "a figure in a checkpoint's explanation carries a figcaption", file: T,
+           edit: insert(%r{^        </figure>}, "          <figcaption>x</figcaption>", armed: /<figure class="chain">/),
+           section: :skeleton, expect: "checkpoint A's explanation sets its figure like prose, with no figcaption"),
+
   # ---- one citation per Look at entry ----
 
   # An entry keeps its own a.path beside the excerpt whose summary is the link.
@@ -505,6 +511,12 @@ CASES = [
            edit: sed(/^  if \[ -n "\$LINK" \]; then$/, "  if false; then"),
            section: :excerpt, expect: "--at with a link puts it on the summary's location, with the range it read"),
 
+  # --inline is parsed and then ignored, so the snippet the explanation shows ships as a shut
+  # disclosure with a why placeholder in it, in the middle of the prose.
+  Case.new(desc: "excerpt.sh ignores --inline", file: EXCERPT,
+           edit: sed("--inline) INLINE=1; shift ;;", "--inline) shift ;;"),
+           section: :excerpt, expect: "--inline --diff emits the open snippet, not a disclosure"),
+
   # ---- page-lint.sh: each break one rule switched off ----
   #
   # A lint whose rule never fires passes every page, which is the check that always passes in a new
@@ -526,6 +538,12 @@ CASES = [
   Case.new(desc: "page-lint.sh stops reading a linked phrase as a citation", file: LINT,
            edit: sed('    pr = match(rest, /<a class="ref"[^>]*>/) ? RSTART : 0; lr = RLENGTH', "    pr = 0"),
            section: :page_lint, expect: "a linked phrase is a citation read from its href: one outside the diff with no tier is unlabelled"),
+
+  # An inline snippet's caption is read as a sentence, so every snippet quoting unchanged code in an
+  # explanation draws an unlabelled WARN, and a run learns to stop using the form.
+  Case.new(desc: "page-lint.sh reads an inline snippet's caption as a sentence", file: LINT,
+           edit: sed("(note|buildstate|ex-cap)", "(note|buildstate)"),
+           section: :page_lint, expect: "an inline snippet's caption is not a sentence, and the prose around it still is"),
 
   # The on-changed shape is dropped, so a label on changed code passes.
   Case.new(desc: "page-lint.sh stops warning on from-unchanged-code over changed files", file: LINT,

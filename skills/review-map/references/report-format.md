@@ -225,15 +225,17 @@ change the judgment, and the page carries the judgment.
   <h3>Archived projects in the project filter</h3>
   <p>What the system does here, in terms of the behaviour a user or a caller sees, and the
      concepts needed to follow the rest.</p>
-  <p>What the change did to it, the mechanism and what follows from it, with facts stated as
-     facts and the rest marked <span class="tier tier-unc">from unchanged code</span>.</p>
+  <p>What the change did to it, and the sentence that introduces what comes next:</p>
+  <div class="excerpt excerpt--diff ex-inline">…</div> <!-- optional: the few lines that say it, excerpt.sh --inline -->
+  <figure class="chain">…</figure>                     <!-- optional: at most ONE figure, of any kind, no figcaption -->
+  <p>What follows from it, with facts stated as facts and the rest marked
+     <span class="tier tier-unc">from unchanged code</span>.</p>
   <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
   <p class="open"><b>Review question</b> Does the filter still hide archived projects for every
      caller, including the two reports that build their own scope?</p>   <!-- always; last in the explanation -->
   <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <details class="cp-ev">                                <!-- the supporting evidence, shut -->
     <summary><span class="chev">▸</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
-    <figure class="chain">…</figure>                     <!-- optional: at most ONE figure, of any kind -->
     <ul class="lookat">
       <li><b>The scope guard</b>
           <span>the branch the filter now skips, and what reaches it instead</span>
@@ -257,17 +259,40 @@ one replaced.
 
 **Narrative first, proof beneath it.** Everything down to the review question is the explanation,
 and it reads continuously: a reviewer understands the behaviour, the change, its consequences and
-the question without opening a link, expanding an excerpt or following a chain. Everything the
-reviewer would open to *verify* that explanation — the figure, the *Look at* list with its
-excerpts, the probe — sits after the question in `details.cp-ev`, shut by default and labelled
-*Supporting evidence*. A checkpoint that interleaves the two makes the reviewer understand and
-verify at once, and the default reading becomes an investigation log. The line between them is
-one test: **what a reviewer needs to understand or challenge the change belongs in the
-explanation; what they need to substantiate it belongs in the evidence.** *The new test covers a
-reservation that started an hour ago and none starting within the next minute* changes the
-judgment, so it is said above the question (as the GAP); the test's code is evidence. The
-uncertainty stays in the explanation too — a tier, *the run could not tell whether…* — even when
-the line that settles it is in the block below.
+the question without opening a link, expanding an excerpt or leaving the page. Everything the
+reviewer would open to *verify* that explanation — the *Look at* list with its excerpts, the
+probe — sits after the question in `details.cp-ev`, shut by default and labelled *Supporting
+evidence*. A checkpoint that interleaves the two makes the reviewer understand and verify at once,
+and the default reading becomes an investigation log. The line between them is one test: **what a
+reviewer needs to understand or challenge the change belongs in the explanation; what they need to
+substantiate it belongs in the evidence.** *The new test covers a reservation that started an hour
+ago and none starting within the next minute* changes the judgment, so it is said above the
+question (as the GAP); the test's code is evidence. The uncertainty stays in the explanation too —
+a tier, *the run could not tell whether…* — even when the line that settles it is in the block
+below, and even when a figure above tells a clean causal story.
+
+**That test is about purpose, not format: separate explanation from proof, not prose from
+everything else.** The best explanation of a mechanism is sometimes a drawing of it, and of a
+change sometimes the two lines that make it, as in a well-written engineering article. So:
+
+- **A figure carries part of the argument, so it sits in the explanation**, where the argument
+  reaches it — at most one per checkpoint, of any kind, and never required (§ *Topology figures*
+  owns which shape and whether one is earned). It is set like prose rather than shown like an
+  exhibit: no card, no `figcaption`. **The sentence before it is its caption** — *the old search
+  could not have found an earlier slot either, and this is why:* — and the sentence after it says
+  what follows, never a walk through the nodes the figure has just shown. A figure the explanation
+  has to narrate node by node was drawn for the wrong job.
+- **A few lines of code may sit in the explanation** when they say the idea more clearly than a
+  sentence about them would — the change itself, or the invariant the argument stands on: an
+  inline snippet, `excerpt.sh --inline`, at most one per checkpoint, about ten lines at the most,
+  introduced by the sentence before it and followed by what it shows. It is a quotation, so it is
+  generated like every excerpt and its caption is its linked location and computed tag. Lines it
+  quotes are not quoted again in the evidence; that *Look at* entry keeps a bare `a.path`.
+- **What substantiates stays below**: the *Look at* entries and their excerpts, longer quotations,
+  the probe, the trail of files an investigation walked. Code a reader has to scan is evidence.
+
+Neither a figure nor a snippet is owed. Most checkpoints carry neither, and one is earned only when
+the reader would otherwise rebuild in their head what it shows at a glance.
 
 **Close to its claims, never an appendix.** The evidence is the checkpoint's, one click from the
 question it supports, never moved to the foot; a reader opens it without losing their place.
@@ -399,21 +424,26 @@ narrative a second time.
   checkpoint has no such slot, and the shape above is the shape.
 - **The supporting evidence, `details.cp-ev`, after the question.** Shut by default, its `summary`
   the fixed label *Supporting evidence* and nothing else — no count of locations, which beside every
-  checkpoint would be a heft the reader reads as thoroughness. It holds, in this order, the figure if
-  one was earned, the *Look at* list, and the probe if one was earned. A checkpoint always has one,
-  because the list is never empty.
-- **The chain, `figure.chain`, optional, first in the evidence.** Earned when the judgment turns on a
-  mechanism whose steps the reader cannot hold from prose — a guard order, a value derived across three or more hops, a request path
-  with a branch. It shows mechanism **inside the change** and holds no affected-unchanged node;
-  § *Chains* owns the component and the rule that sends a crossing chain to *Impact outside the
-  diff*. A chain followed by a paragraph that names each node again is the defect: the figure says
-  how the value gets there, the prose says why that matters, and the review question what to judge. The same slot holds one of
-  the three shapes a chain cannot draw — `figure.converge`, `figure.lifecycle`, `figure.structure`
-  — and § *Topology figures* owns which shape a judgment has and the order the questions are asked
-  in. **One figure per checkpoint, of any kind.** It is evidence, not narrative: the explanation
-  states what the figure shows — the guard order's consequence, the path that skips the invariant —
-  so the checkpoint reads complete with the block shut, and the figure lets a reader inspect the
-  steps.
+  checkpoint would be a heft the reader reads as thoroughness. It holds, in this order, the *Look at*
+  list and the probe if one was earned. A checkpoint always has one, because the list is never empty.
+- **The chain, `figure.chain`, optional, in the explanation.** Earned when the judgment turns on a
+  mechanism whose steps the reader cannot hold from prose — a guard order, a value derived across
+  three or more hops, a request path with a branch. It shows mechanism **inside the change** and
+  holds no affected-unchanged node; § *Chains* owns the component and the rule that sends a crossing
+  chain to *Impact outside the diff*. It sits where the argument reaches it, between the sentence
+  that introduces it and the one that says what follows, with no card and no `figcaption` (*Narrative
+  first*, above). A chain followed by a paragraph that names each node again is the defect: the
+  figure says how the value gets there, the prose says why that matters, and the review question
+  what to judge. The same place holds one of the three shapes a chain cannot draw —
+  `figure.converge`, `figure.lifecycle`, `figure.structure` — and § *Topology figures* owns which
+  shape a judgment has and the order the questions are asked in. **One figure per checkpoint, of any
+  kind.** A figure whose only job is to substantiate a claim the prose already carries, not to
+  explain it, goes in the evidence block instead, first, with a `figcaption` saying what it shows —
+  shut away from the sentence that would have introduced it, it has to say that on its own.
+- **The inline snippet, `div.excerpt.ex-inline`, optional, in the explanation.** A few lines of the
+  change or of the code the argument stands on, quoted where saying them in words would be longer
+  and vaguer — `excerpt.sh --inline`, never typed, at most one per checkpoint. *Narrative first*,
+  above, owns when one is earned; § *Source excerpts* owns the quotation.
 - **Look at, `ul.lookat`, one to four entries, in the evidence.** Each has **three parts, in this order**: a title
   naming what is at that location, a clause saying what to see in it, and the citation last. An entry
   with no clause is a bare citation, and a bare citation is a location the reader has to open to learn
@@ -601,6 +631,8 @@ his vocabulary.
   the code creates one*.
 - **Borrow the vocabulary of design review.** *Smell*, *cleaner*, *a better design would* and a
   named refactoring grade the code — the severity chip in a famous voice.
+- **Move the figure or the inline snippet out of the explanation.** The sentences around them may
+  change; the sentence before each still introduces it and the one after still says what follows.
 - **Touch the review question, the GAP or the supporting evidence.** Restyled, a question turns into a
   choice between two actions, and a choice leans toward one of them. The question keeps the form the
   rules above gave it.
@@ -998,7 +1030,9 @@ rule exists because the alternative is the same consequence drawn twice at conve
 which reads as thoroughness.
 
 **A checkpoint chain has no lanes, no legend and no card header.** It is one column; the kinds are
-told apart by border, and the `figcaption` says in one line what the chain shows. Three to five nodes:
+told apart by border. It sits in the checkpoint's explanation, set like prose, and the sentence that
+introduces it does what a `figcaption` would — § *The review checkpoint*, *Narrative first*; only a
+chain filed in the evidence block carries one. Three to five nodes:
 fewer is a sentence, more is listing layers instead of following a value — a fetch wrapper that passes
 a field through unaltered is not a hop, and collapsing to the hops where the value changes shape, is
 renamed or is dropped is the honest chain. **At most one figure per checkpoint, of any kind** — a
@@ -1018,7 +1052,7 @@ drawing neither. The reverse shape — several paths arriving at one place, each
 same thing true — is not a chain at all; it is `figure.converge`.
 
 **Labels, not sentences.** A node carries an identifier and a few words; a relation carries a verb.
-Searches, caveats and conclusions go in the explanation or the `figcaption`, never in a node — a chain
+Searches, caveats and conclusions go in the sentences around the figure, never in a node — a chain
 of clauses is not a figure, and it is the shape the box grid this component replaced kept collapsing
 into. **A figure that restates a list is worse than no figure**, because it costs the reader time and
 teaches nothing.
@@ -1068,8 +1102,10 @@ At step 7f, for a checkpoint that may earn a figure, ask in this order and stop 
 
 Then four gates, all of which must hold, or there is no figure:
 
-- **A reviewer question.** The figure answers a question from the table above, and the `figcaption`
-  states it in one line. A figure that cannot be tied to one is decoration.
+- **A reviewer question.** The figure answers a question from the table above, and the sentence that
+  introduces it in the explanation asks it — *which paths have to keep the history row truthful? Three
+  do:* — or, for a figure filed in the evidence, its `figcaption` states it in one line. A figure
+  that cannot be tied to one is decoration.
 - **A topology, not adjacency.** Files joined by arrows are not a shape — `ownership.rb → historical_ownership.rb → rubygem.rb`
   says nothing a list would not. *Normal removal and the `disown` path both have to close the history row*
   is a shape.
@@ -1094,7 +1130,6 @@ No tests as nodes, no file paths as labels, no fields that do not explain the be
     </ol>
     <div class="cv-target"><span class="ip-box"><b>one open history row per owner and gem</b><span class="ip-d">must hold on every path</span></span></div>
   </div>
-  <figcaption>Which paths must keep ownership history truthful.</figcaption>
 </figure>
 ```
 
@@ -1150,7 +1185,6 @@ citation that does not say what its clause claims.
     <li class="lc-s lc-new"><span class="ip-rel"><i></i>ownership removed<a class="path ip-loc" href="{{DIFF}}R128">app/models/ownership.rb:128</a></span><span class="ip-box"><b>historical</b></span></li>
   </ol>
   <p class="lc-back">&#8634; reinstated &rarr; active<a class="path ip-loc" href="{{BLOB}}#L90">app/models/ownership.rb:90</a></p>
-  <figcaption>What states an ownership can be in, and what moves it between them.</figcaption>
 </figure>
 ```
 
@@ -1178,7 +1212,6 @@ stages — and tests that walk the transitions in sequence are the best evidence
     <li class="st-e ip-aff"><span class="st-rel">belongs to<span class="st-card">N:1</span><a class="path ip-loc" href="{{DIFF}}R2">app/models/historical_ownership.rb:2</a></span><span class="ip-box"><b>Rubygem</b></span></li>
     <li class="st-e st-none ip-aff"><span class="st-rel">no has_many<span class="st-card">history unreachable from the gem</span></span><span class="ip-box"><b>Rubygem</b><a class="path ip-loc" href="{{BLOB}}#L12">app/models/rubygem.rb:12</a></span></li>
   </ul>
-  <figcaption>What a historical ownership is attached to.</figcaption>
 </figure>
 ```
 
@@ -1285,8 +1318,10 @@ still shows where the account is created.
 
 ### What none of them may become
 
-Every rule in § *Chains* about labels and prose holds for all three: labels, not sentences; a
-`figcaption` of one line; an explanation that states the judgment rather than walking the figure.
+Every rule in § *Chains* about labels and prose holds for all three: labels, not sentences; a place
+in the explanation between the sentence that introduces it and the one that says what follows, with
+no `figcaption` (the shift, which is Context's, keeps its own); an explanation that states the
+judgment rather than walking the figure.
 None of them has a legend — the node kinds are told apart by border, as in a chain — and none of them
 is a new section, a rail entry or a badge. A figure is part of the checkpoint it explains — the shift
 alone is *Context*'s, for the reason its own section gives — sits after
@@ -1745,9 +1780,10 @@ Two variants:
 | `.excerpt--diff` | A hunk with `+`/`−` gutters | Changed code, where *what moved* is the reviewer's question. The variant that lets a judgment be made with no diff open |
 
 **An excerpt sits in the entry it confirms, and nowhere else.** Inside a checkpoint that is a *Look
-at* entry in the checkpoint's supporting evidence, never the explanation above the question, which
-reads continuously; a claim the reader would otherwise take on faith gets an entry whose clause names
-it. Never in a block of its own, and never in the evidence foot — the foot is provenance a reader is
+at* entry in the checkpoint's supporting evidence; a claim the reader would otherwise take on faith
+gets an entry whose clause names it. The one exception is the inline snippet, which is explanation
+rather than confirmation and sits in the explanation's own flow (*The rules*, below). Never in a block
+of its own, and never in the evidence foot — the foot is provenance a reader is
 not expected to open, and a quotation that makes a judgment possible belongs one click from that
 judgment.
 
@@ -1773,7 +1809,13 @@ regenerated diff. It was never about quoting one committed line that a claim tur
 - **The page must read completely with every excerpt closed.** No claim, no evidence tier and no
   citation may live only inside one. An excerpt *confirms* what the prose already said; it never
   *carries* it. This is the whole difference between progressive disclosure and hidden content, and it
-  is the rule to check first when reviewing a page that uses them.
+  is the rule to check first when reviewing a page that uses them. **The inline snippet is the one
+  excerpt that is not closed** — `excerpt.sh --inline`, a `div.excerpt.ex-inline` in a checkpoint's
+  explanation, where a few lines say the idea better than a sentence would (§ *The review
+  checkpoint*, *Narrative first*). It is part of the explanation, so it may carry part of it; it is
+  still a quotation, generated, its caption its linked location and its computed tag, and the
+  sentence before it is its why. At most one per checkpoint and about ten lines: past that it is code
+  to scan, which is evidence.
 - **There is no per-section floor.** A checkpoint quotes the guard because the judgment turns on it,
   not because a rule says every part of the page shows its diff. The old floor existed because a
   behaviour flow that described its change without showing it was asking to be believed; a
@@ -2228,7 +2270,7 @@ reading, and everything after that point is wasted regardless of how good it is.
 | What a repository concept *is* — an endpoint sequence, a plugin hooking core, a domain term a setting introduces | Its *Context* entry | Each checkpoint that relies on it says what it needs of it in its own words; the entry is the fuller picture, never a step the checkpoint leaves out |
 | How the request sequence changed, when two or more checkpoints turn on it | *Context*'s `figure.lifecycle.lc-shift` | Each of those checkpoints, saying in its own sentence which request moved and what that means for its judgment; *What changed*'s `dl.ba` says it in product terms, never as requests |
 | A judgment the reviewer has to make | Its checkpoint's explanation | The reading path, as one stop's why; *Impact outside the diff*, in one clause |
-| Mechanism inside the change | That checkpoint's explanation, in words; its `figure.chain`, in the supporting evidence, for the steps | Nowhere else |
+| Mechanism inside the change | That checkpoint's explanation, in words, with its `figure.chain` set in it for the steps | Nowhere else |
 | An unchanged writer that must keep an invariant the change relies on — a path flowing **in** | That checkpoint's `figure.converge`, with a `ul.lookat` entry carrying its clause | Never an impact card: impact paths flow **out**, to a consequence |
 | A consequence that crosses into unchanged code | *Impact outside the diff* — the figure, and the affected entry beside it | The checkpoint that turns on it explains it — which callers, what they now do — and points at the path for its hops; it never redraws the figure |
 | Unchanged code the change reaches that no checkpoint turns on | The affected entries beside the panel, or the evidence foot's list | Nowhere else |

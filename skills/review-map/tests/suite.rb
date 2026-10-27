@@ -324,18 +324,31 @@ class ReviewMapSuite
     assert_eq count(markup, 'class="open"'),   6, "every checkpoint, the pending stub included, ends its explanation in its review question"
     assert_eq count(markup, '<details class="cp-ev">'), 5, "each written checkpoint carries its supporting evidence in one block"
 
-    # NARRATIVE FIRST, PROOF BENEATH IT. The explanation reads straight through to the question, so
-    # nothing a reader opens to verify it — a figure, an excerpt, the where-to-look list, a probe —
-    # sits above the question, and all of it sits inside the evidence block after it.
+    # NARRATIVE FIRST, PROOF BENEATH IT — AND PURPOSE DECIDES THE SIDE, NOT FORMAT. The explanation
+    # reads straight through to the question, so nothing a reader opens to verify it — a collapsed
+    # excerpt, the where-to-look list, a probe — sits above the question. What carries the argument
+    # does: the template's figures sit in the explanation, set like prose with no figcaption (the
+    # sentence before one is its caption), and checkpoint A shows the one inline snippet a checkpoint
+    # may hold, which is open because there is nothing to open.
     %w[a b c d e].each do |x|
       cp = markup[/<section class="cp" id="cp-#{x}">.*?\n      <\/section>/m].to_s
       q = cp.index('class="open"')
       ev = cp.index('<details class="cp-ev">')
       check q && ev && q < ev, "checkpoint #{x.upcase} asks its question before its supporting evidence"
       narrative = cp[0...(q || 0)]
-      %w[<figure class="excerpt class="lookat" class="probe"].each do |part|
+      %w[<details\ class="excerpt class="lookat" class="probe"].each do |part|
         check !narrative.include?(part), "checkpoint #{x.upcase}'s explanation carries no #{part.delete('<"')} — it is evidence"
       end
+      evidence = cp[(ev || cp.size)..]
+      assert_eq count(evidence, "<figure"), 0, "checkpoint #{x.upcase}'s figure, if it has one, is in the explanation, not the evidence"
+      assert_eq count(narrative, "<figcaption"), 0, "checkpoint #{x.upcase}'s explanation sets its figure like prose, with no figcaption"
+    end
+    cp_a = markup[/<section class="cp" id="cp-a">.*?\n      <\/section>/m].to_s
+    a_narrative = cp_a[0...(cp_a.index('class="open"') || 0)]
+    assert_eq count(a_narrative, '<div class="excerpt excerpt--diff ex-inline">'), 1, "checkpoint A's explanation shows an inline snippet, as excerpt.sh --inline writes it"
+    assert_eq count(markup, "ex-inline"), 1, "and it is the only one assembled — a snippet is earned, not a slot"
+    %w[chain converge lifecycle structure].each do |kind|
+      check head.include?(".cp > figure.#{kind}"), "a #{kind} in the explanation loses its card — the head range sets it like prose"
     end
 
     # THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 05. A chain inside a checkpoint shows
@@ -1123,6 +1136,28 @@ class ReviewMapSuite
     out = ex.("--diff", "app/changed.rb", "--base", "HEAD~1").out
     assert_eq count(out, '<span class="ex-loc">app/changed.rb:1-3</span>'), 1, "--diff with no link leaves the location plain"
     assert_eq count(out, "WHY_THIS_MATTERS"), 1, "and an unwritten why stays visibly unwritten"
+
+    # --inline is the snippet the explanation shows: open, because there is nothing to open, and
+    # captioned with the location and the tag alone, because the sentence above it is its why.
+    out = ex.("--diff", "app/changed.rb", "--base", "HEAD~1", "--inline", "--blob", "https://h/blob/s/app/changed.rb").out
+    assert_eq count(out, '<div class="excerpt excerpt--diff ex-inline">'), 1, "--inline --diff emits the open snippet, not a disclosure"
+    assert_eq count(out, /<details|<summary|ex-why|WHY_THIS_MATTERS/), 0, "with no disclosure and no why"
+    assert_eq count(out, '<p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://h/blob/s/app/changed.rb#L1-L3">app/changed.rb:1-3</a></span> <span class="tag">Changed</span></p>'), 1,
+              "and a caption holding the linked hunk range and the computed tag"
+    out = ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1", "--inline").out
+    assert_eq count(out, '<div class="excerpt excerpt--source ex-inline">'), 1, "--inline --at emits the open snippet too"
+    assert_eq count(out, '<span class="tag">Unchanged</span>'), 1, "with the tag still read off the diff"
+    check out.rstrip.end_with?("</div>") && count(out, "</details>").zero?, "and closes the div it opened"
+    %w[--in-entry --why].each do |flag|
+      args = ["--at", "app/same.rb:1-1", "--base", "HEAD~1", "--inline", flag]
+      args << "w" if flag == "--why"
+      assert_eq ex.(*args).code, 2, "--inline with #{flag} is refused — the sentence above the snippet is its why"
+    end
+    write(File.join(repo, "app/long.rb"), (1..12).map { |n| "l#{n}" }.join("\n") + "\n")
+    commit_all(repo, "long")
+    warned = ex.("--at", "app/long.rb:1-12", "--base", "HEAD~2", "--inline")
+    check warned.err.include?("budget for an inline snippet"), "--inline warns past its own, shorter budget"
+    check !ex.("--at", "app/long.rb:1-12", "--base", "HEAD~2").err.include?("budget"), "which a Look at excerpt of the same length does not reach"
   end
 
   # ------------------------------------------------------------------ page-lint.sh
@@ -1190,6 +1225,27 @@ class ReviewMapSuite
     assert_eq count(r.out, "WARN  unlabelled"), 1, "a linked phrase is a citation read from its href: one outside the diff with no tier is unlabelled"
     assert_eq count(r.out, "WARN  on-changed"), 1, "and one over a changed file under the unchanged label is on-changed"
     assert_eq count(r.out, "WARN"), 2, "while a diff-form phrase holding a code chip is changed code, and clean"
+
+    # An inline snippet's caption is a location and a computed tag, the open twin of an excerpt's
+    # summary, so it is not a sentence: an Unchanged snippet in the explanation draws no unlabelled
+    # WARN, while the prose around it is still read.
+    write(path("inline.html"), <<~HTML)
+      <section class="cp" id="cp-a">
+        <p>The finder relies on the guard, which reads like this:</p>
+        <div class="excerpt excerpt--source ex-inline">
+          <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/o/r/blob/0123abcd/lib/guard.rb#L3-L4">lib/guard.rb:3-4</a></span> <span class="tag">Unchanged</span></p>
+          <div class="ex-body">
+      <pre data-src="lib/guard.rb" style="counter-reset: exl 2"><span class="l">  return nil if late?</span>
+      </pre>
+          </div>
+        </div>
+        <p>The <a class="ref" href="https://github.com/o/r/blob/0123abcd/lib/other.rb#L3">helper reads it unguarded</a>.</p>
+      </section>
+      <details class="evidence"><summary>Evidence</summary><div class="gt gt-paths">
+      <div class="c" data-path="app/models/project.rb">app/models/project.rb</div>
+      </div></details>
+    HTML
+    assert_eq count(lint(path("inline.html")).out, "WARN"), 1, "an inline snippet's caption is not a sentence, and the prose around it still is"
 
     # A card's why may not carry a citation — impact-paths.rb holds that line — so its unchanged-code
     # label is never the uncited shape. The same label in a paragraph is.

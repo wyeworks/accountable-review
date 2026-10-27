@@ -460,6 +460,12 @@ SKIP  no .impact panel in this input
 ## --page excerpt-duplicate.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment excerpt-inline-unchanged-changed-file.html
+exit=0
+SKIP  no .impact panel in this input
+## --page excerpt-inline-unchanged-changed-file.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment excerpt-linked-clean.html
 exit=0
 SKIP  no .impact panel in this input
@@ -550,6 +556,12 @@ SKIP  no .impact panel in this input
 ## --page figures-converge-target-loc.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-evidence-no-caption.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-evidence-no-caption.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment figures-lifecycle-aff.html
 exit=0
 SKIP  no .impact panel in this input
@@ -566,6 +578,12 @@ WARN  no .impact panel on this page — right only if nothing the change does re
 exit=0
 SKIP  no .impact panel in this input
 ## --page figures-lifecycle-no-loc.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment figures-narrative-clean.html
+exit=0
+SKIP  no .impact panel in this input
+## --page figures-narrative-clean.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment figures-shift-clean.html

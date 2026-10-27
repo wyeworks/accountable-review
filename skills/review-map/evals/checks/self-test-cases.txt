@@ -296,6 +296,8 @@
 # near a ledger would be worse than the defect. The third needs neither ledger nor repository:
 # a tag outside the closed vocabulary was typed, whatever the diff says.
  excerpts           | excerpt-unchanged-changed-file.html | 1 | the change touches the file
+# The inline snippet an explanation shows is a div, not a disclosure; the tag rule must still read it.
+ excerpts           | excerpt-inline-unchanged-changed-file.html | 1 | the change touches the file
  excerpts           | excerpt-at-head.html          | 0 | no excerpt labels a changed file Unchanged
  excerpts           | excerpt-typed-tag.html        | 1 | outside the generator's vocabulary
 # And the same three when git is asked and CANNOT ANSWER. Both of these rules learn what the
@@ -359,6 +361,10 @@
 # reads as thoroughness, and it is the canonical-home regression arriving as a figure — the same
 # consequence the impact panel already drew.
  figures            | figures-clean.html                  | 0 | cp-a's chain holds its shape
+# Where a figure sits decides its caption: in the explanation the sentence before it is the caption,
+# so none is asked for; in the supporting evidence nothing beside it says what it answers.
+ figures            | figures-narrative-clean.html        | 0 | cp-a's chain holds its shape
+ figures            | figures-evidence-no-caption.html    | 1 | has to say it on its own
  figures            | figures-clean.html                  | 0 | cp-b's converge holds its shape
  figures            | figures-clean.html                  | 0 | cp-c's lifecycle holds its shape
  figures            | figures-clean.html                  | 0 | cp-d's structure holds its shape

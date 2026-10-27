@@ -74,7 +74,7 @@ rule one level up — yours, not the other host's.
 | `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
 | `references/themes/` | never | The three looks — Daylight (default), Workshop, Field Notes — each a font link, a token block and its overrides. `page-skeleton.sh` writes all three into the head with the repository's choice switched on, and the tail script builds the reader's *Aa* menu that switches them; a run never reads one, never chooses one, and never types the menu |
 | `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
-| `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
+| `scripts/excerpt.sh` | step 9 | Generates the source excerpts, collapsed in a *Look at* entry or `--inline` in an explanation — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
 | `scripts/page-lint.sh` | step 10 | Reads the finished page: placeholders are a FAIL to fix, a tier that disagrees with the diff is a WARN to read |
@@ -879,14 +879,18 @@ unchanged callers or something a user sees, the checkpoint names them and says w
 pointer to *Context*, the impact panel or another checkpoint is depth, never a step of the argument.
 Repeat a little background when standing alone takes it; what keeps one home is the finding and the
 judgment. Self-contained is not exhaustive — what this concern needs, not everything step 5 found.
-**Then separate the narrative from its proof.** Everything down to the review question reads
-continuously — no excerpt, no figure, no walk through files, and citations only where a sentence
-resting on unchanged code keeps one beside its tier. What the reviewer would open to *verify* it —
-the figure, the *Look at* list with its excerpts, the probe — goes after the question in the
+**Then separate the narrative from its proof — by purpose, not by format.** Everything down to the
+review question reads continuously — no collapsed excerpt, no walk through files, and citations only
+where a sentence resting on unchanged code keeps one beside its tier. What the reviewer would open to
+*verify* it — the *Look at* list with its excerpts, the probe — goes after the question in the
 checkpoint's shut *Supporting evidence* block. The test: what a reviewer needs to understand or
 challenge the change is explanation, so a test that leaves the boundary open is said above the
 question; what they need to substantiate it is evidence, so that test's code is an entry below.
-Uncertainty stays in the explanation even when the line that settles it is in the block.
+Uncertainty stays in the explanation even when the line that settles it is in the block, and even
+when a figure tells a clean story. **A figure or a few lines of code that carry the argument are
+explanation**: the figure sits in the prose where the argument reaches it, and so may one inline
+snippet of the lines that say the idea best — each introduced by the sentence before it and followed
+by what it shows, and neither owed.
 `report-format.md` § *The review checkpoint* owns these rules. **Name each checkpoint's one idea** in
 `agenda.md`, a line each — `cp-a idea: convention versus construction — the page is about
 instruments by convention, the timeline by construction` — the thread step 9's voice pass carries the
@@ -940,16 +944,19 @@ a node nobody traced.
 Diagram and prose have different jobs. The figure says how the value gets there, or which paths must
 hold; the explanation says what the reader has to judge about it. **An explanation that walks the
 figure node by node is the defect** — it doubles the length and teaches nothing twice, and it is what a
-run reaches for when it is unsure the figure landed. The figure sits in the supporting evidence, so
-the explanation states its upshot in a sentence — which path skips the invariant, what the guard
-order lets through — and reads complete with the block shut.
+run reaches for when it is unsure the figure landed. The figure sits in the explanation, set like
+prose with no card and no `figcaption`: the sentence before it says what the reader is about to see,
+and the sentence after it states the upshot — which path skips the invariant, what the guard order
+lets through.
 
 **7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it:
 
 - Which citations are load-bearing for the judgment. Those get a collapsed excerpt in the *Look at*
   entry they confirm, inside the checkpoint's supporting evidence, generated in step 9. A claim in the
-  explanation a reader would otherwise take on faith gets an entry of its own, never an excerpt in
-  the prose.
+  explanation a reader would otherwise take on faith gets an entry of its own. The one excerpt the
+  prose may hold is an inline snippet — a few lines that *explain* rather than confirm, generated in
+  step 9 with `--inline` — and lines it quotes are not quoted again in an entry, which keeps a bare
+  `a.path`.
 - Which claims carry an evidence tier.
 - Whether a probe would settle the question **and would answer where the reviewer runs it** — a
   `pre.probe`, proposed and never run, last in the supporting evidence, at most one per checkpoint. **A probe
@@ -1257,12 +1264,15 @@ Everything else about writing holds at every stage:
   question — and *What changed*'s prose at stage 1 — to `$W/voice/<section id>.html` first, then
   revise the explanation once as `report-format.md` § *The voice pass* says, carrying the idea 7f
   named; the revision is what the `Edit` replacing the stub lands. The GAP, the question and the
-  supporting evidence land as drafted. Draft every checkpoint that is ready in one turn and land
-  their revisions together in the next, so the pass costs a turn per batch, not per checkpoint, and
-  keep the draft files: step 10 holds the page to them.
+  supporting evidence land as drafted. The draft carries the figure and the inline snippet in their
+  places, and the revision moves sentences around them, never them out. Draft every checkpoint that
+  is ready in one turn and land their revisions together in the next, so the pass costs a turn per
+  batch, not per checkpoint, and keep the draft files: step 10 holds the page to them.
 - **Figures are components, and there is no `<svg>` on this page.** A component reflows, has no
   canvas to overflow and cannot be drawn wrong; the only thing left to get wrong is whether the edges
-  are true. A chain that lands in unchanged code is an impact path, drawn once in section 05.
+  are true. A chain that lands in unchanged code is an impact path, drawn once in section 05. A
+  checkpoint's figure sits in its explanation with no `figcaption` — the sentence before it is the
+  caption — and the page's styles set it like prose; never wrap it in a box of your own.
 - **Generate source excerpts; never type them.** An excerpt is a quotation, and a paraphrased
   quotation is a false one nothing catches. The script reads the real bytes, escapes them, tags the
   language and derives the state tag from the diff:
@@ -1274,6 +1284,8 @@ Everything else about writing holds at every stage:
 
   **Both forms need `--base`**, because the tag is a claim about the diff. Pass `--blob` or `--link`
   whenever the rung allows; an entry with an excerpt has no `a.path` of its own and uses `--in-entry`.
+  The inline snippet in an explanation uses `--inline` instead — open, captioned with its location and
+  tag, no why — and its placeholder goes in the draft where the sentence introducing it ends.
   **Generate all of them in one call**, one line per excerpt, each to a file in `$W`. **Never read the
   generated HTML back and retype it**: leave a one-line placeholder where each belongs and splice the
   files in with shell at the end. Never write a colour class into the code; pass `--lang` only when
@@ -1385,18 +1397,18 @@ complete. With `--output` there is no URL: say where the file is, once.
   cite the line, add the tier, drop the label — as a correction that replaces (step 8), never as a
   note about the page's own drafting; where it is wrong about this page, leave the sentence and say
   so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
-  page whole. The same call checks that the voice pass (step 9) kept every link and tier of each
+  page whole. The same call checks that the voice pass (step 9) kept every link, tier and figure of each
   draft, comparing the draft with what landed down to the supporting evidence:
 
   ```sh
-  refs() { grep -oE 'class="ref" href="[^"]*"|class="tier[^"]*"' | sort; }
+  refs() { grep -oE 'class="(ref|path ip-loc)" href="[^"]*"|class="tier[^"]*"|<figure class="[^"]*"' | sort; }
   for f in "$W"/voice/*.html; do id=$(basename "$f" .html)
     awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="cp-ev"|<\/section>/ {exit} on' \
       "$W/page.html" | refs | diff -q - <(refs < "$f") >/dev/null || echo "voice: $id"
   done
   ```
 
-  A `voice:` line is a citation or a tier the revision dropped or added; put the draft's back. **Run
+  A `voice:` line is a citation, a tier or a figure the revision dropped or added; put the draft's back. **Run
   the gate, the lint, the voice check and a grep for leftover markers in one call, fix everything
   they print in one turn of side-by-side `Edit`s, then re-run that one call** — a fix per turn
   re-bills the whole context for every sentence. A fix can raise a WARN of its own, so keep going

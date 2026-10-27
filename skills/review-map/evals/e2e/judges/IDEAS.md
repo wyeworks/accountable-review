@@ -149,6 +149,11 @@ first item is the one that makes the feature worth having or not.
 - One canonical home: each fact is explained once, and later mentions are a one-sentence
   pointer.
 - No assurance, no narrated drafting, and no autobiography in a correction (SKILL.md step 8).
+- An explanation's figure and inline snippet (`report-format.md` § *The review checkpoint*,
+  *Narrative first*): each earned — the reader would otherwise rebuild what it shows — introduced by
+  the sentence before it, followed by what it means rather than a walk through its nodes, and no
+  qualification the prose owed left out because the figure tells a clean story. `checkpoint-claims`
+  would also need to read a figure's edges and a snippet's lines as claims of the explanation.
 - The voice pass (`report-format.md` § *The voice pass*): each explanation carries one named idea,
   every paragraph opens on its turn in the argument, nothing is in the first person or in design-review
   vocabulary, and no hedge the draft had was smoothed into a statement. The last needs the run's
