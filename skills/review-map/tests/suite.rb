@@ -49,6 +49,7 @@ class ReviewMapSuite
     carry_plan:  "carry-plan.sh",
     excerpt:     "excerpt.sh",
     page_lint:   "page-lint.sh",
+    voice:       "the voice comparison in SKILL.md step 10",
     usage:       "usage.sh"
   }.freeze
 
@@ -1294,6 +1295,43 @@ class ReviewMapSuite
     # A comment carries every placeholder and rule name in the template; none of it is read.
     write(path("comment.html"), %(<!-- {{IN_A_COMMENT}} from unchanged code --><p>Plain.</p>\n<div class="c" data-path="a.rb">a</div>\n))
     assert_eq count(lint(path("comment.html")).out, "FAIL"), 0, "a placeholder inside a comment is not on the page"
+  end
+
+  # ------------------------------------------------------------------ the voice comparison
+  #
+  # Step 10's check that the voice pass kept every link, tier, snippet and figure of a draft. It is
+  # shell written into SKILL.md rather than a script, so the row runs the block exactly as a run
+  # copies it: lifted from the prose, `<page.html>` replaced by a path, under plain sh.
+
+  def voice(page, draft, id = "cp-a")
+    block = first_block(read(File.join(@skill, "SKILL.md")).split("The same call checks that the voice pass", 2).last.to_s,
+                        "```sh", /^\s*```\s*$/).lines[1...-1].to_a.join
+    w = path("voice-run")
+    FileUtils.rm_rf(w)
+    write(File.join(w, "page.html"), page)
+    write(File.join(w, "voice", "#{id}.html"), draft)
+    sh("sh", "-c", block.gsub("<page.html>", '"$W/page.html"'), env: { "W" => w })
+  end
+
+  def section_voice
+    ref = %(<a class="ref" href="https://github.com/o/r/blob/abc/app/a.rb#L3">reads the column</a>)
+    snip = %(<div class="excerpt excerpt--diff ex-inline">\n  <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/o/r/pull/1/files#diff-ab">app/a.rb:3</a></span></p>\n</div>\n)
+    tier = %(<span class="tier tier-unc">from unchanged code</span>)
+    expl = %(<p>The model #{ref} on every save.</p>\n#{snip})
+    question = %(<p class="open"><b>Review question</b>Does the caller\nthat #{tier} still pass?</p>\n)
+    evidence = %(<details class="cp-ev"><summary>Supporting evidence</summary>\n<a class="cite" href="https://github.com/o/r/blob/abc/lib/b.rb#L9">lib/b.rb:9</a>\n</details>\n)
+    page = ->(body) { %(<section class="cp" id="cp-a">\n<h3>Saving</h3>\n#{body}</section>\n) }
+    draft = expl + question
+
+    r = voice(page.(expl + question + evidence), draft)
+    assert_eq r.out, "", "a page that landed its draft whole draws no voice line, though its question wraps and its evidence cites"
+    assert_eq r.code, 0, "and the comparison runs under plain sh"
+
+    r = voice(page.(%(<p>The model #{ref} on every save.</p>\n) + question + evidence), draft)
+    assert_eq r.out, "voice: cp-a\n", "a revision that drops the inline snippet draws a voice line"
+
+    r = voice(page.(expl + question.sub(" #{tier}", "") + evidence), draft)
+    assert_eq r.out, "voice: cp-a\n", "a tier dropped from the question's second line draws a voice line"
   end
 
   # ------------------------------------------------------------------ usage.sh

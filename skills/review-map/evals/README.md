@@ -148,9 +148,11 @@ runs — once reporting a factual error in a caption that no expectation covered
 wording of an expectation outright as false at line granularity. Read `notes` before the verdicts;
 `report.rb` prints them above the table for that reason.
 
-**Counting is never a criterion.** § 01's word budget is measured by `run.rb` (`changed_words`,
-guidance 80–160) and shown beside the verdicts, not asked of the judge: a grader asked to verify
-thirty things does all of them badly, and the mechanical ones are what it is worst at.
+**Counting is never a criterion.** § 01's word count is recorded by `run.rb` (`changed_words`) and
+shown beside the verdicts as an observation, with no window to fall inside or outside — the page
+has no word budget (`references/report-format.md` § *The agenda budget*). It is not asked of the
+judge either: a grader asked to verify thirty things does all of them badly, and the mechanical
+ones are what it is worst at.
 
 `e2e/verdicts.rb` does the parsing, recovering a fenced or prose-wrapped reply in memory and keeping
 the raw one on disk, and `checks/self-test.rb` exercises it against `golden/verdicts-*.json` without

@@ -166,10 +166,7 @@ module Summary
       end
       l << "   📝 notes: #{doc['notes']}" unless doc["notes"].to_s.empty?
     end
-    if row["changed_words"]
-      within = row["changed_words_in_budget"] ? "within" : "outside"
-      l << "✍️  §01          #{row['changed_words']} words, #{within} the 80–160 guidance"
-    end
+    l << "✍️  §01          #{row['changed_words']} words" if row["changed_words"]
     l << "📂 #{page}" if File.exist?(page)
     l
   end

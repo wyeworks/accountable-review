@@ -358,7 +358,9 @@ narrative a second time.
     through files, methods or excerpts — *in `reservation.rb`… then in `finder.rb`… then the spec…*
     — when the behaviour can be said directly. Name code where naming it helps, as `<code>`;
     citations belong in the evidence block, except the one a sentence resting on unchanged code
-    keeps beside its tier, because that tier names its source (§ *Evidence tiers*).
+    keeps beside its tier, because that tier names its source (§ *Evidence tiers*), and the one a
+    claim about an untouched line of a changed file keeps at the claim, because it carries no tier
+    and the diff view does not show that line.
   - **Link the claim, never a path in parentheses.** Where the explanation does cite, the link is
     the shortest phrase that makes the claim — *the order detail’s
     `<a class="ref">product association is not polymorphic</a>`* — and the href carries the file
@@ -627,7 +629,7 @@ his vocabulary.
 - **Change a claim.** Every claim, citation, tier and unknown in the draft survives, and nothing new
   is asserted; what moves is the order, the sentence breaks and the sentences that join them. A
   hedge is a claim — *probably* smoothed into a statement is the pass's characteristic error, and the
-  link comparison in `SKILL.md` step 9 cannot see it.
+  link comparison in `SKILL.md` step 10 cannot see it.
 - **Write in the first person.** *I'm reading that from the preloader source* puts a person on the
   page, and *I found nothing* reads as a person vouching for coverage. The same facts are impersonal:
   *That comes from activerecord 8.0.5.1's preloader source, not from this repository*; *nothing in
@@ -1327,8 +1329,8 @@ no `figcaption` (the shift, which is Context's, keeps its own); an explanation t
 judgment rather than walking the figure.
 None of them has a legend — the node kinds are told apart by border, as in a chain — and none of them
 is a new section, a rail entry or a badge. A figure is part of the checkpoint it explains — the shift
-alone is *Context*'s, for the reason its own section gives — sits after
-its explanation and before its `ul.lookat`, and is checked by `evals/checks/figures.rb`, which grades
+alone is *Context*'s, for the reason its own section gives — sits in
+its explanation, above the review question, and is checked by `evals/checks/figures.rb`, which grades
 shape and locators and can grade nothing about whether the shape was the right one.
 
 When a figure shows a correctness boundary — a path that bypasses what the others run — that boundary

@@ -882,7 +882,8 @@ Repeat a little background when standing alone takes it; what keeps one home is 
 judgment. Self-contained is not exhaustive — what this concern needs, not everything step 5 found.
 **Then separate the narrative from its proof — by purpose, not by format.** Everything down to the
 review question reads continuously — no collapsed excerpt, no walk through files, and citations only
-where a sentence resting on unchanged code keeps one beside its tier. What the reviewer would open to
+where a sentence resting on unchanged code keeps one beside its tier, or a claim about an untouched
+line of a changed file keeps that line's at the claim (step 8). What the reviewer would open to
 *verify* it — the *Look at* list with its excerpts, the probe — goes after the question in the
 checkpoint's shut *Supporting evidence* block. The test: what a reviewer needs to understand or
 challenge the change is explanation, so a test that leaves the boundary open is said above the
@@ -1404,20 +1405,22 @@ complete. With `--output` there is no URL: say where the file is, once.
   draft of this run, comparing the draft with what landed down to the review question:
 
   ```sh
-  refs() { grep -oE 'class="(ref|path ip-loc)" href="[^"]*"|class="tier[^"]*"|<figure class="[^"]*"' | sort; }
+  refs() { grep -oE 'class="(ref|cite|path ip-loc)" href="[^"]*"|class="tier[^"]*"|<figure class="[^"]*"' | sort; }
   for f in "$W"/voice/*.html; do
     [ -e "$f" ] || continue; id=$(basename "$f" .html)
     grep -q "id=\"$id\"" <page.html> || continue
-    awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="open"|<\/section>/ {print; exit} on' \
-      <page.html> | refs > "$W/voice/.page"
+    awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="open"/ {q=1}
+      on && (q && /<\/p>/ || /<\/section>/) {print; exit} on' <page.html> | refs > "$W/voice/.page"
     refs < "$f" > "$W/voice/.draft"
     cmp -s "$W/voice/.page" "$W/voice/.draft" || echo "voice: $id"
   done
   ```
 
   `<page.html>` is the page itself — `$W/page.html`, or `<dir>/index.html` with `--output`. The page
-  side stops at the review question, so a primer below it is never compared, and plain `sh` runs it.
-  A `voice:` line is a citation, a tier or a figure the revision dropped or added; put the draft's back. **Run
+  side stops where the review question's paragraph closes, however many lines it wraps to, so a
+  primer below it is never compared, and plain `sh` runs it. The inline snippet's citation is its
+  caption's `a.cite`, so a snippet the revision moved out is a missing `cite`. A `voice:` line is a
+  citation, a tier, a snippet or a figure the revision dropped or added; put the draft's back. **Run
   the gate, the lint, the voice check and a grep for leftover markers in one call, fix everything
   they print in one turn of side-by-side `Edit`s, then re-run that one call** — a fix per turn
   re-bills the whole context for every sentence. A fix can raise a WARN of its own, so keep going
@@ -1541,10 +1544,12 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   run. Name one of this application's constants in a demo and it becomes exactly the fiction above,
   with this rule switched off. Nothing else on the page carries output, at any flag, and a `pre.demo`
   outside an `aside.primer` is a general-purpose hole for the same lie.
-- **The page must read completely with every collapsed block closed.** Three components collapse — a
-  source excerpt beside the entry it confirms, `details.searched`, and `details.evidence`, the foot
-  that is section 06 — and the rule is the same for all three: they confirm a claim the prose already
-  made, and never carry one. A claim that exists only inside a collapsed block is hidden content
+- **The page must read completely with every collapsed block closed.** Four components collapse — a
+  checkpoint's `details.cp-ev`, its *Supporting evidence*; a source excerpt beside the entry it
+  confirms; `details.searched`; and `details.evidence`, the foot that is section 06 — and the rule is
+  the same for all four: they confirm a claim the prose already made, and never carry one. A *Look
+  at* clause restates a claim the explanation above the question makes; one that says something the
+  explanation does not is a sentence missing from the explanation. A claim that exists only inside a collapsed block is hidden content
   wearing the clothes of progressive disclosure. Judge this **entry by entry**: a citation that
   appears elsewhere on the page does not rescue a *Look at* entry whose only `file:line` is inside the
   block a reader has not opened.

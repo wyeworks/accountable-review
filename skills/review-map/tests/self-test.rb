@@ -119,6 +119,7 @@ CARRY = "scripts/carry-plan.sh"
 EXCERPT = "scripts/excerpt.sh"
 LINT = "scripts/page-lint.sh"
 USAGE = "scripts/usage.sh"
+SKILL_MD = "SKILL.md"
 
 CASES = [
   # ---- script breaks: the partition assertion, which no template break can exercise ----
@@ -382,7 +383,9 @@ CASES = [
            section: :carry_plan, expect: "and so is one whose diff href hashes to it"),
 
   Case.new(desc: "the path test is a substring match rather than a whole token", file: CARRY,
-           edit: sed(%r{^BOUND='\[\^A-Za-z0-9\._/-\]'$}, "BOUND=''"),
+           # A boundary of any character, not none: `(^|)` is an empty subexpression some greps refuse,
+           # and a refused pattern matches nothing, which would leave the row green for the wrong reason.
+           edit: sed(%r{^BOUND='\[\^A-Za-z0-9\._/-\]'$}, "BOUND='.'"),
            section: :carry_plan, expect: "api/Gemfile in the delta does not match api/Gemfile.lock on the page"),
 
   # A Context entry is outside every checkpoint, so the cp rule never reaches it.
@@ -593,7 +596,20 @@ CASES = [
   # A window that reset is reported as a share — a delta across two different windows.
   Case.new(desc: "usage.sh reports a share across a window reset", file: USAGE,
            edit: sed('a[w "_reset"] == b[w "_reset"] && ', ""),
-           section: :usage, expect: "a window that reset is reported where it stands, never as a share")
+           section: :usage, expect: "a window that reset is reported where it stands, never as a share"),
+
+  # ---- the voice comparison in SKILL.md step 10: each break a snippet the shell no longer counts ----
+
+  # The page side stops on the review question's first line, so a question that wraps loses its
+  # second line there and a page that landed its draft whole reports a change it never made.
+  Case.new(desc: "the voice comparison cuts the review question at its first line", file: SKILL_MD,
+           edit: sed(%(on && (q && /<\\/p>/ || /<\\/section>/) {print; exit} on'), %(on && /class="open"|<\\/section>/ {print; exit} on')),
+           section: :voice, expect: "a page that landed its draft whole draws no voice line, though its question wraps and its evidence cites"),
+
+  # The inline snippet's caption link is not collected, so a revision that moves it out lands unflagged.
+  Case.new(desc: "the voice comparison stops collecting the inline snippet's citation", file: SKILL_MD,
+           edit: sed("(ref|cite|path ip-loc)", "(ref|path ip-loc)"),
+           section: :voice, expect: "a revision that drops the inline snippet draws a voice line")
 ].freeze
 
 # ------------------------------------------------------------------ running
