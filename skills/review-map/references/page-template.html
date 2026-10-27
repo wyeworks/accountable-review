@@ -178,7 +178,9 @@
                             Each node past a path's first carries its INCOMING
                             relation in .ip-rel, so an edge is labelled or it is
                             missing. Lane comes from the kind: .ip-chg left,
-                            .ip-aff right and teal, .ip-out spans and ends the path
+                            .ip-aff right and teal, .ip-out spans and ends the path.
+                            At --impact collapsed, the default, the figure and the
+                            affected list sit inside one shut details.imp-fold
     path preamble ......... p.ip-why — one per .ip-card, above the lanes. What goes
                             wrong and to whom, then the checkpoint. Never the hops
     node locator .......... a.path.ip-loc — last line of an .ip-box, in both figure
@@ -486,17 +488,21 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 .ctx > dt:not(:first-of-type), .ctx > dd:not(:first-of-type) { border-top: 1px solid var(--rule); }
 .ctx .ctx-used, .lc-shift .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .ctx .ctx-used a, .lc-shift .ctx-used a { color: inherit; }
-/* --context collapsed: the same section, its entries (and shift) behind one shut
-   details.ctx-fold whose summary is the fixed label and the entry names. Neutral
-   rules, no family colour: plum would say "how a thing is known", and Context is
-   what a thing is. The one fold allowed to hold content rather than provenance —
-   report-format.md § How much Context says why that is safe. */
-details.ctx-fold { margin-top: 8px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-details.ctx-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
-details.ctx-fold > summary::-webkit-details-marker { display: none; }
-details.ctx-fold > summary::marker { content: ""; }
-.ctx-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+/* --context collapsed and --impact collapsed (the default): the same section, its
+   content behind one shut fold whose summary is a fixed label and the names inside —
+   details.ctx-fold holds Context's entries (and shift), details.imp-fold section 05's
+   cards and affected list. Neutral rules, no family colour: plum would say "how a
+   thing is known", and neither section is provenance. The two folds allowed to hold
+   content rather than provenance — report-format.md § How much Context and § How
+   much Impact say why each is safe. */
+details.ctx-fold, details.imp-fold { margin-top: 8px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+details.ctx-fold > summary, details.imp-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
+details.ctx-fold > summary::-webkit-details-marker, details.imp-fold > summary::-webkit-details-marker { display: none; }
+details.ctx-fold > summary::marker, details.imp-fold > summary::marker { content: ""; }
+.ctx-fold-lbl, .imp-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 details.ctx-fold > .ctx { margin-top: 0; }
+details.imp-fold[open] { padding-bottom: 24px; }
+details.imp-fold > .impact { margin-top: 10px; }
 @media (max-width: 700px) {
   .ctx { grid-template-columns: minmax(0, 1fr); }
   .ctx > dd { padding-top: 4px; }
@@ -2301,10 +2307,22 @@ post.saved_change_to_title?  # =&gt; true</pre>
 
          The affected entries below the figure are the ones the paths run through
          and the ones a checkpoint turns on. Everything else the pass found goes
-         in details.evidence at the foot. ===== -->
+         in details.evidence at the foot.
+
+         --impact (report-format.md § How much Impact). collapsed, the default, is
+         what is assembled here: the figure and the affected list inside ONE
+         details.imp-fold, shut, directly under the h2. Its summary is the fixed
+         label and each card's behaviour — the .ip-hd text after its letter —
+         joined by commas; no count, no badge. open: the same section with the
+         details and its summary removed and nothing else changed. never: delete
+         this section and its rail entry, drop every clause that points at an
+         impact path, list an affected entry only this section carried in the
+         foot, and add nothing anywhere else. ===== -->
     <section id="impact" style="padding-top:62px">
       <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
       <h2 style="margin-bottom:22px">Impact outside the diff</h2>
+      <details class="imp-fold">
+        <summary><span class="imp-fold-lbl">Impact paths</span> {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}, {{A_DIFFERENT_BEHAVIOUR}}</summary>
 
       <figure class="impact">
         <span class="lbl">Impact paths</span>
@@ -2365,6 +2383,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
         <li><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> &mdash; {{ONE_CLAUSE}} <a href="#cp-{{LETTER}}">Checkpoint {{LETTER}}</a></li>
         <li><a class="path" href="{{BLOB}}#L{{LINE}}">{{PATH}}:{{LINE}}</a> &mdash; {{WHY_AFFECTED}} <span class="tier">{{TIER}}</span></li>
       </ul>
+      </details>
     </section>
 
     <!-- =====================================================================

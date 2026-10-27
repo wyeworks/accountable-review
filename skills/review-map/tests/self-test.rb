@@ -294,6 +294,14 @@ CASES = [
            edit: move_block(/^ *<section id="context">/, %r{^ *</section>}, before: /^ *<section id="start"/),
            section: :skeleton, expect: "Context comes before the agenda"),
 
+  # The impact fold shut early, before the affected list. Section 05 still holds one fold with its
+  # summary and the panel inside it, so only the range assertion can notice the list left outside.
+  Case.new(desc: "the impact fold closes before the affected list", file: T,
+           edit: ->(s) { s.sub("      </ul>\n      </details>\n    </section>", "      </ul>\n    </section>")
+                          .sub(%(      <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed),
+                               %(      </details>\n      <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed)) },
+           section: :skeleton, expect: "the impact fold holds the panel and the affected list both"),
+
   # ---- diff-render.sh: every break here publishes a link that lands on nothing ----
 
   # The signal no size rule can replace. One changed line in a linguist-generated file is a small

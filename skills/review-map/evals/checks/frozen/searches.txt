@@ -670,6 +670,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-collapsed.html
+exit=0
+PASS  every one of 1 affected entr(ies) sits in a file the diff does not touch, against the page's own ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-collapsed.html
+exit=0
+PASS  every one of 1 affected entr(ies) sits in a file the diff does not touch, against the page's own ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-entities-vocab-clean.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
@@ -1213,6 +1221,10 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment impact-aff-changed-file.html
 exit=1
 FAIL  1 affected entr(ies) in a file the change touches: app/queries/active_projects.rb:3 — affected, not changed means a file outside the diff; an untouched line of a changed file is cited from the checkpoint that turns on it
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-collapsed.html
+exit=0
+PASS  every one of 1 affected entr(ies) sits in a file the diff does not touch, against the page's own ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment searches-clean.html --repo searches-repo
 exit=0

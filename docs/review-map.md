@@ -58,7 +58,11 @@ does not earn omitted outright.
   sentence or two on what goes wrong and to whom, so you know whether a chain is worth tracing
   before you trace it. Beneath the figure, each affected entry gets a citation and a clause,
   pointing at the checkpoint that turns on it rather than explaining it twice. If nothing crosses
-  into unchanged code, the section is not there at all.
+  into unchanged code, the section is not there at all. Because every card and entry points back at
+  a checkpoint that already explains it, the chains and the list sit behind one shut toggle under
+  the heading by default. `--impact` (or `review_map.impact`) sets that: `collapsed`, the default;
+  `open`, expanded; `never`, no section — the checkpoints keep every explanation, and only their
+  pointers into it go. The run traces consumers exactly as hard at all three.
 - **Evidence & diff coverage** — one shut disclosure at the foot, holding every changed path, the
   searches the run ran and what they returned, and the affected code no checkpoint turns on. It is
   provenance: the page reads complete with it closed, and nothing a reviewer has to act on lives only
