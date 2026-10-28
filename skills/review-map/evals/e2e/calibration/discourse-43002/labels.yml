@@ -26,7 +26,9 @@
 #                         3 untouched line of a changed file cited · 4 excerpts earned · 5 every field
 #                         complete with its excerpt shut
 gold:
-  what-changed: [pass, pass, pass, pass, pass]
+  what-changed: [pass, pass, pass, pass, pass]   # 1: "a click … toggles the card's width" is true of every size (each
+                                                 # larger card spans both columns); that it also resets a tall card's
+                                                 # height is checkpoint D's, not an inaccuracy here
   checkpoint-judgments: [pass, pass, pass, pass]
   checkpoint-explanation: [pass, pass, pass]
   checkpoint-claims: [pass, fail, pass]     # 2: cp-d calls the click shortcut "a toggle between two sizes over a range of eight"; the rules allow
