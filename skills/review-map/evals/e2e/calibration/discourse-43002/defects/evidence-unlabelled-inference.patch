@@ -1,6 +1,17 @@
 --- gold.html
 +++ gold.html
-@@ -2409,7 +2409,9 @@
+@@ -2347,7 +2347,9 @@
+         The dashboard returns each card&#39;s size alongside its other fields. In the browser, an admin
+         drags a card&#39;s lower corner to grow or shrink it, watches it reflow live, and the size is
+         saved on release. A click on the corner without dragging toggles the card&#39;s width instead.
+-        The handles appear only for admins, and not while a card is still loading.</p>
++        The handles appear
++        <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L171-L173">only for admins</a>,
++        and not while a card is still loading.</p>
+       <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
+         sizes admins chose. A dashboard where no card has been resized looks as it did: every existing
+         row reads one row by one column, which is how every card rendered before.</p>
+@@ -2409,7 +2411,9 @@
            modal</a>, even one that only reorders two reports, every
            card on the dashboard is back to one row by one column
            <span class="tier tier-unc">from unchanged code</span>.</p>
@@ -11,7 +22,7 @@
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L133-L136">the same
            section builder the dashboard uses</a>, which now returns each report&#39;s size; its save
            maps them away. The path is drawn in <a href="#impact">Impact outside the diff</a>.</p>
-@@ -2465,7 +2467,8 @@
+@@ -2465,7 +2469,8 @@
          <h3>Saving one card&#39;s size by rewriting the whole layout</h3>
          <p>The dashboard stores its pinned reports as one list, and the only way to change any part of
            it is to send the whole list again: the layout endpoint deletes every stored row and inserts
@@ -21,7 +32,7 @@
          <p>Resizing now works this way too, and an admin does it far more often. When a resize ends,
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L390-L409">the
            handler builds the full list from the cards this browser holds</a>, with the new size swapped
-@@ -2477,15 +2480,16 @@
+@@ -2477,15 +2482,16 @@
            builds its list from the cards as they stood when it began, and a card only takes its new
            size once its own request returns. Two overlapping saves, such as clicks on two cards&#39;
            handles in quick succession, would each send a list without the other&#39;s change. The one
@@ -41,13 +52,13 @@
            this; resizing adds a trigger that fires much more often.</p>
          <p class="open"><b>Review question</b>Is it acceptable that each resize replaces the stored layout with what this browser currently shows?</p>
          <details class="cp-ev">
-@@ -2698,7 +2702,9 @@
+@@ -2698,7 +2704,9 @@
            once. An admin who presses a tall card&#39;s corner meaning to start a drag, and lets go,
            loses the height and has to drag it back. A press only becomes a drag after
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight
 -          pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>
 +          pixels of travel</a>, because
-+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">the handles report a move only past it</a>
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/modifiers/d-pointer-drag.ts#L451-L461">the drag modifier reports no move until the pointer passes it</a>
 +          <span class="tier tier-unc">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>
          <div class="gap"><b>GAP</b><span>Nothing tests a click on a card that is already larger than the smallest size.</span></div>
          <p class="open"><b>Review question</b>Should a click on a tall card&#39;s handle take it all the way back to the smallest size?</p>

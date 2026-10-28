@@ -239,13 +239,16 @@ FIX = {
      "The shortcut is a toggle between two sizes over a range of five,"],
   ],
   # c1: two claims rest on files the diff does not touch and carry no tier — what the eight-pixel
-  # threshold means (d-resize-handles.gts) and where the modal loads its reports from
+  # threshold means (d-pointer-drag.ts) and where the modal loads its reports from
   # (manage-reports.gjs:137); the corrected copy cites and tiers both.
-  # c3: checkpoint B's two "removing a report already did this" rest on removeReport, untouched
-  # lines of the changed reports.gjs; the corrected copy cites it at both.
+  # c3: checkpoint B's two "removing a report already did this" rest on removeReport, and § 01's
+  # admins-only handles on canEdit, untouched lines of the changed reports.gjs; the corrected copy
+  # cites all three.
   "evidence" => [
     ["pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>",
-     "pixels of travel</a>, because\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106\">the handles report a move only past it</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>"],
+     "pixels of travel</a>, because\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/modifiers/d-pointer-drag.ts#L451-L461\">the drag modifier reports no move until the pointer passes it</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>"],
+    ["The handles appear only for admins, and not while a card is still loading.",
+     "The handles appear\n        <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L171-L173\">only for admins</a>,\n        and not while a card is still loading."],
     ["It loads its enabled reports from\n          <a class=\"ref\"",
      "It\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/modal/manage-reports.gjs#L137\">loads its enabled reports from the available-reports action</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, which builds them from\n          <a class=\"ref\""],
     ["Removing a report from the dashboard already worked this way.",
@@ -257,7 +260,7 @@ FIX = {
   # that a taller card also drops to one row; the corrected copy says both sizes the click chooses
   "what-changed" => [
     ["A click on the corner without dragging toggles the card&#39;s width instead.",
-     "A click on the corner without dragging instead switches a card between the smallest\n        size and one row at full width."],
+     "A click on the corner without dragging instead widens a card of the smallest size to one row at full width,\n        and returns a card of any other size to the smallest."],
   ],
 }.freeze
 

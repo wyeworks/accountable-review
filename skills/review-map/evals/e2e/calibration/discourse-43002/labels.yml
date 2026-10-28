@@ -34,12 +34,13 @@ gold:
                                             # five (1x1, 1x2, 2x2, 3x2, 4x2), eight counts the combinations the full-width rule forbids
   reading-path: [pass, pass, pass, pass]
   impact: [pass, pass, pass, pass]
-  evidence: [fail, pass, fail, pass, pass]  # 1: cp-d's "eight pixels of travel" means what d-resize-handles.gts does, and cp-a's
+  evidence: [fail, pass, fail, pass, pass]  # 1: cp-d's "eight pixels of travel" means what d-pointer-drag.ts does, and cp-a's
                                             # "loads its enabled reports from" is manage-reports.gjs:137; both unchanged, neither tiered.
-                                            # 3: cp-b's two "removing a report already did this" rest on removeReport,
-                                            # reports.gjs:411-426, untouched lines of a changed file, uncited
+                                            # 3: cp-b's two "removing a report already did this" rest on removeReport, and § 01's
+                                            # admins-only handles on canEdit,
+                                            # reports.gjs:411-426 and :171-173, untouched lines of a changed file, uncited
 variants:
-  what-changed-corrected:            # gold with the click sentence naming both sizes it chooses
+  what-changed-corrected:            # gold with the click sentence saying what it does to the smallest card and to any other
     what-changed: {1: pass}
   what-changed-headline:             # the <h2> says each admin's sizes are saved for them; the table has no user column
     base: what-changed-corrected
@@ -108,7 +109,7 @@ variants:
   impact-why-walks-hops:             # card A's why narrates both nodes of the path beneath it
     impact: {4: fail}
 
-  evidence-corrected:                # gold with the two untiered claims tiered and cited, and removeReport cited at both claims
+  evidence-corrected:                # gold with the two untiered claims tiered and cited, and removeReport and canEdit cited
     evidence: {1: pass, 3: pass}
   evidence-unlabelled-inference:     # the overlapping-saves claim loses its `inferred`
     base: evidence-corrected
