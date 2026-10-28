@@ -1679,7 +1679,7 @@
     "k": 3,
     "need": 2,
     "calibrated": false,
-    "date": "2026-10-28T05:06:34Z",
+    "date": "2026-10-28T14:30:33Z",
     "prs": [
       "discourse-43002"
     ],
@@ -1691,7 +1691,7 @@
         "expected": null,
         "got": [
           "fail",
-          "fail"
+          "pass"
         ],
         "gated": false,
         "held": true
@@ -1750,8 +1750,8 @@
         "criterion": 1,
         "expected": "pass",
         "got": [
-          "fail",
           "pass",
+          "fail",
           "fail"
         ],
         "gated": true,
@@ -1815,8 +1815,8 @@
         "criterion": 1,
         "expected": null,
         "got": [
-          "fail",
-          "pass"
+          "pass",
+          "fail"
         ],
         "gated": false,
         "held": true
@@ -2079,7 +2079,7 @@
         "criterion": 3,
         "expected": "pass",
         "got": [
-          "pass",
+          "fail",
           "fail"
         ],
         "gated": false,

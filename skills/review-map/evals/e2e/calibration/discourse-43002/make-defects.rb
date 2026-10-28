@@ -86,7 +86,7 @@ D = [
   # ---- what-changed --------------------------------------------------------------------------
   # 1 accurate, in the headline: admin_dashboard_reports has no user column — one layout for every admin
   ["what-changed-headline",
-   "Admins can resize report cards, and each card keeps its size</h2>",
+   "Admins can resize report cards, and the dashboard stores each card&#39;s size</h2>",
    "Admins can resize report cards, and each admin's sizes are saved for them</h2>"],
   # 1 accurate: canEdit is currentUser?.admin (reports.gjs:171-173); moderators get no handle
   ["what-changed-wrong-delta",
@@ -262,9 +262,17 @@ FIX = {
     ["<strong>The modal, which this change does not touch, still",
      "<strong>The modal, which this change does not touch\n          <span class=\"tier tier-unc\">from unchanged code</span>, still"],
   ],
-  # c1, unsettled on gold: "a click … toggles the card's width" is true of every size but leaves out
-  # that a taller card also drops to one row; the corrected copy says both sizes the click chooses
+  # c1: the headline and the closing sentence say every size is kept, which a Manage reports save
+  # undoes (checkpoint A); "both default to 1" links only the rows migration; and "a click … toggles
+  # the card's width" leaves out that a taller card also drops to one row. The corrected copy says
+  # what is stored and where it is lost, links both migrations and says what a click chooses.
   "what-changed" => [
+    ["Admins can resize report cards, and each card keeps its size</h2>",
+     "Admins can resize report cards, and the dashboard stores each card&#39;s size</h2>"],
+    ["hold it, and\n        <a class=\"ref\" href=\"https://github.com/discourse/discourse/pull/43002/files#diff-59d620a03a4ddb1d01b1811c3a1217d2d6621dd785563941c64536fe1d21e112R5\">both default to 1</a>.",
+     "hold it, and both default to 1:\n        <a class=\"ref\" href=\"https://github.com/discourse/discourse/pull/43002/files#diff-59d620a03a4ddb1d01b1811c3a1217d2d6621dd785563941c64536fe1d21e112R5\">rows</a> and\n        <a class=\"ref\" href=\"https://github.com/discourse/discourse/pull/43002/files#diff-91368d121fcc9b195af286b35b9cf000337a81d43dd7831772500ce2d66d3fb5R5\">cols</a>."],
+    ["<p>Admins get layouts that survive a reload, and",
+     "<p>Admins get layouts that survive a reload until the Manage reports modal is next saved\n        (<a href=\"#cp-a\">Checkpoint A</a>), and"],
     ["A click on the corner without dragging toggles the card&#39;s width instead.",
      "A click on the corner without dragging instead widens a card of the smallest size to one row at full width,\n        and returns a card of any other size to the smallest."],
   ],
