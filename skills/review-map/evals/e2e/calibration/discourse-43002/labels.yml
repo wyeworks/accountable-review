@@ -35,10 +35,11 @@ gold:
   reading-path: [pass, pass, pass, pass]
   impact: [pass, pass, pass, pass]
   evidence: [fail, pass, fail, pass, pass]  # 1: cp-d's "eight pixels of travel" means what d-pointer-drag.ts does, and cp-a's
-                                            # "loads its enabled reports from" is manage-reports.gjs:137; both unchanged, neither tiered.
-                                            # 3: cp-b's two "removing a report already did this" rest on removeReport, and § 01's
-                                            # admins-only handles on canEdit,
-                                            # reports.gjs:411-426 and :171-173, untouched lines of a changed file, uncited
+                                            # "loads its enabled reports from" is manage-reports.gjs:137, and cp-a and cp-b say what the
+                                            # modal sends (manage-reports.gjs:197-205); all unchanged, none tiered.
+                                            # 3: cp-b's two "removing a report already did this" rest on removeReport, § 01's
+                                            # admins-only handles on canEdit (reports.gjs:411-426, :171-173), and cp-b's "ten" on
+                                            # VISIBLE_CAP (admin_dashboard_report.rb:4); untouched lines of changed files, uncited
 variants:
   what-changed-corrected:            # gold with the click sentence saying what it does to the smallest card and to any other
     what-changed: {1: pass}
@@ -109,7 +110,7 @@ variants:
   impact-why-walks-hops:             # card A's why narrates both nodes of the path beneath it
     impact: {4: fail}
 
-  evidence-corrected:                # gold with the two untiered claims tiered and cited, and removeReport and canEdit cited
+  evidence-corrected:                # gold with its four untiered claims tiered and its three uncited untouched lines cited
     evidence: {1: pass, 3: pass}
   evidence-unlabelled-inference:     # the overlapping-saves claim loses its `inferred`
     base: evidence-corrected

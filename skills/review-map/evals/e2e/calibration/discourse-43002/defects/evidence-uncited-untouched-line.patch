@@ -11,7 +11,17 @@
        <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
          sizes admins chose. A dashboard where no card has been resized looks as it did: every existing
          row reads one row by one column, which is how every card rendered before.</p>
-@@ -2409,7 +2411,9 @@
+@@ -2384,7 +2386,8 @@
+           sets a card&#39;s size. Both save through the same layout endpoint, and that endpoint stores
+           whatever list it receives as the complete layout, replacing every row it held before.</p>
+         <p>So a card&#39;s size survives a save only if that save sends it. The resize handler sends
+-          every card with its current size. <strong>The modal, which this change does not touch, still
++          every card with its current size. <strong>The modal, which this change does not touch
++          <span class="tier tier-unc">from unchanged code</span>, still
+           sends each report&#39;s source and identifier and nothing else:</strong></p>
+ <div class="excerpt excerpt--source ex-inline">
+   <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a></span> <span class="tag">Unchanged</span></p>
+@@ -2409,7 +2412,9 @@
            modal</a>, even one that only reorders two reports, every
            card on the dashboard is back to one row by one column
            <span class="tier tier-unc">from unchanged code</span>.</p>
@@ -22,7 +32,7 @@
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L133-L136">the same
            section builder the dashboard uses</a>, which now returns each report&#39;s size; its save
            maps them away. The path is drawn in <a href="#impact">Impact outside the diff</a>.</p>
-@@ -2465,7 +2469,8 @@
+@@ -2465,7 +2470,8 @@
          <h3>Saving one card&#39;s size by rewriting the whole layout</h3>
          <p>The dashboard stores its pinned reports as one list, and the only way to change any part of
            it is to send the whole list again: the layout endpoint deletes every stored row and inserts
@@ -32,18 +42,25 @@
          <p>Resizing now works this way too, and an admin does it far more often. When a resize ends,
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L390-L409">the
            handler builds the full list from the cards this browser holds</a>, with the new size swapped
-@@ -2485,7 +2490,9 @@
-           <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-7746fec8454dfbbb711ddef80bc797cac7b3de6d1925f55ac19d3e939418cab7R26-R37">the ten most recently created</a>. A row whose source has no
+@@ -2482,10 +2488,15 @@
+           first one&#39;s size runs them one after the other.</p>
+         <p>The second is a stored report the dashboard never shows. The section shows only reports whose
+           source still has a registered provider and, of those,
+-          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-7746fec8454dfbbb711ddef80bc797cac7b3de6d1925f55ac19d3e939418cab7R26-R37">the ten most recently created</a>. A row whose source has no
++          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-7746fec8454dfbbb711ddef80bc797cac7b3de6d1925f55ac19d3e939418cab7R26-R37">the most recently created</a>, up to
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/models/admin_dashboard_report.rb#L4">ten</a>. A row whose source has no
            provider is dropped by <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/registry.rb#L16-L25">the
            provider lookup</a> <span class="tier tier-unc">from unchanged code</span>, never reaches the
 -          browser, and is deleted by the next resize. Removing a report or saving the modal already did
 +          browser, and is deleted by the next resize.
 +          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426">Removing
-+          a report</a> or saving the modal already did
++          a report</a> or
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">saving
++          the modal</a> <span class="tier tier-unc">from unchanged code</span> already did
            this; resizing adds a trigger that fires much more often.</p>
          <p class="open"><b>Review question</b>Is it acceptable that each resize replaces the stored layout with what this browser currently shows?</p>
          <details class="cp-ev">
-@@ -2578,8 +2585,8 @@
+@@ -2578,8 +2589,8 @@
            <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R311-R312">a default of 1 and a not-null constraint, and no
            check</a>. In practice the endpoint&#39;s check is the one in force.</p>
          <p>The same check also guards a request that only reads. Each card&#39;s chart data is fetched
@@ -54,7 +71,7 @@
            card&#39;s size with that request. A stored size the check refuses would fail the request,
            and the dashboard then
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L241-L249">marks
-@@ -2698,7 +2705,9 @@
+@@ -2698,7 +2709,9 @@
            once. An admin who presses a tall card&#39;s corner meaning to start a drag, and lets go,
            loses the height and has to drag it back. A press only becomes a drag after
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight

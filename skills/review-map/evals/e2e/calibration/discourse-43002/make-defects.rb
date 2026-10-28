@@ -240,10 +240,12 @@ FIX = {
   ],
   # c1: two claims rest on files the diff does not touch and carry no tier — what the eight-pixel
   # threshold means (d-pointer-drag.ts) and where the modal loads its reports from
-  # (manage-reports.gjs:137); the corrected copy cites and tiers both.
+  # (manage-reports.gjs:137); the corrected copy cites and tiers both, and tiers the two
+  # untiered claims about what the modal sends (manage-reports.gjs:197-205), in A and B.
   # c3: checkpoint B's two "removing a report already did this" rest on removeReport, and § 01's
-  # admins-only handles on canEdit, untouched lines of the changed reports.gjs; the corrected copy
-  # cites all three.
+  # admins-only handles on canEdit, untouched lines of the changed reports.gjs; B's "ten" rests on
+  # VISIBLE_CAP, an untouched line of the changed admin_dashboard_report.rb. The corrected copy
+  # cites all four.
   "evidence" => [
     ["pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>",
      "pixels of travel</a>, because\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/modifiers/d-pointer-drag.ts#L451-L461\">the drag modifier reports no move until the pointer passes it</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>"],
@@ -253,8 +255,12 @@ FIX = {
      "It\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/modal/manage-reports.gjs#L137\">loads its enabled reports from the available-reports action</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, which builds them from\n          <a class=\"ref\""],
     ["Removing a report from the dashboard already worked this way.",
      "<a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426\">Removing\n          a report from the dashboard</a> already worked this way."],
-    ["browser, and is deleted by the next resize. Removing a report or saving",
-     "browser, and is deleted by the next resize.\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426\">Removing\n          a report</a> or saving"],
+    ["browser, and is deleted by the next resize. Removing a report or saving the modal already did",
+     "browser, and is deleted by the next resize.\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426\">Removing\n          a report</a> or\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205\">saving\n          the modal</a> <span class=\"tier tier-unc\">from unchanged code</span> already did"],
+    ["\">the ten most recently created</a>.",
+     "\">the most recently created</a>, up to\n          <a class=\"ref\" href=\"#{BLOB}/app/models/admin_dashboard_report.rb#L4\">ten</a>."],
+    ["<strong>The modal, which this change does not touch, still",
+     "<strong>The modal, which this change does not touch\n          <span class=\"tier tier-unc\">from unchanged code</span>, still"],
   ],
   # c1, unsettled on gold: "a click … toggles the card's width" is true of every size but leaves out
   # that a taller card also drops to one row; the corrected copy says both sizes the click chooses
