@@ -131,9 +131,12 @@ D = [
    "<b>Review question</b>This is a bug: a click should widen a one-by-one card and leave every other size alone.</p>"],
 
   # ---- checkpoint-explanation ----------------------------------------------------------------
-  # 1 explains before it asks: checkpoint B opens on identifiers and leaves what the layout is to Context
+  # 1 explains before it asks: checkpoint B opens on identifiers whose jobs its next paragraphs explain
+  ["checkpoint-explanation-identifier-first", CP_B_OPENING,
+   "        <p><code>setSize</code> sends the layout to the endpoint that calls\n          <code>LayoutUpdater</code>, which runs <code>delete_all</code> and then <code>insert_all</code>.</p>\n#{CP_B_OPENING}"],
+  # 2 stands alone: checkpoint B leaves how the layout is stored, the fact its argument starts from, to Context
   ["checkpoint-explanation-step-in-context", CP_B_OPENING,
-   "        <p><code>setSize</code> calls <code>LayoutUpdater</code> through the layout endpoint; how the\n          layout is stored is in <a href=\"#context\">Context</a>.</p>\n"],
+   "        <p>How the dashboard stores its layout is in <a href=\"#context\">Context</a>.</p>\n"],
   # 2 stands alone: checkpoint C's unchanged bulk caller cut down to a pointer
   ["checkpoint-explanation-callers-pointer", CP_C_BULK,
    "        <p>The same check reaches other callers too; see <a href=\"#impact\">Impact outside the diff</a>.</p>\n"],

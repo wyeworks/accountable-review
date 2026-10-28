@@ -63,8 +63,10 @@ variants:
   checkpoint-judgments-verdict:      # checkpoint D's question: "This is a bug: a click should …"
     checkpoint-judgments: {4: fail}
 
-  checkpoint-explanation-step-in-context: # checkpoint B opens on setSize and LayoutUpdater and leaves what the layout is to Context
+  checkpoint-explanation-identifier-first: # checkpoint B opens on setSize, LayoutUpdater, delete_all and insert_all before their jobs are said
     checkpoint-explanation: {1: fail}
+  checkpoint-explanation-step-in-context: # checkpoint B's opening, how the layout is stored, replaced by a pointer to Context
+    checkpoint-explanation: {2: fail}
   checkpoint-explanation-callers-pointer: # checkpoint C's bulk-endpoint paragraph cut to "see Impact outside the diff"
     checkpoint-explanation: {2: fail}
   checkpoint-explanation-exhaustive: # checkpoint D padded with the handle component's internals

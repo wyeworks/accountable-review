@@ -10,26 +10,28 @@ parts: [changed, context, attention]
 criteria:
   - >-
     EXPLAINS BEFORE IT ASKS. Each checkpoint's prose establishes what the system does here, then what
-    the change did and why that matters, and only then reaches its review question. A checkpoint that
-    opens on its question, or on an implementation identifier the reader has not been told the job
-    of, fails. So does one that leaves a step of its argument to another place — a fact the reader
-    needs stated only in Context, in another checkpoint, in Impact outside the diff or behind a
-    link. A pointer to one of those for further depth is correct, and passes.
+    the change did and why that matters, and only then reaches its review question. This criterion
+    is about order within the checkpoint: one that opens on its question, or on an implementation
+    identifier before the job it does has been said, fails, even when everything is explained
+    further down. Whether a fact the checkpoint needs is in it at all is criterion 2's question.
   - >-
     STANDS ALONE, NEVER EXHAUSTIVE. Read each checkpoint as if you had jumped straight to it from the
     rail. It tells you what it needs of the domain, the code and What changed, and what the unchanged
     callers it reaches now do: a caller whose behaviour bears on the judgment gets its own sentence,
     and callers reached the same way may be a count in a clause, their list in the supporting
-    evidence. A checkpoint that cuts those callers to a pointer ("see Impact path A") fails. So does
-    the opposite: prose that walks every caller the run traced, the framework's internals, or
-    secondary observations that do not change the question.
+    evidence. A checkpoint that leaves a step of its argument to another place fails — a fact the
+    reader needs stated only in Context, in another checkpoint, in Impact outside the diff or behind
+    a link, or callers cut to a pointer ("see Impact path A"). A pointer to one of those for further
+    depth is correct, and passes. The opposite fails too: prose that walks every caller the run
+    traced, the framework's internals, or secondary observations that do not change the question.
   - >-
-    READS COMPLETE WITH SUPPORTING EVIDENCE SHUT. With every checkpoint's `details.cp-ev` closed, the
-    explanation and the review question still say everything the reviewer needs to understand and
-    challenge the change. What changes the judgment — a test gap, an unknown, a caller that now
-    behaves differently — is said above the question, never only in a *Look at* clause or a probe.
-    An explanation written as a walk through the files its entries cite ("in `a.rb`… then in
-    `b.rb`… then the spec…") fails, because it is the evidence retold rather than the behaviour said.
+    READS COMPLETE WITH SUPPORTING EVIDENCE SHUT. This criterion is about the split inside one
+    checkpoint, between its explanation and its own `details.cp-ev`. With that block closed, the
+    explanation and the review question still say what changes the judgment — a test gap, an unknown
+    — above the question, never only in a *Look at* clause or a probe. An explanation written as a
+    walk through the files its entries cite ("in `a.rb`… then in `b.rb`… then the spec…") fails,
+    because it is the evidence retold rather than the behaviour said. A fact left to another section
+    of the page is criterion 2's failure, not this one's.
 ---
 You are grading one section of a Review Map: an HTML page that explains a pull request to the
 person about to review it. You grade **the page, never the pull request**. Whether the change is

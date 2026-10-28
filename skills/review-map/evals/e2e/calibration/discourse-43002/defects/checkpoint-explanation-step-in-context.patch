@@ -1,14 +1,13 @@
 --- gold.html
 +++ gold.html
-@@ -2463,9 +2463,8 @@
+@@ -2463,9 +2463,7 @@
        <section class="cp" id="cp-b">
          <span class="lbl lbl-wide">Checkpoint B</span>
          <h3>Saving one card&#39;s size by rewriting the whole layout</h3>
 -        <p>The dashboard stores its pinned reports as one list, and the only way to change any part of
 -          it is to send the whole list again: the layout endpoint deletes every stored row and inserts
 -          the list it was given. Removing a report from the dashboard already worked this way.</p>
-+        <p><code>setSize</code> calls <code>LayoutUpdater</code> through the layout endpoint; how the
-+          layout is stored is in <a href="#context">Context</a>.</p>
++        <p>How the dashboard stores its layout is in <a href="#context">Context</a>.</p>
          <p>Resizing now works this way too, and an admin does it far more often. When a resize ends,
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L390-L409">the
            handler builds the full list from the cards this browser holds</a>, with the new size swapped
