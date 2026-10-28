@@ -26,22 +26,26 @@
 #                         3 untouched line of a changed file cited · 4 excerpts earned · 5 every field
 #                         complete with its excerpt shut
 gold:
-  what-changed: [pass, pass, pass, pass, pass]   # 1: "a click … toggles the card's width" is true of every size (each
-                                                 # larger card spans both columns); that it also resets a tall card's
-                                                 # height is checkpoint D's, not an inaccuracy here
+  what-changed: [~, pass, pass, pass, pass]       # 1: unsettled — "a click … toggles the card's width" is true of every size,
+                                                 # and leaves out that a taller card also drops to one row
   checkpoint-judgments: [pass, pass, pass, pass]
   checkpoint-explanation: [pass, pass, pass]
   checkpoint-claims: [pass, fail, pass]     # 2: cp-d calls the click shortcut "a toggle between two sizes over a range of eight"; the rules allow
                                             # five (1x1, 1x2, 2x2, 3x2, 4x2), eight counts the combinations the full-width rule forbids
   reading-path: [pass, pass, pass, pass]
   impact: [pass, pass, pass, pass]
-  evidence: [~, pass, pass, pass, pass]     # 1: unsettled — cp-d's "a press only becomes a drag after eight pixels of travel" cites the threshold
-                                            # reports.gjs passes, but what the threshold means is d-resize-handles.gts, unchanged; its Look at entry
-                                            # carries `from unchanged code`, the sentence does not
+  evidence: [fail, pass, fail, pass, pass]  # 1: cp-d's "eight pixels of travel" means what d-resize-handles.gts does, and cp-a's
+                                            # "loads its enabled reports from" is manage-reports.gjs:137; both unchanged, neither tiered.
+                                            # 3: cp-b's two "removing a report already did this" rest on removeReport,
+                                            # reports.gjs:411-426, untouched lines of a changed file, uncited
 variants:
+  what-changed-corrected:            # gold with the click sentence naming both sizes it chooses
+    what-changed: {1: pass}
   what-changed-headline:             # the <h2> says each admin's sizes are saved for them; the table has no user column
+    base: what-changed-corrected
     what-changed: {1: fail}
   what-changed-wrong-delta:          # "admins and moderators" see the handles — canEdit is currentUser?.admin
+    base: what-changed-corrected
     what-changed: {1: fail}
   what-changed-steps-as-deltas:      # one delta split into a bullet list of execution steps
     what-changed: {2: fail}
@@ -104,14 +108,15 @@ variants:
   impact-why-walks-hops:             # card A's why narrates both nodes of the path beneath it
     impact: {4: fail}
 
-  evidence-corrected:                # gold with cp-d's eight-pixel claim citing d-resize-handles.gts and tiered `from unchanged code`
-    evidence: {1: pass}
+  evidence-corrected:                # gold with the two untiered claims tiered and cited, and removeReport cited at both claims
+    evidence: {1: pass, 3: pass}
   evidence-unlabelled-inference:     # the overlapping-saves claim loses its `inferred`
     base: evidence-corrected
     evidence: {1: fail}
   evidence-labelled-diff-claim:      # § 01's default of 1, which the migration adds, gains `from unchanged code`
     evidence: {2: fail}
   evidence-uncited-untouched-line:   # cp-c's bulk_reports claim loses its citation; bulk_reports is outside every hunk of the changed controller
+    base: evidence-corrected
     evidence: {3: fail}
   evidence-unearned-excerpt:         # a stylesheet excerpt beside the default-report seeder entry
     evidence: {4: fail}

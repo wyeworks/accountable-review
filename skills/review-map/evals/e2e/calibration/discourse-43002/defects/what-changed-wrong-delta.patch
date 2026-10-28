@@ -1,10 +1,13 @@
 --- gold.html
 +++ gold.html
-@@ -2347,7 +2347,7 @@
+@@ -2346,8 +2346,9 @@
+         <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R246">rejects a size out of range, or a card taller than one row that does not span both columns</a>.
          The dashboard returns each card&#39;s size alongside its other fields. In the browser, an admin
          drags a card&#39;s lower corner to grow or shrink it, watches it reflow live, and the size is
-         saved on release. A click on the corner without dragging toggles the card&#39;s width instead.
+-        saved on release. A click on the corner without dragging toggles the card&#39;s width instead.
 -        The handles appear only for admins, and not while a card is still loading.</p>
++        saved on release. A click on the corner without dragging instead switches a card between the smallest
++        size and one row at full width.
 +        The handles appear for admins and moderators, and not while a card is still loading.</p>
        <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
          sizes admins chose. A dashboard where no card has been resized looks as it did: every existing

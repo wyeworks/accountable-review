@@ -15,7 +15,10 @@ criteria:
     inference from naming, architecture, library behaviour or reasoning about an order the code
     does not show carries `inferred`; something not established carries `uncertain` and says what
     would settle it. Any of those stated plainly fails, and so does one carrying a tier stronger
-    than it earns — `inferred from tests` on reasoning no test runs. An entry under an *Affected,
+    than it earns — `inferred from tests` on reasoning no test runs. A framework's documented
+    behaviour carried by a doc link (`a.doc`) is provenance, not an inference: the claim rests on
+    the call site it cites and takes that call site's tier, which is no label when the diff shows
+    the call. An entry under an *Affected,
     not changed* heading is labelled by that heading. The same claim restated in another field —
     a *Look at* clause, an impact card's `p.ip-why`, a stop's why — carries its tier there too.
     Check the claims against the code.

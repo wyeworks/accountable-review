@@ -238,11 +238,26 @@ FIX = {
     ["The shortcut is a toggle between two sizes over a range of eight,",
      "The shortcut is a toggle between two sizes over a range of five,"],
   ],
-  # c1, unsettled on gold: what the eight-pixel threshold means — that a move is reported only past
-  # it — is d-resize-handles.gts, a file the diff does not touch; the corrected copy cites and tiers it
+  # c1: two claims rest on files the diff does not touch and carry no tier — what the eight-pixel
+  # threshold means (d-resize-handles.gts) and where the modal loads its reports from
+  # (manage-reports.gjs:137); the corrected copy cites and tiers both.
+  # c3: checkpoint B's two "removing a report already did this" rest on removeReport, untouched
+  # lines of the changed reports.gjs; the corrected copy cites it at both.
   "evidence" => [
     ["pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>",
      "pixels of travel</a>, because\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106\">the handles report a move only past it</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>"],
+    ["It loads its enabled reports from\n          <a class=\"ref\"",
+     "It\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/modal/manage-reports.gjs#L137\">loads its enabled reports from the available-reports action</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, which builds them from\n          <a class=\"ref\""],
+    ["Removing a report from the dashboard already worked this way.",
+     "<a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426\">Removing\n          a report from the dashboard</a> already worked this way."],
+    ["browser, and is deleted by the next resize. Removing a report or saving",
+     "browser, and is deleted by the next resize.\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426\">Removing\n          a report</a> or saving"],
+  ],
+  # c1, unsettled on gold: "a click … toggles the card's width" is true of every size but leaves out
+  # that a taller card also drops to one row; the corrected copy says both sizes the click chooses
+  "what-changed" => [
+    ["A click on the corner without dragging toggles the card&#39;s width instead.",
+     "A click on the corner without dragging instead switches a card between the smallest\n        size and one row at full width."],
   ],
 }.freeze
 
@@ -251,6 +266,9 @@ FIX = {
 REBASED = {
   "checkpoint-claims-explanation" => "checkpoint-claims",
   "evidence-unlabelled-inference" => "evidence",
+  "evidence-uncited-untouched-line" => "evidence",
+  "what-changed-headline" => "what-changed",
+  "what-changed-wrong-delta" => "what-changed",
 }.freeze
 
 VARIANTS = D.map { |name, old, new| [name, FIX.fetch(REBASED[name], []) + [[old, new]]] } +
